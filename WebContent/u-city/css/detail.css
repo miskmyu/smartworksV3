@@ -75,27 +75,6 @@
 .picture_section .detail_picture {height: 125px; padding: 5px; width: 155px}
 .picture_section .detail_picture img {max-width: 155px; max-height: 125px}
 .space_contents {padding: 0 10px 10px}
-.js_image_list_header, .js_file_list_header {margin:0 0 4px 0; padding:3px 0 0 0; line-height: 20px} /* CheckBox in Image List Header*/
-
-/* 본문 댓글 관련 */
-.reply_point {background: url("../../images/reply_point.gif") no-repeat left top; width:11px; height:7px; margin-top: 5px}
-.reply_section {background-color:#ebf2fa; padding:10px; width:600px; margin-bottom:7px}
-.reply {margin:0 20px} /* 상세페이지에 댓글,업무,메모 입력 영역*/
-.reply_input {margin:5px 0 0 0} /* 댓글 입력 영역 */
-#upload_form_box .reply_input {margin:5px} /* Reply Input in upload_form_box */
- .js_delete_comment_btn .btn_x {padding-right: 3px}
-.list_reply li, .reply > ul > li, .space_section > ul > li, .space_content_area > ul > li, .history_list > ul > li
- {border-bottom: 1px dotted #9c9c9c; vertical-align: middle; overflow: hidden}
-.list_reply .end, .reply .end, .noborder li {border-bottom: none !important; vertical-align: middle}
-.repl_tinfo {background: url("../../images/header_nico.png") no-repeat 4px -267px; padding:0 0 0 20px} /* 댓글모두보기 아이콘 */
-.repl_write {background: url("../../images/header_nico.png") no-repeat 0 -411px; padding: 2px 0 1px 17px; font-size: 11px; color: #23579E;  margin-left: 5px}
-a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0 -435px; text-decoration: underline}
-
-/* 댓글 목록, 전자결재 결재 댓글  */
-.list_reply {margin:0} 
-.list_reply .bg {background-color:#ededed}
-.list_reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
-.list_reply .det_title .txt_info {display:inline-block; line-height:15px; vertical-align: middle}/* 댓글 나올 시 오른쪽 두줄정보  */
 
 /* 목록  타이틀 */
 .list_title_space .title {font-size:14px; font-weight:bold; padding: 0 10px 0 0; line-height: 18px; color:#FFF; float:left}
@@ -103,7 +82,6 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_contents {clear:both}
 .list_contents table tr .end, .list_contents table td .end {border-bottom: 0 none}
 .list_contents table .tit_bg {background-color:#171b1e; border-top:1px solid #6d6d6d; border-bottom:1px solid #444444}
-
 
 .list_contents table th {text-align:center}
 .list_contents table td {border-bottom: 1px solid #444444; text-align: center}
@@ -200,15 +178,7 @@ a .proc_btn_next:hover {background: url("../images/proc_bg.png") no-repeat -129p
 .paginate a.pre span:hover {background-position: -20px -376px}
 .paginate a.next span:hover {background-position: -45px -376px}
 .paginate a.next_end span:hover {background-position: -65px -376px}
-
 .num_box {float:right; margin: -28px 5px 0; position:relative}
-
-/* Nav Paging */
-.nav_paginate {color:#dddddd; font-size:11px; margin:0 6px 0 0; text-align:right}
-.nav_paginate .prev a {background: url("../../images/nav_img.png") no-repeat 0 -538px transparent; display: inline-block; width:7px; height:9px}
-.nav_paginate .prev a:hover {background-position:0 -552px}
-.nav_paginate .next a {background: url("../../images/nav_img.png") no-repeat -12px -538px transparent; display: inline-block; width:7px; height:9px}
-.nav_paginate .next a:hover { background-position:-12px -552px}
 
 /* Prev Page, Next Page  */
 .move_btn_space, .select_btn_space {background-color: #f6f6f6; border-bottom: 1px solid #E8E8E8; font-weight: bold; line-height: 20px; height:23px; text-align:right; padding-right: 5px}
@@ -221,60 +191,6 @@ a .proc_btn_next:hover {background: url("../images/proc_bg.png") no-repeat -129p
 .icon_arr_npage a {background: url("../../images/header_nico.png") no-repeat scroll -20px -314px transparent; display:block; height: 16px; width: 18px}
 .icon_arr_npage a:hover {background-position: -67px -314px}
 
-/* 탭 */
-.tab {height: 31px; position: relative; top: 6px; z-index: 31; margin-left:5px}
-.tab li { background: url("../../images/bg_tab_l.jpg") no-repeat scroll 0 0 transparent; float: left; height: 31px}
-.tab li.current { background-position: left -31px}
-.tab li .intab { background: url("../../images/bg_tab_r.jpg") no-repeat scroll right top transparent; display: block; float: left; height: 31px}
-.tab li.current .intab { background-position: right -31px}
-.tab li .intab a { display: inline-block; line-height: 32px; padding: 0 8px; color:#FFF}
-.tab li.current .intab a { color: #000000; font-weight: bold}
-
-/* 탭 설정페이지 */
-.tab_adm {height: 23px; position: relative; top: 30px; z-index: 31; margin-left:5px}
-.tab_adm li { background: url("../../images/bg_tab_a_l.gif") no-repeat scroll 0 0 transparent; float: left; height: 23px}
-.tab_adm li.current { background-position: left -23px}
-.tab_adm li div { background: url("../../images/bg_tab_a_r.gif") no-repeat scroll right top transparent; display: block; float: left; height: 23px}
-.tab_adm li.current div { background-position: right -23px}
-.tab_adm li div a { display: inline-block; line-height: 26px; padding: 0 12px 0 10px; color:#a4a4a4}
-.tab_adm li.current div a { color: #d36d6e; font-weight: bold}
-.tab_adm li div.end { background-position: right -46px}
-.tab_adm li.current div.end { background-position: right -69px}
-
-/* Tab - text */
-.tab_text {height: 22px; padding: 30px 0 0 130px} 
-.tab_text li {float: right; font-size:11px; color:#dddddd} 
-.tab_text li a {font-size:12px; color:#454545; margin-left:5px}
-.tab_text li a:hover {color:#e16561}
-.tab_text li .current { color:#d93e3a; font-weight:bold}
-
-/* 목록 탭 */
-.tab_lst {height:40px; position: relative; top:5px; z-index: 32}
-.tab_lst li {float:left; height:23px; background-color:#FFF}
-.tab_lst li.current {color:#000000; font-weight:bold; border:1px solid #c7c7c7; border-bottom:none}
-.tab_lst li.lst {background: url("../../images/body_icon.png") no-repeat scroll 10px -137px #FFF; padding:11px 15px 0 35px}
-.tab_lst li.lst.current {background: url("../../images/body_icon.png") no-repeat scroll 10px -171px #FFF; height:24px}
-.tab_lst li.wup {background: url("../../images/body_icon.png") no-repeat scroll -153px -137px #FFF; padding: 11px 10px 0 45px}
-.tab_lst li.wup.current {background: url("../../images/body_icon.png") no-repeat scroll -153px -171px #FFF; height:24px}
-.tab_lst li.stat {background: url("../../images/body_icon.png") no-repeat scroll -387px -137px #FFF; padding: 11px 10px 0 35px}
-.tab_lst li.stat.current {background: url("../../images/body_icon.png") no-repeat scroll -387px -171px #FFF; height:24px}
-
-/* Tab side Arrow */
-.btn_arr_prev2 {background: url("../../images/body_icon.png") no-repeat 0 -485px transparent; width: 14px; height: 15px; margin: 10px 3px 0 0; display: inline-block; float: left}
-a:hover.btn_arr_prev2 {background: url("../../images/body_icon.png") no-repeat 0 -513px transparent}
-.btn_arr_prev {background: url("../../images/body_icon.png") no-repeat -23px -485px transparent; width:14px; height:15px; margin:10px 3px 0 0; display: inline-block; float: left}
-a:hover.btn_arr_prev:hover {background: url("../../images/body_icon.png") no-repeat -23px -513px transparent}
-
-.btn_arr_next {background: url("../../images/body_icon.png") no-repeat -55px -485px transparent; width:14px; height:15px; margin: 10px 0 0 3px; display: inline-block; float: left}
-a:hover.btn_arr_next {background: url("../../images/body_icon.png") no-repeat -55px -513px; transparent}
-.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -78px -485px transparent; width:14px; height:15px; margin: 10px 0 0 3px; display: inline-block; float: left}
-a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -78px -513px transparent}
-
-/* Option - date */
-.option_section { float:right; margin:5px 5px 0 0}
-.sel_date_section {background: url("../../images/bg_date_feild.jpg") no-repeat 0 0; display: inline-block; font-weight: bold; height: 19px; padding: 0 0 0 6px; width:120px; line-height: 18px}
-.sel_date_section a.btn_calendar {background: url("../../images/bg_date_feild.jpg") no-repeat -577px 0; float: right; height: 19px; width: 23px}
-.sel_date_section a:hover.btn_calendar {background: url("../../images/bg_date_feild.jpg") no-repeat 100% 0; float: right}
 
 /* 상단 아이콘 */
 .icon_forward_w {background: url("../../images/body_icon.png") no-repeat scroll 0 -364px transparent; height:18px; width:16px; display:inline-block}
@@ -286,26 +202,11 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .icon_work_create a {background: url("../../images/body_icon.png") no-repeat scroll 0 -814px transparent; height:18px; width:17px; display:inline-block; margin:0 5px 0 0}
 .icon_excel a {background: url("../../images/body_icon.png") no-repeat scroll -115px -814px transparent; height:18px; width:17px; display:inline-block}
 
-/* 사진 이미지 사이즈, Border */
-.profile_size_b {width:110px; height:110px; border: 1px solid #999999}
-.profile_size_66 {width:66px; height:66px; border: 1px solid #999999}
-.profile_size_m {width:48px; height:48px; border: 1px solid #999999}
-/* profile size for comment -- added by ysjung */
-.profile_size_c {width:26px; height:26px; border: 1px solid #999999}
-.profile_size_s {width:20px; height:20px; border: 1px solid #999999}
-.profile_size_24 {width:24px; height:24px; border: 1px solid #999999}
-#nav .profile_size_b, #nav .profile_size_66, #nav .profile_size_m, #nav .profile_size_c, #nav .profile_size_s, #nav .profile_size_24 
-{border:none !important}
-.photo_section img {border: 1px solid #999999}
-
 /* Body Icon */
 .icon_body_modify {background: url("../../images/body_icon.png") no-repeat scroll 0 -7px transparent; height:16px; width:16px; display:inline-block}
 .icon_body_register {background: url("../../images/body_icon.png") no-repeat scroll -74px -7px transparent; height:16px; width:16px; display:inline-block}
 .icon_body_read {background: url("../../images/body_icon.png") no-repeat scroll -156px -8px transparent; height:16px; width:13px; display:inline-block}
 .icon_smartbuilder {background: url("../../images/body_icon.png") no-repeat scroll -271px -364px transparent; height:16px; padding: 0 0 0 20px !important; line-height: 19px}
-/* 
-.bu_work_explan {background: url("../../images/body_icon.png") no-repeat scroll 0 -83px transparent; height:16px; display:inline-block; padding: 0 0 0 15px}
- */
 .icon_video_manual {background: url("../../images/body_icon.png") no-repeat scroll 0 -118px transparent; height:16px; display:inline-block}
 .icon_web_manual {background: url("../../images/body_icon.png") no-repeat scroll 0 -1018px transparent; height:16px; display: block; line-height: 17px; padding: 0 0 0 18px; float:left}
 .icon_file_manual {background: url("../../images/body_icon.png") no-repeat scroll 0 -989px transparent; height:16px; display: block; line-height: 17px; padding: 0 0 0 18px; float:left}
@@ -341,3 +242,6 @@ a .icon_btn_edit:hover {background-position:-43px -859px}
 
 /* Button Set */
 .button_set {background-color: #1E2127; font-size: 11px; padding: 5px; border-bottom: 1px solid #444444; text-align: right}
+
+/* Chart */
+.chart_area {padding: 5px 2px 10px 10px; clear:both}

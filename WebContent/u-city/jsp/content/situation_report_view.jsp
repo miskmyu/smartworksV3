@@ -19,7 +19,6 @@
 
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
-	String chartType = request.getParameter("chartType");
 	User cUser = SmartUtil.getCurrentUser();
 
 	String[] allServices = Service.getAllServiceNames();
@@ -28,20 +27,24 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!--  전체 레이아웃 -->
-<div class="filter_group js_work_report_view">
+<div class="js_work_report_view">
 
 	<!-- 컨텐츠 -->
 	<div class="fr">
-		<select>
-			<option value="<%=System.REPORT_OPTION_PERIOD_BY_TIME%>">시간대별</option>
-			<option value="<%=System.REPORT_OPTION_PERIOD_BY_DAY%>">요일별</option>
-			<option value="<%=System.REPORT_OPTION_PERIOD_BY_MONTH%>">월별</option>
-			<option value="<%=System.REPORT_OPTION_PERIOD_BY_SEASON%>">계절별</option>
+		<select class="js_select_ucity_category">
+			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_TIME%>">시간대별</option>
+			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_AMPM%>">오전/오후</option>
+			<option selected value="<%=System.REPORT_OPTION_CATEGORY_BY_DAY%>">요일별</option>
+			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_MONTH%>">월별</option>
+			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_SEASON%>">계절별</option>
+			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_QUARTER%>">분기별</option>
+			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_HALFYEAR%>">반기별</option>
 		</select>
- 		<select>
+ 		<select class="js_select_ucity_period">
 			<option value="<%=System.REPORT_OPTION_THIS_YEAR%>">올해</option>
-			<option value="<%=System.REPORT_OPTION_RECENT_A_YEAR%>">최근1년</option>
+			<option selected value="<%=System.REPORT_OPTION_RECENT_A_YEAR%>">최근1년</option>
 			<option value="<%=System.REPORT_OPTION_RECENT_THREE_YEARS%>">최근3년</option>
+			<option value="<%=System.REPORT_OPTION_RECENT_FIVE_YEARS%>">최근5년</option>
 			<option value="<%=System.REPORT_OPTION_ALL_HISTORY%>">전체</option>
 		</select>
 		<select class="js_select_ucity_service">
@@ -78,7 +81,7 @@
 		%>
 		
 	</div>
-	<div id="chart_target" class="cb pt5 js_work_report_view" style="height:300px;">
+	<div id="chart_target" class="chart_area js_work_report_view" style="height:300px;">
 	</div>
 
 	<div class="glo_btn_space">

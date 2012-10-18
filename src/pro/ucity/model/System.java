@@ -6,16 +6,16 @@ import net.smartworks.util.SmartUtil;
 public class System {
 
 	public static final int MAX_PROCESS						= 10;
-	public static final int PROCESS_ENV_WEAHTER				= 0;
-	public static final int PROCESS_ENV_ATMOSPHERE			= 1;
-	public static final int PROCESS_ENV_WATER				= 2;
-	public static final int PROCESS_TRAFFIC_ILLEGAL_PARKING	= 3;
-	public static final int PROCESS_TRAFFIC_INCIDENT		= 4;
-	public static final int PROCESS_DISASTER_FIRE			= 5;
-	public static final int PROCESS_CRIME_CCTV				= 6;
-	public static final int PROCESS_CRIME_VEHICLES			= 7;
-	public static final int PROCESS_WATERWORKS_LEAKS		= 8;
-	public static final int PROCESS_FACILITY_MANAGEMENT		= 9;
+	public static final int PROCESS_ENV_WEAHTER				= 0;    //기상
+	public static final int PROCESS_ENV_ATMOSPHERE			= 1;    //대기
+	public static final int PROCESS_ENV_WATER				= 2;        //수질
+	public static final int PROCESS_TRAFFIC_ILLEGAL_PARKING	= 3;    //불법주정차
+	public static final int PROCESS_TRAFFIC_INCIDENT		= 4;        //돌발
+	public static final int PROCESS_DISASTER_FIRE			= 5;         //화재특보
+	public static final int PROCESS_CRIME_CCTV				= 6;     //방범 cctv
+	public static final int PROCESS_CRIME_VEHICLES			= 7;     //방범 용의차량
+	public static final int PROCESS_WATERWORKS_LEAKS		= 8;         //상수도누수
+	public static final int PROCESS_FACILITY_MANAGEMENT		= 9;      //시설물 관리
 	
 	
 	public static final int ID_OPERATION_PORTAL 		= 1;
@@ -26,15 +26,15 @@ public class System {
 
 
 	//dev
-	public static final String DATABASE_JDBC_DRIVE = "com.tmax.tibero.jdbc.TbDriver";
-	public static final String DATABASE_CONNECTION = "jdbc:tibero:thin:@dev.smartworks.net:8629:tibero";
-	public static final String DATABASE_USERNAME = "tibero";
-	public static final String DATABASE_PASSWORD = "tmax";
-	//개발
 //	public static final String DATABASE_JDBC_DRIVE = "com.tmax.tibero.jdbc.TbDriver";
-//	public static final String DATABASE_CONNECTION = "jdbc:tibero:thin:@10.2.10.147:8629:CNUCTIDV";
-//	public static final String DATABASE_USERNAME = "bpmuser";
-//	public static final String DATABASE_PASSWORD = "bpmadmin";
+//	public static final String DATABASE_CONNECTION = "jdbc:tibero:thin:@dev.smartworks.net:8629:tibero";
+//	public static final String DATABASE_USERNAME = "tibero";
+//	public static final String DATABASE_PASSWORD = "tmax";
+	//개발
+	public static final String DATABASE_JDBC_DRIVE = "com.tmax.tibero.jdbc.TbDriver";
+	public static final String DATABASE_CONNECTION = "jdbc:tibero:thin:@10.2.10.147:8629:CNUCTIDV";
+	public static final String DATABASE_USERNAME = "bpmuser";
+	public static final String DATABASE_PASSWORD = "bpmadmin";
 	
 	public static final int TABLE_ID_OPPORTAL_SITUATION 	= 11;
 	public static final int TABLE_ID_OPPORTAL_DISPLAY 		= 12;
@@ -74,70 +74,74 @@ public class System {
 	public static final long DEFAULT_TASK_TIMEOUT				= 10 * 60 * 1000;
 	public static final long DEFAULT_POLLING_INTERVAL 			= 10 * 1000;
 	
-	public static final String TASK_FORM_NAME_USERVICE_END 		= "기상특보 종료";
+	public static final String TASK_FORM_NAME_USERVICE_END 		= "상황발생 종료화면";
 
+	public static final String REPORT_OPTION_CATEGORY_BY_TIME = "option.category.byTime";
+	public static final String REPORT_OPTION_CATEGORY_BY_AMPM = "option.category.byAmPm";
+	public static final String REPORT_OPTION_CATEGORY_BY_DAY = "option.category.byDay";
+	public static final String REPORT_OPTION_CATEGORY_BY_MONTH = "option.category.byMonth";
+	public static final String REPORT_OPTION_CATEGORY_BY_SEASON = "option.category.bySeason";
+	public static final String REPORT_OPTION_CATEGORY_BY_QUARTER = "option.category.byQuarter";
+	public static final String REPORT_OPTION_CATEGORY_BY_HALFYEAR = "option.category.byHalfYear";
 	
-	public static final String REPORT_OPTION_PERIOD_BY_TIME = "option.period.byTime";
-	public static final String REPORT_OPTION_PERIOD_BY_DAY = "option.period.byDay";
-	public static final String REPORT_OPTION_PERIOD_BY_MONTH = "option.period.byMonth";
-	public static final String REPORT_OPTION_PERIOD_BY_SEASON = "option.period.bySeason";
-	
-	public static final String REPORT_OPTION_THIS_YEAR = "option.thisYear";
-	public static final String REPORT_OPTION_RECENT_A_YEAR = "option.recentAYear";
-	public static final String REPORT_OPTION_RECENT_THREE_YEARS = "option.recentThreeYears";
-	public static final String REPORT_OPTION_ALL_HISTORY = "option.allHistory";
+	public static final String REPORT_OPTION_THIS_YEAR = "option.period.thisYear";
+	public static final String REPORT_OPTION_RECENT_A_YEAR = "option.period.recentAYear";
+	public static final String REPORT_OPTION_RECENT_THREE_YEARS = "option.period.recentThreeYears";
+	public static final String REPORT_OPTION_RECENT_FIVE_YEARS = "option.period.recentFiveYears";
+	public static final String REPORT_OPTION_ALL_HISTORY = "option.period.all";
 
-	public static final String REPORT_OPTION_ALL_SERVICES = "option.allServices";
-	public static final String REPORT_OPTION_ALL_EVENTS = "option.allEvents";
+	public static final String REPORT_OPTION_ALL_SERVICES = "option.service.all";
+	public static final String REPORT_OPTION_ALL_EVENTS = "option.event.all";
 	
+
 	public static String getProcessId(int process){
 		if(process<0 || process>MAX_PROCESS) return null;
 		
 		//dev
-		switch(process){
-		case PROCESS_ENV_WEAHTER:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_ENV_ATMOSPHERE:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_ENV_WATER:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_TRAFFIC_ILLEGAL_PARKING:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_TRAFFIC_INCIDENT:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_DISASTER_FIRE:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_CRIME_CCTV:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_CRIME_VEHICLES:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_WATERWORKS_LEAKS:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_FACILITY_MANAGEMENT:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		
-		//개발서버
 //		switch(process){
 //		case PROCESS_ENV_WEAHTER:
-//			return "pkg_6247af34746044228556b5366752141e";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_ENV_ATMOSPHERE:
-//			return "pkg_6247af34746044228556b5366752141e";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_ENV_WATER:
-//			return "pkg_6247af34746044228556b5366752141e";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_TRAFFIC_ILLEGAL_PARKING:
-//			return "pkg_6247af34746044228556b5366752141e";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_TRAFFIC_INCIDENT:
-//			return "pkg_6247af34746044228556b5366752141e";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_DISASTER_FIRE:
-//			return "pkg_6247af34746044228556b5366752141e";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_CRIME_CCTV:
-//			return "pkg_6247af34746044228556b5366752141e";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_CRIME_VEHICLES:
-//			return "pkg_6247af34746044228556b5366752141e";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_WATERWORKS_LEAKS:
-//			return "pkg_6247af34746044228556b5366752141e";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_FACILITY_MANAGEMENT:
-//			return "pkg_6247af34746044228556b5366752141e";
+//			return "pkg_9564849550184543b06fa46e3290f296";
+		
+		//개발서버
+		switch(process){
+		case PROCESS_ENV_WEAHTER:
+			return "pkg_6247af34746044228556b5366752141e";
+		case PROCESS_ENV_ATMOSPHERE:
+			return "pkg_95c0181fcb3f47429fadc3ea50f0d803";
+		case PROCESS_ENV_WATER:
+			return "pkg_116c47c171f74fcbaaa69381e8730f25";
+		case PROCESS_TRAFFIC_ILLEGAL_PARKING:
+			return "pkg_356e545e04444974bf1c07fadc073a77";
+		case PROCESS_TRAFFIC_INCIDENT:
+			return "pkg_e267443deb0b471586759d7dad83bcf4";
+		case PROCESS_DISASTER_FIRE:
+			return "pkg_492f63ad6d9b480b8535b0bdb7a2d9a9";
+		case PROCESS_CRIME_CCTV:
+			return "pkg_17bb1abf2809465fbde08db85c3103a0";
+		case PROCESS_CRIME_VEHICLES:
+			return "pkg_d6c93e05baf546c5a6901328e75a2e12";
+		case PROCESS_WATERWORKS_LEAKS:
+			return "pkg_1ef67bf9a18b4ee4bfb86d62504a1223";
+		case PROCESS_FACILITY_MANAGEMENT:
+			return "pkg_efa10156dc8445ee8a89df5e95493791";
 		
 		}
 		
