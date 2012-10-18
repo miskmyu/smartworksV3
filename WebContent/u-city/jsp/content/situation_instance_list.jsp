@@ -1,3 +1,5 @@
+<%@page import="pro.ucity.util.UcityUtil"%>
+<%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.server.engine.common.model.Property"%>
 <%@page import="net.smartworks.model.work.info.SmartTaskInfo"%>
@@ -151,7 +153,6 @@
 				Property[] extendedProperties = instanceInfo.getExtentedProperty();
 				String serviceName = "";
 				String eventName = "";
-				String serviceType = "";
 				String externalDisplay = "";
 				String eventPlace = "";
 				String eventTime = "";
@@ -163,8 +164,6 @@
 							serviceName = CommonUtil.toNotNull(extendedProperty.getValue());
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_NAME)){
 							eventName = CommonUtil.toNotNull(extendedProperty.getValue());							
-						}else if(extendedProperty.getName().equals(FIELD_ID_TYPE)){
-							serviceType = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_EXTERNAL_DISPLAY)){
 							externalDisplay = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_PLACE)){
@@ -179,7 +178,15 @@
 				
 				UserInfo owner = instanceInfo.getOwner();
 				UserInfo lastModifier = instanceInfo.getLastModifier();
-				TaskInstanceInfo lastTask = instanceInfo.getLastTask();
+//				TaskInstanceInfo lastTask = instanceInfo.getLastTask();
+				TaskInstanceInfo[] runningTasks = instanceInfo.getRunningTasks();
+				String[] serviceTypes = null;
+				if(!SmartUtil.isBlankObject(runningTasks)){
+					serviceTypes = new String[runningTasks.length];
+					for(int k=0; k<runningTasks.length; k++){
+						serviceTypes[k] = UcityUtil.getServiceTypeName(runningTasks[k].getName());
+					}
+				}
 				String target =  "situationDetail.sw?cid=" + instanceInfo.getContextId() + "&workId=" + instanceInfo.getWork().getId();
 				String statusImage = "";
 				String statusTitle = "";
@@ -223,10 +230,22 @@
 						<a class="js_ucity_content" href="<%=target %>"><%=eventName%></a>
 					</td>
 					<td>
-						<a class="js_ucity_content" href="<%=target %>"><%=serviceType%></a>
-					</td>
+						<%if(!SmartUtil.isBlankObject(serviceTypes)){ %>
+	 						<a class="js_ucity_content" href="<%=target %>">
+	 							<%for(int index=0; index<serviceTypes.length; index++){ %>
+	 								<%=serviceTypes[index]%><%if(index<serviceTypes.length-1){ %></br><%} %>
+	 							<%} %>
+	 						</a>
+	 					<%} %>
+ 					</td>
 					<td>
- 						<a class="js_ucity_content" href="<%=target %>"><%if(!SmartUtil.isBlankObject(lastTask)){%><%=lastTask.getName()%><%} %></a>
+						<%if(!SmartUtil.isBlankObject(runningTasks)){ %>
+	 						<a class="js_ucity_content" href="<%=target %>">
+	 							<%for(int index=0; index<runningTasks.length; index++){ %>
+	 								<%=runningTasks[index].getName()%><%if(index<runningTasks.length-1){ %></br><%} %>
+	 							<%} %>
+	 						</a>
+	 					<%} %>
  					</td>
 					<td>
 						<a class="js_ucity_content" href="<%=target %>"><%=externalDisplay%></a>
