@@ -4583,7 +4583,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					Property p3 = new Property("type",workList.getType());
 					Property p4 = new Property("externalDisplay",workList.getExternalDisplay());
 					Property p5 = new Property("eventPlace",workList.getEventPlace());
-					Property p6 = new Property("isSms",workList.isSms() + "");
+					Property p6 = new Property("isSms", CommonUtil.toBoolean(workList.getIsSms())+"");
 					Property p7 = new Property("eventId",workList.getEventId());
 					Property p8 = new Property("eventTime",workList.getEventTime() + "");
 
