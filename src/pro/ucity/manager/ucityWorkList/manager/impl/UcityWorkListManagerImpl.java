@@ -434,7 +434,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		tableBuff.append(" 						when TO_CHAR(createdtime + 9/24, 'HH24') between '23' and '24' then '심야(23시~3시)'  ");
 		tableBuff.append(" 							when TO_CHAR(createdtime + 9/24, 'HH24') between '00' and '02' then '심야(23시~3시)' ");						
 		tableBuff.append(" 		end as eventTime_hour ");
-		tableBuff.append("	, case when TO_CHAR(createdtime + 9/24, 'HH24') between '01' and '12' then '오전(AM)' when TO_CHAR(createdtime + 9/24, 'HH24') between '13' and '24' then '오후(PM)' end as eventTime_ampm  ");
+		tableBuff.append("	, case when TO_CHAR(createdtime + 9/24, 'HH24') between '01' and '12' then 'A' when TO_CHAR(createdtime + 9/24, 'HH24') between '13' and '24' then 'P' end as eventTime_ampm  ");
 		tableBuff.append("	, TO_CHAR(createdtime, 'dy') || '요일' as eventTime_dy ");
 		tableBuff.append("	, TO_CHAR(createdtime, 'MM') || '월' as eventTime_month ");
 		tableBuff.append("	, case when TO_CHAR(createdtime, 'MM') between '01' and '06' then '상반기'   ");
@@ -629,6 +629,10 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 					resultMap.put("3분기", (BigDecimal)fields[1]);
 				} else if (((Character)fields[0]).toString().equalsIgnoreCase("4")) {
 					resultMap.put("4분기", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("A")) {
+					resultMap.put("오전(AM)", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("P")) {
+					resultMap.put("오후(PM)", (BigDecimal)fields[1]);
 				}
 				
 			} else {

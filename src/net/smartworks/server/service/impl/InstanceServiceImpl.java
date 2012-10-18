@@ -4313,7 +4313,39 @@ public class InstanceServiceImpl implements IInstanceService {
 		return tableColName;
 	}
 	
-	
+	//프로세스인스턴스안의 실행중인 태스크가 지연처리라면 프로세스인스턴스의 상태도 지연처리다
+		private boolean isDelayedProcessInstanceWithSetRunningTasks(String userId, String prcInstId, PWInstanceInfo pworkInfo) throws Exception {
+			if (prcInstId == null)
+				return false;		
+			
+			//실행중이 태스크들을 구한다
+			TskTaskCond tskCond = new TskTaskCond();
+			tskCond.setStatus(TskTask.TASKSTATUS_ASSIGN);
+			tskCond.setProcessInstId(prcInstId);
+			tskCond.setType(TskTask.TASKTYPE_COMMON);
+			
+			TskTask[] tasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+			if (tasks == null || tasks.length == 0)
+				return false;
+			
+			pworkInfo.setRunningTasks(ModelConverter.getTaskInstanceInfoArrayByTskTaskArray(pworkInfo, tasks));
+			
+			for (int i = 0; i < tasks.length; i++) {
+				TskTask task = tasks[i];
+				
+				//GMT 시간임
+				Date expactEndDate = task.getExpectEndDate();
+				long expactEndDateTime = expactEndDate.getTime();
+				
+				Date now = new Date();
+				System.out.println("GMT : " + TimeZone.getDefault().getRawOffset());
+				long nowTime = now.getTime() - TimeZone.getDefault().getRawOffset();
+				
+				if (expactEndDateTime < nowTime)
+					return true;
+			}
+			return false;
+		}
 	
 	//프로세스인스턴스안의 실행중인 태스크가 지연처리라면 프로세스인스턴스의 상태도 지연처리다
 	private boolean isDelayedProcessInstance(String userId, String prcInstId) throws Exception {
@@ -4528,7 +4560,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					pworkInfo.setOwner(ModelConverter.getUserInfoByUserId(workList.getCreationUser()));
 					int status = -1;
 					if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-						boolean isDelayedProcessInst = isDelayedProcessInstance(userId, workList.getPrcInstId());
+						boolean isDelayedProcessInst = isDelayedProcessInstanceWithSetRunningTasks(userId, workList.getPrcInstId(), pworkInfo);
 						if (isDelayedProcessInst) {
 							status = Instance.STATUS_DELAYED_RUNNING;
 						} else {
