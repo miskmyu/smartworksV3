@@ -51,6 +51,9 @@ public class System {
 	public static final String TABLE_NAME_DEVMID_SEND_STATUS   	= "TN_IDM_SEND_STATUS";
 	public static final String TABLE_NAME_ADAPTER_HISTORY	    = "TB_UAST_CMNC_HS";
 	public static final String TABLE_NAME_COMMID_JOIN           = "CMDB.TN_CM_EVENT_OUTB_INFO";
+	public static final String TABLE_NAME_SEND_CONTENTS = "UIDB.TN_IDM_SEND_CONTENTS";						// 외부표출 시 컨텐츠정보 테이블 ( JOIN )
+	public static final String TABLE_NAME_SEND_INFO = "UIDB.TN_IDM_SEND_INFO";								// 단말연계미들웨어 테이블
+	public static final String TABLE_NAME_RCV_DEVICE = "UIDB.TN_IDM_CONTENTS_RCV_DEVICE";						// 단말연계미들웨어 RCV 테이블
 	
 	//개발서버
 //	public static final String TABLE_NAME_OPPORTAL_SITUATION 	= "USITUATION.TH_ST_SITUATION_HISTORY";			// 업무포털(발생,접수,처리,종료)테이블
@@ -142,7 +145,7 @@ public class System {
 //			return "pkg_1ef67bf9a18b4ee4bfb86d62504a1223";
 //		case PROCESS_FACILITY_MANAGEMENT:
 //			return "pkg_efa10156dc8445ee8a89df5e95493791";
-		
+//		
 		}
 		
 		return null;
@@ -275,6 +278,12 @@ public class System {
 			return System.TABLE_ID_ADAPTER_HISTORY;
 		}
 		return -1;
+	}
+	
+	public static String[] getReleaseTaskNames(){
+		return new String[]{ "기상특보 종료",
+							"통신 미들웨어(종료)"
+		};
 	}
 	
 }
