@@ -12,7 +12,7 @@ CREATE TABLE UcityWorkList (
 	eventName varchar(200),
 	type varchar(100),
 	externalDisplay varchar(200),
-	isSms int,
+	isSms varchar(10),
 	eventPlace varchar(100),	
 	creator	varchar(50),
 	createdtime timestamp,

@@ -4313,7 +4313,39 @@ public class InstanceServiceImpl implements IInstanceService {
 		return tableColName;
 	}
 	
-	
+	//프로세스인스턴스안의 실행중인 태스크가 지연처리라면 프로세스인스턴스의 상태도 지연처리다
+		private boolean isDelayedProcessInstanceWithSetRunningTasks(String userId, String prcInstId, PWInstanceInfo pworkInfo) throws Exception {
+			if (prcInstId == null)
+				return false;		
+			
+			//실행중이 태스크들을 구한다
+			TskTaskCond tskCond = new TskTaskCond();
+			tskCond.setStatus(TskTask.TASKSTATUS_ASSIGN);
+			tskCond.setProcessInstId(prcInstId);
+			tskCond.setType(TskTask.TASKTYPE_COMMON);
+			
+			TskTask[] tasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+			if (tasks == null || tasks.length == 0)
+				return false;
+			
+			pworkInfo.setRunningTasks(ModelConverter.getTaskInstanceInfoArrayByTskTaskArray(pworkInfo, tasks));
+			
+			for (int i = 0; i < tasks.length; i++) {
+				TskTask task = tasks[i];
+				
+				//GMT 시간임
+				Date expactEndDate = task.getExpectEndDate();
+				long expactEndDateTime = expactEndDate.getTime();
+				
+				Date now = new Date();
+				System.out.println("GMT : " + TimeZone.getDefault().getRawOffset());
+				long nowTime = now.getTime() - TimeZone.getDefault().getRawOffset();
+				
+				if (expactEndDateTime < nowTime)
+					return true;
+			}
+			return false;
+		}
 	
 	//프로세스인스턴스안의 실행중인 태스크가 지연처리라면 프로세스인스턴스의 상태도 지연처리다
 	private boolean isDelayedProcessInstance(String userId, String prcInstId) throws Exception {
@@ -4338,7 +4370,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			long expactEndDateTime = expactEndDate.getTime();
 			
 			Date now = new Date();
-			System.out.println("GMT : " + TimeZone.getDefault().getRawOffset());
+//			System.out.println("GMT : " + TimeZone.getDefault().getRawOffset());
 			long nowTime = now.getTime() - TimeZone.getDefault().getRawOffset();
 			
 			if (expactEndDateTime < nowTime)
@@ -4528,7 +4560,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					pworkInfo.setOwner(ModelConverter.getUserInfoByUserId(workList.getCreationUser()));
 					int status = -1;
 					if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-						boolean isDelayedProcessInst = isDelayedProcessInstance(userId, workList.getPrcInstId());
+						boolean isDelayedProcessInst = isDelayedProcessInstanceWithSetRunningTasks(userId, workList.getPrcInstId(), pworkInfo);
 						if (isDelayedProcessInst) {
 							status = Instance.STATUS_DELAYED_RUNNING;
 						} else {
@@ -4551,7 +4583,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					Property p3 = new Property("type",workList.getType());
 					Property p4 = new Property("externalDisplay",workList.getExternalDisplay());
 					Property p5 = new Property("eventPlace",workList.getEventPlace());
-					Property p6 = new Property("isSms",workList.isSms()+"");
+					Property p6 = new Property("isSms", CommonUtil.toBoolean(workList.getIsSms())+"");
 					Property p7 = new Property("eventId",workList.getEventId());
 					Property p8 = new Property("eventTime",workList.getEventTime() + "");
 
@@ -9625,68 +9657,6 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception {
-		String xmlData = 
-				"<ChartData type=\"COLUMN_CHART\" dimension=\"2\">" +
-					"<groupingDefineName><![CDATA[요청구분]]></groupingDefineName>" +
-					"<valueInfoDefineName><![CDATA[IT담당자]]></valueInfoDefineName>" +
-					"<valueInfoDefineUnit><![CDATA[userField]]></valueInfoDefineUnit>" +
-					"<grouping>" +
-						"<name><![CDATA[계정등록(Mighty,스마트웍스)]]></name>" +
-						"<value><![CDATA[8]]></value>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[공장자동화 개발/수정]]></name>" +
-						"<value><![CDATA[18]]></value>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[기타]]></name>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[기타 프로그램 개발/수정]]></name>" +
-						"<value><![CDATA[20]]></value>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[네트워크 유지보수]]></name>" +
-						"<value><![CDATA[12]]></value>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[메일 계정 신청]]></name>" +
-						"<value><![CDATA[5]]></value>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[스마트웍스 개발/수정]]></name>" +
-						"<value><![CDATA[16]]></value>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[장애처리]]></name>" +
-						"<value><![CDATA[10]]></value>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[전산기기 요청(PC,모니터,주변기기)]]></name>" +
-						"<value><![CDATA[4]]></value>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[퇴사자전산처리]]></name>" +
-						"<value><![CDATA[2]]></value>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[홈페이지 유지보수]]></name>" +
-						"<value><![CDATA[2]]></value>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[MES 프로그램 개발/수정]]></name>" +
-						"<value><![CDATA[53]]></value>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[PC A/S]]></name>" +
-						"<value><![CDATA[15]]></value>" +
-					"</grouping>" +
-					"<grouping>" +
-						"<name><![CDATA[PDA 프로그램 개발/수정]]></name>" +
-						"<value><![CDATA[5]]></value>" +
-					"</grouping>" +
-				"</ChartData>";
-		return xmlData;
+		return SwManagerFactory.getInstance().getUcityWorkListManager().getUcityChartXml(categoryName, periodName, serviceName, eventName);
 	}
-
 }

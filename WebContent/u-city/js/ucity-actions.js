@@ -30,6 +30,7 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				$.ajax({
 					url : "ucity_get_chart_xml.sw",
+					contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
 					data : {
 						categoryName : 'option.category.byDay', 
 						periodName : 'option.period.recentAYear', 
@@ -74,6 +75,7 @@ $(function() {
 		var eventName = workReport.find('.js_select_ucity_event:visible option:selected').attr('value');
 		$.ajax({
 			url : "ucity_get_chart_xml.sw",
+			contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
 			data : {
 				categoryName : categoryName, 
 				periodName : periodName, 
@@ -102,4 +104,10 @@ $(function() {
 		input.addClass('current').siblings().removeClass('current');
 		return false;
 	});
+	
+	$('.js_situation_space_reload').live('click', function(e) {
+		window.location.reload(true);
+		return false;
+	});
+
 });

@@ -155,7 +155,7 @@ public class OPDisplay {
 		if(!this.isValid()) return null;
 		
 		String externalDisplay = "";
-		String isSms = "";
+		String isSms = "false";
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
 			if(keyMap.getKey().equals("SITUATION_ID"))

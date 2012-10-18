@@ -163,6 +163,8 @@ public class Event {
 				"차량고장상황",
 				"교통통제상황",
 				"교통혼잡상황",
+				"교통통제상황",
+				"교통혼잡상황",
 				"화재",
 				"태풍상황",
 				"지하도침수상황",
@@ -207,20 +209,31 @@ public class Event {
 					"불법주정차(용의차량)상황",
 					"교통사고상황",
 					"뺑소니상황",
-					"차량고장상황"
+					"차량고장상황",
+					"교통통제상황",
+					"교통혼잡상황"
 			};
 		else if(serviceName.equals("방범"))
 			return new String[]{
 					"방범(용의차량)상황",
-					"비상벨상황"
+					"비상벨상황",
+					"응급상황",
+					"강도상황",
+					"미아상황"
 			};
 		else if(serviceName.equals("방재"))
 			return new String[]{
-					"화재"
+					"화재",
+					"태풍상황",
+					"지하도침수상황",
+					"수위경보"
 			};
 		else if(serviceName.equals("상수도"))
 			return new String[]{
-					"누수발생"
+					"수량초과",
+					"수량미만",
+					"유압초과",
+					"유압미만"
 			};
 		else if(serviceName.equals("시설물"))
 			return new String[]{

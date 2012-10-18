@@ -164,7 +164,7 @@
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_TIME)){
 							eventTime = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_IS_SMS)){
-							isSms = ("Y".equals(extendedProperty.getValue())) ? "예" : "아니요";			
+							isSms = ("true".equals(extendedProperty.getValue())) ? "예" : "아니요";			
 						}
 					}
 				}
@@ -201,7 +201,7 @@
 					break;
 				// 인스턴스가 완료된 경우...
 				case Instance.STATUS_ABORTED:
-					statusImage = "icon_status_not_yet";
+					statusImage = "icon_status_aborted";
 					statusTitle = "이상종료";
 					break;
 				// 기타 잘못되어 상태가 없는 경우..

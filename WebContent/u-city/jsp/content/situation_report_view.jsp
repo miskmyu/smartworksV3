@@ -66,7 +66,7 @@
 			if(!SmartUtil.isBlankObject(events)){
 		%>
 				<select class="js_select_ucity_event" service="<%=allServices[i]%>" style="display:none">
-					<option value="<%=System.REPORT_OPTION_ALL_SERVICES%>">모든이벤트</option>
+					<option value="<%=System.REPORT_OPTION_ALL_EVENTS%>">모든이벤트</option>
 					<%
 					for(int j=0; j<events.length; j++){
 					%>
