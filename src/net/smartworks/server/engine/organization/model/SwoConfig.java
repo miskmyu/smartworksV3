@@ -29,11 +29,13 @@ public class SwoConfig extends SwoObject {
 	public static final String A_USERID = "userId";
 	public static final String A_PASSWORD = "password";
 	public static final String A_ISACTIVITY = "isActivity";
+	public static final String A_USEMESSAGINGSERVICE = "useMessagingService";
 
 	private String smtpAddress;
 	private String userId;
 	private String password;
 	private boolean isActivity = true;
+	private boolean useMessagingService = true;
 	
 	public SwoConfig() {
 		super();
@@ -220,6 +222,12 @@ public class SwoConfig extends SwoObject {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public boolean isUseMessagingService() {
+		return useMessagingService;
+	}
+	public void setUseMessagingService(boolean useMessagingService) {
+		this.useMessagingService = useMessagingService;
 	}
 
 }

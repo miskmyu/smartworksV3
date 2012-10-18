@@ -1,5 +1,6 @@
 package net.smartworks.model.community.info;
 
+import net.smartworks.model.community.Department;
 import net.smartworks.model.community.User;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;

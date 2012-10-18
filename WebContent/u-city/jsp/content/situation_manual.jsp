@@ -31,9 +31,15 @@
 	String userviceCode = request.getParameter("userviceCode");
 	String serviceCode = request.getParameter("serviceCode");
 	String eventCode = request.getParameter("eventCode");
-	String situationStatus = OPSituation.STATUS_SITUATION_RELEASE;//request.getParameter("situationStatus");
+	String situationStatus = request.getParameter("situationStatus");
+	if(SmartUtil.isBlankObject(situationStatus))
+		situationStatus = OPSituation.STATUS_SITUATION_RELEASE;
 	
-	String eventId = Event.ID_ENV_GALE;//Event.getEventIdByCode(userviceCode, serviceCode, eventCode);
+	String eventId = null;
+	if(SmartUtil.isBlankObject(userviceCode) || SmartUtil.isBlankObject(serviceCode) || SmartUtil.isBlankObject(eventCode))
+	 	eventId = Event.ID_ENV_GALE;
+	else
+		eventId = Event.getEventIdByCode(userviceCode, serviceCode, eventCode);
 
 	String workId = System.getProcessIdByProcessStatus(Event.getProcessByEventId(eventId), situationStatus);
 	ProcessWork work = (ProcessWork)smartWorks.getWorkById(workId);
@@ -108,7 +114,8 @@ function submitForms() {
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 업무 설명 보기 -->
-<div class="contents_space js_pwork_manual_page js_sub_instance_list js_space_sub_instance" workId="<%=work.getId()%>" workType="<%=work.getType()%>">
+<div class="contents_space js_pwork_manual_page js_sub_instance_list js_space_sub_instance" workId="<%=work.getId()%>" workType="<%=work.getType()%>"
+								userviceCode="<%=userviceCode %>" serviceCode="<%=serviceCode %>" eventCode="<%=eventCode %>" situationStatus="<%=situationStatus %>" >
 
 	<!-- 타이틀-->
 	<div class="list_title_space mt20">
@@ -124,15 +131,15 @@ function submitForms() {
 			<div class="lft_title"></div>
 			<div class="lft_step">
 				<div class="s1 <%if(OPSituation.STATUS_SITUATION_OCCURRED.equals(situationStatus)){ %>current<%}%>">
-					<a href=""> </a>
+					<a class="js_ucity_content" href="situationManual.sw?userviceCode=<%=userviceCode%>&serviceCode=<%=serviceCode%>&eventCode=<%=eventCode%>&situationStatus=<%=OPSituation.STATUS_SITUATION_OCCURRED%>"> </a>
 				</div>
 				<div class="arr"></div>
 				<div class="s2 <%if(OPSituation.STATUS_SITUATION_PROCESSING.equals(situationStatus)){ %>current<%}%>">
-					<a href=""> </a>
+					<a class="js_ucity_content" href="situationManual.sw?userviceCode=<%=userviceCode%>&serviceCode=<%=serviceCode%>&eventCode=<%=eventCode%>&situationStatus=<%=OPSituation.STATUS_SITUATION_PROCESSING%>"> </a>
 				</div>
 				<div class="arr"></div>
 				<div class="s3 <%if(OPSituation.STATUS_SITUATION_RELEASE.equals(situationStatus)){ %>current<%}%> end">
-					<a href=""> </a>
+					<a class="js_ucity_content" href="situationManual.sw?userviceCode=<%=userviceCode%>&serviceCode=<%=serviceCode%>&eventCode=<%=eventCode%>&situationStatus=<%=OPSituation.STATUS_SITUATION_RELEASE%>"> </a>
 				</div>
 			</div>
 		</div>
@@ -150,12 +157,9 @@ function submitForms() {
 							int count = 0;
 							for (SmartTaskInfo task : tasks) {
 								count++;
-								UserInfo assignedUser = task.getAssignedUser();
-								String assignedUserImg = (SmartUtil.isBlankObject(assignedUser)) ? User.getNoUserPicture() : assignedUser.getMinPicture();
-								String assigningPosition = (SmartUtil.isBlankObject(assignedUser)) ? "" : assignedUser.getPosition();
-								String assigningName = (SmartUtil.isBlankObject(assignedUser)) ? task.getAssigningName() : assignedUser.getName();
+								String currentClass = (count==1) ? "current" : "";
 						%>
-								<li class="task js_manual_task js_select_task_manual" taskId="<%=task.getId()%>">
+								<li class="task <%=currentClass %> js_manual_task js_select_situation_manual" taskId="<%=task.getId()%>">
 									<a class="js_select_task_manual" href=""> 
 										<span class="<%=("n" + count)%>"> </span>
 										<div class="task_tx"><%=task.getName()%></div>
