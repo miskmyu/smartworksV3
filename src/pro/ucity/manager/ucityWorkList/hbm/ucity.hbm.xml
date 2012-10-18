@@ -17,7 +17,7 @@
 		<property name="eventTime" column="eventTime" type="timestamp"/>
 		<property name="type" column="type" type="string" length="100"/>
 		<property name="externalDisplay" column="externalDisplay" type="string" length="200"/>
-		<property name="isSms" column="isSms" type="boolean"/>
+		<property name="isSms" column="isSms" type="string" length="10"/>
 		<property name="eventPlace" column="eventPlace" type="string" length="100"/>
 		<property name="creationUser" column="creator" type="string" length="50"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>

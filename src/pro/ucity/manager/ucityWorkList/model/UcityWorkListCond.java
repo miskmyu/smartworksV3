@@ -34,7 +34,7 @@ public class UcityWorkListCond  extends MisObjectCond{
 	private String eventName;
 	private String type;
 	private String externalDisplay;
-	private boolean isSms;
+	private String isSms;
 	private String eventPlace;
 	private String eventId;
 	private Date eventTime;
@@ -120,17 +120,17 @@ public class UcityWorkListCond  extends MisObjectCond{
 	public void setEventId(String eventId) {
 		this.eventId = eventId;
 	}
-	public boolean isSms() {
-		return isSms;
-	}
-	public void setSms(boolean isSms) {
-		this.isSms = isSms;
-	}
 	public Date getEventTime() {
 		return eventTime;
 	}
 	public void setEventTime(Date eventTime) {
 		this.eventTime = eventTime;
+	}
+	public String getIsSms() {
+		return isSms;
+	}
+	public void setIsSms(String isSms) {
+		this.isSms = isSms;
 	}
 	
 }

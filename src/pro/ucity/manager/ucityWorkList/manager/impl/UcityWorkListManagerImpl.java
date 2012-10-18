@@ -113,7 +113,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		String eventName = null;
 		String type = null;
 		String externalDisplay = null;
-		//boolean isSms = false;
+		String isSms = null;
 		String eventPlace = null;
 		
 		String searchKey = null;
@@ -141,7 +141,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			eventName = cond.getEventName();
 			type = cond.getType();
 			externalDisplay = cond.getExternalDisplay();
-			//isSms = cond.isSms();
+			isSms = cond.getIsSms();
 			eventPlace = cond.getEventPlace();
 			
 			searchKey = cond.getSearchKey();
@@ -185,8 +185,8 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 				buf.append(" and obj.type = :type");
 			if (externalDisplay != null)
 				buf.append(" and obj.externalDisplay = :externalDisplay");
-//			if (isSms != null)
-//				buf.append(" and obj.isSms = :isSms");
+			if (isSms != null)
+				buf.append(" and obj.isSms = :isSms");
 			if (eventPlace != null)
 				buf.append(" and obj.eventPlace = :eventPlace");
 			if (creationUser != null)
@@ -294,7 +294,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			eventName = cond.getEventName();
 			type = cond.getType();
 			externalDisplay = cond.getExternalDisplay();
-			//isSms = cond.getIsSms();
+			isSms = cond.getIsSms();
 			eventPlace = cond.getEventPlace();
 			
 			if (prcInstId != null)
@@ -321,8 +321,8 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 				query.setString("type", type);
 			if (externalDisplay != null)
 				query.setString("externalDisplay", externalDisplay);
-			//if (isSms != null)
-			//	query.setString("isSms", isSms);
+			if (isSms != null)
+				query.setString("isSms", isSms);
 			if (eventPlace != null)
 				query.setString("eventPlace", eventPlace);
 			if (searchKey != null)

@@ -85,7 +85,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				ucityWorkList.setEventName(eventName);
 				ucityWorkList.setType(type);
 				ucityWorkList.setExternalDisplay(externalDisplay);
-				ucityWorkList.setIsSms(CommonUtil.toBoolean(isSms));
+				ucityWorkList.setIsSms(isSms);
 				ucityWorkList.setEventPlace(eventPlace);
 				
 				ucityWorkList.setCreationUser(user);
@@ -113,7 +113,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				if (!CommonUtil.isEmpty(externalDisplay))
 					ucityWorkList.setExternalDisplay(externalDisplay);
 				if (!CommonUtil.isEmpty(isSms))
-					ucityWorkList.setIsSms(CommonUtil.toBoolean(isSms));
+					ucityWorkList.setIsSms(isSms);
 				if (!CommonUtil.isEmpty(eventPlace))
 					ucityWorkList.setEventPlace(eventPlace);
 
