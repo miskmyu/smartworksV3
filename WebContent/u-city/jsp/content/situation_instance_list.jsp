@@ -201,7 +201,7 @@
 					break;
 				// 인스턴스가 완료된 경우...
 				case Instance.STATUS_ABORTED:
-					statusImage = "icon_status_not_yet";
+					statusImage = "icon_status_aborted";
 					statusTitle = "이상종료";
 					break;
 				// 기타 잘못되어 상태가 없는 경우..

@@ -104,4 +104,10 @@ $(function() {
 		input.addClass('current').siblings().removeClass('current');
 		return false;
 	});
+	
+	$('.js_situation_space_reload').live('click', function(e) {
+		window.location.reload(true);
+		return false;
+	});
+
 });
