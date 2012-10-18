@@ -4411,6 +4411,8 @@ public class InstanceServiceImpl implements IInstanceService {
 							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
 						else if(rightOperandInt == Instance.STATUS_COMPLETED)
 							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_COMPLETE;
+						else if(rightOperandInt == Instance.STATUS_ABORTED)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_ABORTED;
 					}
 
 					filter.setLeftOperandType(formFieldType);
