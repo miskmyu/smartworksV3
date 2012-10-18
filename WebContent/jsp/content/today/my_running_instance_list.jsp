@@ -92,13 +92,13 @@
 					</div>					
 					<!-- 타이틀을 나타내는 곳 // -->
 					
-					<form name="frmSearchInstance" class="fr js_search_running_instance">
+<%-- 					<form name="frmSearchInstance" class="fr js_search_running_instance">
 						<div class="srch_wh srch_wsize">
 							<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" title="<fmt:message key="search.search_running_instance"/>"
 								placeholder="<fmt:message key="search.search_running_instance"/>">
 							<button title="<fmt:message key='search.search'/>" onclick="selectListParam($('.js_running_instance_title').find('.js_progress_span:first'), false);return false;"></button>
 						</div>
-					</form>
+					</form> --%>
 <%-- 					<form class="form_space po_left js_form_filter_name" name="frmHomeFilterName">
 						<select name="selFilterName" class="js_select_search_filter">
 							<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" 

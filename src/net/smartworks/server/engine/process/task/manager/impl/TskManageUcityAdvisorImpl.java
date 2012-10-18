@@ -126,5 +126,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 	public void preSetTask(String user, TskTask obj, String level) throws Exception {
 	}
 	public void postSetTask(String user, TskTask obj, String level) throws Exception {
+		if (obj.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED))
+			this.postExecuteTask(user, obj, null);
 	}
 }
