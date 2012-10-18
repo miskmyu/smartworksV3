@@ -4313,6 +4313,39 @@ public class InstanceServiceImpl implements IInstanceService {
 		return tableColName;
 	}
 	
+	
+	
+	//프로세스인스턴스안의 실행중인 태스크가 지연처리라면 프로세스인스턴스의 상태도 지연처리다
+	private boolean isDelayedProcessInstance(String userId, String prcInstId) throws Exception {
+		if (prcInstId == null)
+			return false;		
+		
+		//실행중이 태스크들을 구한다
+		TskTaskCond tskCond = new TskTaskCond();
+		tskCond.setStatus(TskTask.TASKSTATUS_ASSIGN);
+		tskCond.setProcessInstId(prcInstId);
+		tskCond.setType(TskTask.TASKTYPE_COMMON);
+		
+		TskTask[] tasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+		if (tasks == null || tasks.length == 0)
+			return false;
+		
+		for (int i = 0; i < tasks.length; i++) {
+			TskTask task = tasks[i];
+			
+			//GMT 시간임
+			Date expactEndDate = task.getExpectEndDate();
+			long expactEndDateTime = expactEndDate.getTime();
+			
+			Date now = new Date();
+			System.out.println("GMT : " + TimeZone.getDefault().getRawOffset());
+			long nowTime = now.getTime() - TimeZone.getDefault().getRawOffset();
+			
+			if (expactEndDateTime < nowTime)
+				return true;
+		}
+		return false;
+	}
 	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception {
 	
 		try {
@@ -4495,9 +4528,17 @@ public class InstanceServiceImpl implements IInstanceService {
 					pworkInfo.setOwner(ModelConverter.getUserInfoByUserId(workList.getCreationUser()));
 					int status = -1;
 					if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-						status = Instance.STATUS_RUNNING;
+						boolean isDelayedProcessInst = isDelayedProcessInstance(userId, workList.getPrcInstId());
+						if (isDelayedProcessInst) {
+							status = Instance.STATUS_DELAYED_RUNNING;
+						} else {
+							status = Instance.STATUS_RUNNING;
+						}
+						
 					} else if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 						status = Instance.STATUS_COMPLETED;
+					} else if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
+						status = Instance.STATUS_ABORTED;
 					}
 					pworkInfo.setStatus(status);
 					pworkInfo.setSubject(workList.getTitle());
@@ -7836,11 +7877,15 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			TskTask task = getTskManager().getTask(userId, taskInstId, IManager.LEVEL_ALL);
 			task.setStatus(TskTask.TASKSTATUS_ABORTED);
+			task.setExecutionDate(new LocalDate());
+			task.setStartDate(new LocalDate());
+			task.setRealEndDate(new LocalDate());
+			task.setPerformer(userId);
 			String prcInstId = task.getProcessInstId();
 			PrcProcessInst prcInst = getPrcManager().getProcessInst(userId, prcInstId, IManager.LEVEL_ALL);
 			prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_ABORTED);
-			getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
 			getPrcManager().setProcessInst(userId, prcInst, IManager.LEVEL_ALL);
+			getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
 			return taskInstId;
 		} else if (action.equalsIgnoreCase("create")) {
 			//이미 생성된 인스턴스에 새로운 태스크를 생성하여 수행한다 기존에 생성되어 흘러가던 태스크와 별개로

@@ -369,6 +369,8 @@ public class MonXpdlManagerImpl implements IMonManager{
 				act.setStatus("SUSPENDED");
 			} else if (status.equalsIgnoreCase(CommonUtil.toDefault((String)MisUtil.taskStatusMap().get("terminated"), "terminated"))) {
 				act.setStatus("TERMINATED");
+			} else if (status.equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
+				act.setStatus("SUSPENDED");
 			} else { 
 				act.setStatus("COMPLETED");
 			}
