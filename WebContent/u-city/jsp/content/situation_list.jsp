@@ -194,15 +194,15 @@
 						<form class="form_space fl js_form_filter_name" name="frmPworkFilterName">
 							<select name="selFilterName" class="js_select_search_filter" href="search_filter.sw?workId=<%=workId%>">
 								<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" 
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_ALL_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									<%if(!SmartUtil.isBlankObject(selectedFilterId) && SearchFilter.FILTER_ALL_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.all_instances' />
 								</option>
 								<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									<%if(!SmartUtil.isBlankObject(selectedFilterId) && SearchFilter.FILTER_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									최근 발생항목
 								</option>
 								<option value="<%=SearchFilter.FILTER_RUNNING_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_RUNNING_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									<%if(!SmartUtil.isBlankObject(selectedFilterId) && SearchFilter.FILTER_RUNNING_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									진행중인 항목
 								</option>
 								<%

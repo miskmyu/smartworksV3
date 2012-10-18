@@ -658,7 +658,8 @@ public class UcityUtil {
 						}
 					}else{
 						if(System.getTableId(tableName)==System.TABLE_ID_OPPORTAL_SITUATION && OPSituation.isDisplayableStatus(status)){
-							dataRecord = OPDisplay.checkForDisplay(eventId, dataRecord);
+							dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
+							dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);
 						}
 						try{
 						java.lang.System.out.println("############ START Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
