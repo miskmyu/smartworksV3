@@ -96,14 +96,7 @@
 					%>"></span>
 				</a>
 			</th>				
-			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_TYPE%>">구분
-			 		<span class="<%
-					if(sortedField.getFieldId().equals(FIELD_ID_TYPE)){
-						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
-					%>"></span>
-				</a>				
-			</th>
+			<th>구분</th>
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>">진행단계
 			 		<span class="<%
@@ -194,33 +187,33 @@
 				// 인스턴스가 현재 진행중인 경우..
 				case Instance.STATUS_RUNNING:
 					statusImage = "icon_status_running";
-					statusTitle = "content.status.running";
+					statusTitle = "처리중";
 					break;
 				// 인스턴스가 지연진행중인 경우....
 				case Instance.STATUS_DELAYED_RUNNING:
 					statusImage = "icon_status_d_running";
-					statusTitle = "content.status.delayed_running";
-					break;
-				// 인스턴스가 반려된 경우...
-				case Instance.STATUS_RETURNED:
-					statusImage = "icon_status_returned";
-					statusTitle = "content.status.returned";
+					statusTitle = "지연처리중";
 					break;
 				// 인스턴스가 완료된 경우...
 				case Instance.STATUS_COMPLETED:
 					statusImage = "icon_status_completed";
-					statusTitle = "content.status.completed";
+					statusTitle = "완료";
+					break;
+				// 인스턴스가 완료된 경우...
+				case Instance.STATUS_ABORTED:
+					statusImage = "icon_status_not_yet";
+					statusTitle = "이상종료";
 					break;
 				// 기타 잘못되어 상태가 없는 경우..
 				default:
 					statusImage = "icon_status_not_yet";
-					statusTitle = "content.status.not_yet";
+					statusTitle = "미진행";
 				}
 			%>
 				<tr class="instance_list js_ucity_content" href="<%=target%>">
 					<td class="tc vm">
 						<a class="js_ucity_content" href="<%=target %>">					
-							<span class="<%=statusImage%>" title="<fmt:message key='<%=statusTitle%>'/>"></span>
+							<span class="<%=statusImage%>" title="<%=statusTitle%>"></span>
 						</a>
 					</td>
 					<td>
@@ -292,14 +285,7 @@
 					%>"></span>
 				</a>
 			</th>				
-			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_TYPE%>">구분
-			 		<span class="<%
-					if(sortedField.getFieldId().equals(FIELD_ID_TYPE)){
-						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
-					%>"></span>
-				</a>				
-			</th>
+			<th>구분</th>
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>">진행단계
 			 		<span class="<%
