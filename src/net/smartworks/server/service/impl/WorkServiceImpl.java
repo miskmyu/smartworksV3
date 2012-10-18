@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -1525,7 +1526,11 @@ public class WorkServiceImpl implements IWorkService {
 						selFilterOperator = ConditionOperator.GREATER_EQUAL.getId();
 						rightOperandType = FormField.TYPE_DATE;
 					} else if(selFilterOperator.equals(ConditionOperator.TODAY.getId())) {
-						rightOperand = this.getRecentSomeDays(1);
+						//rightOperand = this.getRecentSomeDays(1);
+						Calendar cal = Calendar.getInstance();
+						cal.set(Calendar.HOUR, 0);
+						cal.set(Calendar.MINUTE, 0);
+						rightOperand = new LocalDate(cal.getTime().getTime()- TimeZone.getDefault().getRawOffset()).toGMTDateString();
 						selFilterOperator = ConditionOperator.GREATER_EQUAL.getId();
 						rightOperandType = FormField.TYPE_DATE;
 					} else if(selFilterOperator.equals(ConditionOperator.THIS_WEEK.getId())) {
