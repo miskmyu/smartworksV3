@@ -49,13 +49,10 @@
 .contents_space .det_title, .reply .det_title, .det_title {overflow:hidden} /* 타이틀 */
 .contents_space .area {padding:10px}
 .contents_space .border {border:1px solid #c7c7c7; background-color:#FFF; padding:10px}
-.contents_space .border_no_topline {border: 1px solid #6D6D6D; margin: 2px 0 5px; padding: 5px}
+.contents_space .border_no_topline {border: 1px solid #6D6D6D; border-top:0; padding: 5px}
 .contents_space table > td,
 .contents_space table > th { padding:3px 10px}
 .contents_space > .title, .contents_space .title_list {border-bottom: 1px solid #6D6D6D; font-size:16px; color:#FFF; font-weight: bold; padding: 0 0 3px}
-
-/* Reply Info */
-.task_information {vertical-align:bottom; float:left}
 
 /* 공간 영역 */
 .space_section {padding: 8px 0 0 0}
@@ -158,10 +155,6 @@ a .proc_btn_next:hover {background: url("../images/proc_bg.png") no-repeat -129p
 .proc_task .title {margin-bottom:3px; height:30px; overflow: hidden}
 .proc_task .name {color: #999897 !important; font-size: 11px; font-weight: normal; word-wrap: break-word; max-height: 27px; overflow: hidden;}
 
-/* 프로세스 포인트 위치 */
-.pos_default {left: 58px; position: relative; top: 1px; z-index: 20}
-.pos_reply_point {left: 86px; position: relative; top: 1px; z-index: 20}
-.pos_reply {left: 60px; position: relative; top: 1px; z-index: 20}
 
 /* 페이징 */
 .paginate {padding: 10px 0; position: relative; text-align: center; font-size: 12px; font-weight: bold; background-color: #1E2127}
@@ -190,7 +183,6 @@ a .proc_btn_next:hover {background: url("../images/proc_bg.png") no-repeat -129p
 .icon_arr_ppage a:hover {background-position: -47px -314px}
 .icon_arr_npage a {background: url("../../images/header_nico.png") no-repeat scroll -20px -314px transparent; display:block; height: 16px; width: 18px}
 .icon_arr_npage a:hover {background-position: -67px -314px}
-
 
 /* 상단 아이콘 */
 .icon_forward_w {background: url("../../images/body_icon.png") no-repeat scroll 0 -364px transparent; height:18px; width:16px; display:inline-block}
@@ -227,9 +219,6 @@ a .icon_btn_edit:hover {background-position:-43px -859px}
 .icon_btn_add {background: url("../../images/bgBtnIcons.gif") 0 -105px no-repeat; height:21px; display:inline-block; padding-left:20px}
 .icon_btn_start {background: url("../../images/bgBtnIcons.gif") 0 -84px no-repeat; height:21px; display:inline-block; padding-left:5px}
 .icon_btn_tail {background: url("../../images/bgBtnIconsTail.gif") 100% 0 no-repeat; height:21px; display:inline-block; padding-right:5px; line-height:24px; font-size:11px}
-
-.btn_s_modi {background: url("../../images/btn_modi.gif") 0 0; height:21px; width:40px; display:inline-block}
-.btn_s_del {background: url("../../images/bt_delete.gif") 0 0; height:21px; width:40px; display:inline-block}
 
 /* Icon in builder Tab*/
 .btn_wo_adm {background: url("../../images/body_icon.png") no-repeat -149px -485px transparent; height:14px;  width:16px; display: inline-block; padding-right:5px; vertical-align: middle}
