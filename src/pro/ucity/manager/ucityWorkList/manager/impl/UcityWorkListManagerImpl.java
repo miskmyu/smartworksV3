@@ -8,6 +8,9 @@
 
 package pro.ucity.manager.ucityWorkList.manager.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -412,5 +415,227 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			logger.error(e, e);
 			throw new UcityWorkListException(e);
 		}
+	}
+	private String getUcityWorkListTableQueryForChart() {
+		StringBuffer tableBuff = new StringBuffer();
+		tableBuff.append(" select ");
+		tableBuff.append("	servicename ");
+		tableBuff.append("	,eventname ");
+		tableBuff.append("	,eventTime ");
+		tableBuff.append("	,createdtime ");
+		tableBuff.append("	,title ");
+		tableBuff.append("	,status ");
+		tableBuff.append("	, TO_CHAR(createdtime + 9/24, 'yyyyMMdd') as eventTime_year ");
+		tableBuff.append(" 	, case when TO_CHAR(createdtime + 9/24, 'HH24') between '03' and '05' then '새벽(3시~6시)'   ");
+		tableBuff.append(" 		when TO_CHAR(createdtime + 9/24, 'HH24') between '06' and '10' then '아침(6시~11시)'   ");
+		tableBuff.append(" 			when TO_CHAR(createdtime + 9/24, 'HH24') between '11' and '13' then '점심(11시~14시)' "); 
+		tableBuff.append(" 				when TO_CHAR(createdtime + 9/24, 'HH24') between '14' and '17' then '낮(14시~18시)'  ");
+		tableBuff.append(" 					when TO_CHAR(createdtime + 9/24, 'HH24') between '18' and '22' then '저녁(18시~23시)'  ");
+		tableBuff.append(" 						when TO_CHAR(createdtime + 9/24, 'HH24') between '23' and '24' then '심야(23시~3시)'  ");
+		tableBuff.append(" 							when TO_CHAR(createdtime + 9/24, 'HH24') between '00' and '02' then '심야(23시~3시)' ");						
+		tableBuff.append(" 		end as eventTime_hour ");
+		tableBuff.append("	, case when TO_CHAR(createdtime + 9/24, 'HH24') between '01' and '12' then '오전(AM)' when TO_CHAR(createdtime + 9/24, 'HH24') between '13' and '24' then '오후(PM)' end as eventTime_ampm  ");
+		tableBuff.append("	, TO_CHAR(createdtime, 'dy') || '요일' as eventTime_dy ");
+		tableBuff.append("	, TO_CHAR(createdtime, 'MM') || '월' as eventTime_month ");
+		tableBuff.append("	, case when TO_CHAR(createdtime, 'MM') between '01' and '06' then '상반기'   ");
+		tableBuff.append("		when TO_CHAR(createdtime, 'MM') between '04' and '12' then '하반기'   ");
+		tableBuff.append("		end as eventTime_half  ");
+		tableBuff.append("	, case when TO_CHAR(createdtime, 'MM') between '01' and '03' then '1분기'   ");
+		tableBuff.append("		when TO_CHAR(createdtime, 'MM') between '04' and '06' then '2분기'   ");
+		tableBuff.append("			when TO_CHAR(createdtime, 'MM') between '07' and '09' then '3분기'  ");
+		tableBuff.append("				when TO_CHAR(createdtime, 'MM') between '10' and '12' then '4분기'    ");
+		tableBuff.append("		end as eventTime_quarter  ");
+		tableBuff.append("	, case when TO_CHAR(createdtime, 'MM') between '03' and '05' then '봄'   ");
+		tableBuff.append("		when TO_CHAR(createdtime, 'MM') between '06' and '08' then '여름'   ");
+		tableBuff.append("			when TO_CHAR(createdtime, 'MM') between '09' and '11' then '가을'  ");
+		tableBuff.append("				when TO_CHAR(createdtime, 'MM') = '12' then '겨울'    ");
+		tableBuff.append("					when TO_CHAR(createdtime, 'MM') between '01' and '02' then '겨울'  ");
+		tableBuff.append("		end as eventTime_season ");
+		tableBuff.append(" from ");
+		tableBuff.append(" ucityworklist ");
+		return tableBuff.toString();
+	}
+	private String getCategoryColumnName(String categoryName) {
+		if (categoryName.equalsIgnoreCase("option.category.byTime")) {
+			return "eventTime_hour";
+		} else if (categoryName.equalsIgnoreCase("option.category.byAmPm")) {
+			return "eventTime_ampm";
+		} else if (categoryName.equalsIgnoreCase("option.category.byDay")) {
+			return "eventTime_dy";
+		} else if (categoryName.equalsIgnoreCase("option.category.byMonth")) {
+			return "eventTime_month";
+		} else if (categoryName.equalsIgnoreCase("option.category.bySeason")) {
+			return "eventTime_season";
+		} else if (categoryName.equalsIgnoreCase("option.category.byQuarter")) {
+			return "eventTime_quarter";
+		} else if (categoryName.equalsIgnoreCase("option.category.byHalfYear")) {
+			return "eventTime_half";
+		}
+		return null;
+	}
+	private String getPeriod(String periodName) {
+		
+		Calendar cal = Calendar.getInstance();
+		int nowYear = cal.get(Calendar.YEAR);
+		String nowMonth = cal.get(Calendar.MONTH) + "";
+		String nowDay = cal.get(Calendar.DATE) + "";
+		
+		if (periodName.equalsIgnoreCase("option.period.thisYear")) {
+			return nowYear + "0101";
+		} else if (periodName.equalsIgnoreCase("option.period.recentAYear")) {
+			return (nowYear - 1) + nowMonth + nowDay;
+		} else if (periodName.equalsIgnoreCase("option.period.recentThreeYears")) {
+			return (nowYear - 3) + nowMonth + nowDay;
+		} else if (periodName.equalsIgnoreCase("option.period.recentFiveYears")) {
+			return (nowYear - 5) + nowMonth + nowDay;
+		}
+		return null;
+	}
+	private List<String> getCategoryScop(String categoryName) {
+		List<String> result = new ArrayList<String>();
+
+		if (categoryName.equalsIgnoreCase("option.category.byTime")) {
+			result.add("새벽(3시~6시)");
+			result.add("아침(6시~11시)");
+			result.add("점심(11시~14시)");
+			result.add("낮(14시~18시)");
+			result.add("저녁(18시~23시)");
+			result.add("심야(23시~3시)");
+			return result;
+		} else if (categoryName.equalsIgnoreCase("option.category.byAmPm")) {
+			result.add("오전(AM)");
+			result.add("오후(PM)");
+			return result;
+		} else if (categoryName.equalsIgnoreCase("option.category.byDay")) {
+			result.add("월요일");
+			result.add("화요일");
+			result.add("수요일");
+			result.add("목요일");
+			result.add("금요일");
+			result.add("토요일");
+			result.add("일요일");
+			return result;
+		} else if (categoryName.equalsIgnoreCase("option.category.byMonth")) {
+			result.add("1월");
+			result.add("2월");
+			result.add("3월");
+			result.add("4월");
+			result.add("5월");
+			result.add("6월");
+			result.add("7월");
+			result.add("8월");
+			result.add("9월");
+			result.add("10월");
+			result.add("11월");
+			result.add("12월");
+			return result;
+		} else if (categoryName.equalsIgnoreCase("option.category.bySeason")) {
+			result.add("봄");
+			result.add("여름");
+			result.add("가을");
+			result.add("겨울");
+			return result;
+		} else if (categoryName.equalsIgnoreCase("option.category.byQuarter")) {
+			result.add("1분기");
+			result.add("2분기");
+			result.add("3분기");
+			result.add("4분기");
+			return result;
+		} else if (categoryName.equalsIgnoreCase("option.category.byHalfYear")) {
+			result.add("상반기");
+			result.add("하반기");
+			return result;
+		}
+		return null;
+	}
+	private String getXmlDataForChart(String categoryName, Map<String, Object> resultMap) throws Exception {
+
+		StringBuffer resultXml = new StringBuffer();
+		List<String> categoryScop = getCategoryScop(categoryName);
+		
+		resultXml.append("<ChartData type=\"COLUMN_CHART\" dimension=\"2\">");
+		if (categoryName.equalsIgnoreCase("option.category.byTime")) {
+			resultXml.append("<groupingDefineName><![CDATA[").append("시간대별").append("]]></groupingDefineName>");
+			resultXml.append("<valueInfoDefineUnit><![CDATA[시간대별]]></valueInfoDefineUnit>");
+		} else if (categoryName.equalsIgnoreCase("option.category.byAmPm")) {
+			resultXml.append("<groupingDefineName><![CDATA[").append("오전/오후").append("]]></groupingDefineName>");
+			resultXml.append("<valueInfoDefineUnit><![CDATA[오전/오후]]></valueInfoDefineUnit>");
+		} else if (categoryName.equalsIgnoreCase("option.category.byDay")) {
+			resultXml.append("<groupingDefineName><![CDATA[").append("요일별").append("]]></groupingDefineName>");
+			resultXml.append("<valueInfoDefineUnit><![CDATA[요일별]]></valueInfoDefineUnit>");
+		} else if (categoryName.equalsIgnoreCase("option.category.byMonth")) {
+			resultXml.append("<groupingDefineName><![CDATA[").append("월별").append("]]></groupingDefineName>");
+			resultXml.append("<valueInfoDefineUnit><![CDATA[월별]]></valueInfoDefineUnit>");
+		} else if (categoryName.equalsIgnoreCase("option.category.bySeason")) {
+			resultXml.append("<groupingDefineName><![CDATA[").append("계절별").append("]]></groupingDefineName>");
+			resultXml.append("<valueInfoDefineUnit><![CDATA[계절별]]></valueInfoDefineUnit>");
+		} else if (categoryName.equalsIgnoreCase("option.category.byQuarter")) {
+			resultXml.append("<groupingDefineName><![CDATA[").append("분기별").append("]]></groupingDefineName>");
+			resultXml.append("<valueInfoDefineUnit><![CDATA[분기별]]></valueInfoDefineUnit>");
+		} else if (categoryName.equalsIgnoreCase("option.category.byHalfYear")) {
+			resultXml.append("<groupingDefineName><![CDATA[").append("반기별").append("]]></groupingDefineName>");
+			resultXml.append("<valueInfoDefineUnit><![CDATA[반기별]]></valueInfoDefineUnit>");
+		}
+		resultXml.append("<valueInfoDefineName><![CDATA[발생건수]]></valueInfoDefineName>");
+		resultXml.append("<valueInfoDefineUnit><![CDATA[건]]></valueInfoDefineUnit>");
+		
+		for (int i = 0; i < categoryScop.size(); i++) {
+			resultXml.append("<grouping>");
+			resultXml.append("<name><![CDATA[").append(categoryScop.get(i)).append("]]></name>");
+			resultXml.append("<value><![CDATA[").append(CommonUtil.toDefault((BigDecimal)resultMap.get(categoryScop.get(i)) + "", "0")).append("]]></value>");
+			resultXml.append("</grouping>");
+		}
+		resultXml.append("</ChartData>");
+		
+		return resultXml.toString();
+	}
+	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception {
+		StringBuffer chartQuery = new StringBuffer();
+		chartQuery.append("select tbl.").append(getCategoryColumnName(categoryName)).append(", count(*) as count from (");
+		chartQuery.append(getUcityWorkListTableQueryForChart());
+		chartQuery.append(") tbl where 1=1 ");
+		if(!serviceName.equalsIgnoreCase("option.service.all") || !eventName.equalsIgnoreCase("option.event.all")) {
+			if (!serviceName.equalsIgnoreCase("option.service.all")) {
+				chartQuery.append(" and tbl.serviceName = '").append(serviceName).append("' ");
+			}
+			if (!eventName.equalsIgnoreCase("option.event.all")) {
+				chartQuery.append(" and tbl.eventName = '").append(eventName).append("' ");
+			}
+		}
+		if (!periodName.equalsIgnoreCase("option.period.all")) {
+			chartQuery.append("and tbl.eventTime_year >= '").append(getPeriod(periodName)).append("' ");
+		}
+		chartQuery.append(" group by tbl.").append(getCategoryColumnName(categoryName)).append(" order by tbl.").append(getCategoryColumnName(categoryName));
+
+		Query query = this.getSession().createSQLQuery(chartQuery.toString());
+		
+		List list = query.list();
+		Map<String,Object> resultMap = new HashMap<String, Object>();
+		if (list == null || list.isEmpty())
+			return getXmlDataForChart(categoryName, resultMap);
+		
+		for (Iterator itr = list.iterator(); itr.hasNext();) {
+			Object[] fields = (Object[]) itr.next();
+			if (fields[0] instanceof Character) {
+				if(((Character)fields[0]).toString().equalsIgnoreCase("상")) {
+					resultMap.put("상반기", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("하")) {
+					resultMap.put("하반기", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("1")) {
+					resultMap.put("1분기", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("2")) {
+					resultMap.put("2분기", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("3")) {
+					resultMap.put("3분기", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("4")) {
+					resultMap.put("4분기", (BigDecimal)fields[1]);
+				}
+				
+			} else {
+				resultMap.put((String)fields[0], (BigDecimal)fields[1]);
+			}
+				
+		}
+		return getXmlDataForChart(categoryName, resultMap);
 	}
 }
