@@ -201,4 +201,6 @@ public interface IInstanceService {
 	
 	public TaskInstance getTaskInstanceById(String workId, String taskInstId) throws Exception;
 	
+	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception;
+	
 }

@@ -1709,4 +1709,9 @@ public class SmartWorks implements ISmartWorks {
 		return instanceService.createTaskInstance(requestBody, request);
 	}
 
+	@Override
+	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception {
+		return instanceService.getUcityChartXml(categoryName, periodName, serviceName, eventName);
+	}
+
 }

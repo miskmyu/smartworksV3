@@ -763,5 +763,7 @@ public interface ISmartWorks {
 
 	public abstract InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception;
 	
+	public abstract String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception;
+	
 	
 }

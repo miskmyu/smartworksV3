@@ -77,18 +77,22 @@ public class System {
 	public static final String TASK_FORM_NAME_USERVICE_END 		= "기상특보 종료";
 
 	
-	public static final String REPORT_OPTION_PERIOD_BY_TIME = "option.period.byTime";
-	public static final String REPORT_OPTION_PERIOD_BY_DAY = "option.period.byDay";
-	public static final String REPORT_OPTION_PERIOD_BY_MONTH = "option.period.byMonth";
-	public static final String REPORT_OPTION_PERIOD_BY_SEASON = "option.period.bySeason";
+	public static final String REPORT_OPTION_CATEGORY_BY_TIME = "option.category.byTime";
+	public static final String REPORT_OPTION_CATEGORY_BY_AMPM = "option.category.byAmPm";
+	public static final String REPORT_OPTION_CATEGORY_BY_DAY = "option.category.byDay";
+	public static final String REPORT_OPTION_CATEGORY_BY_MONTH = "option.category.byMonth";
+	public static final String REPORT_OPTION_CATEGORY_BY_SEASON = "option.category.bySeason";
+	public static final String REPORT_OPTION_CATEGORY_BY_QUARTER = "option.category.byQuarter";
+	public static final String REPORT_OPTION_CATEGORY_BY_HALFYEAR = "option.category.byHalfYear";
 	
-	public static final String REPORT_OPTION_THIS_YEAR = "option.thisYear";
-	public static final String REPORT_OPTION_RECENT_A_YEAR = "option.recentAYear";
-	public static final String REPORT_OPTION_RECENT_THREE_YEARS = "option.recentThreeYears";
-	public static final String REPORT_OPTION_ALL_HISTORY = "option.allHistory";
+	public static final String REPORT_OPTION_THIS_YEAR = "option.period.thisYear";
+	public static final String REPORT_OPTION_RECENT_A_YEAR = "option.period.recentAYear";
+	public static final String REPORT_OPTION_RECENT_THREE_YEARS = "option.period.recentThreeYears";
+	public static final String REPORT_OPTION_RECENT_FIVE_YEARS = "option.period.recentFiveYears";
+	public static final String REPORT_OPTION_ALL_HISTORY = "option.period.all";
 
-	public static final String REPORT_OPTION_ALL_SERVICES = "option.allServices";
-	public static final String REPORT_OPTION_ALL_EVENTS = "option.allEvents";
+	public static final String REPORT_OPTION_ALL_SERVICES = "option.service.all";
+	public static final String REPORT_OPTION_ALL_EVENTS = "option.event.all";
 	
 	public static String getProcessId(int process){
 		if(process<0 || process>MAX_PROCESS) return null;
