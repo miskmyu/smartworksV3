@@ -114,7 +114,10 @@ public class UcityWorkList  extends MisObject{
 	public boolean isSms() {
 		return isSms;
 	}
-	public void setSms(boolean isSms) {
+	public boolean getIsSms() {
+		return isSms;
+	}
+	public void setIsSms(boolean isSms) {
 		this.isSms = isSms;
 	}
 	public Date getEventTime() {
