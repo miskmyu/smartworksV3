@@ -30,6 +30,7 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				$.ajax({
 					url : "ucity_get_chart_xml.sw",
+					contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
 					data : {
 						categoryName : 'option.category.byDay', 
 						periodName : 'option.period.recentAYear', 
@@ -38,7 +39,7 @@ $(function() {
 					},
 					success : function(xmlData, status, jqXHR) {
 						target.html(data).slideDown(500);
-						loadChartViewer($('#chart_target'), {chartType : 'LINE_CHART', xmlData : xmlData});
+						loadChartViewer($('#chart_target'), {chartType : 'LINE_CHART', xmlData : xmlData.record});
 					},
 					error : function(xhr, ajaxOptions, thrownError){
 					}
@@ -74,6 +75,7 @@ $(function() {
 		var eventName = workReport.find('.js_select_ucity_event:visible option:selected').attr('value');
 		$.ajax({
 			url : "ucity_get_chart_xml.sw",
+			contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
 			data : {
 				categoryName : categoryName, 
 				periodName : periodName, 
@@ -81,7 +83,7 @@ $(function() {
 				eventName : eventName, 
 			},
 			success : function(data, status, jqXHR) {
-				loadChartViewer($('#chart_target'), {chartType : 'LINE_CHART', xmlData : data});
+				loadChartViewer($('#chart_target'), {chartType : 'LINE_CHART', xmlData : data.record});
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 			}
@@ -102,4 +104,10 @@ $(function() {
 		input.addClass('current').siblings().removeClass('current');
 		return false;
 	});
+	
+	$('.js_situation_space_reload').live('click', function(e) {
+		window.location.reload(true);
+		return false;
+	});
+
 });

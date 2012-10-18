@@ -19,16 +19,16 @@ import net.smartworks.util.SmartUtil;
 
 public class DMHistory {
 
-	public static final String DEVICE_ID_MEDIABOARD		= "mbdr";
-	public static final String DEVICE_ID_TRAFFIC_BIT	= "trfcBIT";
-	public static final String DEVICE_ID_TRAFFIC_VMS	= "trfcVMS";
-	public static final String DEVICE_ID_KIOSK			= "trfcKIOSK";
-	public static final String DEVICE_ID_ENV_VMS		= "envrVMS";
+	public static final String DEVICE_ID_MEDIABOARD		= "CIMBMBD";
+	public static final String DEVICE_ID_TRAFFIC_BIT	= "TMEMBIT";
+	public static final String DEVICE_ID_TRAFFIC_VMS	= "TMEMVMS";
+	public static final String DEVICE_ID_KIOSK			= "TMEMKIOSK";
+	public static final String DEVICE_ID_ENV_VMS		= "EVEIVMS";
 	
 	public static final String FIELD_NAME_EVENT_ID = "a.EVENT_ID";
 	public static final String FIELD_NAME_SEND_VALUE = "c.SEND_RESPONSE_VALUE";
 	public static final String FIELD_NAME_SEND_SEQ = "SEND_INFO_SEQ";
-	public static final String FIELD_NAME_ADAPTER_DIV = "ADAPTER_DIVISION";
+	public static final String FIELD_NAME_ADAPTER_DIV = "b.ADAPTER_DIVISION";
 	
 	
 	
@@ -36,7 +36,7 @@ public class DMHistory {
 	
 	public static final String QUERY_SELECT_FOR_DISPLAY_PERFORM = "select b.*," + FIELD_NAME_SEND_VALUE + ", " + FIELD_NAME_EVENT_ID + " from " + System.TABLE_NAME_SEND_INFO + " a, " + System.TABLE_NAME_SEND_CONTENTS + " b, "
 			+ System.TABLE_NAME_RCV_DEVICE + " c where a." + FIELD_NAME_SEND_SEQ + " = b." + FIELD_NAME_SEND_SEQ + " and c." + FIELD_NAME_SEND_SEQ +  " = a." + FIELD_NAME_SEND_SEQ + " and " + FIELD_NAME_EVENT_ID +
-			" = ? and " + FIELD_NAME_ADAPTER_DIV + " = ? order by " + FIELD_NAME_SEND_SEQ + " desc";
+			" = ? and " + FIELD_NAME_ADAPTER_DIV + " = ? order by a." + FIELD_NAME_SEND_SEQ + " desc";
 	
 	public static final String QUERY_SELECT_FOR_STOP_PERFORM = "select b.*," + FIELD_NAME_SEND_VALUE + ", " + FIELD_NAME_EVENT_ID + " from " + System.TABLE_NAME_SEND_INFO + " a, " + System.TABLE_NAME_SEND_CONTENTS + " b, "
 			+ System.TABLE_NAME_RCV_DEVICE + " c where a." + FIELD_NAME_SEND_SEQ + " = b." + FIELD_NAME_SEND_SEQ + " and c." + FIELD_NAME_SEND_SEQ +  " = a." + FIELD_NAME_SEND_SEQ + " and " + FIELD_NAME_EVENT_ID +
@@ -44,7 +44,7 @@ public class DMHistory {
 
 	
 	public static final KeyMap[] DEVMID_TRACE_FIELDS = {
-		new KeyMap("표출내용", "DATA_PATH"), new KeyMap("표출지속시간", "PLAY_TIME"), new KeyMap("표출결과", "SEND_RESPONSE_VALUE"), new KeyMap("이벤트아이디", "EVENT_ID"), new KeyMap("디바이스아이디", "ADAPTER_DIVISION"),
+		new KeyMap("표출내용", "DATA_PATH"), new KeyMap("표출지속시간", "PLAY_TIME"), new KeyMap("표출결과", "SEND_RESPONSE_VALUE"), new KeyMap("이벤트아이디", "EVENT_ID"), new KeyMap("디바이스아이디", "ADAPTER_DIVISION")
 	};
 
 	private String eventId;
@@ -148,10 +148,10 @@ public class DMHistory {
 			this.sendResponseValue = result.getString("SEND_RESPONSE_VALUE");
 		}catch (Exception ex){}
 		try{
-			this.sendResponseValue = result.getString("EVENT_ID");
+			this.eventId = result.getString("EVENT_ID");
 		}catch (Exception ex){}
 		try{
-			this.sendResponseValue = result.getString("ADAPTER_DIVISION");
+			this.deviceId = result.getString("ADAPTER_DIVISION");
 		}catch (Exception ex){}
 	}
 
@@ -163,13 +163,14 @@ public class DMHistory {
 
 	public static Map<String,Object> readHistoryTable(String eventId, String status, String deviceId){
 		
-		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(status)) return null;
+		if(SmartUtil.isBlankObject(eventId)) return null;
 		try {
 			Class.forName(System.DATABASE_JDBC_DRIVE);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 
+		if(SmartUtil.isBlankObject(status)) status = "N";
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				

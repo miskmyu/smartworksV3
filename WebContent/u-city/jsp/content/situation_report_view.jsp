@@ -30,7 +30,7 @@
 <div class="js_work_report_view">
 
 	<!-- 컨텐츠 -->
-	<div class="fr">
+	<div class="fr mr10">
 		<select class="js_select_ucity_category">
 			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_TIME%>">시간대별</option>
 			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_AMPM%>">오전/오후</option>
@@ -66,7 +66,7 @@
 			if(!SmartUtil.isBlankObject(events)){
 		%>
 				<select class="js_select_ucity_event" service="<%=allServices[i]%>" style="display:none">
-					<option value="<%=System.REPORT_OPTION_ALL_SERVICES%>">모든이벤트</option>
+					<option value="<%=System.REPORT_OPTION_ALL_EVENTS%>">모든이벤트</option>
 					<%
 					for(int j=0; j<events.length; j++){
 					%>

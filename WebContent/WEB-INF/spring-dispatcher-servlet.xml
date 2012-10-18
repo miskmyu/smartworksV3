@@ -28,8 +28,7 @@
 	<!--<beans:bean id="multipartResolver" class="org.springframework.web.multipart.cos.CosMultipartResolver"> 
 		one of the properties available; the maximum file size in bytes <beans:property 
 		name="maxUploadSize" value="10000000" /> </beans:bean> -->
-
-<!-- 	<beans:bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+<!--  	<beans:bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
         <beans:property name="messageConverters">
             <beans:list>
                 <beans:bean id="stringHttpMessageConverter"

@@ -81,11 +81,11 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				
 				ucityWorkList.setServiceName(serviceName);
 				ucityWorkList.setEventId(eventId);
-				ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMdd"));
+				ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMddHHmmss"));
 				ucityWorkList.setEventName(eventName);
 				ucityWorkList.setType(type);
 				ucityWorkList.setExternalDisplay(externalDisplay);
-				ucityWorkList.setIsSms(CommonUtil.toBoolean(isSms));
+				ucityWorkList.setIsSms(isSms);
 				ucityWorkList.setEventPlace(eventPlace);
 				
 				ucityWorkList.setCreationUser(user);
@@ -105,7 +105,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				if (!CommonUtil.isEmpty(eventId))
 					ucityWorkList.setEventId(eventId);
 				if (!CommonUtil.isEmpty(eventTime))
-					ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMdd"));
+					ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMddHHmmss"));
 				if (!CommonUtil.isEmpty(eventName))
 					ucityWorkList.setEventName(eventName);
 				if (!CommonUtil.isEmpty(type))
@@ -113,7 +113,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				if (!CommonUtil.isEmpty(externalDisplay))
 					ucityWorkList.setExternalDisplay(externalDisplay);
 				if (!CommonUtil.isEmpty(isSms))
-					ucityWorkList.setIsSms(CommonUtil.toBoolean(isSms));
+					ucityWorkList.setIsSms(isSms);
 				if (!CommonUtil.isEmpty(eventPlace))
 					ucityWorkList.setEventPlace(eventPlace);
 
@@ -126,5 +126,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 	public void preSetTask(String user, TskTask obj, String level) throws Exception {
 	}
 	public void postSetTask(String user, TskTask obj, String level) throws Exception {
+		if (obj.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED))
+			this.postExecuteTask(user, obj, null);
 	}
 }

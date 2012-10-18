@@ -1,3 +1,5 @@
+<%@page import="pro.ucity.util.UcityUtil"%>
+<%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.server.engine.common.model.Property"%>
 <%@page import="net.smartworks.model.work.info.SmartTaskInfo"%>
@@ -94,14 +96,7 @@
 					%>"></span>
 				</a>
 			</th>				
-			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_TYPE%>">구분
-			 		<span class="<%
-					if(sortedField.getFieldId().equals(FIELD_ID_TYPE)){
-						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
-					%>"></span>
-				</a>				
-			</th>
+			<th>구분</th>
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>">진행단계
 			 		<span class="<%
@@ -151,7 +146,6 @@
 				Property[] extendedProperties = instanceInfo.getExtentedProperty();
 				String serviceName = "";
 				String eventName = "";
-				String serviceType = "";
 				String externalDisplay = "";
 				String eventPlace = "";
 				String eventTime = "";
@@ -163,8 +157,6 @@
 							serviceName = CommonUtil.toNotNull(extendedProperty.getValue());
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_NAME)){
 							eventName = CommonUtil.toNotNull(extendedProperty.getValue());							
-						}else if(extendedProperty.getName().equals(FIELD_ID_TYPE)){
-							serviceType = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_EXTERNAL_DISPLAY)){
 							externalDisplay = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_PLACE)){
@@ -172,14 +164,22 @@
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_TIME)){
 							eventTime = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_IS_SMS)){
-							isSms = ("Y".equals(extendedProperty.getValue())) ? "예" : "아니요";			
+							isSms = ("true".equals(extendedProperty.getValue())) ? "예" : "아니요";			
 						}
 					}
 				}
 				
 				UserInfo owner = instanceInfo.getOwner();
 				UserInfo lastModifier = instanceInfo.getLastModifier();
-				TaskInstanceInfo lastTask = instanceInfo.getLastTask();
+//				TaskInstanceInfo lastTask = instanceInfo.getLastTask();
+				TaskInstanceInfo[] runningTasks = instanceInfo.getRunningTasks();
+				String[] serviceTypes = null;
+				if(!SmartUtil.isBlankObject(runningTasks)){
+					serviceTypes = new String[runningTasks.length];
+					for(int k=0; k<runningTasks.length; k++){
+						serviceTypes[k] = UcityUtil.getServiceTypeName(runningTasks[k].getName());
+					}
+				}
 				String target =  "situationDetail.sw?cid=" + instanceInfo.getContextId() + "&workId=" + instanceInfo.getWork().getId();
 				String statusImage = "";
 				String statusTitle = "";
@@ -187,33 +187,33 @@
 				// 인스턴스가 현재 진행중인 경우..
 				case Instance.STATUS_RUNNING:
 					statusImage = "icon_status_running";
-					statusTitle = "content.status.running";
+					statusTitle = "처리중";
 					break;
 				// 인스턴스가 지연진행중인 경우....
 				case Instance.STATUS_DELAYED_RUNNING:
 					statusImage = "icon_status_d_running";
-					statusTitle = "content.status.delayed_running";
-					break;
-				// 인스턴스가 반려된 경우...
-				case Instance.STATUS_RETURNED:
-					statusImage = "icon_status_returned";
-					statusTitle = "content.status.returned";
+					statusTitle = "지연처리중";
 					break;
 				// 인스턴스가 완료된 경우...
 				case Instance.STATUS_COMPLETED:
 					statusImage = "icon_status_completed";
-					statusTitle = "content.status.completed";
+					statusTitle = "완료";
+					break;
+				// 인스턴스가 완료된 경우...
+				case Instance.STATUS_ABORTED:
+					statusImage = "icon_status_aborted";
+					statusTitle = "이상종료";
 					break;
 				// 기타 잘못되어 상태가 없는 경우..
 				default:
 					statusImage = "icon_status_not_yet";
-					statusTitle = "content.status.not_yet";
+					statusTitle = "미진행";
 				}
 			%>
 				<tr class="instance_list js_ucity_content" href="<%=target%>">
 					<td class="tc vm">
 						<a class="js_ucity_content" href="<%=target %>">					
-							<span class="<%=statusImage%>" title="<fmt:message key='<%=statusTitle%>'/>"></span>
+							<span class="<%=statusImage%>" title="<%=statusTitle%>"></span>
 						</a>
 					</td>
 					<td>
@@ -223,10 +223,22 @@
 						<a class="js_ucity_content" href="<%=target %>"><%=eventName%></a>
 					</td>
 					<td>
-						<a class="js_ucity_content" href="<%=target %>"><%=serviceType%></a>
-					</td>
+						<%if(!SmartUtil.isBlankObject(serviceTypes)){ %>
+	 						<a class="js_ucity_content" href="<%=target %>">
+	 							<%for(int index=0; index<serviceTypes.length; index++){ %>
+	 								<%=serviceTypes[index]%><%if(index<serviceTypes.length-1){ %></br><%} %>
+	 							<%} %>
+	 						</a>
+	 					<%} %>
+ 					</td>
 					<td>
- 						<a class="js_ucity_content" href="<%=target %>"><%if(!SmartUtil.isBlankObject(lastTask)){%><%=lastTask.getName()%><%} %></a>
+						<%if(!SmartUtil.isBlankObject(runningTasks)){ %>
+	 						<a class="js_ucity_content" href="<%=target %>">
+	 							<%for(int index=0; index<runningTasks.length; index++){ %>
+	 								<%=runningTasks[index].getName()%><%if(index<runningTasks.length-1){ %></br><%} %>
+	 							<%} %>
+	 						</a>
+	 					<%} %>
  					</td>
 					<td>
 						<a class="js_ucity_content" href="<%=target %>"><%=externalDisplay%></a>
@@ -273,14 +285,7 @@
 					%>"></span>
 				</a>
 			</th>				
-			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_TYPE%>">구분
-			 		<span class="<%
-					if(sortedField.getFieldId().equals(FIELD_ID_TYPE)){
-						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
-					%>"></span>
-				</a>				
-			</th>
+			<th>구분</th>
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>">진행단계
 			 		<span class="<%

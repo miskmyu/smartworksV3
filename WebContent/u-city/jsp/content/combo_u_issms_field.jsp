@@ -48,10 +48,10 @@
 <span class="str_field">
 	<input name="hdnFieldType" type="hidden" value="<%=UcityUtil.FIELD_TYPE_COMBO_U_ISSMS %>"/>
 	<select name="txtFilterStringOperand">
-			<option value="Y" <%if((operandValue != null) && operandValue.equals("Y")){%> selected<%} %>>
+			<option value="true" <%if((operandValue != null) && operandValue.equals("true")){%> selected<%} %>>
 				<fmt:message key="filter.operand.true" />
 			</option>
-			<option value="N" <%if((operandValue != null) && operandValue.equals("N")){%> selected<%} %>>
+			<option value="false" <%if((operandValue != null) && operandValue.equals("false")){%> selected<%} %>>
 				<fmt:message key="filter.operand.false" />
 			</option>
 	</select> 

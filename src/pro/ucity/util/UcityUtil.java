@@ -53,6 +53,15 @@ public class UcityUtil {
 		super();
 	}
 	
+	public static String getServiceTypeName(String taskName){
+		if(SmartUtil.isBlankObject(taskName)) return "";
+		for(int i=0; i<System.getReleaseTaskNames().length; i++){
+			if(taskName.equals(System.getReleaseTaskNames()[i]))
+				return "종료";
+		}
+		return "발생";
+	}
+	
 	public static FormField[] getSituationListFields() throws Exception{
 		return new FormField[] { 
 			new FormField(FormField.ID_STATUS, "상태", FormField.TYPE_COMBO_STATUS), 
@@ -62,15 +71,15 @@ public class UcityUtil {
 			new FormField(FormField.ID_LAST_TASK, "진행단계", FormField.TYPE_TEXT),
 			new FormField("externalDisplay", "외부표출", FormField.TYPE_TEXT),
 			new FormField("isSms", "SMS발송", FIELD_TYPE_COMBO_U_ISSMS),
-			new FormField("eventTime", "발생일시", FormField.TYPE_DATETIME),
+			new FormField("eventTime", "발생일시", FormField.TYPE_DATE),
 			new FormField("eventPlace", "발생장소", FormField.TYPE_TEXT)
 		};
 	}
 
 	public static final String FIELD_TYPE_COMBO_U_SERVICE = "comboUService";
 	public static final String FIELD_TYPE_COMBO_U_EVENT = "comboUEvent";
-	public static final String FIELD_TYPE_COMBO_U_TYPE = "comboUEvent";
-	public static final String FIELD_TYPE_COMBO_U_ISSMS = "comboUIsSms";
+	public static final String FIELD_TYPE_COMBO_U_TYPE = "comboUType";
+	public static final String FIELD_TYPE_COMBO_U_ISSMS = "comboUIssms";
 	public static String getPageNameByField(FormField field) throws Exception{
 		if(SmartUtil.isBlankObject(field)) return "";
 		if(field.getType().equals(FormField.TYPE_COMBO_STATUS))
@@ -132,6 +141,7 @@ public class UcityUtil {
 		requestBody.put("eventName", data.get("eventName"));
 		requestBody.put("eventId", eventId);
 		requestBody.put("eventTime", eventTime);
+		requestBody.put("isSms", "false");
 		
 		Map<String, Object> fieldData = new HashMap<String, Object>();
 		for(int i=0; i<form.getFields().length; i++){
@@ -176,6 +186,7 @@ public class UcityUtil {
 		requestBody.put("eventPlace", data.get("eventPlace"));
 		requestBody.put("eventId", eventId);
 		requestBody.put("eventTime", eventTime);
+		requestBody.put("isSms", "false");
 		
 		Map<String, Object> fieldData = new HashMap<String, Object>();
 		for(int i=0; i<form.getFields().length; i++){
@@ -647,7 +658,8 @@ public class UcityUtil {
 						}
 					}else{
 						if(System.getTableId(tableName)==System.TABLE_ID_OPPORTAL_SITUATION && OPSituation.isDisplayableStatus(status)){
-							dataRecord = OPDisplay.checkForDisplay(eventId, dataRecord);
+							dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
+							dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);
 						}
 						try{
 						java.lang.System.out.println("############ START Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
@@ -772,6 +784,6 @@ class PollingModel {
 	}
 	public void setTaskInstance(TaskInstance taskInstance) {
 		this.taskInstance = taskInstance;
-	}
+	}	
 }
 

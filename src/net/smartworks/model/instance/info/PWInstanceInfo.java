@@ -8,6 +8,14 @@ import net.smartworks.util.LocalDate;
 
 public class PWInstanceInfo extends WorkInstanceInfo {
 	
+	private TaskInstanceInfo[] runningTasks;
+	
+	public TaskInstanceInfo[] getRunningTasks() {
+		return runningTasks;
+	}
+	public void setRunningTasks(TaskInstanceInfo[] runningTasks) {
+		this.runningTasks = runningTasks;
+	}
 	public PWInstanceInfo() {
 		super();
 		super.setType(WorkInstance.TYPE_PROCESS);
