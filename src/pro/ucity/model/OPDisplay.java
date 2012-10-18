@@ -23,8 +23,10 @@ public class OPDisplay {
 	public static final String FIELD_NAME_SITUATION_ID = "SITUATION_ID";
 	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
 	public static final String FIELD_NAME_REQUEST_DATE = "REQUEST_DATE";
+	public static final String FIELD_NAME_STOP_REQUEST = "STOP_REQUEST";
 
 	public static final String QUERY_SELECT_FOR_CHECK = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) order by " + FIELD_NAME_REQUEST_DATE + " desc";
+	public static final String QUERY_SELECT_FOR_STOP_CHECK = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_STOP_REQUEST + " = 'Y' order by " + FIELD_NAME_REQUEST_DATE + " desc";
 	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_OPPORTAL_DISPLAY + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_SITUATION_ID + " = ? ";
 	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_DISPLAY_ID + " = ?";
 
@@ -259,13 +261,13 @@ public class OPDisplay {
 			this.requestDate = result.getString("REQUEST_DATE");
 		}catch (Exception ex){}
 		try{
-			this.requestDate = result.getString("STOP_REQUEST");
+			this.stopRequest = result.getString("STOP_REQUEST");
 		}catch (Exception ex){}
 		try{
-			this.requestDate = result.getString("STOP_REQUEST_DATE");
+			this.stopRequestDate = result.getString("STOP_REQUEST_DATE");
 		}catch (Exception ex){}
 		try{
-			this.requestDate = result.getString("STOP_REQUEST_USER_ID");
+			this.stopRequestUserId = result.getString("STOP_REQUEST_USER_ID");
 		}catch (Exception ex){}
 	}
 	
@@ -274,7 +276,7 @@ public class OPDisplay {
 		return false;
 	}
 	
-	public static Map<String,Object> checkForDisplay(String eventId, Map<String,Object> dataRecord){
+	public static Map<String,Object> checkForDisplay(String eventId, boolean isStopRequest, Map<String,Object> dataRecord){
 		
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(dataRecord)) return dataRecord;
 		try {
@@ -287,7 +289,7 @@ public class OPDisplay {
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
-		String opDisplaySelectSql = OPDisplay.QUERY_SELECT_FOR_CHECK;
+		String opDisplaySelectSql = (isStopRequest) ? OPDisplay.QUERY_SELECT_FOR_STOP_CHECK : OPDisplay.QUERY_SELECT_FOR_CHECK;
 		String opDisplayUpdateSql = OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM;
 		try {
 			try{

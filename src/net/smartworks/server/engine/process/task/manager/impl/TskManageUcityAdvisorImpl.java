@@ -81,7 +81,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				
 				ucityWorkList.setServiceName(serviceName);
 				ucityWorkList.setEventId(eventId);
-				ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMdd"));
+				ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMddHHmmss"));
 				ucityWorkList.setEventName(eventName);
 				ucityWorkList.setType(type);
 				ucityWorkList.setExternalDisplay(externalDisplay);
@@ -105,7 +105,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				if (!CommonUtil.isEmpty(eventId))
 					ucityWorkList.setEventId(eventId);
 				if (!CommonUtil.isEmpty(eventTime))
-					ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMdd"));
+					ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMddHHmmss"));
 				if (!CommonUtil.isEmpty(eventName))
 					ucityWorkList.setEventName(eventName);
 				if (!CommonUtil.isEmpty(type))

@@ -21,6 +21,7 @@ import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.service.impl.SmartWorks;
 import net.smartworks.util.LocalDate;
@@ -139,13 +140,16 @@ public class UcityController extends ExceptionInterceptor {
 
 	@RequestMapping(value = "/ucity_get_chart_xml", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody String ucityGetChartXml(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public @ResponseBody Map<String, Object>  ucityGetChartXml(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String categoryName = request.getParameter("categoryName");
 		String periodName = request.getParameter("periodName");
 		String serviceName = request.getParameter("serviceName");
 		String eventName = request.getParameter("eventName");
 		
-		return smartworks.getUcityChartXml(categoryName, periodName, serviceName, eventName);
+		String chartXml = smartworks.getUcityChartXml(categoryName, periodName, serviceName, eventName);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("record", chartXml);
+		return map;
 	}	
 
 

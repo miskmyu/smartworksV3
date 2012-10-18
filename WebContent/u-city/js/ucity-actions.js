@@ -39,7 +39,7 @@ $(function() {
 					},
 					success : function(xmlData, status, jqXHR) {
 						target.html(data).slideDown(500);
-						loadChartViewer($('#chart_target'), {chartType : 'LINE_CHART', xmlData : xmlData});
+						loadChartViewer($('#chart_target'), {chartType : 'LINE_CHART', xmlData : xmlData.record});
 					},
 					error : function(xhr, ajaxOptions, thrownError){
 					}
@@ -83,7 +83,7 @@ $(function() {
 				eventName : eventName, 
 			},
 			success : function(data, status, jqXHR) {
-				loadChartViewer($('#chart_target'), {chartType : 'LINE_CHART', xmlData : data});
+				loadChartViewer($('#chart_target'), {chartType : 'LINE_CHART', xmlData : data.record});
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 			}

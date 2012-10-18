@@ -71,7 +71,7 @@ public class UcityUtil {
 			new FormField(FormField.ID_LAST_TASK, "진행단계", FormField.TYPE_TEXT),
 			new FormField("externalDisplay", "외부표출", FormField.TYPE_TEXT),
 			new FormField("isSms", "SMS발송", FIELD_TYPE_COMBO_U_ISSMS),
-			new FormField("eventTime", "발생일시", FormField.TYPE_DATETIME),
+			new FormField("eventTime", "발생일시", FormField.TYPE_DATE),
 			new FormField("eventPlace", "발생장소", FormField.TYPE_TEXT)
 		};
 	}
@@ -658,7 +658,8 @@ public class UcityUtil {
 						}
 					}else{
 						if(System.getTableId(tableName)==System.TABLE_ID_OPPORTAL_SITUATION && OPSituation.isDisplayableStatus(status)){
-							dataRecord = OPDisplay.checkForDisplay(eventId, dataRecord);
+							dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
+							dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);
 						}
 						try{
 						java.lang.System.out.println("############ START Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
