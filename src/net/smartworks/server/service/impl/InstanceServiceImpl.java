@@ -4511,8 +4511,9 @@ public class InstanceServiceImpl implements IInstanceService {
 					Property p4 = new Property("externalDisplay",workList.getExternalDisplay());
 					Property p5 = new Property("eventPlace",workList.getEventPlace());
 					Property p6 = new Property("isSms",workList.getIsSms());
+					Property p7 = new Property("eventTime",workList.getEventTime());
 	
-					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6};
+					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7};
 					
 					pworkInfo.setExtentedProperty(properties);
 					
