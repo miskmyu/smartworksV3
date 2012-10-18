@@ -3,6 +3,7 @@ package net.smartworks.server.engine.process.task.manager.impl;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.DateUtil;
 import net.smartworks.server.engine.common.util.MisUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
@@ -80,11 +81,11 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				
 				ucityWorkList.setServiceName(serviceName);
 				ucityWorkList.setEventId(eventId);
-				ucityWorkList.setEventTime(eventTime);
+				ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMdd"));
 				ucityWorkList.setEventName(eventName);
 				ucityWorkList.setType(type);
 				ucityWorkList.setExternalDisplay(externalDisplay);
-				ucityWorkList.setIsSms(isSms);
+				ucityWorkList.setSms(CommonUtil.toBoolean(isSms));
 				ucityWorkList.setEventPlace(eventPlace);
 				
 				ucityWorkList.setCreationUser(user);
@@ -104,7 +105,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				if (!CommonUtil.isEmpty(eventId))
 					ucityWorkList.setEventId(eventId);
 				if (!CommonUtil.isEmpty(eventTime))
-					ucityWorkList.setEventTime(eventTime);
+					ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMdd"));
 				if (!CommonUtil.isEmpty(eventName))
 					ucityWorkList.setEventName(eventName);
 				if (!CommonUtil.isEmpty(type))
@@ -112,7 +113,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				if (!CommonUtil.isEmpty(externalDisplay))
 					ucityWorkList.setExternalDisplay(externalDisplay);
 				if (!CommonUtil.isEmpty(isSms))
-					ucityWorkList.setIsSms(isSms);
+					ucityWorkList.setSms(CommonUtil.toBoolean(isSms));
 				if (!CommonUtil.isEmpty(eventPlace))
 					ucityWorkList.setEventPlace(eventPlace);
 

@@ -137,6 +137,7 @@ public class SettingsServiceImpl implements ISettingsService {
 			String sendMailAccount = "";
 			String sendMailPassword = "";
 			boolean sendMailNotification = false;
+			boolean useMessagingService = true;
 			if(swoCompany != null) {
 				id = swoCompany.getId();
 				name = swoCompany.getName();
@@ -148,6 +149,7 @@ public class SettingsServiceImpl implements ISettingsService {
 				sendMailAccount = swoConfig.getUserId();
 				sendMailPassword = swoConfig.getPassword();
 				sendMailNotification = swoConfig.isActivity();
+				useMessagingService = swoConfig.isUseMessagingService();
 			}
 
 			CompanyGeneral companyGeneral = new CompanyGeneral();
@@ -160,6 +162,7 @@ public class SettingsServiceImpl implements ISettingsService {
 			companyGeneral.setSendMailPassword(sendMailPassword);
 			companyGeneral.setSendMailNotification(sendMailNotification);
 			companyGeneral.setTestAfterSaving(true);
+			companyGeneral.setUseMessagingService(useMessagingService);
 			return companyGeneral;
 		} catch(Exception e){
 			e.printStackTrace();
@@ -186,6 +189,7 @@ public class SettingsServiceImpl implements ISettingsService {
 			String txtMailAccount = null;
 			String pasMailPassword = null;
 			boolean isActivity = false;
+			boolean useMessagingService = false;
 			String imgCompanyLogo = null;
 			String imgCompanyLoginImage = null;
 			String companyFileId = null;
@@ -210,6 +214,8 @@ public class SettingsServiceImpl implements ISettingsService {
 						pasMailPassword = (String)frmCompanyGeneral.get("pasMailPassword");
 					} else if(fieldId.equals("chkMailNotification")) {
 						isActivity = true;
+					} else if(fieldId.equals("chkUseMessagingService")) {
+						useMessagingService = true;
 					}
 				}
 			}
@@ -245,6 +251,7 @@ public class SettingsServiceImpl implements ISettingsService {
 			swoConfig.setUserId(txtMailAccount);
 			swoConfig.setPassword(pasMailPassword);
 			swoConfig.setActivity(isActivity);
+			swoConfig.setUseMessagingService(useMessagingService);
 			getSwoManager().setConfig(userId, swoConfig, IManager.LEVEL_ALL);
 			
 			String chkTestAfterSaving = (String)frmCompanyGeneral.get("chkTestAfterSaving");

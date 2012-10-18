@@ -8,6 +8,8 @@
 
 package pro.ucity.manager.ucityWorkList.model;
 
+import java.util.Date;
+
 import net.smartworks.server.engine.common.model.MisObjectCond;
 import net.smartworks.server.engine.common.util.CommonUtil;
 
@@ -32,10 +34,10 @@ public class UcityWorkListCond  extends MisObjectCond{
 	private String eventName;
 	private String type;
 	private String externalDisplay;
-	private String isSms;
+	private boolean isSms;
 	private String eventPlace;
 	private String eventId;
-	private String eventTime;
+	private Date eventTime;
 	
 	private String searchKey;
 	
@@ -106,12 +108,6 @@ public class UcityWorkListCond  extends MisObjectCond{
 	public void setExternalDisplay(String externalDisplay) {
 		this.externalDisplay = externalDisplay;
 	}
-	public String getIsSms() {
-		return isSms;
-	}
-	public void setIsSms(String isSms) {
-		this.isSms = isSms;
-	}
 	public String getEventPlace() {
 		return eventPlace;
 	}
@@ -124,10 +120,16 @@ public class UcityWorkListCond  extends MisObjectCond{
 	public void setEventId(String eventId) {
 		this.eventId = eventId;
 	}
-	public String getEventTime() {
+	public boolean isSms() {
+		return isSms;
+	}
+	public void setSms(boolean isSms) {
+		this.isSms = isSms;
+	}
+	public Date getEventTime() {
 		return eventTime;
 	}
-	public void setEventTime(String eventTime) {
+	public void setEventTime(Date eventTime) {
 		this.eventTime = eventTime;
 	}
 	
