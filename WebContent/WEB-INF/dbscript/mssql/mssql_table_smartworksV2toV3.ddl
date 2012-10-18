@@ -835,3 +835,8 @@ ALTER TABLE swmailaccount add useMailSign bit;
 update swmailaccount set useMailSign='0'
 
 ALTER TABLE swmailaccount add senderUserTitle varchar(50);
+
+ALTER TABLE sworgconfig add useMessagingService bit;
+update sworgconfig set useMessagingService='0'
+
+

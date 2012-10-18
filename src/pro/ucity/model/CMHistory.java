@@ -84,6 +84,15 @@ public class CMHistory {
 	public void setSrFlag(String srFlag) {
 		this.srFlag = srFlag;
 	}
+	public String getSrFlagName(){
+		if(SmartUtil.isBlankObject(this.srFlag)) return "";
+		if(this.srFlag.equals(MSG_TYPE_OCCURRENCE)){
+			return "수신";
+		}else if(this.srFlag.equals(MSG_TYPE_RELEASE)){
+			return "송신";
+		}
+		return "기타";
+	}
 	public String getMsgId() {
 		return msgId;
 	}
@@ -198,7 +207,7 @@ public class CMHistory {
 			if(keyMap.getKey().equals("TRST_ID"))
 				dataRecord.put(keyMap.getId(), this.trstId);
 			else if(keyMap.getKey().equals("SR_FLAG"))
-				dataRecord.put(keyMap.getId(), this.srFlag);
+				dataRecord.put(keyMap.getId(), this.getSrFlagName());
 			else if(keyMap.getKey().equals("MSG_ID"))
 				dataRecord.put(keyMap.getId(), this.msgId);
 			else if(keyMap.getKey().equals("SYS_CD"))
@@ -208,7 +217,7 @@ public class CMHistory {
 			else if(keyMap.getKey().equals("OUTB_DTM"))
 				dataRecord.put(keyMap.getId(), this.outbDtm);
 			else if(keyMap.getKey().equals("SCSS_YN"))
-				dataRecord.put(keyMap.getId(), this.scssYn);
+				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.scssYn) ? "on" : "");
 			else if(keyMap.getKey().equals("ERR_CD"))
 				dataRecord.put(keyMap.getId(), this.errCd);
 			else if(keyMap.getKey().equals("RR_KEY"))

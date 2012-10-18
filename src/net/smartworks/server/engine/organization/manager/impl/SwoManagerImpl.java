@@ -1622,7 +1622,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append("update SwoConfig set");
 				buf.append(" companyId=:companyId, name=:name, domainId=:domainId, smtpAddress=:smtpAddress, userId=:userId, password=:password,");
 				buf.append(" creationDate=:creationDate, creationUser=:creationUser,");
-				buf.append(" modificationUser=:modificationUser, modificationDate=:modificationDate, isActivity=:isActivity");
+				buf.append(" modificationUser=:modificationUser, modificationDate=:modificationDate, isActivity=:isActivity, useMessagingService=:useMessagingService");
 				buf.append(" where id=:id");
 				Query query = this.getSession().createQuery(buf.toString());
 				query.setString(SwoConfig.A_COMPANYID, obj.getCompanyId());
@@ -1636,6 +1636,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setTimestamp(SwoConfig.A_MODIFICATIONUSER, obj.getModificationDate());
 				query.setTimestamp(SwoConfig.A_MODIFICATIONDATE, obj.getModificationDate());
 				query.setBoolean(SwoConfig.A_ISACTIVITY, obj.isActivity());
+				query.setBoolean(SwoConfig.A_USEMESSAGINGSERVICE, obj.isUseMessagingService());
 				query.setString(SwoConfig.A_ID, obj.getId());
 				
 			}				
@@ -1779,7 +1780,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			if (level.equals(LEVEL_ALL)) {
 				buf.append(" obj");
 			} else {
-				buf.append(" obj.userId, obj.smtpAddress, obj.password, obj.isActivity");
+				buf.append(" obj.userId, obj.smtpAddress, obj.password, obj.isActivity, obj.useMessagingService");
 			}
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
@@ -1795,6 +1796,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					obj.setUserId((String)fields[j++]);
 					obj.setPassword((String)fields[j++]);
 					obj.setActivity(CommonUtil.toBoolean(fields[j++]));
+					obj.setUseMessagingService(CommonUtil.toBoolean(fields[j++]));
 					objList.add(obj);
 				}
 				list = objList;
@@ -2119,11 +2121,11 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				}
 			} else {
 				//겸직적용
-				sqlBuf.append(" select id, name, deptId, pos, roleId, picture, '' as description, 'u' as type from sworguser where adjunctDeptIds like '%"+ departmentId +"|%' ");
+				sqlBuf.append(" select id, name, deptId, pos, roleId, picture, '' as description, internalNo, mobileNo, 'u' as type from sworguser where adjunctDeptIds like '%"+ departmentId +"|%' ");
 				sqlBuf.append(" union ");
-				sqlBuf.append(" select id, name, deptId, pos, roleId, picture, '' as description, 'u' as type from sworguser where deptId = '" + departmentId + "' and type != 'SYSTEM'");
+				sqlBuf.append(" select id, name, deptId, pos, roleId, picture, '' as description, internalNo, mobileNo, 'u' as type from sworguser where deptId = '" + departmentId + "' and type != 'SYSTEM'");
 				sqlBuf.append(" union ");
-				sqlBuf.append(" select id, name, '' as deptId, '' as pos, 'z' as roleId, '' as picture, description, 'd' as type from sworgDept where parentId = '" + departmentId + "'");
+				sqlBuf.append(" select id, name, '' as deptId, '' as pos, 'z' as roleId, '' as picture, description, '' as internalNo, '' as mobileNo, 'd' as type from sworgDept where parentId = '" + departmentId + "'");
 				sqlBuf.append(" order by roleId asc, name asc ");
 
 				Query query = getSession().createSQLQuery(sqlBuf.toString());
@@ -2140,6 +2142,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 						obj.setRoleId((String)fields[j++]);
 						obj.setPictureName((String)fields[j++]);
 						obj.setDescription((String)fields[j++]);
+						obj.setPhoneNo((String)fields[j++]);
+						obj.setCellPhoneNo((String)fields[j++]);
 						obj.setType((String)fields[j++].toString());
 						objList.add(obj);
 					}
