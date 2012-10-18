@@ -105,6 +105,7 @@
 		<property name="password" type="string" length="20"/>
 		<property name="name" type="string" length="255"/>
 		<property name="domainId" type="string" length="50"/>
+		<property name="useMessagingService" type="boolean"/>
 		<property name="companyId" type="string" length="100"/>
 		<property name="creationUser" column="creator" type="string" length="50"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>

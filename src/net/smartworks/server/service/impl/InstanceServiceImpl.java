@@ -4510,10 +4510,12 @@ public class InstanceServiceImpl implements IInstanceService {
 					Property p3 = new Property("type",workList.getType());
 					Property p4 = new Property("externalDisplay",workList.getExternalDisplay());
 					Property p5 = new Property("eventPlace",workList.getEventPlace());
-					Property p6 = new Property("isSms",workList.getIsSms());
-	
-					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6};
-					
+					Property p6 = new Property("isSms",workList.isSms() + "");
+					Property p7 = new Property("eventId",workList.getEventId());
+					Property p8 = new Property("eventTime",workList.getEventTime() + "");
+
+					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7, p8};
+
 					pworkInfo.setExtentedProperty(properties);
 					
 					pwInstanceInfoList.add(pworkInfo);
@@ -9575,6 +9577,71 @@ public class InstanceServiceImpl implements IInstanceService {
 		TaskInstance taskInstance = ModelConverter.getTaskInstanceByTskTask(userId, pworkInstObj, task);
 		
 		return taskInstance;
+	}
+	@Override
+	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception {
+		String xmlData = 
+				"<ChartData type=\"COLUMN_CHART\" dimension=\"2\">" +
+					"<groupingDefineName><![CDATA[요청구분]]></groupingDefineName>" +
+					"<valueInfoDefineName><![CDATA[IT담당자]]></valueInfoDefineName>" +
+					"<valueInfoDefineUnit><![CDATA[userField]]></valueInfoDefineUnit>" +
+					"<grouping>" +
+						"<name><![CDATA[계정등록(Mighty,스마트웍스)]]></name>" +
+						"<value><![CDATA[8]]></value>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[공장자동화 개발/수정]]></name>" +
+						"<value><![CDATA[18]]></value>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[기타]]></name>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[기타 프로그램 개발/수정]]></name>" +
+						"<value><![CDATA[20]]></value>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[네트워크 유지보수]]></name>" +
+						"<value><![CDATA[12]]></value>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[메일 계정 신청]]></name>" +
+						"<value><![CDATA[5]]></value>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[스마트웍스 개발/수정]]></name>" +
+						"<value><![CDATA[16]]></value>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[장애처리]]></name>" +
+						"<value><![CDATA[10]]></value>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[전산기기 요청(PC,모니터,주변기기)]]></name>" +
+						"<value><![CDATA[4]]></value>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[퇴사자전산처리]]></name>" +
+						"<value><![CDATA[2]]></value>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[홈페이지 유지보수]]></name>" +
+						"<value><![CDATA[2]]></value>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[MES 프로그램 개발/수정]]></name>" +
+						"<value><![CDATA[53]]></value>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[PC A/S]]></name>" +
+						"<value><![CDATA[15]]></value>" +
+					"</grouping>" +
+					"<grouping>" +
+						"<name><![CDATA[PDA 프로그램 개발/수정]]></name>" +
+						"<value><![CDATA[5]]></value>" +
+					"</grouping>" +
+				"</ChartData>";
+		return xmlData;
 	}
 
 }

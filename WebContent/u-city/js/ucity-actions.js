@@ -15,8 +15,9 @@ $(function() {
 		}
 	});
 	
-	$('.js_select_situation_report').live('click', function(e) {
+	$('.js_view_situation_report').live('click', function(e) {
 		var input = $(targetElement(e));
+		input.hide().siblings().show();
 		var workReport = $('div.js_work_report_page');
 		var target = workReport.find('div.js_work_report_view');
 		var url = input.attr('href');
@@ -27,13 +28,72 @@ $(function() {
 				chartType: 'line'
 			},
 			success : function(data, status, jqXHR) {
-				target.html(data).slideDown(500);
-				loadChartViewer($('#chart_target'));
+				$.ajax({
+					url : "ucity_get_chart_xml.sw",
+					data : {
+						categoryName : 'option.category.byDay', 
+						periodName : 'option.period.recentAYear', 
+						serviceName : 'option.service.all', 
+						eventName : 'option.event.all', 
+					},
+					success : function(xmlData, status, jqXHR) {
+						target.html(data).slideDown(500);
+						loadChartViewer($('#chart_target'), {chartType : 'LINE_CHART', xmlData : xmlData});
+					},
+					error : function(xhr, ajaxOptions, thrownError){
+					}
+				});
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 			}
 		});
 		
+		return false;
+	});
+
+	$('.js_close_situation_report').live('click', function(e) {
+		var input = $(targetElement(e));
+		input.hide().siblings().show();
+		var workReport = $('div.js_work_report_page');
+		var target = workReport.find('div.js_work_report_view');
+		target.slideUp();
+		return false;
+	});
+
+	$('.js_situation_report_close').live('click', function(e) {
+		$('div.js_work_report_page').find('.js_close_situation_report').click().hide().siblings().show();
+		return false;
+	});
+
+	$('.js_situation_report_execute').live('click', function(e) {
+		var input = $(targetElement(e));
+		var workReport = $('div.js_work_report_page');
+		var categoryName = workReport.find('.js_select_ucity_category option:selected').attr('value');
+		var periodName = workReport.find('.js_select_ucity_period option:selected').attr('value');
+		var serviceName = workReport.find('.js_select_ucity_service option:selected').attr('value');
+		var eventName = workReport.find('.js_select_ucity_event:visible option:selected').attr('value');
+		$.ajax({
+			url : "ucity_get_chart_xml.sw",
+			data : {
+				categoryName : categoryName, 
+				periodName : periodName, 
+				serviceName : serviceName, 
+				eventName : eventName, 
+			},
+			success : function(data, status, jqXHR) {
+				loadChartViewer($('#chart_target'), {chartType : 'LINE_CHART', xmlData : data});
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+			}
+		});
+		return false;
+	});
+
+	$('.js_select_ucity_service').live('change', function(e) {
+		var input = $(targetElement(e));
+		var workReport = $('div.js_work_report_page');
+		var serviceName = input.find('option:selected').attr('value');
+		workReport.find('.js_select_ucity_event[service="' + serviceName + '"]').show().siblings('.js_select_ucity_event').hide();
 		return false;
 	});
 

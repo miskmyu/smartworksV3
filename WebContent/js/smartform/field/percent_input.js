@@ -44,7 +44,9 @@ SmartWorks.FormRuntime.PercentInputBuilder.build = function(config) {
 		if(value==''){
 			$percent = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span>&nbsp;</span></div>');
 		}else{
-			$percent = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span>' + (value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true }) + '</span></div>');
+			//$percent = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span>' + $(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true }) + '</span></div>');
+			$percent = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span>' + value + '</span></div>');
+			$percent.find('span').formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 			$percent.text($percent.text() + "%");
 		}
 	} else {

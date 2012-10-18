@@ -53,13 +53,13 @@ public class Adapter {
 
 	public static final KeyMap[][] ADAPTER_HISTORY_FIELDS = {
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("특보분류", "env_event_type"), new KeyMap("발생내용", "event_content")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("오염물질수", "pollution_number"), new KeyMap("오염물질구분", "pollution_type"), new KeyMap("오염물질측정치", "pollution_value"), new KeyMap("오염등급", "pollution_level"), new KeyMap("오염물질 예/정보구분", "pollution_example")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("오염물질수", "pollution_number"), new KeyMap("오염물질구분", "pollution_type"), new KeyMap("오염물질측정치", "pollution_value"), new KeyMap("오염등급", "pollution_level"), new KeyMap("오염물질 예/경보구분", "pollution_example")},
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code")},
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("노트링크 시작 ID", "link_start_id"), new KeyMap("노트링크 종료 ID", "link_end_id"), new KeyMap("돌발상황 유형", "outbreak_type"), new KeyMap("돌발상황 코드", "outbreak_code")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("탐지분류", "search_type")},
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("탐지분류", "search_type")},
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("임계치 값", "threshold_value")},
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("시설물이상구분", "facility_type")}		
 	};
@@ -299,7 +299,7 @@ public class Adapter {
 		if(SmartUtil.isBlankObject(commBody) || this.process<0 || this.process>System.MAX_PROCESS) return;
 		
 		String[] tokens = commBody.split(Adapter.FIELD_SEPERATOR);
-		if(tokens.length != ADAPTER_HISTORY_FIELDS[System.PROCESS_ENV_WEAHTER].length) return;
+		if(tokens.length != ADAPTER_HISTORY_FIELDS[process].length) return;
 		
 		switch(process){
 		case System.PROCESS_ENV_WEAHTER:
@@ -346,9 +346,15 @@ public class Adapter {
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
+			this.searchType = tokens[3];
 			break;
 		case System.PROCESS_CRIME_CCTV:
+			this.eventId = tokens[0];
+			this.occuredDate = tokens[1];
+			this.facilityId = tokens[2];
+			this.locationName = tokens[3];
+			break;
+		case System.PROCESS_CRIME_VEHICLES:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
@@ -356,12 +362,6 @@ public class Adapter {
 			this.carNumber = tokens[4];
 			this.carType = tokens[5];
 			this.crimeCode = tokens[6];
-			break;
-		case System.PROCESS_CRIME_VEHICLES:
-			this.eventId = tokens[0];
-			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.searchType = tokens[3];
 			break;
 		case System.PROCESS_WATERWORKS_LEAKS:
 			this.eventId = tokens[0];
@@ -415,8 +415,8 @@ public class Adapter {
 				dataRecord.put(keyMap.getId(), this.eventContent);
 			else if(keyMap.getKey().equals("facility_id"))
 				dataRecord.put(keyMap.getId(), this.facilityId);
-			else if(keyMap.getKey().equals("facility_id"))
-				dataRecord.put(keyMap.getId(), this.facilityId);
+			else if(keyMap.getKey().equals("facility_type"))
+				dataRecord.put(keyMap.getId(), this.facilityType);
 			else if(keyMap.getKey().equals("location_name"))
 				dataRecord.put(keyMap.getId(), this.locationName);
 			else if(keyMap.getKey().equals("pollution_number"))

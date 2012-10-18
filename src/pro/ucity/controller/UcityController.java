@@ -8,6 +8,7 @@
 
 package pro.ucity.controller;
 
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.service.ISmartWorks;
+import net.smartworks.service.impl.SmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
@@ -134,5 +136,17 @@ public class UcityController extends ExceptionInterceptor {
 
 		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/situation_report_view.jsp", "");
 	}
+
+	@RequestMapping(value = "/ucity_get_chart_xml", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody String ucityGetChartXml(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String categoryName = request.getParameter("categoryName");
+		String periodName = request.getParameter("periodName");
+		String serviceName = request.getParameter("serviceName");
+		String eventName = request.getParameter("eventName");
+		
+		return smartworks.getUcityChartXml(categoryName, periodName, serviceName, eventName);
+	}	
+
 
 }
