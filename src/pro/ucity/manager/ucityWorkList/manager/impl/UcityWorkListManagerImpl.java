@@ -362,15 +362,17 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 							query.setFloat(param, CommonUtil.toFloat(operValue));
 						} else if (operType.equalsIgnoreCase(Filter.OPERANDTYPE_DATE)) {
 							 if (operator.equalsIgnoreCase("datein") || operator.equalsIgnoreCase("datenotin")) {
-									query.setTimestamp(param, DateUtil.toFromDate(DateUtil.toDate(operValue), DateUtil.CYCLE_DAY));
-									query.setTimestamp("_" + param, DateUtil.toToDate(DateUtil.toDate(operValue), DateUtil.CYCLE_DAY));
-								 } else {
-									query.setTimestamp(param, DateUtil.toDate(operValue));
-								 }		
-							} else if (operType.equalsIgnoreCase("number")) {
+								query.setTimestamp(param, DateUtil.toFromDate(DateUtil.toDate(operValue), DateUtil.CYCLE_DAY));
+								query.setTimestamp("_" + param, DateUtil.toToDate(DateUtil.toDate(operValue), DateUtil.CYCLE_DAY));
+							 } else {
+								query.setTimestamp(param, DateUtil.toDate(operValue));
+							 }		
+						} else if (operType.equalsIgnoreCase("number")) {
 							query.setDouble(param, Double.parseDouble(operValue));
 						} else if (operType.equalsIgnoreCase("boolean")) {
 							query.setBoolean(param, CommonUtil.toBoolean(operValue));
+						} else if (operType.equalsIgnoreCase("datechooser")) {
+							query.setTimestamp(param, DateUtil.toDate(operValue));
 						} else {
 							query.setParameter(param, operValue);
 						}
