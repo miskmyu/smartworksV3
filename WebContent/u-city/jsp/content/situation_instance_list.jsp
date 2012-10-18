@@ -164,7 +164,7 @@
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_TIME)){
 							eventTime = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_IS_SMS)){
-							isSms = ("Y".equals(extendedProperty.getValue())) ? "예" : "아니요";			
+							isSms = ("true".equals(extendedProperty.getValue())) ? "예" : "아니요";			
 						}
 					}
 				}
