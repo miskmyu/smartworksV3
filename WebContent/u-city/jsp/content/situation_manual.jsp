@@ -147,7 +147,7 @@ function submitForms() {
 
 		<!-- Right Section -->
 		<div class="section_rgt">
-			<div class="point" style="top:330px"></div>
+			<div class="point" style="top:85px"></div>
 			<div class="group_rgt js_manual_tasks_holder" style="overflow:hidden">
 				<div class="working_proces js_manual_tasks">
 					<ul>
