@@ -290,9 +290,21 @@ public class OPSituation {
 		}catch (Exception ex){}
 		try{
 			this.startDate = result.getString("START_DATE");
+			if(!SmartUtil.isBlankObject(this.startDate)){
+				this.startDate = this.startDate.replaceAll("-", "");
+				this.startDate = this.startDate.replaceAll(" ", "");
+				this.startDate = this.startDate.replaceAll(":", "");
+				this.startDate = this.startDate.replace(".0", "");
+			}
 		}catch (Exception ex){}
 		try{
 			this.endDate = result.getString("END_DATE");
+			if(!SmartUtil.isBlankObject(this.endDate)){
+				this.endDate = this.endDate.replaceAll("-", "");
+				this.endDate = this.endDate.replaceAll(" ", "");
+				this.endDate = this.endDate.replaceAll(":", "");
+				this.endDate = this.endDate.replace(".0", "");
+			}
 		}catch (Exception ex){}
 		try{
 			this.contents = result.getString("CONTENTS");
@@ -319,9 +331,21 @@ public class OPSituation {
 		}catch (Exception ex){}
 		try{
 			this.startDate = result.getString("START_DATE");
+			if(!SmartUtil.isBlankObject(this.startDate)){
+				this.startDate = this.startDate.replaceAll("-", "");
+				this.startDate = this.startDate.replaceAll(" ", "");
+				this.startDate = this.startDate.replaceAll(":", "");
+				this.startDate = this.startDate.replace(".0", "");
+			}
 		}catch (Exception ex){}
 		try{
 			this.endDate = result.getString("END_DATE");
+			if(!SmartUtil.isBlankObject(this.endDate)){
+				this.endDate = this.endDate.replaceAll("-", "");
+				this.endDate = this.endDate.replaceAll(" ", "");
+				this.endDate = this.endDate.replaceAll(":", "");
+				this.endDate = this.endDate.replace(".0", "");
+			}
 		}catch (Exception ex){}
 		try{
 			this.contents = result.getString("CONTENTS");

@@ -10,6 +10,7 @@ import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.task.manager.AbstractTskManagerAdvisor;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
+import net.smartworks.util.SmartUtil;
 
 import org.springframework.util.StringUtils;
 
@@ -60,7 +61,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 			String externalDisplay = obj.getExtendedAttributeValue("ucity_externalDisplay");
 			String isSms = obj.getExtendedAttributeValue("ucity_isSms");
 			String eventPlace = obj.getExtendedAttributeValue("ucity_eventPlace");
-			
+			System.out.println("1. issms 의 값은 [" + isSms + "]" );
 			UcityWorkListCond ucityCond = new UcityWorkListCond();
 			ucityCond.setPrcInstId(prcInstId);
 			ucityCond.setPackageId(packageId);
@@ -81,11 +82,13 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				
 				ucityWorkList.setServiceName(serviceName);
 				ucityWorkList.setEventId(eventId);
-				ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMdd"));
+				ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMddHHmmss"));
 				ucityWorkList.setEventName(eventName);
 				ucityWorkList.setType(type);
 				ucityWorkList.setExternalDisplay(externalDisplay);
+				System.out.println("2. issms 의 값은 [" + isSms + "]" );
 				ucityWorkList.setIsSms(CommonUtil.toBoolean(isSms));
+				System.out.println("3. issms 의 값은 [" + isSms + "]" );
 				ucityWorkList.setEventPlace(eventPlace);
 				
 				ucityWorkList.setCreationUser(user);
@@ -99,13 +102,13 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				ucityWorkList.setStatus(prcInst.getStatus());
 				ucityWorkList.setRunningTaskId(runningTaskId);
 				ucityWorkList.setRunningTaskName(runningTaskName);
-
+				System.out.println("4. issms 의 값은 [" + isSms + "]" );
 				if (!CommonUtil.isEmpty(serviceName))
 					ucityWorkList.setServiceName(serviceName);
 				if (!CommonUtil.isEmpty(eventId))
 					ucityWorkList.setEventId(eventId);
 				if (!CommonUtil.isEmpty(eventTime))
-					ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMdd"));
+					ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMddHHmmss"));
 				if (!CommonUtil.isEmpty(eventName))
 					ucityWorkList.setEventName(eventName);
 				if (!CommonUtil.isEmpty(type))
@@ -114,6 +117,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 					ucityWorkList.setExternalDisplay(externalDisplay);
 				if (!CommonUtil.isEmpty(isSms))
 					ucityWorkList.setIsSms(CommonUtil.toBoolean(isSms));
+				System.out.println("4. issms 의 값은 [" + isSms + "]" );
 				if (!CommonUtil.isEmpty(eventPlace))
 					ucityWorkList.setEventPlace(eventPlace);
 
