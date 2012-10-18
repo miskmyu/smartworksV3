@@ -75,6 +75,21 @@ public class System {
 	public static final long DEFAULT_POLLING_INTERVAL 			= 10 * 1000;
 	
 	public static final String TASK_FORM_NAME_USERVICE_END 		= "기상특보 종료";
+
+	
+	public static final String REPORT_OPTION_PERIOD_BY_TIME = "option.period.byTime";
+	public static final String REPORT_OPTION_PERIOD_BY_DAY = "option.period.byDay";
+	public static final String REPORT_OPTION_PERIOD_BY_MONTH = "option.period.byMonth";
+	public static final String REPORT_OPTION_PERIOD_BY_SEASON = "option.period.bySeason";
+	
+	public static final String REPORT_OPTION_THIS_YEAR = "option.thisYear";
+	public static final String REPORT_OPTION_RECENT_A_YEAR = "option.recentAYear";
+	public static final String REPORT_OPTION_RECENT_THREE_YEARS = "option.recentThreeYears";
+	public static final String REPORT_OPTION_ALL_HISTORY = "option.allHistory";
+
+	public static final String REPORT_OPTION_ALL_SERVICES = "option.allServices";
+	public static final String REPORT_OPTION_ALL_EVENTS = "option.allEvents";
+	
 	public static String getProcessId(int process){
 		if(process<0 || process>MAX_PROCESS) return null;
 		

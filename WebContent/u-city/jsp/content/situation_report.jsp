@@ -43,7 +43,8 @@
 	
 		<!-- 우측 영역 -->
 		<div class="fr txt_btn js_work_report_list_box" style="position: relative; top: 5px;">
-			<a class="js_select_situation_report" href="situationReportView.sw?workId=<%=workId%>&workType=<%=work.getType()%>">상황발생 추이 보기</a>
+			<a class="js_view_situation_report" href="situationReportView.sw?workId=<%=workId%>&workType=<%=work.getType()%>">상황발생 추이 보기</a>
+			<a class="js_close_situation_report" style="display:none">상황발생 추이 닫기</a>
 		</div>			
 		<!-- 우측 영역 //-->
 	<div class="cb"></div>
