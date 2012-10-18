@@ -528,7 +528,7 @@ public class Adapter {
 				java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
 				return;
 			}
-			con.setAutoCommit(false);
+//			con.setAutoCommit(false);
 			
 			try{
 				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -550,25 +550,27 @@ public class Adapter {
 							if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_OCCURRENCE){
 								try{
 									adapter.startProcess();	
-									con.commit();
+//									con.commit();
 									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 정상적으로 시작되었습니다!");
 								}catch (Exception se){
 									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
 									se.printStackTrace();
-									con.rollback();
+//									if(con != null)
+//										con.rollback();
 								}
 							}else if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE){
 								try{
 									adapter.endProcess();
-									con.commit();
+//									con.commit();
 									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
 								}catch (Exception se){
 									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
 									se.printStackTrace();
-									con.rollback();
+//									if(con != null)
+//										con.rollback();
 								}
 							}else{
-								con.rollback();
+//								con.rollback();
 								java.lang.System.out.println("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
 							}
 						}catch (Exception we){
@@ -592,7 +594,8 @@ public class Adapter {
 					selectPstmt.close();
 				if (updatePstmt != null)
 					updatePstmt.close();
-				con.close();
+				if(con != null)
+					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -30,10 +30,10 @@ body{ height:100%; width:99.5%;}
 .smartOutput table td{ padding:4px;}
 
 .smartOutput blockquote { margin:15px 0px 15px 40px ; }
-.smartOutput ol { margin:15px 0px 15px 40px;list-style-type:decimal; }
-.smartOutput ul { margin:15px 0px 15px 40px;list-style-type:disc;}
-.smartOutput ul ul { margin:15px 0px 15px 40px;list-style-type:circle;}
-.smartOutput ul ul ul{ margin:15px 0px 15px 40px;list-style-type:square;} 
+.smartOutput ol { margin:15px 0px 15px 40px; list-style-type:decimal; }
+.smartOutput ul { margin:0; padding:0; list-style-type:disc;}
+.smartOutput ul ul { margin:15px 0px 15px 40px; list-style-type:circle;}
+.smartOutput ul ul ul{ margin:15px 0px 15px 40px; list-style-type:square;} 
 .smartOutput a:link {color:#666666;text-decoration:none;}
 .smartOutput a:visited {color:#666666;text-decoration:none;}
 .smartOutput a:active {color:#666666;text-decoration:none;}

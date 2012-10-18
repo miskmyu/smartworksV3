@@ -291,4 +291,14 @@ public class MailInstance extends Instance {
 		}
 		return html;
 	}
+	
+	public static String getEmailAddressesShow(User[] users){
+		if(SmartUtil.isBlankObject(users)) return "";
+		String shown = users[0].getEmailAddressShown();
+		for(int i=1; i<users.length; i++){
+			shown = shown + ", " +  users[i].getEmailAddressShown();
+		}
+		return shown;		
+		
+	}
 }

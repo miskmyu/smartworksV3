@@ -19,152 +19,82 @@ import net.smartworks.util.SmartUtil;
 
 public class DMHistory {
 
-	public static final String DEVICE_ID_MEDIABOARD		= "";
-	public static final String DEVICE_ID_TRAFFIC_BIT	= "";
-	public static final String DEVICE_ID_TRAFFIC_VMS	= "";
-	public static final String DEVICE_ID_KIOSK			= "";
-	public static final String DEVICE_ID_ENV_VMS		= "";
+	public static final String DEVICE_ID_MEDIABOARD		= "mbdr";
+	public static final String DEVICE_ID_TRAFFIC_BIT	= "trfcBIT";
+	public static final String DEVICE_ID_TRAFFIC_VMS	= "trfcVMS";
+	public static final String DEVICE_ID_KIOSK			= "trfcKIOSK";
+	public static final String DEVICE_ID_ENV_VMS		= "envrVMS";
+	
+	public static final String FIELD_NAME_EVENT_ID = "a.EVENT_ID";
+	public static final String FIELD_NAME_SEND_VALUE = "c.SEND_RESPONSE_VALUE";
+	public static final String FIELD_NAME_SEND_SEQ = "SEND_INFO_SEQ";
+	public static final String FIELD_NAME_ADAPTER_DIV = "ADAPTER_DIVISION";
+	
+	
 	
 	public static final String FLAG_STOP_DISPLAY 	= "Y";
 	
-	public static final String QUERY_SELECT_FOR_DISPLAY_PERFORM = "";//"select a.* from " + System.TABLE_NAME_COMMID_TRACE + " a, " + System.TABLE_NAME_COMMID_JOIN + " b where " + FIELD_NAME_COMMID_EVENT_ID +" = ? and " + FIELD_NAME_COMMID_OUTB_ID + " = " + FIELD_NAME_COMMID_EOUTB_ID + " and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_OCCURRENCE + "'";
-	public static final String QUERY_SELECT_FOR_STOP_PERFORM = "";//"select a.* from " + System.TABLE_NAME_COMMID_TRACE + " a, " + System.TABLE_NAME_COMMID_JOIN + " b where " + FIELD_NAME_COMMID_EVENT_ID +" = ? and " + FIELD_NAME_COMMID_OUTB_ID + " = " + FIELD_NAME_COMMID_EOUTB_ID + " and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_RELEASE + "'";
-		
+	public static final String QUERY_SELECT_FOR_DISPLAY_PERFORM = "select b.*," + FIELD_NAME_SEND_VALUE + ", " + FIELD_NAME_EVENT_ID + " from " + System.TABLE_NAME_SEND_INFO + " a, " + System.TABLE_NAME_SEND_CONTENTS + " b, "
+			+ System.TABLE_NAME_RCV_DEVICE + " c where a." + FIELD_NAME_SEND_SEQ + " = b." + FIELD_NAME_SEND_SEQ + " and c." + FIELD_NAME_SEND_SEQ +  " = a." + FIELD_NAME_SEND_SEQ + " and " + FIELD_NAME_EVENT_ID +
+			" = ? and " + FIELD_NAME_ADAPTER_DIV + " = ? order by " + FIELD_NAME_SEND_SEQ + " desc";
+	
+	public static final String QUERY_SELECT_FOR_STOP_PERFORM = "select b.*," + FIELD_NAME_SEND_VALUE + ", " + FIELD_NAME_EVENT_ID + " from " + System.TABLE_NAME_SEND_INFO + " a, " + System.TABLE_NAME_SEND_CONTENTS + " b, "
+			+ System.TABLE_NAME_RCV_DEVICE + " c where a." + FIELD_NAME_SEND_SEQ + " = b." + FIELD_NAME_SEND_SEQ + " and c." + FIELD_NAME_SEND_SEQ +  " = a." + FIELD_NAME_SEND_SEQ + " and " + FIELD_NAME_EVENT_ID +
+			" = ? and " + FIELD_NAME_ADAPTER_DIV + " = ? order by " + FIELD_NAME_SEND_SEQ + " desc";
+
+	
 	public static final KeyMap[] DEVMID_TRACE_FIELDS = {
-		new KeyMap("트랜잭션 아이디", "TRST_ID"), new KeyMap("송수신 구분", "SR_FLAG"), new KeyMap("메시지 아이디", "MSG_ID"), new KeyMap("시스템 코드", "SYS_CD"),
-		new KeyMap("데이터 타입", "DATA_TYP"), new KeyMap("발생 일시", "OUTB_DTM"), new KeyMap("성공여부", "SCSS_YN"), new KeyMap("에러 코드", "ERR_CD"),
-		new KeyMap("요청 응답 키", "RR_KEY"), new KeyMap("수신 프로토콜 타입", "R_PRTCL_TYP"), new KeyMap("수신 MEP 타입", "R_MEP"), new KeyMap("메시지 원본","MSG_ORIG"), new KeyMap("메시지 종류 구분", "MSG_KND_GUBN"),
-		new KeyMap("송신 프로토콜 타입", "S_PRTCL_TYP"), new KeyMap("재시도 횟수", "RTR_CNT"), new KeyMap("송신 MEP 타입", "S_MEP"), new KeyMap("수신 이벤트 내용", "RCV_EVET_CNTN"),
-		new KeyMap("이벤트 발생 아이디", "EVET_OUTB_ID")
+		new KeyMap("표출내용", "DATA_PATH"), new KeyMap("표출지속시간", "PLAY_TIME"), new KeyMap("표출결과", "SEND_RESPONSE_VALUE"), new KeyMap("이벤트아이디", "EVENT_ID"), new KeyMap("디바이스아이디", "ADAPTER_DIVISION"),
 	};
+
+	private String eventId;
+	private String deviceId;
 	
-	private String trstId;
-	private String srFlag;
-	private String msgId;
-	private String sysCd;
-	private String dataTyp;
-	private String outbDtm;
-	private String scssYn;
-	private String errCd;
-	private String rrKey;
-	private String rPrtclTyp;
-	private String rMep;
-	private String msgOrig;
-	private String msgKndGubn;
-	private String sPrtclTyp;
-	private String rtrCnt;
-	private String sMep;
-	private String rcvEvetCntn;
-	private String evetOutbId;
+	private String dataPath;
+	private String playTime;
+	private String sendResponseValue;
+
 	
-	public String getTrstId() {
-		return trstId;
+	public String getEventId() {
+		return eventId;
 	}
-	public void setTrstId(String trstId) {
-		this.trstId = trstId;
+
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
 	}
-	public String getSrFlag() {
-		return srFlag;
+
+	public String getDeviceId() {
+		return deviceId;
 	}
-	public void setSrFlag(String srFlag) {
-		this.srFlag = srFlag;
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
 	}
-	public String getMsgId() {
-		return msgId;
+
+	public String getDataPath() {
+		return dataPath;
 	}
-	public void setMsgId(String msgId) {
-		this.msgId = msgId;
+
+	public void setDataPath(String dataPath) {
+		this.dataPath = dataPath;
 	}
-	public String getSysCd() {
-		return sysCd;
+
+	public String getPlayTime() {
+		return playTime;
 	}
-	public void setSysCd(String sysCd) {
-		this.sysCd = sysCd;
+
+	public void setPlayTime(String playTime) {
+		this.playTime = playTime;
 	}
-	public String getDataTyp() {
-		return dataTyp;
+
+	public String getSendResponseValue() {
+		return sendResponseValue;
 	}
-	public void setDataTyp(String dataTyp) {
-		this.dataTyp = dataTyp;
+
+	public void setSendResponseValue(String sendResponseValue) {
+		this.sendResponseValue = sendResponseValue;
 	}
-	public String getOutbDtm() {
-		return outbDtm;
-	}
-	public void setOutbDtm(String outbDtm) {
-		this.outbDtm = outbDtm;
-	}
-	public String getScssYn() {
-		return scssYn;
-	}
-	public void setScssYn(String scssYn) {
-		this.scssYn = scssYn;
-	}
-	public String getErrCd() {
-		return errCd;
-	}
-	public void setErrCd(String errCd) {
-		this.errCd = errCd;
-	}
-	public String getRrKey() {
-		return rrKey;
-	}
-	public void setRrKey(String rrKey) {
-		this.rrKey = rrKey;
-	}
-	public String getrPrtclTyp() {
-		return rPrtclTyp;
-	}
-	public void setrPrtclTyp(String rPrtclTyp) {
-		this.rPrtclTyp = rPrtclTyp;
-	}
-	public String getrMep() {
-		return rMep;
-	}
-	public void setrMep(String rMep) {
-		this.rMep = rMep;
-	}
-	public String getMsgOrig() {
-		return msgOrig;
-	}
-	public void setMsgOrig(String msgOrig) {
-		this.msgOrig = msgOrig;
-	}
-	public String getMsgKndGubn() {
-		return msgKndGubn;
-	}
-	public void setMsgKndGubn(String msgKndGubn) {
-		this.msgKndGubn = msgKndGubn;
-	}
-	public String getsPrtclTyp() {
-		return sPrtclTyp;
-	}
-	public void setsPrtclTyp(String sPrtclTyp) {
-		this.sPrtclTyp = sPrtclTyp;
-	}
-	public String getRtrCnt() {
-		return rtrCnt;
-	}
-	public void setRtrCnt(String rtrCnt) {
-		this.rtrCnt = rtrCnt;
-	}
-	public String getsMep() {
-		return sMep;
-	}
-	public void setsMep(String sMep) {
-		this.sMep = sMep;
-	}
-	public String getRcvEvetCntn() {
-		return rcvEvetCntn;
-	}
-	public void setRcvEvetCntn(String rcvEvetCntn) {
-		this.rcvEvetCntn = rcvEvetCntn;
-	}
-	public String getEvetOutbId() {
-		return evetOutbId;
-	}
-	public void setEvetOutbId(String evetOutbId) {
-		this.evetOutbId = evetOutbId;
-	}
+
 	public DMHistory(ResultSet resultSet){
 		super();
 		if(SmartUtil.isBlankObject(resultSet)) return;
@@ -180,42 +110,16 @@ public class DMHistory {
 		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
-			if(keyMap.getKey().equals("TRST_ID"))
-				dataRecord.put(keyMap.getId(), this.trstId);
-			else if(keyMap.getKey().equals("SR_FLAG"))
-				dataRecord.put(keyMap.getId(), this.srFlag);
-			else if(keyMap.getKey().equals("MSG_ID"))
-				dataRecord.put(keyMap.getId(), this.msgId);
-			else if(keyMap.getKey().equals("SYS_CD"))
-				dataRecord.put(keyMap.getId(), this.sysCd);
-			else if(keyMap.getKey().equals("DATA_TYP"))
-				dataRecord.put(keyMap.getId(), this.dataTyp);
-			else if(keyMap.getKey().equals("OUTB_DTM"))
-				dataRecord.put(keyMap.getId(), this.outbDtm);
-			else if(keyMap.getKey().equals("SCSS_YN"))
-				dataRecord.put(keyMap.getId(), this.scssYn);
-			else if(keyMap.getKey().equals("ERR_CD"))
-				dataRecord.put(keyMap.getId(), this.errCd);
-			else if(keyMap.getKey().equals("RR_KEY"))
-				dataRecord.put(keyMap.getId(), this.rrKey);
-			else if(keyMap.getKey().equals("R_PRTCL_TYP"))
-				dataRecord.put(keyMap.getId(), this.rPrtclTyp);
-			else if(keyMap.getKey().equals("R_MEP"))
-				dataRecord.put(keyMap.getId(), this.rMep);
-			else if(keyMap.getKey().equals("MSG_ORIG"))
-				dataRecord.put(keyMap.getId(), this.msgOrig);
-			else if(keyMap.getKey().equals("MSG_KND_GUBN"))
-				dataRecord.put(keyMap.getId(), this.msgKndGubn);
-			else if(keyMap.getKey().equals("S_PRTCL_TYP"))
-				dataRecord.put(keyMap.getId(), this.sPrtclTyp);
-			else if(keyMap.getKey().equals("RTR_CNT"))
-				dataRecord.put(keyMap.getId(), this.rtrCnt);
-			else if(keyMap.getKey().equals("S_MEP"))
-				dataRecord.put(keyMap.getId(), this.sMep);
-			else if(keyMap.getKey().equals("RCV_EVET_CNTN"))
-				dataRecord.put(keyMap.getId(), this.rcvEvetCntn);
-			else if(keyMap.getKey().equals("EVET_OUTB_ID"))
-				dataRecord.put(keyMap.getId(), this.evetOutbId);
+			if(keyMap.getKey().equals("DATA_PATH"))
+				dataRecord.put(keyMap.getId(), this.dataPath);
+			else if(keyMap.getKey().equals("PLAY_TIME"))
+				dataRecord.put(keyMap.getId(), this.playTime);
+			else if(keyMap.getKey().equals("SEND_RESPONSE_VALUE"))
+				dataRecord.put(keyMap.getId(), this.sendResponseValue);	
+			else if(keyMap.getKey().equals("EVENT_ID"))
+				dataRecord.put(keyMap.getId(), this.eventId);	
+			else if(keyMap.getKey().equals("ADAPTER_DIVISION"))
+				dataRecord.put(keyMap.getId(), this.deviceId);	
 		}
 		return dataRecord;
 //		return UcityTest.getCMHistoryDataRecord();		
@@ -235,63 +139,24 @@ public class DMHistory {
 	public void setResult(ResultSet result){
 		if(SmartUtil.isBlankObject(result)) return;
 		try{
-			this.trstId = result.getString("TRST_ID");
+			this.dataPath = result.getString("DATA_PATH");
 		}catch (Exception ex){}
 		try{
-			this.srFlag = result.getString("SR_FLAG");
+			this.playTime = result.getString("PLAY_TIME");
 		}catch (Exception ex){}
 		try{
-			this.msgId = result.getString("MSG_ID");
+			this.sendResponseValue = result.getString("SEND_RESPONSE_VALUE");
 		}catch (Exception ex){}
 		try{
-			this.sysCd = result.getString("SYS_CD");
+			this.sendResponseValue = result.getString("EVENT_ID");
 		}catch (Exception ex){}
 		try{
-			this.dataTyp = result.getString("DATA_TYP");
-		}catch (Exception ex){}
-		try{
-			this.outbDtm = result.getString("OUTB_DTM");
-		}catch (Exception ex){}
-		try{
-			this.scssYn = result.getString("SCSS_YN");
-		}catch (Exception ex){}
-		try{
-			this.errCd = result.getString("ERR_CD");
-		}catch (Exception ex){}
-		try{
-			this.rrKey = result.getString("RR_KEY");
-		}catch (Exception ex){}
-		try{
-			this.rPrtclTyp = result.getString("R_PRTCL_TYP");
-		}catch (Exception ex){}
-		try{
-			this.rMep = result.getString("R_MEP");
-		}catch (Exception ex){}
-		try{
-			this.rMep = result.getString("MSG_ORIG");
-		}catch (Exception ex){}
-		try{
-			this.msgKndGubn = result.getString("MSG_KND_GUBN");
-		}catch (Exception ex){}
-		try{
-			this.sPrtclTyp = result.getString("S_PRTCL_TYP");
-		}catch (Exception ex){}
-		try{
-			this.rtrCnt = result.getString("RTR_CNT");
-		}catch (Exception ex){}
-		try{
-			this.sMep = result.getString("S_MEP");
-		}catch (Exception ex){}
-		try{
-			this.rcvEvetCntn = result.getString("RCV_EVET_CNTN");
-		}catch (Exception ex){}
-		try{
-			this.evetOutbId = result.getString("EVET_OUTB_ID");
+			this.sendResponseValue = result.getString("ADAPTER_DIVISION");
 		}catch (Exception ex){}
 	}
 
 	public boolean isValid(){
-		if(!SmartUtil.isBlankObject(this.trstId) && !SmartUtil.isBlankObject(this.evetOutbId))
+		if(!SmartUtil.isBlankObject(this.eventId) && !SmartUtil.isBlankObject(this.deviceId))
 			return true;
 		return false;
 	}
@@ -320,14 +185,15 @@ public class DMHistory {
 			try{
 				selectPstmt = con.prepareStatement(cmHistorySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
+				selectPstmt.setString(2, deviceId);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
 				int count = rs.getRow();
 				rs.first();
-				if (count == 1) {
+				if (count >= 1) {
 					try{
-						DMHistory cmHistory = new DMHistory(rs);
-						if(cmHistory.isValid()){
+						DMHistory dmHistory = new DMHistory(rs);
+						if(dmHistory.isValid()){
 							try {
 								if (selectPstmt != null)
 									selectPstmt.close();
@@ -336,7 +202,7 @@ public class DMHistory {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-							return cmHistory.getDataRecord();
+							return dmHistory.getDataRecord();
 						}
 					}catch (Exception we){
 						we.printStackTrace();
@@ -351,7 +217,8 @@ public class DMHistory {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-				con.close();
+				if(con != null)
+					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

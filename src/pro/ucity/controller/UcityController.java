@@ -129,4 +129,10 @@ public class UcityController extends ExceptionInterceptor {
 		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/combo_u_issms_field.jsp", "");
 	}
 
+	@RequestMapping("/situationReportView")
+	public ModelAndView situationReportView(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/situation_report_view.jsp", "");
+	}
+
 }

@@ -22,7 +22,7 @@ public class CMHistory {
 	//DEV
 //	public static final String FIELD_NAME_COMMID_EVENT_ID = "EVET_OUTB_ID";
 //	public static final String FIELD_NAME_COMMID_MSG_TYPE = "MSG_KND_GUBN";
-//	
+
 	//개발
 	public static final String FIELD_NAME_COMMID_EVENT_ID = "b.U_SVC_EVENT_ID";
 	public static final String FIELD_NAME_COMMID_OUTB_ID = "a.EVET_OUTB_ID";
@@ -39,6 +39,7 @@ public class CMHistory {
 	//DEV
 //	public static final String QUERY_SELECT_FOR_OCCURRENCE_PERFORM = "select * from " + System.TABLE_NAME_COMMID_TRACE + " where " + FIELD_NAME_COMMID_EVENT_ID + " = ? and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_OCCURRENCE + "'";
 //	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select * from " + System.TABLE_NAME_COMMID_TRACE + " where " + FIELD_NAME_COMMID_EVENT_ID + " = ? and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_RELEASE + "'";
+	//개발
 	public static final String QUERY_SELECT_FOR_OCCURRENCE_PERFORM = "select a.* from " + System.TABLE_NAME_COMMID_TRACE + " a, " + System.TABLE_NAME_COMMID_JOIN + " b where " + FIELD_NAME_COMMID_EVENT_ID +" = ? and " + FIELD_NAME_COMMID_OUTB_ID + " = " + FIELD_NAME_COMMID_EOUTB_ID + " and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_OCCURRENCE + "'";
 	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select a.* from " + System.TABLE_NAME_COMMID_TRACE + " a, " + System.TABLE_NAME_COMMID_JOIN + " b where " + FIELD_NAME_COMMID_EVENT_ID +" = ? and " + FIELD_NAME_COMMID_OUTB_ID + " = " + FIELD_NAME_COMMID_EOUTB_ID + " and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_RELEASE + "'";
 		
@@ -365,7 +366,8 @@ public class CMHistory {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-				con.close();
+				if(con != null)
+					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

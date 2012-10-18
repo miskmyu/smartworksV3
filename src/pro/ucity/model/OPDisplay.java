@@ -333,7 +333,8 @@ public class OPDisplay {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-				con.close();
+				if(con != null)
+					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -399,7 +400,8 @@ public class OPDisplay {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-				con.close();
+				if(con != null)
+					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

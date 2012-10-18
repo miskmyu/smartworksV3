@@ -18,7 +18,7 @@
 		<intercept-url pattern="/**" access="permitAll" />
 		<form-login login-page="/loginc.sw" login-processing-url="/j_spring_security_check" default-target-url="/indexc.sw" authentication-failure-url="/loginc.sw?type=failedLogin" />
 		<remember-me />
-		<logout invalidate-session="false" logout-success-url="/loginc.sw?type=logout" logout-url="/logoutc" />
+		<logout invalidate-session="false" logout-success-url="/loginc.sw?type=logout" logout-url="/logout" />
 		<session-management invalid-session-url="/loginc.sw?type=expiredSession" session-authentication-error-url="/loginc.sw?type=unauthorized">
 			<concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/>
 		</session-management>

@@ -109,6 +109,10 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_contents table td {border-bottom: 1px solid #444444; text-align: center}
 .list_contents table td {padding:4px 5px; border-left:none; border-right:none}
 
+/* Border가 있는 Table */
+.table_border table td, .table_border table th {border: 1px solid #444444;}
+.table_border table th {background-color:#171b1e;}
+
 /* Working Guide */
 .section_guide { border:1px solid #404850; clear:both; padding:20px; overflow:hidden}
 .section_lft {width:108px; float:left; text-align:center}
