@@ -4370,7 +4370,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			long expactEndDateTime = expactEndDate.getTime();
 			
 			Date now = new Date();
-			System.out.println("GMT : " + TimeZone.getDefault().getRawOffset());
+//			System.out.println("GMT : " + TimeZone.getDefault().getRawOffset());
 			long nowTime = now.getTime() - TimeZone.getDefault().getRawOffset();
 			
 			if (expactEndDateTime < nowTime)
