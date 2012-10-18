@@ -7918,6 +7918,19 @@ public class InstanceServiceImpl implements IInstanceService {
 			prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_ABORTED);
 			getPrcManager().setProcessInst(userId, prcInst, IManager.LEVEL_ALL);
 			getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
+			
+			TskTaskCond runningTaskCond = new TskTaskCond();
+			runningTaskCond.setProcessInstId(prcInstId);
+			runningTaskCond.setType(TskTask.TASKTYPE_COMMON);
+			runningTaskCond.setStatus(TskTask.TASKSTATUS_ASSIGN);
+			TskTask[] runningTasks = getTskManager().getTasks(userId, runningTaskCond, IManager.LEVEL_ALL);
+			if (runningTasks != null && runningTasks.length != 0) {
+				for (int i = 0; i < runningTasks.length; i++) {
+					TskTask runningTask = runningTasks[i];
+					runningTask.setStatus(TskTask.TASKSTATUS_COMPLETE);
+					getTskManager().setTask(userId, runningTask, IManager.LEVEL_ALL);
+				}
+			}
 			return taskInstId;
 		} else if (action.equalsIgnoreCase("create")) {
 			//이미 생성된 인스턴스에 새로운 태스크를 생성하여 수행한다 기존에 생성되어 흘러가던 태스크와 별개로
