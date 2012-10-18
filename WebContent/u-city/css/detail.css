@@ -244,4 +244,4 @@ a .icon_btn_edit:hover {background-position:-43px -859px}
 .button_set {background-color: #1E2127; font-size: 11px; padding: 5px; border-bottom: 1px solid #444444; text-align: right}
 
 /* Chart */
-.chart_area {padding: 5px 2px 10px 10px; clear:both}
+.chart_area {padding: 5px 10px 10px 10px; clear:both}
