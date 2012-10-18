@@ -22,5 +22,5 @@ public interface IUcityWorkListManager extends IManager {
 	public void removeUcityWorkList(String userId, UcityWorkListCond cond) throws UcityWorkListException;
 	public long getUcityWorkListSize(String userId, UcityWorkListCond cond) throws UcityWorkListException;
 	public UcityWorkList[] getUcityWorkLists(String userId, UcityWorkListCond cond, String level) throws UcityWorkListException;
-	
+	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception;
 }
