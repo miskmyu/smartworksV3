@@ -154,7 +154,7 @@ public class ICSituation {
 			else if(keyMap.getKey().equals("POS_Z"))
 				dataRecord.put(keyMap.getId(), this.posZ);
 			else if(keyMap.getKey().equals("SEND_TIME"))
-				dataRecord.put(keyMap.getId(), this.sendTime);
+				dataRecord.put(keyMap.getId(), UcityUtil.getDateString(this.sendTime));
 			else if(keyMap.getKey().equals("EVENT_CONTENT"))
 				dataRecord.put(keyMap.getId(), this.eventContent);
 			else if(keyMap.getKey().equals("SISUL_DIV"))

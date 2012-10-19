@@ -201,7 +201,7 @@ function logout() {
 <script type="text/javascript" src="smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/jquery/fileuploader/fileuploader.js" ></script>
 
-<title><fmt:message key="head.title"><fmt:param value="<%=currentUser.getCompany() %>" /></fmt:message></title>
+<title>U-CITY</title>
 
 </head>
 

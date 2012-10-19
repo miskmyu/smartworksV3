@@ -4,7 +4,7 @@ $(function() {
 	 * 어디에서든 class 값이 js_container로 지정된 anchor 가 선택이 되면, anchor 의 href 값으로 ajax 를 호출하여
 	 * 가져온 값을 container(메인컨텐트)화면에 보여준다.
 	 */
-	$('.js_ucity_content').swnavi({
+/*	$('.js_ucity_content').swnavi({
 		history : true,
 		before : function(event){
 			smartPop.progressCenter();				
@@ -13,6 +13,10 @@ $(function() {
 		after : function(event){
 			smartPop.closeProgress();
 		}
+	});
+*/
+	$('.js_ucity_content').live('click', function(e){
+		return true;
 	});
 	
 	$('.js_view_situation_report').live('click', function(e) {
@@ -32,7 +36,7 @@ $(function() {
 					url : "ucity_get_chart_xml.sw",
 					contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
 					data : {
-						categoryName : 'option.category.byDay', 
+						categoryName : 'option.category.byTime', 
 						periodName : 'option.period.recentAYear', 
 						serviceName : 'option.service.all', 
 						eventName : 'option.event.all', 

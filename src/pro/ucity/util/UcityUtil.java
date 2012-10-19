@@ -62,6 +62,13 @@ public class UcityUtil {
 		return "발생";
 	}
 	
+	public static String getDateString(String value){
+		if(SmartUtil.isBlankObject(value) || value.length()<12) return "";
+		if(value.length()>=14)
+			return value.substring(0, 4) + "-" + value.substring(4, 6) + "-" + value.substring(6, 8) + " " +  value.substring(8, 10) + ":" +  value.substring(10, 12) + ":" +  value.substring(12, 14) + ".0";
+		return value.substring(0, 4) + "-" + value.substring(4, 6) + "-" + value.substring(6, 8) + " " +  value.substring(8, 10) + ":" +  value.substring(10, 12) + ":" + "00.0";
+	}
+	
 	public static FormField[] getSituationListFields() throws Exception{
 		return new FormField[] { 
 			new FormField(FormField.ID_STATUS, "상태", FormField.TYPE_COMBO_STATUS), 

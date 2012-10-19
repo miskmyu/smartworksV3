@@ -187,7 +187,7 @@
 						<form name="frmSearchInstance" class="fl">
 							<div class="srch">
 								<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
-								<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
+								<button title="<fmt:message key='search.search_instance'/>" onclick="$('#search_filter').slideUp(500).html('');$('a.js_edit_search_filter').show();selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 							</div>
 						</form>
 
