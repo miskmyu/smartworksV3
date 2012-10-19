@@ -51,6 +51,9 @@ public class System {
 	public static final String TABLE_NAME_DEVMID_SEND_STATUS   	= "TN_IDM_SEND_STATUS";
 	public static final String TABLE_NAME_ADAPTER_HISTORY	    = "TB_UAST_CMNC_HS";
 	public static final String TABLE_NAME_COMMID_JOIN           = "CMDB.TN_CM_EVENT_OUTB_INFO";
+	public static final String TABLE_NAME_SEND_CONTENTS = "UIDB.TN_IDM_SEND_CONTENTS";						// 외부표출 시 컨텐츠정보 테이블 ( JOIN )
+	public static final String TABLE_NAME_SEND_INFO = "UIDB.TN_IDM_SEND_INFO";								// 단말연계미들웨어 테이블
+	public static final String TABLE_NAME_RCV_DEVICE = "UIDB.TN_IDM_CONTENTS_RCV_DEVICE";						// 단말연계미들웨어 RCV 테이블
 	
 	//개발서버
 //	public static final String TABLE_NAME_OPPORTAL_SITUATION 	= "USITUATION.TH_ST_SITUATION_HISTORY";			// 업무포털(발생,접수,처리,종료)테이블
@@ -155,11 +158,11 @@ public class System {
 		switch(process){
 		case PROCESS_ENV_WEAHTER:
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
-				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+				return "pkg_48adacc27fc9443d82d5545028262ca8";
 			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
-				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+				return "pkg_5483a6924d7d47b3951f046ea358f0d9";
 			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
-				return "pkg_c54deaaf347e4b3bbd437d5e9b4aef1c";
+				return "pkg_83f1a038f3fc4427811d76ad9dee51e8";
 			return null;
 		case PROCESS_ENV_ATMOSPHERE:
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
@@ -211,11 +214,11 @@ public class System {
 			return null;
 		case PROCESS_CRIME_VEHICLES:
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
-				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+				return "pkg_244eb0f1593f4ee8bb6b9c2ef6a028f7";
 			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
-				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+				return "pkg_ec5ddaa7b06c41e5a5b64fda54b23c64";
 			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
-				return "pkg_c54deaaf347e4b3bbd437d5e9b4aef1c";
+				return "pkg_04a736259d534583b319d2c546d407d6";
 			return null;
 		case PROCESS_WATERWORKS_LEAKS:
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
@@ -275,6 +278,12 @@ public class System {
 			return System.TABLE_ID_ADAPTER_HISTORY;
 		}
 		return -1;
+	}
+	
+	public static String[] getReleaseTaskNames(){
+		return new String[]{ "기상특보 종료",
+							"통신 미들웨어(종료)"
+		};
 	}
 	
 }
