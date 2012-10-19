@@ -33,7 +33,7 @@
 	String eventCode = request.getParameter("eventCode");
 	String situationStatus = request.getParameter("situationStatus");
 	if(SmartUtil.isBlankObject(situationStatus))
-		situationStatus = OPSituation.STATUS_SITUATION_RELEASE;
+		situationStatus = OPSituation.STATUS_SITUATION_OCCURRED;
 	
 	String eventId = null;
 	if(SmartUtil.isBlankObject(userviceCode) || SmartUtil.isBlankObject(serviceCode) || SmartUtil.isBlankObject(eventCode))
@@ -51,6 +51,8 @@
 		if (diagram != null)
 			tasks = diagram.getTasks();
 	}
+	
+	String pointerPos = (situationStatus.equals(OPSituation.STATUS_SITUATION_OCCURRED)) ? "top:85px;" :  (situationStatus.equals(OPSituation.STATUS_SITUATION_PROCESSING)) ? "top:210px;" : "top:330px";
 	
 %>
 <script type="text/javascript">
@@ -147,7 +149,7 @@ function submitForms() {
 
 		<!-- Right Section -->
 		<div class="section_rgt">
-			<div class="point" style="top:85px"></div>
+			<div class="point" style="<%=pointerPos%>"></div>
 			<div class="group_rgt js_manual_tasks_holder" style="overflow:hidden">
 				<div class="working_proces js_manual_tasks">
 					<ul>

@@ -51,7 +51,7 @@ $(function() {
 		input.find('input').attr('value', 'true');
 		var progressSpan = input.siblings('span.js_progress_span:first');
 		if(isEmpty(input.parents('.js_pop_instance_list_page'))){
-			$('#search_filter').slideUp(500).html('');			
+//			$('#search_filter').slideUp(500).html('');			
 			selectListParam(progressSpan, false);
 		}else{
 			popSelectListParam(progressSpan, false);
@@ -64,7 +64,7 @@ $(function() {
 		var progressSpan = input.siblings('span.js_progress_span:first');
 		input.siblings('input[name="hdnCurrentPage"]').attr('value', input.text());
 		if(isEmpty(input.parents('.js_pop_instance_list_page'))){
-			$('#search_filter').slideUp(500).html('');			
+//			$('#search_filter').slideUp(500).html('');			
 			selectListParam(progressSpan, false);
 		}else{
 			popSelectListParam(progressSpan, false);
@@ -76,7 +76,7 @@ $(function() {
 		var input = $(targetElement(e));
 		var progressSpan = input.siblings('span.js_progress_span:first');
 		if(isEmpty(input.parents('.js_pop_instance_list_page'))){
-			$('#search_filter').slideUp(500).html('');			
+//			$('#search_filter').slideUp(500).html('');			
 			selectListParam(progressSpan, false);
 		}else{
 			popSelectListParam(progressSpan, false);
@@ -102,7 +102,7 @@ $(function() {
 		}
 		var progressSpan = input.siblings('.js_progress_span:first');
 		if(isEmpty(input.parents('.js_pop_instance_list_page'))){
-			$('#search_filter').slideUp(500).html('');			
+//			$('#search_filter').slideUp(500).html('');			
 			selectListParam(progressSpan, false);
 		}else{
 			popSelectListParam(progressSpan, false);

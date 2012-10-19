@@ -615,9 +615,9 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		Map<String,Object> resultMap = new HashMap<String, Object>();
 		if (list == null || list.isEmpty())
 			return getXmlDataForChart(categoryName, resultMap);
-		
 		for (Iterator itr = list.iterator(); itr.hasNext();) {
 			Object[] fields = (Object[]) itr.next();
+			System.out.println("Query fields  = " + (String)fields[0] + ", " + (BigDecimal)fields[1]);
 			if (fields[0] instanceof Character) {
 				if(((Character)fields[0]).toString().equalsIgnoreCase("상")) {
 					resultMap.put("상반기", (BigDecimal)fields[1]);
@@ -638,9 +638,24 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 				}
 				
 			} else {
-				resultMap.put((String)fields[0], (BigDecimal)fields[1]);
+				if(((String)fields[0]).toString().equalsIgnoreCase("sun요일")) {
+					resultMap.put("일요일", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("mon요일")) {
+					resultMap.put("월요일", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("tue요일")) {
+					resultMap.put("화요일", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("wed요일")) {
+					resultMap.put("수요일", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("thu요일")) {
+					resultMap.put("목요일", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("fri요일")) {
+					resultMap.put("금요일", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("sat요일")) {
+					resultMap.put("토요일", (BigDecimal)fields[1]);
+				}else{
+					resultMap.put((String)fields[0], (BigDecimal)fields[1]);
+				}
 			}
-				
 		}
 		return getXmlDataForChart(categoryName, resultMap);
 	}

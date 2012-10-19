@@ -411,7 +411,7 @@ public class Adapter {
 			if(keyMap.getKey().equals("event_id"))
 				dataRecord.put(keyMap.getId(), this.eventId);
 			else if(keyMap.getKey().equals("occured_date"))
-				dataRecord.put(keyMap.getId(), this.occuredDate);
+				dataRecord.put(keyMap.getId(), UcityUtil.getDateString(this.occuredDate));
 			else if(keyMap.getKey().equals("env_event_type"))
 				dataRecord.put(keyMap.getId(), this.envEventType);
 			else if(keyMap.getKey().equals("event_content"))

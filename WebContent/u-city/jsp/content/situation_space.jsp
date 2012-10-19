@@ -88,7 +88,7 @@
 				<!-- 다이어그램 보기 -->
 				<div class="txt_btn fr h_auto pt5">
 <!-- 					<a class ="js_situation_space_reload" href="">새로고침</a>
- -->                	<a href="">목록보기</a>
+ -->                	<a class="js_ucity_content" href="situationMonitoring.sw">목록보기</a>
                 </div>
 				<!--  다이어그램 보기// -->				
 			</div>
@@ -212,7 +212,7 @@
 					</a>
 				</span>
 				<span class="btn_gray">
-					<a class="" href="">
+					<a class="js_ucity_content" href="situationMonitoring.sw">
 					<span class="txt_btn_start"></span>
 					<span class="txt_btn_center">목록보기</span>
 					<span class="txt_btn_end"></span>
