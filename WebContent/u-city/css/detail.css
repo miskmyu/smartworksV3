@@ -53,6 +53,8 @@
 .contents_space table > td,
 .contents_space table > th { padding:3px 10px}
 .contents_space > .title, .contents_space .title_list {border-bottom: 1px solid #6D6D6D; font-size:16px; color:#FFF; font-weight: bold; padding: 0 0 3px}
+.contents_space .sub_title01 {background: url("../images/subtitle01_bg.jpg") no-repeat 0 0; font-size:14px; color:#dddddd; font-weight: bold; margin: 20px 0 3px; padding: 0 0 0 30px; line-height: 27px; display: inline-block}
+.contents_space .sub_title01 > span {background: url("../images/subtitle01_bg.jpg") no-repeat 100% 0; height: 26px; width:20px; float: right; display: inline-block}
 
 /* 공간 영역 */
 .space_section {padding: 8px 0 0 0}
@@ -85,7 +87,10 @@
 .list_contents table td {padding:4px 5px; border-left:none; border-right:none}
 
 /* Border가 있는 Table */
-.table_border table td, .table_border table th {border: 1px solid #444444;}
+.table_border table td, .table_border table th {border: 1px solid #444444; text-align: center; padding: 0}
+.table_border table th a, .table_border table td a {display:block}
+.table_border table .current a {background-color: #1D3145; color:#cfdce9 !important}
+.table_border a:hover {text-decoration: none !important}
 .table_border table th {background-color:#171b1e;}
 
 /* Working Guide */
