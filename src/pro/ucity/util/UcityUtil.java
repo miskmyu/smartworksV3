@@ -14,18 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.tmax.tibero.jdbc.TbSQLException;
-
-import pro.ucity.manager.ucityWorkList.model.UcityWorkList;
-import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
-import pro.ucity.model.Adapter;
-import pro.ucity.model.CMHistory;
-import pro.ucity.model.DMHistory;
-import pro.ucity.model.ICSituation;
-import pro.ucity.model.OPDisplay;
-import pro.ucity.model.OPSituation;
-import pro.ucity.model.System;
-
 import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.info.InstanceInfoList;
@@ -46,6 +34,16 @@ import net.smartworks.server.service.IWorkService;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.SmartUtil;
+import pro.ucity.manager.ucityWorkList.model.UcityWorkList;
+import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
+import pro.ucity.model.Adapter;
+import pro.ucity.model.CMHistory;
+import pro.ucity.model.DMHistory;
+import pro.ucity.model.ICSituation;
+import pro.ucity.model.OPDisplay;
+import pro.ucity.model.OPSituation;
+import pro.ucity.model.OPSms;
+import pro.ucity.model.System;
 
 public class UcityUtil {
 	
@@ -146,6 +144,8 @@ public class UcityUtil {
 		requestBody.put("formName", form.getName());
 		requestBody.put("serviceName", data.get("serviceName"));
 		requestBody.put("eventName", data.get("eventName"));
+		if(!SmartUtil.isBlankObject(data.get("eventPlace")))
+			requestBody.put("eventPlace", data.get("eventPlace"));
 		requestBody.put("eventId", eventId);
 		requestBody.put("eventTime", eventTime);
 		requestBody.put("isSms", "false");
@@ -370,6 +370,9 @@ public class UcityUtil {
 		case System.TABLE_ID_OPPORTAL_DISPLAY:
 			dataRecord = OPDisplay.readHistoryTable(eventId, status);
 			break;
+		case System.TABLE_ID_OPPORTAL_SMS:
+			dataRecord = OPSms.readHistoryTable(eventId, deviceId);
+			break;
 		case System.TABLE_ID_INTCON_SITUATION:
 			dataRecord = ICSituation.readHistoryTable(eventId, status);
 			break;
@@ -406,6 +409,7 @@ public class UcityUtil {
 				String status = null;
 				String displayId = null;
 				String deviceId = null;
+				String smsId = null;
 				String timeout = null;
 				for(int k=0; k<record.getDataFields().length; k++){
 					SwdDataField dataField = record.getDataFields()[k];
@@ -419,13 +423,15 @@ public class UcityUtil {
 						displayId = dataField.getValue();
 					}else if(dataField.getName().equals(System.DATA_FIELD_NAME_DEVICE_ID)){
 						deviceId = dataField.getValue();
+					}else if(dataField.getName().equals(System.DATA_FIELD_NAME_SMS_ID)){
+						smsId = dataField.getValue();
 					}else if(dataField.getName().equals(System.DATA_FIELD_NAME_TIMEOUT)){
 						timeout = dataField.getValue();
 					}
 				}
 				if(!SmartUtil.isBlankObject(eventId) && !SmartUtil.isBlankObject(tableName)){
 					try{
-						UcityUtil.invokePollingForRunningTask(eventId, tableName, status, displayId, deviceId, timeout, taskInstance);
+						UcityUtil.invokePollingForRunningTask(eventId, tableName, status, displayId, deviceId, smsId, timeout, taskInstance);
 					}catch (Exception e){
 						throw e;
 					}
@@ -470,6 +476,7 @@ public class UcityUtil {
 			String status = null;
 			String displayId = null;
 			String deviceId = null;
+			String smsId = null;
 			String timeout = null;
 			for(int k=0; k<record.getDataFields().length; k++){
 				SwdDataField dataField = record.getDataFields()[k];
@@ -483,13 +490,15 @@ public class UcityUtil {
 					displayId = dataField.getValue();
 				}else if(dataField.getName().equals(System.DATA_FIELD_NAME_DEVICE_ID)){
 					deviceId = dataField.getValue();
+				}else if(dataField.getName().equals(System.DATA_FIELD_NAME_SMS_ID)){
+					smsId = dataField.getValue();
 				}else if(dataField.getName().equals(System.DATA_FIELD_NAME_TIMEOUT)){
 					timeout = dataField.getValue();
 				}
 			}
 			if(!SmartUtil.isBlankObject(eventId) && !SmartUtil.isBlankObject(tableName)){
 				try{
-					UcityUtil.invokePollingForRunningTask(eventId, tableName, status, displayId, deviceId, timeout, taskInstance);
+					UcityUtil.invokePollingForRunningTask(eventId, tableName, status, displayId, deviceId, smsId, timeout, taskInstance);
 				}catch (Exception e){
 					throw e;
 				}
@@ -513,13 +522,13 @@ public class UcityUtil {
 	}
 
 	static List<PollingModel> pollingQueue = new LinkedList<PollingModel>();
-	synchronized static int addPolling(String eventId, String tableName, String status, String displayId, String deviceId, long timeout, TaskInstance taskInstance){
+	synchronized static int addPolling(String eventId, String tableName, String status, String displayId, String deviceId, String smsId, long timeout, TaskInstance taskInstance){
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(taskInstance)){
 			java.lang.System.out.println("EventId or TaskInstance does not exist Error!!!!, EventId=" + eventId);
 			return -1;
 		}
 		if(SmartUtil.isBlankObject(pollingQueue)){
-			pollingQueue.add(new PollingModel(eventId, tableName, status, displayId, deviceId, timeout, taskInstance));
+			pollingQueue.add(new PollingModel(eventId, tableName, status, displayId, deviceId, smsId, timeout, taskInstance));
 			return 0;
 		}
 		
@@ -531,7 +540,7 @@ public class UcityUtil {
 			}
 		}
 		
-		pollingQueue.add(new PollingModel(eventId, tableName, status, displayId, deviceId, timeout, taskInstance));
+		pollingQueue.add(new PollingModel(eventId, tableName, status, displayId, deviceId, smsId, timeout, taskInstance));
 		return pollingQueue.size() -1;
 	}
 	synchronized static void addThreadToPolling(int index, Thread thread){
@@ -592,7 +601,7 @@ public class UcityUtil {
 		}
 		
 	}
-	synchronized public static void invokePollingForRunningTask(String eventId, String tableName, String status, String displayId, String deviceId, String timeout, TaskInstance taskInstance) throws Exception{
+	synchronized public static void invokePollingForRunningTask(String eventId, String tableName, String status, String displayId, String deviceId, String smsId, String timeout, TaskInstance taskInstance) throws Exception{
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(taskInstance)) return;
 		
 		long timeoutInMilliseconds =  System.DEFAULT_TASK_TIMEOUT;
@@ -604,7 +613,7 @@ public class UcityUtil {
 		}
 		
 		int index = -1;
-		if((index = addPolling(eventId, tableName, status, displayId, deviceId, timeoutInMilliseconds, taskInstance)) == -1){
+		if((index = addPolling(eventId, tableName, status, displayId, deviceId, smsId, timeoutInMilliseconds, taskInstance)) == -1){
 			java.lang.System.out.println("Add Polling already running, Event Id=" + eventId + ", Task Name=" + taskInstance.getName());
 			return;		
 		}
@@ -617,6 +626,7 @@ public class UcityUtil {
 				String status = thisModel.getStatus();
 				String displayId = thisModel.getDisplayId();
 				String deviceId = thisModel.getDeviceId();
+				String smsId = thisModel.getSmsId();
 				TaskInstance taskInstance = thisModel.getTaskInstance();
 				long timeout = thisModel.getTimeout();
 				Map<String, Object> dataRecord = null;
@@ -629,6 +639,8 @@ public class UcityUtil {
 						if(!taskInstance.isRunning()) break;
 						if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_DISPLAY)
 							dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId, deviceId);
+						else if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_SMS)
+							dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId, smsId);
 						else
 							dataRecord = UcityUtil.readTaskTable(tableName, eventId, status, deviceId);
 					} catch(Exception e) {
@@ -667,6 +679,7 @@ public class UcityUtil {
 						if(System.getTableId(tableName)==System.TABLE_ID_OPPORTAL_SITUATION && OPSituation.isDisplayableStatus(status)){
 							dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
 							dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);
+							dataRecord = OPSms.checkForDisplay(eventId, dataRecord);
 						}
 						try{
 						java.lang.System.out.println("############ START Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
@@ -718,12 +731,13 @@ public class UcityUtil {
 }
 
 class PollingModel {
-	PollingModel(String eventId, String tableName, String status, String displayId, String deviceId, long timeout, TaskInstance taskInstance) {
+	PollingModel(String eventId, String tableName, String status, String displayId, String deviceId, String smsId, long timeout, TaskInstance taskInstance) {
 		this.eventId = eventId;
 		this.tableName = tableName;
 		this.status = status;
 		this.displayId = displayId;
 		this.deviceId = deviceId;
+		this.smsId = smsId;
 		this.taskInstance = taskInstance;
 		this.timeout = timeout;
 	}
@@ -735,6 +749,7 @@ class PollingModel {
 	protected String status = null;
 	protected String displayId = null;
 	protected String deviceId = null;
+	protected String smsId = null;
 	protected long timeout = System.DEFAULT_TASK_TIMEOUT;
 	protected TaskInstance taskInstance = null;
 	
@@ -779,6 +794,12 @@ class PollingModel {
 	}
 	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
+	}
+	public String getSmsId() {
+		return smsId;
+	}
+	public void setSmsId(String smsId) {
+		this.smsId = smsId;
 	}
 	public long getTimeout() {
 		return timeout;

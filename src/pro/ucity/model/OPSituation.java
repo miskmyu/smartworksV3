@@ -41,6 +41,9 @@ public class OPSituation {
 	public static final String FIELD_NAME_EVENT_CODE = "SITTN_EVENT_CD";
 	public static final String FIELD_NAME_EVENT_NAME = "SITTN_EVENT_NM";
 	public static final String FIELD_NAME_EVENT_DESC = "SITTN_EVENT_DESC";
+	public static final String FIELD_NAME_LC_NAME = "LC_NM";
+	public static final String FIELD_NAME_OCFACILITY_ID = "OCCUR_FACILITY_ID";
+	public static final String FIELD_NAME_FACILITY_ID = "FACILITY_ID";
 	
 	public static final String SYMBOL_FOR_OP_START = "ST";
 
@@ -50,12 +53,29 @@ public class OPSituation {
 	public static final String QUERY_SELECT_FOR_PROCESSING_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_STATUS + " = ?";
 	public static final String QUERY_SELECT_FOR_PROCESS_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where " + FIELD_NAME_SITUATION_ID + " = ? and (" + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_PROCESSING + "' or " + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_RELEASE + "') and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null)";
 	
+	
+	public static final String QUERY_SELECT_FOR_FACILITY ="select distinct c." + FIELD_NAME_LC_NAME + " from " + System.TABLE_NAME_OPPORTAL_SITUATION + " a," + System.TABLE_NAME_OPPORTAL_ST +" b, " + System.TABLE_NAME_OPPORTAL_FACILITY + 
+															" c where a." + FIELD_NAME_SITUATION_ID + " = b." + FIELD_NAME_SITUATION_ID + " and  b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + " and a." 
+															+ FIELD_NAME_SITUATION_ID + " = ? ";
+	
+//	public static final String QUERY_SELECT_FOR_PERFORM ="select distinct a.*, c." + FIELD_NAME_LC_NAME + " from " + System.TABLE_NAME_OPPORTAL_SITUATION + " a," + System.TABLE_NAME_OPPORTAL_ST +" b, " + System.TABLE_NAME_OPPORTAL_FACILITY + 
+//															" c where a." + FIELD_NAME_SITUATION_ID + " = ? and a." + FIELD_NAME_STATUS + " = ? and (a." + FIELD_NAME_READ_CONFIRM + " != 'Y' or a." + FIELD_NAME_READ_CONFIRM + " is null)  and  a." + FIELD_NAME_SITUATION_ID + "= b." + FIELD_NAME_SITUATION_ID + " and b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + 
+//															" order by start_date desc";
+//	
+//	public static final String QUERY_SELECT_FOR_PROCESSING_PERFORM ="select distinct a.*, c." + FIELD_NAME_LC_NAME + " from " + System.TABLE_NAME_OPPORTAL_SITUATION + " a," + System.TABLE_NAME_OPPORTAL_ST +" b, " + System.TABLE_NAME_OPPORTAL_FACILITY + 
+//															" c where a." + FIELD_NAME_SITUATION_ID + " = ? and a." + FIELD_NAME_STATUS + " = ? and  a." + FIELD_NAME_SITUATION_ID + "= b." + FIELD_NAME_SITUATION_ID + " and b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + 
+//															" order by start_date desc";
+//	
+//	public static final String QUERY_SELECT_FOR_PROCESS_PERFORM ="select distinct a.*, c." + FIELD_NAME_LC_NAME + " from " + System.TABLE_NAME_OPPORTAL_SITUATION + " a," + System.TABLE_NAME_OPPORTAL_ST +" b, " + System.TABLE_NAME_OPPORTAL_FACILITY + 
+//																		" c where a." + FIELD_NAME_SITUATION_ID + " = ? and (a." + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_PROCESSING + "' or a." + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_RELEASE + "') and (a." + FIELD_NAME_READ_CONFIRM + " != 'Y' or a." + FIELD_NAME_READ_CONFIRM + " is null) and  a." + FIELD_NAME_SITUATION_ID + "= b." + FIELD_NAME_SITUATION_ID + " and b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + 
+//																		" order by start_date desc";
+	
 	public static final String QUERY_SELECT_EVENT_CODE = "SELECT A.* FROM CMDB.TM_CM_STAT_EVENT A, USITUATION.TH_ST_SITUATION_HISTORY B, USITUATION.TM_ST_SITUATION C WHERE B.SITUATION_ID = C.SITUATION_ID AND C.CATEGORY_ID = A.CATEGORY_ID AND B.SITUATION_ID = ? AND B.SEQ = '1'";
 	
 	public static final KeyMap[] OPPORTAL_SITUATION_FIELDS = {
 		new KeyMap("상황 아이디", "SITUATION_ID"), new KeyMap("순번", "SEQ"), new KeyMap("상태", "STATUS"),
 		new KeyMap("담당자 아이디", "CHARGE_USER_ID"), new KeyMap("시작일시", "START_DATE"), new KeyMap("종료일시", "END_DATE"),
-		new KeyMap("내용", "CONTENTS"), new KeyMap("담당자명", "CHARGE_USER_NAME")
+		new KeyMap("내용", "CONTENTS"), new KeyMap("담당자명", "CHARGE_USER_NAME"), new KeyMap("발생장소명","LC_NM")
 	};
 
 	private int process=-1;
@@ -75,6 +95,7 @@ public class OPSituation {
 	private String startDate;
 	private String endDate;
 	private String contents;
+	private String locationName;
 		
 	public int getProcess() {
 		return process;
@@ -185,16 +206,23 @@ public class OPSituation {
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
+	public String getLocationName() {
+		return locationName;
+	}
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
+	}
+	
 	public OPSituation(ResultSet resultSet){
 		super();
 		if(SmartUtil.isBlankObject(resultSet)) return;
 		this.setResult(resultSet);
 	}
-	
-	public OPSituation(ResultSet resultSet, ResultSet joinResultSet){
+
+	public OPSituation(ResultSet resultSet, ResultSet joinResultSet, ResultSet joinFacilitySet){
 		super();
 		if(SmartUtil.isBlankObject(resultSet) || SmartUtil.isBlankObject(joinResultSet)) return;
-		this.setResult(resultSet, joinResultSet);
+		this.setResult(resultSet, joinResultSet, joinFacilitySet);
 	}
 	
 	public Map<String, Object> getDataRecord(){
@@ -206,10 +234,10 @@ public class OPSituation {
 
 		dataRecord.put("serviceName", this.serviceName);
 		dataRecord.put("eventName", this.eventName);
-/*		if(this.process==System.PROCESS_CRIME_CCTV){
-			dataRecord.put("eventPlace", this.contents);
+		if(!SmartUtil.isBlankObject(this.locationName)){
+			dataRecord.put("eventPlace", this.locationName);
 		}
-*/		
+		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
 			if(keyMap.getKey().equals("SITUATION_ID"))
@@ -228,11 +256,21 @@ public class OPSituation {
 				dataRecord.put(keyMap.getId(), UcityUtil.getDateString(this.endDate));
 			else if(keyMap.getKey().equals("CONTENTS"))
 				dataRecord.put(keyMap.getId(), this.contents);
+			else if(keyMap.getKey().equals("LC_NM"))
+				dataRecord.put(keyMap.getId(), this.locationName);
 		}
 		return dataRecord;
 //		return UcityTest.getOPSituationDataRecord();
 	}
 
+	private void setJoinFacility(ResultSet joinFacility){
+		if(SmartUtil.isBlankObject(joinFacility)) return;
+		
+		try{
+			this.locationName = joinFacility.getString("LC_NM");
+		}catch (Exception e){}
+	}
+	
 	private void setJoinResult(ResultSet joinResult){
 		if(SmartUtil.isBlankObject(joinResult)) return;
 		
@@ -312,9 +350,12 @@ public class OPSituation {
 		try{
 			this.contents = result.getString("CONTENTS");
 		}catch (Exception ex){}
+		try{
+			this.locationName = result.getString("LC_NM");
+		}catch (Exception ex){}
 	}
 	
-	public void setResult(ResultSet result, ResultSet joinResult){
+	public void setResult(ResultSet result, ResultSet joinResult, ResultSet joinFacilitySet){
 		if(SmartUtil.isBlankObject(result)) return;
 
 		try{
@@ -353,8 +394,12 @@ public class OPSituation {
 		try{
 			this.contents = result.getString("CONTENTS");
 		}catch (Exception ex){}
+		try{
+			this.locationName = result.getString("LC_NM");
+		}catch (Exception ex){}
 		
 		setJoinResult(joinResult);
+		setJoinFacility(joinFacilitySet);
 	}
 	
 	public boolean isValid(){
@@ -385,6 +430,7 @@ public class OPSituation {
 				
 		String opSituationSelectSql = OPSituation.QUERY_SELECT_FOR_START;
 		String opSituationJoinSelectSql = OPSituation.QUERY_SELECT_EVENT_CODE;
+		String opSituationJoinFacilitySql = OPSituation.QUERY_SELECT_FOR_FACILITY;
 		String opSituationUpdateSql = OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM;
 		try {
 			
@@ -411,6 +457,11 @@ public class OPSituation {
 						try{
 							String situationId = rs.getString(OPSituation.FIELD_NAME_SITUATION_ID);
 							String status = rs.getString(OPSituation.FIELD_NAME_STATUS);
+
+							selectPstmt = con.prepareStatement(opSituationJoinFacilitySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+							selectPstmt.setString(1, situationId);
+							ResultSet joinFacilityRs = selectPstmt.executeQuery();
+							joinFacilityRs.first();
 							
 							selectPstmt = con.prepareStatement(opSituationJoinSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							selectPstmt.setString(1, situationId);
@@ -423,7 +474,8 @@ public class OPSituation {
 								updatePstmt.setString(2, status);
 								boolean result = updatePstmt.execute();
 								try{
-									OPSituation opSituation = new OPSituation(rs, joinRs);
+									
+									OPSituation opSituation = new OPSituation(rs, joinRs, joinFacilityRs);
 									opSituation.startProcess();
 //									con.commit();
 									java.lang.System.out.println("[SUCCESS] 새로운 PORTAL 발생 이벤트(아이디 : '" + situationId + ")가 정상적으로 시작되었습니다!");

@@ -652,7 +652,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 					resultMap.put("오후(PM)", (BigDecimal)fields[1]);
 				}
 				
-			} else {
+			} else if(fields[0] instanceof String){
 				if(((String)fields[0]).toString().equalsIgnoreCase("sun요일")) {
 					resultMap.put("일요일", (BigDecimal)fields[1]);
 				} else if (((String)fields[0]).toString().equalsIgnoreCase("mon요일")) {

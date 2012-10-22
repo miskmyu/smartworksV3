@@ -1891,8 +1891,8 @@ public class WorkServiceImpl implements IWorkService {
 			//패키지의 메뉴얼파일을 저장한다
 			Map<String, Object> fileManualFile = (Map<String, Object>)frmPWorkManual.get("fileManualFile");
 			
-			List<Map<String, String>> fielList = (ArrayList<Map<String, String>>)fileManualFile.get("files");
-			String fileGroupId = (String)fileManualFile.get("groupId");
+			List<Map<String, String>> fielList = (fileManualFile==null) ? null : (ArrayList<Map<String, String>>)fileManualFile.get("files");
+			String fileGroupId = (fileManualFile==null) ? null : (String)fileManualFile.get("groupId");
 			
 //			if(!fielList.isEmpty()) {
 //				for(int i=0; i < fielList.subList(0, fielList.size()).size(); i++) {
@@ -1904,13 +1904,15 @@ public class WorkServiceImpl implements IWorkService {
 //				}
 //			}
 			try {
-				for(int i=0; i < fielList.subList(0, fielList.size()).size(); i++) {
-					Map<String, String> file = fielList.get(i);
-					String fileId = file.get("fileId");
-					String fileName = file.get("fileName");
-					String fileSize = file.get("fileSize");
-					getDocManager().insertFiles("Files", workId, fileGroupId, fileId, fileName, fileSize);
-					pkg.setManualFileName(fileGroupId);
+				if(fielList!=null){
+					for(int i=0; i < fielList.subList(0, fielList.size()).size(); i++) {
+						Map<String, String> file = fielList.get(i);
+						String fileId = file.get("fileId");
+						String fileName = file.get("fileName");
+						String fileSize = file.get("fileSize");
+						getDocManager().insertFiles("Files", workId, fileGroupId, fileId, fileName, fileSize);
+						pkg.setManualFileName(fileGroupId);
+					}
 				}
 			} catch (Exception e) {
 				throw new DocFileException("file upload fail...");
