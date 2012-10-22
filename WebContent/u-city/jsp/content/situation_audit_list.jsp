@@ -189,51 +189,51 @@
 					<table width="100%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
 							<th rowspan="2" <%if(auditNumber==Audit.ID_SITUATION_OCCURRED) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_SITUATION_OCCURRED%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_SITUATION_OCCURRED %>" auditId="<%=Audit.ID_SITUATION_OCCURRED%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
 							</th>
 							<th rowspan="2" <%if(auditNumber==Audit.ID_COMMUNICATION_MW) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_COMMUNICATION_MW%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_COMMUNICATION_MW %>" auditId="<%=Audit.ID_COMMUNICATION_MW%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
 							</th>
 							<th colspan="3">운영포털</th>
 							<th rowspan="2" <%if(auditNumber==Audit.ID_INTEGRATED_CONTROL) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_INTEGRATED_CONTROL%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_INTEGRATED_CONTROL %>" auditId="<%=Audit.ID_INTEGRATED_CONTROL%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
 							</th>
 							<th rowspan="2" <%if(auditNumber==Audit.ID_DEVICE_MW) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_DEVICE_MW%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_DEVICE_MW %>" auditId="<%=Audit.ID_DEVICE_MW%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
 							</th>
 						</tr>
 						<tr>
 							<th <%if(auditNumber==Audit.ID_PORTAL_ACCEPTED) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_PORTAL_ACCEPTED%>">접수</a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_ACCEPTED %>" auditId="<%=Audit.ID_PORTAL_ACCEPTED%>">접수</a>
 							</th>
 							<th <%if(auditNumber==Audit.ID_PORTAL_PROCESSING) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_PORTAL_PROCESSING%>">처리</a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_PROCESSING %>" auditId="<%=Audit.ID_PORTAL_PROCESSING%>">처리</a>
 							</th>
 							<th <%if(auditNumber==Audit.ID_PORTAL_RELEASE) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_PORTAL_RELEASE%>">종료</a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_RELEASE %>" auditId="<%=Audit.ID_PORTAL_RELEASE%>">종료</a>
 							</th>
 						</tr>
 						<tr>
 							<td <%if(auditNumber==Audit.ID_SITUATION_OCCURRED) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_SITUATION_OCCURRED%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_SITUATION_OCCURRED] %><%}else{ %>0<%} %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_SITUATION_OCCURRED %>" auditId="<%=Audit.ID_SITUATION_OCCURRED%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_SITUATION_OCCURRED] %><%}else{ %>0<%} %></a>
 							</td>
 							<td <%if(auditNumber==Audit.ID_COMMUNICATION_MW) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_COMMUNICATION_MW%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_COMMUNICATION_MW] %><%}else{ %>0<%} %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_COMMUNICATION_MW %>" auditId="<%=Audit.ID_COMMUNICATION_MW%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_COMMUNICATION_MW] %><%}else{ %>0<%} %></a>
 							</td>
 							<td  <%if(auditNumber==Audit.ID_SITUATION_OCCURRED) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_PORTAL_ACCEPTED%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_PORTAL_ACCEPTED] %><%}else{ %>0<%} %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_ACCEPTED %>" auditId="<%=Audit.ID_PORTAL_ACCEPTED%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_PORTAL_ACCEPTED] %><%}else{ %>0<%} %></a>
 							</td>
 							<td <%if(auditNumber==Audit.ID_PORTAL_PROCESSING) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_PORTAL_PROCESSING%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_PORTAL_PROCESSING] %><%}else{ %>0<%} %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_PROCESSING %>" auditId="<%=Audit.ID_PORTAL_PROCESSING%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_PORTAL_PROCESSING] %><%}else{ %>0<%} %></a>
 							</td>
 							<td <%if(auditNumber==Audit.ID_PORTAL_RELEASE) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_PORTAL_RELEASE%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_PORTAL_RELEASE] %><%}else{ %>0<%} %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_RELEASE %>" auditId="<%=Audit.ID_PORTAL_RELEASE%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_PORTAL_RELEASE] %><%}else{ %>0<%} %></a>
 							</td>
 							<td <%if(auditNumber==Audit.ID_INTEGRATED_CONTROL) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_INTEGRATED_CONTROL%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_INTEGRATED_CONTROL] %><%}else{ %>0<%} %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_INTEGRATED_CONTROL %>" auditId="<%=Audit.ID_INTEGRATED_CONTROL%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_INTEGRATED_CONTROL] %><%}else{ %>0<%} %></a>
 							</td>
 							<td <%if(auditNumber==Audit.ID_DEVICE_MW) {%>class="current"<%} %>>
-								<a href="" auditId="<%=Audit.ID_DEVICE_MW%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_DEVICE_MW] %><%}else{ %>0<%} %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_DEVICE_MW %>" auditId="<%=Audit.ID_DEVICE_MW%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_DEVICE_MW] %><%}else{ %>0<%} %></a>
 							</td>
 						</tr>
 					</table>
