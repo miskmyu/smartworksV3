@@ -93,7 +93,8 @@
 .table_border {clear:both}
 .table_border table td, .table_border table th {border: 1px solid #444444; text-align: center; padding: 0}
 .table_border table th a, .table_border table td a {display:block}
-.table_border table .current a {background-color: #1D3145; color:#cfdce9 !important}
+.table_border table .current {background-color: #1D3145; color:#cfdce9 !important}
+.table_border table .current a {color:#cfdce9 !important}
 .table_border a:hover {text-decoration: none !important}
 .table_border table th {background-color:#171b1e;}
 
