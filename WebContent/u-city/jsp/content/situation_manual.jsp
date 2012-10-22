@@ -181,23 +181,32 @@ function submitForms() {
 					</ul>
 				</div>
 				<div class="section_guide_tx">
-					<%if(!SmartUtil.isBlankObject(tasks) && tasks.length>0) %>
-					<div><%=CommonUtil.toNotNull(tasks[0].getForm().getDescription()) %></div>
-<!-- 					<div class="title">상급자 보고</div>
-					<div class="dep2">
-						<div class="title">상급자 보고가 필요한 경우</div>
-						<div class="ml10">기상특보에서 이벤트 등급이 B등급 이상일 경우, 혹은 예고없이 찾아온 기상
-							상황이 발생할때 상급자에게 보고하시면 됩니다.</div>
-					</div>
-
-					<div class="dep2">
-						<div class="title">상급자 정보 열람 및 선택방법</div>
-						<div class="ml10">
-							① 상급자 정보를 열람 및 선택하시기 위한 방법을 순차적으로 설명합니다.<br /> ② 상급자 정보를 열람 및
-							선택하시기 위한 방법을 순차적으로 설명합니다.
-						</div>
-					</div>
- -->				</div>
+					<%if(!SmartUtil.isBlankObject(tasks) && tasks.length>0){
+						for(int i=0; i<tasks.length; i++){
+					%>
+						<div class="js_situation_manual_desc" taskId="<%=tasks[i].getId()%>" <%if(i>0){ %>style="display:none"<%} %>>
+							<%if(i==0){%>
+			 					<div class="title">상급자 보고</div>
+								<div class="dep2">
+									<div class="title">상급자 보고가 필요한 경우</div>
+									<div class="ml10">기상특보에서 이벤트 등급이 B등급 이상일 경우, 혹은 예고없이 찾아온 기상
+										상황이 발생할때 상급자에게 보고하시면 됩니다.</div>
+								</div>
+			
+								<div class="dep2">
+									<div class="title">상급자 정보 열람 및 선택방법</div>
+									<div class="ml10">
+										① 상급자 정보를 열람 및 선택하시기 위한 방법을 순차적으로 설명합니다.<br /> ② 상급자 정보를 열람 및
+										선택하시기 위한 방법을 순차적으로 설명합니다.
+									</div>
+								</div>
+							
+							<%}else{%><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %><%} %></div>
+					<%
+						}
+					}
+					%>
+				</div>
 			</div>
 		</div>
 		<!-- Right Section //-->
