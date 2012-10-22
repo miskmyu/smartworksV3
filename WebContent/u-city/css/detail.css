@@ -76,17 +76,21 @@
 .space_contents {padding: 0 10px 10px}
 
 /* 목록  타이틀 */
-.list_title_space .title {font-size:14px; font-weight:bold; padding: 0 10px 0 0; line-height: 18px; color:#FFF; float:left}
-.list_title_space .title.guide {background: url("../images/icon_guide.png") no-repeat 0 0 transparent; padding:0 0 0 22px; margin:0 0 20px}
+.list_title_space {border-bottom: 1px solid #6D6D6D; overflow: hidden;}
+.list_title_space .title {font-size:14px; font-weight:bold; padding: 0 10px 0 0; line-height: 22px; color:#FFF; float:left}
+.list_title_space .title.guide {background: url("../images/icon.png") no-repeat 0 0 transparent; padding:0 0 0 22px; margin:0 0 20px}
+.list_title_space .title.monitoring {background: url("../images/icon.png") no-repeat 0 -34px transparent; padding:0 0 0 22px; margin:0 0 20px}
+.list_title_space .title.audit {background: url("../images/icon.png") no-repeat 0 -67px transparent; padding:0 0 0 22px; margin:0 0 20px}
 .list_contents {clear:both}
 .list_contents table tr .end, .list_contents table td .end {border-bottom: 0 none}
-.list_contents table .tit_bg {background-color:#171b1e; border-top:1px solid #6d6d6d; border-bottom:1px solid #444444}
+.list_contents table .tit_bg {background-color:#171b1e; border-top:1px solid #444444; border-bottom:1px solid #444444}
 
 .list_contents table th {text-align:center}
 .list_contents table td {border-bottom: 1px solid #444444; text-align: center}
 .list_contents table td {padding:4px 5px; border-left:none; border-right:none}
 
 /* Border가 있는 Table */
+.table_border {clear:both}
 .table_border table td, .table_border table th {border: 1px solid #444444; text-align: center; padding: 0}
 .table_border table th a, .table_border table td a {display:block}
 .table_border table .current a {background-color: #1D3145; color:#cfdce9 !important}
@@ -162,7 +166,7 @@ a .proc_btn_next:hover {background: url("../images/proc_bg.png") no-repeat -129p
 
 
 /* 페이징 */
-.paginate {padding: 10px 0; position: relative; text-align: center; font-size: 12px; font-weight: bold; background-color: #1E2127}
+.paginate {padding: 10px 0; position: relative; text-align: center; font-size: 12px; font-weight: bold; background-color: #1E2127; height:14px}
 .paginate strong {color:#ff7e7e; margin:0 20px 0 0}
 .paginate .num {margin:0 20px 0 0; text-decoration: none; vertical-align: middle}
 
