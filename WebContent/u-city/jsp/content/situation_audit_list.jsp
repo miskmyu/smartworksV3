@@ -1,3 +1,4 @@
+<%@page import="pro.ucity.model.Audit"%>
 <%@page import="pro.ucity.model.System"%>
 <%@page import="pro.ucity.util.UcityTest"%>
 <%@page import="net.smartworks.model.instance.info.RequestParams"%>
@@ -150,7 +151,12 @@
 	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
  */
  	session.setAttribute("lastLocation", "situation_list.sw");
-	
+
+ 	String auditId = (String)session.getAttribute("auditId");
+ 	if(SmartUtil.isBlankObject(auditId)) auditId = Audit.DEFAULT_AUDIT_ID_STR;
+ 	
+ 	int[][] auditTasks = smartWorks.getUcityAuditTaskCounts(true);
+ 	
 	String workId = System.getProcessId(System.PROCESS_ENV_WEAHTER);
 	User cUser = SmartUtil.getCurrentUser();
 	ProcessWork work = (ProcessWork) smartWorks.getWorkById(workId);
@@ -224,6 +230,7 @@
 					<div id='pwork_instance_list_page'>
 						<jsp:include page="/u-city/jsp/content/situation_instance_list.jsp">
 							<jsp:param value="<%=workId%>" name="workId"/>
+							<jsp:param value="<%=auditId%>" name="auditId"/>							
 						</jsp:include>
 					</div>
 				</div>

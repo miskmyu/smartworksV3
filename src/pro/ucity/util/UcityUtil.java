@@ -385,7 +385,7 @@ public class UcityUtil {
 		IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
 		IWorkService workService = SwServiceFactory.getInstance().getWorkService();
 		
-		InstanceInfoList instanceList = instanceService.getAllUcityPWorkInstanceList(true, new RequestParams());
+		InstanceInfoList instanceList = instanceService.getAllUcityPWorkInstanceList(true, new RequestParams(), -1);
 		if(SmartUtil.isBlankObject(instanceList) || SmartUtil.isBlankObject(instanceList.getInstanceDatas())){
 			return;
 		}
