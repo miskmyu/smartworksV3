@@ -78,7 +78,7 @@
 /* 목록  타이틀 */
 .list_title_space {border-bottom: 1px solid #6D6D6D; overflow: hidden;}
 .list_title_space .title {font-size:14px; font-weight:bold; padding: 0 10px 0 0; line-height: 22px; color:#FFF; float:left}
-.list_title_space .title.guide {background: url("../images/icon.png") no-repeat 0 0 transparent; padding:0 0 0 22px; margin:0 0 20px}
+.list_title_space .title.guide {background: url("../images/icon.png") no-repeat 0 0 transparent; padding:0 0 0 22px; margin:0 0 10px}
 .list_title_space .title.monitoring {background: url("../images/icon.png") no-repeat 0 -34px transparent; padding:0 0 0 22px; margin:0 0 20px}
 .list_title_space .title.audit {background: url("../images/icon.png") no-repeat 0 -67px transparent; padding:0 0 0 22px; margin:0 0 20px}
 .list_contents {clear:both}
@@ -114,7 +114,8 @@
 .lft_step .s2.current a {background-position: -146px -164px; height:102px; width:102px}
 .lft_step .s3.current a {background-position: -146px -285px; height:102px; width:102px}
 .section_rgt {margin:0 0 0 114px}
-.group_rgt {background-color:#1c1f21; border-radius:8px; padding:35px 40px; margin: 0 0 0 23px}
+.group_rgt {background-color:#1c1f21; border-radius:8px; padding:30px; margin: 0 0 0 23px; overflow: hidden}
+.rgt_area {min-height: 335px; max-height: 435px; overflow-x: hidden; overflow-y: auto}
 .section_rgt .point {background: url("../images/guide_arr.png") no-repeat 0 0 transparent; width:23px; height:45px; float:left; position:relative}
 .working_proces {}
 .working_proces ul { display:inline-block}
@@ -131,7 +132,7 @@
 .working_proces .n5 {background-position: -350px -325px;}
 .section_guide_tx { margin:40px 0 0 0; line-height:17px}
 .section_guide_tx .title {background: url("../images/portal_proces.png") no-repeat -349px -370px transparent; font-size:14px; padding:0 0 0 20px; font-weight:bold; color:#FFF}
-.section_guide_tx .dep2 { margin:15px 5px}
+.section_guide_tx .dep2 { margin:15px 5px; word-wrap: break-word}
 .section_guide_tx .dep2 .title {background: url("../images/portal_proces.png") no-repeat -349px -399px transparent; color:#4c6542; font-weight:bold; font-size:12px; padding:0 0 5px 10px}
 		
 /* 프로세스 */

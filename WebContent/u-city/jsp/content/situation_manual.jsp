@@ -123,7 +123,7 @@ function submitForms() {
 								userviceCode="<%=userviceCode %>" serviceCode="<%=serviceCode %>" eventCode="<%=eventCode %>" situationStatus="<%=situationStatus %>" >
 
 	<!-- 타이틀-->
-	<div class="list_title_space mt20">
+	<div class="list_title_space bn">
 		<div class="title guide"><%=CommonUtil.toNotNull(Event.getEventNameByCode(eventId)) %> 운영 가이드</div>
 	</div>
 	<!-- 타이틀//-->
@@ -153,59 +153,61 @@ function submitForms() {
 		<!-- Right Section -->
 		<div class="section_rgt">
 			<div class="point" style="<%=pointerPos%>"></div>
-			<div class="group_rgt js_manual_tasks_holder" style="overflow:hidden">
-				<div class="working_proces js_manual_tasks">
-					<ul>
-						<!-- 태스크 //-->
-						<%
-						if (tasks != null) {
-							int count = 0;
-							for (SmartTaskInfo task : tasks) {
-								count++;
-								String currentClass = (count==1) ? "current" : "";
-						%>
-								<li class="task <%=currentClass %> js_manual_task js_select_situation_manual" taskId="<%=task.getId()%>">
-									<a class="js_select_task_manual" href=""> 
-										<span class="<%=("n" + count)%>"> </span>
-										<div class="task_tx"><%=task.getName()%></div>
-									</a>
-								</li>
-								<%if(count!=tasks.length){ %>
-									<li class="arr"></li>
-								<%} %>
-						<%
+			<div class="group_rgt js_manual_tasks_holder">
+				<div class="rgt_area">
+					<div class="working_proces js_manual_tasks">
+						<ul>
+							<!-- 태스크 //-->
+							<%
+							if (tasks != null) {
+								int count = 0;
+								for (SmartTaskInfo task : tasks) {
+									count++;
+									String currentClass = (count==1) ? "current" : "";
+							%>
+									<li class="task <%=currentClass %> js_manual_task js_select_situation_manual" taskId="<%=task.getId()%>">
+										<a class="js_select_task_manual" href=""> 
+											<span class="<%=("n" + count)%>"> </span>
+											<div class="task_tx"><%=task.getName()%></div>
+										</a>
+									</li>
+									<%if(count!=tasks.length){ %>
+										<li class="arr"></li>
+									<%} %>
+							<%
+									}
 								}
-							}
+							%>
+							<!-- 태스크 -->
+						</ul>
+					</div>
+					<div class="section_guide_tx">
+						<%if(!SmartUtil.isBlankObject(tasks) && tasks.length>0){
+							for(int i=0; i<tasks.length; i++){
 						%>
-						<!-- 태스크 -->
-					</ul>
-				</div>
-				<div class="section_guide_tx">
-					<%if(!SmartUtil.isBlankObject(tasks) && tasks.length>0){
-						for(int i=0; i<tasks.length; i++){
-					%>
-						<div class="js_situation_manual_desc" taskId="<%=tasks[i].getId()%>" <%if(i>0){ %>style="display:none"<%} %>>
-							<%if(i==0){%>
-			 					<div class="title">상급자 보고</div>
-								<div class="dep2">
-									<div class="title">상급자 보고가 필요한 경우</div>
-									<div class="ml10">기상특보에서 이벤트 등급이 B등급 이상일 경우, 혹은 예고없이 찾아온 기상
-										상황이 발생할때 상급자에게 보고하시면 됩니다.</div>
-								</div>
-			
-								<div class="dep2">
-									<div class="title">상급자 정보 열람 및 선택방법</div>
-									<div class="ml10">
-										① 상급자 정보를 열람 및 선택하시기 위한 방법을 순차적으로 설명합니다.<br /> ② 상급자 정보를 열람 및
-										선택하시기 위한 방법을 순차적으로 설명합니다.
+							<div class="js_situation_manual_desc" taskId="<%=tasks[i].getId()%>" <%if(i>0){ %>style="display:none"<%} %>>
+								<%if(i==0){%>
+				 					<div class="title">상급자 보고</div>
+									<div class="dep2">
+										<div class="title">상급자 보고가 필요한 경우</div>
+										<div class="ml10">기상특보에서 이벤트 등급이 B등급 이상일 경우, 혹은 예고없이 찾아온 기상
+											상황이 발생할때 상급자에게 보고하시면 됩니다.</div>
 									</div>
-								</div>
-							
-							<%}else{%><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %><%} %></div>
-					<%
+				
+									<div class="dep2">
+										<div class="title">상급자 정보 열람 및 선택방법</div>
+										<div class="ml10">
+											① 상급자 정보를 열람 및 선택하시기 위한 방법을 순차적으로 설명합니다.<br /> ② 상급자 정보를 열람 및
+											선택하시기 위한 방법을 순차적으로 설명합니다.
+										</div>
+									</div>
+								
+								<%}else{%><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %><%} %></div>
+						<%
+							}
 						}
-					}
-					%>
+						%>
+					</div>
 				</div>
 			</div>
 		</div>
