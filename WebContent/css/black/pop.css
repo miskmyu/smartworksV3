@@ -74,7 +74,7 @@
 
 /* Smart User Info */
 .smartp_name { font-weight:bold; color:#3B5998}
-.smartp_info {background: url("../../images/dot_gray.gif")no-repeat 0 7px; padding:0 0 0 7px}
+.smartp_info {background: url("../../images/dot_gray.gif")no-repeat 0 7px; padding:0 0 0 7px; word-wrap:break-word}
 .smartp_info > span {color:#919191}
 .smartp_btn_space {background-color: #c7c7c7; height: 19px; padding: 4px 5px 2px}
 .pop_icon_chat a {background: url("../../images/nav_img.png") no-repeat scroll -151px 0 transparent; display: inline-block; height: 19px; width:20px}

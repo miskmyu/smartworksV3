@@ -50,9 +50,6 @@
 		<option value="<%=Instance.STATUS_RUNNING%>" <%if((operandValue != null) && Integer.parseInt(operandValue) == Instance.STATUS_RUNNING){%> selected<%} %>>
 			처리중
 		</option>
-		<option value="<%=Instance.STATUS_DELAYED_RUNNING%>" <%if((operandValue != null) && Integer.parseInt(operandValue) == Instance.STATUS_DELAYED_RUNNING){%> selected<%} %>>
-			지연처리중
-		</option>
 		<option value="<%=Instance.STATUS_ABORTED%>" <%if((operandValue != null) && Integer.parseInt(operandValue) == Instance.STATUS_ABORTED){%> selected<%} %>>
 			이상종료
 		</option>

@@ -4378,7 +4378,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 		return false;
 	}
-	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception {
+	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params, int auditId) throws Exception {
 	
 		try {
 			User user = SmartUtil.getCurrentUser();
@@ -9670,8 +9670,15 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 		return taskInstance;
 	}
+	
 	@Override
 	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception {
 		return SwManagerFactory.getInstance().getUcityWorkListManager().getUcityChartXml(categoryName, periodName, serviceName, eventName);
+	}
+
+	@Override
+	public int[][] getUcityAuditTaskCounts(boolean runningOnly) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -2,6 +2,7 @@ package net.smartworks.server.service.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -1530,7 +1531,14 @@ public class WorkServiceImpl implements IWorkService {
 						Calendar cal = Calendar.getInstance();
 						cal.set(Calendar.HOUR, 0);
 						cal.set(Calendar.MINUTE, 0);
-						rightOperand = new LocalDate(cal.getTime().getTime()- TimeZone.getDefault().getRawOffset()).toGMTDateString();
+						cal.set(Calendar.SECOND, 0);
+						cal.set(Calendar.MILLISECOND, 0);
+						long defaultOffset = TimeZone.getDefault().getRawOffset();
+						Date today = cal.getTime();
+						LocalDate localDate = new LocalDate(today.getTime());
+						String gmtLocalDateStr = localDate.toGMTDateString();
+						String localDateStr = localDate.toLocalDateString();
+						rightOperand = new LocalDate(cal.getTime().getTime()- defaultOffset).toGMTDateString();
 						selFilterOperator = ConditionOperator.GREATER_EQUAL.getId();
 						rightOperandType = FormField.TYPE_DATE;
 					} else if(selFilterOperator.equals(ConditionOperator.THIS_WEEK.getId())) {

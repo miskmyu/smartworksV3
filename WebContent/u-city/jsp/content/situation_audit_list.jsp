@@ -1,3 +1,4 @@
+<%@page import="pro.ucity.model.Audit"%>
 <%@page import="pro.ucity.model.System"%>
 <%@page import="pro.ucity.util.UcityTest"%>
 <%@page import="net.smartworks.model.instance.info.RequestParams"%>
@@ -150,7 +151,12 @@
 	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
  */
  	session.setAttribute("lastLocation", "situation_list.sw");
-	
+
+ 	String auditId = (String)session.getAttribute("auditId");
+ 	if(SmartUtil.isBlankObject(auditId)) auditId = Audit.DEFAULT_AUDIT_ID_STR;
+ 	
+ 	int[][] auditTasks = smartWorks.getUcityAuditTaskCounts(true);
+ 	
 	String workId = System.getProcessId(System.PROCESS_ENV_WEAHTER);
 	User cUser = SmartUtil.getCurrentUser();
 	ProcessWork work = (ProcessWork) smartWorks.getWorkById(workId);
@@ -177,88 +183,51 @@
 			<!-- 목록보기 -->
 			<div class=" contents_space">
 
-				<jsp:include page="/u-city/jsp/content/situation_report.jsp">
-					<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
-				</jsp:include>
+				<div class="title_list bn">상황 이벤트 감시					
+					<!-- 우측 영역 -->
+					<div class="fr txt_btn js_work_report_list_box" style="position: relative; top: 5px;">
+					</div>			
+					<!-- 우측 영역 //-->
+				</div>
 				
 				<!-- 테이블 -->
 				<div class="table_border">
 					<table width="100%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
-							<th rowspan="2">상황발생</th>
-							<th rowspan="2">통신미들웨어</th>
-							<th colspan="3">업무포털</th>
-							<th rowspan="2">단말 연개 미들웨어</th>
+							<th rowspan="2"><a href="">상황발생</a></th>
+							<th rowspan="2"><a href="">통신 미들웨어</a></th>
+							<th colspan="3"><a href="">운영포털</a></th>
+							<th rowspan="2"><a href="">통합관제</a></th>
+							<th rowspan="2"><a href="">단말연계 미들웨어</a></th>
 						</tr>
 						<tr>
-							<th>접수</th>
-							<th>처리</th>
-							<th>종료</th>
+							<th class="current"><a href="">접수</a></th>
+							<th><a href="">처리</a></th>
+							<th><a href="">종료</a></th>
 						</tr>
 						<tr>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
+							<td><a href="">3</a></td>
+							<td><a href="">0</a></td>
+							<td class="current"><a href="">0</a></td>
+							<td><a href="">5</a></td>
+							<td><a href="">0</a></td>
+							<td><a href="">0</a></td>
+							<td><a href="">7</a></td>
 						</tr>
 					</table>
 				</div>
 				<!-- 테이블 //-->
 				
-				<!-- 상세필터 -->
-				<div class="list_title_space js_work_list_title mt20">
-					<div class="title_line_options">
-						<form name="frmSearchInstance" class="fl">
-							<div class="srch">
-								<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
-								<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
-							</div>
-						</form>
-
-						<form class="form_space fl js_form_filter_name" name="frmPworkFilterName">
-							<select name="selFilterName" class="js_select_search_filter" href="search_filter.sw?workId=<%=workId%>">
-								<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" 
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_ALL_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-									<fmt:message key='filter.name.all_instances' />
-								</option>
-								<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-									최근 발생항목
-								</option>
-								<option value="<%=SearchFilter.FILTER_RUNNING_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_RUNNING_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-									진행중인 항목
-								</option>
-								<%
-								SearchFilterInfo[] filters = work.getSearchFilters();
-								if (filters != null) {
-									for (SearchFilterInfo filter : filters) {
-								%>
-										<option class="js_custom_filter" value="<%=filter.getId()%>" <%if(filter.getId().equals(selectedFilterId)){%> selected <%} %>><%=filter.getName()%></option>
-								<%
-									}
-								}
-								%>
-							</select>
-						</form>
-						<a href="searchFilter.sw?workId=<%=workId%>" class="js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
-							<span class="icon_btn_edit"></span>
-						</a>
-					</div>
-				</div>
-				<!-- 상세필터//-->
-
-				<!-- 상세필터 및 새업무등록하기 화면 -->
-				<div id="search_filter" class="filter_section js_new_work_form"></div>
-				<!-- 상세필터 -->
+				<!-- 목록보기 타이틀-->
+				<div class="sub_title01">클릭시 해당  타이틀<span></span></div>
+				<!-- 목록보기 타이틀-->
 
 				<!-- 목록 테이블 -->
  				<div class="list_contents">
 					<div id='pwork_instance_list_page'>
 						<jsp:include page="/u-city/jsp/content/situation_instance_list.jsp">
 							<jsp:param value="<%=workId%>" name="workId"/>
+							<jsp:param value="<%=auditId%>" name="auditId"/>							
 						</jsp:include>
 					</div>
 				</div>

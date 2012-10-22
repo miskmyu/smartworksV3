@@ -206,7 +206,10 @@ public class OPSituation {
 
 		dataRecord.put("serviceName", this.serviceName);
 		dataRecord.put("eventName", this.eventName);
-		
+/*		if(this.process==System.PROCESS_CRIME_CCTV){
+			dataRecord.put("eventPlace", this.contents);
+		}
+*/		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
 			if(keyMap.getKey().equals("SITUATION_ID"))
@@ -220,9 +223,9 @@ public class OPSituation {
 			else if(keyMap.getKey().equals("CHARGE_USER_NAME"))
 				dataRecord.put(keyMap.getId(), this.chargeUserName);
 			else if(keyMap.getKey().equals("START_DATE"))
-				dataRecord.put(keyMap.getId(), this.startDate);
+				dataRecord.put(keyMap.getId(), UcityUtil.getDateString(this.startDate));
 			else if(keyMap.getKey().equals("END_DATE"))
-				dataRecord.put(keyMap.getId(), this.endDate);
+				dataRecord.put(keyMap.getId(), UcityUtil.getDateString(this.endDate));
 			else if(keyMap.getKey().equals("CONTENTS"))
 				dataRecord.put(keyMap.getId(), this.contents);
 		}

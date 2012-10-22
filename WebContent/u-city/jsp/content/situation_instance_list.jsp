@@ -42,7 +42,9 @@
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
 	User cUser = SmartUtil.getCurrentUser();
 	ProcessWork work = (ProcessWork)session.getAttribute("smartWork");
-
+	
+	String auditId = request.getParameter("auditId");
+	
 	String workId = work.getId();
 	if(SmartUtil.isBlankObject(params)){
 		String savedWorkId = (String)session.getAttribute("workId");
@@ -56,7 +58,11 @@
 	session.setAttribute("requestParams", params);
 	session.setAttribute("workId", workId);
 
-	InstanceInfoList instanceList = smartWorks.getAllUcityPWorkInstanceList(false, params);
+	InstanceInfoList instanceList = null;
+	if(SmartUtil.isBlankObject(auditId))
+		instanceList = smartWorks.getAllUcityPWorkInstanceList(false, params, -1);
+	else
+		instanceList = smartWorks.getAllUcityPWorkInstanceList(true, params, Integer.parseInt(auditId));
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />

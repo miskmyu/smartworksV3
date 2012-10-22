@@ -32,9 +32,9 @@
 	<!-- 컨텐츠 -->
 	<div class="fr mr10">
 		<select class="js_select_ucity_category">
-			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_TIME%>">시간대별</option>
+			<option selected value="<%=System.REPORT_OPTION_CATEGORY_BY_TIME%>">시간대별</option>
 			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_AMPM%>">오전/오후</option>
-			<option selected value="<%=System.REPORT_OPTION_CATEGORY_BY_DAY%>">요일별</option>
+			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_DAY%>">요일별</option>
 			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_MONTH%>">월별</option>
 			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_SEASON%>">계절별</option>
 			<option value="<%=System.REPORT_OPTION_CATEGORY_BY_QUARTER%>">분기별</option>
