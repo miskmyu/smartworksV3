@@ -46,6 +46,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import pro.ucity.manager.ucityWorkList.manager.IUcityWorkListManager;
+import pro.ucity.sso.manager.ISsoManager;
 
 public class SwManagerFactory {
 
@@ -90,8 +91,15 @@ public class SwManagerFactory {
 		this.timerManager = timerManager;
 	}
 	//UCITY
+	private ISsoManager ssoManager;
 	private IUcityWorkListManager ucityWorkListManager;
 
+	public ISsoManager getSsoManager() {
+		return ssoManager;
+	}
+	public void setSsoManager(ISsoManager ssoManager) {
+		this.ssoManager = ssoManager;
+	}
 	public IUcityWorkListManager getUcityWorkListManager() {
 		return ucityWorkListManager;
 	}
