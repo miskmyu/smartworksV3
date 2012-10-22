@@ -177,22 +177,18 @@
 			<!-- 목록보기 -->
 			<div class=" contents_space">
 
-				<div class="title_list">상황 이벤트 감시					
-					<!-- 우측 영역 -->
-					<div class="fr txt_btn js_work_report_list_box" style="position: relative; top: 5px;">
-					</div>			
-					<!-- 우측 영역 //-->
-				</div>
+				<jsp:include page="/u-city/jsp/content/situation_report.jsp">
+					<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
+				</jsp:include>
 				
 				<!-- 테이블 -->
 				<div class="table_border">
 					<table width="100%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
-							<th rowspan="2"  style="text-align:center">상황발생</th>
-							<th rowspan="2">통신 미들웨어</th>
-							<th colspan="3">운영포털</th>
-							<th rowspan="2">통합관제</th>
-							<th rowspan="2">단말연계 미들웨어</th>
+							<th rowspan="2">상황발생</th>
+							<th rowspan="2">통신미들웨어</th>
+							<th colspan="3">업무포털</th>
+							<th rowspan="2">단말 연개 미들웨어</th>
 						</tr>
 						<tr>
 							<th>접수</th>
@@ -200,24 +196,63 @@
 							<th>종료</th>
 						</tr>
 						<tr>
-							<td>3</td>
-							<td>0</td>
-							<td>0</td>
-							<td>5</td>
-							<td>0</td>
-							<td>0</td>
-							<td>7</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
 						</tr>
 					</table>
 				</div>
 				<!-- 테이블 //-->
 				
-				<!-- 목록보기 타이틀-->
+				<!-- 상세필터 -->
 				<div class="list_title_space js_work_list_title mt20">
 					<div class="title_line_options">
+						<form name="frmSearchInstance" class="fl">
+							<div class="srch">
+								<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
+								<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
+							</div>
+						</form>
+
+						<form class="form_space fl js_form_filter_name" name="frmPworkFilterName">
+							<select name="selFilterName" class="js_select_search_filter" href="search_filter.sw?workId=<%=workId%>">
+								<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" 
+									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_ALL_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									<fmt:message key='filter.name.all_instances' />
+								</option>
+								<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>"
+									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									최근 발생항목
+								</option>
+								<option value="<%=SearchFilter.FILTER_RUNNING_INSTANCES%>"
+									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_RUNNING_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									진행중인 항목
+								</option>
+								<%
+								SearchFilterInfo[] filters = work.getSearchFilters();
+								if (filters != null) {
+									for (SearchFilterInfo filter : filters) {
+								%>
+										<option class="js_custom_filter" value="<%=filter.getId()%>" <%if(filter.getId().equals(selectedFilterId)){%> selected <%} %>><%=filter.getName()%></option>
+								<%
+									}
+								}
+								%>
+							</select>
+						</form>
+						<a href="searchFilter.sw?workId=<%=workId%>" class="js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
+							<span class="icon_btn_edit"></span>
+						</a>
 					</div>
 				</div>
-				<!-- 목록보기 타이틀-->
+				<!-- 상세필터//-->
+
+				<!-- 상세필터 및 새업무등록하기 화면 -->
+				<div id="search_filter" class="filter_section js_new_work_form"></div>
+				<!-- 상세필터 -->
 
 				<!-- 목록 테이블 -->
  				<div class="list_contents">
