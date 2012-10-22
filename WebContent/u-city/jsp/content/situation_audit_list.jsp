@@ -183,7 +183,7 @@
 			<!-- 목록보기 -->
 			<div class=" contents_space">
 
-				<div class="title_list">상황 이벤트 감시					
+				<div class="title_list bn">상황 이벤트 감시					
 					<!-- 우측 영역 -->
 					<div class="fr txt_btn js_work_report_list_box" style="position: relative; top: 5px;">
 					</div>			
@@ -194,35 +194,32 @@
 				<div class="table_border">
 					<table width="100%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
-							<th rowspan="2"  style="text-align:center">상황발생</th>
-							<th rowspan="2">통신 미들웨어</th>
-							<th colspan="3">운영포털</th>
-							<th rowspan="2">통합관제</th>
-							<th rowspan="2">단말연계 미들웨어</th>
+							<th rowspan="2"><a href="">상황발생</a></th>
+							<th rowspan="2"><a href="">통신 미들웨어</a></th>
+							<th colspan="3"><a href="">운영포털</a></th>
+							<th rowspan="2"><a href="">통합관제</a></th>
+							<th rowspan="2"><a href="">단말연계 미들웨어</a></th>
 						</tr>
 						<tr>
-							<th>접수</th>
-							<th>처리</th>
-							<th>종료</th>
+							<th class="current"><a href="">접수</a></th>
+							<th><a href="">처리</a></th>
+							<th><a href="">종료</a></th>
 						</tr>
 						<tr>
-							<td>3</td>
-							<td>0</td>
-							<td>0</td>
-							<td>5</td>
-							<td>0</td>
-							<td>0</td>
-							<td>7</td>
+							<td><a href="">3</a></td>
+							<td><a href="">0</a></td>
+							<td class="current"><a href="">0</a></td>
+							<td><a href="">5</a></td>
+							<td><a href="">0</a></td>
+							<td><a href="">0</a></td>
+							<td><a href="">7</a></td>
 						</tr>
 					</table>
 				</div>
 				<!-- 테이블 //-->
 				
 				<!-- 목록보기 타이틀-->
-				<div class="list_title_space js_work_list_title mt20">
-					<div class="title_line_options">
-					</div>
-				</div>
+				<div class="sub_title01">클릭시 해당  타이틀<span></span></div>
 				<!-- 목록보기 타이틀-->
 
 				<!-- 목록 테이블 -->

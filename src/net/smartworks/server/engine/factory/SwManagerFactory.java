@@ -38,6 +38,7 @@ import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.report.manager.IReportManager;
 import net.smartworks.server.engine.resource.manager.IResourceDesigntimeManager;
 import net.smartworks.server.engine.resource.manager.IResourceRuntimeManager;
+import net.smartworks.server.engine.scheduling.manager.impl.TimerManager;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.worklist.manager.impl.WorkListManagerImpl;
 
@@ -80,7 +81,14 @@ public class SwManagerFactory {
 	private IMailManager mailManager;
 	private IIdxManager autoIndexManager;
 	private IReportManager reportManager;
+	private TimerManager timerManager;
 	
+	public TimerManager getTimerManager() {
+		return timerManager;
+	}
+	public void setTimerManager(TimerManager timerManager) {
+		this.timerManager = timerManager;
+	}
 	//UCITY
 	private IUcityWorkListManager ucityWorkListManager;
 
