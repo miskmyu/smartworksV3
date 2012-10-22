@@ -9719,21 +9719,62 @@ public class InstanceServiceImpl implements IInstanceService {
 		return SwManagerFactory.getInstance().getUcityWorkListManager().getUcityChartXml(categoryName, periodName, serviceName, eventName);
 	}
 
+	private int[][] getUcityAuditTaskCountsByTasks(boolean runningOnly, TskTask[] tasks) throws Exception {
+
+		int[][] result = null;
+		if (runningOnly) {
+			result = new int[1][Audit.MAX_AUDIT_ID];
+			for (int i = 0; i < 1; i++) {
+				for (int j = 0; j < Audit.MAX_AUDIT_ID; j++) {
+					result[i][j] = 0;
+				}
+			}
+		} else {
+			result = new int[2][Audit.MAX_AUDIT_ID];
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < Audit.MAX_AUDIT_ID; j++) {
+					result[i][j] = 0;
+				}
+			}
+		}
+		if (tasks == null) {
+			return result;
+		}
+		Map<String, Integer> auditNameIdMappingMap = Audit.getAuditNameIdMappingMap();
+		
+		for (int i = 0; i < tasks.length; i++) {
+			TskTask task = tasks[i];
+			String taskName = task.getName();
+			String taskStatus = task.getStatus();
+			
+			if (auditNameIdMappingMap.get(taskName) == null)
+				continue;
+			
+			int auditId = auditNameIdMappingMap.get(taskName);
+			int typeId = 0;
+			if (taskStatus.equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
+				typeId = 1;
+			}
+			result[typeId][auditId] = result[typeId][auditId] + 1;
+		}
+		return result;
+	}
 	@Override
 	public int[][] getUcityAuditTaskCounts(boolean runningOnly) throws Exception {
 
+		User cUser = SmartUtil.getCurrentUser();
+		String userId = cUser.getId();
+		
+		TskTask[] tasks = null;
 		TskTaskCond taskCond = new TskTaskCond();
 		if (runningOnly) {
-			
+			taskCond.setStatusIns(new String[]{TskTask.TASKSTATUS_ASSIGN});
+			tasks = getTskManager().getTasks(userId, taskCond, IManager.LEVEL_LITE);
+		} else {
+			taskCond.setStatusIns(new String[]{TskTask.TASKSTATUS_ASSIGN, TskTask.TASKSTATUS_ABORTED});
+			tasks = getTskManager().getTasks(userId, taskCond, IManager.LEVEL_LITE);
 		}
-		String[] taskName = Audit.getTaskNamesByAuditId(1);
-		taskName = Audit.getTaskNamesByAuditId(2);
-		taskName = Audit.getTaskNamesByAuditId(3);
-		taskName = Audit.getTaskNamesByAuditId(4);
-		taskName = Audit.getTaskNamesByAuditId(5);
-		taskName = Audit.getTaskNamesByAuditId(6);
-		taskName = Audit.getTaskNamesByAuditId(7);
+		return getUcityAuditTaskCountsByTasks(runningOnly, tasks);
 		
-		return null;
 	}
 }
