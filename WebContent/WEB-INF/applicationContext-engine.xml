@@ -98,7 +98,7 @@
 		<beans:property name="mailManager" ref="mailManager"/>
 		<beans:property name="autoIndexManager" ref="autoIndexManager"/>
 		<beans:property name="reportManager" ref="reportManager"/>
-		<beans:property name="timerManager" ref="timerManager"/>
+		<!-- <beans:property name="timerManager" ref="timerManager"/> -->
 		
 		<beans:property name="ucityWorkListManager" ref="ucityWorkListManager"/>
 
