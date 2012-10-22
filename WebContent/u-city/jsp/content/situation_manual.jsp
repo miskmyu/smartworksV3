@@ -118,7 +118,7 @@ function submitForms() {
 								userviceCode="<%=userviceCode %>" serviceCode="<%=serviceCode %>" eventCode="<%=eventCode %>" situationStatus="<%=situationStatus %>" >
 
 	<!-- 타이틀-->
-	<div class="list_title_space mt20">
+	<div class="list_title_space bn">
 		<div class="title guide"><%=CommonUtil.toNotNull(Event.getEventNameByCode(eventId)) %> 운영 가이드</div>
 	</div>
 	<!-- 타이틀//-->
@@ -176,14 +176,14 @@ function submitForms() {
 					</ul>
 				</div>
 				<div class="section_guide_tx">
-					<form name="frmPWorkManual">	
+					<form class="rgt_area" name="frmPWorkManual">	
 						<%if(!SmartUtil.isBlankObject(tasks) && tasks.length>0){
 							for(int i=0; i<tasks.length; i++){
 						%>
 								<div class="js_situation_task" taskId="<%=tasks[i].getId()%>" <%if(i>0){ %>style="display:none"<%} %>>
 									<div class="js_form_desc_view"><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %></div>
 	<!-- 
-						 					<div class="title">상급자 보고</div>
+					 					<div class="title">상급자 보고</div>
 											<div class="dep2">
 												<div class="title">상급자 보고가 필요한 경우</div>
 												<div class="ml10">기상특보에서 이벤트 등급이 B등급 이상일 경우, 혹은 예고없이 찾아온 기상

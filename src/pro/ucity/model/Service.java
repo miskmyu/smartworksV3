@@ -72,7 +72,7 @@ public class Service {
 		
 		if(userviceCode.equals(USERVICE_CODE_ENVIRONMENT)) return ID_ENVIRONMENT;
 		else if(userviceCode.equals(USERVICE_CODE_FACILITY)) return ID_FACILITY;
-		else if(userviceCode.equals(USERVICE_CODE_PLATFORM)) return ID_FACILITY;
+//		else if(userviceCode.equals(USERVICE_CODE_PLATFORM)) return ID_FACILITY;
 		else if(userviceCode.equals(USERVICE_CODE_SECURITY)) return ID_DISASTER;
 		else if(userviceCode.equals(USERVICE_CODE_TRAFFIC)) return ID_TRAFFIC;
 		return "";
