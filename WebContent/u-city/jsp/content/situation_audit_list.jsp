@@ -176,17 +176,31 @@
 
 			<!-- 목록보기 -->
 			<div class=" contents_space">
-
-				<div class="title_list bn audit">상황 이벤트 감시					
+				
+				<div class="list_title_space bn">
+					<div class="title audit mb2">상황 이벤트 감시</div>
+					
 					<!-- 우측 영역 -->
 					<div class="fr txt_btn js_work_report_list_box" style="position: relative; top: 5px;">
 					</div>			
 					<!-- 우측 영역 //-->
+					
 				</div>
 				
 				<!-- 테이블 -->
 				<div class="table_border">
-					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+					<table width="930" border="0" cellspacing="0" cellpadding="0">
+					<colgroup>
+						<col width="133px">
+						<col width="133px">
+						<col width="133px">
+						<col width="133px">
+						<col width="133px">
+						<col width="133px">
+						<col width="132px">
+					</colgroup>
+					<tbody>
 						<tr>
 							<th rowspan="2" <%if(auditNumber==Audit.ID_SITUATION_OCCURRED) {%>class="current"<%} %>>
 								<a href="situationAudit.sw?auditId=<%=Audit.ID_SITUATION_OCCURRED %>" auditId="<%=Audit.ID_SITUATION_OCCURRED%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
@@ -236,6 +250,7 @@
 								<a href="situationAudit.sw?auditId=<%=Audit.ID_DEVICE_MW %>" auditId="<%=Audit.ID_DEVICE_MW%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_DEVICE_MW] %><%}else{ %>0<%} %></a>
 							</td>
 						</tr>
+						</tbody>
 					</table>
 				</div>
 				<!-- 테이블 //-->
