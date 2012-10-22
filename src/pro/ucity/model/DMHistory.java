@@ -34,11 +34,11 @@ public class DMHistory {
 	
 	public static final String FLAG_STOP_DISPLAY 	= "Y";
 	
-	public static final String QUERY_SELECT_FOR_DISPLAY_PERFORM = "select b.*," + FIELD_NAME_SEND_VALUE + ", " + FIELD_NAME_EVENT_ID + " from " + System.TABLE_NAME_SEND_INFO + " a, " + System.TABLE_NAME_SEND_CONTENTS + " b, "
+	public static final String QUERY_SELECT_FOR_DISPLAY_PERFORM = "select distinct a."+ FIELD_NAME_SEND_SEQ +",b.*," + FIELD_NAME_SEND_VALUE + ", " + FIELD_NAME_EVENT_ID + " from " + System.TABLE_NAME_SEND_INFO + " a, " + System.TABLE_NAME_SEND_CONTENTS + " b, "
 			+ System.TABLE_NAME_RCV_DEVICE + " c where a." + FIELD_NAME_SEND_SEQ + " = b." + FIELD_NAME_SEND_SEQ + " and c." + FIELD_NAME_SEND_SEQ +  " = a." + FIELD_NAME_SEND_SEQ + " and " + FIELD_NAME_EVENT_ID +
 			" = ? and " + FIELD_NAME_ADAPTER_DIV + " = ? order by a." + FIELD_NAME_SEND_SEQ + " desc";
 	
-	public static final String QUERY_SELECT_FOR_STOP_PERFORM = "select b.*," + FIELD_NAME_SEND_VALUE + ", " + FIELD_NAME_EVENT_ID + " from " + System.TABLE_NAME_SEND_INFO + " a, " + System.TABLE_NAME_SEND_CONTENTS + " b, "
+	public static final String QUERY_SELECT_FOR_STOP_PERFORM = "select distinct a."+ FIELD_NAME_SEND_SEQ +",b.*," + FIELD_NAME_SEND_VALUE + ", " + FIELD_NAME_EVENT_ID + " from " + System.TABLE_NAME_SEND_INFO + " a, " + System.TABLE_NAME_SEND_CONTENTS + " b, "
 			+ System.TABLE_NAME_RCV_DEVICE + " c where a." + FIELD_NAME_SEND_SEQ + " = b." + FIELD_NAME_SEND_SEQ + " and c." + FIELD_NAME_SEND_SEQ +  " = a." + FIELD_NAME_SEND_SEQ + " and " + FIELD_NAME_EVENT_ID +
 			" = ? and " + FIELD_NAME_ADAPTER_DIV + " = ? order by " + FIELD_NAME_SEND_SEQ + " desc";
 

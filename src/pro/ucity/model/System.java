@@ -38,6 +38,7 @@ public class System {
 	
 	public static final int TABLE_ID_OPPORTAL_SITUATION 	= 11;
 	public static final int TABLE_ID_OPPORTAL_DISPLAY 		= 12;
+	public static final int TABLE_ID_OPPORTAL_SMS 		= 13;
 	public static final int TABLE_ID_INTCON_SITUATION 		= 21;
 	public static final int TABLE_ID_COMMID_TRACE 			= 31;
 	public static final int TABLE_ID_DEVMID_SEND_STATUS 	= 41;
@@ -57,7 +58,10 @@ public class System {
 	
 	//개발서버
 	public static final String TABLE_NAME_OPPORTAL_SITUATION 	= "USITUATION.TH_ST_SITUATION_HISTORY";			// 업무포털(발생,접수,처리,종료)테이블
+	public static final String TABLE_NAME_OPPORTAL_ST = "USITUATION.TM_ST_SITUATION";							// 업무포털(발생,접수,처리,종료)조인테이블
+	public static final String TABLE_NAME_OPPORTAL_FACILITY = "CMDB.TM_CM_FACILITY_INFO";						// 시설물코드 테이블
 	public static final String TABLE_NAME_OPPORTAL_DISPLAY 		= "USITUATION.TN_ST_DISPLAY";				// 외부표출테이블
+	public static final String TABLE_NAME_OPPORTAL_SMS 		= "USITUATION.TM_SM_SMS_ITEM";   				// SMS 테이블
 	public static final String TABLE_NAME_INTCON_SITUATION 		= "US1.TN_CTL_EVENT_INFO";					// 통합관제테이블
 	public static final String TABLE_NAME_COMMID_TRACE 			= "TB_COM_INTG_LOG";						// 통신미들웨어테이블
 	public static final String TABLE_NAME_DEVMID_SEND_STATUS 	= "TN_IDM_SEND_STATUS";							// 안씀
@@ -67,11 +71,14 @@ public class System {
 	public static final String TABLE_NAME_SEND_INFO = "UIDB.TN_IDM_SEND_INFO";								// 단말연계미들웨어 테이블
 	public static final String TABLE_NAME_RCV_DEVICE = "UIDB.TN_IDM_CONTENTS_RCV_DEVICE";						// 단말연계미들웨어 RCV 테이블
 
+	
+
 	public static final String DATA_FIELD_NAME_EVENT_ID			= "Event Id";
 	public static final String DATA_FIELD_NAME_TABLE_ID			= "Table Id";
 	public static final String DATA_FIELD_NAME_STATUS			= "Status";
 	public static final String DATA_FIELD_NAME_DISPLAY_ID		= "Display Id";
 	public static final String DATA_FIELD_NAME_DEVICE_ID		= "Device Id";
+	public static final String DATA_FIELD_NAME_SMS_ID		= "SMS Id";
 	public static final String DATA_FIELD_NAME_TIMEOUT			= "Timeout Minutes";
 	
 	public static final long DEFAULT_TASK_TIMEOUT				= 10 * 60 * 1000;
