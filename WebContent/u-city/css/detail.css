@@ -78,7 +78,7 @@
 /* 목록  타이틀 */
 .list_title_space {border-bottom: 1px solid #6D6D6D; overflow: hidden;}
 .list_title_space .title {font-size:14px; font-weight:bold; padding: 0 10px 0 0; line-height: 22px; color:#FFF; float:left}
-.list_title_space .title.guide {background: url("../images/icon.png") no-repeat 0 0 transparent; padding:0 0 0 22px; margin:0 0 10px}
+.list_title_space .title.guide {background: url("../images/icon.png") no-repeat 0 2px transparent; padding:0 0 0 22px; margin:0 0 10px}
 .list_title_space .title.monitoring {background: url("../images/icon.png") no-repeat 0 -34px transparent; padding:0 0 0 22px; margin:0 0 20px}
 .list_title_space .title.audit {background: url("../images/icon.png") no-repeat 0 -67px transparent; padding:0 0 0 22px; margin:0 0 20px}
 .list_contents {clear:both}
