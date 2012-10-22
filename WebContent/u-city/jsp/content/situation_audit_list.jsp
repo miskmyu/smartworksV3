@@ -177,7 +177,7 @@
 			<!-- 목록보기 -->
 			<div class=" contents_space">
 
-				<div class="title_list bn">상황 이벤트 감시					
+				<div class="title_list bn audit">상황 이벤트 감시					
 					<!-- 우측 영역 -->
 					<div class="fr txt_btn js_work_report_list_box" style="position: relative; top: 5px;">
 					</div>			
@@ -241,7 +241,7 @@
 				<!-- 테이블 //-->
 				
 				<!-- 목록보기 타이틀-->
-				<div class="sub_title01"><span><%=Audit.getAuditNameById(auditNumber) %></span></div>
+				<div class="sub_title01"><%=Audit.getAuditNameById(auditNumber) %><span></span></div>
 				<!-- 목록보기 타이틀-->
 
 				<!-- 목록 테이블 -->
