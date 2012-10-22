@@ -115,7 +115,7 @@
 .lft_step .s3.current a {background-position: -146px -285px; height:102px; width:102px}
 .section_rgt {margin:0 0 0 114px}
 .group_rgt {background-color:#1c1f21; border-radius:8px; padding:30px; margin: 0 0 0 23px; overflow: hidden}
-.rgt_area {min-height: 344px; max-height: 414px; overflow-x: hidden; overflow-y: auto}
+.rgt_area {min-height: 344px; max-height: 435px; overflow-x: hidden; overflow-y: auto}
 .section_rgt .point {background: url("../images/guide_arr.png") no-repeat 0 0 transparent; width:23px; height:45px; float:left; position:relative}
 .working_proces {}
 .working_proces ul { display:inline-block}
