@@ -9722,28 +9722,17 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Override
 	public int[][] getUcityAuditTaskCounts(boolean runningOnly) throws Exception {
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		TskTaskCond taskCond = new TskTaskCond();
+		if (runningOnly) {
+			
+		}
+		String[] taskName = Audit.getTaskNamesByAuditId(1);
+		taskName = Audit.getTaskNamesByAuditId(2);
+		taskName = Audit.getTaskNamesByAuditId(3);
+		taskName = Audit.getTaskNamesByAuditId(4);
+		taskName = Audit.getTaskNamesByAuditId(5);
+		taskName = Audit.getTaskNamesByAuditId(6);
+		taskName = Audit.getTaskNamesByAuditId(7);
 		
 		return null;
 	}
