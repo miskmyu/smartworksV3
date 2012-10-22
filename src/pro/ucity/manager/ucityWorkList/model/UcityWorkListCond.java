@@ -24,6 +24,7 @@ public class UcityWorkListCond  extends MisObjectCond{
 	private static final String NAME = CommonUtil.toName(UcityWorkListCond.class, PREFIX);
 	
 	private String prcInstId;
+	private String[] prcInstIdIns;
 	private String packageId;
 	private String status;
 	private String title;
@@ -132,5 +133,10 @@ public class UcityWorkListCond  extends MisObjectCond{
 	public void setIsSms(String isSms) {
 		this.isSms = isSms;
 	}
-	
+	public String[] getPrcInstIdIns() {
+		return prcInstIdIns;
+	}
+	public void setPrcInstIdIns(String[] prcInstIdIns) {
+		this.prcInstIdIns = prcInstIdIns;
+	}
 }
