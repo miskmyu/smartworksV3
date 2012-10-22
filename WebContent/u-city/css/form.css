@@ -20,7 +20,7 @@
 .btn_fb_space5 {padding-right: 75px; position: relative;} /* 버튼5자 들어가 있는 영역 */
 .icon_fb_user {background: url("../images/btn_s_person.png") no-repeat 0 0; height:16px; width:16px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
 .icon_fb_users {background: url("../images/btn_s_persons.png") no-repeat 0 0; height:16px; width:16px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
-.icon_fb_date {background: url("../images/btn_s_calendar.png") no-repeat 0 0; height:16px; width:16px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
+.icon_fb_date {background: url("../images/btn_s_calendar.png") no-repeat 0 0; height:17px; width:16px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
 .icon_fb_time {background: url("../images/btn_s_time.png") no-repeat 0 0; height:16px; width:16px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
 .icon_fb_work {background: url("../images/btn_s_work.png") no-repeat 0 0; height:16px; width:16px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
 .icon_fb_depart {background: url("../images/btn_s_depart.png") no-repeat 0 0; height:16px; width:16px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
