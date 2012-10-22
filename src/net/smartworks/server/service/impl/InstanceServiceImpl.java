@@ -191,6 +191,7 @@ import org.springframework.util.StringUtils;
 
 import pro.ucity.manager.ucityWorkList.model.UcityWorkList;
 import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
+import pro.ucity.model.Audit;
 
 @Service
 public class InstanceServiceImpl implements IInstanceService {
@@ -4378,7 +4379,43 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 		return false;
 	}
+	
 	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params, int auditId) throws Exception {
+		String[] taskNames = Audit.getTaskNamesByAuditId(auditId);
+		if (taskNames == null || taskNames.length == 0)
+			return getAllUcityPWorkInstanceList(runningOnly, params, null);
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		
+		TskTaskCond taskCond = new TskTaskCond();
+		taskCond.setNameIns(taskNames);
+		if (runningOnly) {
+			taskCond.setStatusIns(new String[]{TskTask.TASKSTATUS_ASSIGN});
+		} else {
+			taskCond.setStatusIns(new String[]{TskTask.TASKSTATUS_ASSIGN, TskTask.TASKSTATUS_ABORTED});
+		}
+		TskTask[] tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, taskCond,IManager.LEVEL_ALL);
+		
+		List prcIdList = new ArrayList();
+		for (int i = 0; i < tasks.length; i++) {
+			TskTask task = tasks[i];
+			String prcInstId = task.getProcessInstId();
+			if (!prcIdList.contains(prcInstId)) {
+				prcIdList.add(prcInstId);
+			}
+		}
+		if (prcIdList.size() != 0) {
+			String[] prcIds = new String[prcIdList.size()];
+			prcIdList.toArray(prcIds);
+			return getAllUcityPWorkInstanceList(runningOnly, params, prcIds);
+		} else {
+			return getAllUcityPWorkInstanceList(runningOnly, params, new String[]{""});
+		}
+	}
+	
+	
+	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params, String[] instanceIdIns) throws Exception {
 	
 		try {
 			User user = SmartUtil.getCurrentUser();
@@ -4455,6 +4492,10 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			String searchKey = params.getSearchKey();
 			ucityWorkListCond.setSearchKey(CommonUtil.toNull(searchKey));
+			
+			if (instanceIdIns != null && instanceIdIns.length != 0) {
+				ucityWorkListCond.setPrcInstIdIns(instanceIdIns);
+			}
 
 			long totalCount = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkListSize(user.getId(), ucityWorkListCond);
 
@@ -9678,7 +9719,30 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	@Override
 	public int[][] getUcityAuditTaskCounts(boolean runningOnly) throws Exception {
-		// TODO Auto-generated method stub
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		return null;
 	}
 }

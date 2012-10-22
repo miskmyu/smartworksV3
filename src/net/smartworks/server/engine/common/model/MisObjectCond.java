@@ -19,6 +19,8 @@ public class MisObjectCond extends ClassObjectCond{
 
 	public static final String A_NAME = "name";
 	public static final String A_NAMELIKE = "nameLike";
+	public static final String A_NAMEIN = "nameIn";
+	public static final String A_NAMEINS = "nameIns";
 	public static final String A_CREATIONUSER = "creationUser";
 	public static final String A_CREATIONDATE = "creationDate";
 	public static final String A_CREATIONDATEFROM = "creationDateFrom";
@@ -50,7 +52,8 @@ public class MisObjectCond extends ClassObjectCond{
 	private String description;
 	private String descriptionLike;
 	private String status;
-	
+
+	private String[] nameIns;
 	private String[] statusIns;
 	private String[] statusNotIns;
 	private Property[] extendedProperties;
@@ -84,6 +87,7 @@ public class MisObjectCond extends ClassObjectCond{
 		appendElementString(A_NAMELIKE, getNameLike(), tab, buf);
 		appendElementString(A_DESCRIPTION, getDescription(), tab, true, buf);
 		appendElementString(A_DESCRIPTIONLIKE, getDescriptionLike(), tab, true, buf);
+		appendElementsString(A_NAMEINS, A_NAMEIN, getNameIns(), tab, buf);
 		appendElementsString(A_STATUSINS, A_STATUSIN, getStatusIns(), tab, buf);
 		appendElementsString(A_STATUSNOTINS, A_STATUSNOTIN, getStatusNotIns(), tab, buf);
 		appendElementsString(A_EXTENDEDPROPERTIES, A_EXTENDEDPROPERTY, extendedProperties, tab, buf);
@@ -150,6 +154,14 @@ public class MisObjectCond extends ClassObjectCond{
 				obj.setDescription(getNodeValue(childNode, true));
 			} else if (childNode.getNodeName().equals(A_DESCRIPTIONLIKE)) {
 				obj.setDescriptionLike(getNodeValue(childNode, true));
+			} else if (childNode.getNodeName().equals(A_NAMEINS)) {
+				Node[] nodes = getNodes(childNode);
+				if (nodes == null || nodes.length == 0)
+					continue;
+				String[] objs = new String[nodes.length];
+				for (int j=0; j<nodes.length; j++)
+					objs[j] = nodes[j].getNodeValue();
+				obj.setNameIns(objs);
 			} else if (childNode.getNodeName().equals(A_STATUSINS)) {
 				Node[] nodes = getNodes(childNode);
 				if (nodes == null || nodes.length == 0)
@@ -281,5 +293,11 @@ public class MisObjectCond extends ClassObjectCond{
 	}
 	public void setModificationDateTo(Date modificationDateTo) {
 		this.modificationDateTo = modificationDateTo;
+	}
+	public String[] getNameIns() {
+		return nameIns;
+	}
+	public void setNameIns(String[] nameIns) {
+		this.nameIns = nameIns;
 	}
 }
