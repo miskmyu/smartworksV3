@@ -341,15 +341,7 @@ if(instanceList == null || work == null || SmartUtil.isBlankObject(instanceList.
 	<div class="tc"><fmt:message key="common.message.no_instance"/></div>
 
 <%
-}
-if(!SmartUtil.isBlankObject(sortedField)){
-%>
-	<form name="frmSortingField">
-		<input name="hdnSortingFieldId" type="hidden" value="<%=sortedField.getFieldId()%>">
-		<input name="hdnSortingIsAscending" type="hidden" value="<%=sortedField.isAscending()%>">
-	</form>
-<%
-}
+}else{
 %>
 <!-- 목록 테이블 //-->
 
@@ -411,3 +403,15 @@ if(!SmartUtil.isBlankObject(sortedField)){
 	</div>
 	<!-- 페이징 //-->
 </form>
+
+<%
+}
+if(!SmartUtil.isBlankObject(sortedField)){
+%>
+	<form name="frmSortingField">
+		<input name="hdnSortingFieldId" type="hidden" value="<%=sortedField.getFieldId()%>">
+		<input name="hdnSortingIsAscending" type="hidden" value="<%=sortedField.isAscending()%>">
+	</form>
+<%
+}
+%>

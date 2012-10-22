@@ -107,8 +107,31 @@ $(function() {
 		var input = $(targetElement(e)).parents('.js_select_situation_manual');
 		input.addClass('current').siblings().removeClass('current');
 		var taskId = input.attr('taskId');
-		var target = $('.js_situation_manual_desc[taskId="'+taskId+'"]');
+		var target = $('.js_situation_task[taskId="'+taskId+'"]');
 		target.show().siblings().hide();
+		return false;
+	});
+	
+	$('.js_modify_situation_manual').live('click', function(e){
+		var target = $(targetElement(e)).parents('.js_modify_situation_manual');
+		target.hide().siblings().show();
+		var workManual = target.parents('.js_pwork_manual_page');
+		workManual.find('.js_form_desc_view').hide().next().show();
+		return false;
+	});
+
+	$('.js_cancel_situation_manual').live('click', function(e){
+		var target = $(targetElement(e)).parents('.js_cancel_situation_manual');
+		target.hide().siblings('.js_modify_situation_manual').show().siblings('.js_save_situation_manual').hide();
+		var workManual = target.parents('.js_iwork_manual_page');
+		if(isEmpty(workManual)) workManual = target.parents('.js_pwork_manual_page');
+		workManual.find('.js_work_desc_view').show().next().hide();
+		workManual.find('.js_form_desc_view').show().next().hide();
+		return false;
+	});
+	
+	$('.js_save_situation_manual').live('click', function(e){
+		submitForms();
 		return false;
 	});
 	
