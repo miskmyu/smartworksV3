@@ -39,7 +39,7 @@
 <!--  전체 레이아웃 -->
 <div class="js_work_report_page" workId="<%=workId %>" reportId="<%=lastReportId%>" reportType="<%=lastReportType %>" chartType="<%=lastChartType%>">
 	
-	<div class="list_title_space mb10">
+	<div class="list_title_space">
 					<div class="title monitoring mb2">통합 상황 모니터링</div>
 	
 		<!-- 우측 영역 -->
