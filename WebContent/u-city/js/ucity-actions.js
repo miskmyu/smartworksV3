@@ -106,6 +106,9 @@ $(function() {
 	$('.js_select_situation_manual').live('mouseenter', function(e) {
 		var input = $(targetElement(e)).parents('.js_select_situation_manual');
 		input.addClass('current').siblings().removeClass('current');
+		var taskId = input.attr('taskId');
+		var target = $('.js_situation_manual_desc[taskId="'+taskId+'"]');
+		target.show().siblings().hide();
 		return false;
 	});
 	

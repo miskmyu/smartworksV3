@@ -4398,11 +4398,13 @@ public class InstanceServiceImpl implements IInstanceService {
 		TskTask[] tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, taskCond,IManager.LEVEL_ALL);
 		
 		List prcIdList = new ArrayList();
-		for (int i = 0; i < tasks.length; i++) {
-			TskTask task = tasks[i];
-			String prcInstId = task.getProcessInstId();
-			if (!prcIdList.contains(prcInstId)) {
-				prcIdList.add(prcInstId);
+		if(tasks!=null){
+			for (int i = 0; i < tasks.length; i++) {
+				TskTask task = tasks[i];
+				String prcInstId = task.getProcessInstId();
+				if (!prcIdList.contains(prcInstId)) {
+					prcIdList.add(prcInstId);
+				}
 			}
 		}
 		if (prcIdList.size() != 0) {

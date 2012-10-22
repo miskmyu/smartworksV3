@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-#wrap {height:auto; min-width: 970px; max-width:1170px; margin:0; z-index:1;}
+#wrap {height:auto; width: 970px; margin:0; z-index:1;}
 body {background-color: #22282F}
 #content a:link, #content a:visited, #content a:focus, #content a:active{color:#a6a6a6; text-decoration:none}
 #content a:hover { text-decoration:underline}

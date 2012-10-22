@@ -633,7 +633,6 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			return getXmlDataForChart(categoryName, resultMap);
 		for (Iterator itr = list.iterator(); itr.hasNext();) {
 			Object[] fields = (Object[]) itr.next();
-			System.out.println("Query fields  = " + (String)fields[0] + ", " + (BigDecimal)fields[1]);
 			if (fields[0] instanceof Character) {
 				if(((Character)fields[0]).toString().equalsIgnoreCase("상")) {
 					resultMap.put("상반기", (BigDecimal)fields[1]);
