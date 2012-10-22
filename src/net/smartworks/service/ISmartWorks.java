@@ -761,9 +761,11 @@ public interface ISmartWorks {
 
 	public abstract SmartForm getFormById(String formId, String workId) throws Exception;
 
-	public abstract InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception;
+	public abstract InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params, int auditId) throws Exception;
 	
 	public abstract String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception;
+	
+	public abstract int[][] getUcityAuditTaskCounts(boolean runningOnly) throws Exception;
 	
 	
 }
