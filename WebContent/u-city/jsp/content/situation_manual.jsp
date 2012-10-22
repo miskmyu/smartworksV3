@@ -43,6 +43,9 @@
 
 	String workId = System.getProcessIdByProcessStatus(Event.getProcessByEventId(eventId), situationStatus);
 	ProcessWork work = (ProcessWork)smartWorks.getWorkById(workId);
+	if(SmartUtil.isBlankObject(work)){
+		work = (ProcessWork)smartWorks.getWorkById("pkg_336b0e079fc44ab19acbe49ded2e8b12");
+	}
 
 	SmartDiagram diagram = null;
 	SmartTaskInfo[] tasks = null;
