@@ -145,7 +145,7 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks"); 
  	session.setAttribute("lastLocation", "situation_list.sw");
 
- 	String auditId = (String)session.getAttribute("auditId");
+ 	String auditId = (String)request.getParameter("auditId");
  	if(SmartUtil.isBlankObject(auditId)) auditId = Audit.DEFAULT_AUDIT_ID_STR;
  	int auditNumber = Integer.parseInt(auditId);
  	
@@ -206,14 +206,14 @@
 								<a href="situationAudit.sw?auditId=<%=Audit.ID_SITUATION_OCCURRED %>" auditId="<%=Audit.ID_SITUATION_OCCURRED%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
 							</th>
 							<th rowspan="2" <%if(auditNumber==Audit.ID_COMMUNICATION_MW) {%>class="current"<%} %>>
-								<a href="situationAudit.sw?auditId=<%=Audit.ID_COMMUNICATION_MW %>" auditId="<%=Audit.ID_COMMUNICATION_MW%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_COMMUNICATION_MW %>" auditId="<%=Audit.ID_COMMUNICATION_MW%>"><%=Audit.getAuditNameById(Audit.ID_COMMUNICATION_MW) %></a>
 							</th>
 							<th colspan="3">운영포털</th>
 							<th rowspan="2" <%if(auditNumber==Audit.ID_INTEGRATED_CONTROL) {%>class="current"<%} %>>
-								<a href="situationAudit.sw?auditId=<%=Audit.ID_INTEGRATED_CONTROL %>" auditId="<%=Audit.ID_INTEGRATED_CONTROL%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_INTEGRATED_CONTROL %>" auditId="<%=Audit.ID_INTEGRATED_CONTROL%>"><%=Audit.getAuditNameById(Audit.ID_INTEGRATED_CONTROL) %></a>
 							</th>
 							<th rowspan="2" <%if(auditNumber==Audit.ID_DEVICE_MW) {%>class="current"<%} %>>
-								<a href="situationAudit.sw?auditId=<%=Audit.ID_DEVICE_MW %>" auditId="<%=Audit.ID_DEVICE_MW%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_DEVICE_MW %>" auditId="<%=Audit.ID_DEVICE_MW%>"><%=Audit.getAuditNameById(Audit.ID_DEVICE_MW) %></a>
 							</th>
 						</tr>
 						<tr>
@@ -234,7 +234,7 @@
 							<td <%if(auditNumber==Audit.ID_COMMUNICATION_MW) {%>class="current"<%} %>>
 								<a href="situationAudit.sw?auditId=<%=Audit.ID_COMMUNICATION_MW %>" auditId="<%=Audit.ID_COMMUNICATION_MW%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_COMMUNICATION_MW] %><%}else{ %>0<%} %></a>
 							</td>
-							<td  <%if(auditNumber==Audit.ID_SITUATION_OCCURRED) {%>class="current"<%} %>>
+							<td  <%if(auditNumber==Audit.ID_PORTAL_ACCEPTED) {%>class="current"<%} %>>
 								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_ACCEPTED %>" auditId="<%=Audit.ID_PORTAL_ACCEPTED%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_PORTAL_ACCEPTED] %><%}else{ %>0<%} %></a>
 							</td>
 							<td <%if(auditNumber==Audit.ID_PORTAL_PROCESSING) {%>class="current"<%} %>>
