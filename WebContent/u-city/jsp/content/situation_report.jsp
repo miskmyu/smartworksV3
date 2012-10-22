@@ -39,7 +39,8 @@
 <!--  전체 레이아웃 -->
 <div class="js_work_report_page" workId="<%=workId %>" reportId="<%=lastReportId%>" reportType="<%=lastReportType %>" chartType="<%=lastChartType%>">
 	
-	<div class="title_list">통합 상황 모니터링	
+	<div class="list_title_space">
+					<div class="title monitoring mb2">통합 상황 모니터링</div>
 	
 		<!-- 우측 영역 -->
 		<div class="fr txt_btn js_work_report_list_box" style="position: relative; top: 5px;">
@@ -48,6 +49,7 @@
 		</div>			
 		<!-- 우측 영역 //-->
 	</div>
+
 	<div class="cb"></div>
 		<div class="js_work_report_view border_no_topline" style="display:none;"></div>
 <!-- 전체 레이아웃//-->

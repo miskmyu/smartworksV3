@@ -1,3 +1,4 @@
+<%@page import="pro.ucity.model.Audit"%>
 <%@page import="pro.ucity.model.System"%>
 <%@page import="pro.ucity.util.UcityTest"%>
 <%@page import="net.smartworks.model.instance.info.RequestParams"%>
@@ -142,15 +143,14 @@
 </script>
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks"); 
-/* 	String cid = request.getParameter("cid");
-	String wid = request.getParameter("wid");
-
-	session.setAttribute("cid", cid);
-	session.setAttribute("wid", wid);
-	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
- */
  	session.setAttribute("lastLocation", "situation_list.sw");
-	
+
+ 	String auditId = (String)request.getParameter("auditId");
+ 	if(SmartUtil.isBlankObject(auditId)) auditId = Audit.DEFAULT_AUDIT_ID_STR;
+ 	int auditNumber = Integer.parseInt(auditId);
+ 	
+ 	int[][] auditTasks = smartWorks.getUcityAuditTaskCounts(true);
+ 	
 	String workId = System.getProcessId(System.PROCESS_ENV_WEAHTER);
 	User cUser = SmartUtil.getCurrentUser();
 	ProcessWork work = (ProcessWork) smartWorks.getWorkById(workId);
@@ -176,89 +176,95 @@
 
 			<!-- 목록보기 -->
 			<div class=" contents_space">
-
-				<jsp:include page="/u-city/jsp/content/situation_report.jsp">
-					<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
-				</jsp:include>
+				
+				<div class="list_title_space bn">
+					<div class="title audit mb2">상황 이벤트 감시</div>
+					
+					<!-- 우측 영역 -->
+					<div class="fr txt_btn js_work_report_list_box" style="position: relative; top: 5px;">
+					</div>			
+					<!-- 우측 영역 //-->
+					
+				</div>
 				
 				<!-- 테이블 -->
 				<div class="table_border">
-					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+					<table width="930" border="0" cellspacing="0" cellpadding="0">
+					<colgroup>
+						<col width="133px">
+						<col width="133px">
+						<col width="133px">
+						<col width="133px">
+						<col width="133px">
+						<col width="133px">
+						<col width="132px">
+					</colgroup>
+					<tbody>
 						<tr>
-							<th rowspan="2">상황발생</th>
-							<th rowspan="2">통신미들웨어</th>
-							<th colspan="3">업무포털</th>
-							<th rowspan="2">단말 연개 미들웨어</th>
+							<th rowspan="2" <%if(auditNumber==Audit.ID_SITUATION_OCCURRED) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_SITUATION_OCCURRED %>" auditId="<%=Audit.ID_SITUATION_OCCURRED%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_OCCURRED) %></a>
+							</th>
+							<th rowspan="2" <%if(auditNumber==Audit.ID_COMMUNICATION_MW) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_COMMUNICATION_MW %>" auditId="<%=Audit.ID_COMMUNICATION_MW%>"><%=Audit.getAuditNameById(Audit.ID_COMMUNICATION_MW) %></a>
+							</th>
+							<th colspan="3">운영포털</th>
+							<th rowspan="2" <%if(auditNumber==Audit.ID_INTEGRATED_CONTROL) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_INTEGRATED_CONTROL %>" auditId="<%=Audit.ID_INTEGRATED_CONTROL%>"><%=Audit.getAuditNameById(Audit.ID_INTEGRATED_CONTROL) %></a>
+							</th>
+							<th rowspan="2" <%if(auditNumber==Audit.ID_DEVICE_MW) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_DEVICE_MW %>" auditId="<%=Audit.ID_DEVICE_MW%>"><%=Audit.getAuditNameById(Audit.ID_DEVICE_MW) %></a>
+							</th>
 						</tr>
 						<tr>
-							<th>접수</th>
-							<th>처리</th>
-							<th>종료</th>
+							<th <%if(auditNumber==Audit.ID_PORTAL_ACCEPTED) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_ACCEPTED %>" auditId="<%=Audit.ID_PORTAL_ACCEPTED%>">접수</a>
+							</th>
+							<th <%if(auditNumber==Audit.ID_PORTAL_PROCESSING) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_PROCESSING %>" auditId="<%=Audit.ID_PORTAL_PROCESSING%>">처리</a>
+							</th>
+							<th <%if(auditNumber==Audit.ID_PORTAL_RELEASE) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_RELEASE %>" auditId="<%=Audit.ID_PORTAL_RELEASE%>">종료</a>
+							</th>
 						</tr>
 						<tr>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
+							<td <%if(auditNumber==Audit.ID_SITUATION_OCCURRED) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_SITUATION_OCCURRED %>" auditId="<%=Audit.ID_SITUATION_OCCURRED%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_SITUATION_OCCURRED] %><%}else{ %>0<%} %></a>
+							</td>
+							<td <%if(auditNumber==Audit.ID_COMMUNICATION_MW) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_COMMUNICATION_MW %>" auditId="<%=Audit.ID_COMMUNICATION_MW%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_COMMUNICATION_MW] %><%}else{ %>0<%} %></a>
+							</td>
+							<td  <%if(auditNumber==Audit.ID_PORTAL_ACCEPTED) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_ACCEPTED %>" auditId="<%=Audit.ID_PORTAL_ACCEPTED%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_PORTAL_ACCEPTED] %><%}else{ %>0<%} %></a>
+							</td>
+							<td <%if(auditNumber==Audit.ID_PORTAL_PROCESSING) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_PROCESSING %>" auditId="<%=Audit.ID_PORTAL_PROCESSING%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_PORTAL_PROCESSING] %><%}else{ %>0<%} %></a>
+							</td>
+							<td <%if(auditNumber==Audit.ID_PORTAL_RELEASE) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_RELEASE %>" auditId="<%=Audit.ID_PORTAL_RELEASE%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_PORTAL_RELEASE] %><%}else{ %>0<%} %></a>
+							</td>
+							<td <%if(auditNumber==Audit.ID_INTEGRATED_CONTROL) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_INTEGRATED_CONTROL %>" auditId="<%=Audit.ID_INTEGRATED_CONTROL%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_INTEGRATED_CONTROL] %><%}else{ %>0<%} %></a>
+							</td>
+							<td <%if(auditNumber==Audit.ID_DEVICE_MW) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_DEVICE_MW %>" auditId="<%=Audit.ID_DEVICE_MW%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_DEVICE_MW] %><%}else{ %>0<%} %></a>
+							</td>
 						</tr>
+						</tbody>
 					</table>
 				</div>
 				<!-- 테이블 //-->
 				
-				<!-- 상세필터 -->
-				<div class="list_title_space js_work_list_title mt20">
-					<div class="title_line_options">
-						<form name="frmSearchInstance" class="fl">
-							<div class="srch">
-								<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
-								<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
-							</div>
-						</form>
-
-						<form class="form_space fl js_form_filter_name" name="frmPworkFilterName">
-							<select name="selFilterName" class="js_select_search_filter" href="search_filter.sw?workId=<%=workId%>">
-								<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" 
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_ALL_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-									<fmt:message key='filter.name.all_instances' />
-								</option>
-								<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-									최근 발생항목
-								</option>
-								<option value="<%=SearchFilter.FILTER_RUNNING_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_RUNNING_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-									진행중인 항목
-								</option>
-								<%
-								SearchFilterInfo[] filters = work.getSearchFilters();
-								if (filters != null) {
-									for (SearchFilterInfo filter : filters) {
-								%>
-										<option class="js_custom_filter" value="<%=filter.getId()%>" <%if(filter.getId().equals(selectedFilterId)){%> selected <%} %>><%=filter.getName()%></option>
-								<%
-									}
-								}
-								%>
-							</select>
-						</form>
-						<a href="searchFilter.sw?workId=<%=workId%>" class="js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
-							<span class="icon_btn_edit"></span>
-						</a>
-					</div>
-				</div>
-				<!-- 상세필터//-->
-
-				<!-- 상세필터 및 새업무등록하기 화면 -->
-				<div id="search_filter" class="filter_section js_new_work_form"></div>
-				<!-- 상세필터 -->
+				<!-- 목록보기 타이틀-->
+				<div class="sub_title01"><%=Audit.getAuditNameById(auditNumber) %><span></span></div>
+				<!-- 목록보기 타이틀-->
 
 				<!-- 목록 테이블 -->
  				<div class="list_contents">
 					<div id='pwork_instance_list_page'>
 						<jsp:include page="/u-city/jsp/content/situation_instance_list.jsp">
 							<jsp:param value="<%=workId%>" name="workId"/>
+							<jsp:param value="<%=auditId%>" name="auditId"/>							
 						</jsp:include>
 					</div>
 				</div>

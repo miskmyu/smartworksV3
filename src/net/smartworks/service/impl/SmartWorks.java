@@ -1700,8 +1700,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception {
-		return instanceService.getAllUcityPWorkInstanceList(runningOnly, params);
+	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params, int auditId) throws Exception {
+		return instanceService.getAllUcityPWorkInstanceList(runningOnly, params, auditId);
 	}
 
 	@Override
@@ -1712,6 +1712,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception {
 		return instanceService.getUcityChartXml(categoryName, periodName, serviceName, eventName);
+	}
+
+	@Override
+	public int[][] getUcityAuditTaskCounts(boolean runningOnly) throws Exception {
+		return instanceService.getUcityAuditTaskCounts(runningOnly);
 	}
 
 }

@@ -51,7 +51,7 @@ public interface IInstanceService {
 
 	public InstanceInfoList getIWorkInstanceListByFormId(String formId, RequestParams params) throws Exception;
 
-	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception;
+	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params, int auditId) throws Exception;
 	
 	public InstanceInfoList getAllPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception;
 	
@@ -200,6 +200,8 @@ public interface IInstanceService {
 	public InstanceInfoList getForwardTasksById(String forwardId, RequestParams params) throws Exception;
 	
 	public TaskInstance getTaskInstanceById(String workId, String taskInstId) throws Exception;
+	
+	public int[][] getUcityAuditTaskCounts(boolean runningOnly) throws Exception;
 	
 	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception;
 	

@@ -38,6 +38,7 @@ import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.report.manager.IReportManager;
 import net.smartworks.server.engine.resource.manager.IResourceDesigntimeManager;
 import net.smartworks.server.engine.resource.manager.IResourceRuntimeManager;
+import net.smartworks.server.engine.scheduling.manager.impl.TimerManager;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.worklist.manager.impl.WorkListManagerImpl;
 
@@ -45,6 +46,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import pro.ucity.manager.ucityWorkList.manager.IUcityWorkListManager;
+import pro.ucity.sso.manager.ISsoManager;
 
 public class SwManagerFactory {
 
@@ -80,10 +82,24 @@ public class SwManagerFactory {
 	private IMailManager mailManager;
 	private IIdxManager autoIndexManager;
 	private IReportManager reportManager;
+	private TimerManager timerManager;
 	
+	public TimerManager getTimerManager() {
+		return timerManager;
+	}
+	public void setTimerManager(TimerManager timerManager) {
+		this.timerManager = timerManager;
+	}
 	//UCITY
+	private ISsoManager ssoManager;
 	private IUcityWorkListManager ucityWorkListManager;
 
+	public ISsoManager getSsoManager() {
+		return ssoManager;
+	}
+	public void setSsoManager(ISsoManager ssoManager) {
+		this.ssoManager = ssoManager;
+	}
 	public IUcityWorkListManager getUcityWorkListManager() {
 		return ucityWorkListManager;
 	}

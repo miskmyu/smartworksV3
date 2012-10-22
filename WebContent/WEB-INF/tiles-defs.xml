@@ -154,6 +154,9 @@
 	<definition name="situationManual" extends="situationMonitoring">
 		<put-attribute name="content" value="/u-city/jsp/content/situation_manual.jsp" />
 	</definition>
+	<definition name="situationAudit" extends="situationMonitoring">
+		<put-attribute name="content" value="/u-city/jsp/content/situation_audit_list.jsp" />
+	</definition>
 	<definition name="situationManualEnvOccurrence" extends="situationMonitoring">
 		<put-attribute name="content" value="/u-city/jsp/content/situation_manual_env_occurrence.jsp" />
 	</definition>

@@ -289,8 +289,20 @@ public class System {
 	
 	public static String[] getReleaseTaskNames(){
 		return new String[]{ "기상특보 종료",
+							"대기특보 종료",
+							"수질특보 종료",
+							"상수도누수 종료",
+							"시설물관리 종료",
+							"상황종료",
+							"통합관제 종료표출",
+							"종료 SMS발송",
+							"미디어보드 중단",
+							"교통 BIT 중단",
+							"교통 VMS 중단",
+							"KIOSK 중단",
+							"환경 VMS 중단",
 							"통신 미들웨어(종료)"
 		};
 	}
-	
+
 }

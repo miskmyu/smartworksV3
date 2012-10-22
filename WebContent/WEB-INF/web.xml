@@ -60,6 +60,21 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
+	<!-- UCITY -->
+<!-- 	<filter>
+	    <filter-name>SSORequest</filter-name>
+	    <filter-class>pro.ucity.sso.filter.UcitySSOFilter</filter-class>
+	    <init-param>
+	        <param-name>INITPARAM</param-name>
+	        <param-value>initParams</param-value>
+	    </init-param>
+	</filter>
+	<filter-mapping>
+	    <filter-name>SSORequest</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping> -->
+	<!-- UCITY END -->
+
 	<listener>
 	    <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 	</listener>

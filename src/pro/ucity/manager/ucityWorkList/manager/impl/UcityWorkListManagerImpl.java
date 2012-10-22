@@ -101,6 +101,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		String objId = null;
 		
 		String prcInstId = null;
+		String[] prcInstIdIns = null;
 		String packageId = null;
 		String status = null;
 		String title = null;
@@ -130,6 +131,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			objId = cond.getObjId();
 			
 			prcInstId = cond.getPrcInstId();
+			prcInstIdIns = cond.getPrcInstIdIns();
 			packageId = cond.getPackageId();
 			status = cond.getStatus();
 			title = cond.getTitle();
@@ -163,6 +165,15 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 				buf.append(" and obj.objId = :objId");
 			if (prcInstId != null)
 				buf.append(" and obj.prcInstId = :prcInstId");
+			if (prcInstIdIns != null && prcInstIdIns.length != 0) {
+				buf.append(" and obj.prcInstId in (");
+				for (int i=0; i<prcInstIdIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":prcInstIdIn").append(i);
+				}
+				buf.append(")");
+			}
 			if (packageId != null)
 				buf.append(" and obj.packageId = :packageId");
 			if (status != null)
@@ -299,6 +310,11 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			
 			if (prcInstId != null)
 				query.setString("prcInstId", prcInstId);
+			if (prcInstIdIns != null && prcInstIdIns.length != 0) {
+				for (int i=0; i<prcInstIdIns.length; i++) {
+					query.setString("prcInstIdIn"+i, prcInstIdIns[i]);
+				}
+			}
 			if (packageId != null)
 				query.setString("packageId", packageId);
 			if (status != null)

@@ -191,6 +191,7 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 		int step = -1;
 		Property[] extProps = null;
 		String[] statusIns = null;
+		String[] nameIns = null;
 		String[] statusNotIns = null;
 		String[] typeIns = null;
 		String[] typeNotIns = null;
@@ -228,6 +229,7 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 			def = cond.getDef();
 			form = cond.getForm();
 			extProps = cond.getExtendedProperties();
+			nameIns = cond.getNameIns();
 			statusIns = cond.getStatusIns();
 			statusNotIns = cond.getStatusNotIns();
 			typeIns = cond.getTypeIns();
@@ -357,6 +359,15 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 					if (extValue != null)
 						buf.append(" and extProp").append(i).append(".value = :extValue").append(i);
 				}
+			}
+			if (nameIns != null && nameIns.length != 0) {
+				buf.append(" and obj.name in (");
+				for (int i=0; i<nameIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":nameIn").append(i);
+				}
+				buf.append(")");
 			}
 			if (statusIns != null && statusIns.length != 0) {
 				buf.append(" and obj.status in (");
@@ -566,6 +577,11 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 						query.setString("extName"+i, extName);
 					if (extValue != null)
 						query.setString("extValue"+i, extValue);
+				}
+			}
+			if (nameIns != null && nameIns.length != 0) {
+				for (int i=0; i<nameIns.length; i++) {
+					query.setString("nameIn"+i, nameIns[i]);
 				}
 			}
 			if (statusIns != null && statusIns.length != 0) {

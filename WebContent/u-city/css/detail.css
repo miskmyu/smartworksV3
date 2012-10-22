@@ -53,6 +53,8 @@
 .contents_space table > td,
 .contents_space table > th { padding:3px 10px}
 .contents_space > .title, .contents_space .title_list {border-bottom: 1px solid #6D6D6D; font-size:16px; color:#FFF; font-weight: bold; padding: 0 0 3px}
+.contents_space .sub_title01 {background: url("../images/subtitle01_bg.jpg") no-repeat 0 0; font-size:14px; color:#dddddd; font-weight: bold; margin: 20px 0 3px; padding: 0 0 0 30px; line-height: 27px; display: inline-block}
+.contents_space .sub_title01 > span {background: url("../images/subtitle01_bg.jpg") no-repeat 100% 0; height: 26px; width:20px; float: right; display: inline-block}
 
 /* 공간 영역 */
 .space_section {padding: 8px 0 0 0}
@@ -74,18 +76,26 @@
 .space_contents {padding: 0 10px 10px}
 
 /* 목록  타이틀 */
-.list_title_space .title {font-size:14px; font-weight:bold; padding: 0 10px 0 0; line-height: 18px; color:#FFF; float:left}
-.list_title_space .title.guide {background: url("../images/icon_guide.png") no-repeat 0 0 transparent; padding:0 0 0 22px; margin:0 0 20px}
+.list_title_space {border-bottom: 1px solid #6D6D6D; overflow: hidden;}
+.list_title_space .title {font-size:14px; font-weight:bold; padding: 0 10px 0 0; line-height: 22px; color:#FFF; float:left}
+.list_title_space .title.guide {background: url("../images/icon.png") no-repeat 0 2px transparent; padding:0 0 0 22px; margin:0 0 10px}
+.list_title_space .title.monitoring {background: url("../images/icon.png") no-repeat 0 -34px transparent; padding:0 0 0 22px; margin:0 0 20px}
+.list_title_space .title.audit {background: url("../images/icon.png") no-repeat 0 -67px transparent; padding:0 0 0 22px; margin:0 0 20px}
 .list_contents {clear:both}
 .list_contents table tr .end, .list_contents table td .end {border-bottom: 0 none}
-.list_contents table .tit_bg {background-color:#171b1e; border-top:1px solid #6d6d6d; border-bottom:1px solid #444444}
+.list_contents table .tit_bg {background-color:#171b1e; border-top:1px solid #444444; border-bottom:1px solid #444444}
 
 .list_contents table th {text-align:center}
 .list_contents table td {border-bottom: 1px solid #444444; text-align: center}
 .list_contents table td {padding:4px 5px; border-left:none; border-right:none}
 
 /* Border가 있는 Table */
-.table_border table td, .table_border table th {border: 1px solid #444444;}
+.table_border {clear:both}
+.table_border table td, .table_border table th {border: 1px solid #444444; text-align: center; padding: 0}
+.table_border table th a, .table_border table td a {display:block}
+.table_border table .current {background-color: #1D3145; color:#cfdce9 !important}
+.table_border table .current a {color:#cfdce9 !important}
+.table_border a:hover {text-decoration: none !important}
 .table_border table th {background-color:#171b1e;}
 
 /* Working Guide */
@@ -104,7 +114,8 @@
 .lft_step .s2.current a {background-position: -146px -164px; height:102px; width:102px}
 .lft_step .s3.current a {background-position: -146px -285px; height:102px; width:102px}
 .section_rgt {margin:0 0 0 114px}
-.group_rgt {background-color:#1c1f21; border-radius:8px; padding:35px 40px; margin: 0 0 0 23px}
+.group_rgt {background-color:#1c1f21; border-radius:8px; padding:30px; margin: 0 0 0 23px; overflow: hidden}
+.rgt_area {min-height: 344px; max-height: 435px; overflow-x: hidden; overflow-y: auto}
 .section_rgt .point {background: url("../images/guide_arr.png") no-repeat 0 0 transparent; width:23px; height:45px; float:left; position:relative}
 .working_proces {}
 .working_proces ul { display:inline-block}
@@ -121,7 +132,7 @@
 .working_proces .n5 {background-position: -350px -325px;}
 .section_guide_tx { margin:40px 0 0 0; line-height:17px}
 .section_guide_tx .title {background: url("../images/portal_proces.png") no-repeat -349px -370px transparent; font-size:14px; padding:0 0 0 20px; font-weight:bold; color:#FFF}
-.section_guide_tx .dep2 { margin:15px 5px}
+.section_guide_tx .dep2 { margin:15px 5px; word-wrap: break-word}
 .section_guide_tx .dep2 .title {background: url("../images/portal_proces.png") no-repeat -349px -399px transparent; color:#4c6542; font-weight:bold; font-size:12px; padding:0 0 5px 10px}
 		
 /* 프로세스 */
@@ -157,7 +168,7 @@ a .proc_btn_next:hover {background: url("../images/proc_bg.png") no-repeat -129p
 
 
 /* 페이징 */
-.paginate {padding: 10px 0; position: relative; text-align: center; font-size: 12px; font-weight: bold; background-color: #1E2127}
+.paginate {padding: 10px 0; position: relative; text-align: center; font-size: 12px; font-weight: bold; background-color: #1E2127; height:14px}
 .paginate strong {color:#ff7e7e; margin:0 20px 0 0}
 .paginate .num {margin:0 20px 0 0; text-decoration: none; vertical-align: middle}
 
