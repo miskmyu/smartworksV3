@@ -1,5 +1,8 @@
 package net.smartworks.server.engine.process.task.manager.impl;
 
+import java.util.Date;
+import java.util.TimeZone;
+
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -81,7 +84,9 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				
 				ucityWorkList.setServiceName(serviceName);
 				ucityWorkList.setEventId(eventId);
-				ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMddHHmmss"));
+				Date tempDate = new Date();
+				tempDate.setTime((DateUtil.toDate(eventTime, "yyyyMMddHHmmss").getTime()) - TimeZone.getDefault().getRawOffset());
+				ucityWorkList.setEventTime(tempDate);
 				ucityWorkList.setEventName(eventName);
 				ucityWorkList.setType(type);
 				ucityWorkList.setExternalDisplay(externalDisplay);
@@ -104,8 +109,11 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 					ucityWorkList.setServiceName(serviceName);
 				if (!CommonUtil.isEmpty(eventId))
 					ucityWorkList.setEventId(eventId);
-				if (!CommonUtil.isEmpty(eventTime))
-					ucityWorkList.setEventTime(DateUtil.toDate(eventTime, "yyyyMMddHHmmss"));
+				if (!CommonUtil.isEmpty(eventTime)) {
+					Date tempDate = new Date();
+					tempDate.setTime((DateUtil.toDate(eventTime, "yyyyMMddHHmmss").getTime()) - TimeZone.getDefault().getRawOffset());
+					ucityWorkList.setEventTime(tempDate);
+				}
 				if (!CommonUtil.isEmpty(eventName))
 					ucityWorkList.setEventName(eventName);
 				if (!CommonUtil.isEmpty(type))

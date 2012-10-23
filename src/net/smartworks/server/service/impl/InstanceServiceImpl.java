@@ -4630,8 +4630,14 @@ public class InstanceServiceImpl implements IInstanceService {
 					Property p5 = new Property("eventPlace",workList.getEventPlace());
 					Property p6 = new Property("isSms", CommonUtil.toBoolean(workList.getIsSms())+"");
 					Property p7 = new Property("eventId",workList.getEventId());
-					Property p8 = new Property("eventTime",workList.getEventTime() + "");
-
+					Property p8;
+					if (workList.getEventTime() != null) {
+						Date tempDate = new Date();
+						tempDate.setTime(workList.getEventTime().getTime() + TimeZone.getDefault().getRawOffset());
+						 p8 = new Property("eventTime", DateUtil.toDateString(tempDate));
+					} else {
+						p8 = new Property("eventTime", null);
+					}
 					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7, p8};
 
 					pworkInfo.setExtentedProperty(properties);
