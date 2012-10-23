@@ -256,11 +256,11 @@ public class System {
 		
 		if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("091") && eventCode.equals("11")){
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
-				return "pkg_dc91d2ec9b094b4ebd27dc4c9ff63822";
+				return "pkg_9c7a8b7690cf4c4a810f2fb44a8b9511";
 			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
 				return "pkg_d416790a8da24ed29879d351658deeeb";
 			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
-				return "pkg_825e6fe6d48841c9b5cffd2956abc3a3";
+				return "pkg_34fee390431140b0a2f9d976877d0497";
 			return null;//호우
 		}else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && eventCode.equals("13")){
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
@@ -314,9 +314,9 @@ public class System {
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
 				return "pkg_9c7a8b7690cf4c4a810f2fb44a8b9511";
 			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
-				return "pkg_01dc24dc84eb4304be25e9ac72bddfc6";
+				return "pkg_d416790a8da24ed29879d351658deeeb";
 			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
-				return "pkg_bcd556318f274bcfaede3056d82dc4d2";
+				return "pkg_34fee390431140b0a2f9d976877d0497";
 			return null;//화재
 		}else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && eventCode.equals("14")){
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
@@ -380,7 +380,7 @@ public class System {
 			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
 				return "pkg_7d814eac92a24fdd9944b4725b6c9000";
 			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
-				return "pkg_a5549a663d0f45269f8094364e4107d7";
+				return "pkg_39b55eb57d504bbe9d67623950bdb047";
 			return null;//교통혼잡
 		}
 		
