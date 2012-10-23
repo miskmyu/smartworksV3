@@ -46,10 +46,7 @@ public class System {
 	
 	//DEV
 	public static final String TABLE_NAME_OPPORTAL_SITUATION    = "TH_ST_SITUATION_HISTORY";
-	public static final String TABLE_NAME_OPPORTAL_ST = "USITUATION.TM_ST_SITUATION";							// 업무포털(발생,접수,처리,종료)조인테이블
-	public static final String TABLE_NAME_OPPORTAL_FACILITY = "CMDB.TM_CM_FACILITY_INFO";						// 시설물코드 테이블
 	public static final String TABLE_NAME_OPPORTAL_DISPLAY 		= "TN_ST_DISPLAY";
-	public static final String TABLE_NAME_OPPORTAL_SMS 		= "USITUATION.TM_SM_SMS_ITEM";   				// SMS 테이블
 	public static final String TABLE_NAME_INTCON_SITUATION 		= "TN_CTL_EVENT_INFO";
 	public static final String TABLE_NAME_COMMID_TRACE 			= "TB_COM_INTG_LOG";
 	public static final String TABLE_NAME_DEVMID_SEND_STATUS   	= "TN_IDM_SEND_STATUS";
