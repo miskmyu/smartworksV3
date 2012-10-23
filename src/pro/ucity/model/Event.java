@@ -323,6 +323,20 @@ public class Event {
 			return ID_WATERWORKS_LEAKS;
 		else if(userviceCode.equals(Service.USERVICE_CODE_FACILITY) && serviceCode.equals("092") && eventCode.equals("11"))
 			return ID_FACILITY_TROUBLE;
+		else if(userviceCode.equals(Service.USERVICE_CODE_FACILITY) && serviceCode.equals("092") && eventCode.equals("12"))
+			return ID_FACILITY_TROUBLE;//FCL 시설물 92 시설물파손(12)
+		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && eventCode.equals("11"))
+			return ID_ROBBERY_SITUATION;//SEC 방재 91 강도(11)
+		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && eventCode.equals("12"))
+			return ID_STRAY_CHILD_SITUATION;//SEC 방재	91 미아(12)
+		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && eventCode.equals("13"))
+			return ID_EMERGENCY_SITUATIONS;//SEC 방재	91 응급(13)
+		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && eventCode.equals("14"))
+			return ID_DISASTER_UNDERPASS_FLOODING;//SEC 방재	92 지하차도침수(14)
+		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && eventCode.equals("15"))
+			return ID_DISASTER_WATER_LEVEL_ALRAM;//SEC 방재	92 수위경보(15)
+		else if(userviceCode.equals(Service.USERVICE_CODE_TRAFFIC) && serviceCode.equals("091") && eventCode.equals("15"))
+			return ID_TRAFFIC_CONGESTION;//TRF 교통	91 교통혼잡(15)
 		return "";
 		
 /* TO DO

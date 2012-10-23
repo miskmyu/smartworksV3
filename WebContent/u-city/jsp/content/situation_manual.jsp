@@ -41,7 +41,7 @@
 	else
 		eventId = Event.getEventIdByCode(userviceCode, serviceCode, eventCode);
 
-	String workId = System.getProcessIdByProcessStatus(Event.getProcessByEventId(eventId), situationStatus);
+	String workId = System.getManualProcessId(userviceCode, serviceCode, eventCode, situationStatus);
 	ProcessWork work = (ProcessWork)smartWorks.getWorkById(workId);
 	if(SmartUtil.isBlankObject(work)){
 		work = (ProcessWork)smartWorks.getWorkById("pkg_336b0e079fc44ab19acbe49ded2e8b12");
