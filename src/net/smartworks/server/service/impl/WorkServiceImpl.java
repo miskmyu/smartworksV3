@@ -1,5 +1,7 @@
 package net.smartworks.server.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1527,18 +1529,16 @@ public class WorkServiceImpl implements IWorkService {
 						selFilterOperator = ConditionOperator.GREATER_EQUAL.getId();
 						rightOperandType = FormField.TYPE_DATE;
 					} else if(selFilterOperator.equals(ConditionOperator.TODAY.getId())) {
-						//rightOperand = this.getRecentSomeDays(1);
 						Calendar cal = Calendar.getInstance();
-						cal.set(Calendar.HOUR, 0);
-						cal.set(Calendar.MINUTE, 0);
-						cal.set(Calendar.SECOND, 0);
-						cal.set(Calendar.MILLISECOND, 0);
-						long defaultOffset = TimeZone.getDefault().getRawOffset();
-						Date today = cal.getTime();
-						LocalDate localDate = new LocalDate(today.getTime());
-						String gmtLocalDateStr = localDate.toGMTDateString();
-						String localDateStr = localDate.toLocalDateString();
-						rightOperand = new LocalDate(cal.getTime().getTime()- defaultOffset).toGMTDateString();
+						SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+						java.util.Date date = cal.getTime();
+						String Today = new SimpleDateFormat("yyyyMMdd").format(date);
+						try {
+							cal.setTime(formatter.parse(Today));
+						} catch (ParseException e) {
+							throw new Exception(e);
+						}
+						rightOperand = new LocalDate(cal.getTime().getTime()).toGMTDateString();
 						selFilterOperator = ConditionOperator.GREATER_EQUAL.getId();
 						rightOperandType = FormField.TYPE_DATE;
 					} else if(selFilterOperator.equals(ConditionOperator.THIS_WEEK.getId())) {
@@ -1546,7 +1546,8 @@ public class WorkServiceImpl implements IWorkService {
 						selFilterOperator = ConditionOperator.GREATER_EQUAL.getId();
 						rightOperandType = FormField.TYPE_DATE;
 					} else if(selFilterOperator.equals(ConditionOperator.THIS_MONTH.getId())) {
-						rightOperand = this.getRecentSomeMonths(1);
+						//rightOperand = this.getRecentSomeMonths(1);
+						rightOperand = this.getThisMonth();
 						selFilterOperator = ConditionOperator.GREATER_EQUAL.getId();
 						rightOperandType = FormField.TYPE_DATE;
 					} else if(selFilterOperator.equals(ConditionOperator.THIS_QUARTER.getId())) {
@@ -1704,6 +1705,20 @@ public class WorkServiceImpl implements IWorkService {
 		return new LocalDate(new LocalDate().getTime() - LocalDate.ONE_DAY*(someDays-1)).toGMTSimpleDateString();
 	}
 
+	public String getThisMonth() throws Exception {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+		java.util.Date date = cal.getTime();
+		String today = new SimpleDateFormat("yyyyMMdd").format(date);
+		today = today.substring(0, 6) + "01" ;
+		try {
+			cal.setTime(formatter.parse(today));
+		} catch (ParseException e) {
+			throw new Exception(e);
+		}
+		return new LocalDate(cal.getTime().getTime()).toGMTDateString();
+	}
+	
 	public String getRecentSomeMonths(int someMonths) throws Exception {
 		Calendar calendar = Calendar.getInstance();
 		int thisMonth = new LocalDate().getMonth();
