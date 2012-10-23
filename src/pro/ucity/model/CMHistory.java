@@ -5,251 +5,478 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.tmax.tibero.jdbc.TbSQLException;
 
-import pro.ucity.util.UcityTest;
 import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
+import net.smartworks.model.work.ProcessWork;
+import net.smartworks.server.service.INoticeService;
+import net.smartworks.server.service.IWorkService;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
 
-public class CMHistory {
+public class Adapter {
 
-	//DEV
-//	public static final String FIELD_NAME_COMMID_EVENT_ID = "EVET_OUTB_ID";
-//	public static final String FIELD_NAME_COMMID_MSG_TYPE = "MSG_KND_GUBN";
-
-	//개발
-	public static final String FIELD_NAME_COMMID_EVENT_ID = "b.U_SVC_EVENT_ID";
-	public static final String FIELD_NAME_COMMID_OUTB_ID = "a.EVET_OUTB_ID";
-	public static final String FIELD_NAME_COMMID_EOUTB_ID = "b.EVENT_OUTB_ID";
-	public static final String FIELD_NAME_COMMID_MSG_TYPE = "SR_FLAG";
+	public static final String FIELD_SEPERATOR = "\\|\\|";
+	public static final int LENGTH_COMM_HEADER = 50;
+	public static final int LENGTH_SERVICE_CODE = 4;
+	public static final int LENGTH_EVENT_CODE = 4;
+	public static final int LENGTH_EVENT_TYPE = 2;
 	
-	//DEV
-//	public static final String MSG_TYPE_OCCURRENCE = "O";
-//	public static final String MSG_TYPE_RELEASE = "R";
-	//개발
-	public static final String MSG_TYPE_OCCURRENCE = "S";
-	public static final String MSG_TYPE_RELEASE = "R";
+	public static final int POS_SERVICE_CODE = 33;
+	public static final int POS_EVENT_CODE = 37;
+	public static final int POS_EVENT_TYPE = 41;
 	
-	//DEV
-//	public static final String QUERY_SELECT_FOR_OCCURRENCE_PERFORM = "select * from " + System.TABLE_NAME_COMMID_TRACE + " where " + FIELD_NAME_COMMID_EVENT_ID + " = ? and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_OCCURRENCE + "'";
-//	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select * from " + System.TABLE_NAME_COMMID_TRACE + " where " + FIELD_NAME_COMMID_EVENT_ID + " = ? and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_RELEASE + "'";
+	public static final int EVENT_TYPE_OCCURRENCE = 1;
+	public static final int EVENT_TYPE_RELEASE = 2;
+	//dev
+	public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
+	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
+	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
+	public static final String FIELD_NAME_DVSN_TYPE = "COMM_DVSN_CD";
 	//개발
-	public static final String QUERY_SELECT_FOR_OCCURRENCE_PERFORM = "select a.* from " + System.TABLE_NAME_COMMID_TRACE + " a, " + System.TABLE_NAME_COMMID_JOIN + " b where " + FIELD_NAME_COMMID_EVENT_ID +" = ? and " + FIELD_NAME_COMMID_OUTB_ID + " = " + FIELD_NAME_COMMID_EOUTB_ID + " and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_OCCURRENCE + "'";
-	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select a.* from " + System.TABLE_NAME_COMMID_TRACE + " a, " + System.TABLE_NAME_COMMID_JOIN + " b where " + FIELD_NAME_COMMID_EVENT_ID +" = ? and " + FIELD_NAME_COMMID_OUTB_ID + " = " + FIELD_NAME_COMMID_EOUTB_ID + " and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_RELEASE + "'";
-		
-	  
+//	public static final String FIELD_NAME_COMM_TG_ID = "RECV_CMNC_TG_ID";
+//	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
+//	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
+//	public static final String FIELD_NAME_DVSN_TYPE = "COMM_DVSN_CD";
+	
+	public static final String DVSN_RECV_TYPE = "RECV";
+//  public static final String DVSN_SEND_TYPE = "SEND";
+ 	
+	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) and " + FIELD_NAME_DVSN_TYPE + " = '" + DVSN_RECV_TYPE + "'";
+	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) and " + FIELD_NAME_DVSN_TYPE + " = '" + DVSN_RECV_TYPE + "'";
+	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_ADAPTER_HISTORY + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_COMM_TG_ID + " = ?";
 
-	public static final KeyMap[] COMMID_TRACE_FIELDS = {
-		new KeyMap("트랜잭션 아이디", "TRST_ID"), new KeyMap("송수신 구분", "SR_FLAG"), new KeyMap("메시지 아이디", "MSG_ID"), new KeyMap("시스템 코드", "SYS_CD"),
-		new KeyMap("데이터 타입", "DATA_TYP"), new KeyMap("발생 일시", "OUTB_DTM"), new KeyMap("성공여부", "SCSS_YN"), new KeyMap("에러 코드", "ERR_CD"),
-		new KeyMap("요청 응답 키", "RR_KEY"), new KeyMap("수신 프로토콜 타입", "R_PRTCL_TYP"), new KeyMap("수신 MEP 타입", "R_MEP"), new KeyMap("메시지 원본","MSG_ORIG"), new KeyMap("메시지 종류 구분", "MSG_KND_GUBN"),
-		new KeyMap("송신 프로토콜 타입", "S_PRTCL_TYP"), new KeyMap("재시도 횟수", "RTR_CNT"), new KeyMap("송신 MEP 타입", "S_MEP"), new KeyMap("수신 이벤트 내용", "RCV_EVET_CNTN"),
-		new KeyMap("이벤트 발생 아이디", "EVET_OUTB_ID")
+	public static final KeyMap[][] ADAPTER_HISTORY_FIELDS = {
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("특보분류", "env_event_type"), new KeyMap("발생내용", "event_content")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("오염물질수", "pollution_number"), new KeyMap("오염물질구분", "pollution_type"), new KeyMap("오염물질측정치", "pollution_value"), new KeyMap("오염등급", "pollution_level"), new KeyMap("오염물질 예/경보구분", "pollution_example")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("노트링크 시작 ID", "link_start_id"), new KeyMap("노트링크 종료 ID", "link_end_id"), new KeyMap("돌발상황 유형", "outbreak_type"), new KeyMap("돌발상황 코드", "outbreak_code")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("탐지분류", "search_type")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("임계치 값", "threshold_value")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("시설물이상구분", "facility_type")}		
 	};
 	
-	private String trstId;
-	private String srFlag;
-	private String msgId;
-	private String sysCd;
-	private String dataTyp;
-	private String outbDtm;
-	private String scssYn;
-	private String errCd;
-	private String rrKey;
-	private String rPrtclTyp;
-	private String rMep;
-	private String msgOrig;
-	private String msgKndGubn;
-	private String sPrtclTyp;
-	private String rtrCnt;
-	private String sMep;
-	private String rcvEvetCntn;
-	private String evetOutbId;
+	private String commHeader;
+	private String commBody;
 	
-	public String getTrstId() {
-		return trstId;
+	private int process=-1;
+	private int eventType;	
+	private String serviceCode;
+	private String eventCode;
+	private String communicationId;
+	
+	private String eventId;
+	private String occuredDate;
+	private String envEventType;
+	private String eventContent;
+	private String facilityId;
+	private String locationName;
+	private String pollutionNumber;
+	private String pollutionType;
+	private String pollutionValue;
+	private String pollutionLevel;
+	private String pollutionExample;
+	private String carNumber;
+	private String carType;
+	private String crimeCode;
+	private String linkStartId;
+	private String linkEndId;
+	private String outbreakType;
+	private String outbreakCode;
+	private String searchType;
+	private String thresholdValue;
+	private String facilityType;
+	
+	public String getCommHeader() {
+		return commHeader;
 	}
-	public void setTrstId(String trstId) {
-		this.trstId = trstId;
+	public void setCommHeader(String commHeader) {
+		this.commHeader = commHeader;
 	}
-	public String getSrFlag() {
-		return srFlag;
+	public String getCommBody() {
+		return commBody;
 	}
-	public void setSrFlag(String srFlag) {
-		this.srFlag = srFlag;
+	public void setCommBody(String commBody) {
+		this.commBody = commBody;
 	}
-	public String getSrFlagName(){
-		if(SmartUtil.isBlankObject(this.srFlag)) return "";
-		if(this.srFlag.equals(MSG_TYPE_OCCURRENCE)){
-			return "수신";
-		}else if(this.srFlag.equals(MSG_TYPE_RELEASE)){
-			return "송신";
-		}
-		return "기타";
+	public int getProcess() {
+		return process;
 	}
-	public String getMsgId() {
-		return msgId;
+	public void setProcess(int process) {
+		this.process = process;
 	}
-	public void setMsgId(String msgId) {
-		this.msgId = msgId;
+	public int getEventType() {
+		return eventType;
 	}
-	public String getSysCd() {
-		return sysCd;
+	public void setEventType(int eventType) {
+		this.eventType = eventType;
 	}
-	public void setSysCd(String sysCd) {
-		this.sysCd = sysCd;
+	public String getServiceCode() {
+		return serviceCode;
 	}
-	public String getDataTyp() {
-		return dataTyp;
+	public void setServiceCode(String serviceCode) {
+		this.serviceCode = serviceCode;
 	}
-	public void setDataTyp(String dataTyp) {
-		this.dataTyp = dataTyp;
+	public String getEventCode() {
+		return eventCode;
 	}
-	public String getOutbDtm() {
-		return outbDtm;
+	public void setEventCode(String eventCode) {
+		this.eventCode = eventCode;
 	}
-	public void setOutbDtm(String outbDtm) {
-		this.outbDtm = outbDtm;
+	public String getCommunicationId() {
+		return communicationId;
 	}
-	public String getScssYn() {
-		return scssYn;
+	public void setCommunicationId(String communicationId) {
+		this.communicationId = communicationId;
 	}
-	public void setScssYn(String scssYn) {
-		this.scssYn = scssYn;
+	public String getEventId() {
+		return eventId;
 	}
-	public String getErrCd() {
-		return errCd;
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
 	}
-	public void setErrCd(String errCd) {
-		this.errCd = errCd;
+	public String getOccuredDate() {
+		return occuredDate;
 	}
-	public String getRrKey() {
-		return rrKey;
+	public void setOccuredDate(String occuredDate) {
+		if(!SmartUtil.isBlankObject(occuredDate) && occuredDate.length()==12)
+			this.occuredDate = occuredDate.substring(0,4) + "-" + occuredDate.substring(4,2) + "-" + occuredDate.substring(6,2) + " " + occuredDate.substring(8,2) + ":" + occuredDate.substring(10,2);
+		else
+			this.occuredDate = occuredDate;
 	}
-	public void setRrKey(String rrKey) {
-		this.rrKey = rrKey;
+	public String getEnvEventType() {
+		return envEventType;
 	}
-	public String getrPrtclTyp() {
-		return rPrtclTyp;
+	public void setEnvEventType(String envEventType) {
+		this.envEventType = envEventType;
 	}
-	public void setrPrtclTyp(String rPrtclTyp) {
-		this.rPrtclTyp = rPrtclTyp;
+	public String getEventContent() {
+		return eventContent;
 	}
-	public String getrMep() {
-		return rMep;
+	public void setEventContent(String eventContent) {
+		this.eventContent = eventContent;
 	}
-	public void setrMep(String rMep) {
-		this.rMep = rMep;
+	public String getFacilityId() {
+		return facilityId;
 	}
-	public String getMsgOrig() {
-		return msgOrig;
+	public void setFacilityId(String facilityId) {
+		this.facilityId = facilityId;
 	}
-	public void setMsgOrig(String msgOrig) {
-		this.msgOrig = msgOrig;
+	public String getLocationName() {
+		return locationName;
 	}
-	public String getMsgKndGubn() {
-		return msgKndGubn;
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
+	}	
+	public String getPollutionNumber() {
+		return pollutionNumber;
 	}
-	public void setMsgKndGubn(String msgKndGubn) {
-		this.msgKndGubn = msgKndGubn;
+	public void setPollutionNumber(String pollutionNumber) {
+		this.pollutionNumber = pollutionNumber;
 	}
-	public String getsPrtclTyp() {
-		return sPrtclTyp;
+	public String getPollutionType() {
+		return pollutionType;
 	}
-	public void setsPrtclTyp(String sPrtclTyp) {
-		this.sPrtclTyp = sPrtclTyp;
+	public void setPollutionType(String pollutionType) {
+		this.pollutionType = pollutionType;
 	}
-	public String getRtrCnt() {
-		return rtrCnt;
+	public String getPollutionValue() {
+		return pollutionValue;
 	}
-	public void setRtrCnt(String rtrCnt) {
-		this.rtrCnt = rtrCnt;
+	public void setPollutionValue(String pollutionValue) {
+		this.pollutionValue = pollutionValue;
 	}
-	public String getsMep() {
-		return sMep;
+	public String getPollutionLevel() {
+		return pollutionLevel;
 	}
-	public void setsMep(String sMep) {
-		this.sMep = sMep;
+	public void setPollutionLevel(String pollutionLevel) {
+		this.pollutionLevel = pollutionLevel;
 	}
-	public String getRcvEvetCntn() {
-		return rcvEvetCntn;
+	public String getPollutionExample() {
+		return pollutionExample;
 	}
-	public void setRcvEvetCntn(String rcvEvetCntn) {
-		this.rcvEvetCntn = rcvEvetCntn;
+	public void setPollutionExample(String pollutionExample) {
+		this.pollutionExample = pollutionExample;
 	}
-	public String getEvetOutbId() {
-		return evetOutbId;
+	public String getCarNumber() {
+		return carNumber;
 	}
-	public void setEvetOutbId(String evetOutbId) {
-		this.evetOutbId = evetOutbId;
+	public void setCarNumber(String carNumber) {
+		this.carNumber = carNumber;
 	}
-	public CMHistory(ResultSet resultSet){
+	public String getCarType() {
+		return carType;
+	}
+	public void setCarType(String carType) {
+		this.carType = carType;
+	}
+	public String getCrimeCode() {
+		return crimeCode;
+	}
+	public void setCrimeCode(String crimeCode) {
+		this.crimeCode = crimeCode;
+	}
+	public String getLinkStartId() {
+		return linkStartId;
+	}
+	public void setLinkStartId(String linkStartId) {
+		this.linkStartId = linkStartId;
+	}
+	public String getLinkEndId() {
+		return linkEndId;
+	}
+	public void setLinkEndId(String linkEndId) {
+		this.linkEndId = linkEndId;
+	}
+	public String getOutbreakType() {
+		return outbreakType;
+	}
+	public void setOutbreakType(String outbreakType) {
+		this.outbreakType = outbreakType;
+	}
+	public String getOutbreakCode() {
+		return outbreakCode;
+	}
+	public void setOutbreakCode(String outbreakCode) {
+		this.outbreakCode = outbreakCode;
+	}
+	public String getSearchType() {
+		return searchType;
+	}
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
+	}
+	public String getThresholdValue() {
+		return thresholdValue;
+	}
+	public void setThresholdValue(String thresholdValue) {
+		this.thresholdValue = thresholdValue;
+	}
+	public String getFacilityType() {
+		return facilityType;
+	}
+	public void setFacilityType(String facilityType) {
+		this.facilityType = facilityType;
+	}
+	public Adapter(String commHeader, String commBody){
+		super();
+		this.commHeader = commHeader;
+		this.commBody = commBody;
+		parseCommHeader(commHeader);
+		parseCommBody(commBody);
+	}
+
+	public Adapter(ResultSet resultSet){
 		super();
 		if(SmartUtil.isBlankObject(resultSet)) return;
 		this.setResult(resultSet);
 	}
+	private void parseCommHeader(String commHeader){
+		int sizeHeader = commHeader.length();
+		if(SmartUtil.isBlankObject(commHeader) || commHeader.length() != LENGTH_COMM_HEADER) return;
+		
+		this.serviceCode = commHeader.substring(Adapter.POS_SERVICE_CODE, Adapter.POS_SERVICE_CODE+Adapter.LENGTH_SERVICE_CODE);
+		this.eventCode = commHeader.substring(Adapter.POS_EVENT_CODE, Adapter.POS_EVENT_CODE+Adapter.LENGTH_EVENT_CODE);
+		String eventType = commHeader.substring(Adapter.POS_EVENT_TYPE, Adapter.POS_EVENT_TYPE+Adapter.LENGTH_EVENT_TYPE);
+		
+		this.process = Event.getProcessByEventId(this.eventCode);
+		
+		if(eventType.equals(Event.TYPE_OCCURRENCE))
+			this.eventType = EVENT_TYPE_OCCURRENCE;
+		if(eventType.equals(Event.TYPE_RELEASE))
+			this.eventType = EVENT_TYPE_RELEASE;
+	
+	}
+	private void parseCommBody(String commBody){
+		if(SmartUtil.isBlankObject(commBody) || this.process<0 || this.process>System.MAX_PROCESS) return;
+		
+		String[] tokens = commBody.split(Adapter.FIELD_SEPERATOR);
+		if(tokens.length != ADAPTER_HISTORY_FIELDS[process].length) return;
+		
+		switch(process){
+		case System.PROCESS_ENV_WEAHTER:
+			this.eventId = tokens[0];
+			this.occuredDate = tokens[1];
+			this.envEventType = tokens[2];
+			this.eventContent = tokens[3];
+			break;
+		case System.PROCESS_ENV_ATMOSPHERE:
+			this.eventId = tokens[0];
+			this.occuredDate = tokens[1];
+			this.facilityId = tokens[2];
+			this.locationName = tokens[3];
+			this.pollutionNumber = tokens[4];
+			this.pollutionType = tokens[5];
+			this.pollutionValue = tokens[6];
+			this.pollutionLevel = tokens[7];
+			this.pollutionExample = tokens[8];
+			break;
+		case System.PROCESS_ENV_WATER:
+			this.eventId = tokens[0];
+			this.occuredDate = tokens[1];
+			this.facilityId = tokens[2];
+			this.locationName = tokens[3];
+			break;
+		case System.PROCESS_TRAFFIC_ILLEGAL_PARKING:
+			this.eventId = tokens[0];
+			this.occuredDate = tokens[1];
+			this.facilityId = tokens[2];
+			this.locationName = tokens[3];
+			this.carNumber = tokens[4];
+			this.carType = tokens[5];
+			this.crimeCode = tokens[6];
+			break;
+		case System.PROCESS_TRAFFIC_INCIDENT:
+			this.eventId = tokens[0];
+			this.occuredDate = tokens[1];
+			this.linkStartId = tokens[2];
+			this.linkEndId = tokens[3];
+			this.outbreakType = tokens[4];
+			this.outbreakCode = tokens[5];
+			break;
+		case System.PROCESS_DISASTER_FIRE:
+			this.eventId = tokens[0];
+			this.occuredDate = tokens[1];
+			this.facilityId = tokens[2];
+			this.searchType = tokens[3];
+			break;
+		case System.PROCESS_CRIME_CCTV:
+			this.eventId = tokens[0];
+			this.occuredDate = tokens[1];
+			this.facilityId = tokens[2];
+			this.locationName = tokens[3];
+			break;
+		case System.PROCESS_CRIME_VEHICLES:
+			this.eventId = tokens[0];
+			this.occuredDate = tokens[1];
+			this.facilityId = tokens[2];
+			this.locationName = tokens[3];
+			this.carNumber = tokens[4];
+			this.carType = tokens[5];
+			this.crimeCode = tokens[6];
+			break;
+		case System.PROCESS_WATERWORKS_LEAKS:
+			this.eventId = tokens[0];
+			this.occuredDate = tokens[1];
+			this.facilityId = tokens[2];
+			this.locationName = tokens[3];
+			this.thresholdValue = tokens[4];
+			break;
+		case System.PROCESS_FACILITY_MANAGEMENT:
+			this.eventId = tokens[0];
+			this.occuredDate = tokens[1];
+			this.facilityId = tokens[2];
+			this.locationName = tokens[3];
+			this.facilityType = tokens[4];
+			break;
+		}
+	}
+	
+	public String getServiceName(){
+		return Service.getServiceNameByCode(this.serviceCode);
+	}
+	
+	public String getEventName(){
+		return Event.getEventNameByCode(this.eventCode);
+	}
 	
 	public Map<String, Object> getDataRecord(){
+		if(this.process<0 || this.process>System.MAX_PROCESS) return null;
 		
 		Map<String, Object> dataRecord = new HashMap<String, Object>();
-		KeyMap[] keyMaps = CMHistory.COMMID_TRACE_FIELDS;
+		KeyMap[] keyMaps = Adapter.ADAPTER_HISTORY_FIELDS[this.process];
 		
 		if(!this.isValid()) return null;
 		
+		dataRecord.put("serviceName", Service.getServiceNameByCode(this.getServiceCode()));
+		if(this.process == System.PROCESS_ENV_WEAHTER)
+			dataRecord.put("eventName", this.envEventType);
+		else
+			dataRecord.put("eventName", Event.getEventNameByCode(this.getEventCode()));
+		dataRecord.put("eventPlace", this.locationName);
+		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
-			if(keyMap.getKey().equals("TRST_ID"))
-				dataRecord.put(keyMap.getId(), this.trstId);
-			else if(keyMap.getKey().equals("SR_FLAG"))
-				dataRecord.put(keyMap.getId(), this.getSrFlagName());
-			else if(keyMap.getKey().equals("MSG_ID"))
-				dataRecord.put(keyMap.getId(), this.msgId);
-			else if(keyMap.getKey().equals("SYS_CD"))
-				dataRecord.put(keyMap.getId(), this.sysCd);
-			else if(keyMap.getKey().equals("DATA_TYP"))
-				dataRecord.put(keyMap.getId(), this.dataTyp);
-			else if(keyMap.getKey().equals("OUTB_DTM"))
-				dataRecord.put(keyMap.getId(), this.outbDtm);
-			else if(keyMap.getKey().equals("SCSS_YN"))
-				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.scssYn) ? "on" : "");
-			else if(keyMap.getKey().equals("ERR_CD"))
-				dataRecord.put(keyMap.getId(), this.errCd);
-			else if(keyMap.getKey().equals("RR_KEY"))
-				dataRecord.put(keyMap.getId(), this.rrKey);
-			else if(keyMap.getKey().equals("R_PRTCL_TYP"))
-				dataRecord.put(keyMap.getId(), this.rPrtclTyp);
-			else if(keyMap.getKey().equals("R_MEP"))
-				dataRecord.put(keyMap.getId(), this.rMep);
-			else if(keyMap.getKey().equals("MSG_ORIG"))
-				dataRecord.put(keyMap.getId(), this.msgOrig);
-			else if(keyMap.getKey().equals("MSG_KND_GUBN"))
-				dataRecord.put(keyMap.getId(), this.msgKndGubn);
-			else if(keyMap.getKey().equals("S_PRTCL_TYP"))
-				dataRecord.put(keyMap.getId(), this.sPrtclTyp);
-			else if(keyMap.getKey().equals("RTR_CNT"))
-				dataRecord.put(keyMap.getId(), this.rtrCnt);
-			else if(keyMap.getKey().equals("S_MEP"))
-				dataRecord.put(keyMap.getId(), this.sMep);
-			else if(keyMap.getKey().equals("RCV_EVET_CNTN"))
-				dataRecord.put(keyMap.getId(), this.rcvEvetCntn);
-			else if(keyMap.getKey().equals("EVET_OUTB_ID"))
-				dataRecord.put(keyMap.getId(), this.evetOutbId);
+			if(keyMap.getKey().equals("event_id"))
+				dataRecord.put(keyMap.getId(), this.eventId);
+			else if(keyMap.getKey().equals("occured_date"))
+				dataRecord.put(keyMap.getId(), this.occuredDate);
+			else if(keyMap.getKey().equals("env_event_type"))
+				dataRecord.put(keyMap.getId(), this.envEventType);
+			else if(keyMap.getKey().equals("event_content"))
+				dataRecord.put(keyMap.getId(), this.eventContent);
+			else if(keyMap.getKey().equals("facility_id"))
+				dataRecord.put(keyMap.getId(), this.facilityId);
+			else if(keyMap.getKey().equals("facility_type"))
+				dataRecord.put(keyMap.getId(), this.facilityType);
+			else if(keyMap.getKey().equals("location_name"))
+				dataRecord.put(keyMap.getId(), this.locationName);
+			else if(keyMap.getKey().equals("pollution_number"))
+				dataRecord.put(keyMap.getId(), this.pollutionNumber);
+			else if(keyMap.getKey().equals("pollution_type"))
+				dataRecord.put(keyMap.getId(), this.pollutionType);
+			else if(keyMap.getKey().equals("pollution_value"))
+				dataRecord.put(keyMap.getId(), this.pollutionValue);
+			else if(keyMap.getKey().equals("pollution_level"))
+				dataRecord.put(keyMap.getId(), this.pollutionLevel);
+			else if(keyMap.getKey().equals("pollution_example"))
+				dataRecord.put(keyMap.getId(), this.pollutionExample);
+			else if(keyMap.getKey().equals("car_number"))
+				dataRecord.put(keyMap.getId(), this.carNumber);
+			else if(keyMap.getKey().equals("car_type"))
+				dataRecord.put(keyMap.getId(), this.carType);
+			else if(keyMap.getKey().equals("crime_code"))
+				dataRecord.put(keyMap.getId(), this.crimeCode);
+			else if(keyMap.getKey().equals("link_start_id"))
+				dataRecord.put(keyMap.getId(), this.linkStartId);
+			else if(keyMap.getKey().equals("link_end_id"))
+				dataRecord.put(keyMap.getId(), this.linkEndId);
+			else if(keyMap.getKey().equals("outbreak_type"))
+				dataRecord.put(keyMap.getId(), this.outbreakType);
+			else if(keyMap.getKey().equals("outbreak_code"))
+				dataRecord.put(keyMap.getId(), this.outbreakCode);
+			else if(keyMap.getKey().equals("search_type"))
+				dataRecord.put(keyMap.getId(), this.searchType);
+			else if(keyMap.getKey().equals("threshold_value"))
+				dataRecord.put(keyMap.getId(), this.thresholdValue);
 		}
 		return dataRecord;
-//		return UcityTest.getCMHistoryDataRecord();		
 	}
 	
-	public void performTask(String processId, String taskInstId) throws Exception{
+	public void startProcess() throws Exception{
+		if(this.process<0 || this.process>System.MAX_PROCESS || this.eventType!=EVENT_TYPE_OCCURRENCE) return;
+		
+		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
+		if(processWork==null) return;
+		
+		UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.eventId, this.occuredDate, this.getDataRecord());
+	}
+	
+	public void endProcess() throws Exception{
+		if(this.process<0 || this.process>System.MAX_PROCESS || this.eventType!=EVENT_TYPE_RELEASE) return;
+		
+		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
+		if(processWork==null) return;
+		
+		UcityUtil.endUServiceProcess(System.getProcessId(this.process), this.eventId, this.getDataRecord());
+	}
+	
+	public void performTask(String taskInstId) throws Exception{
 		TaskInstance taskInstance = null;
 		if(SmartUtil.isBlankObject(taskInstId)) return;
 		
-		taskInstance = SwServiceFactory.getInstance().getInstanceService().getTaskInstanceById(processId, taskInstId);
+		taskInstance = SwServiceFactory.getInstance().getInstanceService().getTaskInstanceById(System.getProcessId(this.process), taskInstId);
 		
 		if(SmartUtil.isBlankObject(taskInstance)) return;
 		
@@ -257,131 +484,205 @@ public class CMHistory {
 	}
 	
 	public void setResult(ResultSet result){
-		if(SmartUtil.isBlankObject(result)) return;
 		try{
-			this.trstId = result.getString("TRST_ID");
-		}catch (Exception ex){}
-		try{
-			this.srFlag = result.getString("SR_FLAG");
-		}catch (Exception ex){}
-		try{
-			this.msgId = result.getString("MSG_ID");
-		}catch (Exception ex){}
-		try{
-			this.sysCd = result.getString("SYS_CD");
-		}catch (Exception ex){}
-		try{
-			this.dataTyp = result.getString("DATA_TYP");
-		}catch (Exception ex){}
-		try{
-			this.outbDtm = result.getString("OUTB_DTM");
-		}catch (Exception ex){}
-		try{
-			this.scssYn = result.getString("SCSS_YN");
-		}catch (Exception ex){}
-		try{
-			this.errCd = result.getString("ERR_CD");
-		}catch (Exception ex){}
-		try{
-			this.rrKey = result.getString("RR_KEY");
-		}catch (Exception ex){}
-		try{
-			this.rPrtclTyp = result.getString("R_PRTCL_TYP");
-		}catch (Exception ex){}
-		try{
-			this.rMep = result.getString("R_MEP");
-		}catch (Exception ex){}
-		try{
-			this.rMep = result.getString("MSG_ORIG");
-		}catch (Exception ex){}
-		try{
-			this.msgKndGubn = result.getString("MSG_KND_GUBN");
-		}catch (Exception ex){}
-		try{
-			this.sPrtclTyp = result.getString("S_PRTCL_TYP");
-		}catch (Exception ex){}
-		try{
-			this.rtrCnt = result.getString("RTR_CNT");
-		}catch (Exception ex){}
-		try{
-			this.sMep = result.getString("S_MEP");
-		}catch (Exception ex){}
-		try{
-			this.rcvEvetCntn = result.getString("RCV_EVET_CNTN");
-		}catch (Exception ex){}
-		try{
-			this.evetOutbId = result.getString("EVET_OUTB_ID");
-		}catch (Exception ex){}
+			if(result.getRow()>0){ 
+				this.communicationId = result.getString(FIELD_NAME_COMM_TG_ID);
+				String commContent = result.getString(FIELD_NAME_COMM_CONTENT);
+				if(SmartUtil.isBlankObject(commContent) || commContent.length()<Adapter.LENGTH_COMM_HEADER) return;
+				this.commHeader = commContent.substring(0, Adapter.LENGTH_COMM_HEADER);
+				this.commBody = commContent.substring(Adapter.LENGTH_COMM_HEADER);
+				this.parseCommHeader(this.commHeader);
+				this.parseCommBody(this.commBody);				
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 	}
-
+	
 	public boolean isValid(){
-		if(!SmartUtil.isBlankObject(this.trstId) && !SmartUtil.isBlankObject(this.evetOutbId))
+		if(	this.process != -1 && !SmartUtil.isBlankObject(this.commHeader) 
+				&& !SmartUtil.isBlankObject(this.commBody) && this.eventType !=0 && !SmartUtil.isBlankObject(this.eventId))
 			return true;
 		return false;
 	}
-
-	public static Map<String,Object> readHistoryTable(String eventId, String status){
-		
-		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(status)) return null;
+	
+	synchronized public static void readHistoryTableToStart(){
+		java.lang.System.out.println("############ START checking ADAPTER History To Start  ################");
 		try {
 			Class.forName(System.DATABASE_JDBC_DRIVE);
 		} catch (ClassNotFoundException e) {
+			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 			e.printStackTrace();
+			return;
 		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
+		PreparedStatement updatePstmt = null;
 				
-		String cmHistorySelectSql = (status.equals(MSG_TYPE_OCCURRENCE)) ? CMHistory.QUERY_SELECT_FOR_OCCURRENCE_PERFORM : CMHistory.QUERY_SELECT_FOR_RELEASE_PERFORM;
+		String adapterSelectSql = Adapter.QUERY_SELECT_FOR_START;
+		String adapterUpdateSql = Adapter.QUERY_UPDATE_FOR_READ_CONFIRM;
 		try {
 			try{
 				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
 			}catch (TbSQLException te){
+				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 				te.printStackTrace();
-				return null;
+				java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+				return;
 			}
+//			con.setAutoCommit(false);
 			
 			try{
-				selectPstmt = con.prepareStatement(cmHistorySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				selectPstmt.setString(1, eventId);
+				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = selectPstmt.executeQuery();				
-				rs.last(); 
-				int count = rs.getRow();
-				rs.first();
-				if (count == 1) {
-					try{
-						CMHistory cmHistory = new CMHistory(rs);
-						if(cmHistory.isValid()){
-							try {
-								if (selectPstmt != null)
-									selectPstmt.close();
-								con.close();
-							} catch (SQLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+				rs.last();
+				int count = rs.getRow(); 
+				rs.beforeFirst();
+				if (count != 0) {
+					java.lang.System.out.println("============== ADAPTER 이벤트 발생 ===============");
+					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
+					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
+					while(rs.next()) {
+						try{
+							String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
+							updatePstmt = con.prepareStatement(adapterUpdateSql);
+							updatePstmt.setString(1, communicationId);
+							boolean result = updatePstmt.execute();
+							Adapter adapter = new Adapter(rs);
+							if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_OCCURRENCE){
+								try{
+									adapter.startProcess();	
+//									con.commit();
+									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 정상적으로 시작되었습니다!");
+								}catch (Exception se){
+									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
+									se.printStackTrace();
+//									if(con != null)
+//										con.rollback();
+								}
+							}else if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE){
+								try{
+									adapter.endProcess();
+//									con.commit();
+									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
+								}catch (Exception se){
+									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
+									se.printStackTrace();
+//									if(con != null)
+//										con.rollback();
+								}
+							}else{
+//								con.rollback();
+								java.lang.System.out.println("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
 							}
-							return cmHistory.getDataRecord();
+						}catch (Exception we){
+							java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+							we.printStackTrace();
+							java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+							return;
 						}
-					}catch (Exception we){
-						we.printStackTrace();
 					}
 				}
 			}catch (Exception e1){
+				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 				e1.printStackTrace();
 			}
 		} catch (Exception e) {
+			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
+				if (updatePstmt != null)
+					updatePstmt.close();
 				if(con != null)
 					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
 		}
-		return null;
 	}
+	
+//	public static Map<String,Object> readHistoryTable(String eventId){
+//		java.lang.System.out.println("############ START checking ADAPTER History To Process(Event Id:" + eventId +  ")  ################");
+//		try {
+//			Class.forName(System.DATABASE_JDBC_DRIVE);
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//			java.lang.System.out.println("[ERROR ] ADAPTER 처리 이벤트 데이터베이스 오류 종료!");
+//			java.lang.System.out.println("############ END checking ADAPTER History To Process(Event Id:" + eventId +  ")  ################");
+//		}
+//
+//		Connection con = null;
+//		PreparedStatement selectPstmt = null;
+//		PreparedStatement updatePstmt = null;
+//				
+//		String adapterSelectSql = Adapter.QUERY_SELECT_FOR_PERFORM;
+//		String adapterUpdateSql = Adapter.QUERY_UPDATE_FOR_READ_CONFIRM;
+//		try {
+//			
+//			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+//			con.setAutoCommit(false);
+//			
+//			try{
+//				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//				ResultSet rs = selectPstmt.executeQuery();				
+//				rs.last(); 
+//				int count = rs.getRow(); 
+//				rs.first();
+//				if (count == 1) {
+//					try{
+//						java.lang.System.out.println("============== ADAPTER 처리 이벤트 발견 ===============");
+//						String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
+//						updatePstmt = con.prepareStatement(adapterUpdateSql);
+//						updatePstmt.setString(1, communicationId);
+//						boolean result = updatePstmt.execute();
+//						Adapter adapter = new Adapter(rs);
+//						if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE && adapter.getEventId().equals(eventId)){
+//							con.commit();
+//							try {
+//								if (selectPstmt != null)
+//									selectPstmt.close();
+//								if (updatePstmt != null)
+//									updatePstmt.close();
+//								con.close();
+//							} catch (SQLException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
+//							return adapter.getDataRecord();
+//						}else{
+//							con.rollback();
+//						}
+//					}catch (Exception we){
+//						we.printStackTrace();
+//						java.lang.System.out.println("[ERROR ] ADAPTER 처리 이벤트 데이터베이스 오류 종료!");
+//					}
+//				}
+//			}catch (Exception e1){
+//				e1.printStackTrace();
+//				java.lang.System.out.println("[ERROR ] ADAPTER 처리 이벤트 데이터베이스 오류 종료!");
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			java.lang.System.out.println("[ERROR ] ADAPTER 처리 이벤트 데이터베이스 오류 종료!");
+//		} finally {
+//			try {
+//				if (selectPstmt != null)
+//					selectPstmt.close();
+//				if (updatePstmt != null)
+//					updatePstmt.close();
+//				con.close();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//		java.lang.System.out.println("############ END checking ADAPTER History To Process(Event Id:" + eventId +  ")  ################");
+//		return null;
+//	}
 }
