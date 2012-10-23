@@ -160,6 +160,8 @@
 		String savedWorkId = (String)session.getAttribute("workId");
 		if(!SmartUtil.isBlankObject(workId) && workId.equals(work.getId())){
 			params = (RequestParams)session.getAttribute("requestParams");
+			if(!SmartUtil.isBlankObject(params))
+				params.setSearchFilter(null);
 		}
 	}if (params != null){
 		selectedFilterId = params.getFilterId();

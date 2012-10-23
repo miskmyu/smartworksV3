@@ -297,7 +297,8 @@ public class Event {
 	public static String getEventIdByCode(String userviceCode, String serviceCode, String eventCode){
 		if(SmartUtil.isBlankObject(userviceCode) || SmartUtil.isBlankObject(serviceCode) || SmartUtil.isBlankObject(eventCode)) return "";
 		
-		if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("091") && eventCode.equals("11"))
+		if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("091") && eventCode.equals("11") ||
+				userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && eventCode.equals("11"))
 			return ID_ENV_STORM;
 		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && eventCode.equals("13"))
 			return ID_ENV_TYPHOON;

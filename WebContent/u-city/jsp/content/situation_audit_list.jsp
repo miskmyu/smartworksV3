@@ -44,83 +44,13 @@
 		});
 	};
 	
-	saveAsSearchFilter = function(filterId){
-		var pworkList = $('.js_pwork_list_page');
-		var searchFilter = $('.js_search_filter_page');
-		var url = "set_work_search_filter.sw";
-		if(isEmpty(filterId)){
-			url = "create_work_search_filter.sw";
-			searchFilter.find('input[name="txtNewFilterName"]').addClass('required');
-		}
-
-		if (!SmartWorks.GridLayout.validate(searchFilter.find('form.js_validation_required'), $('.js_filter_error_message'))) return;
-
-		var paramsJson = {};
-		var workId = pworkList.attr('workId');
-		var searchFilters = searchFilter.find('form[name="frmSearchFilter"]');
-		paramsJson['workId'] = workId;
-		paramsJson['workType'] = <%=SmartWork.TYPE_PROCESS%>;
-		if(isEmpty(filterId)) {
-			filterId = "";
-		}
-		paramsJson['filterId'] = filterId;
-		paramsJson['txtNewFilterName'] = searchFilter.find('input[name="txtNewFilterName"]').attr('value');
-
-		if(!isEmpty(searchFilters)){
-			var searchFilterArray = new Array();
-			for(var i=0; i<searchFilters.length; i++){
-				var searchFilter = $(searchFilters[i]);
-				if(searchFilter.is(':visible'))
-					searchFilterArray.push(searchFilter.serializeObject());
-			}
-			paramsJson['frmSearchFilters'] = searchFilterArray;
-		}
-		var progressSpan = searchFilter.find('span.js_progress_span:first');
-		smartPop.progressCont(progressSpan);
-		$.ajax({
-			url : url,
-			contentType : 'application/json',
-			type : 'POST',
-			data : JSON.stringify(paramsJson),
-			success : function(data, status, jqXHR) {
-				var selectSearchFilter = pworkList.find('.js_select_search_filter');
-				selectSearchFilter.find('.js_custom_filter').remove();
-				selectSearchFilter.append(data);
-				$('a.js_search_filter_close').click();
-				smartPop.closeProgress();
-			},
-			error : function(xhr, ajaxOptions, thrownError) {
-				smartPop.closeProgress();
-				if(xhr.status == httpStatus.InternalServerError){
-					var message = smartMessage.get(xhr.responseText);
-					if(!isEmpty(message)){
-						smartPop.showInfo(smartPop.ERROR, message);
-						return;
-					}
-				}
-				smartPop.showInfo(smartPop.ERROR, smartMessage.get('setFilterError'));
-			}
-		});
-	};
-	
-	saveSearchFilter = function(){
-		var searchFilter = $('.js_search_filter_page');
-		var filterId = searchFilter.attr('filterId');
-		//filterId에 system 문자열이 들어가지 않을 시,fileterId를 전달
-		if(isEmpty(filterId) || filterId.match(".*system.*")){
-			searchFilter.find('input[name="txtNewFilterName"]').removeClass('required');
-			saveAsSearchFilter("");
-		}else{
-			saveAsSearchFilter(filterId);
-		}
-	};
-
 	selectListParam = function(progressSpan, isGray){
 		var pworkList = $('.js_pwork_list_page');
 		var forms = pworkList.find('form:visible');
 		var paramsJson = {};
+		var auditId = pworkList.attr('auditId');
 		var workId = pworkList.attr('workId');
-		paramsJson["href"] = "u-city/jsp/content/situation_instance_list.jsp?workId=" + workId;
+		paramsJson["href"] = "u-city/jsp/content/situation_instance_list.jsp?workId=" + workId + "&auditId=" + auditId;
 		var searchFilters = pworkList.find('form[name="frmSearchFilter"]');
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);
@@ -146,6 +76,7 @@
  	session.setAttribute("lastLocation", "situation_list.sw");
 
  	String auditId = (String)request.getParameter("auditId");
+ 	if(SmartUtil.isBlankObject(auditId)) auditId = (String)session.getAttribute("auditId");
  	if(SmartUtil.isBlankObject(auditId)) auditId = Audit.DEFAULT_AUDIT_ID_STR;
  	int auditNumber = Integer.parseInt(auditId);
  	
@@ -165,6 +96,7 @@
 		selectedFilterId = params.getFilterId();
 	}
 	
+	session.setAttribute("auditId", auditId);
 	session.setAttribute("smartWork", work);
 	session.removeAttribute("workInstance");
 %>
@@ -172,7 +104,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_pwork_list_page js_work_list_page">
+<div class="section_portlet js_pwork_list_page js_work_list_page" auditId="<%=auditId%>">
 
 			<!-- 목록보기 -->
 			<div class=" contents_space">
