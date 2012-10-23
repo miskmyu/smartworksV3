@@ -254,7 +254,7 @@ public class System {
 	public static String getManualProcessId(String userviceCode, String serviceCode, String eventCode, String status){
 		if(SmartUtil.isBlankObject(userviceCode) || SmartUtil.isBlankObject(serviceCode) || SmartUtil.isBlankObject(eventCode) || SmartUtil.isBlankObject(status)) return null;
 		
-		if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && eventCode.equals("11")){
+		if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("091") && eventCode.equals("11")){
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
 				return "pkg_22b8cf03a873499ea6bb7716684c5664";
 			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
@@ -341,7 +341,7 @@ public class System {
 				return "pkg_4d8d8c805b1747b2b66bc3fdd72c9b64";
 			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
 				return "pkg_0a8a8f31c278430d82add9e02b6fc7bf";
-			return null;//강도- 호우와 주소코드가 같음....
+			return null;//강도
 		}else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && eventCode.equals("12")){
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
 				return "pkg_fb0f805e648c4069af427b0f157e7dcd";
