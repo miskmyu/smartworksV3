@@ -254,7 +254,8 @@ public class System {
 	public static String getManualProcessId(String userviceCode, String serviceCode, String eventCode, String status){
 		if(SmartUtil.isBlankObject(userviceCode) || SmartUtil.isBlankObject(serviceCode) || SmartUtil.isBlankObject(eventCode) || SmartUtil.isBlankObject(status)) return null;
 		
-		if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("091") && eventCode.equals("11")){
+		if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("091") && eventCode.equals("11") 
+				|| userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && eventCode.equals("11")){
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
 				return "pkg_dc91d2ec9b094b4ebd27dc4c9ff63822";
 			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
