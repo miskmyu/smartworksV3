@@ -28,13 +28,23 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
+	String STATUS_CODE_OCCURRENCE = "OCCURRENCE";
+	String STATUS_CODE_RECEIPT = "RECEIPT";
+	String STATUS_CODE_FINISH = "FINISH";
+
 	String userviceCode = request.getParameter("userviceCode");
 	String serviceCode = request.getParameter("serviceCode");
 	String eventCode = request.getParameter("eventCode");
-	String situationStatus = request.getParameter("situationStatus");
+	String situationStatus = request.getParameter("statusCode");
 	if(SmartUtil.isBlankObject(situationStatus))
 		situationStatus = OPSituation.STATUS_SITUATION_OCCURRED;
-	
+	else if(situationStatus.equals(STATUS_CODE_OCCURRENCE))
+		situationStatus = OPSituation.STATUS_SITUATION_OCCURRED;
+	else if(situationStatus.equals(STATUS_CODE_RECEIPT))
+		situationStatus = OPSituation.STATUS_SITUATION_PROCESSING;
+	else if(situationStatus.equals(STATUS_CODE_FINISH))
+		situationStatus = OPSituation.STATUS_SITUATION_RELEASE;
+		
 	String eventId = null;
 	if(SmartUtil.isBlankObject(userviceCode) || SmartUtil.isBlankObject(serviceCode) || SmartUtil.isBlankObject(eventCode))
 	 	eventId = Event.ID_ENV_GALE;
