@@ -112,7 +112,7 @@
 	<beans:bean id="ssoManager" class="pro.ucity.sso.manager.impl.SsoManagerImpl"/>
 	
 	<beans:bean id="timerManager" class="net.smartworks.server.engine.scheduling.manager.impl.TimerManager">
-		<beans:property name="fb" ref="schedulerFactoryBean"/>
+		<!-- <beans:property name="fb" ref="schedulerFactoryBean"/> -->
 	</beans:bean>
 	<beans:bean id="reportManager" class="net.smartworks.server.engine.report.manager.impl.ReportManagerImpl"/>
 	<beans:bean id="autoIndexManager" class="net.smartworks.server.engine.autoindex.manager.impl.IdxManagerImpl"/>
