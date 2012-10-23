@@ -1,5 +1,8 @@
 package pro.ucity.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Audit {
 
 	public static final int ID_SITUATION_OCCURRED		= 0;
@@ -56,4 +59,19 @@ public class Audit {
 		}
 		return "";
 	}
+	
+	public static Map<String, Integer> getAuditNameIdMappingMap() {
+		Map<String, Integer> resultMap = new HashMap<String, Integer>();
+		for (int i = 0; i < TASK_NAMES_BY_AUDIT_ID.length; i++) {
+			String[] subArray = getTaskNamesByAuditId(i);
+			for (int j = 0; j < subArray.length; j++) {
+				String name = subArray[j];
+				if (resultMap.get(name) == null) {
+					resultMap.put(name, i);
+				}
+			}
+		}
+		return resultMap;
+	}
+	
 }
