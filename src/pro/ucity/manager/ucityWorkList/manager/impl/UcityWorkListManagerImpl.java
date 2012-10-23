@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.model.Filter;
@@ -388,7 +389,9 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 						} else if (operType.equalsIgnoreCase("boolean")) {
 							query.setBoolean(param, CommonUtil.toBoolean(operValue));
 						} else if (operType.equalsIgnoreCase("datechooser")) {
-							query.setTimestamp(param, DateUtil.toDate(operValue));
+							Date tempDate = new Date();
+							tempDate.setTime(DateUtil.toDate(operValue).getTime() - TimeZone.getDefault().getRawOffset());
+							query.setTimestamp(param, tempDate);
 						} else {
 							query.setParameter(param, operValue);
 						}
