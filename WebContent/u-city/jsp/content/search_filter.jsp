@@ -189,7 +189,7 @@
 		</div>
 		
 		<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
-		<div class="fr form_space js_progress_span" ></div>
+		<div class="fr form_space" ></div>
 		
 		<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
 		<span class="form_space sw_error_message js_filter_error_message" style="text-align:right; color: red"></span>

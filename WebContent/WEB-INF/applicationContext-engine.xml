@@ -98,7 +98,7 @@
 		<beans:property name="mailManager" ref="mailManager"/>
 		<beans:property name="autoIndexManager" ref="autoIndexManager"/>
 		<beans:property name="reportManager" ref="reportManager"/>
-		<!-- <beans:property name="timerManager" ref="timerManager"/> -->
+		<beans:property name="timerManager" ref="timerManager"/>
 		
 		<beans:property name="ucityWorkListManager" ref="ucityWorkListManager"/>
 		<beans:property name="ssoManager" ref="ssoManager"/>
@@ -111,6 +111,9 @@
 	<beans:bean id="ucityWorkListManager" class="pro.ucity.manager.ucityWorkList.manager.impl.UcityWorkListManagerImpl"/>
 	<beans:bean id="ssoManager" class="pro.ucity.sso.manager.impl.SsoManagerImpl"/>
 	
+	<beans:bean id="timerManager" class="net.smartworks.server.engine.scheduling.manager.impl.TimerManager">
+		<beans:property name="fb" ref="schedulerFactoryBean"/>
+	</beans:bean>
 	<beans:bean id="reportManager" class="net.smartworks.server.engine.report.manager.impl.ReportManagerImpl"/>
 	<beans:bean id="autoIndexManager" class="net.smartworks.server.engine.autoindex.manager.impl.IdxManagerImpl"/>
 	<beans:bean id="mailManager" class="net.smartworks.server.engine.mail.manager.impl.MailManagerImpl"/>

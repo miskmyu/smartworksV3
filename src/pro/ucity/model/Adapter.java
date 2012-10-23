@@ -36,6 +36,7 @@ public class Adapter {
 	
 	public static final int EVENT_TYPE_OCCURRENCE = 1;
 	public static final int EVENT_TYPE_RELEASE = 2;
+	
 	//dev
 	public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
 	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
@@ -48,7 +49,7 @@ public class Adapter {
 //	public static final String FIELD_NAME_DVSN_TYPE = "COMM_DVSN_CD";
 	
 	public static final String DVSN_RECV_TYPE = "RECV";
-	public static final String DVSN_SEND_TYPE = "SEND";
+//  public static final String DVSN_SEND_TYPE = "SEND";
  	
 	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) and " + FIELD_NAME_DVSN_TYPE + " = '" + DVSN_RECV_TYPE + "'";
 	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) and " + FIELD_NAME_DVSN_TYPE + " = '" + DVSN_RECV_TYPE + "'";
@@ -411,7 +412,7 @@ public class Adapter {
 			if(keyMap.getKey().equals("event_id"))
 				dataRecord.put(keyMap.getId(), this.eventId);
 			else if(keyMap.getKey().equals("occured_date"))
-				dataRecord.put(keyMap.getId(), UcityUtil.getDateString(this.occuredDate));
+				dataRecord.put(keyMap.getId(), this.occuredDate);
 			else if(keyMap.getKey().equals("env_event_type"))
 				dataRecord.put(keyMap.getId(), this.envEventType);
 			else if(keyMap.getKey().equals("event_content"))

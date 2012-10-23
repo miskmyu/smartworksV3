@@ -48,7 +48,7 @@ public class ConditionOperator {
 	
 	public static final KeyMap[] dateOperators = new KeyMap[] {
 		RECENT_DAYS,
-//		TODAY,
+		TODAY,
 		THIS_WEEK,
 		THIS_MONTH,
 		THIS_QUARTER,

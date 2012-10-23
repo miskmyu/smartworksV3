@@ -18,13 +18,14 @@ public class Audit {
 	public static final String DEFAULT_AUDIT_ID_STR		= "4";
 	
 	private static final String[][] TASK_NAMES_BY_AUDIT_ID = {
-		new String[]{"기상특보 발생", "기상특보 종료"},
-		new String[]{"통신미들웨어 발생", "통신미들웨어 종료"},
+		new String[]{"기상특보 발생", "기상특보 종료", "대기특보 발생", "대기특보 종료", "수질특보 발생", "수질특보 종료", "불법주정차 발생", "불법주정차 종료", "돌발상황 발생", "돌발상황 종료", 
+				"방범 CCTV 발생", "방범(용의차량) 발생", "상수도누수 발생", "상수도누수 종료", "시설물관리 발생", "시설물관리 종료", "화재특보 발생"},
+		new String[]{"통신 미들웨어(발생)", "통신 미들웨어(종료)"},
 		new String[]{"상황발생"},
 		new String[]{"상황등록/접수"},
 		new String[]{"상황처리"},
 		new String[]{"상황종료"},
-		new String[]{"통합관제 발생", "통합관제 종료"},
+		new String[]{"통합관제 발생표출", "통합관제 종료표출"},
 		new String[]{"단말연계미들웨어"},
 		new String[]{"발생 SMS발송", "미디어보드", "교통 BIT", "교통 VMS", "KIOSK", "환경 VMS", "미디어보드 중단", "교통 BIT 중단", "교통 VMS 중단", "KIOSK 중단", "환경 VMS 중단"}
 	};
