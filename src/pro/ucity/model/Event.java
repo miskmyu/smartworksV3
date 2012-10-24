@@ -96,37 +96,37 @@ public class Event {
 		}else if(eventId.equals(ID_ENV_WARNING)){
 			return "환경경보";
 		}else if(eventId.equals(ID_TRAFFIC_INCIDENT)){
-			return "돌발상황";
+			return "돌발";
 		}else if(eventId.equals(ID_TRAFFIC_ILLEGAL_PARKING)){
-			return "불법주정차(용의차량)상황";
+			return "불법주정차(용의차량)";
 		}else if(eventId.equals(ID_TRAFFIC_ACCIDENTS)){
-			return "교통사고상황";
+			return "교통사고";
 		}else if(eventId.equals(ID_TRAFFIC_HIT_AND_RUN)){
-			return "뺑소니상황";
+			return "뺑소니";
 		}else if(eventId.equals(ID_TRAFFIC_VEHICLE_BREAKDOWN)){
-			return "차량고장상황";
+			return "차량고장";
 		}else if(eventId.equals(ID_TRAFFIC_CONTROL_SITUATION)){
-			return "교통통제상황";
+			return "교통통제";
 		}else if(eventId.equals(ID_TRAFFIC_CONGESTION)){
-			return "교통혼잡상황";
+			return "교통혼잡";
 		}else if(eventId.equals(ID_DISASTER_FIRE)){
 			return "화재";
 		}else if(eventId.equals(ID_DISASTER_TYPHOON)){
-			return "태풍상황";
+			return "태풍";
 		}else if(eventId.equals(ID_DISASTER_UNDERPASS_FLOODING)){
-			return "지하도침수상황";
+			return "지하도침수";
 		}else if(eventId.equals(ID_DISASTER_WATER_LEVEL_ALRAM)){
 			return "수위경보";
 		}else if(eventId.equals(ID_CRIME_VEHICLE)){
 			return "방범(용의차량)상황";
 		}else if(eventId.equals(ID_CRIME_EMERGENCY)){
-			return "비상벨상황";
+			return "비상벨요청";
 		}else if(eventId.equals(ID_EMERGENCY_SITUATIONS)){
-			return "응급상황";
+			return "응급";
 		}else if(eventId.equals(ID_ROBBERY_SITUATION)){
-			return "강도상황";
+			return "강도";
 		}else if(eventId.equals(ID_STRAY_CHILD_SITUATION)){
-			return "미아상황";
+			return "미아";
 		}else if(eventId.equals(ID_WATERWORKS_LEAKS)){
 			return "상하수도누수";
 		}else if(eventId.equals(ID_WATERWORKS_UNDER)){

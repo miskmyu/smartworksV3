@@ -125,7 +125,7 @@ function submitForms() {
 	
 		<!-- 타이틀-->
 		<div class="list_title_space bn">
-			<div class="title guide"><%=CommonUtil.toNotNull(Event.getEventNameByCode(eventId)) %> 운영 가이드</div>
+			<div class="title guide"><%=CommonUtil.toNotNull(Event.getEventNameByCode(eventId)) %> 상황 운영 가이드</div>
 		</div>
 		<!-- 타이틀//-->
 	

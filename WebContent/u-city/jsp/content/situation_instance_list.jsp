@@ -112,6 +112,18 @@
 				</a>						
 			</th>
 			<th>
+				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_TIME%>">발생일시
+					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_TIME)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
+				</a>
+			</th>
+			<th>
+				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_PLACE%>">발생장소
+					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_PLACE)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
+				</a>
+			</th>
+			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EXTERNAL_DISPLAY%>">외부표출
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FIELD_ID_EXTERNAL_DISPLAY)){
@@ -126,18 +138,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>						
-			</th>
-			<th>
-				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_TIME%>">발생일시
-					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_TIME)){
-						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
-				</a>
-			</th>
-			<th>
-				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_PLACE%>">발생장소
-					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_PLACE)){
-						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
-				</a>
 			</th>
 		</tr>	
 		<%	
@@ -247,16 +247,16 @@
 	 					<%} %>
  					</td>
 					<td>
-						<a class="js_ucity_content" href="<%=target %>"><%=externalDisplay%></a>
-					</td>
-					<td>
-						<a class="js_ucity_content" href="<%=target %>"><%=isSms%></a>
-					</td>
-					<td>
 						<a class="js_ucity_content" href="<%=target %>"><%=eventTime %></a>
 					</td>
 					<td>
 						<a class="js_ucity_content" href="<%=target %>"><%=eventPlace%></a>
+					</td>
+					<td>	
+						<a class="js_ucity_content" href="<%=target %>"><%=externalDisplay%></a>
+					</td>
+					<td>
+						<a class="js_ucity_content" href="<%=target %>"><%=isSms%></a>
 					</td>
 				</tr>
 	<%
@@ -301,22 +301,6 @@
 				</a>						
 			</th>
 			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EXTERNAL_DISPLAY%>">외부표출
-			 		<span class="<%
-					if(sortedField.getFieldId().equals(FIELD_ID_EXTERNAL_DISPLAY)){
-						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
-					%>"></span>
-				</a>						
-			</th>
-			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_IS_SMS%>">SMS발송
-			 		<span class="<%
-					if(sortedField.getFieldId().equals(FIELD_ID_IS_SMS)){
-						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
-					%>"></span>
-				</a>						
-			</th>
-			<th>
 				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_TIME%>">발생일시
 					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_TIME)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
@@ -328,6 +312,22 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 			</th>
+			<th>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EXTERNAL_DISPLAY%>">외부표출
+			 		<span class="<%
+					if(sortedField.getFieldId().equals(FIELD_ID_EXTERNAL_DISPLAY)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
+					%>"></span>
+				</a>						
+			</th>			
+			<th>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_IS_SMS%>">SMS발송
+			 		<span class="<%
+					if(sortedField.getFieldId().equals(FIELD_ID_IS_SMS)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
+					%>"></span>
+				</a>						
+			</th>			
 		</tr>	
 	<%		
 	}
