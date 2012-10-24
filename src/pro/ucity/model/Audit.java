@@ -44,13 +44,13 @@ public class Audit {
 		case ID_COMMUNICATION_MW:
 			return "통신미들웨어";
 		case ID_PORTAL_OCCURRED:
-			return "운영포털 발생";
+			return "운영포털 - 발생";
 		case ID_PORTAL_ACCEPTED:
-			return "운영포털 접수";
+			return "운영포털 - 접수";
 		case ID_PORTAL_PROCESSING:
-			return "운영포털 처리";
+			return "운영포털 - 처리";
 		case ID_PORTAL_RELEASE:
-			return "운영포털 종료";
+			return "운영포털 - 종료";
 		case ID_INTEGRATED_CONTROL:
 			return "통합관제";
 		case ID_DEVICE_MW:

@@ -128,6 +128,9 @@ public class OPSms {
 		KeyMap[] keyMaps = OPSms.OPPORTAL_SMS_FIELDS;
 
 		if(!this.isValid()) return null;
+		
+		dataRecord.put("isSms", "true");
+		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
 			if(keyMap.getKey().equals("SMS_ID"))
@@ -229,6 +232,7 @@ public class OPSms {
 				rs.first();
 				if(count>0) {
 					try{
+						String smsId = rs.getString(OPSms.FIELD_NAME_SMS_ID);
 						updatePstmt = con.prepareStatement(opSmsUpdateSql);
 						updatePstmt.setString(1, eventId);
 						boolean result = updatePstmt.execute();
@@ -240,7 +244,7 @@ public class OPSms {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						dataRecord.put("SMS Id", rs.getString(OPSms.FIELD_NAME_SMS_ID));
+						dataRecord.put("SMS Id", smsId);
 						return dataRecord;
 					}catch (Exception we){
 						we.printStackTrace();

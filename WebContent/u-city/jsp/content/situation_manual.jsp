@@ -28,25 +28,31 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
+	String STATUS_CODE_OCCURRENCE = "OCCURRENCE";
+	String STATUS_CODE_RECEIPT = "RECEIPT";
+	String STATUS_CODE_FINISH = "FINISH";
+
 	String userviceCode = request.getParameter("userviceCode");
 	String serviceCode = request.getParameter("serviceCode");
 	String eventCode = request.getParameter("eventCode");
-	String situationStatus = request.getParameter("situationStatus");
+	String situationStatus = request.getParameter("statusCode");
 	if(SmartUtil.isBlankObject(situationStatus))
 		situationStatus = OPSituation.STATUS_SITUATION_OCCURRED;
-	
+	else if(situationStatus.equals(STATUS_CODE_OCCURRENCE))
+		situationStatus = OPSituation.STATUS_SITUATION_OCCURRED;
+	else if(situationStatus.equals(STATUS_CODE_RECEIPT))
+		situationStatus = OPSituation.STATUS_SITUATION_PROCESSING;
+	else if(situationStatus.equals(STATUS_CODE_FINISH))
+		situationStatus = OPSituation.STATUS_SITUATION_RELEASE;
+		
 	String eventId = null;
 	if(SmartUtil.isBlankObject(userviceCode) || SmartUtil.isBlankObject(serviceCode) || SmartUtil.isBlankObject(eventCode))
 	 	eventId = Event.ID_ENV_GALE;
 	else
 		eventId = Event.getEventIdByCode(userviceCode, serviceCode, eventCode);
 
-	String workId = System.getProcessIdByProcessStatus(Event.getProcessByEventId(eventId), situationStatus);
+	String workId = System.getManualProcessId(userviceCode, serviceCode, eventCode, situationStatus);
 	ProcessWork work = (ProcessWork)smartWorks.getWorkById(workId);
-	if(SmartUtil.isBlankObject(work)){
-		work = (ProcessWork)smartWorks.getWorkById("pkg_336b0e079fc44ab19acbe49ded2e8b12");
-	}
-
 	SmartDiagram diagram = null;
 	SmartTaskInfo[] tasks = null;
 	if(!SmartUtil.isBlankObject(work)){
@@ -112,154 +118,158 @@ function submitForms() {
 </script>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
-
-<!-- 업무 설명 보기 -->
-<div class="contents_space js_pwork_manual_page js_sub_instance_list js_space_sub_instance" workId="<%=work.getId()%>" workType="<%=work.getType()%>"
-								userviceCode="<%=userviceCode %>" serviceCode="<%=serviceCode %>" eventCode="<%=eventCode %>" situationStatus="<%=situationStatus %>" >
-
-	<!-- 타이틀-->
-	<div class="list_title_space bn">
-		<div class="title guide"><%=CommonUtil.toNotNull(Event.getEventNameByCode(eventId)) %> 운영 가이드</div>
-	</div>
-	<!-- 타이틀//-->
-
-	<!-- 컨텐츠 -->
-	<div class="section_guide">
-
-		<!-- Left Section -->
-		<div class="section_lft">
-			<div class="lft_title"></div>
-			<div class="lft_step">
-				<div class="s1 <%if(OPSituation.STATUS_SITUATION_OCCURRED.equals(situationStatus)){ %>current<%}%>">
-					<a class="js_ucity_content" href="situationManual.sw?userviceCode=<%=userviceCode%>&serviceCode=<%=serviceCode%>&eventCode=<%=eventCode%>&situationStatus=<%=OPSituation.STATUS_SITUATION_OCCURRED%>"> </a>
-				</div>
-				<div class="arr"></div>
-				<div class="s2 <%if(OPSituation.STATUS_SITUATION_PROCESSING.equals(situationStatus)){ %>current<%}%>">
-					<a class="js_ucity_content" href="situationManual.sw?userviceCode=<%=userviceCode%>&serviceCode=<%=serviceCode%>&eventCode=<%=eventCode%>&situationStatus=<%=OPSituation.STATUS_SITUATION_PROCESSING%>"> </a>
-				</div>
-				<div class="arr"></div>
-				<div class="s3 <%if(OPSituation.STATUS_SITUATION_RELEASE.equals(situationStatus)){ %>current<%}%> end">
-					<a class="js_ucity_content" href="situationManual.sw?userviceCode=<%=userviceCode%>&serviceCode=<%=serviceCode%>&eventCode=<%=eventCode%>&situationStatus=<%=OPSituation.STATUS_SITUATION_RELEASE%>"> </a>
+<%if(!SmartUtil.isBlankObject(work)){ %>
+	<!-- 업무 설명 보기 -->
+	<div class="contents_space js_pwork_manual_page js_sub_instance_list js_space_sub_instance" workId="<%=work.getId()%>" workType="<%=work.getType()%>"
+									userviceCode="<%=userviceCode %>" serviceCode="<%=serviceCode %>" eventCode="<%=eventCode %>" situationStatus="<%=situationStatus %>" >
+	
+		<!-- 타이틀-->
+		<div class="list_title_space bn">
+			<div class="title guide"><%=CommonUtil.toNotNull(Event.getEventNameByCode(eventId)) %> 상황 운영 가이드</div>
+		</div>
+		<!-- 타이틀//-->
+	
+		<!-- 컨텐츠 -->
+		<div class="section_guide">
+	
+			<!-- Left Section -->
+			<div class="section_lft">
+				<div class="lft_title"></div>
+				<div class="lft_step">
+					<div class="s1 <%if(OPSituation.STATUS_SITUATION_OCCURRED.equals(situationStatus)){ %>current<%}%>">
+						<a class="js_ucity_content" href="situationManual.sw?userviceCode=<%=userviceCode%>&serviceCode=<%=serviceCode%>&eventCode=<%=eventCode%>&statusCode=<%=OPSituation.STATUS_SITUATION_OCCURRED%>"> </a>
+					</div>
+					<div class="arr"></div>
+					<div class="s2 <%if(OPSituation.STATUS_SITUATION_PROCESSING.equals(situationStatus)){ %>current<%}%>">
+						<a class="js_ucity_content" href="situationManual.sw?userviceCode=<%=userviceCode%>&serviceCode=<%=serviceCode%>&eventCode=<%=eventCode%>&statusCode=<%=OPSituation.STATUS_SITUATION_PROCESSING%>"> </a>
+					</div>
+					<div class="arr"></div>
+					<div class="s3 <%if(OPSituation.STATUS_SITUATION_RELEASE.equals(situationStatus)){ %>current<%}%> end">
+						<a class="js_ucity_content" href="situationManual.sw?userviceCode=<%=userviceCode%>&serviceCode=<%=serviceCode%>&eventCode=<%=eventCode%>&statusCode=<%=OPSituation.STATUS_SITUATION_RELEASE%>"> </a>
+					</div>
 				</div>
 			</div>
-		</div>
-		<!-- Left Section //-->
-
-		<!-- Right Section -->
-		<div class="section_rgt">
-			<div class="point" style="<%=pointerPos%>"></div>
-			<div class="group_rgt js_manual_tasks_holder" style="overflow:hidden">
-				<div class="working_proces js_manual_tasks">
-					<ul>
-						<!-- 태스크 //-->
-						<%
-						if (tasks != null) {
-							int count = 0;
-							for (SmartTaskInfo task : tasks) {
-								count++;
-								String currentClass = (count==1) ? "current" : "";
-						%>
-								<li class="task <%=currentClass %> js_manual_task js_select_situation_manual" taskId="<%=task.getId()%>">
-									<a class="js_select_task_manual" href=""> 
-										<span class="<%=("n" + count)%>"> </span>
-										<div class="task_tx"><%=task.getName()%></div>
-									</a>
-								</li>
-								<%if(count!=tasks.length){ %>
-									<li class="arr"></li>
-								<%} %>
-						<%
+			<!-- Left Section //-->
+	
+			<!-- Right Section -->
+			<div class="section_rgt">
+				<div class="point" style="<%=pointerPos%>"></div>
+				<div class="group_rgt js_manual_tasks_holder" style="overflow:hidden">
+					<div class="working_proces js_manual_tasks">
+						<ul>
+							<!-- 태스크 //-->
+							<%
+							if (tasks != null) {
+								int count = 0;
+								for (SmartTaskInfo task : tasks) {
+									count++;
+									String currentClass = (count==1) ? "current" : "";
+							%>
+									<li class="task <%=currentClass %> js_manual_task js_select_situation_manual" taskId="<%=task.getId()%>">
+										<a class="js_select_task_manual" href=""> 
+											<span class="<%=("n" + count)%>"> </span>
+											<div class="task_tx"><%=task.getName()%></div>
+										</a>
+									</li>
+									<%if(count!=tasks.length){ %>
+										<li class="arr"></li>
+									<%} %>
+							<%
+									}
+								}
+							%>
+							<!-- 태스크 -->
+						</ul>
+					</div>
+					<div class="section_guide_tx">
+						<form class="rgt_area" name="frmPWorkManual">	
+							<%if(!SmartUtil.isBlankObject(tasks) && tasks.length>0){
+								for(int i=0; i<tasks.length; i++){
+							%>
+									<div class="js_situation_task" taskId="<%=tasks[i].getId()%>" <%if(i>0){ %>style="display:none"<%} %>>
+										<div class="js_form_desc_view"><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %></div>
+		<!-- 
+						 					<div class="title">상급자 보고</div>
+												<div class="dep2">
+													<div class="title">상급자 보고가 필요한 경우</div>
+													<div class="ml10">기상특보에서 이벤트 등급이 B등급 이상일 경우, 혹은 예고없이 찾아온 기상
+														상황이 발생할때 상급자에게 보고하시면 됩니다.</div>
+												</div>
+							
+												<div class="dep2">
+													<div class="title">상급자 정보 열람 및 선택방법</div>
+													<div class="ml10">
+														① 상급자 정보를 열람 및 선택하시기 위한 방법을 순차적으로 설명합니다.<br /> ② 상급자 정보를 열람 및
+														선택하시기 위한 방법을 순차적으로 설명합니다.
+													</div>
+												</div>
+		 -->									
+										<div class="js_form_desc_edit"  style="display:none">
+												<span><fmt:message key="builder.title.form_desc"/> : </span>
+												<span class="fr js_select_editor_box" fieldName="txtaFormDesc<%=tasks[i].getId() %>">
+													<input name="rdoEditor<%=i %>" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
+												<input name="rdoEditor<%=i %>" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
+											</span>
+											<textarea class="fieldline js_form_desc_text" name="txtaFormDesc<%=tasks[i].getId() %>" cols="" rows="22" style="height: 262px"><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %></textarea>
+											<div class="js_form_desc_editor"></div>
+										</div>
+									</div>
+							<%
 								}
 							}
-						%>
-						<!-- 태스크 -->
-					</ul>
-				</div>
-				<div class="section_guide_tx">
-					<form class="rgt_area" name="frmPWorkManual">	
-						<%if(!SmartUtil.isBlankObject(tasks) && tasks.length>0){
-							for(int i=0; i<tasks.length; i++){
-						%>
-								<div class="js_situation_task" taskId="<%=tasks[i].getId()%>" <%if(i>0){ %>style="display:none"<%} %>>
-									<div class="js_form_desc_view"><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %></div>
-	<!-- 
-					 					<div class="title">상급자 보고</div>
-											<div class="dep2">
-												<div class="title">상급자 보고가 필요한 경우</div>
-												<div class="ml10">기상특보에서 이벤트 등급이 B등급 이상일 경우, 혹은 예고없이 찾아온 기상
-													상황이 발생할때 상급자에게 보고하시면 됩니다.</div>
-											</div>
-						
-											<div class="dep2">
-												<div class="title">상급자 정보 열람 및 선택방법</div>
-												<div class="ml10">
-													① 상급자 정보를 열람 및 선택하시기 위한 방법을 순차적으로 설명합니다.<br /> ② 상급자 정보를 열람 및
-													선택하시기 위한 방법을 순차적으로 설명합니다.
-												</div>
-											</div>
-	 -->									
-									<div class="js_form_desc_edit"  style="display:none">
-											<span><fmt:message key="builder.title.form_desc"/> : </span>
-											<span class="fr js_select_editor_box" fieldName="txtaFormDesc<%=tasks[i].getId() %>">
-												<input name="rdoEditor<%=i %>" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
-											<input name="rdoEditor<%=i %>" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
-										</span>
-										<textarea class="fieldline js_form_desc_text" name="txtaFormDesc<%=tasks[i].getId() %>" cols="" rows="22" style="height: 262px"><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %></textarea>
-										<div class="js_form_desc_editor"></div>
-									</div>
-								</div>
-						<%
-							}
-						}
-						%>
-					</form>
+							%>
+						</form>
+					</div>
 				</div>
 			</div>
-		</div>
-		<!-- Right Section //-->
-	    <!-- 라인 -->
-		<div class="solid_line_s mt10 mb5"></div>		
-
-		<!-- 우측 버튼 -->
-		<div class="txt_btn">	
-
-			<!-- 수정하기 -->
-			<div class="fr ml5">
-				<%
-				if(work.amIBuilderUser()) {
-				%>
-					<span class="btn_gray js_modify_situation_manual"> 
-						<a href="">
-							<span class="txt_btn_start"></span>
-							<span class="txt_btn_center"><fmt:message key='common.button.modify' /> </span> 
-							<span class="txt_btn_end"></span>
-						</a>
-					</span>
-					<span class="btn_gray js_save_situation_manual" style="display:none"> 
-						<a href="">
-							<span class="txt_btn_start"></span> 
-							<span class="txt_btn_center"><fmt:message key='common.button.save' /> </span>
-							<span class="txt_btn_end"></span>
-						</a>
-					</span>
-					<span class="btn_gray js_cancel_situation_manual" style="display:none"> 
-						<a href="">
-							<span class="txt_btn_start"></span> 
-							<span class="txt_btn_center"><fmt:message key='common.button.cancel' /> </span>
-							<span class="txt_btn_end"></span>
-						</a>
-					</span>
-				<%
-				}
-				%>
+			<!-- Right Section //-->
+		    <!-- 라인 -->
+			<div class="solid_line_s mt10 mb5"></div>		
+	
+			<!-- 우측 버튼 -->
+			<div class="txt_btn">	
+	
+				<!-- 수정하기 -->
+				<div class="fr ml5">
+					<%
+					if(work.amIBuilderUser()) {
+					%>
+<%-- 						<span class="btn_gray js_modify_situation_manual"> 
+							<a href="">
+								<span class="txt_btn_start"></span>
+								<span class="txt_btn_center"><fmt:message key='common.button.modify' /> </span> 
+								<span class="txt_btn_end"></span>
+							</a>
+						</span>
+						<span class="btn_gray js_save_situation_manual" style="display:none"> 
+							<a href="">
+								<span class="txt_btn_start"></span> 
+								<span class="txt_btn_center"><fmt:message key='common.button.save' /> </span>
+								<span class="txt_btn_end"></span>
+							</a>
+						</span>
+						<span class="btn_gray js_cancel_situation_manual" style="display:none"> 
+							<a href="">
+								<span class="txt_btn_start"></span> 
+								<span class="txt_btn_center"><fmt:message key='common.button.cancel' /> </span>
+								<span class="txt_btn_end"></span>
+							</a>
+						</span>
+ --%>					<%
+					}
+					%>
+				</div>
+				<!-- 수정하기 //-->
 			</div>
-			<!-- 수정하기 //-->
+	
 		</div>
-
-	</div>
- </div>
-<!-- 업무 설명 보기 -->
-
+	 </div>
+	<!-- 업무 설명 보기 -->
+<%}else{ %>
+	<script>
+		alert("등록되지 않은 이벤트 코드 입니다. 관리자에게 문의하여 주시기 바랍니다!");
+	</script>
+<%} %>
 <script>
 	var manualFile = $('.js_pwork_manual_page').find('.js_manual_file');
 	if(!isEmpty(manualFile)){

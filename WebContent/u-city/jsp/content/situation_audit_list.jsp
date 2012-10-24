@@ -48,8 +48,8 @@
 		var pworkList = $('.js_pwork_list_page');
 		var forms = pworkList.find('form:visible');
 		var paramsJson = {};
-		var workId = pworkList.attr('workId');
 		var auditId = pworkList.attr('auditId');
+		var workId = pworkList.attr('workId');
 		paramsJson["href"] = "u-city/jsp/content/situation_instance_list.jsp?workId=" + workId + "&auditId=" + auditId;
 		var searchFilters = pworkList.find('form[name="frmSearchFilter"]');
 		for(var i=0; i<forms.length; i++){
@@ -104,7 +104,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_pwork_list_page js_work_list_page" auditId=<%=auditId %>>
+<div class="section_portlet js_pwork_list_page js_work_list_page" auditId="<%=auditId%>">
 
 			<!-- 목록보기 -->
 			<div class=" contents_space">

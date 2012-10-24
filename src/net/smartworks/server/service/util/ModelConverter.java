@@ -19,6 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import net.smartworks.model.approval.Approval;
 import net.smartworks.model.approval.ApprovalLine;
@@ -138,8 +139,6 @@ import net.smartworks.server.engine.process.approval.model.AprApproval;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLineCond;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
-import net.smartworks.server.engine.process.process.model.PrcProcess;
-import net.smartworks.server.engine.process.process.model.PrcProcessCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstExtend;
@@ -165,13 +164,11 @@ import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
-import net.smartworks.util.OSValidator;
 import net.smartworks.util.Semaphore;
 import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
-import org.apache.commons.validator.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -3561,6 +3558,7 @@ public class ModelConverter {
 		
 		TskTaskDef[] tskDefs = getTskManager().getTaskDefs(userId, tskDefCond, IManager.LEVEL_ALL);
 		List smartTaskInfoList = new ArrayList();
+		Map<Integer, SmartTaskInfo> sortingTaskMap = new HashMap<Integer, SmartTaskInfo>();
 		if (tskDefs != null) {
 			for (TskTaskDef taskDef: tskDefs) {
 				String actId = taskDef.getExtendedPropertyValue("activityId");
@@ -3590,12 +3588,24 @@ public class ModelConverter {
 				formInfo.setMinImageName(minImageName);
 				formInfo.setOrgImageName(orgImageName);
 				smartTaskInfo.setForm(formInfo);
-				smartTaskInfoList.add(smartTaskInfo);
+				
+//				smartTaskInfoList.add(smartTaskInfo);
+				sortingTaskMap.put(Integer.parseInt(actId), smartTaskInfo);
 			}
 		}
-		SmartTaskInfo[] smartTaskInfoArray = new SmartTaskInfo[smartTaskInfoList.size()];
-		smartTaskInfoList.toArray(smartTaskInfoArray);
-		
+//		SmartTaskInfo[] smartTaskInfoArray = new SmartTaskInfo[smartTaskInfoList.size()];
+//		smartTaskInfoList.toArray(smartTaskInfoArray);
+		if (sortingTaskMap == null || sortingTaskMap.size() == 0)
+			return null;
+		SmartTaskInfo[] smartTaskInfoArray = new SmartTaskInfo[sortingTaskMap.size()];
+		TreeMap<Integer, SmartTaskInfo> sortingMap = new TreeMap<Integer, SmartTaskInfo>(sortingTaskMap);
+		Iterator itr = sortingMap.keySet().iterator();
+		int i = 0;
+		while (itr.hasNext()) {
+			int key = (Integer)itr.next();
+			smartTaskInfoArray[i] = (SmartTaskInfo)sortingMap.get(key);
+			i++;
+		}
 		return smartTaskInfoArray;
 	}
 	public static SearchFilterInfo[] getSearchFilterInfoByPkgPackage(String userId, PkgPackage pkg) throws Exception {
