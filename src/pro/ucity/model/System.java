@@ -254,15 +254,22 @@ public class System {
 	public static String getManualProcessId(String userviceCode, String serviceCode, String eventCode, String status){
 		if(SmartUtil.isBlankObject(userviceCode) || SmartUtil.isBlankObject(serviceCode) || SmartUtil.isBlankObject(eventCode) || SmartUtil.isBlankObject(status)) return null;
 		
-		if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("091") && eventCode.equals("11") 
-				|| userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && eventCode.equals("11")){
+		if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && eventCode.equals("11")){
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
-				return "pkg_9c7a8b7690cf4c4a810f2fb44a8b9511";
+				return "pkg_dc91d2ec9b094b4ebd27dc4c9ff63822";
 			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
-				return "pkg_d416790a8da24ed29879d351658deeeb";
+				return "pkg_c43e60dda6564140a9105110b713c536";
 			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
-				return "pkg_34fee390431140b0a2f9d976877d0497";
+				return "pkg_825e6fe6d48841c9b5cffd2956abc3a3";
 			return null;//호우
+		}else if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("092") && eventCode.equals("11")){
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_9de67e21265d4be3897dc0f72a980917";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_5483a6924d7d47b3951f046ea358f0d9";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_83f1a038f3fc4427811d76ad9dee51e8";
+			return null;//대기
 		}else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && eventCode.equals("13")){
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
 				return "pkg_ff9f46ac20bb4738b0bec085c6ace804";
@@ -273,11 +280,11 @@ public class System {
 			return null;//태풍
 		}else if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("093")){
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
-				return "pkg_13622961d532401b8608593f8c0dc882";
+				return "pkg_4951539ef1eb40dd815079f30185cd57";
 			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
-				return "pkg_51b060bc68c142df85597f5161462d00";
+				return "pkg_4345157596784b9f83f80539671063a2";
 			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
-				return "pkg_390ea965ae7e4036902189fbac7d6f9b";
+				return "pkg_5d1afb61edd7421e9f8b234730e1d4c7";
 			return null;//수질
 		}else if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("091")){
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
@@ -383,6 +390,30 @@ public class System {
 			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
 				return "pkg_39b55eb57d504bbe9d67623950bdb047";
 			return null;//교통혼잡
+		}else if(userviceCode.equals(Service.USERVICE_CODE_PLATFORM) && serviceCode.equals("091") && eventCode.equals("11")){
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_96ece13e42894455a98aed75e16f2fa1";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_1fca4579951443be8d11b95d22bd6f74";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_94756601af6a4798815f9681cc1efee7";
+			return null;//도로통제
+		}else if(userviceCode.equals(Service.USERVICE_CODE_FACILITY) && serviceCode.equals("091")){
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_85a803f50c204b9d97e0eddeca52fab7";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_f3377a11073946789166451117b0dced";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_eba9e94abb0c46a99233920c19ea65f6";
+			return null;//상하수도 누수
+		}else if(userviceCode.equals(Service.USERVICE_CODE_FACILITY) && serviceCode.equals("092") && eventCode.equals("11")){
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_4b54b8c95dc5492c9d0d9df23b3ce413";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_b7dfc939aee8420f94114c3858e55a57";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_2a79a0d1dd2b4c47b276f25e3b25be71";
+			return null;//시설물고장
 		}
 		
 		return null;
@@ -396,6 +427,8 @@ public class System {
 			return TABLE_NAME_OPPORTAL_SITUATION;
 		case System.TABLE_ID_OPPORTAL_DISPLAY:
 			return TABLE_NAME_OPPORTAL_DISPLAY;
+		case System.TABLE_ID_OPPORTAL_SMS:
+			return TABLE_NAME_OPPORTAL_SMS;
 		case System.TABLE_ID_INTCON_SITUATION:
 			return TABLE_NAME_INTCON_SITUATION;
 		case System.TABLE_ID_COMMID_TRACE:
@@ -415,6 +448,8 @@ public class System {
 			return System.TABLE_ID_OPPORTAL_SITUATION;
 		}else if(tableName.equals(TABLE_NAME_OPPORTAL_DISPLAY)){
 			return System.TABLE_ID_OPPORTAL_DISPLAY;
+		}else if(tableName.equals(TABLE_NAME_OPPORTAL_SMS)){
+			return System.TABLE_ID_OPPORTAL_SMS;
 		}else if(tableName.equals(TABLE_NAME_INTCON_SITUATION)){
 			return System.TABLE_ID_INTCON_SITUATION;
 		}else if(tableName.equals(TABLE_NAME_COMMID_TRACE)){

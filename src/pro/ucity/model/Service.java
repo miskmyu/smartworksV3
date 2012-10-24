@@ -17,6 +17,7 @@ public class Service {
 	public static final String ID_MEDIABOARD 		= "1111";
 	public static final String ID_PERM_CONTROL 		= "1112";
 	public static final String ID_SMS_MMS 			= "1113";
+	public static final String ID_PLATFORM			= "1131";
 
 	public static final String USERVICE_CODE_ENVIRONMENT 	= "ENV";
 	public static final String USERVICE_CODE_FACILITY 		= "FCL";
@@ -52,6 +53,8 @@ public class Service {
 			return "상시관제";			
 		}else if(serviceCode.equals(ID_SMS_MMS)){
 			return "SMS/MMS 발송";			
+		}else if(serviceCode.equals(ID_PLATFORM)){
+			return "플랫폼";			
 		}
 		return "";
 	}
@@ -63,7 +66,8 @@ public class Service {
 				"방범",			
 				"방재",			
 				"상수도",			
-				"시설물"				
+				"시설물",
+				"플랫폼"
 		};
 	}
 
@@ -72,31 +76,10 @@ public class Service {
 		
 		if(userviceCode.equals(USERVICE_CODE_ENVIRONMENT)) return ID_ENVIRONMENT;
 		else if(userviceCode.equals(USERVICE_CODE_FACILITY)) return ID_FACILITY;
-//		else if(userviceCode.equals(USERVICE_CODE_PLATFORM)) return ID_FACILITY;
+		else if(userviceCode.equals(USERVICE_CODE_PLATFORM)) return ID_PLATFORM;
 		else if(userviceCode.equals(USERVICE_CODE_SECURITY)) return ID_DISASTER;
 		else if(userviceCode.equals(USERVICE_CODE_TRAFFIC)) return ID_TRAFFIC;
 		return "";
-
-/* TO DO
-		PFM 복합상황 91 도로통제
-		
-		SEC 방재 91 강도(11)
-			91 미아(12)
-			91 응급(13)
-			91 용의차량추적(14)
-			91 비상벨요청(15)
-			92 호우(11)
-			92 화재(12)
-			92 태풍(13)
-			92 지하차도침수(14)
-			92 수위경보(15)
-		
-		TRF 교통 91 교통사고(11)
-			91 뺑소니(12)
-			91 차량고장(13)
-			91 교통혼잡(15)
-*/
-
 	}
 
 }

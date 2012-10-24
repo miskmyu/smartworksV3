@@ -234,7 +234,7 @@ function submitForms() {
 					<%
 					if(work.amIBuilderUser()) {
 					%>
-						<span class="btn_gray js_modify_situation_manual"> 
+<%-- 						<span class="btn_gray js_modify_situation_manual"> 
 							<a href="">
 								<span class="txt_btn_start"></span>
 								<span class="txt_btn_center"><fmt:message key='common.button.modify' /> </span> 
@@ -255,7 +255,7 @@ function submitForms() {
 								<span class="txt_btn_end"></span>
 							</a>
 						</span>
-					<%
+ --%>					<%
 					}
 					%>
 				</div>
