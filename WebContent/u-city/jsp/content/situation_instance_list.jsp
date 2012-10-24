@@ -179,13 +179,30 @@
 				UserInfo lastModifier = instanceInfo.getLastModifier();
 //				TaskInstanceInfo lastTask = instanceInfo.getLastTask();
 				TaskInstanceInfo[] runningTasks = instanceInfo.getRunningTasks();
-				String[] serviceTypes = null;
+				String occurredTaskNames = null;
+				String releasedTaskNames = null;
 				if(!SmartUtil.isBlankObject(runningTasks)){
-					serviceTypes = new String[runningTasks.length];
 					for(int k=0; k<runningTasks.length; k++){
-						serviceTypes[k] = UcityUtil.getServiceTypeName(runningTasks[k].getName());
+						if("발생".equals(UcityUtil.getServiceTypeName(runningTasks[k].getName()))){
+							occurredTaskNames = occurredTaskNames + (occurredTaskNames==null ? "" : ", ") + runningTasks[k].getName();
+						}else if("종료".equals(UcityUtil.getServiceTypeName(runningTasks[k].getName()))){
+							releasedTaskNames = releasedTaskNames + (releasedTaskNames==null ? "" : ", ") + runningTasks[k].getName();
+						}
 					}
 				}
+				String serviceType = "";
+				String runningTaskNames = "";
+				if(occurredTaskNames!=null && releasedTaskNames!=null){
+					serviceType =  "발생</br>종료";
+					runningTaskNames = occurredTaskNames + "</br>" + releasedTaskNames;
+				}else if(occurredTaskNames!=null){
+					serviceType = "발생";
+					runningTaskNames = occurredTaskNames;
+				}else if(releasedTaskNames!=null){
+					serviceType = "종료";
+					runningTaskNames = releasedTaskNames;
+				}
+
 				String target =  "situationDetail.sw?cid=" + instanceInfo.getContextId() + "&workId=" + instanceInfo.getWork().getId();
 				String statusImage = "";
 				String statusTitle = "";
@@ -229,21 +246,13 @@
 						<a class="js_ucity_content" href="<%=target %>"><%=eventName%></a>
 					</td>
 					<td>
-						<%if(!SmartUtil.isBlankObject(serviceTypes)){ %>
-	 						<a class="js_ucity_content" href="<%=target %>">
-	 							<%for(int index=0; index<serviceTypes.length; index++){ %>
-	 								<%=serviceTypes[index]%><%if(index<serviceTypes.length-1){ %></br><%} %>
-	 							<%} %>
-	 						</a>
+						<%if(!SmartUtil.isBlankObject(serviceType)){ %>
+	 						<a class="js_ucity_content" href="<%=target %>"><%=serviceType %></a>
 	 					<%} %>
  					</td>
 					<td>
-						<%if(!SmartUtil.isBlankObject(runningTasks)){ %>
-	 						<a class="js_ucity_content" href="<%=target %>">
-	 							<%for(int index=0; index<runningTasks.length; index++){ %>
-	 								<%=runningTasks[index].getName()%><%if(index<runningTasks.length-1){ %></br><%} %>
-	 							<%} %>
-	 						</a>
+						<%if(!SmartUtil.isBlankObject(runningTaskNames)){ %>
+	 						<a class="js_ucity_content" href="<%=target %>"><%=runningTaskNames %></a>
 	 					<%} %>
  					</td>
 					<td>

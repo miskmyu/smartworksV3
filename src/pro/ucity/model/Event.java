@@ -347,15 +347,5 @@ public class Event {
 			return ID_TRAFFIC_CONTROL_SITUATION;//TRF 교통	91 교통혼잡(15)
 		return "";
 		
-/* TO DO
-		FCL 시설물 92 시설물파손(12)
-		SEC 방재 91 강도(11)
-		SEC 방재	91 미아(12)
-		SEC 방재	91 응급(13)
-		SEC 방재	92 지하차도침수(14)
-		SEC 방재	92 수위경보(15)
-		TRF 교통	91 교통혼잡(15)
-*/
-		
 	}	
 }

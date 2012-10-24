@@ -73,7 +73,7 @@
 </script>
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks"); 
- 	session.setAttribute("lastLocation", "situation_list.sw");
+ 	session.setAttribute("lastLocation", "situationAudit.sw");
 
  	String auditId = (String)request.getParameter("auditId");
  	if(SmartUtil.isBlankObject(auditId)) auditId = (String)session.getAttribute("auditId");
@@ -91,6 +91,8 @@
 		String savedWorkId = (String)session.getAttribute("workId");
 		if(!SmartUtil.isBlankObject(workId) && workId.equals(work.getId())){
 			params = (RequestParams)session.getAttribute("requestParams");
+			if(!SmartUtil.isBlankObject(params))
+				params.setSearchFilter(null);
 		}
 	}if (params != null){
 		selectedFilterId = params.getFilterId();
@@ -124,13 +126,13 @@
 
 					<table width="930" border="0" cellspacing="0" cellpadding="0">
 					<colgroup>
-						<col width="133px">
-						<col width="133px">
-						<col width="133px">
-						<col width="133px">
-						<col width="133px">
-						<col width="133px">
-						<col width="132px">
+						<col width="<%=930/7 %>px">
+						<col width="<%=930/7 %>px">
+						<col width="<%=930/7 %>px">
+						<col width="<%=930/7 %>px">
+						<col width="<%=930/7 %>px">
+						<col width="<%=930/7 %>px">
+						<col width="<%=930/7 %>px">
 					</colgroup>
 					<tbody>
 						<tr>
@@ -141,11 +143,11 @@
 								<a href="situationAudit.sw?auditId=<%=Audit.ID_COMMUNICATION_MW %>" auditId="<%=Audit.ID_COMMUNICATION_MW%>"><%=Audit.getAuditNameById(Audit.ID_COMMUNICATION_MW) %></a>
 							</th>
 							<th colspan="3">운영포털</th>
-							<th rowspan="2" <%if(auditNumber==Audit.ID_INTEGRATED_CONTROL) {%>class="current"<%} %>>
-								<a href="situationAudit.sw?auditId=<%=Audit.ID_INTEGRATED_CONTROL %>" auditId="<%=Audit.ID_INTEGRATED_CONTROL%>"><%=Audit.getAuditNameById(Audit.ID_INTEGRATED_CONTROL) %></a>
-							</th>
 							<th rowspan="2" <%if(auditNumber==Audit.ID_DEVICE_MW) {%>class="current"<%} %>>
 								<a href="situationAudit.sw?auditId=<%=Audit.ID_DEVICE_MW %>" auditId="<%=Audit.ID_DEVICE_MW%>"><%=Audit.getAuditNameById(Audit.ID_DEVICE_MW) %></a>
+							</th>
+							<th rowspan="2" <%if(auditNumber==Audit.ID_SITUATION_DISPLAY) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_SITUATION_DISPLAY %>" auditId="<%=Audit.ID_SITUATION_DISPLAY%>"><%=Audit.getAuditNameById(Audit.ID_SITUATION_DISPLAY) %></a>
 							</th>
 						</tr>
 						<tr>
@@ -175,11 +177,11 @@
 							<td <%if(auditNumber==Audit.ID_PORTAL_RELEASE) {%>class="current"<%} %>>
 								<a href="situationAudit.sw?auditId=<%=Audit.ID_PORTAL_RELEASE %>" auditId="<%=Audit.ID_PORTAL_RELEASE%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_PORTAL_RELEASE] %><%}else{ %>0<%} %></a>
 							</td>
-							<td <%if(auditNumber==Audit.ID_INTEGRATED_CONTROL) {%>class="current"<%} %>>
-								<a href="situationAudit.sw?auditId=<%=Audit.ID_INTEGRATED_CONTROL %>" auditId="<%=Audit.ID_INTEGRATED_CONTROL%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_INTEGRATED_CONTROL] %><%}else{ %>0<%} %></a>
-							</td>
 							<td <%if(auditNumber==Audit.ID_DEVICE_MW) {%>class="current"<%} %>>
 								<a href="situationAudit.sw?auditId=<%=Audit.ID_DEVICE_MW %>" auditId="<%=Audit.ID_DEVICE_MW%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_DEVICE_MW] %><%}else{ %>0<%} %></a>
+							</td>
+							<td <%if(auditNumber==Audit.ID_SITUATION_DISPLAY) {%>class="current"<%} %>>
+								<a href="situationAudit.sw?auditId=<%=Audit.ID_SITUATION_DISPLAY %>" auditId="<%=Audit.ID_SITUATION_DISPLAY%>"><%if(auditTasks!=null){ %><%=auditTasks[0][Audit.ID_SITUATION_DISPLAY] %><%}else{ %>0<%} %></a>
 							</td>
 						</tr>
 						</tbody>
@@ -188,7 +190,7 @@
 				<!-- 테이블 //-->
 				
 				<!-- 목록보기 타이틀-->
-				<div class="sub_title01"><%=Audit.getAuditNameById(auditNumber) %><span></span></div>
+  				<div class="sub_title01"><%=Audit.getAuditNameById(auditNumber) %><span></span></div>
 				<!-- 목록보기 타이틀-->
 
 				<!-- 목록 테이블 -->
