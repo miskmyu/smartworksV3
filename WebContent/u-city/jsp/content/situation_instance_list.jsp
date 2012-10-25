@@ -184,9 +184,9 @@
 				if(!SmartUtil.isBlankObject(runningTasks)){
 					for(int k=0; k<runningTasks.length; k++){
 						if("발생".equals(UcityUtil.getServiceTypeName(runningTasks[k].getName()))){
-							occurredTaskNames = occurredTaskNames + (occurredTaskNames==null ? "" : ", ") + runningTasks[k].getName();
+							occurredTaskNames = occurredTaskNames + (SmartUtil.isBlankObject(occurredTaskNames) ? "" : ", ") + runningTasks[k].getName();
 						}else if("종료".equals(UcityUtil.getServiceTypeName(runningTasks[k].getName()))){
-							releasedTaskNames = releasedTaskNames + (releasedTaskNames==null ? "" : ", ") + runningTasks[k].getName();
+							releasedTaskNames = releasedTaskNames + (SmartUtil.isBlankObject(releasedTaskNames) ? "" : ", ") + runningTasks[k].getName();
 						}
 					}
 				}
