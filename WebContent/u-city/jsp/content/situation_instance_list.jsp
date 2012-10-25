@@ -179,8 +179,8 @@
 				UserInfo lastModifier = instanceInfo.getLastModifier();
 //				TaskInstanceInfo lastTask = instanceInfo.getLastTask();
 				TaskInstanceInfo[] runningTasks = instanceInfo.getRunningTasks();
-				String occurredTaskNames = null;
-				String releasedTaskNames = null;
+				String occurredTaskNames = "";
+				String releasedTaskNames = "";
 				if(!SmartUtil.isBlankObject(runningTasks)){
 					for(int k=0; k<runningTasks.length; k++){
 						if("발생".equals(UcityUtil.getServiceTypeName(runningTasks[k].getName()))){
@@ -192,13 +192,13 @@
 				}
 				String serviceType = "";
 				String runningTaskNames = "";
-				if(occurredTaskNames!=null && releasedTaskNames!=null){
+				if(!SmartUtil.isBlankObject(occurredTaskNames) && !SmartUtil.isBlankObject(releasedTaskNames)){
 					serviceType =  "발생</br>종료";
 					runningTaskNames = occurredTaskNames + "</br>" + releasedTaskNames;
-				}else if(occurredTaskNames!=null){
+				}else if(!SmartUtil.isBlankObject(occurredTaskNames)){
 					serviceType = "발생";
 					runningTaskNames = occurredTaskNames;
-				}else if(releasedTaskNames!=null){
+				}else if(!SmartUtil.isBlankObject(releasedTaskNames)){
 					serviceType = "종료";
 					runningTaskNames = releasedTaskNames;
 				}
