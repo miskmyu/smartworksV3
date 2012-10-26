@@ -2494,3 +2494,24 @@ CREATE TABLE SwLoginUserHistory (
 	loginTime datetime,
     primary key (id)
 );
+CREATE TABLE SWScheduleDef (
+	objId varchar(50) NOT NULL,
+	targetPackageType varchar(10),
+	targetPackageId varchar(100),
+	targetFormId varchar(100),
+	targetFieldId varchar(100),
+	status varchar(10),
+	name varchar(200),
+	groupName varchar(100),
+	jobName varchar(100),
+	triggerName varchar(100),
+	targetClass varchar(200),
+	cronExpression varchar(50),
+	isAutoStart varchar(10),
+	creator	varchar(50),
+	createdtime datetime,
+	modifier varchar(50),
+	modifiedtime datetime,
+    primary key (id)
+);
+
