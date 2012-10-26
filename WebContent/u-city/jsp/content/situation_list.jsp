@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="pro.ucity.model.System"%>
 <%@page import="pro.ucity.util.UcityTest"%>
 <%@page import="net.smartworks.model.instance.info.RequestParams"%>
@@ -148,6 +149,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 	ProcessWork work = (ProcessWork) smartWorks.getWorkById(workId);
 	String selectedFilterId = SearchFilter.FILTER_ALL_INSTANCES;
+	String searchKey = ""; 
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
 	if (params == null){
 		String savedWorkId = (String)session.getAttribute("workId");
@@ -158,6 +160,7 @@
 		}
 	}if (params != null){
 		selectedFilterId = params.getFilterId();
+		searchKey = params.getSearchKey();
 	}
 	
 	session.setAttribute("smartWork", work);
@@ -181,7 +184,7 @@
 					<div class="title_line_options">
 						<form name="frmSearchInstance" class="fl">
 							<div class="srch">
-								<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
+								<input name="txtSearchInstance" class="nav_input" value="<%=CommonUtil.toNotNull(searchKey) %>" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
 								<button title="<fmt:message key='search.search_instance'/>" onclick="$('#search_filter').slideUp(500).html('');$('a.js_edit_search_filter').show();selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 							</div>
 						</form>
