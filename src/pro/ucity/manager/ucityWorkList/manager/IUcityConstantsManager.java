@@ -8,7 +8,10 @@
 
 package pro.ucity.manager.ucityWorkList.manager;
 
+import javax.sql.DataSource;
+
 public interface IUcityConstantsManager {
+	public DataSource getDataSource();
 	public String getQueryByKey(String key);
 	public String getCodeByKey(String key);
 }

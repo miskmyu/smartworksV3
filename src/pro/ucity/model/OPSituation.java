@@ -16,6 +16,7 @@ import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.work.ProcessWork;
+import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
 
@@ -436,13 +437,13 @@ public class OPSituation {
 	
 	public static void readHistoryTableToStart(){
 		java.lang.System.out.println("############ START checking PORTAL History To Start  ################");
-		try {
-			Class.forName(System.DATABASE_JDBC_DRIVE);
-		} catch (ClassNotFoundException e) {
-			java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
-			e.printStackTrace();
-			return;
-		}
+//		try {
+//			Class.forName(System.DATABASE_JDBC_DRIVE);
+//		} catch (ClassNotFoundException e) {
+//			java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
+//			e.printStackTrace();
+//			return;
+//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
@@ -460,7 +461,8 @@ public class OPSituation {
 		try {
 			
 			try{
-				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
 				te.printStackTrace();
@@ -548,11 +550,11 @@ public class OPSituation {
 	public static Map<String,Object> readHistoryTable(String eventId, String status){
 		
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(status)) return null;
-		try {
-			Class.forName(System.DATABASE_JDBC_DRIVE);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Class.forName(System.DATABASE_JDBC_DRIVE);
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
@@ -565,7 +567,8 @@ public class OPSituation {
 		String opSituationUpdateSql = UcityConstant.getQueryByKey("OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
-				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();
 				return null;

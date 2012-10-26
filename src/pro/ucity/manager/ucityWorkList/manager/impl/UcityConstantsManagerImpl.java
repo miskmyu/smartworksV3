@@ -11,12 +11,23 @@ package pro.ucity.manager.ucityWorkList.manager.impl;
 import java.util.Hashtable;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 import net.smartworks.server.engine.common.util.CommonUtil;
 
 import pro.ucity.manager.ucityWorkList.manager.IUcityConstantsManager;
 
 public class UcityConstantsManagerImpl implements IUcityConstantsManager {
 
+	DataSource dataSource = null;
+	
+	public DataSource getDataSource() {
+		return dataSource;
+	}
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+	
 	private Map<String, String> queryMap = new Hashtable<String, String>();
 	private Map<String, String> codeMap = new Hashtable<String, String>();
 	

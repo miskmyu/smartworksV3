@@ -17,6 +17,7 @@ import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.work.ProcessWork;
+import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.INoticeService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.server.service.factory.SwServiceFactory;
@@ -509,13 +510,13 @@ public class Adapter {
 	
 	synchronized public static void readHistoryTableToStart(){
 		java.lang.System.out.println("############ START checking ADAPTER History To Start  ################");
-		try {
-			Class.forName(System.DATABASE_JDBC_DRIVE);
-		} catch (ClassNotFoundException e) {
-			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
-			e.printStackTrace();
-			return;
-		}
+//		try {
+//			Class.forName(System.DATABASE_JDBC_DRIVE);
+//		} catch (ClassNotFoundException e) {
+//			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+//			e.printStackTrace();
+//			return;
+//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
@@ -528,7 +529,8 @@ public class Adapter {
 		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
-				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 				te.printStackTrace();

@@ -10,6 +10,7 @@
 						http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 	
    	<beans:bean id="ucityContantsManager" class="pro.ucity.manager.ucityWorkList.manager.impl.UcityConstantsManagerImpl">
+		<beans:property name="dataSource" ref="misDs" />
 		<beans:property name="queryMap">
 			<beans:map>
 				<!-- Adapter -->
