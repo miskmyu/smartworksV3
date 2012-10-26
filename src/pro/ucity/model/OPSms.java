@@ -24,9 +24,9 @@ public class OPSms {
 	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
 	public static final String FIELD_NAME_REGIST_DATE = "REGIST_DATE";
 
-	public static final String QUERY_SELECT_FOR_CHECK = "select * from " + System.TABLE_NAME_OPPORTAL_SMS + " where " + FIELD_NAME_SITUATION_ID + " = ? and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) order by " + FIELD_NAME_REGIST_DATE + " desc";
-	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_OPPORTAL_SMS + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_SITUATION_ID + " = ?";
-	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SMS + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_SMS_ID + " = ?";
+//	public static final String QUERY_SELECT_FOR_CHECK = "select * from " + System.TABLE_NAME_OPPORTAL_SMS + " where " + FIELD_NAME_SITUATION_ID + " = ? and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) order by " + FIELD_NAME_REGIST_DATE + " desc";
+//	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_OPPORTAL_SMS + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_SITUATION_ID + " = ?";
+//	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SMS + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_SMS_ID + " = ?";
 
 	public static final KeyMap[] OPPORTAL_SMS_FIELDS = {
 		new KeyMap("메시지 아이디", "SMS_ID"), new KeyMap("메시지 구분", "SEND_TYPE"), new KeyMap("등록일", "REGIST_DATE"), new KeyMap("발송자", "SEND_USER_NAME"),
@@ -213,8 +213,11 @@ public class OPSms {
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
-		String opSmsSelectSql = QUERY_SELECT_FOR_CHECK;
-		String opSmsUpdateSql = QUERY_UPDATE_FOR_READ_CONFIRM;
+//		String opSmsSelectSql = QUERY_SELECT_FOR_CHECK;
+//		String opSmsUpdateSql = QUERY_UPDATE_FOR_READ_CONFIRM;
+		
+		String opSmsSelectSql = UcityConstant.getQueryByKey("OPSms.QUERY_SELECT_FOR_CHECK");
+		String opSmsUpdateSql = UcityConstant.getQueryByKey("OPSms.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
 				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
@@ -282,7 +285,8 @@ public class OPSms {
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
-		String opSmsSelectSql = OPSms.QUERY_SELECT_FOR_PERFORM;
+//		String opSmsSelectSql = OPSms.QUERY_SELECT_FOR_PERFORM;
+		String opSmsSelectSql = UcityConstant.getQueryByKey("OPSms.QUERY_SELECT_FOR_PERFORM");
 		try {
 			try{
 				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);

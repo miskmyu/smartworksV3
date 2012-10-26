@@ -25,10 +25,10 @@ public class OPDisplay {
 	public static final String FIELD_NAME_REQUEST_DATE = "REQUEST_DATE";
 	public static final String FIELD_NAME_STOP_REQUEST = "STOP_REQUEST";
 
-	public static final String QUERY_SELECT_FOR_CHECK = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) order by " + FIELD_NAME_REQUEST_DATE + " desc";
-	public static final String QUERY_SELECT_FOR_STOP_CHECK = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_STOP_REQUEST + " = 'Y' order by " + FIELD_NAME_REQUEST_DATE + " desc";
-	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_OPPORTAL_DISPLAY + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_SITUATION_ID + " = ? ";
-	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_DISPLAY_ID + " = ?";
+//	public static final String QUERY_SELECT_FOR_CHECK = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) order by " + FIELD_NAME_REQUEST_DATE + " desc";
+//	public static final String QUERY_SELECT_FOR_STOP_CHECK = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_STOP_REQUEST + " = 'Y' order by " + FIELD_NAME_REQUEST_DATE + " desc";
+//	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_OPPORTAL_DISPLAY + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_SITUATION_ID + " = ? ";
+//	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_DISPLAY_ID + " = ?";
 
 	public static final KeyMap[] OPPORTAL_DISPLAY_FIELDS = {
 		new KeyMap("상황표출 아이디", "DISPLAY_ID"), new KeyMap("상황 아이디", "SITUATION_ID"), new KeyMap("상황표출 내용", "DISPLAY_CONTENT"),
@@ -289,8 +289,10 @@ public class OPDisplay {
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
-		String opDisplaySelectSql = (isStopRequest) ? OPDisplay.QUERY_SELECT_FOR_STOP_CHECK : OPDisplay.QUERY_SELECT_FOR_CHECK;
-		String opDisplayUpdateSql = OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM;
+//		String opDisplaySelectSql = (isStopRequest) ? OPDisplay.QUERY_SELECT_FOR_STOP_CHECK : OPDisplay.QUERY_SELECT_FOR_CHECK;
+//		String opDisplayUpdateSql = OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM;
+		String opDisplaySelectSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_STOP_CHECK") : UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_CHECK");
+		String opDisplayUpdateSql = UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
 				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
@@ -358,7 +360,8 @@ public class OPDisplay {
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
-		String opDisplaySelectSql = OPDisplay.QUERY_SELECT_FOR_PERFORM;
+//		String opDisplaySelectSql = OPDisplay.QUERY_SELECT_FOR_PERFORM;
+		String opDisplaySelectSql = UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_PERFORM");
 		try {
 			try{
 				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);

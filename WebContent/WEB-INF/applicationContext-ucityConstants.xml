@@ -1,0 +1,108 @@
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+						http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	
+   	<beans:bean id="ucityContantsManager" class="pro.ucity.manager.ucityWorkList.manager.impl.UcityConstantsManagerImpl">
+		<beans:property name="queryMap">
+			<beans:map>
+				<!-- Adapter -->
+				<beans:entry key="Adapter.QUERY_SELECT_FOR_START">
+					<beans:value>select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and COMM_DVSN_CD = 'RECV'</beans:value>
+				</beans:entry>
+				<beans:entry key="Adapter.QUERY_SELECT_FOR_PERFORM">
+					<beans:value>select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and COMM_DVSN_CD = 'RECV'</beans:value>
+				</beans:entry>
+				<beans:entry key="Adapter.QUERY_UPDATE_FOR_READ_CONFIRM">
+					<beans:value>update TB_UAST_CMNC_HS set BPM_CNFM_YN = 'Y' where RECV_CMNC_TG_ID = ?</beans:value>
+				</beans:entry>
+				
+				<!-- CMHistory -->
+				<beans:entry key="CMHistory.QUERY_SELECT_FOR_OCCURRENCE_PERFORM">
+					<beans:value>select a.* from TB_COM_INTG_LOG a, CMDB.TN_CM_EVENT_OUTB_INFO b where b.U_SVC_EVENT_ID = ? and a.EVET_OUTB_ID = b.EVENT_OUTB_ID and SR_FLAG = 'R'</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.QUERY_SELECT_FOR_RELEASE_PERFORM">
+					<beans:value>select a.* from TB_COM_INTG_LOG a, CMDB.TN_CM_EVENT_OUTB_INFO b where b.U_SVC_EVENT_ID = ? and a.EVET_OUTB_ID = b.EVENT_OUTB_ID and SR_FLAG = 'R'</beans:value>
+				</beans:entry>
+
+				<!-- DMHistory -->
+				<beans:entry key="DMHistory.QUERY_SELECT_FOR_DISPLAY_PERFORM">
+					<beans:value>select distinct a.SEND_INFO_SEQ,b.*,c.SEND_RESPONSE_VALUE, a.EVENT_ID from UIDB.TN_IDM_SEND_INFO a, UIDB.TN_IDM_SEND_CONTENTS b, UIDB.TN_IDM_CONTENTS_RCV_DEVICE c where a.SEND_INFO_SEQ = b.SEND_INFO_SEQ and c.SEND_INFO_SEQ = a.SEND_INFO_SEQ and a.EVENT_ID = ? and b.ADAPTER_DIVISION = ? order by a.SEND_INFO_SEQ desc</beans:value>
+				</beans:entry>
+				<beans:entry key="DMHistory.QUERY_SELECT_FOR_STOP_PERFORM">
+					<beans:value>select distinct a.SEND_INFO_SEQ,b.*,c.SEND_RESPONSE_VALUE, a.EVENT_ID from UIDB.TN_IDM_SEND_INFO a, UIDB.TN_IDM_SEND_CONTENTS b, UIDB.TN_IDM_CONTENTS_RCV_DEVICE c where a.SEND_INFO_SEQ = b.SEND_INFO_SEQ and c.SEND_INFO_SEQ = a.SEND_INFO_SEQ and a.EVENT_ID = ? and b.ADAPTER_DIVISION = ? order by a.SEND_INFO_SEQ desc</beans:value>
+				</beans:entry>
+				
+				<!-- ICSituation -->
+				<beans:entry key="ICSituation.QUERY_SELECT_FOR_OCCURRENCE_PERFORM">
+					<beans:value>select * from US1.TN_CTL_EVENT_INFO where ID = ? and (DONE_YN != 'Y' or DONE_YN is null)</beans:value>
+				</beans:entry>
+				<beans:entry key="ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM">
+					<beans:value>select * from US1.TN_CTL_EVENT_INFO where ID = ? and DONE_YN = 'N'</beans:value>
+				</beans:entry>
+				
+				<!-- OPDisplay -->
+				<beans:entry key="OPDisplay.QUERY_SELECT_FOR_CHECK">
+					<beans:value>select * from US1.TN_CTL_EVENT_INFO where ID = ? and DONE_YN = 'N'</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.QUERY_SELECT_FOR_STOP_CHECK">
+					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and STOP_REQUEST = 'Y' order by REQUEST_DATE desc</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM">
+					<beans:value>update USITUATION.TN_ST_DISPLAY set BPM_CNFM_YN = 'Y' where SITUATION_ID = ?</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.QUERY_SELECT_FOR_PERFORM">
+					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and DISPLAY_ID = ?</beans:value>
+				</beans:entry>
+				
+				<!-- OPSituation -->
+				<beans:entry key="OPSituation.QUERY_SELECT_FOR_START">
+					<beans:value>select * from USITUATION.TH_ST_SITUATION_HISTORY where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and SITUATION_ID like 'ST%' and STATUS = 'H02'</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM">
+					<beans:value>update USITUATION.TH_ST_SITUATION_HISTORY set BPM_CNFM_YN = 'Y' where SITUATION_ID = ? and STATUS = ?</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.QUERY_SELECT_FOR_PERFORM">
+					<beans:value>select * from USITUATION.TH_ST_SITUATION_HISTORY where SITUATION_ID = ? and STATUS = ? and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null)</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.QUERY_SELECT_FOR_PROCESSING_PERFORM">
+					<beans:value>select * from USITUATION.TH_ST_SITUATION_HISTORY where SITUATION_ID = ? and STATUS = ?</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM">
+					<beans:value>select * from USITUATION.TH_ST_SITUATION_HISTORY where SITUATION_ID = ? and (STATUS = 'H03' or STATUS = 'H04') and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null)</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.QUERY_SELECT_FOR_FACILITY">
+					<beans:value>select distinct c.LC_NM from USITUATION.TH_ST_SITUATION_HISTORY a,USITUATION.TM_ST_SITUATION b, CMDB.TM_CM_FACILITY_INFO c where a.SITUATION_ID = b.SITUATION_ID and b.OCCUR_FACILITY_ID = c.FACILITY_ID and a.SITUATION_ID = ?</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.QUERY_SELECT_EVENT_CODE">
+					<beans:value>SELECT A.*, C.OCCUR_DATE FROM CMDB.TM_CM_STAT_EVENT A, USITUATION.TH_ST_SITUATION_HISTORY B, USITUATION.TM_ST_SITUATION C WHERE B.SITUATION_ID = C.SITUATION_ID AND C.CATEGORY_ID = A.CATEGORY_ID AND B.SITUATION_ID = ? AND B.SEQ = '1'</beans:value>
+				</beans:entry>
+				
+				<!-- OPSms -->
+				<beans:entry key="OPSms.QUERY_SELECT_FOR_CHECK">
+					<beans:value>select * from USITUATION.TM_SM_SMS_ITEM where SITUATION_ID = ? and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) order by REGIST_DATE desc</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.QUERY_UPDATE_FOR_READ_CONFIRM">
+					<beans:value>update USITUATION.TM_SM_SMS_ITEM set BPM_CNFM_YN = 'Y' where SITUATION_ID = ?</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.QUERY_SELECT_FOR_PERFORM">
+					<beans:value>select * from USITUATION.TM_SM_SMS_ITEM where SITUATION_ID = ? and SMS_ID = ?</beans:value>
+				</beans:entry>
+				
+			</beans:map>
+		</beans:property>
+		<beans:property name="codeMap">
+			<beans:map>
+				<beans:entry key="code">
+					<beans:value>코드</beans:value>
+				</beans:entry>
+			</beans:map>
+		</beans:property>
+	</beans:bean>
+</beans:beans>

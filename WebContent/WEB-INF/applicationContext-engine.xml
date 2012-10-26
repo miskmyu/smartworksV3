@@ -101,6 +101,7 @@
 		<beans:property name="scheduleManager" ref="scheduleManager"/>
 		
 		<beans:property name="ucityWorkListManager" ref="ucityWorkListManager"/>
+		<beans:property name="ucityContantsManager" ref="ucityContantsManager"/>
 		<beans:property name="ssoManager" ref="ssoManager"/>
 
 		<!-- beans:property name="chtManager" ref="chtManager"/>

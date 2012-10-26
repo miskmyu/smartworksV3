@@ -11,7 +11,7 @@
 	<beans:bean id="prcManager" class="net.smartworks.server.engine.process.process.manager.impl.PrcManagerImpl"/>
 	<beans:bean id="depManager" class="net.smartworks.server.engine.process.deploy.manager.impl.DepXpdlManagerImpl"/>
 	<beans:bean id="aprManager" class="net.smartworks.server.engine.process.approval.manager.impl.AprManagerImpl"/>
-	<beans:bean id="sctXPathManager" class="net.smartworks.server.engine.process.script.manager.impl.SctXPathManagerImpl">
+<!-- 	<beans:bean id="sctXPathManager" class="net.smartworks.server.engine.process.script.manager.impl.SctXPathManagerImpl">
 		<beans:property name="functionsList">
 			<beans:list>
 				<beans:bean id="xPathFunction" class="net.smartworks.server.engine.process.script.function.SctXPathFunction">
@@ -19,7 +19,7 @@
 				</beans:bean>
 			</beans:list>
 		</beans:property>
-	</beans:bean>
+	</beans:bean> -->
 	<beans:bean id="monXpdlManager" class="net.smartworks.server.engine.process.monitoring.manager.impl.MonXpdlManagerImpl"/>
 
 </beans:beans>
