@@ -112,6 +112,18 @@
 				</a>						
 			</th>
 			<th>
+				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_TIME%>">발생일시
+					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_TIME)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
+				</a>
+			</th>
+			<th>
+				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_PLACE%>">발생장소
+					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_PLACE)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
+				</a>
+			</th>
+			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EXTERNAL_DISPLAY%>">외부표출
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FIELD_ID_EXTERNAL_DISPLAY)){
@@ -126,18 +138,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>						
-			</th>
-			<th>
-				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_TIME%>">발생일시
-					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_TIME)){
-						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
-				</a>
-			</th>
-			<th>
-				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_PLACE%>">발생장소
-					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_PLACE)){
-						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
-				</a>
 			</th>
 		</tr>	
 		<%	
@@ -179,13 +179,30 @@
 				UserInfo lastModifier = instanceInfo.getLastModifier();
 //				TaskInstanceInfo lastTask = instanceInfo.getLastTask();
 				TaskInstanceInfo[] runningTasks = instanceInfo.getRunningTasks();
-				String[] serviceTypes = null;
+				String occurredTaskNames = "";
+				String releasedTaskNames = "";
 				if(!SmartUtil.isBlankObject(runningTasks)){
-					serviceTypes = new String[runningTasks.length];
 					for(int k=0; k<runningTasks.length; k++){
-						serviceTypes[k] = UcityUtil.getServiceTypeName(runningTasks[k].getName());
+						if("발생".equals(UcityUtil.getServiceTypeName(runningTasks[k].getName()))){
+							occurredTaskNames = occurredTaskNames + (SmartUtil.isBlankObject(occurredTaskNames) ? "" : ", ") + runningTasks[k].getName();
+						}else if("종료".equals(UcityUtil.getServiceTypeName(runningTasks[k].getName()))){
+							releasedTaskNames = releasedTaskNames + (SmartUtil.isBlankObject(releasedTaskNames) ? "" : ", ") + runningTasks[k].getName();
+						}
 					}
 				}
+				String serviceType = "";
+				String runningTaskNames = "";
+				if(!SmartUtil.isBlankObject(occurredTaskNames) && !SmartUtil.isBlankObject(releasedTaskNames)){
+					serviceType =  "발생</br>종료";
+					runningTaskNames = occurredTaskNames + "</br>" + releasedTaskNames;
+				}else if(!SmartUtil.isBlankObject(occurredTaskNames)){
+					serviceType = "발생";
+					runningTaskNames = occurredTaskNames;
+				}else if(!SmartUtil.isBlankObject(releasedTaskNames)){
+					serviceType = "종료";
+					runningTaskNames = releasedTaskNames;
+				}
+
 				String target =  "situationDetail.sw?cid=" + instanceInfo.getContextId() + "&workId=" + instanceInfo.getWork().getId();
 				String statusImage = "";
 				String statusTitle = "";
@@ -229,34 +246,26 @@
 						<a class="js_ucity_content" href="<%=target %>"><%=eventName%></a>
 					</td>
 					<td>
-						<%if(!SmartUtil.isBlankObject(serviceTypes)){ %>
-	 						<a class="js_ucity_content" href="<%=target %>">
-	 							<%for(int index=0; index<serviceTypes.length; index++){ %>
-	 								<%=serviceTypes[index]%><%if(index<serviceTypes.length-1){ %></br><%} %>
-	 							<%} %>
-	 						</a>
+						<%if(!SmartUtil.isBlankObject(serviceType)){ %>
+	 						<a class="js_ucity_content" href="<%=target %>"><%=serviceType %></a>
 	 					<%} %>
  					</td>
 					<td>
-						<%if(!SmartUtil.isBlankObject(runningTasks)){ %>
-	 						<a class="js_ucity_content" href="<%=target %>">
-	 							<%for(int index=0; index<runningTasks.length; index++){ %>
-	 								<%=runningTasks[index].getName()%><%if(index<runningTasks.length-1){ %></br><%} %>
-	 							<%} %>
-	 						</a>
+						<%if(!SmartUtil.isBlankObject(runningTaskNames)){ %>
+	 						<a class="js_ucity_content" href="<%=target %>"><%=runningTaskNames %></a>
 	 					<%} %>
  					</td>
-					<td>
-						<a class="js_ucity_content" href="<%=target %>"><%=externalDisplay%></a>
-					</td>
-					<td>
-						<a class="js_ucity_content" href="<%=target %>"><%=isSms%></a>
-					</td>
 					<td>
 						<a class="js_ucity_content" href="<%=target %>"><%=eventTime %></a>
 					</td>
 					<td>
 						<a class="js_ucity_content" href="<%=target %>"><%=eventPlace%></a>
+					</td>
+					<td>	
+						<a class="js_ucity_content" href="<%=target %>"><%=externalDisplay%></a>
+					</td>
+					<td>
+						<a class="js_ucity_content" href="<%=target %>"><%=isSms%></a>
 					</td>
 				</tr>
 	<%
@@ -301,22 +310,6 @@
 				</a>						
 			</th>
 			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EXTERNAL_DISPLAY%>">외부표출
-			 		<span class="<%
-					if(sortedField.getFieldId().equals(FIELD_ID_EXTERNAL_DISPLAY)){
-						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
-					%>"></span>
-				</a>						
-			</th>
-			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_IS_SMS%>">SMS발송
-			 		<span class="<%
-					if(sortedField.getFieldId().equals(FIELD_ID_IS_SMS)){
-						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
-					%>"></span>
-				</a>						
-			</th>
-			<th>
 				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_TIME%>">발생일시
 					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_TIME)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
@@ -328,6 +321,22 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 			</th>
+			<th>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EXTERNAL_DISPLAY%>">외부표출
+			 		<span class="<%
+					if(sortedField.getFieldId().equals(FIELD_ID_EXTERNAL_DISPLAY)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
+					%>"></span>
+				</a>						
+			</th>			
+			<th>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_IS_SMS%>">SMS발송
+			 		<span class="<%
+					if(sortedField.getFieldId().equals(FIELD_ID_IS_SMS)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
+					%>"></span>
+				</a>						
+			</th>			
 		</tr>	
 	<%		
 	}
@@ -393,14 +402,14 @@ if(instanceList == null || work == null || SmartUtil.isBlankObject(instanceList.
 		%>
 	</div>
 	
-	<div class="num_box">
+<%-- 	<div class="num_box">
 		<select class="js_select_page_size" name="selPageSize" title="<fmt:message key='common.title.count_in_page'/>">
 			<option <%if (pageSize == 20) {%> selected <%}%>>20</option>
 			<option <%if (pageSize == 30) {%> selected <%}%>>30</option>
 			<option <%if (pageSize == 50) {%> selected <%}%>>50</option>
 			<option <%if (pageSize == 100) {%> selected <%}%>>100</option>
 		</select>
-	</div>
+	</div> --%>
 	<!-- 페이징 //-->
 </form>
 

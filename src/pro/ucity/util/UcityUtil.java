@@ -46,7 +46,7 @@ import pro.ucity.model.OPSms;
 import pro.ucity.model.System;
 
 public class UcityUtil {
-	
+
 	public UcityUtil() {
 		super();
 	}

@@ -171,7 +171,6 @@ public class ICSituation {
 				dataRecord.put(keyMap.getId(), this.attr1);
 		}
 		return dataRecord;
-//		return UcityTest.getICSituationDataRecord();
 	}
 	
 	public void performTask(String processId, String taskInstId) throws Exception{

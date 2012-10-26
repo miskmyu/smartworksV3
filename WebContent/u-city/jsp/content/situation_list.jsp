@@ -142,14 +142,7 @@
 </script>
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks"); 
-/* 	String cid = request.getParameter("cid");
-	String wid = request.getParameter("wid");
-
-	session.setAttribute("cid", cid);
-	session.setAttribute("wid", wid);
-	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
- */
- 	session.setAttribute("lastLocation", "situation_list.sw");
+ 	session.setAttribute("lastLocation", "situationMonitoring.sw");
 	
 	String workId = System.getProcessId(System.PROCESS_ENV_WEAHTER);
 	User cUser = SmartUtil.getCurrentUser();
@@ -160,6 +153,8 @@
 		String savedWorkId = (String)session.getAttribute("workId");
 		if(!SmartUtil.isBlankObject(workId) && workId.equals(work.getId())){
 			params = (RequestParams)session.getAttribute("requestParams");
+			if(!SmartUtil.isBlankObject(params))
+				params.setSearchFilter(null);
 		}
 	}if (params != null){
 		selectedFilterId = params.getFilterId();

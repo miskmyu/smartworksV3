@@ -4634,7 +4634,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					if (workList.getEventTime() != null) {
 						Date tempDate = new Date();
 						tempDate.setTime(workList.getEventTime().getTime() + TimeZone.getDefault().getRawOffset());
-						 p8 = new Property("eventTime", DateUtil.toDateString(tempDate));
+						 p8 = new Property("eventTime", DateUtil.toDateString(tempDate).replace(".000", ""));
 					} else {
 						p8 = new Property("eventTime", null);
 					}
