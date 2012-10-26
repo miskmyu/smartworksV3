@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.smartworks.server.engine.scheduling.model" default-lazy="false">
+	<class name="ScheduleDef" table="SWScheduleDef">
+		<id name="objId" column="objId" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="targetPackageType" type="string" length="10"/>
+		<property name="targetPackageId" type="string" length="100"/>
+		<property name="targetFormId" type="string" length="100"/>
+		<property name="targetFieldId" type="string" length="100"/>
+		<property name="status" type="string" length="10"/>
+		<property name="name" type="string" length="200"/>
+		<property name="groupName" type="string" length="100"/>
+		<property name="jobName" type="string" length="100"/>
+		<property name="triggerName" type="string" length="100"/>
+		<property name="targetClass" type="string" length="200"/>
+		<property name="cronExpression" type="string" length="50"/>
+		<property name="isAutoStart" type="string" length="10"/>
+		<property name="creationUser" column="creator" type="string" length="50"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="50"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+	</class>
+</hibernate-mapping>

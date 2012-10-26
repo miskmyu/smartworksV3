@@ -38,7 +38,7 @@ import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.report.manager.IReportManager;
 import net.smartworks.server.engine.resource.manager.IResourceDesigntimeManager;
 import net.smartworks.server.engine.resource.manager.IResourceRuntimeManager;
-import net.smartworks.server.engine.scheduling.manager.impl.TimerManager;
+import net.smartworks.server.engine.scheduling.manager.IScheduleManager;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.worklist.manager.impl.WorkListManagerImpl;
 
@@ -82,13 +82,13 @@ public class SwManagerFactory {
 	private IMailManager mailManager;
 	private IIdxManager autoIndexManager;
 	private IReportManager reportManager;
-	private TimerManager timerManager;
+	private IScheduleManager scheduleManager;
 	
-	public TimerManager getTimerManager() {
-		return timerManager;
+	public IScheduleManager getScheduleManager() {
+		return scheduleManager;
 	}
-	public void setTimerManager(TimerManager timerManager) {
-		this.timerManager = timerManager;
+	public void setScheduleManager(IScheduleManager scheduleManager) {
+		this.scheduleManager = scheduleManager;
 	}
 	//UCITY
 	private ISsoManager ssoManager;

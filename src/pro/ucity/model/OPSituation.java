@@ -44,6 +44,7 @@ public class OPSituation {
 	public static final String FIELD_NAME_LC_NAME = "LC_NM";
 	public static final String FIELD_NAME_OCFACILITY_ID = "OCCUR_FACILITY_ID";
 	public static final String FIELD_NAME_FACILITY_ID = "FACILITY_ID";
+	public static final String FIELD_NAME_OCCUR_DATE = "OCCUR_DATE";
 	
 	public static final String SYMBOL_FOR_OP_START = "ST";
 
@@ -70,7 +71,7 @@ public class OPSituation {
 //																		" c where a." + FIELD_NAME_SITUATION_ID + " = ? and (a." + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_PROCESSING + "' or a." + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_RELEASE + "') and (a." + FIELD_NAME_READ_CONFIRM + " != 'Y' or a." + FIELD_NAME_READ_CONFIRM + " is null) and  a." + FIELD_NAME_SITUATION_ID + "= b." + FIELD_NAME_SITUATION_ID + " and b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + 
 //																		" order by start_date desc";
 	
-	public static final String QUERY_SELECT_EVENT_CODE = "SELECT A.* FROM CMDB.TM_CM_STAT_EVENT A, USITUATION.TH_ST_SITUATION_HISTORY B, USITUATION.TM_ST_SITUATION C WHERE B.SITUATION_ID = C.SITUATION_ID AND C.CATEGORY_ID = A.CATEGORY_ID AND B.SITUATION_ID = ? AND B.SEQ = '1'";
+	public static final String QUERY_SELECT_EVENT_CODE = "SELECT A.*, C." + FIELD_NAME_OCCUR_DATE + " FROM CMDB.TM_CM_STAT_EVENT A, USITUATION.TH_ST_SITUATION_HISTORY B, USITUATION.TM_ST_SITUATION C WHERE B.SITUATION_ID = C.SITUATION_ID AND C.CATEGORY_ID = A.CATEGORY_ID AND B.SITUATION_ID = ? AND B.SEQ = '1'";
 	
 	public static final KeyMap[] OPPORTAL_SITUATION_FIELDS = {
 		new KeyMap("상황 아이디", "SITUATION_ID"), new KeyMap("순번", "SEQ"), new KeyMap("상태", "STATUS"),
@@ -96,6 +97,8 @@ public class OPSituation {
 	private String endDate;
 	private String contents;
 	private String locationName;
+	
+	private String occurDate;
 		
 	public int getProcess() {
 		return process;
@@ -212,7 +215,12 @@ public class OPSituation {
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
 	}
-	
+	public String getOccurDate() {
+		return occurDate;
+	}
+	public void setOccurDate(String occurDate) {
+		this.occurDate = occurDate;
+	}
 	public OPSituation(ResultSet resultSet){
 		super();
 		if(SmartUtil.isBlankObject(resultSet)) return;
@@ -258,6 +266,8 @@ public class OPSituation {
 				dataRecord.put(keyMap.getId(), this.contents);
 			else if(keyMap.getKey().equals("LC_NM"))
 				dataRecord.put(keyMap.getId(), this.locationName);
+			else if(keyMap.getKey().equals("OCCUR_DATE"))
+				dataRecord.put(keyMap.getId(), this.occurDate);
 		}
 		return dataRecord;
 //		return UcityTest.getOPSituationDataRecord();
@@ -289,6 +299,15 @@ public class OPSituation {
 		try{
 			this.eventDesc = joinResult.getString(FIELD_NAME_EVENT_DESC);
 		}catch (Exception e){}
+		try{
+			this.occurDate = joinResult.getString("OCCUR_DATE");
+			if(!SmartUtil.isBlankObject(this.occurDate)){
+				this.occurDate = this.occurDate.replaceAll("-", "");
+				this.occurDate = this.occurDate.replaceAll(" ", "");
+				this.occurDate = this.occurDate.replaceAll(":", "");
+				this.occurDate = this.occurDate.replace(".0", "");
+			}
+		}catch (Exception ex){}
 		
 		this.process = Event.getProcessByEventId(Event.getEventIdByCode(this.userviceCode, this.serviceCode, this.eventCode));
 		this.serviceName = Service.getServiceNameByCode(Service.getServiceCodeByUCode(this.userviceCode));
@@ -298,7 +317,7 @@ public class OPSituation {
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null || SmartUtil.isBlankObject(this.serviceName) || SmartUtil.isBlankObject(this.eventName)) return;
 		
-		UcityUtil.startPortalProcess(System.getProcessId(this.process), this.situationId, this.startDate, this.getDataRecord());
+		UcityUtil.startPortalProcess(System.getProcessId(this.process), this.situationId, this.occurDate, this.getDataRecord());
 	}
 	
 	public void performTask(String processId, String taskInstId) throws Exception{
@@ -397,6 +416,7 @@ public class OPSituation {
 		try{
 			this.locationName = result.getString("LC_NM");
 		}catch (Exception ex){}
+
 		
 		setJoinResult(joinResult);
 		setJoinFacility(joinFacilitySet);
