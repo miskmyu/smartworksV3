@@ -18,4 +18,8 @@ public class UcityConstant {
 	public static String getCodeByKey(String key) {
 		return SwManagerFactory.getInstance().getUcityContantsManager().getCodeByKey(key);
 	}
+	public static String getUrlByKey(String key) {
+		// TODO Auto-generated method stub
+		return SwManagerFactory.getInstance().getUcityContantsManager().getUrlByKey(key);
+	}
 }

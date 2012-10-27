@@ -33,7 +33,7 @@ public class SsoManagerImpl extends AbstractManager implements ISsoManager {
 		query.append(" SELECT USER_ID, GROUP_ID, PASSWORD, USER_NAME_KO, USER_NAME_EN, ");
         query.append("        LOCALE, EMP_NO, POSITION_CD, POSITION_NAME, OFFICE_PHONE,  ");
         query.append("        MOBL_PHONE, MAIL, STATUS ");
-        query.append(" FROM TM_CM_USER ");
+        query.append(" FROM CMDB.TM_CM_USER ");
         query.append(" WHERE USER_ID =  '").append(userId).append("'");
         return query.toString();
 	}
@@ -52,7 +52,7 @@ public class SsoManagerImpl extends AbstractManager implements ISsoManager {
         query.append(" SELECT A.PROGRAM_ID , A.PROGRAM_URL ");
         query.append(" FROM USITUATION.TN_PO_PROGRAM_INFO A, USITUATION.TN_PO_PROGRAM_ROLE B ");
 		query.append(" WHERE A.PROGRAM_ID = B.PROGRAM_ID ");
-		query.append(" AND B.ROLE_ID IN (SELECT ROLE_ID FROM TN_CM_USER_ROLE WHERE USER_ID = '").append(userId).append("') ");	
+		query.append(" AND B.ROLE_ID IN (SELECT ROLE_ID FROM CMDB.TN_CM_USER_ROLE WHERE USER_ID = '").append(userId).append("') ");	
 		return query.toString();
 	}
 	
@@ -87,6 +87,7 @@ public class SsoManagerImpl extends AbstractManager implements ISsoManager {
 				
 				objList.add(obj);
 			}
+			list = objList;
 			UserSessionVO[] objs = new UserSessionVO[list.size()];
 			list.toArray(objs);
 			return objs[0];

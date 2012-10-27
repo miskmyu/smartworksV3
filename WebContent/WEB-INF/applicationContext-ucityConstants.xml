@@ -14,6 +14,19 @@
 		<beans:property name="queryMap">
 			<beans:map>
 				<!-- Adapter -->
+				<beans:entry key="Adapter.FIELD_NAME_COMM_TG_ID">
+					<beans:value>RECV_CMNC_TG_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="Adapter.FIELD_NAME_COMM_CONTENT">
+					<beans:value>CMNC_TG_CONT</beans:value>
+				</beans:entry>
+				<beans:entry key="Adapter.FIELD_NAME_READ_CONFIRM">
+					<beans:value>BPM_CNFM_YN</beans:value>
+				</beans:entry>
+				<beans:entry key="Adapter.FIELD_NAME_DVSN_TYPE">
+					<beans:value>COMM_DVSN_CD</beans:value>
+				</beans:entry>																
+				
 				<beans:entry key="Adapter.QUERY_SELECT_FOR_START">
 					<beans:value>select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and COMM_DVSN_CD = 'RECV'</beans:value>
 				</beans:entry>
@@ -25,14 +38,88 @@
 				</beans:entry>
 				
 				<!-- CMHistory -->
+				<beans:entry key="CMHistory.TRST_ID">
+					<beans:value>TRST_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.SR_FLAG">
+					<beans:value>SR_FLAG</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.MSG_ID">
+					<beans:value>MSG_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.SYS_CD">
+					<beans:value>SYS_CD</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.DATA_TYP">
+					<beans:value>DATA_TYP</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.OUTB_DTM">
+					<beans:value>OUTB_DTM</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.SCSS_YN">
+					<beans:value>SCSS_YN</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.ERR_CD">
+					<beans:value>ERR_CD</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.RR_KEY">
+					<beans:value>RR_KEY</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.R_PRTCL_TYP">
+					<beans:value>R_PRTCL_TYP</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.R_MEP">
+					<beans:value>R_MEP</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.MSG_ORIG">
+					<beans:value>MSG_ORIG</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.MSG_KND_GUBN">
+					<beans:value>MSG_KND_GUBN</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.S_PRTCL_TYP">
+					<beans:value>S_PRTCL_TYP</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.RTR_CNT">
+					<beans:value>RTR_CNT</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.S_MEP">
+					<beans:value>S_MEP</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.RCV_EVET_CNTN">
+					<beans:value>RCV_EVET_CNTN</beans:value>
+				</beans:entry>
+				<beans:entry key="CMHistory.EVET_OUTB_ID">
+					<beans:value>EVET_OUTB_ID</beans:value>
+				</beans:entry>			
+				
 				<beans:entry key="CMHistory.QUERY_SELECT_FOR_OCCURRENCE_PERFORM">
 					<beans:value>select a.* from TB_COM_INTG_LOG a, CMDB.TN_CM_EVENT_OUTB_INFO b where b.U_SVC_EVENT_ID = ? and a.EVET_OUTB_ID = b.EVENT_OUTB_ID and SR_FLAG = 'R'</beans:value>
-				</beans:entry>
+				</beans:entry>   
 				<beans:entry key="CMHistory.QUERY_SELECT_FOR_RELEASE_PERFORM">
 					<beans:value>select a.* from TB_COM_INTG_LOG a, CMDB.TN_CM_EVENT_OUTB_INFO b where b.U_SVC_EVENT_ID = ? and a.EVET_OUTB_ID = b.EVENT_OUTB_ID and SR_FLAG = 'R'</beans:value>
 				</beans:entry>
 
 				<!-- DMHistory -->
+				<beans:entry key="DMHistory.EVENT_ID">
+					<beans:value>EVENT_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="DMHistory.DEVICE_ID">
+					<beans:value>DEVICE_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="DMHistory.DATA_PATH">
+					<beans:value>DATA_PATH</beans:value>
+				</beans:entry>
+				<beans:entry key="DMHistory.PLAY_TIME">
+					<beans:value>PLAY_TIME</beans:value>
+				</beans:entry>
+				<beans:entry key="DMHistory.SEND_RESPONSE_VALUE">
+					<beans:value>SEND_RESPONSE_VALUE</beans:value>
+				</beans:entry>
+				<beans:entry key="DMHistory.ADAPTER_DIVISION">
+					<beans:value>ADAPTER_DIVISION</beans:value>
+				</beans:entry>
+				
 				<beans:entry key="DMHistory.QUERY_SELECT_FOR_DISPLAY_PERFORM">
 					<beans:value>select distinct a.SEND_INFO_SEQ,b.*,c.SEND_RESPONSE_VALUE, a.EVENT_ID from UIDB.TN_IDM_SEND_INFO a, UIDB.TN_IDM_SEND_CONTENTS b, UIDB.TN_IDM_CONTENTS_RCV_DEVICE c where a.SEND_INFO_SEQ = b.SEND_INFO_SEQ and c.SEND_INFO_SEQ = a.SEND_INFO_SEQ and a.EVENT_ID = ? and b.ADAPTER_DIVISION = ? order by a.SEND_INFO_SEQ desc</beans:value>
 				</beans:entry>
@@ -41,16 +128,117 @@
 				</beans:entry>
 				
 				<!-- ICSituation -->
+				<beans:entry key="ICSituation.ID">
+					<beans:value>ID</beans:value>
+				</beans:entry>				
+				<beans:entry key="ICSituation.EVENT_ID">
+					<beans:value>EVENT_ID</beans:value>
+				</beans:entry>				
+				<beans:entry key="ICSituation.POS_X">
+					<beans:value>POS_X</beans:value>
+				</beans:entry>				
+				<beans:entry key="ICSituation.POS_Y">
+					<beans:value>POS_Y</beans:value>
+				</beans:entry>				
+				<beans:entry key="ICSituation.POS_Z">
+					<beans:value>POS_Z</beans:value>
+				</beans:entry>				
+				<beans:entry key="ICSituation.SEND_TIME">
+					<beans:value>SEND_TIME</beans:value>
+				</beans:entry>				
+				<beans:entry key="ICSituation.EVENT_CONTENT">
+					<beans:value>EVENT_CONTENT</beans:value>
+				</beans:entry>				
+				<beans:entry key="ICSituation.SISUL_DIV">
+					<beans:value>SISUL_DIV</beans:value>
+				</beans:entry>				
+				<beans:entry key="ICSituation.SISUL_ID">
+					<beans:value>SISUL_ID</beans:value>
+				</beans:entry>				
+				<beans:entry key="ICSituation.ETC">
+					<beans:value>ETC</beans:value>
+				</beans:entry>				
+				<beans:entry key="ICSituation.DONE_YN">
+					<beans:value>DONE_YN</beans:value>
+				</beans:entry>				
+				<beans:entry key="ICSituation.CREATE_DATE">
+					<beans:value>CREATE_DATE</beans:value>
+				</beans:entry>				
+				<beans:entry key="ICSituation.ATTR1">
+					<beans:value>ATTR1</beans:value>
+				</beans:entry>				
+
 				<beans:entry key="ICSituation.QUERY_SELECT_FOR_OCCURRENCE_PERFORM">
 					<beans:value>select * from US1.TN_CTL_EVENT_INFO where ID = ? and (DONE_YN != 'Y' or DONE_YN is null)</beans:value>
 				</beans:entry>
 				<beans:entry key="ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM">
 					<beans:value>select * from US1.TN_CTL_EVENT_INFO where ID = ? and DONE_YN = 'N'</beans:value>
 				</beans:entry>
-				
+	
 				<!-- OPDisplay -->
+				<beans:entry key="OPDisplay.SITUATION_ID">
+					<beans:value>SITUATION_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.DISPLAY_ID">
+					<beans:value>DISPLAY_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.DISPLAY_CONTENT">
+					<beans:value>DISPLAY_CONTENT</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.DISPLAY_IMAGE_PATH">
+					<beans:value>DISPLAY_IMAGE_PATH</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.DISPLAY_MOVIE_PATH">
+					<beans:value>DISPLAY_MOVIE_PATH</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.DISPLAY_SECOND">
+					<beans:value>DISPLAY_SECOND</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.MB_YN">
+					<beans:value>MB_YN</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.ENV_VMS_YN">
+					<beans:value>ENV_VMS_YN</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.TRA_VMS_YN">
+					<beans:value>TRA_VMS_YN</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.BIT_YN">
+					<beans:value>BIT_YN</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.KIOSK_YN">
+					<beans:value>KIOSK_YN</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.REQUEST_DATE">
+					<beans:value>REQUEST_DATE</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.STOP_REQUEST">
+					<beans:value>STOP_REQUEST</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.STOP_REQUEST_DATE">
+					<beans:value>STOP_REQUEST_DATE</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.STOP_REQUEST_USER_ID">
+					<beans:value>STOP_REQUEST_USER_ID</beans:value>
+				</beans:entry>
+
+				<beans:entry key="OPDisplay.FIELD_NAME_DISPLAY_ID">
+					<beans:value>DISPLAY_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.FIELD_NAME_SITUATION_ID">
+					<beans:value>SITUATION_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.FIELD_NAME_READ_CONFIRM">
+					<beans:value>BPM_CNFM_YN</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.FIELD_NAME_REQUEST_DATE">
+					<beans:value>REQUEST_DATE</beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.FIELD_NAME_STOP_REQUEST">
+					<beans:value>STOP_REQUEST</beans:value>
+				</beans:entry>
 				<beans:entry key="OPDisplay.QUERY_SELECT_FOR_CHECK">
-					<beans:value>select * from US1.TN_CTL_EVENT_INFO where ID = ? and DONE_YN = 'N'</beans:value>
+					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) order by REQUEST_DATE desc</beans:value>
 				</beans:entry>
 				<beans:entry key="OPDisplay.QUERY_SELECT_FOR_STOP_CHECK">
 					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and STOP_REQUEST = 'Y' order by REQUEST_DATE desc</beans:value>
@@ -63,6 +251,83 @@
 				</beans:entry>
 				
 				<!-- OPSituation -->
+				<beans:entry key="OPSituation.USERVICE_CD">
+					<beans:value>USERVICE_CD</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.SITUATION_ID">
+					<beans:value>SITUATION_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.SEQ">
+					<beans:value>SEQ</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.STATUS">
+					<beans:value>STATUS</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.CHARGE_USER_ID">
+					<beans:value>CHARGE_USER_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.CHARGE_USER_NAME">
+					<beans:value>CHARGE_USER_NAME</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.START_DATE">
+					<beans:value>START_DATE</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.END_DATE">
+					<beans:value>END_DATE</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.CONTENTS">
+					<beans:value>CONTENTS</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.LOCATION_NAME">
+					<beans:value>LOCATION_NAME</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.LC_NM">
+					<beans:value>LC_NM</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.OCCUR_DATE">
+					<beans:value>OCCUR_DATE</beans:value>
+				</beans:entry>
+				
+				<beans:entry key="OPSituation.FIELD_NAME_SITUATION_ID">
+					<beans:value>SITUATION_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.FIELD_NAME_SEQUENCE">
+					<beans:value>SEQ</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.FIELD_NAME_STATUS">
+					<beans:value>STATUS</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.FIELD_NAME_READ_CONFIRM">
+					<beans:value>BPM_CNFM_YN</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.FIELD_NAME_USERVICE_CODE">
+					<beans:value>USERVICE_CD</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.FIELD_NAME_SERVICE_CODE">
+					<beans:value>UNIT_SVC_CD</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.FIELD_NAME_EVENT_CODE">
+					<beans:value>SITTN_EVENT_CD</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.FIELD_NAME_EVENT_NAME">
+					<beans:value>SITTN_EVENT_NM</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.FIELD_NAME_EVENT_DESC">
+					<beans:value>SITTN_EVENT_DESC</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.FIELD_NAME_LC_NAME">
+					<beans:value>LC_NM</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.FIELD_NAME_OCFACILITY_ID">
+					<beans:value>OCCUR_FACILITY_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.FIELD_NAME_FACILITY_ID">
+					<beans:value>FACILITY_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.FIELD_NAME_OCCUR_DATE">
+					<beans:value>OCCUR_DATE</beans:value>
+				</beans:entry>
+				
 				<beans:entry key="OPSituation.QUERY_SELECT_FOR_START">
 					<beans:value>select * from USITUATION.TH_ST_SITUATION_HISTORY where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and SITUATION_ID like 'ST%' and STATUS = 'H02'</beans:value>
 				</beans:entry>
@@ -86,6 +351,47 @@
 				</beans:entry>
 				
 				<!-- OPSms -->
+				<beans:entry key="OPSms.SITUATION_ID">
+					<beans:value>SITUATION_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.SMS_ID">
+					<beans:value>SMS_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.SEND_TYPE">
+					<beans:value>SEND_TYPE</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.REGIST_DATE">
+					<beans:value>REGIST_DATE</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.SEND_USER_NAME">
+					<beans:value>SEND_USER_NAME</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.RESERVATION_SEND_DATE">
+					<beans:value>RESERVATION_SEND_DATE</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.NOTICE_TYPE">
+					<beans:value>NOTICE_TYPE</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.STATUS">
+					<beans:value>STATUS</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.SMS_CONTENT">
+					<beans:value>SMS_CONTENT</beans:value>
+				</beans:entry>
+
+				<beans:entry key="OPSms.FIELD_NAME_SMS_ID">
+					<beans:value>SMS_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.FIELD_NAME_SITUATION_ID">
+					<beans:value>SITUATION_ID</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.FIELD_NAME_READ_CONFIRM">
+					<beans:value>BPM_CNFM_YN</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSms.FIELD_NAME_REGIST_DATE">
+					<beans:value>REGIST_DATE</beans:value>
+				</beans:entry>
+
 				<beans:entry key="OPSms.QUERY_SELECT_FOR_CHECK">
 					<beans:value>select * from USITUATION.TM_SM_SMS_ITEM where SITUATION_ID = ? and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) order by REGIST_DATE desc</beans:value>
 				</beans:entry>
@@ -94,6 +400,47 @@
 				</beans:entry>
 				<beans:entry key="OPSms.QUERY_SELECT_FOR_PERFORM">
 					<beans:value>select * from USITUATION.TM_SM_SMS_ITEM where SITUATION_ID = ? and SMS_ID = ?</beans:value>
+				</beans:entry>
+				
+				<!-- System -->
+				<beans:entry key="System.TABLE_NAME_OPPORTAL_SITUATION">
+					<beans:value>USITUATION.TH_ST_SITUATION_HISTORY</beans:value>
+				</beans:entry>
+				<beans:entry key="System.TABLE_NAME_OPPORTAL_ST">
+					<beans:value>USITUATION.TM_ST_SITUATION</beans:value>
+				</beans:entry>
+				<beans:entry key="System.TABLE_NAME_OPPORTAL_FACILITY">
+					<beans:value>CMDB.TM_CM_FACILITY_INFO</beans:value>
+				</beans:entry>
+				<beans:entry key="System.TABLE_NAME_OPPORTAL_DISPLAY">
+					<beans:value>USITUATION.TN_ST_DISPLAY</beans:value>
+				</beans:entry>
+				<beans:entry key="System.TABLE_NAME_OPPORTAL_SMS">
+					<beans:value>USITUATION.TM_SM_SMS_ITEM</beans:value>
+				</beans:entry>
+				<beans:entry key="System.TABLE_NAME_INTCON_SITUATION">
+					<beans:value>US1.TN_CTL_EVENT_INFO</beans:value>
+				</beans:entry>
+				<beans:entry key="System.TABLE_NAME_COMMID_TRACE">
+					<beans:value>TB_COM_INTG_LOG</beans:value>
+				</beans:entry>
+				<beans:entry key="System.TABLE_NAME_DEVMID_SEND_STATUS">
+					<beans:value>TN_IDM_SEND_STATUS</beans:value>
+				</beans:entry>
+				<beans:entry key="System.TABLE_NAME_ADAPTER_HISTORY">
+					<beans:value>TB_UAST_CMNC_HS</beans:value>
+				</beans:entry>
+				<beans:entry key="System.TABLE_NAME_COMMID_JOIN">
+					<beans:value>CMDB.TN_CM_EVENT_OUTB_INFO</beans:value>
+				</beans:entry>
+				<beans:entry key="System.TABLE_NAME_SEND_CONTENTS">
+					<beans:value>UIDB.TN_IDM_SEND_CONTENTS</beans:value>
+				</beans:entry>
+				<beans:entry key="System.TABLE_NAME_SEND_INFO">
+					<beans:value>UIDB.TN_IDM_SEND_INFO</beans:value>
+				</beans:entry>
+				<beans:entry key="System.TABLE_NAME_RCV_DEVICE">
+					<beans:value>UIDB.TN_IDM_CONTENTS_RCV_DEVICE</beans:value>
 				</beans:entry>
 				
 			</beans:map>
@@ -105,5 +452,16 @@
 				</beans:entry>
 			</beans:map>
 		</beans:property>
+		
+		
+		<!-- PassUrl List -->
+		<beans:property name="passUrlList">
+			<beans:map>
+				<beans:entry key="BPM.PASSURLLIST">
+					<beans:value>www.cnuct.kr</beans:value>
+				</beans:entry>
+			</beans:map>
+		</beans:property>
+		
 	</beans:bean>
 </beans:beans>

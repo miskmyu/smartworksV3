@@ -26,26 +26,10 @@ public class DMHistory {
 	public static final String DEVICE_ID_KIOSK			= "TMEMKIOSK";
 	public static final String DEVICE_ID_ENV_VMS		= "EVEIVMS";
 	
-	public static final String FIELD_NAME_EVENT_ID = "a.EVENT_ID";
-	public static final String FIELD_NAME_SEND_VALUE = "c.SEND_RESPONSE_VALUE";
-	public static final String FIELD_NAME_SEND_SEQ = "SEND_INFO_SEQ";
-	public static final String FIELD_NAME_ADAPTER_DIV = "b.ADAPTER_DIVISION";
-	
-	
-	
 	public static final String FLAG_STOP_DISPLAY 	= "Y";
 	
-//	public static final String QUERY_SELECT_FOR_DISPLAY_PERFORM = "select distinct a."+ FIELD_NAME_SEND_SEQ +",b.*," + FIELD_NAME_SEND_VALUE + ", " + FIELD_NAME_EVENT_ID + " from " + System.TABLE_NAME_SEND_INFO + " a, " + System.TABLE_NAME_SEND_CONTENTS + " b, "
-//			+ System.TABLE_NAME_RCV_DEVICE + " c where a." + FIELD_NAME_SEND_SEQ + " = b." + FIELD_NAME_SEND_SEQ + " and c." + FIELD_NAME_SEND_SEQ +  " = a." + FIELD_NAME_SEND_SEQ + " and " + FIELD_NAME_EVENT_ID +
-//			" = ? and " + FIELD_NAME_ADAPTER_DIV + " = ? order by a." + FIELD_NAME_SEND_SEQ + " desc";
-//	
-//	public static final String QUERY_SELECT_FOR_STOP_PERFORM = "select distinct a."+ FIELD_NAME_SEND_SEQ +",b.*," + FIELD_NAME_SEND_VALUE + ", " + FIELD_NAME_EVENT_ID + " from " + System.TABLE_NAME_SEND_INFO + " a, " + System.TABLE_NAME_SEND_CONTENTS + " b, "
-//			+ System.TABLE_NAME_RCV_DEVICE + " c where a." + FIELD_NAME_SEND_SEQ + " = b." + FIELD_NAME_SEND_SEQ + " and c." + FIELD_NAME_SEND_SEQ +  " = a." + FIELD_NAME_SEND_SEQ + " and " + FIELD_NAME_EVENT_ID +
-//			" = ? and " + FIELD_NAME_ADAPTER_DIV + " = ? order by a." + FIELD_NAME_SEND_SEQ + " desc";
-
-	
 	public static final KeyMap[] DEVMID_TRACE_FIELDS = {
-		new KeyMap("표출내용", "DATA_PATH"), new KeyMap("표출지속시간", "PLAY_TIME"), new KeyMap("표출결과", "SEND_RESPONSE_VALUE"), new KeyMap("이벤트아이디", "EVENT_ID"), new KeyMap("디바이스아이디", "ADAPTER_DIVISION")
+		new KeyMap("표출내용", UcityConstant.getQueryByKey("DMHistory.DATA_PATH")), new KeyMap("표출지속시간", UcityConstant.getQueryByKey("DMHistory.PLAY_TIME")), new KeyMap("표출결과", UcityConstant.getQueryByKey("DMHistory.SEND_RESPONSE_VALUE")), new KeyMap("이벤트아이디", UcityConstant.getQueryByKey("DMHistory.EVENT_ID")), new KeyMap("디바이스아이디", UcityConstant.getQueryByKey("DMHistory.ADAPTER_DIVISION"))
 	};
 
 	private String eventId;
@@ -111,15 +95,15 @@ public class DMHistory {
 		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
-			if(keyMap.getKey().equals("DATA_PATH"))
+			if(keyMap.getKey().equals(UcityConstant.getQueryByKey("DMHistory.DATA_PATH")))
 				dataRecord.put(keyMap.getId(), this.dataPath);
-			else if(keyMap.getKey().equals("PLAY_TIME"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("DMHistory.PLAY_TIME")))
 				dataRecord.put(keyMap.getId(), this.playTime);
-			else if(keyMap.getKey().equals("SEND_RESPONSE_VALUE"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("DMHistory.SEND_RESPONSE_VALUE")))
 				dataRecord.put(keyMap.getId(), this.sendResponseValue);	
-			else if(keyMap.getKey().equals("EVENT_ID"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("DMHistory.EVENT_ID")))
 				dataRecord.put(keyMap.getId(), this.eventId);	
-			else if(keyMap.getKey().equals("ADAPTER_DIVISION"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("DMHistory.ADAPTER_DIVISION")))
 				dataRecord.put(keyMap.getId(), this.deviceId);	
 		}
 		return dataRecord;
@@ -140,19 +124,19 @@ public class DMHistory {
 	public void setResult(ResultSet result){
 		if(SmartUtil.isBlankObject(result)) return;
 		try{
-			this.dataPath = result.getString("DATA_PATH");
+			this.dataPath = result.getString(UcityConstant.getQueryByKey("DMHistory.DATA_PATH"));
 		}catch (Exception ex){}
 		try{
-			this.playTime = result.getString("PLAY_TIME");
+			this.playTime = result.getString(UcityConstant.getQueryByKey("DMHistory.PLAY_TIME"));
 		}catch (Exception ex){}
 		try{
-			this.sendResponseValue = result.getString("SEND_RESPONSE_VALUE");
+			this.sendResponseValue = result.getString(UcityConstant.getQueryByKey("DMHistory.SEND_RESPONSE_VALUE"));
 		}catch (Exception ex){}
 		try{
-			this.eventId = result.getString("EVENT_ID");
+			this.eventId = result.getString(UcityConstant.getQueryByKey("DMHistory.EVENT_ID"));
 		}catch (Exception ex){}
 		try{
-			this.deviceId = result.getString("ADAPTER_DIVISION");
+			this.deviceId = result.getString(UcityConstant.getQueryByKey("DMHistory.ADAPTER_DIVISION"));
 		}catch (Exception ex){}
 	}
 
