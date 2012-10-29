@@ -89,15 +89,12 @@ function logout() {
 <link href="u-city/css/detail.css" type="text/css" rel="stylesheet" />
 <link href="u-city/css/form.css" type="text/css" rel="stylesheet" />
 <link href="u-city/css/pop.css" type="text/css" rel="stylesheet" />
-<!-- <link href="css/ext/ext-all.css" type="text/css" rel="stylesheet" />
- -->
 <link href="css/black/media.css" type="text/css" rel="stylesheet"/>
 
 
 <link href="css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" type="text/css" title="ui-theme" />
-<!-- <link href="css/ext/ext-all.css" type="text/css" rel="stylesheet" />
+<link href="css/ext/ext-all.css" type="text/css" rel="stylesheet" />
 <link href="css/fileuploader/fileuploader.css" type="text/css" rel="stylesheet"/>
- -->
 <link href="smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />
 
 <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -123,21 +120,18 @@ function logout() {
 <script type="text/javascript" src="js/jquery/jquery.ui.datepicker-ko.js"></script>
 <script type="text/javascript" src="js/jquery/jquery-ui-timepicker-addon.js"></script>
 <script type="text/javascript" src="js/jquery/jquery-ui-timepicker-ko.js"></script>
-<!-- <script type="text/javascript" src="js/jquery/history/jquery.history.js"></script>
- -->
+<script type="text/javascript" src="js/jquery/history/jquery.history.js"></script>
+
 <script type="text/javascript" src="js/jquery/jquery.json-2.3.min.js"></script>
-<!-- 
 <script type="text/javascript" src="js/jquery/jquery.zclip.min.js"></script>
- -->
 <script type="text/javascript" src="js/jquery/jshashtable-2.1.js"></script>
 <script type="text/javascript" src="js/jquery/jquery.numberformatter-1.2.2.min.js"></script>
 <script type="text/javascript" src="js/jquery/jquery.formatCurrency-1.4.0.min.js"></script>
 <script type="text/javascript" src="js/jquery/jquery.simplemodal.1.4.2.min.js"></script>
 <script type="text/javascript" src="js/jquery/jquery-ui-1.8.21.custom.min.js"></script>
 
-<!-- 
+ 
 <script type="text/javascript" src="js/ext/ext-all.js"></script>
- -->
 <script type="text/javascript" src="js/sw/sw-common.js"></script>
 <script type="text/javascript" src="js/sw/sw-util.js"></script>
 <script type="text/javascript" src="js/sw/sw-language.js"></script>
@@ -150,9 +144,9 @@ function logout() {
 <script type="text/javascript" src="js/sw/sw-iframe-autoheight.js"></script>
 
 <script type="text/javascript" src="js/sw/sw-report.js"></script>
-<!-- <script type="text/javascript" src="js/sw/sw-file.js"></script>
+<script type="text/javascript" src="js/sw/sw-file.js"></script>
 <script type="text/javascript" src="js/sw/sw-webmail.js"></script>
- -->
+
 <script type="text/javascript" src='js/sw/sw-formFields.js'></script>
 <script type="text/javascript" src='js/sw/sw-popup.js'></script>
 
@@ -164,10 +158,9 @@ function logout() {
 <script type="text/javascript" src="js/sw/sw-act-space.js"></script>
 <script type="text/javascript" src="js/sw/sw-act-form.js"></script>
 <script type="text/javascript" src="js/sw/sw-act-settings.js"></script>
-<script type="text/javascript" src="js/sw/sw-act-builder.js"></script>
-<!-- 
+<script type="text/javascript" src="js/sw/sw-act-builder.js"></script> 
 <script type="text/javascript" src="js/sw/sw-act-mail.js"></script>
- -->
+
 <script type="text/javascript" src="u-city/js/ucity-actions.js"></script>
 <script type="text/javascript" src="u-city/js/ucity-formFields.js"></script>
 
@@ -189,16 +182,14 @@ function logout() {
 <script type="text/javascript" src='js/smartform/field/time_chooser.js'></script>
 <script type="text/javascript" src='js/smartform/field/datetime_chooser.js'></script>
 <script type="text/javascript" src='js/smartform/field/user_field.js'></script>
-<script type="text/javascript" src='js/smartform/field/ref_form_field.js'></script>
-<!-- 
+<script type="text/javascript" src='js/smartform/field/ref_form_field.js'></script> 
 <script type="text/javascript" src='js/smartform/field/image_box.js'></script>
 <script type="text/javascript" src='js/smartform/field/videoYT_box.js'></script>
- -->
+
 <script type="text/javascript" src='js/smartform/field/auto_index.js'></script>
 
 <script type="text/javascript" src="smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
-<!-- <script type="text/javascript" src="js/jquery/fileuploader/fileuploader.js" ></script>
- -->
+<script type="text/javascript" src="js/jquery/fileuploader/fileuploader.js" ></script>
 <title>U-CITY</title>
 
 </head>

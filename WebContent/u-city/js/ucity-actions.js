@@ -120,6 +120,40 @@ $(function() {
 		return false;
 	});
 
+	$('.js_situation_editor_box').live('click', function(e){
+		var input = $(targetElement(e));
+		var formDescEdit = input.parents('.js_form_desc_edit');
+		var formDescText = formDescEdit.find('.js_form_desc_text');
+		var formDescEditor = formDescEdit.find('.js_form_desc_editor');
+		var formDesc = formDescText.attr('value');
+		var fieldName = input.parents('.js_situation_editor_box').attr('fieldName');
+		if(input.attr('value') == 'editor' && isEmpty(formDescEditor.html())){
+			formDescEdit.find('.js_form_desc_text').hide().attr('name', '');
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			formDescEditor.html(gridTable.html(gridRow));
+
+			SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
+				container: gridRow,
+				fieldId: fieldName,
+				fieldName: "",
+				columns: 1,
+				value: formDesc,
+				resizer: false,
+				required: false
+			});
+			gridRow.find('.form_label').hide();
+			gridRow.find('.form_value').css({width:"100%"});
+			gridRow.find('.form_value > span').css({width:"687px"});
+			gridRow.find('#'+ fieldName).css({height:"280px"});
+						
+		}else if(input.attr('value') == 'text' && !formDescText.is(':visible')){
+			formDescEdit.find('.js_form_desc_text').show().attr('name', fieldName);
+			formDescEditor.html('');
+		}
+		return;
+	});
+
 	$('.js_cancel_situation_manual').live('click', function(e){
 		var target = $(targetElement(e)).parents('.js_cancel_situation_manual');
 		target.hide().siblings('.js_modify_situation_manual').show().siblings('.js_save_situation_manual').hide();
