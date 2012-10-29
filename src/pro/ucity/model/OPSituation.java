@@ -58,19 +58,7 @@ public class OPSituation {
 	public static final String QUERY_SELECT_FOR_FACILITY ="select distinct c." + FIELD_NAME_LC_NAME + " from " + System.TABLE_NAME_OPPORTAL_SITUATION + " a," + System.TABLE_NAME_OPPORTAL_ST +" b, " + System.TABLE_NAME_OPPORTAL_FACILITY + 
 															" c where a." + FIELD_NAME_SITUATION_ID + " = b." + FIELD_NAME_SITUATION_ID + " and  b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + " and a." 
 															+ FIELD_NAME_SITUATION_ID + " = ? ";
-	
-//	public static final String QUERY_SELECT_FOR_PERFORM ="select distinct a.*, c." + FIELD_NAME_LC_NAME + " from " + System.TABLE_NAME_OPPORTAL_SITUATION + " a," + System.TABLE_NAME_OPPORTAL_ST +" b, " + System.TABLE_NAME_OPPORTAL_FACILITY + 
-//															" c where a." + FIELD_NAME_SITUATION_ID + " = ? and a." + FIELD_NAME_STATUS + " = ? and (a." + FIELD_NAME_READ_CONFIRM + " != 'Y' or a." + FIELD_NAME_READ_CONFIRM + " is null)  and  a." + FIELD_NAME_SITUATION_ID + "= b." + FIELD_NAME_SITUATION_ID + " and b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + 
-//															" order by start_date desc";
-//	
-//	public static final String QUERY_SELECT_FOR_PROCESSING_PERFORM ="select distinct a.*, c." + FIELD_NAME_LC_NAME + " from " + System.TABLE_NAME_OPPORTAL_SITUATION + " a," + System.TABLE_NAME_OPPORTAL_ST +" b, " + System.TABLE_NAME_OPPORTAL_FACILITY + 
-//															" c where a." + FIELD_NAME_SITUATION_ID + " = ? and a." + FIELD_NAME_STATUS + " = ? and  a." + FIELD_NAME_SITUATION_ID + "= b." + FIELD_NAME_SITUATION_ID + " and b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + 
-//															" order by start_date desc";
-//	
-//	public static final String QUERY_SELECT_FOR_PROCESS_PERFORM ="select distinct a.*, c." + FIELD_NAME_LC_NAME + " from " + System.TABLE_NAME_OPPORTAL_SITUATION + " a," + System.TABLE_NAME_OPPORTAL_ST +" b, " + System.TABLE_NAME_OPPORTAL_FACILITY + 
-//																		" c where a." + FIELD_NAME_SITUATION_ID + " = ? and (a." + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_PROCESSING + "' or a." + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_RELEASE + "') and (a." + FIELD_NAME_READ_CONFIRM + " != 'Y' or a." + FIELD_NAME_READ_CONFIRM + " is null) and  a." + FIELD_NAME_SITUATION_ID + "= b." + FIELD_NAME_SITUATION_ID + " and b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + 
-//																		" order by start_date desc";
-	
+		
 	public static final String QUERY_SELECT_EVENT_CODE = "SELECT A.*, C." + FIELD_NAME_OCCUR_DATE + " FROM CMDB.TM_CM_STAT_EVENT A, USITUATION.TH_ST_SITUATION_HISTORY B, USITUATION.TM_ST_SITUATION C WHERE B.SITUATION_ID = C.SITUATION_ID AND C.CATEGORY_ID = A.CATEGORY_ID AND B.SITUATION_ID = ? AND B.SEQ = '1'";
 	
 	public static final KeyMap[] OPPORTAL_SITUATION_FIELDS = {
