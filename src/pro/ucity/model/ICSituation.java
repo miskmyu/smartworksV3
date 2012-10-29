@@ -14,25 +14,20 @@ import pro.ucity.util.UcityTest;
 import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
+import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
 
 public class ICSituation {
 
-	public static final String FIELD_NAME_EVENT_ID = "ID";
-	public static final String FIELD_NAME_DONE = "DONE_YN";
-
 	public static final String MSG_TYPE_OCCURRENCE = "O";
 	public static final String MSG_TYPE_RELEASE = "R";
 	
-	public static final String QUERY_SELECT_FOR_OCCURRENCE_PERFORM = "select * from " + System.TABLE_NAME_INTCON_SITUATION + " where " + FIELD_NAME_EVENT_ID + " = ? and (" + FIELD_NAME_DONE + " != 'Y' or " + FIELD_NAME_DONE + " is null)";
-	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select * from " + System.TABLE_NAME_INTCON_SITUATION + " where " + FIELD_NAME_EVENT_ID + " = ? and " + FIELD_NAME_DONE + " = 'N'";
-
 	public static final KeyMap[] INTCON_SITUATION_FIELDS = {
-		new KeyMap("키ID", "ID"), new KeyMap("이벤트구분ID", "EVENT_ID"), new KeyMap("X좌표", "POS_X"), new KeyMap("Y좌표", "POS_Y"),
-		new KeyMap("Z좌표", "POS_Z"), new KeyMap("전송시각", "SEND_TIME"), new KeyMap("이벤트내용", "EVENT_CONTENT"), new KeyMap("시설물구분", "SISUL_DIV"),
-		new KeyMap("시설물ID", "SISUL_ID"), new KeyMap("기타정보", "ETC"), new KeyMap("처리여부", "DONE_YN"), new KeyMap("등록일시", "CREATE_DATE"),
-		new KeyMap("속성", "ATTR1")
+		new KeyMap("키ID", UcityConstant.getQueryByKey("ICSituation.ID")), new KeyMap("이벤트구분ID", UcityConstant.getQueryByKey("ICSituation.EVENT_ID")), new KeyMap("X좌표", UcityConstant.getQueryByKey("ICSituation.POS_X")), new KeyMap("Y좌표", UcityConstant.getQueryByKey("ICSituation.POS_Y")),
+		new KeyMap("Z좌표", UcityConstant.getQueryByKey("ICSituation.POS_Z")), new KeyMap("전송시각", UcityConstant.getQueryByKey("ICSituation.SEND_TIME")), new KeyMap("이벤트내용", UcityConstant.getQueryByKey("ICSituation.EVENT_CONTENT")), new KeyMap("시설물구분", UcityConstant.getQueryByKey("ICSituation.SISUL_DIV")),
+		new KeyMap("시설물ID", UcityConstant.getQueryByKey("ICSituation.SISUL_ID")), new KeyMap("기타정보", UcityConstant.getQueryByKey("ICSituation.ETC")), new KeyMap("처리여부", UcityConstant.getQueryByKey("ICSituation.DONE_YN")), new KeyMap("등록일시", UcityConstant.getQueryByKey("ICSituation.CREATE_DATE")),
+		new KeyMap("속성", UcityConstant.getQueryByKey("ICSituation.ATTR1"))
 	};
 	
 	private String id;
@@ -143,31 +138,31 @@ public class ICSituation {
 		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
-			if(keyMap.getKey().equals("ID"))
+			if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.ID")))
 				dataRecord.put(keyMap.getId(), this.id);
-			else if(keyMap.getKey().equals("EVENT_ID"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.EVENT_ID")))
 				dataRecord.put(keyMap.getId(), this.eventId);
-			else if(keyMap.getKey().equals("POS_X"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.POS_X")))
 				dataRecord.put(keyMap.getId(), this.posX);
-			else if(keyMap.getKey().equals("POS_Y"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.POS_Y")))
 				dataRecord.put(keyMap.getId(), this.posY);
-			else if(keyMap.getKey().equals("POS_Z"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.POS_Z")))
 				dataRecord.put(keyMap.getId(), this.posZ);
-			else if(keyMap.getKey().equals("SEND_TIME"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.SEND_TIME")))
 				dataRecord.put(keyMap.getId(), UcityUtil.getDateString(this.sendTime));
-			else if(keyMap.getKey().equals("EVENT_CONTENT"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.EVENT_CONTENT")))
 				dataRecord.put(keyMap.getId(), this.eventContent);
-			else if(keyMap.getKey().equals("SISUL_DIV"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.SISUL_DIV")))
 				dataRecord.put(keyMap.getId(), this.sisulDiv);
-			else if(keyMap.getKey().equals("SISUL_ID"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.SISUL_ID")))
 				dataRecord.put(keyMap.getId(), this.sisulId);
-			else if(keyMap.getKey().equals("ETC"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.ETC")))
 				dataRecord.put(keyMap.getId(), this.etc);
-			else if(keyMap.getKey().equals("DONE_YN"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.DONE_YN")))
 				dataRecord.put(keyMap.getId(), this.doneYn);
-			else if(keyMap.getKey().equals("CREATE_DATE"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.CREATE_DATE")))
 				dataRecord.put(keyMap.getId(), this.createDate);
-			else if(keyMap.getKey().equals("ATTR1"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("ICSituation.ATTR1")))
 				dataRecord.put(keyMap.getId(), this.attr1);
 		}
 		return dataRecord;
@@ -188,43 +183,43 @@ public class ICSituation {
 		if(SmartUtil.isBlankObject(result)) return;
 
 		try{
-			this.id = result.getString("ID");
+			this.id = result.getString(UcityConstant.getQueryByKey("ICSituation.ID"));
 		}catch (Exception ex){}
 		try{
-			this.eventId = result.getString("EVENT_ID");
+			this.eventId = result.getString(UcityConstant.getQueryByKey("ICSituation.EVENT_ID"));
 		}catch (Exception ex){}
 		try{
-			this.posX = result.getString("POS_X");
+			this.posX = result.getString(UcityConstant.getQueryByKey("ICSituation.POS_X"));
 		}catch (Exception ex){}
 		try{
-			this.posY = result.getString("POS_Y");
+			this.posY = result.getString(UcityConstant.getQueryByKey("ICSituation.POS_Y"));
 		}catch (Exception ex){}
 		try{
-			this.posZ = result.getString("POS_Z");
+			this.posZ = result.getString(UcityConstant.getQueryByKey("ICSituation.POS_Z"));
 		}catch (Exception ex){}
 		try{
-			this.sendTime = result.getString("SEND_TIME");
+			this.sendTime = result.getString(UcityConstant.getQueryByKey("ICSituation.SEND_TIME"));
 		}catch (Exception ex){}
 		try{
-			this.eventContent = result.getString("EVENT_CONTENT");
+			this.eventContent = result.getString(UcityConstant.getQueryByKey("ICSituation.EVENT_CONTENT"));
 		}catch (Exception ex){}
 		try{
-			this.sisulDiv = result.getString("SISUL_DIV");
+			this.sisulDiv = result.getString(UcityConstant.getQueryByKey("ICSituation.SISUL_DIV"));
 		}catch (Exception ex){}
 		try{
-			this.sisulId = result.getString("SISUL_ID");
+			this.sisulId = result.getString(UcityConstant.getQueryByKey("ICSituation.SISUL_ID"));
 		}catch (Exception ex){}
 		try{
-			this.etc = result.getString("ETC");
+			this.etc = result.getString(UcityConstant.getQueryByKey("ICSituation.ETC"));
 		}catch (Exception ex){}
 		try{
-			this.doneYn = result.getString("DONE_YN");
+			this.doneYn = result.getString(UcityConstant.getQueryByKey("ICSituation.DONE_YN"));
 		}catch (Exception ex){}
 		try{
-			this.createDate = result.getString("CREATE_DATE");
+			this.createDate = result.getString(UcityConstant.getQueryByKey("ICSituation.CREATE_DATE"));
 		}catch (Exception ex){}
 		try{
-			this.attr1 = result.getString("ATTR1");
+			this.attr1 = result.getString(UcityConstant.getQueryByKey("ICSituation.ATTR1"));
 		}catch (Exception ex){}
 	}
 	
@@ -236,20 +231,22 @@ public class ICSituation {
 	public static Map<String,Object> readHistoryTable(String eventId, String status){
 		
 		if(SmartUtil.isBlankObject(eventId)) return null;
-		try {
-			Class.forName(System.DATABASE_JDBC_DRIVE);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Class.forName(System.DATABASE_JDBC_DRIVE);
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
 //		String icSituationSelectSql = (status.equals(MSG_TYPE_OCCURRENCE)) ? ICSituation.QUERY_SELECT_FOR_OCCURRENCE_PERFORM : ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM;
-		String icSituationSelectSql = ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM;
+//		String icSituationSelectSql = ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM;
+		String icSituationSelectSql = UcityConstant.getQueryByKey("ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM");
 		try {
 			try{
-				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();
 				return null;

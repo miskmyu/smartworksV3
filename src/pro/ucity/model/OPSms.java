@@ -14,26 +14,19 @@ import pro.ucity.util.UcityTest;
 import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
+import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
 
 public class OPSms {
 
-	public static final String FIELD_NAME_SMS_ID = "SMS_ID";
-	public static final String FIELD_NAME_SITUATION_ID = "SITUATION_ID";
-	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
-	public static final String FIELD_NAME_REGIST_DATE = "REGIST_DATE";
-
-	public static final String QUERY_SELECT_FOR_CHECK = "select * from " + System.TABLE_NAME_OPPORTAL_SMS + " where " + FIELD_NAME_SITUATION_ID + " = ? and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) order by " + FIELD_NAME_REGIST_DATE + " desc";
-	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_OPPORTAL_SMS + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_SITUATION_ID + " = ?";
-	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SMS + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_SMS_ID + " = ?";
-
 	public static final KeyMap[] OPPORTAL_SMS_FIELDS = {
-		new KeyMap("메시지 아이디", "SMS_ID"), new KeyMap("메시지 구분", "SEND_TYPE"), new KeyMap("등록일", "REGIST_DATE"), new KeyMap("발송자", "SEND_USER_NAME"),
-		new KeyMap("예약발송일자", "RESERVATION_SEND_DATE"), new KeyMap("알림구분", "NOTICE_TYPE"), new KeyMap("상태", "STATUS"), new KeyMap("메시지 내용", "SMS_CONTENT")
+		new KeyMap("메시지 아이디", UcityConstant.getQueryByKey("OPSms.SMS_ID")), new KeyMap("메시지 구분", UcityConstant.getQueryByKey("OPSms.SEND_TYPE")), new KeyMap("등록일", UcityConstant.getQueryByKey("OPSms.REGIST_DATE")), new KeyMap("발송자", UcityConstant.getQueryByKey("OPSms.SEND_USER_NAME")),
+		new KeyMap("예약발송일자", UcityConstant.getQueryByKey("OPSms.RESERVATION_SEND_DATE")), new KeyMap("알림구분", UcityConstant.getQueryByKey("OPSms.NOTICE_TYPE")), new KeyMap("상태", UcityConstant.getQueryByKey("OPSms.STATUS")), new KeyMap("메시지 내용", UcityConstant.getQueryByKey("OPSms.SMS_CONTENT"))
 	};
 	
 	private String situationId;
+	
 	private String smsId;
 	private String sendType;
 	private String registDate;
@@ -133,21 +126,21 @@ public class OPSms {
 		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
-			if(keyMap.getKey().equals("SMS_ID"))
+			if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.SMS_ID")))
 				dataRecord.put(keyMap.getId(), this.smsId);
-			else if(keyMap.getKey().equals("SEND_TYPE"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.SEND_TYPE")))
 				dataRecord.put(keyMap.getId(), this.sendType);
-			else if(keyMap.getKey().equals("REGIST_DATE"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.REGIST_DATE")))
 				dataRecord.put(keyMap.getId(), this.registDate);
-			else if(keyMap.getKey().equals("SEND_USER_NAME"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.SEND_USER_NAME")))
 				dataRecord.put(keyMap.getId(), this.sendUserName);
-			else if(keyMap.getKey().equals("NOTICE_TYPE"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.NOTICE_TYPE")))
 				dataRecord.put(keyMap.getId(), this.noticeType);
-			else if(keyMap.getKey().equals("STATUS"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.STATUS")))
 				dataRecord.put(keyMap.getId(), this.status);
-			else if(keyMap.getKey().equals("SMS_CONTENT"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.SMS_CONTENT")))
 				dataRecord.put(keyMap.getId(), this.smsContent);
-			else if(keyMap.getKey().equals("RESERVATION_SEND_DATE"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.RESERVATION_SEND_DATE")))
 				dataRecord.put(keyMap.getId(), this.reservationSendDate);
 		}	
 		return dataRecord;
@@ -167,31 +160,31 @@ public class OPSms {
 	public void setResult(ResultSet result){
 		if(SmartUtil.isBlankObject(result)) return; 				
 		try{
-			this.situationId = result.getString("SITUATION_ID");
+			this.situationId = result.getString(UcityConstant.getQueryByKey("OPSms.SITUATION_ID"));
 		}catch (Exception ex){}
 		try{
-			this.smsId = result.getString("SMS_ID");
+			this.smsId = result.getString(UcityConstant.getQueryByKey("OPSms.SMS_ID"));
 		}catch (Exception ex){}
 		try{
-			this.sendType = result.getString("SEND_TYPE");
+			this.sendType = result.getString(UcityConstant.getQueryByKey("OPSms.SEND_TYPE"));
 		}catch (Exception ex){}
 		try{
-			this.registDate = result.getString("REGIST_DATE");
+			this.registDate = result.getString(UcityConstant.getQueryByKey("OPSms.REGIST_DATE"));
 		}catch (Exception ex){}
 		try{
-			this.sendUserName = result.getString("SEND_USER_NAME");
+			this.sendUserName = result.getString(UcityConstant.getQueryByKey("OPSms.SEND_USER_NAME"));
 		}catch (Exception ex){}
 		try{
-			this.noticeType = result.getString("NOTICE_TYPE");
+			this.noticeType = result.getString(UcityConstant.getQueryByKey("OPSms.NOTICE_TYPE"));
 		}catch (Exception ex){}
 		try{
-			this.status = result.getString("STATUS");
+			this.status = result.getString(UcityConstant.getQueryByKey("OPSms.STATUS"));
 		}catch (Exception ex){}
 		try{
-			this.smsContent = result.getString("SMS_CONTENT");
+			this.smsContent = result.getString(UcityConstant.getQueryByKey("OPSms.SMS_CONTENT"));
 		}catch (Exception ex){}
 		try{
-			this.reservationSendDate = result.getString("RESERVATION_SEND_DATE");
+			this.reservationSendDate = result.getString(UcityConstant.getQueryByKey("OPSms.RESERVATION_SEND_DATE"));
 		}catch (Exception ex){}
 	}
 	
@@ -203,21 +196,25 @@ public class OPSms {
 	public static Map<String,Object> checkForDisplay(String eventId,  Map<String,Object> dataRecord){
 		
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(dataRecord)) return dataRecord;
-		try {
-			Class.forName(System.DATABASE_JDBC_DRIVE);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Class.forName(System.DATABASE_JDBC_DRIVE);
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
-		String opSmsSelectSql = QUERY_SELECT_FOR_CHECK;
-		String opSmsUpdateSql = QUERY_UPDATE_FOR_READ_CONFIRM;
+//		String opSmsSelectSql = QUERY_SELECT_FOR_CHECK;
+//		String opSmsUpdateSql = QUERY_UPDATE_FOR_READ_CONFIRM;
+		
+		String opSmsSelectSql = UcityConstant.getQueryByKey("OPSms.QUERY_SELECT_FOR_CHECK");
+		String opSmsUpdateSql = UcityConstant.getQueryByKey("OPSms.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
-				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();
 				return null;
@@ -232,7 +229,7 @@ public class OPSms {
 				rs.first();
 				if(count>0) {
 					try{
-						String smsId = rs.getString(OPSms.FIELD_NAME_SMS_ID);
+						String smsId = rs.getString(UcityConstant.getQueryByKey("OPSms.FIELD_NAME_SMS_ID"));
 						updatePstmt = con.prepareStatement(opSmsUpdateSql);
 						updatePstmt.setString(1, eventId);
 						boolean result = updatePstmt.execute();
@@ -273,19 +270,21 @@ public class OPSms {
 	public static Map<String,Object> readHistoryTable(String eventId, String smsId){
 		
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(smsId)) return null;
-		try {
-			Class.forName(System.DATABASE_JDBC_DRIVE);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Class.forName(System.DATABASE_JDBC_DRIVE);
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
-		String opSmsSelectSql = OPSms.QUERY_SELECT_FOR_PERFORM;
+//		String opSmsSelectSql = OPSms.QUERY_SELECT_FOR_PERFORM;
+		String opSmsSelectSql = UcityConstant.getQueryByKey("OPSms.QUERY_SELECT_FOR_PERFORM");
 		try {
 			try{
-				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();
 				return null;

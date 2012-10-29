@@ -17,6 +17,7 @@ import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.work.ProcessWork;
+import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.INoticeService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.server.service.factory.SwServiceFactory;
@@ -37,25 +38,8 @@ public class Adapter {
 	public static final int EVENT_TYPE_OCCURRENCE = 1;
 	public static final int EVENT_TYPE_RELEASE = 2;
 	
-	//dev
-	public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
-	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
-	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
-	public static final String FIELD_NAME_DVSN_TYPE = "COMM_DVSN_CD";
-	//개발
-//	public static final String FIELD_NAME_COMM_TG_ID = "RECV_CMNC_TG_ID";
-//	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
-//	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
-//	public static final String FIELD_NAME_DVSN_TYPE = "COMM_DVSN_CD";
-	
-	public static final String DVSN_RECV_TYPE = "RECV";
-//  public static final String DVSN_SEND_TYPE = "SEND";
- 	
-	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) and " + FIELD_NAME_DVSN_TYPE + " = '" + DVSN_RECV_TYPE + "'";
-	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) and " + FIELD_NAME_DVSN_TYPE + " = '" + DVSN_RECV_TYPE + "'";
-	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_ADAPTER_HISTORY + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_COMM_TG_ID + " = ?";
-
 	public static final KeyMap[][] ADAPTER_HISTORY_FIELDS = {
+		
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("특보분류", "env_event_type"), new KeyMap("발생내용", "event_content")},
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("오염물질수", "pollution_number"), new KeyMap("오염물질구분", "pollution_type"), new KeyMap("오염물질측정치", "pollution_value"), new KeyMap("오염등급", "pollution_level"), new KeyMap("오염물질 예/경보구분", "pollution_example")},
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
@@ -486,9 +470,9 @@ public class Adapter {
 	
 	public void setResult(ResultSet result){
 		try{
-			if(result.getRow()>0){ 
-				this.communicationId = result.getString(FIELD_NAME_COMM_TG_ID);
-				String commContent = result.getString(FIELD_NAME_COMM_CONTENT);
+			if(result.getRow()>0){
+				this.communicationId = result.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
+				String commContent = result.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_CONTENT"));
 				if(SmartUtil.isBlankObject(commContent) || commContent.length()<Adapter.LENGTH_COMM_HEADER) return;
 				this.commHeader = commContent.substring(0, Adapter.LENGTH_COMM_HEADER);
 				this.commBody = commContent.substring(Adapter.LENGTH_COMM_HEADER);
@@ -509,23 +493,27 @@ public class Adapter {
 	
 	synchronized public static void readHistoryTableToStart(){
 		java.lang.System.out.println("############ START checking ADAPTER History To Start  ################");
-		try {
-			Class.forName(System.DATABASE_JDBC_DRIVE);
-		} catch (ClassNotFoundException e) {
-			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
-			e.printStackTrace();
-			return;
-		}
+//		try {
+//			Class.forName(System.DATABASE_JDBC_DRIVE);
+//		} catch (ClassNotFoundException e) {
+//			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+//			e.printStackTrace();
+//			return;
+//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
-		String adapterSelectSql = Adapter.QUERY_SELECT_FOR_START;
-		String adapterUpdateSql = Adapter.QUERY_UPDATE_FOR_READ_CONFIRM;
+//		String adapterSelectSql = Adapter.QUERY_SELECT_FOR_START;
+//		String adapterUpdateSql = Adapter.QUERY_UPDATE_FOR_READ_CONFIRM;
+		
+		String adapterSelectSql = UcityConstant.getQueryByKey("Adapter.QUERY_SELECT_FOR_START");
+		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
-				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 				te.printStackTrace();
@@ -546,7 +534,7 @@ public class Adapter {
 					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
 					while(rs.next()) {
 						try{
-							String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
+							String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
 							updatePstmt = con.prepareStatement(adapterUpdateSql);
 							updatePstmt.setString(1, communicationId);
 							boolean result = updatePstmt.execute();

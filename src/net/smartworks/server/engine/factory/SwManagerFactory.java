@@ -45,6 +45,7 @@ import net.smartworks.server.engine.worklist.manager.impl.WorkListManagerImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import pro.ucity.manager.ucityWorkList.manager.IUcityConstantsManager;
 import pro.ucity.manager.ucityWorkList.manager.IUcityWorkListManager;
 import pro.ucity.sso.manager.ISsoManager;
 
@@ -93,7 +94,14 @@ public class SwManagerFactory {
 	//UCITY
 	private ISsoManager ssoManager;
 	private IUcityWorkListManager ucityWorkListManager;
+	private IUcityConstantsManager ucityContantsManager;
 
+	public IUcityConstantsManager getUcityContantsManager() {
+		return ucityContantsManager;
+	}
+	public void setUcityContantsManager(IUcityConstantsManager ucityContantsManager) {
+		this.ucityContantsManager = ucityContantsManager;
+	}
 	public ISsoManager getSsoManager() {
 		return ssoManager;
 	}

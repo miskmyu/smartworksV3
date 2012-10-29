@@ -25,6 +25,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import pro.ucity.model.UcityConstant;
+
 import net.smartworks.server.engine.factory.SwManagerFactory;
 
 public class UcitySSOFilter implements Filter {
@@ -32,41 +34,12 @@ public class UcitySSOFilter implements Filter {
 	private FilterConfig fc; 
 	private List<String> passUrls = new ArrayList<String>();
 
-	@Override
+/*	@Override
 	public void init(FilterConfig config) throws ServletException {
         this.fc = config;
         //this.passUrls.add("");//SSO를 거치지 않을 URL
-	}
-	private boolean retriveUserProgramAuthInfo(ArrayList<UserProgramAuthInfoVO> authProgramList , String url ){
-		boolean authCheck = false;
-		
-		for( UserProgramAuthInfoVO userProgram : authProgramList ){
-			if(  userProgram.getProgramUrl().indexOf(url) >= 0 ){
-				authCheck = true;
-				break;
-			}
-		}
-		return authCheck;
-	}
-	private boolean exceptionPassUrlCheck(String url){
-		//SSO 를 거치지 않을 URL이 존재한다면 passUrls에 등록한다
-		if (this.passUrls.contains(url)) {
-			return true;
-		} else {
-			return false;
-		}
-		/*String exceptionPassUrlList = propertiesService.getString("fmuf.exceptionPassUrlList");
-		if( exceptionPassUrlList != null && exceptionPassUrlList.trim().length() != 0 ){
-			String[] exceptionPassUrlArray = exceptionPassUrlList.split(":");
-			for( int i = 0 ; i < exceptionPassUrlArray.length ; i++  ){
-				if(  url.indexOf(exceptionPassUrlArray[i]) >= 0 ){
-					return true;
-				}
-			}  
-		}
-		log.debug("return false");
-		return false;*/
-	}
+	}*/
+
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 		System.out.println("####################   SSO FILTER START!   ########################");
@@ -138,6 +111,7 @@ public class UcitySSOFilter implements Filter {
 		        session.setAttribute("ubi.pouser", svo);
 		        
 		        result = true;
+		             
 		}else if( exceptionPassUrlCheck(url) ) {  // SSO 를 거치지 않은 예외 통과 URL 인 경우
 			result = true;
 		}else{
@@ -147,27 +121,60 @@ public class UcitySSOFilter implements Filter {
 			throw new ServletException("잘못된 접근입니다. 로그인 후 이용해 주십시오.");  // 잘못된 접근입니다. 로그인 후 이용해 주십시오.
 		}
 		
-		
-		/*}else if( session.getAttribute("SSO_ID") != null ){
-			SessionVO svo = (SessionVO)session.getAttribute("ubi.pouser");    
-			authProgramList = svo.getAuthProgramList();
-		}*/
-		
-        if(exceptionPassUrlCheck(url) ){ // SSO 를 거치지 않은 예외 통과 URL 인 경우 - 권한 체크 로직 통과함
-        	//return true;
-        	return;
-        }else if( !retriveUserProgramAuthInfo(authProgramList , url) ){
-        	System.out.println("해당 화면에 대한 접근 권한이 없습니다.");
+		if( !retriveUserProgramAuthInfo(authProgramList , url) && !exceptionPassUrlCheck(url) ){
+			System.out.println("해당 화면에 대한 접근 권한이 없습니다.");
 			request.setAttribute("errorCode", "400"); 
 			//throw new CommonException(commonMessageSource.getMessage("biz.error.com.004"));  // 해당 화면에 대한 접근 권한이 없습니다.        	
-			throw new ServletException("해당 화면에 대한 접근 권한이 없습니다.");  // 해당 화면에 대한 접근 권한이 없습니다.        	
+			throw new ServletException("해당 화면에 대한 접근 권한이 없습니다.");  // 해당 화면에 대한 접근 권한이 없습니다.    	
         }
-		//return result;
+
+//		return result;
 		return;
 	}
+	private boolean retriveUserProgramAuthInfo(ArrayList<UserProgramAuthInfoVO> authProgramList , String url ){
+		boolean authCheck = false;
+		
+		if( authProgramList != null){
+			for( UserProgramAuthInfoVO userProgram : authProgramList ){
+				if(  userProgram.getProgramUrl().indexOf(url) >= 0 ){
+					authCheck = true;
+					break;
+				}
+			}
+		}
+		return authCheck;
+	}	
+	
+	private boolean exceptionPassUrlCheck(String url){
+		//SSO 를 거치지 않을 URL이 존재한다면 passUrls에 등록한다
+//		if (this.passUrls.contains(url)) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+		String exceptionPassUrlList = UcityConstant.getUrlByKey("BPM.PASSURLLIST");
+		if( exceptionPassUrlList != null && exceptionPassUrlList.trim().length() != 0 ){
+			String[] exceptionPassUrlArray = exceptionPassUrlList.split(":");
+			for( int i = 0 ; i < exceptionPassUrlArray.length ; i++  ){
+				if(  url.indexOf(exceptionPassUrlArray[i]) >= 0 ){
+					return true;
+				}
+			}  
+		}
+		System.out.println("return false");
+		return false;
+	}
+	
+	
 	
 	@Override
 	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void init(FilterConfig arg0) throws ServletException {
 		// TODO Auto-generated method stub
 		
 	}
