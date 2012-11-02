@@ -582,6 +582,12 @@ public class OPSituation {
 				e.printStackTrace();
 			}
 		}
+
+		Map<String, Object> dataRecord = new HashMap<String, Object>();
+		if(OPDisplay.checkIfDisplay(eventId, false) || OPDisplay.checkIfDisplay(eventId, true) || OPSms.checkIfDisplay(eventId)){
+			return dataRecord;
+		}
+
 		return null;
 	}
 }

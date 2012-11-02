@@ -677,9 +677,12 @@ public class UcityUtil {
 						}
 					}else{
 						if(System.getTableId(tableName)==System.TABLE_ID_OPPORTAL_SITUATION && OPSituation.isDisplayableStatus(status)){
-							dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
-							dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);
-							dataRecord = OPSms.checkForDisplay(eventId, dataRecord);
+							if(OPDisplay.checkIfDisplay(eventId, false))
+								dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
+							else if(OPDisplay.checkIfDisplay(eventId, true))
+								dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);
+							else if(OPSms.checkIfDisplay(eventId))
+								dataRecord = OPSms.checkForDisplay(eventId, dataRecord);
 						}
 						try{
 						java.lang.System.out.println("############ START Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");

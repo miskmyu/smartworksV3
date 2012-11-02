@@ -339,6 +339,62 @@ public class OPDisplay {
 		
 	}
 	
+	public static boolean checkIfDisplay(String eventId, boolean isStopRequest){
+		
+		if(SmartUtil.isBlankObject(eventId)) return false;
+//		try {
+//			Class.forName(System.DATABASE_JDBC_DRIVE);
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}
+
+		Connection con = null;
+		PreparedStatement selectPstmt = null;
+		PreparedStatement updatePstmt = null;
+				
+//		String opDisplaySelectSql = (isStopRequest) ? OPDisplay.QUERY_SELECT_FOR_STOP_CHECK : OPDisplay.QUERY_SELECT_FOR_CHECK;
+//		String opDisplayUpdateSql = OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM;
+		String opDisplaySelectSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_STOP_CHECK") : UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_CHECK");
+		String opDisplayUpdateSql = UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM");
+		try {
+			try{
+				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return false;
+			}
+			
+			try{
+				selectPstmt = con.prepareStatement(opDisplaySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				selectPstmt.setString(1, eventId);
+				ResultSet rs = selectPstmt.executeQuery();				
+				rs.last(); 
+				int count = rs.getRow();
+				rs.first();
+				if(count>0) {
+					return true;
+				}
+			}catch (Exception e1){
+				e1.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (selectPstmt != null)
+					selectPstmt.close();
+				if(con != null)
+					con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return false;
+		
+	}
+	
 	public static Map<String,Object> readHistoryTable(String eventId, String displayId){
 		
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(displayId)) return null;

@@ -22,6 +22,9 @@ public class CMHistory {
 
 	public static final String MSG_TYPE_OCCURRENCE = "O";
 	public static final String MSG_TYPE_RELEASE = "R";
+	//개발
+//	public static final String MSG_TYPE_OCCURRENCE = "O";
+//	public static final String MSG_TYPE_RELEASE = "R";
 	
 	public static final KeyMap[] COMMID_TRACE_FIELDS = {
 		new KeyMap("트랜잭션 아이디", UcityConstant.getQueryByKey("CMHistory.TRST_ID")), new KeyMap("송수신 구분", UcityConstant.getQueryByKey("CMHistory.SR_FLAG")), new KeyMap("메시지 아이디", UcityConstant.getQueryByKey("CMHistory.MSG_ID")), new KeyMap("시스템 코드", UcityConstant.getQueryByKey("CMHistory.SYS_CD")),

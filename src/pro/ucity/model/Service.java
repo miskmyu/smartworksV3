@@ -32,13 +32,13 @@ public class Service {
 		}else if(serviceCode.equals(ID_TRAFFIC)){
 			return "교통";			
 		}else if(serviceCode.equals(ID_DISASTER)){
-			return "방범";			
+			return "방범/방재";			
 		}else if(serviceCode.equals(ID_CRIME)){
-			return "방재";			
+			return "방범/방재";			
 		}else if(serviceCode.equals(ID_WATERWORKS)){
-			return "상수도";			
+			return "시설물관리";			
 		}else if(serviceCode.equals(ID_FACILITY)){
-			return "시설물";			
+			return "시설물관리";			
 		}else if(serviceCode.equals(ID_ENVIRONMENT_VMS)){
 			return "환경 VMS 표출";			
 		}else if(serviceCode.equals(ID_TRAFFIC_VMS)){
@@ -63,10 +63,8 @@ public class Service {
 		return new String[] {
 				"환경",
 				"교통",			
-				"방범",			
-				"방재",			
-				"상수도",			
-				"시설물",
+				"방범/방재",			
+				"시설물관리",
 				"플랫폼"
 		};
 	}

@@ -52,6 +52,10 @@
 		eventId = Event.getEventIdByCode(userviceCode, serviceCode, eventCode);
 
 	String workId = System.getManualProcessId(userviceCode, serviceCode, eventCode, situationStatus);
+	// TEST PURPOSE
+	if(SmartUtil.isBlankObject(workId)) workId = "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+	// TEST PURPOSE
+
 	ProcessWork work = (ProcessWork)smartWorks.getWorkById(workId);
 	SmartDiagram diagram = null;
 	SmartTaskInfo[] tasks = null;
@@ -190,7 +194,7 @@ function submitForms() {
 										<div class="js_form_desc_view"><%=tasks[i].getForm().getDescription() %></div>
 										<div class="js_form_desc_edit"  style="display:none">
 												<span><fmt:message key="builder.title.form_desc"/> : </span>
-												<span class="fr js_select_editor_box" fieldName="txtaFormDesc<%=tasks[i].getId() %>">
+												<span class="fr js_situation_editor_box" fieldName="txtaFormDesc<%=tasks[i].getId() %>">
 													<input name="rdoEditor<%=i %>" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
 												<input name="rdoEditor<%=i %>" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
 											</span>
@@ -218,7 +222,9 @@ function submitForms() {
 					<%
 					if(work.amIBuilderUser()) {
 					%>
+
 					<span class="btn_gray js_modify_situation_manual"> 
+
 							<a href="">
 								<span class="txt_btn_start"></span>
 								<span class="txt_btn_center"><fmt:message key='common.button.modify' /> </span> 
@@ -239,8 +245,9 @@ function submitForms() {
 								<span class="txt_btn_end"></span>
 							</a>
 						</span>
-			<%
+				<%
 					}
+
 					%>
 				</div>
 				<!-- 수정하기 //-->

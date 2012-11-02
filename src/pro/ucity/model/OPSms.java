@@ -267,6 +267,55 @@ public class OPSms {
 		
 	}
 	
+	public static boolean checkIfDisplay(String eventId){
+		
+		if(SmartUtil.isBlankObject(eventId)) return false;
+
+		Connection con = null;
+		PreparedStatement selectPstmt = null;
+		PreparedStatement updatePstmt = null;
+						
+		String opSmsSelectSql = UcityConstant.getQueryByKey("OPSms.QUERY_SELECT_FOR_CHECK");
+		String opSmsUpdateSql = UcityConstant.getQueryByKey("OPSms.QUERY_UPDATE_FOR_READ_CONFIRM");
+		try {
+			try{
+				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return false;
+			}
+			
+			try{
+				selectPstmt = con.prepareStatement(opSmsSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				selectPstmt.setString(1, eventId);
+				ResultSet rs = selectPstmt.executeQuery();				
+				rs.last(); 
+				int count = rs.getRow();
+				rs.first();
+				if(count>0) {
+					return true;
+				}
+			}catch (Exception e1){
+				e1.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (selectPstmt != null)
+					selectPstmt.close();
+				if(con != null)
+					con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return false;
+		
+	}
+	
 	public static Map<String,Object> readHistoryTable(String eventId, String smsId){
 		
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(smsId)) return null;
