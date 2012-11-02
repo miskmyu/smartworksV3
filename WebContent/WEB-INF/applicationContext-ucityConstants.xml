@@ -249,6 +249,10 @@
 				<beans:entry key="OPDisplay.QUERY_SELECT_FOR_PERFORM">
 					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and DISPLAY_ID = ?</beans:value>
 				</beans:entry>
+				<beans:entry key="OPDisplay.QUERY_SELECT_FOR_DISPLAY_START">
+					<beans:value>select distinct b.* from USITUATION.TH_ST_SITUATION_HISTORY a,USITUATION.TN_ST_DISPLAY b where a.SITUATION_ID = b.SITUATION_ID and (b.BPM_CNFM_YN = 'N' or b.BPM_CNFM_YN is null)</beans:value>
+				</beans:entry>
+				
 				
 				<!-- OPSituation -->
 				<beans:entry key="OPSituation.USERVICE_CD">
@@ -458,10 +462,11 @@
 		<beans:property name="passUrlList">
 			<beans:map>
 				<beans:entry key="BPM.PASSURLLIST">
-					<beans:value>www.cnuct.kr</beans:value>
+					<beans:value>/smartworksV3/loginc.sw</beans:value>
 				</beans:entry>
 			</beans:map>
 		</beans:property>
 		
 	</beans:bean>
+	<beans:bean id="authenticationSuccessHandler" class="pro.ucity.sso.filter.UcityAuthenticationSuccesHandler"/>
 </beans:beans>

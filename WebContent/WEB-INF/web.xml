@@ -51,7 +51,7 @@
 	</servlet-mapping>
 	
 	<!-- UCITY -->
-<!-- 	<filter>
+<!--  	<filter>
 	    <filter-name>SSORequest</filter-name>
 	    <filter-class>pro.ucity.sso.filter.UcitySSOFilter</filter-class>
 	    <init-param>
@@ -61,10 +61,10 @@
 	</filter>
 	<filter-mapping>
 	    <filter-name>SSORequest</filter-name>
-	    <url-pattern>/*</url-pattern>
+	    <url-pattern>*.sw</url-pattern>
 	</filter-mapping> -->
 	<!-- UCITY END -->
-	
+
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -72,9 +72,13 @@
 
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>*.sw</url-pattern>
 	</filter-mapping>
 	
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/j_spring_security_check</url-pattern>
+	</filter-mapping>
 
 	<listener>
 	    <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>

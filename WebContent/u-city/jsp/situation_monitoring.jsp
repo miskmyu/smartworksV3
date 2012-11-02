@@ -35,9 +35,13 @@
 
 <!-- For Development Purpose -->
 <%
+
+	System.out.println("situation monitoring in============");
 	SecurityContext context = (SecurityContext) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+	System.out.println("context = " + ((context!=null)? context.getAuthentication() : "null"));
 	if (!SmartUtil.isBlankObject(context)) {
 		Authentication auth = context.getAuthentication();
+		System.out.println("auth = " + ((auth!=null)? auth.getPrincipal() : "null"));
 		if(!SmartUtil.isBlankObject(auth)) {
 			String connectUserId = ((Login) auth.getPrincipal()).getId();
 			if(SmartUtil.isBlankObject(session.getAttribute(connectUserId))) {
@@ -66,6 +70,10 @@
 	}
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User currentUser = SmartUtil.getCurrentUser();
+	if(SmartUtil.isBlankObject(currentUser))
+		System.out.println("current user =  NULL");
+	else
+	System.out.println("current user = " + currentUser.getId());
 	
 %>
 <fmt:setLocale value="<%=currentUser.getLocale() %>" scope="request" />
@@ -201,7 +209,7 @@ function logout() {
 <script type="text/javascript" src="smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/jquery/fileuploader/fileuploader.js" ></script>
 
-<title>U-CITY</title>
+<title>UCITY</title>
 
 </head>
 

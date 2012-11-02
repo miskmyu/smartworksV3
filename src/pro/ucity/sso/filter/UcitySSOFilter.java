@@ -28,17 +28,18 @@ import javax.servlet.http.HttpSession;
 import pro.ucity.model.UcityConstant;
 
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.util.SmartUtil;
 
 public class UcitySSOFilter implements Filter {
     
 	private FilterConfig fc; 
 	private List<String> passUrls = new ArrayList<String>();
 
-/*	@Override
+	@Override
 	public void init(FilterConfig config) throws ServletException {
         this.fc = config;
         //this.passUrls.add("");//SSO를 거치지 않을 URL
-	}*/
+	}
 
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -65,6 +66,7 @@ public class UcitySSOFilter implements Filter {
 //			request.setAttribute("errorCode", "100"); 
 //			throw new CommonException(commonMessageSource.getMessage("biz.error.com.001"));  // 잘못된 접근입니다. 로그인 후 이용해 주십시오.
 //		}
+		System.out.println("=========== NO SESSION ======== session = " + ((session!=null) ? session.getId() : "null"));
 		
 		if( session != null && session.getAttribute("SSO_ID") != null ){
 
@@ -113,6 +115,7 @@ public class UcitySSOFilter implements Filter {
 		        result = true;
 		             
 		}else if( exceptionPassUrlCheck(url) ) {  // SSO 를 거치지 않은 예외 통과 URL 인 경우
+			System.out.println("=========== NO SESSION ======== session = " + ((session!=null) ? session.getId() : "null"));
 			result = true;
 		}else{
 			System.out.println("SSO 연계를 통한 접근이 아닙니다. Session 이 생성되지 않았습니다. ");
@@ -129,6 +132,14 @@ public class UcitySSOFilter implements Filter {
         }
 
 //		return result;
+		System.out.println("################################################return 바로 전까지 들어왔습니다.###########################################");
+		try {
+			filterChain.doFilter(servletRequest, servletResponse);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 		return;
 	}
 	private boolean retriveUserProgramAuthInfo(ArrayList<UserProgramAuthInfoVO> authProgramList , String url ){
@@ -169,12 +180,6 @@ public class UcitySSOFilter implements Filter {
 	
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void init(FilterConfig arg0) throws ServletException {
 		// TODO Auto-generated method stub
 		
 	}

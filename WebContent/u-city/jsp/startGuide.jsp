@@ -1,3 +1,6 @@
+<%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
+<%@page import="pro.ucity.sso.filter.UcityAuthenticationSuccesHandler"%>
+<%@page import="org.springframework.web.context.WebApplicationContext"%>
 <%@page import="pro.ucity.model.Service"%>
 <%@page import="pro.ucity.model.OPSituation"%>
 <%@ page contentType="text/html; charset=utf-8"%>
@@ -5,6 +8,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head></head>
 <body>
+<%!public static Object getBean(String beanName, HttpServletRequest request) {
+
+	WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
+
+	return (Object) wac.getBean(beanName);
+}%>
+<%
+	String userviceCode = request.getParameter("userviceCode");
+	String serviceCode = request.getParameter("serviceCode");
+	String eventCode = request.getParameter("eventCode");
+	String statusCode = request.getParameter("statusCode");
+
+	UcityAuthenticationSuccesHandler uas = (UcityAuthenticationSuccesHandler)getBean("authenticationSuccessHandler", request);
+	uas.setDefaultTargetUrl("/situationManual.sw?userviceCode="+ userviceCode + "&serviceCode=" + serviceCode + "&eventCode=" + eventCode + "&statusCode=" + statusCode);
+%>
 <script type="text/javascript">
 // Popup window code
 	var userviceCode = "<%=request.getParameter("userviceCode")%>";

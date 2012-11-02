@@ -201,6 +201,8 @@
 				}else if(!SmartUtil.isBlankObject(releasedTaskNames)){
 					serviceType = "종료";
 					runningTaskNames = releasedTaskNames;
+				}else{
+					serviceType = "종료";
 				}
 
 				String target =  "situationDetail.sw?cid=" + instanceInfo.getContextId() + "&workId=" + instanceInfo.getWork().getId();
