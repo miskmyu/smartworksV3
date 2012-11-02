@@ -5,7 +5,7 @@ import net.smartworks.util.SmartUtil;
 
 public class System {
 
-	public static final int MAX_PROCESS						= 10;
+	public static final int MAX_PROCESS						= 15;
 	public static final int PROCESS_ENV_WEAHTER				= 0;    //기상
 	public static final int PROCESS_ENV_ATMOSPHERE			= 1;    //대기
 	public static final int PROCESS_ENV_WATER				= 2;        //수질
@@ -16,6 +16,11 @@ public class System {
 	public static final int PROCESS_CRIME_VEHICLES			= 7;     //방범 용의차량
 	public static final int PROCESS_WATERWORKS_LEAKS		= 8;         //상수도누수
 	public static final int PROCESS_FACILITY_MANAGEMENT		= 9;      //시설물 관리
+	public static final int PROCESS_ENV_VMS 			= 10;
+	public static final int PROCESS_TRAFFIC_VMS 			= 11;
+	public static final int PROCESS_TRAFFIC_BIT 			= 12;
+	public static final int PROCESS_MEDIABORAD 			= 13;
+	public static final int PROCESS_KIOSK 			= 14;
 	
 	
 	public static final int ID_OPERATION_PORTAL 		= 1;

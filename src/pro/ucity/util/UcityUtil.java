@@ -358,9 +358,9 @@ public class UcityUtil {
 		Map<String,Object> dataRecord = null;
 		int tableId = System.getTableId(tableName);
 		switch(tableId){
-//		case System.TABLE_ID_ADAPTER_HISTORY:
-//			dataRecord = Adapter.readHistoryTable(eventId);
-//			break;
+		case System.TABLE_ID_ADAPTER_HISTORY:
+			dataRecord = Adapter.readHistoryTable(eventId, deviceId, status);
+			break;
 		case System.TABLE_ID_COMMID_TRACE:
 			dataRecord = CMHistory.readHistoryTable(eventId, status);
 			break;
@@ -681,7 +681,8 @@ public class UcityUtil {
 								dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
 							else if(OPDisplay.checkIfDisplay(eventId, true))
 								dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);
-							else if(OPSms.checkIfDisplay(eventId))
+							
+							if(OPSms.checkIfDisplay(eventId))
 								dataRecord = OPSms.checkForDisplay(eventId, dataRecord);
 						}
 						try{

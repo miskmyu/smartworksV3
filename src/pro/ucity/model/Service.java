@@ -18,7 +18,7 @@ public class Service {
 	public static final String ID_PERM_CONTROL 		= "1112";
 	public static final String ID_SMS_MMS 			= "1113";
 	public static final String ID_PLATFORM			= "1131";
-
+	
 	public static final String USERVICE_CODE_ENVIRONMENT 	= "ENV";
 	public static final String USERVICE_CODE_FACILITY 		= "FCL";
 	public static final String USERVICE_CODE_PLATFORM 		= "PFM";
@@ -80,4 +80,21 @@ public class Service {
 		return "";
 	}
 
+	public static String getDeviceCodeByDeviceId(String deviceId){
+		if(SmartUtil.isBlankObject(deviceId)) return null;
+		
+		if(deviceId.equals(DMHistory.DEVICE_ID_ENV_VMS))
+			return Service.ID_ENVIRONMENT_VMS;
+		else if(deviceId.equals(DMHistory.DEVICE_ID_KIOSK))
+			return Service.ID_TRAFFIC_KIOSK;
+		else if(deviceId.equals(DMHistory.DEVICE_ID_MEDIABOARD))
+			return Service.ID_MEDIABOARD;
+		else if(deviceId.equals(DMHistory.DEVICE_ID_TRAFFIC_BIT))
+			return Service.ID_TRAFFIC_BIT;
+		else if(deviceId.equals(DMHistory.DEVICE_ID_TRAFFIC_VMS))
+			return Service.ID_TRAFFIC_VMS;
+		return null;
+	}
+	
+	
 }

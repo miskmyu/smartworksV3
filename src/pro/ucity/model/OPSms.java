@@ -294,6 +294,14 @@ public class OPSms {
 				int count = rs.getRow();
 				rs.first();
 				if(count>0) {
+					try {
+						if (selectPstmt != null)
+							selectPstmt.close();
+						con.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					return true;
 				}
 			}catch (Exception e1){

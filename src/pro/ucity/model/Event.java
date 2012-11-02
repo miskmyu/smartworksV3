@@ -304,6 +304,24 @@ public class Event {
 		return -1;
 	}
 	
+	public static int getProcessByServiceId(String serviceId){
+		
+		if(SmartUtil.isBlankObject(serviceId)) return -1;
+
+		if(serviceId.equals(Service.ID_ENVIRONMENT_VMS)){
+			return System.PROCESS_ENV_VMS;
+		}else if(serviceId.equals(Service.ID_MEDIABOARD)){
+			return System.PROCESS_MEDIABORAD;
+		}else if(serviceId.equals(Service.ID_TRAFFIC_BIT)){
+			return System.PROCESS_TRAFFIC_BIT;
+		}else if(serviceId.equals(Service.ID_TRAFFIC_VMS)){
+			return System.PROCESS_TRAFFIC_VMS;
+		}else if(serviceId.equals(Service.ID_TRAFFIC_KIOSK)){
+			return System.PROCESS_KIOSK;
+		}
+		return -1;
+	}
+	
 	public static String getEventIdByCode(String userviceCode, String serviceCode, String eventCode){
 		if(SmartUtil.isBlankObject(userviceCode) || SmartUtil.isBlankObject(serviceCode) || SmartUtil.isBlankObject(eventCode)) return "";
 		

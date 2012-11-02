@@ -31,7 +31,7 @@
 					<beans:value>select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and COMM_DVSN_CD = 'RECV'</beans:value>
 				</beans:entry>
 				<beans:entry key="Adapter.QUERY_SELECT_FOR_PERFORM">
-					<beans:value>select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and COMM_DVSN_CD = 'RECV'</beans:value>
+					<beans:value>select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and CMNC_DVSN_CD = ?</beans:value>
 				</beans:entry>
 				<beans:entry key="Adapter.QUERY_UPDATE_FOR_READ_CONFIRM">
 					<beans:value>update TB_UAST_CMNC_HS set BPM_CNFM_YN = 'Y' where RECV_CMNC_TG_ID = ?</beans:value>
@@ -121,10 +121,10 @@
 				</beans:entry>
 				
 				<beans:entry key="DMHistory.QUERY_SELECT_FOR_DISPLAY_PERFORM">
-					<beans:value>select distinct a.SEND_INFO_SEQ,b.*,c.SEND_RESPONSE_VALUE, a.EVENT_ID from UIDB.TN_IDM_SEND_INFO a, UIDB.TN_IDM_SEND_CONTENTS b, UIDB.TN_IDM_CONTENTS_RCV_DEVICE c where a.SEND_INFO_SEQ = b.SEND_INFO_SEQ and c.SEND_INFO_SEQ = a.SEND_INFO_SEQ and a.EVENT_ID = ? and b.ADAPTER_DIVISION = ? order by a.SEND_INFO_SEQ desc</beans:value>
+					<beans:value>select distinct a.SEND_INFO_SEQ,b.*,c.SEND_RESPONSE_VALUE, a.EVENT_ID from UIDB.TN_IDM_SEND_INFO a, UIDB.TN_IDM_SEND_CONTENTS b, UIDB.TN_IDM_CONTENTS_RCV_DEVICE c where a.SEND_INFO_SEQ = b.SEND_INFO_SEQ and c.SEND_INFO_SEQ = a.SEND_INFO_SEQ and a.EVENT_ID = ? order by a.SEND_INFO_SEQ desc</beans:value>
 				</beans:entry>
 				<beans:entry key="DMHistory.QUERY_SELECT_FOR_STOP_PERFORM">
-					<beans:value>select distinct a.SEND_INFO_SEQ,b.*,c.SEND_RESPONSE_VALUE, a.EVENT_ID from UIDB.TN_IDM_SEND_INFO a, UIDB.TN_IDM_SEND_CONTENTS b, UIDB.TN_IDM_CONTENTS_RCV_DEVICE c where a.SEND_INFO_SEQ = b.SEND_INFO_SEQ and c.SEND_INFO_SEQ = a.SEND_INFO_SEQ and a.EVENT_ID = ? and b.ADAPTER_DIVISION = ? order by a.SEND_INFO_SEQ desc</beans:value>
+					<beans:value>select distinct a.SEND_INFO_SEQ,b.*,c.SEND_RESPONSE_VALUE, a.EVENT_ID from UIDB.TN_IDM_SEND_INFO a, UIDB.TN_IDM_SEND_CONTENTS b, UIDB.TN_IDM_CONTENTS_RCV_DEVICE c where a.SEND_INFO_SEQ = b.SEND_INFO_SEQ and c.SEND_INFO_SEQ = a.SEND_INFO_SEQ and a.EVENT_ID = ? order by a.SEND_INFO_SEQ desc</beans:value>
 				</beans:entry>
 				
 				<!-- ICSituation -->
@@ -238,7 +238,7 @@
 					<beans:value>STOP_REQUEST</beans:value>
 				</beans:entry>
 				<beans:entry key="OPDisplay.QUERY_SELECT_FOR_CHECK">
-					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) order by REQUEST_DATE desc</beans:value>
+					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and (STOP_REQUEST != 'Y' or STOP_REQUEST is null) order by REQUEST_DATE desc</beans:value>
 				</beans:entry>
 				<beans:entry key="OPDisplay.QUERY_SELECT_FOR_STOP_CHECK">
 					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and STOP_REQUEST = 'Y' order by REQUEST_DATE desc</beans:value>

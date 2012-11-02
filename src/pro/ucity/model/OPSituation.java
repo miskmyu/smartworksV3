@@ -390,7 +390,8 @@ public class OPSituation {
 
 	public static boolean isDisplayableStatus(String status){
 		if(SmartUtil.isBlankObject(status)) return false;
-		if(status.equals(STATUS_SITUATION_ACCEPTED) || status.equals(STATUS_SITUATION_PROCESSING)) return true;
+//		if(status.equals(STATUS_SITUATION_ACCEPTED) || status.equals(STATUS_SITUATION_PROCESSING)) return true;
+		if(status.equals(STATUS_SITUATION_PROCESSING)) return true;
 		return false;
 	}
 	
@@ -584,7 +585,7 @@ public class OPSituation {
 		}
 
 		Map<String, Object> dataRecord = new HashMap<String, Object>();
-		if(OPDisplay.checkIfDisplay(eventId, false) || OPDisplay.checkIfDisplay(eventId, true) || OPSms.checkIfDisplay(eventId)){
+		if(OPDisplay.checkIfDisplay(eventId, false) || OPSms.checkIfDisplay(eventId)){
 			return dataRecord;
 		}
 

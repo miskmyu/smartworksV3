@@ -340,13 +340,13 @@ public class OPDisplay {
 	}
 	
 	public static boolean checkIfDisplay(String eventId, boolean isStopRequest){
-		
+
 		if(SmartUtil.isBlankObject(eventId)) return false;
 //		try {
 //			Class.forName(System.DATABASE_JDBC_DRIVE);
 //		} catch (ClassNotFoundException e) {
 //			e.printStackTrace();
-//		}
+//		} 
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
@@ -373,6 +373,14 @@ public class OPDisplay {
 				int count = rs.getRow();
 				rs.first();
 				if(count>0) {
+					try {
+						if (selectPstmt != null)
+							selectPstmt.close();
+						con.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					return true;
 				}
 			}catch (Exception e1){
