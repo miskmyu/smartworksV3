@@ -5,7 +5,7 @@ var APPNAME_DIAGRAM_VIEWER = "DiagramViewerApp";
 var APPNAME_GANTT_VIEWER = "GanttViewerApp";
 var APPNAME_GANTT_INSTANCE_VIEWER = "GanttInstanceViewerApp";
 var APPNAME_GANTT_TASK_LIST_VIEWER = "GanttTaskListViewerApp";
-var APPNAME_CHART_VIEWER = "ChartGadgetApp";
+var APPNAME_CHART_VIEWER = "ChartGadgetAppUcity";
 
 function loadFlash(target, appName, params){
 	var htm = 	'<object type="application:x-shockwave-flash" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"' +
