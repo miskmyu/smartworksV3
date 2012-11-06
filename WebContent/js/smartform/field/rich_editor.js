@@ -188,6 +188,8 @@ SmartWorks.FormRuntime.RichEditorBuilder.dataField = function(config){
 };
 
 SmartWorks.FormRuntime.RichEditorBuilder.getValue = function(richEditors){
+	if(isEmpty(richEditors)) return "";
+	
 	var richEditor = $(richEditors[0]);
 	var id = richEditor.attr('fieldId');
 	if(!isEmpty(oEditors) && !isEmpty(oEditors.getById[id])){
