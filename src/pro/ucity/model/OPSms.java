@@ -196,24 +196,15 @@ public class OPSms {
 	public static Map<String,Object> checkForDisplay(String eventId,  Map<String,Object> dataRecord){
 		
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(dataRecord)) return dataRecord;
-//		try {
-//			Class.forName(System.DATABASE_JDBC_DRIVE);
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
-//		String opSmsSelectSql = QUERY_SELECT_FOR_CHECK;
-//		String opSmsUpdateSql = QUERY_UPDATE_FOR_READ_CONFIRM;
-		
 		String opSmsSelectSql = UcityConstant.getQueryByKey("OPSms.QUERY_SELECT_FOR_CHECK");
 		String opSmsUpdateSql = UcityConstant.getQueryByKey("OPSms.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
-				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();
@@ -279,7 +270,6 @@ public class OPSms {
 		String opSmsUpdateSql = UcityConstant.getQueryByKey("OPSms.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
-				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();
@@ -327,20 +317,13 @@ public class OPSms {
 	public static Map<String,Object> readHistoryTable(String eventId, String smsId){
 		
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(smsId)) return null;
-//		try {
-//			Class.forName(System.DATABASE_JDBC_DRIVE);
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
-//		String opSmsSelectSql = OPSms.QUERY_SELECT_FOR_PERFORM;
 		String opSmsSelectSql = UcityConstant.getQueryByKey("OPSms.QUERY_SELECT_FOR_PERFORM");
 		try {
 			try{
-				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();

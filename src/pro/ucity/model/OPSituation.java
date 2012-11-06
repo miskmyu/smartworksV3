@@ -230,7 +230,6 @@ public class OPSituation {
 				dataRecord.put(keyMap.getId(), this.occurDate);
 		}
 		return dataRecord;
-//		return UcityTest.getOPSituationDataRecord();
 	}
 
 	private void setJoinFacility(ResultSet joinFacility){
@@ -390,30 +389,17 @@ public class OPSituation {
 
 	public static boolean isDisplayableStatus(String status){
 		if(SmartUtil.isBlankObject(status)) return false;
-//		if(status.equals(STATUS_SITUATION_ACCEPTED) || status.equals(STATUS_SITUATION_PROCESSING)) return true;
 		if(status.equals(STATUS_SITUATION_PROCESSING)) return true;
 		return false;
 	}
 	
 	public static void readHistoryTableToStart(){
 		java.lang.System.out.println("############ START checking PORTAL History To Start  ################");
-//		try {
-//			Class.forName(System.DATABASE_JDBC_DRIVE);
-//		} catch (ClassNotFoundException e) {
-//			java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
-//			e.printStackTrace();
-//			return;
-//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
-//		String opSituationSelectSql = OPSituation.QUERY_SELECT_FOR_START;
-//		String opSituationJoinSelectSql = OPSituation.QUERY_SELECT_EVENT_CODE;
-//		String opSituationJoinFacilitySql = OPSituation.QUERY_SELECT_FOR_FACILITY;
-//		String opSituationUpdateSql = OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM;
-		
 		String opSituationSelectSql = UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_START");
 		String opSituationJoinSelectSql = UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_EVENT_CODE");
 		String opSituationJoinFacilitySql = UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_FACILITY");
@@ -421,7 +407,6 @@ public class OPSituation {
 		try {
 			
 			try{
-				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
@@ -510,16 +495,12 @@ public class OPSituation {
 	public static Map<String,Object> readHistoryTable(String eventId, String status){
 		
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(status)) return null;
-//		try {
-//			Class.forName(System.DATABASE_JDBC_DRIVE);
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
+
 //		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ?  OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM : OPSituation.QUERY_SELECT_FOR_PERFORM;
 //		String opSituationUpdateSql = OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM;
 		
@@ -527,7 +508,6 @@ public class OPSituation {
 		String opSituationUpdateSql = UcityConstant.getQueryByKey("OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
-				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();

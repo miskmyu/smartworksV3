@@ -57,7 +57,7 @@
 #smart_editor .tool li.style button span{ position:relative; display:block; width:auto; height:auto; padding:3px 0 0 5px; visibility:visible; text-align:left; letter-spacing:-1px;}
 #smart_editor .tool .type li{ float:none; display:inline; *top:1px;}
 #smart_editor .tool .type li select{ height:21px; width:62px;}
-#smart_editor .tool .html{ position:relative; right:7px; float:right; width:44px; height:23px; margin:-1px 0; background:url(../img/btn_mobile.gif) no-repeat 0 0;}
+#smart_editor .tool .html{ position:relative; right:7px; float:right; width:44px; height:23px; margin:-1px 0; background:url(../img/btn_html.gif) no-repeat 0 0;}
 #smart_editor .tool .html span{ position:absolute; top:0; left:0; width:0; height:0; overflow:hidden; visibility:hidden;}
 
 /* Content > Tool > Button Default*/

@@ -573,7 +573,6 @@ public class Adapter {
 		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
-				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
