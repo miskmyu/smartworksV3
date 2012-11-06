@@ -193,12 +193,12 @@ function submitForms() {
 									<div class="js_situation_task" taskId="<%=tasks[i].getId()%>" <%if(i>0){ %>style="display:none"<%} %>>
 										<div class="js_form_desc_view"><%=tasks[i].getForm().getDescription() %></div>
 										<div class="js_form_desc_edit"  style="display:none">
-												<span><fmt:message key="builder.title.form_desc"/> : </span>
-												<span class="fr js_situation_editor_box" fieldName="txtaFormDesc<%=tasks[i].getId() %>">
-													<input name="rdoEditor<%=i %>" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
-												<input name="rdoEditor<%=i %>" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
+											<span class="fr js_situation_editor_box" fieldName="txtaFormDesc<%=tasks[i].getId() %>">
+												<input name="rdoEditor<%=i %>" type="radio" checked value="text"/>미리보기
+												<input name="rdoEditor<%=i %>" type="radio" value="editor"/>편집기
 											</span>
-											<textarea class="fieldline js_form_desc_text" name="txtaFormDesc<%=tasks[i].getId() %>" cols="" rows="22" style="height: 262px"><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %></textarea>
+											<div class="js_form_desc_text" style="height: 262px"><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %></div>
+											<input type="hidden" name="txtaFormDesc<%=tasks[i].getId() %>" value="<%=SmartUtil.smartEncode(CommonUtil.toNotNull(tasks[i].getForm().getDescription())) %>"/>
 											<div class="js_form_desc_editor"></div>
 										</div>
 									</div>
