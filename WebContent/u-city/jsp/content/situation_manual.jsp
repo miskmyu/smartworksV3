@@ -231,17 +231,17 @@ function submitForms() {
 								<span class="txt_btn_end"></span>
 							</a>
 						</span>
-						<span class="btn_gray js_save_situation_manual" style="display:none"> 
-							<a href="">
-								<span class="txt_btn_start"></span> 
-								<span class="txt_btn_center"><fmt:message key='common.button.save' /> </span>
-								<span class="txt_btn_end"></span>
-							</a>
-						</span>
-						<span class="btn_gray js_cancel_situation_manual" style="display:none"> 
+						<span class="fr btn_gray js_cancel_situation_manual" style="display:none"> 
 							<a href="">
 								<span class="txt_btn_start"></span> 
 								<span class="txt_btn_center"><fmt:message key='common.button.cancel' /> </span>
+								<span class="txt_btn_end"></span>
+							</a>
+						</span>
+						<span class="fr btn_gray js_save_situation_manual" style="display:none"> 
+							<a href="">
+								<span class="txt_btn_start"></span> 
+								<span class="txt_btn_center"><fmt:message key='common.button.save' /> </span>
 								<span class="txt_btn_end"></span>
 							</a>
 						</span>
