@@ -310,7 +310,7 @@ public class UcityUtil {
 		if(!SmartUtil.isBlankObject(data.get("externalDisplay"))){
 			requestBody.put("externalDisplay", data.get("externalDisplay"));
 		}
-		if(!SmartUtil.isBlankObject(data.get("isSms"))){
+		if(!SmartUtil.isBlankObject(data.get("isSms")) && data.get("isSms") == "true"){
 			requestBody.put("isSms", data.get("isSms"));
 		}
 		
