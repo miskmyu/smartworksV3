@@ -170,7 +170,6 @@ public class DMHistory {
 				dataRecord.put(keyMap.getId(), this.eveiVmsStop);
 		}
 		return dataRecord;
-//		return UcityTest.getCMHistoryDataRecord();		
 	}
 	
 	public void performTask(String processId, String taskInstId) throws Exception{
@@ -223,11 +222,6 @@ public class DMHistory {
 	public static Map<String,Object> readHistoryTable(String eventId, String status, String deviceId){
 		
 		if(SmartUtil.isBlankObject(eventId)) return null;
-//		try {
-//			Class.forName(System.DATABASE_JDBC_DRIVE);
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}
 
 		Map<String, Object> dataRecord = null;
 
@@ -235,11 +229,9 @@ public class DMHistory {
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
-//		String cmHistorySelectSql = (status.equals(FLAG_STOP_DISPLAY)) ? DMHistory.QUERY_SELECT_FOR_STOP_PERFORM : DMHistory.QUERY_SELECT_FOR_DISPLAY_PERFORM;
 		String cmHistorySelectSql = (status.equals(FLAG_STOP_DISPLAY)) ? UcityConstant.getQueryByKey("DMHistory.QUERY_SELECT_FOR_STOP_PERFORM") : UcityConstant.getQueryByKey("DMHistory.QUERY_SELECT_FOR_DISPLAY_PERFORM");
 		try {
 			try{
-				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();

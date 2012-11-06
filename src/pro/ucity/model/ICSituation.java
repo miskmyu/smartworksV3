@@ -231,21 +231,13 @@ public class ICSituation {
 	public static Map<String,Object> readHistoryTable(String eventId, String status){
 		
 		if(SmartUtil.isBlankObject(eventId)) return null;
-//		try {
-//			Class.forName(System.DATABASE_JDBC_DRIVE);
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
-//		String icSituationSelectSql = (status.equals(MSG_TYPE_OCCURRENCE)) ? ICSituation.QUERY_SELECT_FOR_OCCURRENCE_PERFORM : ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM;
-//		String icSituationSelectSql = ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM;
 		String icSituationSelectSql = UcityConstant.getQueryByKey("ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM");
 		try {
 			try{
-				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();
