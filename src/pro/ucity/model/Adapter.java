@@ -295,9 +295,9 @@ public class Adapter {
 		this.eventCode = commHeader.substring(Adapter.POS_EVENT_CODE, Adapter.POS_EVENT_CODE+Adapter.LENGTH_EVENT_CODE);
 		String eventType = commHeader.substring(Adapter.POS_EVENT_TYPE, Adapter.POS_EVENT_TYPE+Adapter.LENGTH_EVENT_TYPE);
 		
-		this.process = Event.getProcessByEventId(this.eventCode);
+		this.process = Event.getProcessByServiceId(this.serviceCode);
 		if(this.process == -1)
-			this.process = Event.getProcessByServiceId(this.serviceCode);
+			this.process = Event.getProcessByEventId(this.eventCode);
 		
 		if(eventType.equals(Event.TYPE_OCCURRENCE))
 			this.eventType = EVENT_TYPE_OCCURRENCE;
@@ -309,12 +309,13 @@ public class Adapter {
 		if(SmartUtil.isBlankObject(commBody) || this.process<0 || this.process>System.MAX_PROCESS) return;
 		
 		String[] tokens = commBody.split(Adapter.FIELD_SEPERATOR);
-		if(tokens != null || tokens.length != ADAPTER_HISTORY_FIELDS[process].length){
+		if(tokens != null){
 			if(tokens != null && tokens.length == 1 && (this.process == System.PROCESS_ENV_VMS || this.process == System.PROCESS_MEDIABORAD || this.process == System.PROCESS_TRAFFIC_VMS || this.process == System.PROCESS_TRAFFIC_BIT || this.process == System.PROCESS_KIOSK)){
 				this.stopDisplay = true;
-			}else{
+			}else if((this.process == System.PROCESS_ENV_VMS || this.process == System.PROCESS_MEDIABORAD || this.process == System.PROCESS_TRAFFIC_VMS || this.process == System.PROCESS_TRAFFIC_BIT || this.process == System.PROCESS_KIOSK)){
+				this.stopDisplay = false;
+			}else if(tokens.length != ADAPTER_HISTORY_FIELDS[process].length)
 				return;
-			}
 		}
 		
 		switch(process){
@@ -419,8 +420,10 @@ public class Adapter {
 		Map<String, Object> dataRecord = new HashMap<String, Object>();
 		KeyMap[] keyMaps = Adapter.ADAPTER_HISTORY_FIELDS[this.process];
 		
-		if(!this.isValid()) return null;
-		
+		int len = 20; 
+		if(len != eventId.length()){
+			if(!this.isValid()) return null;
+		}
 		dataRecord.put("serviceName", Service.getServiceNameByCode(this.getServiceCode()));
 		if(this.process == System.PROCESS_ENV_WEAHTER)
 			dataRecord.put("eventName", this.envEventType);
@@ -509,7 +512,7 @@ public class Adapter {
 	
 	public void setResult(ResultSet result){
 		try{
-			if(result.getRow()>0){
+//			if(result.getRow()>0){
 				this.communicationId = result.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
 				String commContent = result.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_CONTENT"));
 				if(SmartUtil.isBlankObject(commContent) || commContent.length()<Adapter.LENGTH_COMM_HEADER) return;
@@ -517,7 +520,7 @@ public class Adapter {
 				this.commBody = commContent.substring(Adapter.LENGTH_COMM_HEADER);
 				this.parseCommHeader(this.commHeader);
 				this.parseCommBody(this.commBody);				
-			}
+//			}
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -634,8 +637,12 @@ public class Adapter {
 	}
 	
 	public static Map<String,Object> readHistoryTable(String eventId, String deviceId, String status){
-		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(Service.getDeviceCodeByDeviceId(deviceId)) || SmartUtil.isBlankObject(status)) return null;
+		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(Service.getDeviceCodeByDeviceId(deviceId))) return null;
 
+		for(int i=eventId.length(); i < 20; i++){
+			eventId = eventId + "0";
+		}
+		
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
@@ -658,27 +665,29 @@ public class Adapter {
 				rs.last(); 
 				int count = rs.getRow();
 				rs.first();
-				while(count>0) {
-					try{
-						Adapter adapter = new Adapter(rs);
-						if(adapter.isValid(eventId, status)){
-							try {
-								String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
-								updatePstmt = con.prepareStatement(adapterUpdateSql);
-								updatePstmt.setString(1, communicationId);
-								boolean result = updatePstmt.execute();
-								if (selectPstmt != null)
-									selectPstmt.close();
-								con.close();
-							} catch (SQLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+				if(count>0){
+					while(rs.next()) {
+						try{
+							Adapter adapter = new Adapter(rs);
+							if(adapter.isValid(eventId, status)){
+								try {
+									String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
+									updatePstmt = con.prepareStatement(adapterUpdateSql);
+									updatePstmt.setString(1, communicationId);
+									boolean result = updatePstmt.execute();
+									if (selectPstmt != null)
+										selectPstmt.close();
+									con.close();
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								return adapter.getDataRecord();
 							}
-							return adapter.getDataRecord();
+//							rs.next();
+						}catch (Exception we){
+							we.printStackTrace();
 						}
-						rs.next();
-					}catch (Exception we){
-						we.printStackTrace();
 					}
 				}
 			}catch (Exception e1){
