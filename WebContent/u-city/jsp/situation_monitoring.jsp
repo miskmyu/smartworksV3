@@ -185,7 +185,7 @@ function logout() {
 <script type="text/javascript" src='js/smartform/field/file_field.js'></script>
 <script type="text/javascript" src='js/smartform/field/number_input.js'></script>
 <script type="text/javascript" src='js/smartform/field/percent_input.js'></script>
-<script type="text/javascript" src='u-city/js/rich_editor.js'></script>
+<script type="text/javascript" src='js/smartform/field/rich_editor.js'></script>
 <script type="text/javascript" src='js/smartform/field/text_input.js'></script>
 <script type="text/javascript" src='js/smartform/field/time_chooser.js'></script>
 <script type="text/javascript" src='js/smartform/field/datetime_chooser.js'></script>
@@ -196,7 +196,7 @@ function logout() {
 
 <script type="text/javascript" src='js/smartform/field/auto_index.js'></script>
 
-<script type="text/javascript" src="u-city/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript" src="smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/jquery/fileuploader/fileuploader.js" ></script>
 
 
