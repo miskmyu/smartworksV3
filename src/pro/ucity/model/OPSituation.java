@@ -500,7 +500,11 @@ public class OPSituation {
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
-		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ?  UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM") : UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PERFORM");
+
+//		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ?  OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM : OPSituation.QUERY_SELECT_FOR_PERFORM;
+//		String opSituationUpdateSql = OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM;
+		
+		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ? UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM") : ((status.equals(STATUS_SITUATION_OCCURRED)) ? UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_OCCURRED") : UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PERFORM"));
 		String opSituationUpdateSql = UcityConstant.getQueryByKey("OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
@@ -513,7 +517,7 @@ public class OPSituation {
 			try{
 				selectPstmt = con.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
-				if(!status.equals(STATUS_SITUATION_PROCESSING))
+				if(!status.equals(STATUS_SITUATION_PROCESSING) && !status.equals(STATUS_SITUATION_OCCURRED))
 					selectPstmt.setString(2, status);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
