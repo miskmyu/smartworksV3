@@ -345,7 +345,7 @@
 					<beans:value>select * from USITUATION.TH_ST_SITUATION_HISTORY where SITUATION_ID = ? and STATUS = ?</beans:value>
 				</beans:entry>
 				<beans:entry key="OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM">
-					<beans:value>select * from USITUATION.TH_ST_SITUATION_HISTORY where SITUATION_ID = ? and (STATUS = 'H03' or STATUS = 'H04') and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null)</beans:value>
+					<beans:value>select b.* from (select a.* from (select * from USITUATION.TH_ST_SITUATION_HISTORY where SITUATION_ID = ? and STATUS = 'H03' order by SEQ desc) a where rownum = 1) b where b.END_DATE is not null</beans:value>
 				</beans:entry>
 				<beans:entry key="OPSituation.QUERY_SELECT_FOR_FACILITY">
 					<beans:value>select distinct c.LC_NM from USITUATION.TH_ST_SITUATION_HISTORY a,USITUATION.TM_ST_SITUATION b, CMDB.TM_CM_FACILITY_INFO c where a.SITUATION_ID = b.SITUATION_ID and b.OCCUR_FACILITY_ID = c.FACILITY_ID and a.SITUATION_ID = ?</beans:value>

@@ -29,7 +29,7 @@ public class OPSituation {
 	public static final String STATUS_SITUATION_TRANSFER = "H05";
 	public static final String STATUS_SITUATION_CANCEL = "H06";
 	
-	public static final String TASK_NAME_SITUATION_OCCURRENCE = "상황발생";
+	public static final String TASK_NAME_SITUATION_OCCURRENCE = "상황등록/접수";
 	
 	public static final String SYMBOL_FOR_OP_START = "ST";
 	
@@ -552,6 +552,8 @@ public class OPSituation {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
+				if (updatePstmt != null)
+					updatePstmt.close();
 				if(con != null)
 					con.close();
 			} catch (SQLException e) {
