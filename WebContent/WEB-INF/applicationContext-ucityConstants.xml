@@ -94,10 +94,10 @@
 				</beans:entry>			
 				
 				<beans:entry key="CMHistory.QUERY_SELECT_FOR_OCCURRENCE_PERFORM">
-					<beans:value>select a.* from TB_COM_INTG_LOG a, CMDB.TN_CM_EVENT_OUTB_INFO b where b.U_SVC_EVENT_ID = ? and a.EVET_OUTB_ID = b.EVENT_OUTB_ID and SR_FLAG = 'R'</beans:value>
+					<beans:value>select a.* from TB_COM_INTG_LOG a, CMDB.TN_CM_EVENT_OUTB_INFO b where b.U_SVC_EVENT_ID = ? and a.EVET_OUTB_ID = b.EVENT_OUTB_ID and SR_FLAG = 'S'</beans:value>
 				</beans:entry>   
 				<beans:entry key="CMHistory.QUERY_SELECT_FOR_RELEASE_PERFORM">
-					<beans:value>select a.* from TB_COM_INTG_LOG a, CMDB.TN_CM_EVENT_OUTB_INFO b where b.U_SVC_EVENT_ID = ? and a.EVET_OUTB_ID = b.EVENT_OUTB_ID and SR_FLAG = 'R'</beans:value>
+					<beans:value>select a.* from TB_COM_INTG_LOG a, CMDB.TN_CM_EVENT_OUTB_INFO b where b.U_SVC_EVENT_ID = ? and a.EVET_OUTB_ID = b.EVENT_OUTB_ID and SR_FLAG = 'S'</beans:value>
 				</beans:entry>
 
 				<!-- DMHistory -->
@@ -338,9 +338,12 @@
 				<beans:entry key="OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM">
 					<beans:value>update USITUATION.TH_ST_SITUATION_HISTORY set BPM_CNFM_YN = 'Y' where SITUATION_ID = ? and STATUS = ?</beans:value>
 				</beans:entry>
+				<beans:entry key="OPSituation.QUERY_SELECT_FOR_OCCURRED">
+					<beans:value>select * from USITUATION.TH_ST_SITUATION_HISTORY where SITUATION_ID = ? and STATUS = 'H01' and END_DATE is not null and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null)</beans:value>
+				</beans:entry>
 				<beans:entry key="OPSituation.QUERY_SELECT_FOR_PERFORM">
 					<beans:value>select * from USITUATION.TH_ST_SITUATION_HISTORY where SITUATION_ID = ? and STATUS = ? and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null)</beans:value>
-				</beans:entry>
+				</beans:entry>				
 				<beans:entry key="OPSituation.QUERY_SELECT_FOR_PROCESSING_PERFORM">
 					<beans:value>select * from USITUATION.TH_ST_SITUATION_HISTORY where SITUATION_ID = ? and STATUS = ?</beans:value>
 				</beans:entry>

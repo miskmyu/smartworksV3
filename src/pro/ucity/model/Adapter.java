@@ -41,16 +41,16 @@ public class Adapter {
 	public static final String STATUS_STOP_DISPLAY = "Y";
 	
 	public static final KeyMap[][] ADAPTER_HISTORY_FIELDS = {		
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("특보분류", "env_event_type"), new KeyMap("발생내용", "event_content")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("오염물질수", "pollution_number"), new KeyMap("오염물질구분", "pollution_type"), new KeyMap("오염물질측정치", "pollution_value"), new KeyMap("오염등급", "pollution_level"), new KeyMap("오염물질 예/경보구분", "pollution_example")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("노트링크 시작 ID", "link_start_id"), new KeyMap("노트링크 종료 ID", "link_end_id"), new KeyMap("돌발상황 유형", "outbreak_type"), new KeyMap("돌발상황 코드", "outbreak_code")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("탐지분류", "search_type")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("임계치 값", "threshold_value")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("시설물이상구분", "facility_type")},		
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("특보분류", "env_event_type"), new KeyMap("발생내용", "event_content"), new KeyMap("링크아이디", "link_id") },
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("오염물질수", "pollution_number"), new KeyMap("오염물질구분", "pollution_type"), new KeyMap("오염물질측정치", "pollution_value"), new KeyMap("오염등급", "pollution_level"), new KeyMap("오염물질 예/경보구분", "pollution_example"), new KeyMap("링크아이디", "link_id")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("링크아이디", "link_id")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code"), new KeyMap("링크아이디", "link_id")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("노트링크 시작 ID", "link_start_id"), new KeyMap("노트링크 종료 ID", "link_end_id"), new KeyMap("돌발상황 유형", "outbreak_type"), new KeyMap("돌발상황 코드", "outbreak_code"), new KeyMap("링크아이디", "link_id")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("탐지분류", "search_type"), new KeyMap("링크아이디", "link_id")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("링크아이디", "link_id")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code"), new KeyMap("링크아이디", "link_id")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("임계치 값", "threshold_value"), new KeyMap("링크아이디", "link_id")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("시설물이상구분", "facility_type"), new KeyMap("링크아이디", "link_id")},		
 		{new KeyMap("장비 ID", "device_id"), new KeyMap("배경색상", "background_color"), new KeyMap("색상", "font_color"), new KeyMap("폰트크기", " font_size"), new KeyMap("폰트타입", "font_type"), new KeyMap("폰트굵기", "font_thickness"), new KeyMap("표출유형", "display_type"), new KeyMap("데이터형식", "data_type"), new KeyMap("표출내용", "message")},		
 		{new KeyMap("장비 ID", "device_id"), new KeyMap("배경색상", "background_color"), new KeyMap("색상", "font_color"), new KeyMap("폰트크기", " font_size"), new KeyMap("폰트타입", "font_type"), new KeyMap("폰트굵기", "font_thickness"), new KeyMap("표출유형", "display_type"), new KeyMap("데이터형식", "data_type"), new KeyMap("표출내용", "message")},		
 		{new KeyMap("장비 ID", "device_id"), new KeyMap("배경색상", "background_color"), new KeyMap("색상", "font_color"), new KeyMap("폰트크기", " font_size"), new KeyMap("폰트타입", "font_type"), new KeyMap("폰트굵기", "font_thickness"), new KeyMap("표출유형", "display_type"), new KeyMap("데이터형식", "data_type"), new KeyMap("표출내용", "message")},		
@@ -90,6 +90,7 @@ public class Adapter {
 	private String facilityType;
 	private String displayContent;
 	private boolean stopDisplay;
+	private String linkId;
 	
 	public String getCommHeader() {
 		return commHeader;
@@ -274,6 +275,12 @@ public class Adapter {
 	public void setStopDisplay(boolean stopDisplay) {
 		this.stopDisplay = stopDisplay;
 	}
+	public String getLinkId() {
+		return linkId;
+	}
+	public void setLinkId(String linkId) {
+		this.linkId = linkId;
+	}
 	public Adapter(String commHeader, String commBody){
 		super();
 		this.commHeader = commHeader;
@@ -310,7 +317,7 @@ public class Adapter {
 		
 		String[] tokens = commBody.split(Adapter.FIELD_SEPERATOR);
 		if(tokens != null){
-			if(tokens != null && tokens.length == 1 && (this.process == System.PROCESS_ENV_VMS || this.process == System.PROCESS_MEDIABORAD || this.process == System.PROCESS_TRAFFIC_VMS || this.process == System.PROCESS_TRAFFIC_BIT || this.process == System.PROCESS_KIOSK)){
+			if(tokens != null && tokens.length < 3 && (this.process == System.PROCESS_ENV_VMS || this.process == System.PROCESS_MEDIABORAD || this.process == System.PROCESS_TRAFFIC_VMS || this.process == System.PROCESS_TRAFFIC_BIT || this.process == System.PROCESS_KIOSK)){
 				this.stopDisplay = true;
 			}else if((this.process == System.PROCESS_ENV_VMS || this.process == System.PROCESS_MEDIABORAD || this.process == System.PROCESS_TRAFFIC_VMS || this.process == System.PROCESS_TRAFFIC_BIT || this.process == System.PROCESS_KIOSK)){
 				this.stopDisplay = false;
@@ -324,6 +331,7 @@ public class Adapter {
 			this.occuredDate = tokens[1];
 			this.envEventType = tokens[2];
 			this.eventContent = tokens[3];
+			this.linkId = tokens[4];
 			break;
 		case System.PROCESS_ENV_ATMOSPHERE:
 			this.eventId = tokens[0];
@@ -335,12 +343,14 @@ public class Adapter {
 			this.pollutionValue = tokens[6];
 			this.pollutionLevel = tokens[7];
 			this.pollutionExample = tokens[8];
+			this.linkId = tokens[9];
 			break;
 		case System.PROCESS_ENV_WATER:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
+			this.linkId = tokens[4];
 			break;
 		case System.PROCESS_TRAFFIC_ILLEGAL_PARKING:
 			this.eventId = tokens[0];
@@ -350,6 +360,7 @@ public class Adapter {
 			this.carNumber = tokens[4];
 			this.carType = tokens[5];
 			this.crimeCode = tokens[6];
+			this.linkId = tokens[7];
 			break;
 		case System.PROCESS_TRAFFIC_INCIDENT:
 			this.eventId = tokens[0];
@@ -358,18 +369,21 @@ public class Adapter {
 			this.linkEndId = tokens[3];
 			this.outbreakType = tokens[4];
 			this.outbreakCode = tokens[5];
+			this.linkId = tokens[6];
 			break;
 		case System.PROCESS_DISASTER_FIRE:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
 			this.searchType = tokens[3];
+			this.linkId = tokens[4];
 			break;
 		case System.PROCESS_CRIME_CCTV:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
+			this.linkId = tokens[4];
 			break;
 		case System.PROCESS_CRIME_VEHICLES:
 			this.eventId = tokens[0];
@@ -379,6 +393,7 @@ public class Adapter {
 			this.carNumber = tokens[4];
 			this.carType = tokens[5];
 			this.crimeCode = tokens[6];
+			this.linkId = tokens[7];
 			break;
 		case System.PROCESS_WATERWORKS_LEAKS:
 			this.eventId = tokens[0];
@@ -386,6 +401,7 @@ public class Adapter {
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
 			this.thresholdValue = tokens[4];
+			this.linkId = tokens[5];
 			break;
 		case System.PROCESS_FACILITY_MANAGEMENT:
 			this.eventId = tokens[0];
@@ -393,6 +409,7 @@ public class Adapter {
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
 			this.facilityType = tokens[4];
+			this.linkId = tokens[5];
 			break;
 		case System.PROCESS_ENV_VMS:
 		case System.PROCESS_TRAFFIC_BIT:
@@ -402,6 +419,8 @@ public class Adapter {
 			this.eventId = tokens[0];
 			if(!this.stopDisplay)
 				this.displayContent = tokens[tokens.length-1];
+			else
+				this.displayContent = "표출요청중지";
 			break;
 		}
 	}
@@ -477,6 +496,8 @@ public class Adapter {
 				dataRecord.put(keyMap.getId(), this.thresholdValue);
 			else if(keyMap.getKey().equals("message"))
 				dataRecord.put(keyMap.getId(), this.displayContent);
+			else if(keyMap.getKey().equals("link_id"))
+				dataRecord.put(keyMap.getId(), this.linkId);
 		}
 		return dataRecord;
 	}
