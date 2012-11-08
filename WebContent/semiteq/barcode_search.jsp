@@ -280,11 +280,9 @@ function list_Search(){
 				</tr>
 				<tr>
 					<td colspan="6">
-							<div class="list_title_space js_work_list_title mt15">
-								<div id="filter_div" class="filter_group">
+							<div class="js_work_list_title mt15">
+								<div id="filter_div" class="smt_srch_section">
 									<table width="100%" >
-										
-										<tbody>
 											<tr>
 												<th style="width:5%" class="tr">
 													공정
@@ -379,7 +377,6 @@ function list_Search(){
 													<input class="fieldline" type="text" id="standard_title_txt" name="standard_title_txt" />
 												</td>
 											</tr>
-										</tbody>
 									</table>
 								</div>
 							</div>
@@ -387,9 +384,8 @@ function list_Search(){
 				</tr>
 				<tr>
 					<td colspan="6">
-						<center>
-							<div class="list_title_space js_work_list_title mt15">
-								<div id="process_div" class="filter_group" style="height: autox; border: 1px solid #FFFF90; background-color:#cfe6fc;">
+							<div class="js_work_list_title">
+								<div id="process_div" class="smt_table_section">
 									<table width="100%" border='1'>
 										<tr>
 											<td style="width:12%;">
@@ -661,7 +657,6 @@ function list_Search(){
 									</table>
 								</div>
 							</div>
-						</center>
 					</td>
 				</tr>
 			</table>

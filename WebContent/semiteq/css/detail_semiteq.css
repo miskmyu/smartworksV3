@@ -7,6 +7,13 @@ select {vertical-align: middle; border:1px solid #C7C7C7}
 .tl {text-align:left !important}
 .tc {text-align:center !important}
 .tr {text-align:right !important}
+table {width:100%}
 table td, table th {text-align: left}
 
-.sem_srch_section {background-color: #f5e2c9; border-radius: 6px; padding:7px; margin:0 0 3px 0}
+.smt_srch_section {background-color: #f9ead6; border-radius: 6px; padding:7px; margin:0 0 3px 0}
+.smt_table_section {}
+
+.mt5 {margin-top:5px !important}
+.mt10 {margin-top:10px !important}
+.pt5 {padding-top:10px !important}
+.pt10 {padding-top:10px !important}
