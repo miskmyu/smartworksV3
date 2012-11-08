@@ -658,7 +658,7 @@ function list_Search(){
 </center>
 <script type="text/javascript">
 $(window).bind('resize', function() {
-   $("#list").setGridWidth($(window).width() - 100);
+   $("#list").setGridWidth($(window).width() - 50);
 }).trigger('resize');
 </script>
 <div id=lastdiv></div>

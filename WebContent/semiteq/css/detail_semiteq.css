@@ -30,7 +30,7 @@ table td, table th {text-align: left; padding: 2px}
 	
 .portlet_t {
     background: url("../../images/bg_portlet_t.jpg") no-repeat 100% 0 transparent;
-    width:100%; height:12px; overflow:hidden; position:relative}
+    width:100%; height:12px; overflow:hidden}
 
 .portlet_t .portlet_tl {
     background: url("../../images/bg_portlet_t.jpg") no-repeat 0 0 transparent;
