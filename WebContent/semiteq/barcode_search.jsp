@@ -70,9 +70,6 @@ $(document).ready(function(){
 	
 // 	 $("#lastdiv").hide();
 	 $("#waring").hide();
-	 $("#all_div").corner();
-	 $("#process_div").corner();
-	 $("#view_div").corner();
 	 
 	var arg = "";
 	arg = arg + "lot_number="+   $("#lot_code_txt").val();      
@@ -256,7 +253,7 @@ function list_Search(){
 	
 	<ul class="portlet_r" style="margin: 0; padding: 0;">
 		<div class="contents_space">
-		<div id="all_div" class="all_group">
+		<div id="all_div" class="pt10">
 			<table id="select_menu">
 				<tr>	
 					<th style="width: 10%" class="tr">
@@ -280,7 +277,7 @@ function list_Search(){
 				</tr>
 				<tr>
 					<td colspan="6">
-							<div class="js_work_list_title mt15">
+							<div class="js_work_list_title">
 								<div id="filter_div" class="smt_srch_section">
 									<table width="100%" >
 											<tr>
@@ -386,127 +383,127 @@ function list_Search(){
 					<td colspan="6">
 							<div class="js_work_list_title">
 								<div id="process_div" class="smt_table_section">
-									<table width="100%" border='1'>
+									<table width="100%">
 										<tr>
-											<td style="width:12%;">
+											<th style="width:13%;">
 												PKG_TYPE
-											</td>
+											</th>
 											<td style="width:12%;" align="left">
 													<span id="pkg_type_span"></span>
 											</td>
-											<td style="width:12%;">
+											<th style="width:13%;">
 												고객사
-											</td>
+											</th>
 											<td style="width:12%;"  align="left">
 													<span id="customer_span"></span>
 											</td>
-											<td style="width:12%;">
+											<th style="width:13%;">
 												BODY_SIZE
-											</td>
+											</th>
 											<td style="width:12%;"  align="left">
 													<span id="body_size_span"></span>
 											</td>
-											<td style="width:12%;">
+											<th style="width:13%;">
 												현공정
-											</td>
+											</th>
 											<td style="width:12%;"  align="left">											
 													<span id="operation_span"></span>
 											</td>
 										</tr>
 										
 										<tr>
-											<td style="width:12%;">
+											<th>
 												표준제목
-											</td>
-											<td style="width:12%;" align="left">
+											</th>
+											<td>
 													<span id="detail_title"></span>
 											</td>
-											<td style="width:12%;">
+											<th>
 											표준대분류
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 													<span id="detail_big"></span>
 											</td>
-											<td style="width:12%;">
+											<th>
 												표준중분류
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 													<span id="detail_middle"></span>
 											</td>
-											<td style="width:12%;">
+											<th>
 												표준소분류
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 													<span id="detail_small"></span>
 											</td>
 										</tr>
 										
 										<tr>
-											<td style="width:12%;">
+											<th>
 												표준번호
-											</td>
-											<td style="width:12%;" align="left">
+											</th>
+											<td>
 													<span id="detail_number"></span>
 											</td>
-											<td style="width:12%;">
+											<th>
 												개정번호
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 													<span id="detail_number2"></span>
 											</td>
-											<td style="width:12%;">
+											<th>
 												기안부서
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 													<span id="detail_dept"></span>
 											</td>
-											<td style="width:12%;">
+											<th>
 												기안자
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 													<span id="detail_user"></span>
 											</td>
 										</tr>
 										
 										<tr>
-											<td style="width:12%;">
+											<th>
 												적용제품
-											</td>
-											<td style="width:12%;" align="left">
+											</th>
+											<td>
 													<span id="detail_one"></span>
 											</td>
-											<td style="width:12%;">
+											<th>
 												적용 PKG TYPE
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 													<span id="detail_PKG"></span>
 											</td>
-											<td style="width:12%;">
+											<th>
 												적용고객사
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 													<span id="detail_customer"></span>
 											</td>
-											<td style="width:12%;">
+											<th>
 												공정
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 													<span id="detail_process"></span>
 											</td>
 										</tr>
 										<!-- colspan!! --><!-- colspan!! --><!-- colspan!! -->
 										<tr>
-											<td style="width:12%;">
+											<th>
 												제/개정(폐기)사유
-											</td>
-											<td style="width:12%;"  align="left"  colspan="5">
+											</th>
+											<td colspan="5">
 													<span id="detail_re"></span>
 											</td>
 											
-											<td style="width:12%;">
+											<th>
 												등록일자
-											</td>
-											<td style="width:12%;"  align="left"  colspan="5">
+											</th>
+											<td colspan="5">
 												
 													<span id="detail_day"></span>
 												
@@ -516,34 +513,34 @@ function list_Search(){
 										<!-- colspan!! --><!-- colspan!! --><!-- colspan!! -->
 										
 										<tr>
-											<td style="width:12%;">
+											<th>
 												생산1부 배포공정
-											</td>
-											<td style="width:12%;" align="left">
+											</th>
+											<td>
 												
 													<span id="detail_addprocess1"></span>
 												
 											</td>
-											<td style="width:12%;">
+											<th>
 												생산1부 배포부수
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 												
 													<span id="detail_addcount1"></span>
 												
 											</td>
-											<td style="width:12%;">
+											<th>
 												생산기술1팀 배포공정
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 												
 													<span id="detail_addtechprocess1"></span>
 												
 											</td>
-											<td style="width:12%;">
+											<th>
 												생산기술1팀 배포부수
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 												
 													<span id="detail_addtechcount1"></span>
 												
@@ -551,104 +548,89 @@ function list_Search(){
 										</tr>
 										
 										<tr>
-											<td style="width:12%;">
+											<th>
 												생산2부 배포공정
-											</td>
-											<td style="width:12%;" align="left">
+											</th>
+											<td>
 												
 													<span id="detail_addprocess2"></span>
 												
 											</td>
-											<td style="width:12%;">
+											<th>
 												생산2부 배포부수
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 												
 													<span id="detail_addcount2"></span>
 												
 											</td>
-											<td style="width:12%;">
+											<th>
 												생산기술2팀 배포공정
-											</td>
-											<td style="width:12%;"  align="left">
-												
+											</th>
+											<td>
 													<span id="detail_addtechprocess2"></span>
 												
 											</td>
-											<td style="width:12%;">
+											<th>
 												생산기술2팀 배포부수
-											</td>
-											<td style="width:12%;"  align="left">
-												
+											</th>
+											<td>
 													<span id="detail_addtechcount2"></span>
-												
 											</td>
 										</tr>
 										
 										<tr>
-											<td style="width:12%;">
+											<th>
 												품질관리 배포공정
-											</td>
-											<td style="width:12%;" align="left">
+											</th>
+											<td>
 												
 													<span id="detail_addprocess3"></span>
 												
 											</td>
-											<td style="width:12%;">
+											<th>
 												품질관리 배포부수
-											</td>
-											<td style="width:12%;"  align="left">
-												
+											</th>
+											<td>
 													<span id="detail_addcount3"></span>
-												
 											</td>
-											<td style="width:12%;">
+											<th>
 												품질보증 배포공정
-											</td>
-											<td style="width:12%;"  align="left">
-												
+											</th>
+											<td>
 													<span id="detail_addtechprocess3"></span>
-												
 											</td>
-											<td style="width:12%;">
+											<th>
 												품질보증 배포부수
-											</td>
-											<td style="width:12%;"  align="left">
-												
+											</th>
+											<td>
 													<span id="detail_addtechcount3"></span>
-												
 											</td>
 										</tr>
 										
-										<tr>
-											<td style="width:12%;">
+										<tr class="end">
+											<th>
 												STOCK 배포요청부수
-											</td>
-											<td style="width:12%;" align="left">
-												
+											</th>
+											<td>
 													<span id="detail_STOCK"></span>
-												
 											</td>
-											<td style="width:12%;">
+											<th>
 												Packing 배포요청부수
-											</td>
-											<td style="width:12%;"  align="left">
-												
+											</th>
+											<td>
 													<span id="detail_Packing"></span>
-												
 											</td>
-											<td style="width:12%;">
+											<th>
 												TEST생산 배포요청부수
-											</td>
-											<td style="width:12%;"  align="left">
-												
+											</th>
+											<td>
 													<span id="detail_TEST"></span>
-												
 											</td>
-											<td style="width:12%;">
+											<th>
 												ECN 배포요청부수
-											</td>
-											<td style="width:12%;"  align="left">
+											</th>
+											<td>
 												
 													<span id="detail_ECN"></span>
 												
@@ -675,11 +657,11 @@ function list_Search(){
 	존재하지 않는 LOT_NUMBER 입니다.
 </div>
 </center>
-<!-- <script type="text/javascript">
+<script type="text/javascript">
 $(window).bind('resize', function() {
    $("#list").setGridWidth($(window).width() - 15);
 }).trigger('resize');
-</script> -->
+</script>
 <div id=lastdiv></div>
 </body>
 </html>
