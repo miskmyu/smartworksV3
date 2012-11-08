@@ -8,6 +8,10 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 import com.tmax.tibero.jdbc.TbSQLException;
 
 import pro.ucity.util.UcityTest;
@@ -308,6 +312,10 @@ public class CMHistory {
 		String cmHistorySelectSql = (status.equals(MSG_TYPE_OCCURRENCE)) ? UcityConstant.getQueryByKey("CMHistory.QUERY_SELECT_FOR_OCCURRENCE_PERFORM") : UcityConstant.getQueryByKey("CMHistory.QUERY_SELECT_FOR_RELEASE_PERFORM");
 		try {
 			try{
+//			    Context init = new InitialContext();
+//			    Context envinit = (Context)init.lookup("java:comp/env");
+//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//			    con = ds.getConnection();
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();

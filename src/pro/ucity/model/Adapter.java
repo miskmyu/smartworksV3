@@ -1,27 +1,26 @@
 package pro.ucity.model;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.tmax.tibero.jdbc.TbSQLException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
-import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.work.ProcessWork;
 import net.smartworks.server.engine.factory.SwManagerFactory;
-import net.smartworks.server.service.INoticeService;
-import net.smartworks.server.service.IWorkService;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
+import pro.ucity.util.UcityUtil;
+
+import com.tmax.tibero.jdbc.TbSQLException;
 
 public class Adapter {
 
@@ -573,6 +572,10 @@ public class Adapter {
 		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
+//			    Context init = new InitialContext();
+//			    Context envinit = (Context)init.lookup("java:comp/env");
+//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//			    con = ds.getConnection();
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
@@ -671,6 +674,10 @@ public class Adapter {
 		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
+//			    Context init = new InitialContext();
+//			    Context envinit = (Context)init.lookup("java:comp/env");
+//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//			    con = ds.getConnection();
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 
 			}catch (TbSQLException te){
