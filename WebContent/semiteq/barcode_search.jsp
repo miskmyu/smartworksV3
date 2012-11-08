@@ -8,7 +8,6 @@
 <html>
 <head>
 <!-- <link href="../css/default.css" type="text/css" rel="stylesheet" /> -->
-<link href="../css/black/layout.css" type="text/css" rel="stylesheet" />
 <link href="../css/black/detail.css" type="text/css" rel="stylesheet" />
 <link href="../css/black/form.css" type="text/css" rel="stylesheet" />
 <link href="../css/black/pop.css" type="text/css" rel="stylesheet" /> 
@@ -659,7 +658,7 @@ function list_Search(){
 </center>
 <script type="text/javascript">
 $(window).bind('resize', function() {
-   $("#list").setGridWidth($(window).width() - 15);
+   $("#list").setGridWidth($(window).width() - 100);
 }).trigger('resize');
 </script>
 <div id=lastdiv></div>
