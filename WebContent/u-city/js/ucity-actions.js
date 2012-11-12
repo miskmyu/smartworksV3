@@ -178,4 +178,27 @@ $(function() {
 		return false;
 	});
 
+	$('.js_situation_space_abend').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_situation_space_abend');
+		var pworkSpace = input.parents('.js_pwork_space_page');
+		var paramsJson = {};
+		paramsJson['workId'] = pworkSpace.attr('workId');
+		paramsJson['instanceId'] = pworkSpace.attr('instId');
+		paramsJson['taskInstId'] = input.attr('taskInstId');
+		smartPop.progressCenter();
+		console.log(JSON.stringify(paramsJson));
+		$.ajax({
+			url : "abend_process_instance.sw",
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				window.location.reload(true);
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+			}
+		});
+		return false;
+	});
+
 });

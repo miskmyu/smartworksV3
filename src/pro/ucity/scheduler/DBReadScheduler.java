@@ -26,7 +26,7 @@ public class DBReadScheduler extends QuartzJobBean  {
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		if(!isDbReadSchedulerRunning){
-			startScheduler();
+//			startScheduler();
 		}else{
 			System.out.println("진행중인 스케줄러가 있어 그냥 지나감...!!!");			
 		}
