@@ -15,14 +15,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.ChatInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
+import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.service.impl.SmartWorks;
 import net.smartworks.util.LocalDate;
@@ -637,6 +640,17 @@ public class WorkInstanceController extends ExceptionInterceptor {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void moveImageInstances(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.moveImageInstances(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/abend_process_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void abendProcessInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Map<String, Object> accessData = new HashMap<String, Object>();	
+		accessData.put("selWorkSpace", SmartUtil.getSystemUser().getId());
+		accessData.put("selWorkSpaceType", ISmartWorks.SPACE_TYPE_USER);
+		accessData.put("selAccessLevel", AccessPolicy.LEVEL_PUBLIC);
+		requestBody.put("frmAccessSpace", accessData);
+		smartworks.abendTaskInstance(requestBody, request);
 	}
 	
 }

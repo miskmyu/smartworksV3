@@ -14,11 +14,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.PWInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.ProcessWork;
@@ -49,6 +51,18 @@ public class UcityUtil {
 
 	public UcityUtil() {
 		super();
+	}
+	
+	public static boolean isAbendable(ProcessWorkInstance instance){
+		if(SmartUtil.isBlankObject(instance) || instance.getStatus() == Instance.STATUS_COMPLETED || instance.getStatus() == Instance.STATUS_ABORTED || SmartUtil.isBlankObject(instance.getTasks())) return false;
+		TaskInstanceInfo[] tasks = instance.getTasks();
+		
+		for(int i=0; i<tasks.length; i++){
+			TaskInstanceInfo task = tasks[i];
+			if(task.getStatus() == Instance.STATUS_COMPLETED && task.getName().equals(System.TASK_NAME_USERVICE_END))
+				return true;
+		}
+		return false;
 	}
 	
 	public static String getServiceTypeName(String taskName){
