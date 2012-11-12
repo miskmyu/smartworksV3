@@ -8,6 +8,10 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 import com.tmax.tibero.jdbc.TbSQLException;
 
 import pro.ucity.util.UcityTest;
@@ -274,9 +278,13 @@ public class OPDisplay {
 		PreparedStatement updatePstmt = null;
 				
 		String opDisplaySelectSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_STOP_CHECK") : UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_CHECK");
-		String opDisplayUpdateSql = UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM");
+		String opDisplayUpdateSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_STOP_READ_CONFIRM") : UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
+//			    Context init = new InitialContext();
+//			    Context envinit = (Context)init.lookup("java:comp/env");
+//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//			    con = ds.getConnection();
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();
@@ -339,9 +347,13 @@ public class OPDisplay {
 		PreparedStatement updatePstmt = null;
 				
 		String opDisplaySelectSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_STOP_CHECK") : UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_CHECK");
-		String opDisplayUpdateSql = UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM");
+		String opDisplayUpdateSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_STOP_READ_CONFIRM") : UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
+//			    Context init = new InitialContext();
+//			    Context envinit = (Context)init.lookup("java:comp/env");
+//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//			    con = ds.getConnection();
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();
@@ -396,6 +408,10 @@ public class OPDisplay {
 		String opDisplaySelectSql = UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_PERFORM");
 		try {
 			try{
+//			    Context init = new InitialContext();
+//			    Context envinit = (Context)init.lookup("java:comp/env");
+//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//			    con = ds.getConnection();
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();

@@ -94,10 +94,10 @@
 				</beans:entry>			
 				
 				<beans:entry key="CMHistory.QUERY_SELECT_FOR_OCCURRENCE_PERFORM">
-					<beans:value>select a.* from TB_COM_INTG_LOG a, CMDB.TN_CM_EVENT_OUTB_INFO b where b.U_SVC_EVENT_ID = ? and a.EVET_OUTB_ID = b.EVENT_OUTB_ID and SR_FLAG = 'S'</beans:value>
+					<beans:value>select a.* from TB_COM_INTG_LOG a, CMDB.TN_CM_EVENT_OUTB_INFO b where b.U_SVC_EVENT_ID = ? and a.EVET_OUTB_ID = b.EVENT_OUTB_ID and SR_FLAG = 'R'</beans:value>
 				</beans:entry>   
 				<beans:entry key="CMHistory.QUERY_SELECT_FOR_RELEASE_PERFORM">
-					<beans:value>select a.* from TB_COM_INTG_LOG a, CMDB.TN_CM_EVENT_OUTB_INFO b where b.U_SVC_EVENT_ID = ? and a.EVET_OUTB_ID = b.EVENT_OUTB_ID and SR_FLAG = 'S'</beans:value>
+					<beans:value>select a.* from TB_COM_INTG_LOG a, CMDB.TN_CM_EVENT_OUTB_INFO b where b.U_SVC_EVENT_ID = ? and a.EVET_OUTB_ID = b.EVENT_OUTB_ID and SR_FLAG = 'R'</beans:value>
 				</beans:entry>
 
 				<!-- DMHistory -->
@@ -238,13 +238,16 @@
 					<beans:value>STOP_REQUEST</beans:value>
 				</beans:entry>
 				<beans:entry key="OPDisplay.QUERY_SELECT_FOR_CHECK">
-					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and (STOP_REQUEST != 'Y' or STOP_REQUEST is null) order by REQUEST_DATE desc</beans:value>
+					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and (BPM_CNFM_YN != 'Y' and BPM_CNFM_YN != 'S' or BPM_CNFM_YN is null) and (STOP_REQUEST != 'Y' or STOP_REQUEST is null) order by REQUEST_DATE desc</beans:value>
 				</beans:entry>
 				<beans:entry key="OPDisplay.QUERY_SELECT_FOR_STOP_CHECK">
-					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and STOP_REQUEST = 'Y' order by REQUEST_DATE desc</beans:value>
+					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and BPM_CNFM_YN = 'Y' and STOP_REQUEST = 'Y' order by REQUEST_DATE desc</beans:value>
 				</beans:entry>
 				<beans:entry key="OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM">
-					<beans:value>update USITUATION.TN_ST_DISPLAY set BPM_CNFM_YN = 'Y' where SITUATION_ID = ?</beans:value>
+					<beans:value>update USITUATION.TN_ST_DISPLAY set BPM_CNFM_YN = 'Y' where SITUATION_ID = ? and (BPM_CNFM_YN != 'S' or BPM_CNFM_YN is null) </beans:value>
+				</beans:entry>
+				<beans:entry key="OPDisplay.QUERY_UPDATE_FOR_STOP_READ_CONFIRM">
+					<beans:value>update USITUATION.TN_ST_DISPLAY set BPM_CNFM_YN = 'S' where SITUATION_ID = ? and BPM_CNFM_YN != 'N'</beans:value>
 				</beans:entry>
 				<beans:entry key="OPDisplay.QUERY_SELECT_FOR_PERFORM">
 					<beans:value>select * from USITUATION.TN_ST_DISPLAY where SITUATION_ID = ? and DISPLAY_ID = ?</beans:value>

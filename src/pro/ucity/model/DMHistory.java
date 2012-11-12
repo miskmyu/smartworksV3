@@ -8,6 +8,10 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 import com.tmax.tibero.jdbc.TbSQLException;
 
 import pro.ucity.util.UcityTest;
@@ -25,7 +29,7 @@ public class DMHistory {
 	public static final String DEVICE_ID_TRAFFIC_VMS	= "TMEMVMS";
 	public static final String DEVICE_ID_KIOSK			= "TMEMKIOSK";
 	public static final String DEVICE_ID_ENV_VMS		= "EVEIVMS";
-	
+
 	public static final String FLAG_STOP_DISPLAY 	= "Y";
 	
 	public static final KeyMap[] DEVMID_TRACE_FIELDS = {
@@ -199,15 +203,15 @@ public class DMHistory {
 		}catch (Exception ex){}
 		
 		if(!SmartUtil.isBlankObject(division)){
-			if(division.equals(DEVICE_ID_MEDIABOARD)){
+			if(SmartUtil.isBlankObject(this.cimbMbd) && division.equals(DEVICE_ID_MEDIABOARD)){
 				this.cimbMbd = dataPath;
-			}else if(division.equals(DEVICE_ID_TRAFFIC_BIT)){
+			}else if(SmartUtil.isBlankObject(this.tmemBit) && division.equals(DEVICE_ID_TRAFFIC_BIT)){
 				this.tmemBit = dataPath;
-			}else if(division.equals(DEVICE_ID_TRAFFIC_VMS)){
+			}else if(SmartUtil.isBlankObject(this.tmemVms) && division.equals(DEVICE_ID_TRAFFIC_VMS)){
 				this.tmemVms =dataPath;
-			}else if(division.equals(DEVICE_ID_KIOSK)){
+			}else if(SmartUtil.isBlankObject(this.tmemKiosk) && division.equals(DEVICE_ID_KIOSK)){
 				this.tmemKiosk = dataPath;
-			}else if(division.equals(DEVICE_ID_ENV_VMS)){
+			}else if(SmartUtil.isBlankObject(this.eveiVms) && division.equals(DEVICE_ID_ENV_VMS)){
 				this.eveiVms = dataPath;
 			}
 		}
@@ -232,6 +236,10 @@ public class DMHistory {
 		String cmHistorySelectSql = (status.equals(FLAG_STOP_DISPLAY)) ? UcityConstant.getQueryByKey("DMHistory.QUERY_SELECT_FOR_STOP_PERFORM") : UcityConstant.getQueryByKey("DMHistory.QUERY_SELECT_FOR_DISPLAY_PERFORM");
 		try {
 			try{
+//			    Context init = new InitialContext();
+//			    Context envinit = (Context)init.lookup("java:comp/env");
+//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//			    con = ds.getConnection();
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();
