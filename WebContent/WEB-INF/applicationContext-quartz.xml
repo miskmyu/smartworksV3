@@ -17,11 +17,11 @@
 			<beans:value>0/10 * * * * ?</beans:value>
 		</beans:property>
 	</beans:bean>
-<!--     <beans:bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" autowire="no" destroy-method="destroy">
+	<beans:bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" autowire="no" destroy-method="destroy" >
 		<beans:property name="triggers">
 			<beans:list>
 				<beans:ref local="cronTrigger1" />
 			</beans:list>
 		</beans:property>
-	</beans:bean> 	 -->
+	</beans:bean>
 </beans:beans>

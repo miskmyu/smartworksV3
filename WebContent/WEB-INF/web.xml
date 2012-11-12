@@ -7,7 +7,7 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
-		<welcome-file>/jsp/index.jsp</welcome-file>
+		<welcome-file>/u-city/jsp/index.jsp</welcome-file>
 		<welcome-file>default.html</welcome-file>
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
@@ -49,9 +49,14 @@
 		<servlet-name>spring-dispatcher</servlet-name>
 		<url-pattern>*.sw</url-pattern>
 	</servlet-mapping>
+	<listener>
+		<listener-class>net.smartworks.listener.SwServletContextListener</listener-class>
+	</listener>
+
+	
 	
 	<!-- UCITY -->
-<!--  	<filter>
+	<!-- <filter>
 	    <filter-name>SSORequest</filter-name>
 	    <filter-class>pro.ucity.sso.filter.UcitySSOFilter</filter-class>
 	    <init-param>

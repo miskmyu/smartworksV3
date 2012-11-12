@@ -8,11 +8,17 @@
 
 package pro.ucity.util;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
 import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.TaskInstance;
@@ -382,7 +388,16 @@ public class UcityUtil {
 		}
 		return dataRecord;
 	}
-	
+	public static void stopAllThread() throws Exception{
+		if(SmartUtil.isBlankObject(UcityUtil.pollingQueue)) 
+			return;
+		for(int i=0; i<pollingQueue.size(); i++){
+			PollingModel pollingModel = pollingQueue.get(i);
+			java.lang.System.out.println("=============== KILL THREAD BEGIN ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
+			pollingModel.getThread().stop();
+			java.lang.System.out.println("=============== KILL THREAD DONE ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
+		}
+	}
 	synchronized public static void resumePollingForRunningTasks(String processId) throws Exception{
 		
 		IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
@@ -630,9 +645,19 @@ public class UcityUtil {
 				TaskInstance taskInstance = thisModel.getTaskInstance();
 				long timeout = thisModel.getTimeout();
 				Map<String, Object> dataRecord = null;
+				Connection con = null;
 				while(timeout > 0 && SmartUtil.isBlankObject(dataRecord) && !isPollingInterrupted(Thread.currentThread())) {
 					java.lang.System.out.println("############ START checking Table=" + tableName + ", Event Id=" + eventId + ", Timeout=" + timeout + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-					
+					try{
+//					    Context init = new InitialContext();
+//					    Context envinit = (Context)init.lookup("java:comp/env");
+//					    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//					    con = ds.getConnection();
+						con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+					}catch (Exception e){
+						timeout = 0;
+						java.lang.System.out.println("[ERROR] DB접속 끊김.Thread 종료");
+					}
 					IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();					
 					try {
 						taskInstance = (TaskInstance)instanceService.getTaskInstanceById(taskInstance.getWork().getId(), taskInstance.getId());
