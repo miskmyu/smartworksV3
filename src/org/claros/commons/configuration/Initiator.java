@@ -3,13 +3,17 @@ package org.claros.commons.configuration;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.sql.DataSource;
 
 import net.smartworks.util.SmartConfUtil;
 
@@ -90,6 +94,11 @@ public class Initiator extends HttpServlet {
             digester.addCallMethod("claros-config/db-config/db/password", "setPassword", 0);
             digester.addSetNext("claros-config/db-config/db", "addDbConfig", "org.claros.commons.db.DbConfig");
             digester.parse(Paths.getCfgFolder() + "/config.xml");*/
+        	
+//        	Context ct1=new InitialContext();
+//        	Context ct2=(Context)ct1.lookup("java:comp/env");
+//        	DataSource ds=(DataSource)ct2.lookup("jdbc/SmartWorksDS");
+
         	DbConfig dbConfig = new DbConfig();
         	dbConfig.setId(SmartConfUtil.getInstance().getId());
         	dbConfig.setDatabase(SmartConfUtil.getInstance().getUrl());

@@ -197,9 +197,9 @@ function submitForms() {
 												<input name="rdoEditor<%=i %>" type="radio" checked value="text"/>미리보기
 												<input name="rdoEditor<%=i %>" type="radio" value="editor"/>편집기
 											</span>
-											<div class="js_form_desc_text" style="height: 262px"><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %></div>
+											<div class="js_form_desc_text cb" style="height: 262px"><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %></div>
 											<input type="hidden" name="txtaFormDesc<%=tasks[i].getId() %>" value="<%=SmartUtil.smartEncode(CommonUtil.toNotNull(tasks[i].getForm().getDescription())) %>"/>
-											<div class="js_form_desc_editor"></div>
+											<div class="js_form_desc_editor cb"></div>
 										</div>
 									</div>
 							<%
@@ -231,7 +231,7 @@ function submitForms() {
 								<span class="txt_btn_end"></span>
 							</a>
 						</span>
-						<span class="fr btn_gray js_cancel_situation_manual" style="display:none"> 
+						<span class="fr btn_gray ml5 js_cancel_situation_manual" style="display:none"> 
 							<a href="">
 								<span class="txt_btn_start"></span> 
 								<span class="txt_btn_center"><fmt:message key='common.button.cancel' /> </span>
