@@ -26,7 +26,7 @@ public class Audit {
 		new String[]{"상황처리"},
 		new String[]{"상황종료"},
 		new String[]{"통합관제 발생표출", "통합관제 종료표출"},
-		new String[]{"단말연계미들웨어"},
+		new String[]{"단말연계 미들웨어"},
 		new String[]{"발생 SMS발송", "미디어보드", "교통 BIT", "교통 VMS", "KIOSK", "환경 VMS", "미디어보드 중단", "교통 BIT 중단", "교통 VMS 중단", "KIOSK 중단", "환경 VMS 중단"}
 	};
 
@@ -54,7 +54,7 @@ public class Audit {
 		case ID_INTEGRATED_CONTROL:
 			return "통합관제";
 		case ID_DEVICE_MW:
-			return "단말연계미들웨어";
+			return "단말연계 미들웨어";
 		case ID_SITUATION_DISPLAY:
 			return "상황표출";
 		}

@@ -1,0 +1,46 @@
+@charset "utf-8";
+/* CSS Document */
+html {font-size: 12px; font-family: dotum,Helvetica,sans-serif}
+body {background: none #ECE9E2}
+html, body {color:#454545; height:100%}
+select {vertical-align: middle; border:1px solid #C7C7C7}
+.tl {text-align:left !important}
+.tc {text-align:center !important}
+.tr {text-align:right !important}
+table {border-spacing: 0; border-collapse: collapse; width: 100%; line-height: 20px; font-size:12px}
+table td, table th {text-align: left; padding: 2px}
+
+.smt_srch_section {background-color: #faedd5; border-radius: 6px; padding:7px; margin:5px 0 15px 0}
+.smt_srch_section th {color:#656565}
+.smt_table_section {background-color: #e1effa; border-radius: 6px; padding:7px; margin:0 0 15px 0}
+.smt_table_section table td, .smt_table_section table th {border-bottom: 1px dotted #CCCCCC}
+.end td, .end th {border:none !important} 
+.smt_table_section table th {text-align:right; color: #2E6E9E; padding:2px 5px}
+
+.portlet_l {
+    background: url("../../images/bg_portlet_l.jpg") repeat-y scroll 0 0 #ffffff;
+    position:relative; height:100%; width:100%; z-index:10}	
+.portlet_r {
+    background: url("../../images/bg_portlet_r.jpg") repeat-y scroll 100% 0 transparent;
+    height:100%; width:100%; float:none}
+	
+.portlet_b {
+    background: url("../../images/bg_portlet_b.jpg") no-repeat scroll 100% 100% transparent;
+    height:12px; margin-left:10px; display:inline-block}
+	
+.portlet_t {
+    background: url("../../images/bg_portlet_t.jpg") no-repeat 100% 0 transparent;
+    width:100%; height:12px; overflow:hidden}
+
+.portlet_t .portlet_tl {
+    background: url("../../images/bg_portlet_t.jpg") no-repeat 0 0 transparent;
+    display:inline-block; width:10px; height:16px; }
+  
+.fieldline {border:1px solid #c7c7c7; left:0px; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:99.4%}
+
+.mt5 {margin-top:5px !important}
+.mt10 {margin-top:10px !important}
+.mt15 {margin-top:15px !important}
+
+.pt5 {padding-top:10px !important}
+.pt10 {padding-top:10px !important}

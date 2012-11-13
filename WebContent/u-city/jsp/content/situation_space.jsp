@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="pro.ucity.util.UcityUtil"%>
 <%@page import="net.smartworks.server.engine.factory.SwManagerFactory"%>
 <%@page import="pro.ucity.manager.ucityWorkList.model.UcityWorkList"%>
 <%@page import="pro.ucity.manager.ucityWorkList.model.UcityWorkListCond"%>
@@ -205,6 +206,24 @@
 			</div>
 			<!-- 목록보기 -->
 			<div class="mt10 fr">
+				<%if(UcityUtil.isAbendable(instance)){ 
+					String runningTaskInstId = null;
+					for(int i=0; i<instance.getTasks().length; i++){
+						TaskInstanceInfo task = instance.getTasks()[i];
+						if(task.getStatus() == Instance.STATUS_RUNNING || task.getStatus() == Instance.STATUS_DELAYED_RUNNING){
+							runningTaskInstId = task.getId();
+							break;
+						}
+					}
+				%>
+	 				<span class="btn_gray">
+						<a class="js_situation_space_abend" href="" taskInstId=<%=runningTaskInstId %>>
+						<span class="txt_btn_start"></span>
+						<span class="txt_btn_center">이상종료</span>
+						<span class="txt_btn_end"></span>
+						</a>
+					</span>
+				<%} %>
  				<span class="btn_gray">
 					<a class="js_situation_space_reload" href="">
 					<span class="txt_btn_start"></span>
@@ -258,108 +277,66 @@
 	function clickOnTaskInDiagram(formId){
 		var taskInstances = $('.js_pwork_space_page .js_instance_task');
 		if(!isEmpty(taskInstances)){
-			var selectedTask = null;
+			var selectedTasks = new Array();
+			var selectedCount = 0;
 			for(var i=0; i<taskInstances.length; i++){
 				var taskInstance = $(taskInstances[i]);
-				if(taskInstance.attr('formId') === formId && taskInstance.hasClass("completed"))
-					selectedTask = taskInstance;
+				if(taskInstance.attr('formId') === formId && taskInstance.hasClass("completed")){
+					selectedTasks[selectedCount++] = taskInstance;					
+				}
 			}
-			if(!isEmpty(selectedTask) && selectedTask.hasClass("completed"))
-				clickOnTask(selectedTask);			
+			if(!isEmpty(selectedTasks)){
+				if(selectedTasks.length==1) selectedTasks[1] = selectedTasks[0];
+				clickOnTask($(selectedTasks));
+			}
 		}
 	}
 	function clickOnTask(input){
-		var pworkSpace = input.parents('.js_pwork_space_page');
+		var pworkSpace = $('.js_pwork_space_page');
 		var workId = pworkSpace.attr("workId");
-		var formId = input.attr("formId");
-		var taskName = input.attr("taskName");
-		var formMode = input.attr("formMode");
-		var instId = input.attr("taskInstId");
-		var isApprovalWork = input.attr("isApprovalWork");
-		var approvalLineId = input.attr("approvalLineId"); 
-		var approvalContent = pworkSpace.find('div.js_form_task_approval').html('').hide();
-		var formContent = pworkSpace.find('div.js_form_content').html('');
+		var formContent = pworkSpace.find('div.js_form_content').html('<ul></ul>');
 		var formContentPointer = pworkSpace.find('div.js_form_content_pointer');
- 		if(isApprovalWork == 'true' && !isEmpty(approvalContent)){
-			$.ajax({
-				url : 'append_task_approval.sw',
-				data : { 
-					processTaskInstId : instId
+
+		var selectedTasks = input;
+		if(isEmpty(selectedTasks)) return;
+		for(var i=0; i<selectedTasks.length; i++){
+			var selectedTask = $(selectedTasks[i]);
+			var formId = selectedTask.attr("formId");
+			var taskName = selectedTask.attr("taskName");
+			var formMode = selectedTask.attr("formMode");
+			var instId = selectedTask.attr("taskInstId");
+	
+			pworkSpace.find('.js_instance_task').removeClass('selected');
+			selectedTask.addClass('selected');
+			formContentPointer.css({"left": selectedTask.position().left + selectedTask.outerWidth()/2 + "px"});
+			pworkSpace.find('.js_selected_task_title').html(taskName);
+			var formContentList = formContent.find('ul').append('<li></li>').find('li:last');
+			new SmartWorks.GridLayout({
+				target : formContentList,
+				mode : formMode,
+				first : (formMode=='edit'),
+				workId : workId,
+				formId : formId,
+				taskInstId : instId,
+				onSuccess : function(){
+					formContent.attr('taskInstId', instId);
+					smartPop.closeProgress();																
 				},
-				success : function(data, status, jqXHR) {
-					approvalContent.html(data).show();
-				},
-				error : function(xhr, ajaxOptions, thrownError){					
+				onError : function(){
+					smartPop.closeProgress();
+					
 				}
 			});
-		}else if(!isEmpty(approvalLineId) && formMode === "edit"){
-			$.ajax({
-				url : 'append_task_approval.sw',
-				data : { 
-					approvalLineId : approvalLineId
-				},
-				success : function(data, status, jqXHR) {
-					approvalContent.html(data).show();
-				},
-				error : function(xhr, ajaxOptions, thrownError){					
-				}
-			});			
 		}
-		var selectedTask = input;
-		pworkSpace.find('.js_instance_task').removeClass('selected');
-		selectedTask.addClass('selected');
-		formContentPointer.css({"left": selectedTask.position().left + selectedTask.outerWidth()/2 + "px"});
-		pworkSpace.find('.js_selected_task_title').html(taskName);
-		new SmartWorks.GridLayout({
-			target : formContent,
-			mode : formMode,
-			first : (formMode=='edit'),
-			workId : workId,
-			formId : formId,
-			taskInstId : instId,
-			onSuccess : function(){
-				formContent.attr('taskInstId', instId);
-				smartPop.closeProgress();																
-			},
-			onError : function(){
-				smartPop.closeProgress();
-				
-			}
-		});
-		pworkSpace.attr("taskInstId", instId);
-		pworkSpace.attr("formMode", formMode);
+		pworkSpace.attr("taskInstId", selectedTasks.attr("taskInstId"));
+		pworkSpace.attr("formMode", selectedTasks.attr("formMode"));
 		if(!isEmpty(pworkSpace.find('.js_form_task_forward:visible'))) 
 			return;
-		if(formMode==="edit"){
-			if(isReturned || !isEmpty(approvalLineId)){
-				pworkSpace.find('.js_toggle_approval_btn').hide();
-				if(!isEmpty(approvalLineId)){
-					pworkSpace.find('.js_btn_do_approval').show().siblings().hide();
-					pworkSpace.find('.js_btn_return').show();																
-				}else if(isReturned){
-					pworkSpace.find('.js_btn_submit_approval').show().siblings().hide();
-					pworkSpace.find('.js_btn_return').show();											
-				}
-			}else{
-				pworkSpace.find('.js_btn_complete').show().siblings().hide();
-				pworkSpace.find('.js_btn_return').show();
-				pworkSpace.find('.js_btn_reassign').show();
-				pworkSpace.find('.js_btn_temp_save').show();
-				pworkSpace.find('.js_toggle_approval_btn').show();				
-			}
-			pworkSpace.find('.js_check_completion_notice').show();
-		}else{
-			if(isApprovalWork == 'true' && isApprovalForMe){
-				pworkSpace.find('.js_toggle_approval_btn').hide();
-				pworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
-				pworkSpace.find('.js_btn_return_approval').show();
-				pworkSpace.find('.js_btn_reject_approval').show();
-			} else {
-				pworkSpace.find('.js_btn_complete').hide().siblings().hide();
-			}
-			pworkSpace.find('.js_toggle_approval_btn').hide();
-			pworkSpace.find('.js_check_completion_notice').hide();
-		}
+
+		pworkSpace.find('.js_btn_complete').hide().siblings().hide();
+		pworkSpace.find('.js_toggle_approval_btn').hide();
+		pworkSpace.find('.js_check_completion_notice').hide();
+
 	}
 	
 	var getTasksWidth = function(tasks, arrows){

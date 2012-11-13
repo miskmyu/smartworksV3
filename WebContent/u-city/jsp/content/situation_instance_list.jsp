@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.model.instance.ProcessWorkInstance"%>
+<%@page import="net.smartworks.model.instance.WorkInstance"%>
 <%@page import="pro.ucity.util.UcityUtil"%>
 <%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
@@ -192,6 +194,11 @@
 				}
 				String serviceType = "";
 				String runningTaskNames = "";
+				ProcessWorkInstance instance = (ProcessWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instanceInfo.getId());
+				if(!SmartUtil.isBlankObject(occurredTaskNames) || UcityUtil.isAbendable(instance))
+					occurredTaskNames = "비정상(" + occurredTaskNames + ")";
+				if(!SmartUtil.isBlankObject(releasedTaskNames) || UcityUtil.isAbendable(instance))
+					releasedTaskNames = "비정상(" + releasedTaskNames + ")";
 				if(!SmartUtil.isBlankObject(occurredTaskNames) && !SmartUtil.isBlankObject(releasedTaskNames)){
 					serviceType =  "발생</br>종료";
 					runningTaskNames = occurredTaskNames + "</br>" + releasedTaskNames;
@@ -201,6 +208,8 @@
 				}else if(!SmartUtil.isBlankObject(releasedTaskNames)){
 					serviceType = "종료";
 					runningTaskNames = releasedTaskNames;
+				}else{
+					serviceType = "종료";
 				}
 
 				String target =  "situationDetail.sw?cid=" + instanceInfo.getContextId() + "&workId=" + instanceInfo.getWork().getId();

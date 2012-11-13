@@ -8,6 +8,10 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 import com.tmax.tibero.jdbc.TbSQLException;
 
 import pro.ucity.util.UcityTest;
@@ -25,36 +29,26 @@ public class DMHistory {
 	public static final String DEVICE_ID_TRAFFIC_VMS	= "TMEMVMS";
 	public static final String DEVICE_ID_KIOSK			= "TMEMKIOSK";
 	public static final String DEVICE_ID_ENV_VMS		= "EVEIVMS";
-	
-	public static final String FIELD_NAME_EVENT_ID = "a.EVENT_ID";
-	public static final String FIELD_NAME_SEND_VALUE = "c.SEND_RESPONSE_VALUE";
-	public static final String FIELD_NAME_SEND_SEQ = "SEND_INFO_SEQ";
-	public static final String FIELD_NAME_ADAPTER_DIV = "b.ADAPTER_DIVISION";
-	
-	
-	
+
 	public static final String FLAG_STOP_DISPLAY 	= "Y";
 	
-//	public static final String QUERY_SELECT_FOR_DISPLAY_PERFORM = "select distinct a."+ FIELD_NAME_SEND_SEQ +",b.*," + FIELD_NAME_SEND_VALUE + ", " + FIELD_NAME_EVENT_ID + " from " + System.TABLE_NAME_SEND_INFO + " a, " + System.TABLE_NAME_SEND_CONTENTS + " b, "
-//			+ System.TABLE_NAME_RCV_DEVICE + " c where a." + FIELD_NAME_SEND_SEQ + " = b." + FIELD_NAME_SEND_SEQ + " and c." + FIELD_NAME_SEND_SEQ +  " = a." + FIELD_NAME_SEND_SEQ + " and " + FIELD_NAME_EVENT_ID +
-//			" = ? and " + FIELD_NAME_ADAPTER_DIV + " = ? order by a." + FIELD_NAME_SEND_SEQ + " desc";
-//	
-//	public static final String QUERY_SELECT_FOR_STOP_PERFORM = "select distinct a."+ FIELD_NAME_SEND_SEQ +",b.*," + FIELD_NAME_SEND_VALUE + ", " + FIELD_NAME_EVENT_ID + " from " + System.TABLE_NAME_SEND_INFO + " a, " + System.TABLE_NAME_SEND_CONTENTS + " b, "
-//			+ System.TABLE_NAME_RCV_DEVICE + " c where a." + FIELD_NAME_SEND_SEQ + " = b." + FIELD_NAME_SEND_SEQ + " and c." + FIELD_NAME_SEND_SEQ +  " = a." + FIELD_NAME_SEND_SEQ + " and " + FIELD_NAME_EVENT_ID +
-//			" = ? and " + FIELD_NAME_ADAPTER_DIV + " = ? order by a." + FIELD_NAME_SEND_SEQ + " desc";
-
-	
 	public static final KeyMap[] DEVMID_TRACE_FIELDS = {
-		new KeyMap("표출내용", "DATA_PATH"), new KeyMap("표출지속시간", "PLAY_TIME"), new KeyMap("표출결과", "SEND_RESPONSE_VALUE"), new KeyMap("이벤트아이디", "EVENT_ID"), new KeyMap("디바이스아이디", "ADAPTER_DIVISION")
+		new KeyMap("상황 아이디", "situation_id"), new KeyMap("미디어보드", "cimbmbd"), new KeyMap("환경VMS", "eveivms"), new KeyMap("교통VMS", "tmemvms"), new KeyMap("교통BIT", "tmembit"), 
+		new KeyMap("KIOSK", "tmemkiosk"), new KeyMap("미디어보드 표출중지", "cimbmbd_stop"), new KeyMap("환경VMS 표출중지", "eveivms_stop"), new KeyMap("교통VMS 표출중지", "tmemvms_stop"), new KeyMap("교통BIT 표출중지", "tmembit_stop"), 
+		new KeyMap("KIOSK 표출중지", "tmemkiosk_stop")
 	};
 
 	private String eventId;
-	private String deviceId;
-	
-	private String dataPath;
-	private String playTime;
-	private String sendResponseValue;
-
+	private String cimbMbd;
+	private String tmemBit;
+	private String tmemVms;
+	private String tmemKiosk;
+	private String eveiVms;;
+	private String cimbMbdStop;
+	private String tmemBitStop;
+	private String tmemVmsStop;
+	private String tmemKioskStop;
+	private String eveiVmsStop;
 	
 	public String getEventId() {
 		return eventId;
@@ -64,42 +58,88 @@ public class DMHistory {
 		this.eventId = eventId;
 	}
 
-	public String getDeviceId() {
-		return deviceId;
+	public String getCimbMbd() {
+		return cimbMbd;
 	}
 
-	public void setDeviceId(String deviceId) {
-		this.deviceId = deviceId;
+	public void setCimbMbd(String cimbMbd) {
+		this.cimbMbd = cimbMbd;
 	}
 
-	public String getDataPath() {
-		return dataPath;
+	public String getTmemBit() {
+		return tmemBit;
 	}
 
-	public void setDataPath(String dataPath) {
-		this.dataPath = dataPath;
+	public void setTmemBit(String tmemBit) {
+		this.tmemBit = tmemBit;
 	}
 
-	public String getPlayTime() {
-		return playTime;
+	public String getTmemVms() {
+		return tmemVms;
 	}
 
-	public void setPlayTime(String playTime) {
-		this.playTime = playTime;
+	public void setTmemVms(String tmemVms) {
+		this.tmemVms = tmemVms;
 	}
 
-	public String getSendResponseValue() {
-		return sendResponseValue;
+	public String getTmemKiosk() {
+		return tmemKiosk;
 	}
 
-	public void setSendResponseValue(String sendResponseValue) {
-		this.sendResponseValue = sendResponseValue;
+	public void setTmemKiosk(String tmemKiosk) {
+		this.tmemKiosk = tmemKiosk;
 	}
 
-	public DMHistory(ResultSet resultSet){
+	public String getEveiVms() {
+		return eveiVms;
+	}
+
+	public void setEveiVms(String eveiVms) {
+		this.eveiVms = eveiVms;
+	}
+
+	public String getCimbMbdStop() {
+		return cimbMbdStop;
+	}
+
+	public void setCimbMbdStop(String cimbMbdStop) {
+		this.cimbMbdStop = cimbMbdStop;
+	}
+
+	public String getTmemBitStop() {
+		return tmemBitStop;
+	}
+
+	public void setTmemBitStop(String tmemBitStop) {
+		this.tmemBitStop = tmemBitStop;
+	}
+
+	public String getTmemVmsStop() {
+		return tmemVmsStop;
+	}
+
+	public void setTmemVmsStop(String tmemVmsStop) {
+		this.tmemVmsStop = tmemVmsStop;
+	}
+
+	public String getTmemKioskStop() {
+		return tmemKioskStop;
+	}
+
+	public void setTmemKioskStop(String tmemKioskStop) {
+		this.tmemKioskStop = tmemKioskStop;
+	}
+
+	public String getEveiVmsStop() {
+		return eveiVmsStop;
+	}
+
+	public void setEveiVmsStop(String eveiVmsStop) {
+		this.eveiVmsStop = eveiVmsStop;
+	}
+
+	public DMHistory(){
 		super();
-		if(SmartUtil.isBlankObject(resultSet)) return;
-		this.setResult(resultSet);
 	}
 	
 	public Map<String, Object> getDataRecord(){
@@ -108,22 +148,32 @@ public class DMHistory {
 		KeyMap[] keyMaps = DMHistory.DEVMID_TRACE_FIELDS;
 		
 		if(!this.isValid()) return null;
-		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
-			if(keyMap.getKey().equals("DATA_PATH"))
-				dataRecord.put(keyMap.getId(), this.dataPath);
-			else if(keyMap.getKey().equals("PLAY_TIME"))
-				dataRecord.put(keyMap.getId(), this.playTime);
-			else if(keyMap.getKey().equals("SEND_RESPONSE_VALUE"))
-				dataRecord.put(keyMap.getId(), this.sendResponseValue);	
-			else if(keyMap.getKey().equals("EVENT_ID"))
-				dataRecord.put(keyMap.getId(), this.eventId);	
-			else if(keyMap.getKey().equals("ADAPTER_DIVISION"))
-				dataRecord.put(keyMap.getId(), this.deviceId);	
+			if(keyMap.getKey().equals("situation_id"))
+				dataRecord.put(keyMap.getId(), this.eventId);
+			else if(keyMap.getKey().equals("cimbmbd"))
+				dataRecord.put(keyMap.getId(), this.cimbMbd);
+			else if(keyMap.getKey().equals("tmembit"))
+				dataRecord.put(keyMap.getId(), this.tmemBit);
+			else if(keyMap.getKey().equals("tmemvms"))
+				dataRecord.put(keyMap.getId(), this.tmemVms);
+			else if(keyMap.getKey().equals("tmemkiosk"))
+				dataRecord.put(keyMap.getId(), this.tmemKiosk);
+			else if(keyMap.getKey().equals("eveivms"))
+				dataRecord.put(keyMap.getId(), this.eveiVms);
+			else if(keyMap.getKey().equals("cimbmbd_stop"))
+				dataRecord.put(keyMap.getId(), this.cimbMbdStop);
+			else if(keyMap.getKey().equals("tmembit_stop"))
+				dataRecord.put(keyMap.getId(), this.tmemBitStop);
+			else if(keyMap.getKey().equals("tmemvms_stop"))
+				dataRecord.put(keyMap.getId(), this.tmemVmsStop);
+			else if(keyMap.getKey().equals("tmemkiosk_stop"))
+				dataRecord.put(keyMap.getId(), this.tmemKioskStop);
+			else if(keyMap.getKey().equals("eveivms_stop"))
+				dataRecord.put(keyMap.getId(), this.eveiVmsStop);
 		}
 		return dataRecord;
-//		return UcityTest.getCMHistoryDataRecord();		
 	}
 	
 	public void performTask(String processId, String taskInstId) throws Exception{
@@ -139,25 +189,36 @@ public class DMHistory {
 	
 	public void setResult(ResultSet result){
 		if(SmartUtil.isBlankObject(result)) return;
+		
+		String division = null;
+		String dataPath = null;
 		try{
-			this.dataPath = result.getString("DATA_PATH");
+			this.eventId = result.getString(UcityConstant.getQueryByKey("DMHistory.EVENT_ID"));
 		}catch (Exception ex){}
 		try{
-			this.playTime = result.getString("PLAY_TIME");
+			division = result.getString(UcityConstant.getQueryByKey("DMHistory.ADAPTER_DIVISION"));
 		}catch (Exception ex){}
 		try{
-			this.sendResponseValue = result.getString("SEND_RESPONSE_VALUE");
+			dataPath = result.getString(UcityConstant.getQueryByKey("DMHistory.DATA_PATH"));
 		}catch (Exception ex){}
-		try{
-			this.eventId = result.getString("EVENT_ID");
-		}catch (Exception ex){}
-		try{
-			this.deviceId = result.getString("ADAPTER_DIVISION");
-		}catch (Exception ex){}
+		
+		if(!SmartUtil.isBlankObject(division)){
+			if(SmartUtil.isBlankObject(this.cimbMbd) && division.equals(DEVICE_ID_MEDIABOARD)){
+				this.cimbMbd = dataPath;
+			}else if(SmartUtil.isBlankObject(this.tmemBit) && division.equals(DEVICE_ID_TRAFFIC_BIT)){
+				this.tmemBit = dataPath;
+			}else if(SmartUtil.isBlankObject(this.tmemVms) && division.equals(DEVICE_ID_TRAFFIC_VMS)){
+				this.tmemVms =dataPath;
+			}else if(SmartUtil.isBlankObject(this.tmemKiosk) && division.equals(DEVICE_ID_KIOSK)){
+				this.tmemKiosk = dataPath;
+			}else if(SmartUtil.isBlankObject(this.eveiVms) && division.equals(DEVICE_ID_ENV_VMS)){
+				this.eveiVms = dataPath;
+			}
+		}
 	}
 
 	public boolean isValid(){
-		if(!SmartUtil.isBlankObject(this.eventId) && !SmartUtil.isBlankObject(this.deviceId))
+		if(!SmartUtil.isBlankObject(this.eventId))
 			return true;
 		return false;
 	}
@@ -165,21 +226,20 @@ public class DMHistory {
 	public static Map<String,Object> readHistoryTable(String eventId, String status, String deviceId){
 		
 		if(SmartUtil.isBlankObject(eventId)) return null;
-//		try {
-//			Class.forName(System.DATABASE_JDBC_DRIVE);
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}
+
+		Map<String, Object> dataRecord = null;
 
 		if(SmartUtil.isBlankObject(status)) status = "N";
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
-//		String cmHistorySelectSql = (status.equals(FLAG_STOP_DISPLAY)) ? DMHistory.QUERY_SELECT_FOR_STOP_PERFORM : DMHistory.QUERY_SELECT_FOR_DISPLAY_PERFORM;
 		String cmHistorySelectSql = (status.equals(FLAG_STOP_DISPLAY)) ? UcityConstant.getQueryByKey("DMHistory.QUERY_SELECT_FOR_STOP_PERFORM") : UcityConstant.getQueryByKey("DMHistory.QUERY_SELECT_FOR_DISPLAY_PERFORM");
 		try {
 			try{
-				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+//			    Context init = new InitialContext();
+//			    Context envinit = (Context)init.lookup("java:comp/env");
+//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//			    con = ds.getConnection();
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();
@@ -189,29 +249,28 @@ public class DMHistory {
 			try{
 				selectPstmt = con.prepareStatement(cmHistorySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
-				selectPstmt.setString(2, deviceId);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
 				int count = rs.getRow();
 				rs.first();
-				if (count >= 1) {
+				DMHistory dmHistory = null;
+				if(count >=1){
+					dmHistory = new DMHistory();
+				}
+
+				while(count>=1) {
+					dmHistory.setResult(rs);
 					try{
-						DMHistory dmHistory = new DMHistory(rs);
-						if(dmHistory.isValid()){
-							try {
-								if (selectPstmt != null)
-									selectPstmt.close();
-								con.close();
-							} catch (SQLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							return dmHistory.getDataRecord();
-						}
+						rs.next();
+						count = rs.getRow();
 					}catch (Exception we){
 						we.printStackTrace();
+						dataRecord = null;
+						count = 0;
 					}
 				}
+				if(dmHistory!=null && dmHistory.isValid())
+					return dmHistory.getDataRecord();
 			}catch (Exception e1){
 				e1.printStackTrace();
 			}
@@ -228,6 +287,8 @@ public class DMHistory {
 				e.printStackTrace();
 			}
 		}
+		if(dataRecord!=null)
+			return dataRecord;
 		return null;
 	}
 }

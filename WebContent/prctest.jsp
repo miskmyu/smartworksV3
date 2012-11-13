@@ -58,7 +58,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 <title>Insert title here</title>
 </head>
+
 <body>
+<script type="text/javascript">
 <%!
 
 public static Object getBean(String beanName, HttpServletRequest request) {
@@ -162,5 +164,8 @@ public static Object getBean(String beanName, HttpServletRequest request) {
 
 %>
 
+sTSDASJDSAJDKSADJKSAJDSJAKDJSKJDKSDJKD
+	</script>
+	sTSDASJDSAJDKSADJKSAJDSJAKDJSKJDKSDJKD
 </body>
 </html>

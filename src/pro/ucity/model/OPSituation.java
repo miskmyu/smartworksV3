@@ -9,6 +9,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 import com.tmax.tibero.jdbc.TbSQLException;
 
 import pro.ucity.util.UcityTest;
@@ -29,55 +33,14 @@ public class OPSituation {
 	public static final String STATUS_SITUATION_TRANSFER = "H05";
 	public static final String STATUS_SITUATION_CANCEL = "H06";
 	
-	
-	public static final String TASK_NAME_SITUATION_OCCURRENCE = "상황발생";
-	
-	public static final String FIELD_NAME_SITUATION_ID = "SITUATION_ID";
-	public static final String FIELD_NAME_SEQUENCE = "SEQ";
-	public static final String FIELD_NAME_STATUS = "STATUS";
-	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
-	
-	public static final String FIELD_NAME_USERVICE_CODE = "USERVICE_CD";
-	public static final String FIELD_NAME_SERVICE_CODE = "UNIT_SVC_CD";
-	public static final String FIELD_NAME_EVENT_CODE = "SITTN_EVENT_CD";
-	public static final String FIELD_NAME_EVENT_NAME = "SITTN_EVENT_NM";
-	public static final String FIELD_NAME_EVENT_DESC = "SITTN_EVENT_DESC";
-	public static final String FIELD_NAME_LC_NAME = "LC_NM";
-	public static final String FIELD_NAME_OCFACILITY_ID = "OCCUR_FACILITY_ID";
-	public static final String FIELD_NAME_FACILITY_ID = "FACILITY_ID";
-	public static final String FIELD_NAME_OCCUR_DATE = "OCCUR_DATE";
+	public static final String TASK_NAME_SITUATION_OCCURRENCE = "상황등록/접수";
 	
 	public static final String SYMBOL_FOR_OP_START = "ST";
-
-//	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null)  and " + FIELD_NAME_SITUATION_ID + " like '" + SYMBOL_FOR_OP_START + "%' and " + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_ACCEPTED + "'";
-//	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_OPPORTAL_SITUATION + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_STATUS + " =  ?";
-//	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_STATUS + " = ? and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null)";
-//	public static final String QUERY_SELECT_FOR_PROCESSING_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_STATUS + " = ?";
-//	public static final String QUERY_SELECT_FOR_PROCESS_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where " + FIELD_NAME_SITUATION_ID + " = ? and (" + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_PROCESSING + "' or " + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_RELEASE + "') and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null)";
-//	
-//	
-//	public static final String QUERY_SELECT_FOR_FACILITY ="select distinct c." + FIELD_NAME_LC_NAME + " from " + System.TABLE_NAME_OPPORTAL_SITUATION + " a," + System.TABLE_NAME_OPPORTAL_ST +" b, " + System.TABLE_NAME_OPPORTAL_FACILITY + 
-//															" c where a." + FIELD_NAME_SITUATION_ID + " = b." + FIELD_NAME_SITUATION_ID + " and  b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + " and a." 
-//															+ FIELD_NAME_SITUATION_ID + " = ? ";
-//	
-////	public static final String QUERY_SELECT_FOR_PERFORM ="select distinct a.*, c." + FIELD_NAME_LC_NAME + " from " + System.TABLE_NAME_OPPORTAL_SITUATION + " a," + System.TABLE_NAME_OPPORTAL_ST +" b, " + System.TABLE_NAME_OPPORTAL_FACILITY + 
-////															" c where a." + FIELD_NAME_SITUATION_ID + " = ? and a." + FIELD_NAME_STATUS + " = ? and (a." + FIELD_NAME_READ_CONFIRM + " != 'Y' or a." + FIELD_NAME_READ_CONFIRM + " is null)  and  a." + FIELD_NAME_SITUATION_ID + "= b." + FIELD_NAME_SITUATION_ID + " and b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + 
-////															" order by start_date desc";
-////	
-////	public static final String QUERY_SELECT_FOR_PROCESSING_PERFORM ="select distinct a.*, c." + FIELD_NAME_LC_NAME + " from " + System.TABLE_NAME_OPPORTAL_SITUATION + " a," + System.TABLE_NAME_OPPORTAL_ST +" b, " + System.TABLE_NAME_OPPORTAL_FACILITY + 
-////															" c where a." + FIELD_NAME_SITUATION_ID + " = ? and a." + FIELD_NAME_STATUS + " = ? and  a." + FIELD_NAME_SITUATION_ID + "= b." + FIELD_NAME_SITUATION_ID + " and b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + 
-////															" order by start_date desc";
-////	
-////	public static final String QUERY_SELECT_FOR_PROCESS_PERFORM ="select distinct a.*, c." + FIELD_NAME_LC_NAME + " from " + System.TABLE_NAME_OPPORTAL_SITUATION + " a," + System.TABLE_NAME_OPPORTAL_ST +" b, " + System.TABLE_NAME_OPPORTAL_FACILITY + 
-////																		" c where a." + FIELD_NAME_SITUATION_ID + " = ? and (a." + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_PROCESSING + "' or a." + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_RELEASE + "') and (a." + FIELD_NAME_READ_CONFIRM + " != 'Y' or a." + FIELD_NAME_READ_CONFIRM + " is null) and  a." + FIELD_NAME_SITUATION_ID + "= b." + FIELD_NAME_SITUATION_ID + " and b." + FIELD_NAME_OCFACILITY_ID + " = c." + FIELD_NAME_FACILITY_ID + 
-////																		" order by start_date desc";
-//	
-//	public static final String QUERY_SELECT_EVENT_CODE = "SELECT A.*, C." + FIELD_NAME_OCCUR_DATE + " FROM CMDB.TM_CM_STAT_EVENT A, USITUATION.TH_ST_SITUATION_HISTORY B, USITUATION.TM_ST_SITUATION C WHERE B.SITUATION_ID = C.SITUATION_ID AND C.CATEGORY_ID = A.CATEGORY_ID AND B.SITUATION_ID = ? AND B.SEQ = '1'";
 	
 	public static final KeyMap[] OPPORTAL_SITUATION_FIELDS = {
-		new KeyMap("상황 아이디", "SITUATION_ID"), new KeyMap("순번", "SEQ"), new KeyMap("상태", "STATUS"),
-		new KeyMap("담당자 아이디", "CHARGE_USER_ID"), new KeyMap("시작일시", "START_DATE"), new KeyMap("종료일시", "END_DATE"),
-		new KeyMap("내용", "CONTENTS"), new KeyMap("담당자명", "CHARGE_USER_NAME"), new KeyMap("발생장소명","LC_NM")
+		new KeyMap("상황 아이디", UcityConstant.getQueryByKey("OPSituation.SITUATION_ID")), new KeyMap("순번", UcityConstant.getQueryByKey("OPSituation.SEQ")), new KeyMap("상태", UcityConstant.getQueryByKey("OPSituation.STATUS")),
+		new KeyMap("담당자 아이디", UcityConstant.getQueryByKey("OPSituation.CHARGE_USER_ID")), new KeyMap("시작일시", UcityConstant.getQueryByKey("OPSituation.START_DATE")), new KeyMap("종료일시", UcityConstant.getQueryByKey("OPSituation.END_DATE")),
+		new KeyMap("내용", UcityConstant.getQueryByKey("OPSituation.CONTENTS")), new KeyMap("담당자명", UcityConstant.getQueryByKey("OPSituation.CHARGE_USER_NAME")), new KeyMap("발생장소명",UcityConstant.getQueryByKey("OPSituation.LC_NM"))
 	};
 
 	private int process=-1;
@@ -249,29 +212,28 @@ public class OPSituation {
 		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
-			if(keyMap.getKey().equals("SITUATION_ID"))
+			if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSituation.SITUATION_ID")))
 				dataRecord.put(keyMap.getId(), this.situationId);
-			else if(keyMap.getKey().equals("SEQ"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSituation.SEQ")))
 				dataRecord.put(keyMap.getId(), this.seq);
-			else if(keyMap.getKey().equals("STATUS"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSituation.STATUS")))
 				dataRecord.put(keyMap.getId(), this.getStatusName());
-			else if(keyMap.getKey().equals("CHARGE_USER_ID"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSituation.CHARGE_USER_ID")))
 				dataRecord.put(keyMap.getId(), this.chargeUserId);
-			else if(keyMap.getKey().equals("CHARGE_USER_NAME"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSituation.CHARGE_USER_NAME")))
 				dataRecord.put(keyMap.getId(), this.chargeUserName);
-			else if(keyMap.getKey().equals("START_DATE"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSituation.START_DATE")))
 				dataRecord.put(keyMap.getId(), UcityUtil.getDateString(this.startDate));
-			else if(keyMap.getKey().equals("END_DATE"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSituation.END_DATE")))
 				dataRecord.put(keyMap.getId(), UcityUtil.getDateString(this.endDate));
-			else if(keyMap.getKey().equals("CONTENTS"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSituation.CONTENTS")))
 				dataRecord.put(keyMap.getId(), this.contents);
-			else if(keyMap.getKey().equals("LC_NM"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSituation.LC_NM")))
 				dataRecord.put(keyMap.getId(), this.locationName);
-			else if(keyMap.getKey().equals("OCCUR_DATE"))
+			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSituation.OCCUR_DATE")))
 				dataRecord.put(keyMap.getId(), this.occurDate);
 		}
 		return dataRecord;
-//		return UcityTest.getOPSituationDataRecord();
 	}
 
 	private void setJoinFacility(ResultSet joinFacility){
@@ -286,22 +248,22 @@ public class OPSituation {
 		if(SmartUtil.isBlankObject(joinResult)) return;
 		
 		try{
-			this.userviceCode = joinResult.getString("USERVICE_CD");
+			this.userviceCode = joinResult.getString(UcityConstant.getQueryByKey("OPSituation.USERVICE_CD"));
 		}catch (Exception e){}
 		try{
-			this.serviceCode = joinResult.getString(FIELD_NAME_SERVICE_CODE);
+			this.serviceCode = joinResult.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_SERVICE_CODE"));
 		}catch (Exception e){}
 		try{
-			this.eventCode = joinResult.getString(FIELD_NAME_EVENT_CODE);
+			this.eventCode = joinResult.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_EVENT_CODE"));
 		}catch (Exception e){}
 		try{
-			this.eventName = joinResult.getString(FIELD_NAME_EVENT_NAME);
+			this.eventName = joinResult.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_EVENT_NAME"));
 		}catch (Exception e){}
 		try{
-			this.eventDesc = joinResult.getString(FIELD_NAME_EVENT_DESC);
+			this.eventDesc = joinResult.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_EVENT_DESC"));
 		}catch (Exception e){}
 		try{
-			this.occurDate = joinResult.getString("OCCUR_DATE");
+			this.occurDate = joinResult.getString(UcityConstant.getQueryByKey("OPSituation.OCCUR_DATE"));
 			if(!SmartUtil.isBlankObject(this.occurDate)){
 				this.occurDate = this.occurDate.replaceAll("-", "");
 				this.occurDate = this.occurDate.replaceAll(" ", "");
@@ -335,22 +297,22 @@ public class OPSituation {
 	public void setResult(ResultSet result){
 		if(SmartUtil.isBlankObject(result)) return; 
 		try{
-			this.situationId = result.getString("SITUATION_ID");
+			this.situationId = result.getString(UcityConstant.getQueryByKey("OPSituation.SITUATION_ID"));
 		}catch (Exception ex){}
 		try{
-			this.seq = result.getString("SEQ");
+			this.seq = result.getString(UcityConstant.getQueryByKey("OPSituation.SEQ"));
 		}catch (Exception ex){}
 		try{
-			this.status = result.getString("STATUS");
+			this.status = result.getString(UcityConstant.getQueryByKey("OPSituation.STATUS"));
 		}catch (Exception ex){}
 		try{
-			this.chargeUserId = result.getString("CHARGE_USER_ID");
+			this.chargeUserId = result.getString(UcityConstant.getQueryByKey("OPSituation.CHARGE_USER_ID"));
 		}catch (Exception ex){}
 		try{
-			this.chargeUserName = result.getString("CHARGE_USER_NAME");
+			this.chargeUserName = result.getString(UcityConstant.getQueryByKey("OPSituation.CHARGE_USER_NAME"));
 		}catch (Exception ex){}
 		try{
-			this.startDate = result.getString("START_DATE");
+			this.startDate = result.getString(UcityConstant.getQueryByKey("OPSituation.START_DATE"));
 			if(!SmartUtil.isBlankObject(this.startDate)){
 				this.startDate = this.startDate.replaceAll("-", "");
 				this.startDate = this.startDate.replaceAll(" ", "");
@@ -359,7 +321,7 @@ public class OPSituation {
 			}
 		}catch (Exception ex){}
 		try{
-			this.endDate = result.getString("END_DATE");
+			this.endDate = result.getString(UcityConstant.getQueryByKey("OPSituation.END_DATE"));
 			if(!SmartUtil.isBlankObject(this.endDate)){
 				this.endDate = this.endDate.replaceAll("-", "");
 				this.endDate = this.endDate.replaceAll(" ", "");
@@ -368,10 +330,10 @@ public class OPSituation {
 			}
 		}catch (Exception ex){}
 		try{
-			this.contents = result.getString("CONTENTS");
+			this.contents = result.getString(UcityConstant.getQueryByKey("OPSituation.CONTENTS"));
 		}catch (Exception ex){}
 		try{
-			this.locationName = result.getString("LC_NM");
+			this.locationName = result.getString(UcityConstant.getQueryByKey("OPSituation.LC_NM"));
 		}catch (Exception ex){}
 	}
 	
@@ -379,22 +341,22 @@ public class OPSituation {
 		if(SmartUtil.isBlankObject(result)) return;
 
 		try{
-			this.situationId = result.getString("SITUATION_ID");
+			this.situationId = result.getString(UcityConstant.getQueryByKey("OPSituation.SITUATION_ID"));
 		}catch (Exception ex){}
 		try{
-			this.seq = result.getString("SEQ");
+			this.seq = result.getString(UcityConstant.getQueryByKey("OPSituation.SEQ"));
 		}catch (Exception ex){}
 		try{
-			this.status = result.getString("STATUS");
+			this.status = result.getString(UcityConstant.getQueryByKey("OPSituation.STATUS"));
 		}catch (Exception ex){}
 		try{
-			this.chargeUserId = result.getString("CHARGE_USER_ID");
+			this.chargeUserId = result.getString(UcityConstant.getQueryByKey("OPSituation.CHARGE_USER_ID"));
 		}catch (Exception ex){}
 		try{
-			this.chargeUserName = result.getString("CHARGE_USER_NAME");
+			this.chargeUserName = result.getString(UcityConstant.getQueryByKey("OPSituation.CHARGE_USER_NAME"));
 		}catch (Exception ex){}
 		try{
-			this.startDate = result.getString("START_DATE");
+			this.startDate = result.getString(UcityConstant.getQueryByKey("OPSituation.START_DATE"));
 			if(!SmartUtil.isBlankObject(this.startDate)){
 				this.startDate = this.startDate.replaceAll("-", "");
 				this.startDate = this.startDate.replaceAll(" ", "");
@@ -403,7 +365,7 @@ public class OPSituation {
 			}
 		}catch (Exception ex){}
 		try{
-			this.endDate = result.getString("END_DATE");
+			this.endDate = result.getString(UcityConstant.getQueryByKey("OPSituation.END_DATE"));
 			if(!SmartUtil.isBlankObject(this.endDate)){
 				this.endDate = this.endDate.replaceAll("-", "");
 				this.endDate = this.endDate.replaceAll(" ", "");
@@ -412,10 +374,10 @@ public class OPSituation {
 			}
 		}catch (Exception ex){}
 		try{
-			this.contents = result.getString("CONTENTS");
+			this.contents = result.getString(UcityConstant.getQueryByKey("OPSituation.CONTENTS"));
 		}catch (Exception ex){}
 		try{
-			this.locationName = result.getString("LC_NM");
+			this.locationName = result.getString(UcityConstant.getQueryByKey("OPSituation.LC_NM"));
 		}catch (Exception ex){}
 
 		
@@ -431,29 +393,17 @@ public class OPSituation {
 
 	public static boolean isDisplayableStatus(String status){
 		if(SmartUtil.isBlankObject(status)) return false;
-		if(status.equals(STATUS_SITUATION_ACCEPTED) || status.equals(STATUS_SITUATION_PROCESSING)) return true;
+		if(status.equals(STATUS_SITUATION_PROCESSING)) return true;
 		return false;
 	}
 	
 	public static void readHistoryTableToStart(){
 		java.lang.System.out.println("############ START checking PORTAL History To Start  ################");
-//		try {
-//			Class.forName(System.DATABASE_JDBC_DRIVE);
-//		} catch (ClassNotFoundException e) {
-//			java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
-//			e.printStackTrace();
-//			return;
-//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
-//		String opSituationSelectSql = OPSituation.QUERY_SELECT_FOR_START;
-//		String opSituationJoinSelectSql = OPSituation.QUERY_SELECT_EVENT_CODE;
-//		String opSituationJoinFacilitySql = OPSituation.QUERY_SELECT_FOR_FACILITY;
-//		String opSituationUpdateSql = OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM;
-		
 		String opSituationSelectSql = UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_START");
 		String opSituationJoinSelectSql = UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_EVENT_CODE");
 		String opSituationJoinFacilitySql = UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_FACILITY");
@@ -461,7 +411,10 @@ public class OPSituation {
 		try {
 			
 			try{
-				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+//			    Context init = new InitialContext();
+//			    Context envinit = (Context)init.lookup("java:comp/env");
+//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//			    con = ds.getConnection();
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
@@ -482,8 +435,8 @@ public class OPSituation {
 					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
 					while(rs.next()) {
 						try{
-							String situationId = rs.getString(OPSituation.FIELD_NAME_SITUATION_ID);
-							String status = rs.getString(OPSituation.FIELD_NAME_STATUS);
+							String situationId = rs.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_SITUATION_ID"));
+							String status = rs.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_STATUS"));
 
 							selectPstmt = con.prepareStatement(opSituationJoinFacilitySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							selectPstmt.setString(1, situationId);
@@ -550,24 +503,23 @@ public class OPSituation {
 	public static Map<String,Object> readHistoryTable(String eventId, String status){
 		
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(status)) return null;
-//		try {
-//			Class.forName(System.DATABASE_JDBC_DRIVE);
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
+
 //		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ?  OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM : OPSituation.QUERY_SELECT_FOR_PERFORM;
 //		String opSituationUpdateSql = OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM;
 		
-		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ?  UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM") : UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PERFORM");
+		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ? UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM") : ((status.equals(STATUS_SITUATION_OCCURRED)) ? UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_OCCURRED") : UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PERFORM"));
 		String opSituationUpdateSql = UcityConstant.getQueryByKey("OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
-				//con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+//			    Context init = new InitialContext();
+//			    Context envinit = (Context)init.lookup("java:comp/env");
+//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//			    con = ds.getConnection();
 				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				te.printStackTrace();
@@ -577,7 +529,7 @@ public class OPSituation {
 			try{
 				selectPstmt = con.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
-				if(!status.equals(STATUS_SITUATION_PROCESSING))
+				if(!status.equals(STATUS_SITUATION_PROCESSING) && !status.equals(STATUS_SITUATION_OCCURRED))
 					selectPstmt.setString(2, status);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
@@ -616,6 +568,8 @@ public class OPSituation {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
+				if (updatePstmt != null)
+					updatePstmt.close();
 				if(con != null)
 					con.close();
 			} catch (SQLException e) {
@@ -623,6 +577,12 @@ public class OPSituation {
 				e.printStackTrace();
 			}
 		}
+
+		Map<String, Object> dataRecord = new HashMap<String, Object>();
+		if(OPDisplay.checkIfDisplay(eventId, false) || OPDisplay.checkIfDisplay(eventId, true) || OPSms.checkIfDisplay(eventId)){
+			return dataRecord;
+		}
+
 		return null;
 	}
 }

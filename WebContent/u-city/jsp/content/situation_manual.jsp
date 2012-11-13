@@ -52,6 +52,10 @@
 		eventId = Event.getEventIdByCode(userviceCode, serviceCode, eventCode);
 
 	String workId = System.getManualProcessId(userviceCode, serviceCode, eventCode, situationStatus);
+	// TEST PURPOSE
+	if(SmartUtil.isBlankObject(workId)) workId = "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+	// TEST PURPOSE
+
 	ProcessWork work = (ProcessWork)smartWorks.getWorkById(workId);
 	SmartDiagram diagram = null;
 	SmartTaskInfo[] tasks = null;
@@ -187,30 +191,14 @@ function submitForms() {
 								for(int i=0; i<tasks.length; i++){
 							%>
 									<div class="js_situation_task" taskId="<%=tasks[i].getId()%>" <%if(i>0){ %>style="display:none"<%} %>>
-										<div class="js_form_desc_view"><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %></div>
-		<!-- 
-						 					<div class="title">상급자 보고</div>
-												<div class="dep2">
-													<div class="title">상급자 보고가 필요한 경우</div>
-													<div class="ml10">기상특보에서 이벤트 등급이 B등급 이상일 경우, 혹은 예고없이 찾아온 기상
-														상황이 발생할때 상급자에게 보고하시면 됩니다.</div>
-												</div>
-							
-												<div class="dep2">
-													<div class="title">상급자 정보 열람 및 선택방법</div>
-													<div class="ml10">
-														① 상급자 정보를 열람 및 선택하시기 위한 방법을 순차적으로 설명합니다.<br /> ② 상급자 정보를 열람 및
-														선택하시기 위한 방법을 순차적으로 설명합니다.
-													</div>
-												</div>
-		 -->									
+										<div class="js_form_desc_view"><%=tasks[i].getForm().getDescription() %></div>
 										<div class="js_form_desc_edit"  style="display:none">
-												<span><fmt:message key="builder.title.form_desc"/> : </span>
-												<span class="fr js_select_editor_box" fieldName="txtaFormDesc<%=tasks[i].getId() %>">
-													<input name="rdoEditor<%=i %>" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
-												<input name="rdoEditor<%=i %>" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
+											<span class="fr js_situation_editor_box" fieldName="txtaFormDesc<%=tasks[i].getId() %>">
+												<input name="rdoEditor<%=i %>" type="radio" checked value="text"/>미리보기
+												<input name="rdoEditor<%=i %>" type="radio" value="editor"/>편집기
 											</span>
-											<textarea class="fieldline js_form_desc_text" name="txtaFormDesc<%=tasks[i].getId() %>" cols="" rows="22" style="height: 262px"><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %></textarea>
+											<div class="js_form_desc_text" style="height: 262px"><%=CommonUtil.toNotNull(tasks[i].getForm().getDescription()) %></div>
+											<input type="hidden" name="txtaFormDesc<%=tasks[i].getId() %>" value="<%=SmartUtil.smartEncode(CommonUtil.toNotNull(tasks[i].getForm().getDescription())) %>"/>
 											<div class="js_form_desc_editor"></div>
 										</div>
 									</div>
@@ -234,29 +222,32 @@ function submitForms() {
 					<%
 					if(work.amIBuilderUser()) {
 					%>
-<%-- 						<span class="btn_gray js_modify_situation_manual"> 
+
+					<span class="btn_gray js_modify_situation_manual"> 
+
 							<a href="">
 								<span class="txt_btn_start"></span>
 								<span class="txt_btn_center"><fmt:message key='common.button.modify' /> </span> 
 								<span class="txt_btn_end"></span>
 							</a>
 						</span>
-						<span class="btn_gray js_save_situation_manual" style="display:none"> 
-							<a href="">
-								<span class="txt_btn_start"></span> 
-								<span class="txt_btn_center"><fmt:message key='common.button.save' /> </span>
-								<span class="txt_btn_end"></span>
-							</a>
-						</span>
-						<span class="btn_gray js_cancel_situation_manual" style="display:none"> 
+						<span class="fr btn_gray js_cancel_situation_manual" style="display:none"> 
 							<a href="">
 								<span class="txt_btn_start"></span> 
 								<span class="txt_btn_center"><fmt:message key='common.button.cancel' /> </span>
 								<span class="txt_btn_end"></span>
 							</a>
 						</span>
- --%>					<%
+						<span class="fr btn_gray js_save_situation_manual" style="display:none"> 
+							<a href="">
+								<span class="txt_btn_start"></span> 
+								<span class="txt_btn_center"><fmt:message key='common.button.save' /> </span>
+								<span class="txt_btn_end"></span>
+							</a>
+						</span>
+				<%
 					}
+
 					%>
 				</div>
 				<!-- 수정하기 //-->

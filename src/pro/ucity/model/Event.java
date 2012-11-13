@@ -62,41 +62,41 @@ public class Event {
 		if(SmartUtil.isBlankObject(eventId)) return "";
 		
 		if(eventId.equals(ID_ENV_GALE)){
-			return "강풍";
+			return "환경경보";
 		}else if(eventId.equals(ID_ENV_AIRFLOW)){
-			return "풍량";
+			return "환경경보";
 		}else if(eventId.equals(ID_ENV_STORM)){
 			return "호우";
 		}else if(eventId.equals(ID_ENV_HEAVY_SNOWFALL)){
-			return "대설";
+			return "환경경보";
 		}else if(eventId.equals(ID_ENV_DRYING)){
-			return "건조";
+			return "환경경보";
 		}else if(eventId.equals(ID_ENV_STORM_SURGES)){
-			return "폭풍해일";
+			return "환경경보";
 		}else if(eventId.equals(ID_ENV_TSUNAMI)){
-			return "지진해일";
+			return "환경경보";
 		}else if(eventId.equals(ID_ENV_COLD_WAVE)){
-			return "한파";
+			return "환경경보";
 		}else if(eventId.equals(ID_ENV_TYPHOON)){
 			return "태풍";
 		}else if(eventId.equals(ID_ENV_ASIAN_DUST)){
-			return "황사";
+			return "환경경보";
 		}else if(eventId.equals(ID_ENV_HEATWAVE)){
-			return "폭염";
+			return "환경경보";
 		}else if(eventId.equals(ID_ENV_FINE_DUST)){
-			return "대기특보(미세먼지)";
+			return "대기오염";
 		}else if(eventId.equals(ID_ENV_OZONE)){
-			return "대기특보(오존)";
+			return "대기오염";
 		}else if(eventId.equals(ID_ENV_PULLUTION)){
 			return "대기오염";
 		}else if(eventId.equals(ID_ENV_CANAL_WAY)){
-			return "주운";
+			return "수질";
 		}else if(eventId.equals(ID_ENV_WATER)){
 			return "수질";
 		}else if(eventId.equals(ID_ENV_WARNING)){
 			return "환경경보";
 		}else if(eventId.equals(ID_TRAFFIC_INCIDENT)){
-			return "돌발";
+			return "교통사고";
 		}else if(eventId.equals(ID_TRAFFIC_ILLEGAL_PARKING)){
 			return "불법주정차(용의차량)";
 		}else if(eventId.equals(ID_TRAFFIC_ACCIDENTS)){
@@ -106,7 +106,7 @@ public class Event {
 		}else if(eventId.equals(ID_TRAFFIC_VEHICLE_BREAKDOWN)){
 			return "차량고장";
 		}else if(eventId.equals(ID_TRAFFIC_CONTROL_SITUATION)){
-			return "교통통제";
+			return "도로통제";
 		}else if(eventId.equals(ID_TRAFFIC_CONGESTION)){
 			return "교통혼잡";
 		}else if(eventId.equals(ID_DISASTER_FIRE)){
@@ -114,11 +114,11 @@ public class Event {
 		}else if(eventId.equals(ID_DISASTER_TYPHOON)){
 			return "태풍";
 		}else if(eventId.equals(ID_DISASTER_UNDERPASS_FLOODING)){
-			return "지하도침수";
+			return "지하차도침수";
 		}else if(eventId.equals(ID_DISASTER_WATER_LEVEL_ALRAM)){
 			return "수위경보";
 		}else if(eventId.equals(ID_CRIME_VEHICLE)){
-			return "방범(용의차량)상황";
+			return "용의차량추적";
 		}else if(eventId.equals(ID_CRIME_EMERGENCY)){
 			return "비상벨요청";
 		}else if(eventId.equals(ID_EMERGENCY_SITUATIONS)){
@@ -128,21 +128,21 @@ public class Event {
 		}else if(eventId.equals(ID_STRAY_CHILD_SITUATION)){
 			return "미아";
 		}else if(eventId.equals(ID_WATERWORKS_LEAKS)){
-			return "상하수도누수";
+			return "상수도누수발생가능";
 		}else if(eventId.equals(ID_WATERWORKS_UNDER)){
-			return "수량미만";
+			return "상수도누수발생가능";
 		}else if(eventId.equals(ID_HYDRAULIC_LEAKS)){
-			return "유압초과";
+			return "상수도누수발생가능";
 		}else if(eventId.equals(ID_HYDRAULIC_UNDER)){
-			return "유압미만";
+			return "상수도누수발생가능";
 		}else if(eventId.equals(ID_FACILITY_TROUBLE)){
 			return "시설물고장";
 		}else if(eventId.equals(ID_FACILITY_EMERGENCY)){
-			return "긴급메세지";
+			return "시설물고장";
 		}
 		return "";
 	}
-	public static String[] getAllEventNames(){
+	/*public static String[] getAllEventNames(){
 		return new String[]{
 				"강풍",	
 				"호우",
@@ -185,65 +185,69 @@ public class Event {
 				"장애발생",
 				"긴급메세지"
 		};
+	}*/
+	public static String[] getAllEventNames(){
+		return new String[]{
+				"교통혼잡",	
+				"차량고장",
+				"뺑소니",
+				"교통사고",
+				"호우",
+				"지하차도침수",
+				"태풍",
+				"화재",
+				"수위경보",
+				"비상벨요청",
+				"용의차량추적",
+				"응급",
+				"미아",
+				"강도",
+				"대기오염",
+				"환경경보",
+				"수질",
+				"상수도누수발생가능",
+				"시설물고장",
+				"도로통제",
+		};
 	}
+	
 	
 	public static String[] getAllEventNames(String serviceName){
 		if(SmartUtil.isBlankObject(serviceName)) return null;
 		if(serviceName.equals("환경"))
 			return new String[]{
-					"강풍",	
-					"호우",
-					"대설",
-					"건조",
-					"폭풍해일",
-					"지진해일",
-					"한파",
-					"태풍",
-					"황사",
-					"폭염",
-					"대기특보(미세먼지)",
-					"대기특보(오존)",
 					"대기오염",
-					"주운",
-					"수질",
-					"환경경보"
+					"환경경보",
+					"수질"
 			};
 		else if(serviceName.equals("교통"))
 			return new String[]{
-					"돌발상황",
-					"불법주정차(용의차량)상황",
-					"교통사고상황",
-					"뺑소니상황",
-					"차량고장상황",
-					"교통통제상황",
-					"교통혼잡상황"
+					"교통혼잡",
+					"차량고장",
+					"뺑소니",
+					"교통사고",
 			};
-		else if(serviceName.equals("방범"))
+		else if(serviceName.equals("방범/방재"))
 			return new String[]{
-					"방범(용의차량)상황",
-					"비상벨상황",
-					"응급상황",
-					"강도상황",
-					"미아상황"
-			};
-		else if(serviceName.equals("방재"))
-			return new String[]{
+					"호우",
+					"지하차도침수",
+					"태풍",
 					"화재",
-					"태풍상황",
-					"지하도침수상황",
-					"수위경보"
+					"수위경보",
+					"비상벨요청",
+					"용의차량추적",
+					"응급",
+					"미아",
+					"강도",
 			};
-		else if(serviceName.equals("상수도"))
+		else if(serviceName.equals("시설물관리"))
 			return new String[]{
-					"수량초과",
-					"수량미만",
-					"유압초과",
-					"유압미만"
+					"상수도누수발생가능",
+					"시설물고장",
 			};
-		else if(serviceName.equals("시설물"))
+		else if(serviceName.equals("플랫폼"))
 			return new String[]{
-					"장애발생",
-					"긴급메세지"
+					"도로통제"
 			};
 		return null;
 	}
@@ -296,6 +300,24 @@ public class Event {
 			return System.PROCESS_WATERWORKS_LEAKS;
 		}else if(eventId.equals(Event.ID_FACILITY_TROUBLE) || eventId.equals(Event.ID_FACILITY_EMERGENCY)){
 			return System.PROCESS_FACILITY_MANAGEMENT;
+		}
+		return -1;
+	}
+	
+	public static int getProcessByServiceId(String serviceId){
+		
+		if(SmartUtil.isBlankObject(serviceId)) return -1;
+
+		if(serviceId.equals(Service.ID_ENVIRONMENT_VMS)){
+			return System.PROCESS_ENV_VMS;
+		}else if(serviceId.equals(Service.ID_MEDIABOARD)){
+			return System.PROCESS_MEDIABORAD;
+		}else if(serviceId.equals(Service.ID_TRAFFIC_BIT)){
+			return System.PROCESS_TRAFFIC_BIT;
+		}else if(serviceId.equals(Service.ID_TRAFFIC_VMS)){
+			return System.PROCESS_TRAFFIC_VMS;
+		}else if(serviceId.equals(Service.ID_TRAFFIC_KIOSK)){
+			return System.PROCESS_KIOSK;
 		}
 		return -1;
 	}

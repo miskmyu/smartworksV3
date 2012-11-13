@@ -120,6 +120,44 @@ $(function() {
 		return false;
 	});
 
+	$('.js_situation_editor_box').live('click', function(e){
+		var input = $(targetElement(e));
+		var formDescEdit = input.parents('.js_form_desc_edit');
+		var formDescText = formDescEdit.find('.js_form_desc_text');
+		var formDescEditor = formDescEdit.find('.js_form_desc_editor');
+		var formDesc = formDescText.html();
+		var fieldName = input.parents('.js_situation_editor_box').attr('fieldName');
+		if(input.attr('value') == 'editor' && isEmpty(formDescEditor.html())){
+			formDescEdit.find('.js_form_desc_text').hide();
+			formDescEdit.find('input[type="hidden"]').attr('name', '');
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			formDescEditor.html(gridTable.html(gridRow));
+
+			SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
+				container: gridRow,
+				fieldId: fieldName,
+				fieldName: "",
+				columns: 1,
+				value: formDesc,
+				resizer: false,
+				required: false
+			});
+			gridRow.find('.form_label').hide();
+			gridRow.find('.form_value').css({width:"100%"});
+			gridRow.find('.form_value > span').css({width:"687px"});
+			gridRow.find('.form_value iframe:first').css("min-height","262px");
+			gridRow.find('#'+ fieldName).css({height:"280px"});
+						
+		}else if(input.attr('value') == 'text' && !formDescText.is(':visible')){
+			var value = SmartWorks.FormRuntime.RichEditorBuilder.getValue(formDescEditor.find('.js_type_richEditor'));
+			formDescEdit.find('.js_form_desc_text').html(value).show();
+			formDescEdit.find('input[type="hidden"]').attr('name', fieldName).attr('value', value);
+			formDescEditor.html('');
+		}
+		return;
+	});
+
 	$('.js_cancel_situation_manual').live('click', function(e){
 		var target = $(targetElement(e)).parents('.js_cancel_situation_manual');
 		target.hide().siblings('.js_modify_situation_manual').show().siblings('.js_save_situation_manual').hide();
@@ -137,6 +175,29 @@ $(function() {
 	
 	$('.js_situation_space_reload').live('click', function(e) {
 		window.location.reload(true);
+		return false;
+	});
+
+	$('.js_situation_space_abend').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_situation_space_abend');
+		var pworkSpace = input.parents('.js_pwork_space_page');
+		var paramsJson = {};
+		paramsJson['workId'] = pworkSpace.attr('workId');
+		paramsJson['instanceId'] = pworkSpace.attr('instId');
+		paramsJson['taskInstId'] = input.attr('taskInstId');
+		smartPop.progressCenter();
+		console.log(JSON.stringify(paramsJson));
+		$.ajax({
+			url : "abend_process_instance.sw",
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				window.location.reload(true);
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+			}
+		});
 		return false;
 	});
 

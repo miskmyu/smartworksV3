@@ -187,4 +187,17 @@ SmartWorks.FormRuntime.RichEditorBuilder.dataField = function(config){
 	return dataField;
 };
 
+SmartWorks.FormRuntime.RichEditorBuilder.getValue = function(richEditors){
+	if(isEmpty(richEditors)) return "";
+	
+	var richEditor = $(richEditors[0]);
+	var id = richEditor.attr('fieldId');
+	if(!isEmpty(oEditors) && !isEmpty(oEditors.getById[id])){
+		oEditors.getById[id].exec("UPDATE_IR_FIELD", []);
+	}
+	var valueField = richEditor.find('textarea');
+	if(!isEmpty(valueField)) return valueField[0].value;
+	return "";
+};
+
 

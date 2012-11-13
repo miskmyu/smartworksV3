@@ -8,17 +8,25 @@
 
 package pro.ucity.util;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
+import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.PWInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.ProcessWork;
@@ -49,6 +57,18 @@ public class UcityUtil {
 
 	public UcityUtil() {
 		super();
+	}
+	
+	public static boolean isAbendable(ProcessWorkInstance instance){
+		if(SmartUtil.isBlankObject(instance) || instance.getStatus() == Instance.STATUS_COMPLETED || instance.getStatus() == Instance.STATUS_ABORTED || SmartUtil.isBlankObject(instance.getTasks())) return false;
+		TaskInstanceInfo[] tasks = instance.getTasks();
+		
+		for(int i=0; i<tasks.length; i++){
+			TaskInstanceInfo task = tasks[i];
+			if(task.getStatus() == Instance.STATUS_COMPLETED && task.getName().equals(System.TASK_NAME_USERVICE_END))
+				return true;
+		}
+		return false;
 	}
 	
 	public static String getServiceTypeName(String taskName){
@@ -310,7 +330,7 @@ public class UcityUtil {
 		if(!SmartUtil.isBlankObject(data.get("externalDisplay"))){
 			requestBody.put("externalDisplay", data.get("externalDisplay"));
 		}
-		if(!SmartUtil.isBlankObject(data.get("isSms"))){
+		if(!SmartUtil.isBlankObject(data.get("isSms")) && data.get("isSms") == "true"){
 			requestBody.put("isSms", data.get("isSms"));
 		}
 		
@@ -358,9 +378,9 @@ public class UcityUtil {
 		Map<String,Object> dataRecord = null;
 		int tableId = System.getTableId(tableName);
 		switch(tableId){
-//		case System.TABLE_ID_ADAPTER_HISTORY:
-//			dataRecord = Adapter.readHistoryTable(eventId);
-//			break;
+		case System.TABLE_ID_ADAPTER_HISTORY:
+			dataRecord = Adapter.readHistoryTable(eventId, deviceId, status);
+			break;
 		case System.TABLE_ID_COMMID_TRACE:
 			dataRecord = CMHistory.readHistoryTable(eventId, status);
 			break;
@@ -382,7 +402,16 @@ public class UcityUtil {
 		}
 		return dataRecord;
 	}
-	
+	public static void stopAllThread() throws Exception{
+		if(SmartUtil.isBlankObject(UcityUtil.pollingQueue)) 
+			return;
+		for(int i=0; i<pollingQueue.size(); i++){
+			PollingModel pollingModel = pollingQueue.get(i);
+			java.lang.System.out.println("=============== KILL THREAD BEGIN ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
+			pollingModel.getThread().stop();
+			java.lang.System.out.println("=============== KILL THREAD DONE ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
+		}
+	}
 	synchronized public static void resumePollingForRunningTasks(String processId) throws Exception{
 		
 		IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
@@ -640,9 +669,19 @@ public class UcityUtil {
 				TaskInstance taskInstance = thisModel.getTaskInstance();
 				long timeout = thisModel.getTimeout();
 				Map<String, Object> dataRecord = null;
+				Connection con = null;
 				while(timeout > 0 && SmartUtil.isBlankObject(dataRecord) && !isPollingInterrupted(Thread.currentThread())) {
 					java.lang.System.out.println("############ START checking Table=" + tableName + ", Event Id=" + eventId + ", Timeout=" + timeout + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-					
+					try{
+//					    Context init = new InitialContext();
+//					    Context envinit = (Context)init.lookup("java:comp/env");
+//					    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//					    con = ds.getConnection();
+						con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+					}catch (Exception e){
+						timeout = 0;
+						java.lang.System.out.println("[ERROR] DB접속 끊김.Thread 종료");
+					}
 					IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();					
 					try {
 						taskInstance = (TaskInstance)instanceService.getTaskInstanceById(taskInstance.getWork().getId(), taskInstance.getId());
@@ -687,9 +726,13 @@ public class UcityUtil {
 						}
 					}else{
 						if(System.getTableId(tableName)==System.TABLE_ID_OPPORTAL_SITUATION && OPSituation.isDisplayableStatus(status)){
-							dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
-							dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);
-							dataRecord = OPSms.checkForDisplay(eventId, dataRecord);
+							if(OPDisplay.checkIfDisplay(eventId, false))
+								dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
+							else if(OPDisplay.checkIfDisplay(eventId, true))
+								dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);
+							
+							if(OPSms.checkIfDisplay(eventId))
+								dataRecord = OPSms.checkForDisplay(eventId, dataRecord);
 						}
 						try{
 						java.lang.System.out.println("############ START Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");

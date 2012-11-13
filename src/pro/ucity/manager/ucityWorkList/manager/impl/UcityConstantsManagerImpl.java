@@ -30,6 +30,7 @@ public class UcityConstantsManagerImpl implements IUcityConstantsManager {
 	
 	private Map<String, String> queryMap = new Hashtable<String, String>();
 	private Map<String, String> codeMap = new Hashtable<String, String>();
+	private Map<String, String> passUrlList = new Hashtable<String, String>();
 	
 	public Map<String, String> getQueryMap() {
 		return queryMap;
@@ -57,6 +58,19 @@ public class UcityConstantsManagerImpl implements IUcityConstantsManager {
 		if (CommonUtil.isEmpty(key))
 			return null;
 		return this.codeMap.get(key);
+	}
+	
+	public Map<String, String> getPassUrlList() {
+		return passUrlList;
+	}
+	public void setPassUrlList(Map<String, String> passUrlList) {
+		this.passUrlList = passUrlList;
+	}
+	@Override
+	public String getUrlByKey(String key) {
+		if (CommonUtil.isEmpty(key))
+			return null;
+		return this.passUrlList.get(key);
 	}
 
 }
