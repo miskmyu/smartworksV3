@@ -402,16 +402,6 @@ public class UcityUtil {
 		}
 		return dataRecord;
 	}
-	public static void stopAllThread() throws Exception{
-		if(SmartUtil.isBlankObject(UcityUtil.pollingQueue)) 
-			return;
-		for(int i=0; i<pollingQueue.size(); i++){
-			PollingModel pollingModel = pollingQueue.get(i);
-			java.lang.System.out.println("=============== KILL THREAD BEGIN ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
-			pollingModel.getThread().stop();
-			java.lang.System.out.println("=============== KILL THREAD DONE ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
-		}
-	}
 	synchronized public static void resumePollingForRunningTasks(String processId) throws Exception{
 		
 		IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
@@ -629,6 +619,16 @@ public class UcityUtil {
 			}
 		}
 		
+	}
+	public static void stopAllThread() throws Exception{
+		if(SmartUtil.isBlankObject(UcityUtil.pollingQueue)) 
+			return;
+		for(int i=0; i<pollingQueue.size(); i++){
+			PollingModel pollingModel = pollingQueue.get(i);
+			java.lang.System.out.println("=============== KILL THREAD BEGIN ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
+			pollingModel.getThread().stop();
+			java.lang.System.out.println("=============== KILL THREAD DONE ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
+		}
 	}
 	synchronized public static void invokePollingForRunningTask(String eventId, String tableName, String status, String displayId, String deviceId, String smsId, String timeout, TaskInstance taskInstance) throws Exception{
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(taskInstance)) return;

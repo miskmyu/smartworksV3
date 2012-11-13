@@ -27,7 +27,13 @@ public class WebServiceUtil {
 		call.setOperationName(new QName("", operation));
 		String[] returnValue = null;
 		if (returnType.equalsIgnoreCase(RETURN_TYPE_ARRAY)) {
-			returnValue = (String[])call.invoke(new Object[]{inputParams});
+			if (inputParams == null || inputParams.length == 0) {
+				//returnValue = (String[])call.invoke(new Object[]{});
+				returnValue = (String[])call.invoke(inputParams);
+			} else {
+//				returnValue = (String[])call.invoke(new Object[]{inputParams});
+				returnValue = (String[])call.invoke(inputParams);
+			}
 		} else {
 			//returnValue = new String[] {(String)call.invoke(new Object[]{inputParams})};
 			returnValue = new String[] {(String)call.invoke(inputParams)};
