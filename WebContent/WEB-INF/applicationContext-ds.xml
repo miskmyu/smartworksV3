@@ -8,19 +8,18 @@
 
 	<!--######## Data Source ######## -->
 
-<!--######## Data Source ########
-	<bean id="misDs" class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName" value="java:comp/env/jdbc/misDs"/>
-	</bean>	
--->
-	<beans:bean id="misDs"
+
+<!-- 	<beans:bean id="misDs" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<beans:property name="jndiName" value="java:/comp/env/bpm/tibero"/>
+	</beans:bean>	 -->
+
+<beans:bean id="misDs"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<beans:property name="driverClassName" value="${smartworksDs.driverClassName}" />
 		<beans:property name="url" value="${smartworksDs.url}" />
 		<beans:property name="username" value="${smartworksDs.username}" />
 		<beans:property name="password" value="${smartworksDs.password}" />
-	</beans:bean>
-
+	</beans:bean> 
 	<beans:bean id="misLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
 	<!-- Oracle <bean id="misLobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler"/> -->
 	<!-- beans:bean id="misHibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"-->

@@ -547,6 +547,7 @@ public class UcityUtil {
 					e.printStackTrace();
 				}
 			}
+			Thread.sleep(100);
 		}
 	}
 
@@ -659,20 +660,9 @@ public class UcityUtil {
 				TaskInstance taskInstance = thisModel.getTaskInstance();
 				long timeout = thisModel.getTimeout();
 				Map<String, Object> dataRecord = null;
-				Connection con = null;
+				IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();		
 				while(timeout > 0 && SmartUtil.isBlankObject(dataRecord) && !isPollingInterrupted(Thread.currentThread())) {
 					java.lang.System.out.println("############ START checking Table=" + tableName + ", Event Id=" + eventId + ", Timeout=" + timeout + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-					try{
-//					    Context init = new InitialContext();
-//					    Context envinit = (Context)init.lookup("java:comp/env");
-//					    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//					    con = ds.getConnection();
-						con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-					}catch (Exception e){
-						timeout = 0;
-						java.lang.System.out.println("[ERROR] DB접속 끊김.Thread 종료");
-					}
-					IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();					
 					try {
 						taskInstance = (TaskInstance)instanceService.getTaskInstanceById(taskInstance.getWork().getId(), taskInstance.getId());
 						if(!taskInstance.isRunning()) break;
@@ -720,7 +710,6 @@ public class UcityUtil {
 								dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
 							else if(OPDisplay.checkIfDisplay(eventId, true))
 								dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);
-							
 							if(OPSms.checkIfDisplay(eventId))
 								dataRecord = OPSms.checkForDisplay(eventId, dataRecord);
 						}
