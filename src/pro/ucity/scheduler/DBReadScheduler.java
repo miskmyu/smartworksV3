@@ -8,7 +8,10 @@
 
 package pro.ucity.scheduler;
 
+import java.sql.Connection;
 import java.util.Date;
+
+import net.smartworks.server.engine.factory.SwManagerFactory;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -35,6 +38,13 @@ public class DBReadScheduler extends QuartzJobBean  {
 	synchronized static void startScheduler(){
 		isDbReadSchedulerRunning = true;
 		schedulerCount++;
+		Connection connection = null;
+		try{
+			connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+		}catch (Exception e){
+			java.lang.System.out.println("[ERROR] DB접속 끊김.Thread 종료");
+			return;
+		}
 		if(schedulerCount==1){
 			try{
 				Thread.sleep(5000);
@@ -46,8 +56,8 @@ public class DBReadScheduler extends QuartzJobBean  {
 			}
 		}
 		System.out.println( schedulerCount + "번째 스케쥴러 동작 시작 : " + new Date());
-		Adapter.readHistoryTableToStart();
-		OPSituation.readHistoryTableToStart();
+		Adapter.readHistoryTableToStart(connection);
+		OPSituation.readHistoryTableToStart(connection);
 		System.out.println( schedulerCount +"번째 스케쥴러 동작 종료 : " + new Date());
 		isDbReadSchedulerRunning = false;		
 	}
