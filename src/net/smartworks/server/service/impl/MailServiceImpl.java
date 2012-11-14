@@ -1176,7 +1176,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 											(sendType == MailFolder.SEND_TYPE_FORWARD || 
 											 sendType == MailFolder.SEND_TYPE_REPLY || 
 											 sendType == MailFolder.SEND_TYPE_REPLY_ALL) ? SmartMessage.getString("mail.title.content.postfix") + contentHeader : "";
-								if(mailContent == null &&  mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
+//								if(mailContent == null &&  mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
+								if(mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
 									mailContent = "";
 				                	Object obj = tmp.getContent();
 				                	if(null!=obj) mailContent = contentPostfix + obj.toString();
@@ -1190,7 +1191,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 									mailContent = org.claros.commons.utility.Utility.updateTRChars(mailContent);
 									i = j;
 									continue;
-								}else if(mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN)){
+								}else if(mailContent == null && mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN)){
 									mailContent = "";
 				                	Object obj = tmp.getContent();
 				                	if(null!=obj) mailContent = contentPostfix + obj.toString();
