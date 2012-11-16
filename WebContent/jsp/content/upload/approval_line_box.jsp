@@ -42,7 +42,7 @@
 			Approval approval = approvals[i];
 	%>
 		<!-- 결재선 -->
-		<div class="approval_area">
+		<div class="approval_area js_approval_box">
 			<div class="label"><%=approval.getName() %></div>
 			<div class="approval"></div>
 			<%

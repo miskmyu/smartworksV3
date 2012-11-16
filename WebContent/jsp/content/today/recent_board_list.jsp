@@ -81,9 +81,9 @@
 					board = boards[i];
 					workSpace = board.getWorkSpace();
 				%>			
-					<tr class="instance_list js_content_list js_pop_user_info" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>&wid=<%=board.getWorkSpace().getId()%>" userId="<%=board.getOwner().getId()%>" longName="<%=board.getOwner().getLongName() %>" minPicture="<%=board.getOwner().getMinPicture() %>" profile="<%=board.getOwner().getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(board.getOwner().getUser().getUserInfo())%>">
+					<tr class="instance_list js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>&wid=<%=board.getWorkSpace().getId()%>">
 						<td class="title">
-							<span><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">&nbsp;<%=board.getSubject()%></span> 
+							<span><span  class="js_pop_user_info" userId="<%=board.getOwner().getId()%>" longName="<%=board.getOwner().getLongName() %>" minPicture="<%=board.getOwner().getMinPicture() %>" profile="<%=board.getOwner().getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(board.getOwner().getUser().getUserInfo())%>"><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>"></span>&nbsp;<%=board.getSubject()%></span> 
 							<%if(board.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=board.getSubInstanceCount() %></b>]</font><%} %>
 							<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
 							<%

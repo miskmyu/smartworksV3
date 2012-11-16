@@ -45,6 +45,7 @@ function submitForms(action) {
 		}
 		var fromUsers = new Array();
 		var senderUserTitle = newMail.attr('senderUserTitle');
+		var isDraftFolder = newMail.attr('isDraftFolder');
 		var user;
 		//if (senderUserTitle != null && senderUserTitle !='' && senderUserTitle != 'undefined') {
 		if (!isEmpty(senderUserTitle)) {
@@ -73,6 +74,24 @@ function submitForms(action) {
 				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 				var lastHref = newMail.attr('lastHref');
 				if(action === "send"){
+					if(isDraftFolder === "true"){
+						paramsJson = {};
+						var msgIds = new Array();
+						msgIds.push(newMail.attr('msgId'));
+						paramsJson['ids'] = msgIds;
+						paramsJson['folderId'] = newMail.attr('folderId');
+						console.log(JSON.stringify(paramsJson));
+						$.ajax({
+							url : "delete_mails.sw",
+							contentType : 'application/json',
+							type : 'POST',
+							data : JSON.stringify(paramsJson),
+							success : function(data, status, jqXHR) {
+							},
+							error : function(e) {
+							}
+						});
+					}
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("sendMailSucceed"), function(){
 						if(isEmpty(lastHref))
 							window.location.reload(true);
@@ -188,8 +207,11 @@ function submitForms(action) {
 	String sSendType = request.getParameter("sendType");
 	int sendType = (SmartUtil.isBlankObject(sSendType)) ? MailFolder.SEND_TYPE_NONE : Integer.parseInt(sSendType);
 	MailInstance instance = new MailInstance();
+	boolean isDraftFolder = false;
 	if(!SmartUtil.isBlankObject(folderId) && !SmartUtil.isBlankObject(msgId)){
 		instance = smartWorks.getMailInstanceById(folderId, msgId, sendType);
+		MailFolder folder = smartWorks.getMailFolderById(folderId);
+		isDraftFolder = (!SmartUtil.isBlankObject(folder) && folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS);
 	}else if(sendType == MailFolder.SEND_TYPE_WORK_CONTENT){
 //		String mailContents = ((String)request.getAttribute("mailContents")).replace("\"", "\'");
 		String mailContents = (String)request.getAttribute("mailContents");
@@ -215,7 +237,7 @@ function submitForms(action) {
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_new_mail_page js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>" senderId="<%=cUser.getMailId()%>" senderUserTitle="<%=myMailAccount.getSenderUserTitle()%>">
+<div class="section_portlet js_new_mail_page js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>" isDraftFolder="<%=isDraftFolder %>" senderId="<%=cUser.getMailId()%>" senderUserTitle="<%=myMailAccount.getSenderUserTitle()%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">

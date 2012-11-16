@@ -212,7 +212,7 @@
 					<!-- 수정, 삭제버튼 -->
 				    <div class="fr">
 						<%
-						if(work.getEditPolicy().isEditableForMe(owner.getId())){
+						if(work.getEditPolicy().isEditableForMe(owner.getId()) && approvalTask==null && !instance.isApprovalWork()){
 						%>
 					        <span class="btn_gray js_btn_modify">
 					        	<a href="" class="js_modify_iwork_instance">
@@ -290,7 +290,7 @@
 				   		</span>
 				
 						<%
-						if(work.getEditPolicy().isEditableForMe(owner.getId())){
+						if(work.getEditPolicy().isEditableForMe(owner.getId()) && approvalTask==null && !instance.isApprovalWork()){
 						%>
 							<span class="btn_gray ml5 js_btn_delete">
 					        	<a href="" class="js_delete_iwork_instance">
