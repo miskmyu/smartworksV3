@@ -30,10 +30,20 @@ function submitForms() {
 	var fileName = $(fileList[0]).attr('fileName');
 	var title = form.find('input[name="txtBoardName"]').attr("value");
 	var contents = form.find('textarea[name="txtBoardDetails"]').attr("value");
+	var duration = form.find('input[name="txtBoardDuration"]').attr("value");
 
 	var formContent = newBoard.find('.js_hidden_form_content');
+	
+	var validDuration = false;
+	if(!isEmpty(duration)){
+		if((new Date())>(new Date(duration))){
+			smartPop.showInfo(smartPop.ERROR, smartMessage.get("boardDurationDateError"));
+		}else{
+			validDuration = true;
+		}
+	}
 
-	if(!isEmpty(formContent)) {
+	if(!isEmpty(formContent) && validDuration) {
 
 		var workId = newBoard.attr('workId');
 		$.ajax({
@@ -53,7 +63,8 @@ function submitForms() {
 						fileName : fileName,
 						fileList : fileList,
 						title : title,
-						contents : contents
+						contents : contents,
+						duration : duration
 					}),
 					mode : "edit"
 				});
@@ -121,7 +132,7 @@ function submitForms() {
 		<form name="frmNewBoard" class="js_validation_required js_click_start_form">
 			<!-- 새로운 공지를 등록하기 위한 입력화면을 스마트폼을 이용하여 자동으로 그린다.. -->
 			<!-- js_new_board_fields :  js/sw/sw-formFields.js 에서 loadNewBoardFields()가 찾아서 공지입력화면을 이곳에 그려준다.. -->
-			<div class="js_new_board_fields" placeHolderTitle="<fmt:message key='common.upload.message.board'/>" boardNameTitle="<fmt:message key='common.upload.board.name'/>" boardDetailsTitle="<fmt:message key='common.upload.board.details'/>" boardFilesTitle="<fmt:message key='common.upload.board.files'/>">
+			<div class="js_new_board_fields" placeHolderTitle="<fmt:message key='common.upload.message.board'/>" boardNameTitle="<fmt:message key='common.upload.board.name'/>" boardDetailsTitle="<fmt:message key='common.upload.board.details'/>" boardFilesTitle="<fmt:message key='common.upload.board.files'/>" boardDurationTitle="<fmt:message key='common.upload.board.duration'/>">
 			</div>
 		</form>
 		<div class="js_hidden_form_content" style="display:none">

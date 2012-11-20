@@ -50,7 +50,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 	}
 	$file.appendTo(options.container);
 	if (readOnly) {
-		viewFiles(value, $('#'+id));
+		viewFiles(value, options.container.find('#'+id));
 	} else {
 		var fileList = '';
 		if(isTempfile){

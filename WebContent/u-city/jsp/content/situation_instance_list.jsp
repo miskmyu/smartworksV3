@@ -195,9 +195,9 @@
 				String serviceType = "";
 				String runningTaskNames = "";
 				ProcessWorkInstance instance = (ProcessWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instanceInfo.getId());
-				if(!SmartUtil.isBlankObject(occurredTaskNames) || UcityUtil.isAbendable(instance))
+				if(!SmartUtil.isBlankObject(occurredTaskNames) && UcityUtil.isAbendable(instance))
 					occurredTaskNames = "비정상(" + occurredTaskNames + ")";
-				if(!SmartUtil.isBlankObject(releasedTaskNames) || UcityUtil.isAbendable(instance))
+				if(!SmartUtil.isBlankObject(releasedTaskNames) && UcityUtil.isAbendable(instance))
 					releasedTaskNames = "비정상(" + releasedTaskNames + ")";
 				if(!SmartUtil.isBlankObject(occurredTaskNames) && !SmartUtil.isBlankObject(releasedTaskNames)){
 					serviceType =  "발생</br>종료";

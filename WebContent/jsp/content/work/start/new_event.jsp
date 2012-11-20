@@ -28,10 +28,8 @@ function submitForms() {
 	var name = form.find('input[name="txtEventName"]').attr("value");
 	var startDate = form.find('input[name="txtEventStartDate"]').attr("value");
 	var endDate = form.find('input[name="txtEventEndDate"]').attr("value");
-	//var startDate = getGMTDate(startDate, currentUser.timeOffset).format('yyyy.mm.dd HH:MM');
 	var oldEndDate = false;
 	if(!isEmpty(startDate) && !isEmpty(endDate)){
-		//endDate = getGMTDate(endDate, currentUser.timeOffset).format('yyyy.mm.dd HH:MM');
 		if((new Date(startDate))>(new Date(endDate))){
 			oldEndDate = true;
 			smartPop.showInfo(smartPop.ERROR, smartMessage.get("eventOldEndDateError"));

@@ -1159,6 +1159,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					if (parts.size() > 0 || i == -1) {
 						EmailPart tmp = null;
 						String mime = null;
+						boolean gotMailContent = false;
 						attachments = new MailAttachment[parts.size()];
 						for (int j=0;j<parts.size();j++) {
 							tmp = (EmailPart)parts.get(j);
@@ -1171,12 +1172,13 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							if (mime.indexOf(" ") > 0) {
 								mime = mime.substring(0, mime.indexOf(" "));
 							}
-							if(mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN) || mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
+							if(!gotMailContent && (mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN) || mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML))){
 								String contentPostfix = 
 											(sendType == MailFolder.SEND_TYPE_FORWARD || 
 											 sendType == MailFolder.SEND_TYPE_REPLY || 
 											 sendType == MailFolder.SEND_TYPE_REPLY_ALL) ? SmartMessage.getString("mail.title.content.postfix") + contentHeader : "";
-								if(mailContent == null &&  mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
+//								if(mailContent == null &&  mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
+								if(mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
 									mailContent = "";
 				                	Object obj = tmp.getContent();
 				                	if(null!=obj) mailContent = contentPostfix + obj.toString();
@@ -1189,8 +1191,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 									mailContent = HTMLMessageParser.prepareInlineHTMLContent(email, mailContent);
 									mailContent = org.claros.commons.utility.Utility.updateTRChars(mailContent);
 									i = j;
+									gotMailContent = true;
 									continue;
-								}else if(mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN)){
+								}else if(mailContent == null && mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN)){
 									mailContent = "";
 				                	Object obj = tmp.getContent();
 				                	if(null!=obj) mailContent = contentPostfix + obj.toString();
@@ -1207,7 +1210,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							}	
 
 							String fileName = org.claros.commons.utility.Utility.updateTRChars(tmp.getFilename());
-							if( !fileName.equals("Html Body")){
+							if(!fileName.equals("Text Body")){
 								attachments[count] = new MailAttachment(Integer.toString(j), fileName, mime, tmp.getSize());
 								attachments[count].setFileType(SmartUtil.getFileExtension(fileName));
 								attachments[count].setPart(tmp);
