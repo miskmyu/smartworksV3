@@ -34,7 +34,8 @@
 
 <%	
 
-final int MAX_INSTANCE_LIST = 20;
+final int MAX_INSTANCE_LIST = 20; 
+
 
 RequestParams params = (RequestParams)request.getAttribute("requestParams");
 if (params == null) {
