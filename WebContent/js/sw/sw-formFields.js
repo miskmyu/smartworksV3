@@ -797,7 +797,7 @@ function loadWriteMailFields() {
 			var priorityTitle = writeMailField.attr("priorityTitle");
 			var priority = writeMailField.attr('priority');
 			var subjectTitle = writeMailField.attr("subjectTitle");
-			var subject = unescape(writeMailField.attr('subject'));
+			var subject = smartDecode(unescape(writeMailField.attr('subject')));
 			var contents = unescape(writeMailField.attr('contents'));
 			var mailSignature = unescape(writeMailField.attr('mailSignature'));
 			contents = (isMobile.any()) ? "<br/><br/><br/>" + contents : "<br/><br/><br/>" + mailSignature + "<br/>" + contents;
