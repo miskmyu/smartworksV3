@@ -113,6 +113,11 @@ if(!SmartUtil.isBlankObject(instances)) {
 					statusImage = "icon_status_returned";
 					statusTitle = "content.status.returned";
 					break;
+				// 인스턴스가 반려된 경우...
+				case Instance.STATUS_COMPLETED:
+					statusImage = "icon_status_completed";
+					statusTitle = "content.status.completed";
+					break;
 				// 기타 잘못되어 상태가 없는 경우..
 				default:
 					statusImage = "icon_status_not_yet";
