@@ -98,7 +98,13 @@ public class Initiator extends HttpServlet {
 //        	Context ct1=new InitialContext();
 //        	Context ct2=(Context)ct1.lookup("java:comp/env");
 //        	DataSource ds=(DataSource)ct2.lookup("jdbc/SmartWorksDS");
-
+//        	
+//        	Connection con = ds.getConnection();
+//        	String url = con.getMetaData().getURL();
+//        	String driverClassName = con.getMetaData().getDriverName();
+//        	String userName = con.getMetaData().getUserName();
+//        	String passwd = con.getMetaData().get
+        	
         	DbConfig dbConfig = new DbConfig();
         	dbConfig.setId(SmartConfUtil.getInstance().getId());
         	dbConfig.setDatabase(SmartConfUtil.getInstance().getUrl());
