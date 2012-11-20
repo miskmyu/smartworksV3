@@ -213,7 +213,6 @@ function submitForms(action) {
 		MailFolder folder = smartWorks.getMailFolderById(folderId);
 		isDraftFolder = (!SmartUtil.isBlankObject(folder) && folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS);
 	}else if(sendType == MailFolder.SEND_TYPE_WORK_CONTENT){
-//		String mailContents = ((String)request.getAttribute("mailContents")).replace("\"", "\'");
 		String mailContents = (String)request.getAttribute("mailContents");
 		instance.setMailContents(mailContents);
 	}else if(!SmartUtil.isBlankObject(receiverId)){
@@ -226,8 +225,7 @@ function submitForms(action) {
 	MailAccount[] mailAccounts = smartWorks.getMyMailAccounts();
 	MailAccount myMailAccount = (SmartUtil.isBlankObject(mailAccounts)) ? null : mailAccounts[0];
 	String mailSignature = "";
-	if(!SmartUtil.isBlankObject(myMailAccount) && myMailAccount.isUseSignature()){
-//		instance.setMailContents("<br/><br/><br/>" + instance.getMailContents() + "<br/><br/><br/>" + myMailAccount.getSignature().replace("\"", "\'"));
+	if(!isDraftFolder && !SmartUtil.isBlankObject(myMailAccount) && myMailAccount.isUseSignature()){
 		instance.setMailContents(instance.getMailContents());
 		mailSignature = myMailAccount.getSignature();
 	}

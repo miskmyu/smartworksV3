@@ -79,12 +79,16 @@
 				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
-					<fmt:message key='common.title.last_modifier' /> 
-					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
+				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_BOARD_DURATION %>">
+					<fmt:message key='common.upload.board.duration' /> 
+					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_BOARD_DURATION)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
-				</a>/
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>"><fmt:message key='common.title.last_modified_date' />
+				</a>
+				<span class="js_progress_span"></span>
+			</th>
+			<th class="r_line">
+				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
+					<fmt:message key='common.title.last_modified_date' />
 					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
@@ -104,6 +108,7 @@
 			for (InstanceInfo instanceInfo : instanceInfos) {
 				UserInfo owner = instanceInfo.getOwner();
 				UserInfo lastModifier = instanceInfo.getLastModifier();
+				LocalDate duration = ((BoardInstanceInfo)instanceInfo).getDuration();
 				String target = ((WorkInstanceInfo)instanceInfo).getController() + "?cid=" 
 									+ ((WorkInstanceInfo)instanceInfo).getContextId() + "&wid=" + wid
 									+ "&workId=" + SmartWork.ID_BOARD_MANAGEMENT;
@@ -117,6 +122,9 @@
 						<%=((BoardInstanceInfo)instanceInfo).getSubject() %>
 						<%if(((BoardInstanceInfo)instanceInfo).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((BoardInstanceInfo)instanceInfo).getSubInstanceCount() %></b>]</font><%} %>
 						<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
+					</td>
+					<td class="tr">
+						<%if(!SmartUtil.isBlankObject(duration)){%><%=duration.toLocalDateSimpleString()%><%}%>
 					</td>
 					<td class="tr pr10">
 						<%
@@ -152,6 +160,14 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
+				<span class="js_progress_span"></span>
+			</th>
+			<th class="r_line">
+				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_BOARD_DURATION %>">
+					<fmt:message key='common.upload.board.duration' /> 
+					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_BOARD_DURATION)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
+				</a>
 				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">

@@ -10,11 +10,13 @@ import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
 public class BoardInstance extends WorkInstance {
-		
+	
+	public static final int DEFAULT_BOARD_DURATION = 7;
 	private int views;
 	private String content;
 	private String fileGroupId;
 	private List<Map<String, String>> files;
+	private LocalDate duration;
 
 	public int getViews() {
 		return views;
@@ -40,7 +42,15 @@ public class BoardInstance extends WorkInstance {
 	public void setContent(String content) {
 		this.content = content;
 	}
-
+	public LocalDate getDuration() {
+		LocalDate createdDate = (this.getCreatedDate()==null) ? new LocalDate() : this.getCreatedDate();
+		duration = new LocalDate(createdDate.getGMTDate() + LocalDate.ONE_DAY*BoardInstance.DEFAULT_BOARD_DURATION);
+		return duration;
+	}
+	public void setDuration(LocalDate duration) {
+		this.duration = duration;
+	}
+	
 	public BoardInstance(){
 		super();
 		super.setType(Instance.TYPE_BOARD);

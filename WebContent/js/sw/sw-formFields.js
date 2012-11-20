@@ -436,6 +436,7 @@ function loadNewBoardFields() {
 			var boardNameTitle = newBoardField.attr("boardNameTitle");
 			var boardDetailsTitle = newBoardField.attr("boardDetailsTitle");
 			var boardFilesTitle = newBoardField.attr("boardFilesTitle");
+			var boardDurationTitle = newBoardField.attr('boardDurationTitle');
 
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
 				container: gridRow,
@@ -446,7 +447,7 @@ function loadNewBoardFields() {
 			});
 			gridRow.find('.form_label').hide();
 			gridRow.find('.form_value input').removeClass('fieldline').attr('placeholder', placeHolderTitle);
-			
+
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			gridRow.hide();
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
@@ -467,6 +468,21 @@ function loadNewBoardFields() {
 				columns: 1,
 				required: false
 			});
+			
+			var today = new Date();
+			var durationDate = new Date(today.getTime() + 7*24*60*60*1000);
+			var durationDateStr = durationDate.format('yyyy.mm.dd');
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			gridRow.hide();
+			SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtBoardDuration",
+				fieldName: boardDurationTitle,
+				value: durationDateStr,
+				columns: 1,
+				required: true
+			});
+
 		}		
 	}
 };

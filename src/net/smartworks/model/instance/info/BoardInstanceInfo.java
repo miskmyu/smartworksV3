@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.instance.BoardInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.util.LocalDate;
@@ -16,6 +17,7 @@ public class BoardInstanceInfo extends WorkInstanceInfo {
 	private String content;
 	private String fileGroupId;
 	private List<Map<String, String>> files;
+	private LocalDate duration;
 
 	public String getContent() {
 		return content;
@@ -47,6 +49,17 @@ public class BoardInstanceInfo extends WorkInstanceInfo {
 	public void setBriefContent(String briefContent) {
 		this.briefContent = briefContent;
 	}
+	public LocalDate getDuration() {
+		if(duration==null){
+			LocalDate createdDate = (this.getCreatedDate()==null) ? new LocalDate() : this.getCreatedDate();
+			duration = new LocalDate(createdDate.getGMTDate() + LocalDate.ONE_DAY*BoardInstance.DEFAULT_BOARD_DURATION);
+		}
+		return duration;
+	}
+	public void setDuration(LocalDate duration) {
+		this.duration = duration;
+	}
+	
 	public BoardInstanceInfo(){
 		super();
 		super.setType(Instance.TYPE_BOARD);

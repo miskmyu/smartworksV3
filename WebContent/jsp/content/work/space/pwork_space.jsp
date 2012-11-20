@@ -517,14 +517,14 @@
 			pworkSpace.find('.js_check_completion_notice').hide();
 		}
 		
-		if(input.is(':visible') == true){
+/* 		if(input.is(':visible') == true){
 			console.log('input=', input);
 			alert('It is not visible!!!');
 		}else{
 			console.log('input=', input);
 			alert('It is visible!!!');
 		}
-	}
+ */	}
 	
 	var getTasksWidth = function(tasks, arrows){
 		var width = 0;
