@@ -9,11 +9,8 @@
 						http://www.springframework.org/schema/aop
 						http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 	
-	<beans:bean id="testCommonAdvice" class="net.smartworks.server.engine.common.advisor.CommonAdvisor"/>
-	
-	
 	<!-- ucity Advisor -->
-<!--      <beans:bean id="tskManagerUcityAdvisor" class="net.smartworks.server.engine.process.task.manager.impl.TskManageUcityAdvisorImpl"/>
+<!--<beans:bean id="tskManagerUcityAdvisor" class="net.smartworks.server.engine.process.task.manager.impl.TskManageUcityAdvisorImpl"/>
 	<aop:config>
 		<aop:aspect id="ucityAdvisor" ref="tskManagerUcityAdvisor">
 			<aop:pointcut id="ucityMethod" expression="target(net.smartworks.server.engine.process.task.manager.impl.TskManagerImpl)"/>
@@ -21,15 +18,7 @@
 		</aop:aspect>
 	</aop:config>  -->    
 	 
-	<!-- aop:config>
-		<aop:aspect id="commonAdvice" ref="testCommonAdvice">
-			<aop:pointcut id="publicMethod" expression="execution(public * net.smartworks.server.engine.process..*(..))"/>
-			<aop:around pointcut-ref="publicMethod" method="trace"/>
-		</aop:aspect>
-	</aop:config-->
-	
 	<!-- Mail Advisor -->
-	
  	<!-- <beans:bean id="misExecutor" class="org.springframework.scheduling.quartz.SimpleThreadPoolTaskExecutor" destroy-method="destroy">
  		<beans:property name="threadCount" value="10"/>
  	</beans:bean>

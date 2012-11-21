@@ -429,7 +429,7 @@ public class SmartUtil {
 		String roleStr = (user.getRole() == User.USER_ROLE_LEADER) ? SmartMessage.getString("department.role.head") : SmartMessage.getString("department.role.member");
 		String info = "<div><span class='smartp_name'>" + user.getLongName() + "</span><div>";
 		if(!SmartUtil.isBlankObject(user.getDepartment())){
-			info = info + "<div class='smartp_info'><span>" + SmartMessage.getString("profile.title.department") + ":</span> " + user.getDepartment().getName() + " (" + roleStr + ")</div>";
+			info = info + "<div class='smartp_info'><span>" + SmartMessage.getString("profile.title.department") + ":</span> " + CommonUtil.toNotNull(user.getFullDepartment()) + " (" + roleStr + ")</div>";
 		}
 		if(!SmartUtil.isBlankObject(user.getPhoneNo())){
 			info = info + "<div class='smartp_info'><span>" + SmartMessage.getString("profile.title.phone_no") + ":</span> " + user.getPhoneNo() + "</div>";

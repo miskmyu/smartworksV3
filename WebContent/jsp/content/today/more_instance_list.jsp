@@ -34,6 +34,9 @@
 
 <%	
 
+final int MAX_INSTANCE_LIST = 20; 
+
+
 RequestParams params = (RequestParams)request.getAttribute("requestParams");
 if (params == null) {
 	String searchKey = request.getParameter("searchKey");
@@ -52,14 +55,17 @@ boolean assignedOnly = Boolean.parseBoolean(request.getParameter("assignedOnly")
 boolean runningOnly = Boolean.parseBoolean(request.getParameter("runningOnly"));
 
 // lastDate와 assignedOnly값을 가지고 현재 진행중인 모든 인스턴스리스트를 가져온다...
-InstanceInfo[] instances = smartWorks.getMyRunningInstances(lastDate, 20, assignedOnly, runningOnly, params);
+InstanceInfo[] instances = smartWorks.getMyRunningInstances(lastDate, MAX_INSTANCE_LIST, assignedOnly, runningOnly, params);
 if(!SmartUtil.isBlankObject(instances)) {
 %>
 <div class="space_section">
 <ul>
 		<%
 		// 인스턴스 갯수 만큼 리스트를 그린다...
-		for (InstanceInfo instance : instances) {
+		for (int i = 0; i < instances.length; i++) {
+			if (i == MAX_INSTANCE_LIST)
+				continue;
+			InstanceInfo instance = instances[i];
 			String statusImage;
 			String statusTitle;
 			WorkInstanceInfo workInstance = null;
@@ -112,6 +118,11 @@ if(!SmartUtil.isBlankObject(instances)) {
 				case Instance.STATUS_RETURNED:
 					statusImage = "icon_status_returned";
 					statusTitle = "content.status.returned";
+					break;
+				// 인스턴스가 반려된 경우...
+				case Instance.STATUS_COMPLETED:
+					statusImage = "icon_status_completed";
+					statusTitle = "content.status.completed";
 					break;
 				// 기타 잘못되어 상태가 없는 경우..
 				default:
@@ -490,7 +501,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 		}
 		%>
 		<!-- 더보기 버튼 -->
-		<%if(instances.length > 20){ %>
+		<%if(instances.length > MAX_INSTANCE_LIST){ %>
 			<div class="js_more_list">
 				<a href="more_instance_list.sw"><fmt:message key="content.more_running_instance"/></a>
 				<span class="js_progress_span"></span>

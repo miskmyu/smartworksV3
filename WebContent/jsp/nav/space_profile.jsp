@@ -83,7 +83,7 @@
 		<!-- 가입하기/초대하기 아이콘 -->
 		<div class="tc cb">
 			<%
-			if(true){//thisGroup.amIInvitableMember()){
+			if(thisGroup.amIInvitableMember()){
 			%>
 				<button class="js_invite_group_members"><fmt:message key="group.button.invite_member"/></button>
 			<%

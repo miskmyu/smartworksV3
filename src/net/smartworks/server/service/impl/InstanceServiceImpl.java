@@ -483,6 +483,9 @@ public class InstanceServiceImpl implements IInstanceService {
 					taskCond.setSearchKey(params.getSearchKey());
 				}
 			}
+
+			long totalSize = getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
+			
 			taskCond.setPageNo(0);
 			taskCond.setPageSize(requestSize);
 			//taskCond.setPrcStatusIns(new String[]{PrcProcessInst.PROCESSINSTSTATUS_RUNNING, PrcProcessInst.PROCESSINSTSTATUS_RETURN});
@@ -491,7 +494,22 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			TaskWork[] tasks = getWorkListManager().getTaskWorkList(user.getId(), taskCond);
 			
-			if(tasks != null) return ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
+			if(tasks != null) {
+				
+				if (totalSize > requestSize) {
+					InstanceInfo[] tempResult = ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
+					
+					InstanceInfo[] result = new InstanceInfo[tempResult.length + 1];
+					for (int i = 0; i < tempResult.length; i++) {
+						result[i] = tempResult[i];
+					}
+					result[tempResult.length] = new TaskInstanceInfo();
+					return result;
+				} else {
+					return ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
+				}
+				
+			}
 			return null;
 		}catch (Exception e){
 			// Exception Handling Required

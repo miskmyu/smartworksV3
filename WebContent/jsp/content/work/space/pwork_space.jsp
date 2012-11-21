@@ -358,13 +358,15 @@
 				            <span class="txt_btn_end"></span>
 				    	</a>
 			   		</span>
-					<span class="btn_gray ml5 js_btn_return" style="display:none">
+<%--
+ 					<span class="btn_gray ml5 js_btn_return" style="display:none">
 			        	<a href="" class="js_return_task_instance">
 				            <span class="txt_btn_start"></span>
 				            <span class="txt_btn_center"><fmt:message key="common.button.return"/></span>
 				            <span class="txt_btn_end"></span>
 				    	</a>
 			   		</span>
+--%>
 					<span class="btn_gray ml5 js_btn_reassign" style="display:none">
 			        	<a href="" class="js_reassign_task_instance">
 				            <span class="txt_btn_start"></span>
@@ -514,7 +516,15 @@
 			pworkSpace.find('.js_toggle_approval_btn').hide();
 			pworkSpace.find('.js_check_completion_notice').hide();
 		}
-	}
+		
+/* 		if(input.is(':visible') == true){
+			console.log('input=', input);
+			alert('It is not visible!!!');
+		}else{
+			console.log('input=', input);
+			alert('It is visible!!!');
+		}
+ */	}
 	
 	var getTasksWidth = function(tasks, arrows){
 		var width = 0;

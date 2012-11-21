@@ -145,7 +145,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 			if(folderId != -1) 
 				buf.append(" and obj.folderId = :folderId");
 			if(searchKey != null)
-				buf.append(" and (obj.sender like :searchKey or obj.subject like :searchKey)");
+				buf.append(" and (obj.sender like :searchKey or obj.subject like :searchKey or obj.receiver like :searchKey)");
 			if(unread != -1) 
 				buf.append(" and obj.unread = :unread");
 		}
