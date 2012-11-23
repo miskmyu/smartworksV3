@@ -333,7 +333,8 @@ public class UcityUtil {
 		requestBody.put("formId", form.getId());
 		requestBody.put("formName", form.getName());
 		if(!SmartUtil.isBlankObject(data.get("externalDisplay"))){
-			Property[] extendedProperties = taskInstance.getWorkInstance().getExtentedProperty();
+			Property[] extendedProperties = SwServiceFactory.getInstance().getInstanceService().getUcityExtendedPropertyByTaskInstId(taskInstance.getId());
+
 			String externalDisplay = "";
 			if(!SmartUtil.isBlankObject(extendedProperties)){
 				for(int i=0; i<extendedProperties.length; i++){
