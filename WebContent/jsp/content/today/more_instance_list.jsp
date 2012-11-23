@@ -36,7 +36,6 @@
 
 final int MAX_INSTANCE_LIST = 20; 
 
-
 RequestParams params = (RequestParams)request.getAttribute("requestParams");
 if (params == null) {
 	String searchKey = request.getParameter("searchKey");
@@ -64,7 +63,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 		// 인스턴스 갯수 만큼 리스트를 그린다...
 		for (int i = 0; i < instances.length; i++) {
 			if (i == MAX_INSTANCE_LIST)
-				continue;
+				break;
 			InstanceInfo instance = instances[i];
 			String statusImage;
 			String statusTitle;
@@ -502,7 +501,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 		%>
 		<!-- 더보기 버튼 -->
 		<%if(instances.length > MAX_INSTANCE_LIST){ %>
-			<div class="js_more_list">
+			<div class="t_nowork js_more_list">
 				<a href="more_instance_list.sw"><fmt:message key="content.more_running_instance"/></a>
 				<span class="js_progress_span"></span>
 			</div>

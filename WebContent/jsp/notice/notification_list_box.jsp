@@ -21,6 +21,7 @@
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다.
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
+	User cUser = SmartUtil.getCurrentUser();
 
 	// 호출될때 전달되는 lastNoticeId를 가져온다.
 	String lastNoticeId = request.getParameter("lastNoticeId");
@@ -28,12 +29,21 @@
 	
 	// 서버에게 lastNoticeId를 기준으로 최근 10개의 Notice항목을 가져오는 기능.
 	NoticeBox noticeBox = smartWorks.getNoticeBoxForMe10(noticeType, lastNoticeId);
+%>
+<!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle을 설정 한다. -->
+<fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
+<fmt:setBundle basename="resource.smartworksMessage" scope="request" />
+<%
 
 	NoticeMessage[] noticeMessages = noticeBox.getNoticeMessages();
 	if (noticeMessages != null) {
+		String lastTaskId = null;
+		int count = 0;
 		for (NoticeMessage nMessage : (NoticeMessage[]) noticeBox.getNoticeMessages()) {
+			count++;
 			if (noticeBox != null && noticeBox.getNoticeType() == Notice.TYPE_NOTIFICATION) {
 				UserInfo owner = null;
+				if(count == 10) lastTaskId = nMessage.getId();
 
 				// Notice message type 이 시스템 알림인 경우, 
 				if (nMessage.getType() == NoticeMessage.TYPE_SYSTEM_NOTICE) {
@@ -129,6 +139,16 @@
 	<%
 				}
 			}
+		}
+		if(noticeBox.getRemainingLength() > 0){
+%>
+			<ul>
+				<li class="tc pt2">
+					<a class="js_more_notice_list" href="notification_list_box.sw" lastTaskId="<%=lastTaskId%>"><fmt:message key="content.more_running_instance"/></a>
+					<span class="js_progress_span"></span>
+				</li>
+			</ul>
+<%
 		}
 	}
 	%>
