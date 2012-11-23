@@ -119,6 +119,8 @@ public class UserInfo extends WorkSpaceInfo {
 		user.setRole(this.getRole());
 		user.setSignPicture(this.getSignPicture());
 		user.setSmallPictureName(this.getSmallPictureName());
+		user.setDepartment(this.getDepartment().getName());
+		user.setDepartmentId(this.getDepartment().getId());
 		return user;
 	}
 }

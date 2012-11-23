@@ -78,7 +78,13 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		
 		// ####참조업무#### 
 		//obj 객체에 담겨 넘어오는 참조자에게 업무를 전달(생성)한다
-		this.applyRefTasks(user, obj);
+		String isLazyReferenceTask = obj.getExtendedPropertyValue("isLazyReferenceTask");
+		if (CommonUtil.isEmpty(isLazyReferenceTask)) {
+			this.applyRefTasks(user, obj);
+		} else {
+			if (isLazyReferenceTask.equalsIgnoreCase("false"))
+				this.applyRefTasks(user, obj);
+		}
 		
 		// ####전자결재 시작####
 		//approvalLine 은 이미 만들어진 상태에서 아이디값이 넘어 온다(SmartApi.executeTask 에서 set approvalLine, SmartApi.setRecord 에서 set approvalLine)
@@ -305,6 +311,11 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			// 결재자 반영
 			if (applyApprovalTask(user, obj) != null)
 				return;
+		}
+
+		isLazyReferenceTask = obj.getExtendedPropertyValue("isLazyReferenceTask");
+		if (!CommonUtil.isEmpty(isLazyReferenceTask) && isLazyReferenceTask.equalsIgnoreCase("true")) {
+			this.applyRefTasks(user, obj);
 		}
 		//####전자결재 끝####
 		

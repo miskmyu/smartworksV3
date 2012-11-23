@@ -3043,6 +3043,16 @@ public class InstanceServiceImpl implements IInstanceService {
 				if (txtApprovalForwardee != null) {
 					ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
 					
+					String isLazyReferenceTask = (String)frmTaskApproval.get("isLazyReferenceTask");
+					
+					if (CommonUtil.isEmpty(isLazyReferenceTask)) {
+						isLazyReferenceTask = "false";
+					} else if (isLazyReferenceTask.equalsIgnoreCase("true")) {
+						isLazyReferenceTask = "true";
+					} else {
+						isLazyReferenceTask = "false";
+					}
+					
 					String txtForwardForwardee = null;
 					if(!CommonUtil.isEmpty(forwardee)) {
 						String symbol = ";";
@@ -3061,6 +3071,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					obj.setExtendedAttributeValue("txtForwardSubject", txtApprovalSubject);
 					obj.setExtendedAttributeValue("txtForwardForwardee", txtForwardForwardee);
 					obj.setExtendedAttributeValue("txtForwardComments", txtApprovalComments);
+					obj.setExtendedAttributeValue("isLazyReferenceTask", isLazyReferenceTask);
 				}
 			}
 		}
@@ -3487,12 +3498,13 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 			task.setExpectEndDate(expectEndDate);
 			
+
 			//참조자, 전자결재, 연결업무 정보를 셋팅한다
 			setReferenceApprovalToTask(userId, task, requestBody);
 			
 			//UCITY ucityAdvisor에서 사용할 값을 셋팅한다 
 			setUcityExtendedProperty(requestBody, task);
-
+			
 			//태스크를 실행하며 프로세스업무를 실행한다
 			task = getTskManager().executeTask(userId, task, "execute");
 
