@@ -77,6 +77,7 @@ import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
@@ -1719,4 +1720,8 @@ public class SmartWorks implements ISmartWorks {
 		return instanceService.getUcityAuditTaskCounts(runningOnly);
 	}
 
+	@Override
+	public Property[] getUcityExtendedPropertyByTaskInstId(String taskInstId) throws Exception {
+		return instanceService.getUcityExtendedPropertyByTaskInstId(taskInstId);
+	}
 }

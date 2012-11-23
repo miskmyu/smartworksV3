@@ -146,6 +146,28 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_more_notice_list').live('click', function(event){
+		var input = $(targetElement(event));
+		smartPop.progressNav(input.next());
+		var href = input.attr('href');
+		var lastNoticeId = input.attr('lastTaskId');
+		$.ajax({
+			url : href,
+			data : {
+				lastNoticeId : lastNoticeId
+			},
+			success : function(data, status, jqXHR) {
+				input.remove();
+				$('#notice_message_box').find('.js_notice_message_box_list').append(data);
+				smartPop.closeProgress();
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
 	// Notice Message Box 에서 항목의 삭제버튼을 클릭하면 실행되는 기능.
 	// 선택된 항목에서, noticeId, noticeType, lastNoticeId 를 가져와서, ajax 호출을 한다.
 	// 서버에서는 항목을 삭제하고, 삭제된 상태에서의 10개의 항목을 가져다고 전달해준다.

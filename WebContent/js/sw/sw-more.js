@@ -6,7 +6,7 @@
 		smartPop.progressCont(anchor.siblings('.js_progress_span'));
 		var runningPage = anchor.parents('.js_my_running_instance_list_page');
 		var lastDate = runningPage.find('.js_more_instance_item:last').attr('dateValue');
-		var viewType = runningPage.find('.js_view_my_instances:current').attr('viewType');
+		var viewType = runningPage.find('.js_view_my_instances.current > a').attr('viewType');
 		var assignedOnly = (viewType == 'assigned_instances');
 		var runningOnly = (viewType == 'running_instances');
 		$.ajax({
@@ -17,7 +17,7 @@
 				runningOnly : runningOnly
 			},
 			success : function(data, status, jqXHR) {
-				anchor.remove();
+				anchor.parent().remove();
 				$(data).appendTo(runningPage.find('.js_instance_list_table'));
 				smartPop.closeProgress();
 			},

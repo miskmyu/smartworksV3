@@ -22,6 +22,7 @@ import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
+import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.util.LocalDate;
 
@@ -204,5 +205,7 @@ public interface IInstanceService {
 	public int[][] getUcityAuditTaskCounts(boolean runningOnly) throws Exception;
 	
 	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception;
+	
+	public Property[] getUcityExtendedPropertyByTaskInstId(String taskInstId) throws Exception;
 	
 }

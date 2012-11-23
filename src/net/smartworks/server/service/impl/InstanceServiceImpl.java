@@ -483,6 +483,9 @@ public class InstanceServiceImpl implements IInstanceService {
 					taskCond.setSearchKey(params.getSearchKey());
 				}
 			}
+
+			long totalSize = getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
+			
 			taskCond.setPageNo(0);
 			taskCond.setPageSize(requestSize);
 			//taskCond.setPrcStatusIns(new String[]{PrcProcessInst.PROCESSINSTSTATUS_RUNNING, PrcProcessInst.PROCESSINSTSTATUS_RETURN});
@@ -491,7 +494,22 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			TaskWork[] tasks = getWorkListManager().getTaskWorkList(user.getId(), taskCond);
 			
-			if(tasks != null) return ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
+			if(tasks != null) {
+				
+				if (totalSize > requestSize) {
+					InstanceInfo[] tempResult = ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
+					
+					InstanceInfo[] result = new InstanceInfo[tempResult.length + 1];
+					for (int i = 0; i < tempResult.length; i++) {
+						result[i] = tempResult[i];
+					}
+					result[tempResult.length] = new TaskInstanceInfo();
+					return result;
+				} else {
+					return ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
+				}
+				
+			}
 			return null;
 		}catch (Exception e){
 			// Exception Handling Required
@@ -3025,6 +3043,16 @@ public class InstanceServiceImpl implements IInstanceService {
 				if (txtApprovalForwardee != null) {
 					ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
 					
+					String isLazyReferenceTask = (String)frmTaskApproval.get("isLazyReferenceTask");
+					
+					if (CommonUtil.isEmpty(isLazyReferenceTask)) {
+						isLazyReferenceTask = "false";
+					} else if (isLazyReferenceTask.equalsIgnoreCase("true")) {
+						isLazyReferenceTask = "true";
+					} else {
+						isLazyReferenceTask = "false";
+					}
+					
 					String txtForwardForwardee = null;
 					if(!CommonUtil.isEmpty(forwardee)) {
 						String symbol = ";";
@@ -3043,6 +3071,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					obj.setExtendedAttributeValue("txtForwardSubject", txtApprovalSubject);
 					obj.setExtendedAttributeValue("txtForwardForwardee", txtForwardForwardee);
 					obj.setExtendedAttributeValue("txtForwardComments", txtApprovalComments);
+					obj.setExtendedAttributeValue("isLazyReferenceTask", isLazyReferenceTask);
 				}
 			}
 		}
@@ -3469,12 +3498,13 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 			task.setExpectEndDate(expectEndDate);
 			
+
 			//참조자, 전자결재, 연결업무 정보를 셋팅한다
 			setReferenceApprovalToTask(userId, task, requestBody);
 			
 			//UCITY ucityAdvisor에서 사용할 값을 셋팅한다 
 			setUcityExtendedProperty(requestBody, task);
-
+			
 			//태스크를 실행하며 프로세스업무를 실행한다
 			task = getTskManager().executeTask(userId, task, "execute");
 
@@ -9783,4 +9813,34 @@ public class InstanceServiceImpl implements IInstanceService {
 		return getUcityAuditTaskCountsByTasks(runningOnly, tasks);
 		
 	}
+	@Override
+	public Property[] getUcityExtendedPropertyByTaskInstId(String taskInstId) throws Exception {
+		
+		if (CommonUtil.isEmpty(taskInstId))
+			return null;
+		TskTask task = SwManagerFactory.getInstance().getTskManager().getTask("", taskInstId, IManager.LEVEL_LITE);
+		if (CommonUtil.isEmpty(task))
+			return null;
+		
+		String prcInstId = task.getProcessInstId();
+		
+		UcityWorkListCond ucityWorkListCond = new UcityWorkListCond();
+		ucityWorkListCond.setPrcInstId(prcInstId);
+		UcityWorkList[] workLists = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkLists("", ucityWorkListCond, null);
+		
+		if (CommonUtil.isEmpty(workLists))
+			return null;
+		
+		Property p1 = new Property("serviceName",workLists[0].getServiceName());
+		Property p2 = new Property("eventName",workLists[0].getEventName());
+		Property p3 = new Property("type",workLists[0].getType());
+		Property p4 = new Property("externalDisplay",workLists[0].getExternalDisplay());
+		Property p5 = new Property("eventPlace",workLists[0].getEventPlace());
+		Property p6 = new Property("isSms", CommonUtil.toBoolean(workLists[0].getIsSms())+"");
+		Property p7 = new Property("eventId",workLists[0].getEventId());
+		Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7};
+		
+		return properties;
+	}
+	
 }

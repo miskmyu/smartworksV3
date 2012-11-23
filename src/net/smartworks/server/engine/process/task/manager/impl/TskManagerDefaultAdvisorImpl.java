@@ -101,6 +101,10 @@ public class TskManagerDefaultAdvisorImpl extends AbstractTskManagerAdvisor {
 		}
 		
 		PrcProcessInst prcInst = new PrcProcessInst();
+		
+//		if (!CommonUtil.isEmpty(obj.getExtendedAttributeValue("isLazyReferenceTask")))
+//			prcInst.setExtendedPropertyValue("isLazyReferenceTask", obj.getExtendedAttributeValue("isLazyReferenceTask"));
+			
 		String type = obj.getType();
 		if (type.equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 

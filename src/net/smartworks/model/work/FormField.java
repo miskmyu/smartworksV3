@@ -26,6 +26,7 @@ public class FormField extends BaseObject{
 	public static final String ID_FILE_TYPE = "FileType";
 	public static final String ID_FILE_NAME = "FileName";
 	public static final String ID_FILE_SIZE = "FileSize";
+	public static final String ID_BOARD_DURATION = "boardDuration";
 
 	public static final String ID_OWNER = "creator";
 	public static final String ID_CREATED_DATE = "createdTime";
@@ -92,6 +93,7 @@ public class FormField extends BaseObject{
 	public static final FormField FIELD_WORK_ID = new FormField(ID_WORK, SmartMessage.getString("common.title.work_name"), TYPE_OBJECT_ID);
 	public static final FormField FIELD_WORK_SPACE_ID = new FormField(ID_WORK_SPACE, SmartMessage.getString("common.title.work_space_name"), TYPE_OBJECT_ID);
 	public static final FormField FIELD_FILE_CATEGORY_ID = new FormField(ID_FILE_CATEGORY, SmartMessage.getString("common.title.category_name"), TYPE_OBJECT_ID);
+	public static final FormField FIELD_BOARD_DURATION = new FormField(ID_BOARD_DURATION, SmartMessage.getString("common.upload.board.duration"), TYPE_DATE);
 
 	public static final FormField FIELD_OWNER = new FormField(ID_OWNER, SmartMessage.getString("common.title.owner"), TYPE_USER);
 	public static final FormField FIELD_CREATED_DATE = new FormField(ID_CREATED_DATE, SmartMessage.getString("common.title.created_date"), TYPE_DATE);

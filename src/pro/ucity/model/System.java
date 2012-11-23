@@ -96,7 +96,7 @@ public class System {
 		case PROCESS_FACILITY_MANAGEMENT:
 			return "pkg_9564849550184543b06fa46e3290f296";
 		
-		//개발서버
+//		개발서버
 //		switch(process){
 //		case PROCESS_ENV_WEAHTER:
 //			return "pkg_6247af34746044228556b5366752141e";
@@ -118,7 +118,7 @@ public class System {
 //			return "pkg_1ef67bf9a18b4ee4bfb86d62504a1223";
 //		case PROCESS_FACILITY_MANAGEMENT:
 //			return "pkg_efa10156dc8445ee8a89df5e95493791";
-//		
+		
 		}
 		
 		return null;
@@ -259,7 +259,7 @@ public class System {
 			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
 				return "pkg_1d7b9b3fae9841aa83ec94805312a8a2";
 			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
-				return "pkg_7d814eac92a24fdd9944b4725b6c9000";
+				return "pkg_bd646089e8d14d6786331423981d2b1f";
 			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
 				return "pkg_39b55eb57d504bbe9d67623950bdb047";
 			return null;//교통혼잡

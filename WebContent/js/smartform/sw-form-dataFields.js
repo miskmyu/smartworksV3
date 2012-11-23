@@ -81,7 +81,8 @@ function createBoardDataFields(config){
 			fileName : null,
 			fileList : null,
 			title : null,
-			contents : null
+			contents : null,
+			duration : null
 	};
 
 	SmartWorks.extend(options, config);
@@ -93,17 +94,22 @@ function createBoardDataFields(config){
 		formXml: formXml,
 		value: options.title
 	}));
+	dataFields.push(SmartWorks.FormRuntime.DateChooserBuilder.dataField({
+		fieldName: '공지종료',
+		formXml: formXml,
+		value: options.duration
+	}));
 	dataFields.push(SmartWorks.FormRuntime.RichEditorBuilder.dataField({
 		fieldName: '내용',
 		formXml: formXml,
 		value : options.contents
 	}));
 	dataFields.push(SmartWorks.FormRuntime.FileFieldBuilder.dataField({
-			fieldName: '첨부파일',
-			formXml: formXml,
-			groupId: options.groupId,
-			isTempfile: true,
-			fileList: options.fileList
+		fieldName: '첨부파일',
+		formXml: formXml,
+		groupId: options.groupId,
+		isTempfile: true,
+		fileList: options.fileList
 	}));
 	return {dataFields: dataFields};
 }

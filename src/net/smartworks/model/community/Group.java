@@ -169,9 +169,10 @@ public class Group extends WorkSpace {
 	}
 	
 	public boolean amIInvitableMember(){
-		if(SmartUtil.isBlankObject(invitableMembers)) return false;
 		User currentUser = SmartUtil.getCurrentUser();
-		if(invitableMembers.isLeaderChecked() && !SmartUtil.isBlankObject(leader) && leader.getId().equals(currentUser.getId())) return true;
+		if(amIGroupLeader(currentUser)) return true;
+		if(SmartUtil.isBlankObject(invitableMembers)) return false;
+		if(invitableMembers.isLeaderChecked() && amIGroupLeader(currentUser)) return true;
 		else if(invitableMembers.isMembersChecked() && this.amIMember()) return true;
 		else if(invitableMembers.isCustomChecked() && !SmartUtil.isBlankObject(invitableMembers.getCustoms())){
 			for(UserInfo custom : invitableMembers.getCustoms())

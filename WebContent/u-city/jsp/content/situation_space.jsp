@@ -289,7 +289,6 @@
 				}
 			}
 			if(!isEmpty(selectedTasks)){
-//				if(selectedTasks.length==1) selectedTasks[1] = selectedTasks[0];
 				clickOnTask($(selectedTasks));
 			}
 		}

@@ -227,6 +227,7 @@ smartMessage.bundle['en'] = {
 	invalidMailAccountError : "Mail Acount or password is not valid. Please retry with valid Mail Acount or password",
 	addAdjunctError : "Error has beeon occured while adding Adjunct Member. Please contact the Administrator!",
 	removeCommentError : "Error has beeon occured while removing the Comment. Please contact the Administrator!",
+	boardDurationDateError : "The Duration Date of Board must be the future. Please retry with valid Duration Date", 
 	
 	usableUserId : "The ID is not used, so you can user the ID. Please click the ID Change button to change the ID.",
 	duplicatedUserId : "The ID is already used by other. Please input another ID.",

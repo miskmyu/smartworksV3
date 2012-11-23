@@ -44,7 +44,7 @@ public class Utility {
 		}
 		str = org.claros.commons.utility.Utility.replaceAllOccurances(str, "<", "&lt;");
 		str = org.claros.commons.utility.Utility.replaceAllOccurances(str, ">", "&gt;");
-		str = org.claros.commons.utility.Utility.replaceAllOccurances(str, "\"", "&quot");
+		str = org.claros.commons.utility.Utility.replaceAllOccurances(str, "\"", "&quot;");
 		return str;
 	}
 

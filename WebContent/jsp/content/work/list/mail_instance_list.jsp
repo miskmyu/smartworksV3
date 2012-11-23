@@ -40,7 +40,7 @@
 		params = (RequestParams)session.getAttribute("requestParams");
 		if(!folderId.equals(savedWorkId) || SmartUtil.isBlankObject(params)){
 			params = new RequestParams();
-			params.setPageSize(20);
+			params.setPageSize(50);
 			params.setCurrentPage(1);
 			params.setSortingField(new SortingField(MailContent.A_SENTDATE, false));
 		}
@@ -84,13 +84,7 @@
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
 					<th class="r_line to">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_RECEIVER%>"><fmt:message key='common.title.receivers'/>
-					 		<span class="<%
-							if(sortedField.getFieldId().equals(MailContent.A_RECEIVER)){
-								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
-							%>"></span>
-						</a>				
-						<span class="js_progress_span"></span>
+			 			<span><fmt:message key='common.title.receivers'/></span>				
 					</th>
 				<%
 				}else{
@@ -191,13 +185,7 @@
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
 					<th class="r_line to">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_RECEIVER%>"><fmt:message key='common.title.receivers'/>
-					 		<span class="<%
-							if(sortedField.getFieldId().equals(MailContent.A_RECEIVER)){
-								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
-							%>"></span>
-						</a>				
-						<span class="js_progress_span"></span>
+			 			<span><fmt:message key='common.title.receivers'/></span>				
 					</th>
 				<%
 				}else{

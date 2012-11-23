@@ -582,6 +582,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				this.addTableColumn("", domain.getTableName(), "hits", "int");
 				return setRecord(user, obj, level);
 			}
+			
 			throw new SwdException(e);
 		} catch (Exception e) {
 			throw new SwdException(e);

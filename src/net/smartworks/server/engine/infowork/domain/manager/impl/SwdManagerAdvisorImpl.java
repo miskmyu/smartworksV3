@@ -314,6 +314,8 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 				task.setExtendedAttributeValue("extValues", obj.getExtendedAttributeValue("extValues"));
 			if (obj.getExtendedAttributeValue("tskRefType") != null && obj.getExtendedAttributeValue("tskRefType").length() != 0)
 				task.setRefType(obj.getExtendedAttributeValue("tskRefType"));
+			if (obj.getExtendedAttributeValue("isLazyReferenceTask") != null && obj.getExtendedAttributeValue("isLazyReferenceTask").length() != 0)
+				task.setExtendedPropertyValue("isLazyReferenceTask", obj.getExtendedAttributeValue("isLazyReferenceTask"));
 			this.getTskManager().executeTask(user, task, null);
 		}
 

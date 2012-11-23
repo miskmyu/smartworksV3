@@ -34,49 +34,61 @@
 	if (noticeType == Notice.TYPE_NOTIFICATION) {
 	%>
 		<div class="info_ms_title tb"><fmt:message key="notice.message.box.notification" /></div>
-		<jsp:include page="/jsp/notice/notification_list_box.jsp" >
-			<jsp:param value="<%=lastNoticeId %>" name="lastNoticeId"/>
-		</jsp:include>
+		<div class="js_notice_message_box_list">
+			<jsp:include page="/jsp/notice/notification_list_box.jsp" >
+				<jsp:param value="<%=lastNoticeId %>" name="lastNoticeId"/>
+			</jsp:include>
+		</div>
 	<%
 	// 쪽지
 	} else if (noticeType == Notice.TYPE_MESSAGE) {
 	%>
 		<div class="info_ms_title tb"><fmt:message key="notice.message.box.message" /></div>
-		<jsp:include page="/jsp/notice/message_list_box.jsp" >
-			<jsp:param value="<%=lastNoticeId %>" name="lastNoticeId"/>
-		</jsp:include>
+		<div class="js_notice_message_box_list">
+			<jsp:include page="/jsp/notice/message_list_box.jsp" >
+				<jsp:param value="<%=lastNoticeId %>" name="lastNoticeId"/>
+			</jsp:include>
+		</div>
 	<%
 	// 댓글 
 	} else if (noticeType == Notice.TYPE_COMMENT) {
 	%>
 		<div class="info_ms_title tb"><fmt:message key="notice.message.box.comments" /></div>
-		<jsp:include page="/jsp/notice/comment_list_box.jsp" >
-			<jsp:param value="<%=lastNoticeId %>" name="lastNoticeId"/>
-		</jsp:include>
+		<div class="js_notice_message_box_list">
+			<jsp:include page="/jsp/notice/comment_list_box.jsp" >
+				<jsp:param value="<%=lastNoticeId %>" name="lastNoticeId"/>
+			</jsp:include>
+		</div>
 	<%
 	// 할당 업무 
 	} else if (noticeType == Notice.TYPE_ASSIGNED) {
 	%>
 		<div class="info_ms_title tb"><fmt:message key="notice.message.box.assigned" /></div>
-		<jsp:include page="/jsp/notice/assigned_list_box.jsp" >
-			<jsp:param value="<%=lastNoticeId %>" name="lastNoticeId"/>
-		</jsp:include>
+		<div class="js_notice_message_box_list">
+			<jsp:include page="/jsp/notice/assigned_list_box.jsp" >
+				<jsp:param value="<%=lastNoticeId %>" name="lastNoticeId"/>
+			</jsp:include>
+		</div>
 	<%
 	// 이메일 받은편지함
 	} else if (noticeType == Notice.TYPE_MAILBOX) {
 	%>
 		<div class="info_ms_title tb"><fmt:message key="notice.message.box.mailbox" /></div>
-		<jsp:include page="/jsp/notice/mailbox_list_box.jsp" >
-			<jsp:param value="<%=lastNoticeId %>" name="lastNoticeId"/>
-		</jsp:include>
+		<div class="js_notice_message_box_list">
+			<jsp:include page="/jsp/notice/mailbox_list_box.jsp" >
+				<jsp:param value="<%=lastNoticeId %>" name="lastNoticeId"/>
+			</jsp:include>
+		</div>
 	<%
 	// 임시 저장함
 	} else if (noticeType == Notice.TYPE_SAVEDBOX) {
 	%>
 		<div class="info_ms_title tb"><fmt:message key="notice.message.box.savedbox" /></div>
-		<jsp:include page="/jsp/notice/savedbox_list_box.jsp" >
-			<jsp:param value="<%=lastNoticeId %>" name="lastNoticeId"/>
-		</jsp:include>
+		<div class="js_notice_message_box_list">
+			<jsp:include page="/jsp/notice/savedbox_list_box.jsp" >
+				<jsp:param value="<%=lastNoticeId %>" name="lastNoticeId"/>
+			</jsp:include>
+		</div>
 	<%
 	}
 	%>

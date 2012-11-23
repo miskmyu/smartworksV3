@@ -312,6 +312,81 @@ public class SmartUtil {
 			
 		return "home.sw";
 	}
+	
+	public static String combineStrings(String first, String second){
+		if(SmartUtil.isBlankObject(first)) return second;
+		if(SmartUtil.isBlankObject(second)) return first;
+		String combined = first;
+		String[] firstTokens = first.split(", ");
+		String[] secondTokens = second.split(", ");
+		if(!SmartUtil.isBlankObject(firstTokens) && !SmartUtil.isBlankObject(secondTokens)){
+			for(int i=0; i<secondTokens.length; i++){
+				boolean found = false;
+				for(int j=0; j<firstTokens.length; j++){
+					if(firstTokens[j].equals(secondTokens[i])){
+						found = true;
+						break;
+					}
+				}
+				if(!found){
+					combined = combined + ", " + secondTokens[i]; 
+				}
+			}
+		}
+		return combined;
+	}
+
+	 public static String escape(String src) {   
+		 int i;   
+		 char j;   
+		 StringBuffer tmp = new StringBuffer();   
+		 tmp.ensureCapacity(src.length() * 6);   
+		 for (i = 0; i < src.length(); i++) {   
+			 j = src.charAt(i);   
+			 if (Character.isDigit(j) || Character.isLowerCase(j) || Character.isUpperCase(j))   
+				 tmp.append(j);   
+			 else if (j < 256) {   
+				 tmp.append("%");   
+				 if (j < 16)   
+					 tmp.append("0");   
+				 tmp.append(Integer.toString(j, 16));   
+			 } else {   
+				 tmp.append("%u");   
+				 tmp.append(Integer.toString(j, 16));   
+			 }   
+		 }   
+		 return tmp.toString();   
+	 }  
+
+	 public static String unescape(String src) {   
+		 StringBuffer tmp = new StringBuffer();   
+		 tmp.ensureCapacity(src.length());   
+		 int lastPos = 0, pos = 0;   
+		 char ch;   
+		 while (lastPos < src.length()) {   
+			 pos = src.indexOf("%", lastPos);   
+			 if (pos == lastPos) {   
+				 if (src.charAt(pos + 1) == 'u') {   
+					 ch = (char) Integer.parseInt(src.substring(pos + 2, pos + 6), 16);   
+					 tmp.append(ch);   
+					 lastPos = pos + 6;   
+				 } else {   
+					 ch = (char) Integer.parseInt(src.substring(pos + 1, pos + 3), 16);   
+					 tmp.append(ch);   
+					 lastPos = pos + 3;   
+				 }   
+			 } else {   
+				 if (pos == -1) {   
+					 tmp.append(src.substring(lastPos));   
+					 lastPos = src.length();   
+				 } else {   
+					 tmp.append(src.substring(lastPos, pos));   
+					 lastPos = pos;   
+				 }   
+			 }   
+		 }   
+		 return tmp.toString();   
+	 }    
 
 	/* (non-Javadoc)
 	 * @see net.smartworks.service.impl.ISmartWorks#getCurrentUser()
@@ -429,7 +504,7 @@ public class SmartUtil {
 		String roleStr = (user.getRole() == User.USER_ROLE_LEADER) ? SmartMessage.getString("department.role.head") : SmartMessage.getString("department.role.member");
 		String info = "<div><span class='smartp_name'>" + user.getLongName() + "</span><div>";
 		if(!SmartUtil.isBlankObject(user.getDepartment())){
-			info = info + "<div class='smartp_info'><span>" + SmartMessage.getString("profile.title.department") + ":</span> " + user.getDepartment().getName() + " (" + roleStr + ")</div>";
+			info = info + "<div class='smartp_info'><span>" + SmartMessage.getString("profile.title.department") + ":</span> " + CommonUtil.toNotNull(user.getFullDepartment()) + " (" + roleStr + ")</div>";
 		}
 		if(!SmartUtil.isBlankObject(user.getPhoneNo())){
 			info = info + "<div class='smartp_info'><span>" + SmartMessage.getString("profile.title.phone_no") + ":</span> " + user.getPhoneNo() + "</div>";

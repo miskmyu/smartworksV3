@@ -33,13 +33,22 @@
 	String lastNoticeId = request.getParameter("lastNoticeId");
 	int noticeType = Notice.TYPE_COMMENT;
 	NoticeBox noticeBox = smartWorks.getNoticeBoxForMe10(noticeType, lastNoticeId);
+%>
+<!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle을 설정 한다. -->
+<fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
+<fmt:setBundle basename="resource.smartworksMessage" scope="request" />
+<%
 
 	// 서버에게 lastNoticeId를 기준으로 최근 10개의 Notice항목을 가져오는 기능.
 	NoticeMessage[] noticeMessages = noticeBox.getNoticeMessages();
 	if (noticeMessages != null) {
+		String lastTaskId = null;
+		int count = 0;
 		for (NoticeMessage nMessage : (NoticeMessage[]) noticeBox.getNoticeMessages()) {
+			count++;
 			if (noticeBox != null && noticeBox.getNoticeType() == Notice.TYPE_COMMENT) {
 				CommentInstanceInfo commentInstance = (CommentInstanceInfo) nMessage.getInstance();
+				if(count == 10) lastTaskId = commentInstance.getId();
 				UserInfo owner = commentInstance.getOwner();
 				WorkInfo work = null;
 
@@ -127,6 +136,16 @@
 	<%
 				}
 			}
+		}
+		if(noticeBox.getRemainingLength() > 0){
+%>
+			<ul>
+				<li class="tc pt2">
+					<a class="js_more_notice_list" href="comment_list_box.sw" lastTaskId="<%=lastTaskId%>"><fmt:message key="content.more_running_instance"/></a>
+					<span class="js_progress_span"></span>
+				</li>
+			</ul>
+<%
 		}
 	}
 	%>
