@@ -34,7 +34,6 @@
 <script type="text/javascript" src="./js/jquery.corner.js"></script>
 
 
-
 <script type="text/javascript" src="../js/jquery/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="../js/jquery/jquery.validate.js"></script>
 <script type="text/javascript" src="../js/jquery/jquery.effects.core.js"></script>

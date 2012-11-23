@@ -397,10 +397,12 @@ public class OPSituation {
 		return false;
 	}
 	
-	public static void readHistoryTableToStart(){
+	public static void readHistoryTableToStart(Connection connection){
+		if(SmartUtil.isBlankObject(connection)) return;
+		
 		java.lang.System.out.println("############ START checking PORTAL History To Start  ################");
 
-		Connection con = null;
+//		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
@@ -410,46 +412,47 @@ public class OPSituation {
 		String opSituationUpdateSql = UcityConstant.getQueryByKey("OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			
-			try{
-//			    Context init = new InitialContext();
-//			    Context envinit = (Context)init.lookup("java:comp/env");
-//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//			    con = ds.getConnection();
-				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-			}catch (TbSQLException te){
-				java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
-				te.printStackTrace();
-				java.lang.System.out.println("############ END checking PORTAL History To Start  ################");
-				return;
-			}
+//			try{
+////			    Context init = new InitialContext();
+////			    Context envinit = (Context)init.lookup("java:comp/env");
+////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+////			    con = ds.getConnection();
+//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//			}catch (TbSQLException te){
+//				java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
+//				te.printStackTrace();
+//				java.lang.System.out.println("############ END checking PORTAL History To Start  ################");
+//				return;
+//			}
 //			con.setAutoCommit(false);
 			try{
-				selectPstmt = con.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				selectPstmt = connection.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
 				int count = rs.getRow(); 
 				rs.beforeFirst();
 				if (count != 0) {
+					int processedCount = 0;
 					java.lang.System.out.println("============== PORTAL 이벤트 발생 ===============");
 					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
 					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
-					while(rs.next()) {
+					while(rs.next() && processedCount++ < 20) {
 						try{
 							String situationId = rs.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_SITUATION_ID"));
 							String status = rs.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_STATUS"));
 
-							selectPstmt = con.prepareStatement(opSituationJoinFacilitySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+							selectPstmt = connection.prepareStatement(opSituationJoinFacilitySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							selectPstmt.setString(1, situationId);
 							ResultSet joinFacilityRs = selectPstmt.executeQuery();
 							joinFacilityRs.first();
 							
-							selectPstmt = con.prepareStatement(opSituationJoinSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+							selectPstmt = connection.prepareStatement(opSituationJoinSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							selectPstmt.setString(1, situationId);
 							ResultSet joinRs = selectPstmt.executeQuery();
 							joinRs.last();
 							if(joinRs.getRow()==1){
 								joinRs.first();
-								updatePstmt = con.prepareStatement(opSituationUpdateSql);
+								updatePstmt = connection.prepareStatement(opSituationUpdateSql);
 								updatePstmt.setString(1, situationId);
 								updatePstmt.setString(2, status);
 								boolean result = updatePstmt.execute();
@@ -489,8 +492,8 @@ public class OPSituation {
 					selectPstmt.close();
 				if (updatePstmt != null)
 					updatePstmt.close();
-				if(con != null)
-					con.close();
+//				if(con != null)
+//					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -500,11 +503,11 @@ public class OPSituation {
 
 	}
 
-	public static Map<String,Object> readHistoryTable(String eventId, String status){
+	public static Map<String,Object> readHistoryTable(Connection connection, String eventId, String status){
 		
-		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(status)) return null;
+		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(status)) return null;
 
-		Connection con = null;
+//		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
@@ -515,19 +518,19 @@ public class OPSituation {
 		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ? UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM") : ((status.equals(STATUS_SITUATION_OCCURRED)) ? UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_OCCURRED") : UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PERFORM"));
 		String opSituationUpdateSql = UcityConstant.getQueryByKey("OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
-			try{
-//			    Context init = new InitialContext();
-//			    Context envinit = (Context)init.lookup("java:comp/env");
-//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//			    con = ds.getConnection();
-				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-			}catch (TbSQLException te){
-				te.printStackTrace();
-				return null;
-			}
+//			try{
+////			    Context init = new InitialContext();
+////			    Context envinit = (Context)init.lookup("java:comp/env");
+////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+////			    con = ds.getConnection();
+//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//			}catch (TbSQLException te){
+//				te.printStackTrace();
+//				return null;
+//			}
 			
 			try{
-				selectPstmt = con.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				selectPstmt = connection.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
 				if(!status.equals(STATUS_SITUATION_PROCESSING) && !status.equals(STATUS_SITUATION_OCCURRED))
 					selectPstmt.setString(2, status);
@@ -539,14 +542,14 @@ public class OPSituation {
 					try{
 						OPSituation opSituation = new OPSituation(rs);
 						if(opSituation.isValid()){
-							updatePstmt = con.prepareStatement(opSituationUpdateSql);
+							updatePstmt = connection.prepareStatement(opSituationUpdateSql);
 							updatePstmt.setString(1, opSituation.getSituationId());
 							updatePstmt.setString(2, status);
 							boolean result = updatePstmt.execute();
 							try {
 								if (selectPstmt != null)
 									selectPstmt.close();
-								con.close();
+//								con.close();
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -570,8 +573,8 @@ public class OPSituation {
 					selectPstmt.close();
 				if (updatePstmt != null)
 					updatePstmt.close();
-				if(con != null)
-					con.close();
+//				if(con != null)
+//					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -579,7 +582,7 @@ public class OPSituation {
 		}
 
 		Map<String, Object> dataRecord = new HashMap<String, Object>();
-		if(OPDisplay.checkIfDisplay(eventId, false) || OPDisplay.checkIfDisplay(eventId, true) || OPSms.checkIfDisplay(eventId)){
+		if(OPDisplay.checkIfDisplay(connection, eventId, false) || OPDisplay.checkIfDisplay(connection, eventId, true) || OPSms.checkIfDisplay(connection, eventId)){
 			return dataRecord;
 		}
 

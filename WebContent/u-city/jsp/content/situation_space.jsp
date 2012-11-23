@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="pro.ucity.model.System"%>
 <%@page import="pro.ucity.util.UcityUtil"%>
 <%@page import="net.smartworks.server.engine.factory.SwManagerFactory"%>
 <%@page import="pro.ucity.manager.ucityWorkList.model.UcityWorkList"%>
@@ -199,7 +200,7 @@
 				<div class="js_form_task_approval js_form_task p0 mb15" 
 					<%if(approvalTask==null && (SmartUtil.isBlankObject(taskInstance) || !taskInstance.isApprovalWork())){ %>style="display:none"<%} %>></div>
 				
-				<div class="form_wrap up form_read js_form_content"> </div>
+				<div class="form_wrap js_form_content"> </div>
 				<div class="js_check_completion_notice" style="display:none">
 					<jsp:include page="/jsp/content/upload/check_completion_notice.jsp"></jsp:include>
 				</div>
@@ -282,7 +283,9 @@
 			for(var i=0; i<taskInstances.length; i++){
 				var taskInstance = $(taskInstances[i]);
 				if(taskInstance.attr('formId') === formId && taskInstance.hasClass("completed")){
-					selectedTasks[selectedCount++] = taskInstance;					
+					selectedTasks[selectedCount] = taskInstance;
+					if(taskInstance.attr('taskName') === "<%=System.TASK_NAME_DISPLAY_HISTORY%>")
+						selectedCount++;
 				}
 			}
 			if(!isEmpty(selectedTasks)){
@@ -310,7 +313,7 @@
 			selectedTask.addClass('selected');
 			formContentPointer.css({"left": selectedTask.position().left + selectedTask.outerWidth()/2 + "px"});
 			pworkSpace.find('.js_selected_task_title').html(taskName);
-			var formContentList = formContent.find('ul').append('<li></li>').find('li:last');
+			var formContentList = formContent.find('ul').append('<li class="up mt5"></li>').find('li:last');
 			new SmartWorks.GridLayout({
 				target : formContentList,
 				mode : formMode,

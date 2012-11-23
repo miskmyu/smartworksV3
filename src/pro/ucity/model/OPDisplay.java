@@ -269,30 +269,30 @@ public class OPDisplay {
 		return false;
 	}
 	
-	public static Map<String,Object> checkForDisplay(String eventId, boolean isStopRequest, Map<String,Object> dataRecord){
+	public static Map<String,Object> checkForDisplay(Connection connection, String eventId, boolean isStopRequest, Map<String,Object> dataRecord){
 		
-		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(dataRecord)) return dataRecord;
+		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(dataRecord)) return dataRecord;
 
-		Connection con = null;
+//		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
 		String opDisplaySelectSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_STOP_CHECK") : UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_CHECK");
 		String opDisplayUpdateSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_STOP_READ_CONFIRM") : UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
-			try{
-//			    Context init = new InitialContext();
-//			    Context envinit = (Context)init.lookup("java:comp/env");
-//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//			    con = ds.getConnection();
-				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-			}catch (TbSQLException te){
-				te.printStackTrace();
-				return null;
-			}
+//			try{
+////			    Context init = new InitialContext();
+////			    Context envinit = (Context)init.lookup("java:comp/env");
+////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+////			    con = ds.getConnection();
+//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//			}catch (TbSQLException te){
+//				te.printStackTrace();
+//				return null;
+//			}
 			
 			try{
-				selectPstmt = con.prepareStatement(opDisplaySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				selectPstmt = connection.prepareStatement(opDisplaySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
@@ -301,13 +301,13 @@ public class OPDisplay {
 				if(count>0) {
 					try{
 						String displayId = rs.getString(UcityConstant.getQueryByKey("OPDisplay.FIELD_NAME_DISPLAY_ID"));
-						updatePstmt = con.prepareStatement(opDisplayUpdateSql);
+						updatePstmt = connection.prepareStatement(opDisplayUpdateSql);
 						updatePstmt.setString(1, eventId);
 						boolean result = updatePstmt.execute();
 						try {
 							if (selectPstmt != null)
 								selectPstmt.close();
-							con.close();
+//							con.close();
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -327,8 +327,8 @@ public class OPDisplay {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-				if(con != null)
-					con.close();
+//				if(con != null)
+//					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -338,30 +338,30 @@ public class OPDisplay {
 		
 	}
 	
-	public static boolean checkIfDisplay(String eventId, boolean isStopRequest){
+	public static boolean checkIfDisplay(Connection connection, String eventId, boolean isStopRequest){
 
-		if(SmartUtil.isBlankObject(eventId)) return false;
+		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId)) return false;
 
-		Connection con = null;
+//		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
 		String opDisplaySelectSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_STOP_CHECK") : UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_CHECK");
 		String opDisplayUpdateSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_STOP_READ_CONFIRM") : UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
-			try{
-//			    Context init = new InitialContext();
-//			    Context envinit = (Context)init.lookup("java:comp/env");
-//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//			    con = ds.getConnection();
-				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-			}catch (TbSQLException te){
-				te.printStackTrace();
-				return false;
-			}
+//			try{
+////			    Context init = new InitialContext();
+////			    Context envinit = (Context)init.lookup("java:comp/env");
+////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+////			    con = ds.getConnection();
+//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//			}catch (TbSQLException te){
+//				te.printStackTrace();
+//				return false;
+//			}
 			
 			try{
-				selectPstmt = con.prepareStatement(opDisplaySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				selectPstmt = connection.prepareStatement(opDisplaySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
@@ -371,7 +371,7 @@ public class OPDisplay {
 					try {
 						if (selectPstmt != null)
 							selectPstmt.close();
-						con.close();
+//						con.close();
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -387,8 +387,8 @@ public class OPDisplay {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-				if(con != null)
-					con.close();
+//				if(con != null)
+//					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -398,28 +398,28 @@ public class OPDisplay {
 		
 	}
 	
-	public static Map<String,Object> readHistoryTable(String eventId, String displayId){
+	public static Map<String,Object> readHistoryTable(Connection connection, String eventId, String displayId){
 		
-		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(displayId)) return null;
+		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(displayId)) return null;
 
-		Connection con = null;
+//		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
 		String opDisplaySelectSql = UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_PERFORM");
 		try {
-			try{
-//			    Context init = new InitialContext();
-//			    Context envinit = (Context)init.lookup("java:comp/env");
-//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//			    con = ds.getConnection();
-				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-			}catch (TbSQLException te){
-				te.printStackTrace();
-				return null;
-			}
+//			try{
+////			    Context init = new InitialContext();
+////			    Context envinit = (Context)init.lookup("java:comp/env");
+////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+////			    con = ds.getConnection();
+//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//			}catch (TbSQLException te){
+//				te.printStackTrace();
+//				return null;
+//			}
 			
 			try{
-				selectPstmt = con.prepareStatement(opDisplaySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				selectPstmt = connection.prepareStatement(opDisplaySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
 				selectPstmt.setString(2, displayId);
 				ResultSet rs = selectPstmt.executeQuery();				
@@ -433,7 +433,7 @@ public class OPDisplay {
 							try {
 								if (selectPstmt != null)
 									selectPstmt.close();
-								con.close();
+//								con.close();
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -453,8 +453,8 @@ public class OPDisplay {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-				if(con != null)
-					con.close();
+//				if(con != null)
+//					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -20,6 +20,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import com.tmax.tibero.jdbc.TbSQLException;
+
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.TaskInstance;
@@ -58,7 +60,7 @@ public class UcityUtil {
 	public UcityUtil() {
 		super();
 	}
-	
+
 	public static boolean isAbendable(ProcessWorkInstance instance){
 		if(SmartUtil.isBlankObject(instance) || instance.getStatus() == Instance.STATUS_COMPLETED || instance.getStatus() == Instance.STATUS_ABORTED || SmartUtil.isBlankObject(instance.getTasks())) return false;
 		TaskInstanceInfo[] tasks = instance.getTasks();
@@ -373,44 +375,34 @@ public class UcityUtil {
 		SwServiceFactory.getInstance().getInstanceService().abendTaskInstance(requestBody, null);
 	}
 	
-	public static Map<String,Object> readTaskTable(String tableName, String eventId, String status, String deviceId) throws Exception{
+	public static Map<String,Object> readTaskTable(Connection connection, String tableName, String eventId, String status, String deviceId) throws Exception{
 		
 		Map<String,Object> dataRecord = null;
 		int tableId = System.getTableId(tableName);
 		switch(tableId){
 		case System.TABLE_ID_ADAPTER_HISTORY:
-			dataRecord = Adapter.readHistoryTable(eventId, deviceId, status);
+			dataRecord = Adapter.readHistoryTable(connection, eventId, deviceId, status);
 			break;
 		case System.TABLE_ID_COMMID_TRACE:
-			dataRecord = CMHistory.readHistoryTable(eventId, status);
+			dataRecord = CMHistory.readHistoryTable(connection, eventId, status);
 			break;
 		case System.TABLE_ID_OPPORTAL_SITUATION:
-			dataRecord = OPSituation.readHistoryTable(eventId, status);
+			dataRecord = OPSituation.readHistoryTable(connection, eventId, status);
 			break;
 		case System.TABLE_ID_OPPORTAL_DISPLAY:
-			dataRecord = OPDisplay.readHistoryTable(eventId, status);
+			dataRecord = OPDisplay.readHistoryTable(connection, eventId, status);
 			break;
 		case System.TABLE_ID_OPPORTAL_SMS:
-			dataRecord = OPSms.readHistoryTable(eventId, deviceId);
+			dataRecord = OPSms.readHistoryTable(connection, eventId, deviceId);
 			break;
 		case System.TABLE_ID_INTCON_SITUATION:
-			dataRecord = ICSituation.readHistoryTable(eventId, status);
+			dataRecord = ICSituation.readHistoryTable(connection, eventId, status);
 			break;
 		case System.TABLE_ID_DEVMID_SEND_STATUS:
-			dataRecord = DMHistory.readHistoryTable(eventId, status, deviceId);
+			dataRecord = DMHistory.readHistoryTable(connection, eventId, status, deviceId);
 			break;
 		}
 		return dataRecord;
-	}
-	public static void stopAllThread() throws Exception{
-		if(SmartUtil.isBlankObject(UcityUtil.pollingQueue)) 
-			return;
-		for(int i=0; i<pollingQueue.size(); i++){
-			PollingModel pollingModel = pollingQueue.get(i);
-			java.lang.System.out.println("=============== KILL THREAD BEGIN ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
-			pollingModel.getThread().stop();
-			java.lang.System.out.println("=============== KILL THREAD DONE ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
-		}
 	}
 	synchronized public static void resumePollingForRunningTasks(String processId) throws Exception{
 		
@@ -631,6 +623,16 @@ public class UcityUtil {
 		}
 		
 	}
+	public static void stopAllThread() throws Exception{
+		if(SmartUtil.isBlankObject(UcityUtil.pollingQueue)) 
+			return;
+		for(int i=0; i<pollingQueue.size(); i++){
+			PollingModel pollingModel = pollingQueue.get(i);
+			java.lang.System.out.println("=============== KILL THREAD BEGIN ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
+			pollingModel.getThread().stop();
+			java.lang.System.out.println("=============== KILL THREAD DONE ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
+		}
+	}
 	synchronized public static void invokePollingForRunningTask(String eventId, String tableName, String status, String displayId, String deviceId, String smsId, String timeout, TaskInstance taskInstance) throws Exception{
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(taskInstance)) return;
 		
@@ -660,18 +662,29 @@ public class UcityUtil {
 				TaskInstance taskInstance = thisModel.getTaskInstance();
 				long timeout = thisModel.getTimeout();
 				Map<String, Object> dataRecord = null;
-				IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();		
+				Connection connection = null;
+				try{
+//				    Context init = new InitialContext();
+//				    Context envinit = (Context)init.lookup("java:comp/env");
+//				    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//				    connection = ds.getConnection();
+					connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+				}catch (Exception e){
+					timeout = 0;
+					java.lang.System.out.println("[ERROR] DB접속 끊김.Thread 종료");
+				}
+				IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();					
 				while(timeout > 0 && SmartUtil.isBlankObject(dataRecord) && !isPollingInterrupted(Thread.currentThread())) {
 					java.lang.System.out.println("############ START checking Table=" + tableName + ", Event Id=" + eventId + ", Timeout=" + timeout + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 					try {
 						taskInstance = (TaskInstance)instanceService.getTaskInstanceById(taskInstance.getWork().getId(), taskInstance.getId());
 						if(!taskInstance.isRunning()) break;
 						if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_DISPLAY)
-							dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId, deviceId);
+							dataRecord = UcityUtil.readTaskTable(connection, tableName, eventId, displayId, deviceId);
 						else if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_SMS)
-							dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId, smsId);
+							dataRecord = UcityUtil.readTaskTable(connection, tableName, eventId, displayId, smsId);
 						else
-							dataRecord = UcityUtil.readTaskTable(tableName, eventId, status, deviceId);
+							dataRecord = UcityUtil.readTaskTable(connection, tableName, eventId, status, deviceId);
 					} catch(Exception e) {
 						if(timeout<System.DEFAULT_POLLING_INTERVAL){
 							timeout=0;
@@ -706,12 +719,12 @@ public class UcityUtil {
 						}
 					}else{
 						if(System.getTableId(tableName)==System.TABLE_ID_OPPORTAL_SITUATION && OPSituation.isDisplayableStatus(status)){
-							if(OPDisplay.checkIfDisplay(eventId, false))
-								dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
-							else if(OPDisplay.checkIfDisplay(eventId, true))
-								dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);
-							if(OPSms.checkIfDisplay(eventId))
-								dataRecord = OPSms.checkForDisplay(eventId, dataRecord);
+							if(OPDisplay.checkIfDisplay(connection, eventId, false))
+								dataRecord = OPDisplay.checkForDisplay(connection, eventId, false, dataRecord);
+							else if(OPDisplay.checkIfDisplay(connection, eventId, true))
+								dataRecord = OPDisplay.checkForDisplay(connection, eventId, true, dataRecord);	
+							if(OPSms.checkIfDisplay(connection, eventId))
+								dataRecord = OPSms.checkForDisplay(connection, eventId, dataRecord);
 						}
 						try{
 						java.lang.System.out.println("############ START Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
@@ -740,6 +753,14 @@ public class UcityUtil {
 					}
 				}
 				
+				if(connection != null){
+					try{
+						java.lang.System.out.println("#########Connection 끊김#########");
+						connection.close();
+					}catch (Exception e){
+						e.printStackTrace();						
+					}
+				}
 				if(timeout==0 && SmartUtil.isBlankObject(dataRecord)){
 					java.lang.System.out.println("############ END(TIMEOUT) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 					try{

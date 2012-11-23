@@ -302,28 +302,28 @@ public class CMHistory {
 		return false;
 	}
 
-	public static Map<String,Object> readHistoryTable(String eventId, String status){
+	public static Map<String,Object> readHistoryTable(Connection connection, String eventId, String status){
 		
-		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(status)) return null;
+		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(status)) return null;
 
-		Connection con = null;
+//		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
 		String cmHistorySelectSql = (status.equals(MSG_TYPE_OCCURRENCE)) ? UcityConstant.getQueryByKey("CMHistory.QUERY_SELECT_FOR_OCCURRENCE_PERFORM") : UcityConstant.getQueryByKey("CMHistory.QUERY_SELECT_FOR_RELEASE_PERFORM");
 		try {
-			try{
-//			    Context init = new InitialContext();
-//			    Context envinit = (Context)init.lookup("java:comp/env");
-//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//			    con = ds.getConnection();
-				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-			}catch (TbSQLException te){
-				te.printStackTrace();
-				return null;
-			}
+//			try{
+////			    Context init = new InitialContext();
+////			    Context envinit = (Context)init.lookup("java:comp/env");
+////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+////			    con = ds.getConnection();
+//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//			}catch (TbSQLException te){
+//				te.printStackTrace();
+//				return null;
+//			}
 			
 			try{
-				selectPstmt = con.prepareStatement(cmHistorySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				selectPstmt = connection.prepareStatement(cmHistorySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
@@ -336,7 +336,7 @@ public class CMHistory {
 							try {
 								if (selectPstmt != null)
 									selectPstmt.close();
-								con.close();
+//								con.close();
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -356,8 +356,8 @@ public class CMHistory {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-				if(con != null)
-					con.close();
+//				if(con != null)
+//					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

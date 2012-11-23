@@ -38,3 +38,8 @@ body{ height:100%; width:99.5%;}
 .smartOutput a:visited {color:#666666;text-decoration:none;}
 .smartOutput a:active {color:#666666;text-decoration:none;}
 .smartOutput a:hover {color:#666666;text-decoration:none;}
+
+/* U-city SmartInput Layout */
+#smartInput .title {background: url("../../u-city/images/portal_proces.png") no-repeat -349px -370px transparent; font-size:14px; padding:0 0 0 20px; font-weight:bold}
+#smartInput .dep2 { margin:15px 5px; word-wrap: break-word}
+#smartInput .dep2 .title {background: url("../../u-city/images/portal_proces.png") no-repeat -349px -399px transparent; color:#4c6542; font-weight:bold; font-size:12px; padding:0 0 5px 10px}

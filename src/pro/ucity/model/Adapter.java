@@ -419,7 +419,7 @@ public class Adapter {
 			if(!this.stopDisplay)
 				this.displayContent = tokens[tokens.length-1];
 			else
-				this.displayContent = "표출요청중지";
+				this.displayContent = "표출중지요청";
 			break;
 		}
 	}
@@ -561,44 +561,46 @@ public class Adapter {
 		return false;
 	}
 	
-	synchronized public static void readHistoryTableToStart(){
+	synchronized public static void readHistoryTableToStart(Connection connection){
+		if(SmartUtil.isBlankObject(connection)) return;
+		
 		java.lang.System.out.println("############ START checking ADAPTER History To Start  ################");
 
-		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
 		String adapterSelectSql = UcityConstant.getQueryByKey("Adapter.QUERY_SELECT_FOR_START");
 		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
-			try{
-//			    Context init = new InitialContext();
-//			    Context envinit = (Context)init.lookup("java:comp/env");
-//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//			    con = ds.getConnection();
-				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-			}catch (TbSQLException te){
-				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
-				te.printStackTrace();
-				java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
-				return;
-			}
+//			try{
+////			    Context init = new InitialContext();
+////			    Context envinit = (Context)init.lookup("java:comp/env");
+////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+////			    con = ds.getConnection();
+//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//			}catch (TbSQLException te){
+//				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+//				te.printStackTrace();
+//				java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+//				return;
+//			}
 //			con.setAutoCommit(false);
 			
 			try{
-				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				selectPstmt = connection.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last();
 				int count = rs.getRow(); 
 				rs.beforeFirst();
 				if (count != 0) {
+					int processedCount = 0;
 					java.lang.System.out.println("============== ADAPTER 이벤트 발생 ===============");
 					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
 					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
-					while(rs.next()) {
+					while(rs.next() && processedCount++ <20) {
 						try{
 							String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
-							updatePstmt = con.prepareStatement(adapterUpdateSql);
+							updatePstmt = connection.prepareStatement(adapterUpdateSql);
 							updatePstmt.setString(1, communicationId);
 							boolean result = updatePstmt.execute();
 							Adapter adapter = new Adapter(rs);
@@ -649,8 +651,8 @@ public class Adapter {
 					selectPstmt.close();
 				if (updatePstmt != null)
 					updatePstmt.close();
-				if(con != null)
-					con.close();
+//				if(con != null)
+//					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -659,34 +661,34 @@ public class Adapter {
 		}
 	}
 	
-	public static Map<String,Object> readHistoryTable(String eventId, String deviceId, String status){
-		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(Service.getDeviceCodeByDeviceId(deviceId))) return null;
+	public static Map<String,Object> readHistoryTable(Connection connection, String eventId, String deviceId, String status){
+		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(Service.getDeviceCodeByDeviceId(deviceId))) return null;
 
 		for(int i=eventId.length(); i < 20; i++){
 			eventId = eventId + "0";
 		}
 		
-		Connection con = null;
+//		Connection con = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
 		String adapterSelectSql = UcityConstant.getQueryByKey("Adapter.QUERY_SELECT_FOR_PERFORM");
 		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
-			try{
-//			    Context init = new InitialContext();
-//			    Context envinit = (Context)init.lookup("java:comp/env");
-//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//			    con = ds.getConnection();
-				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-
-			}catch (TbSQLException te){
-				te.printStackTrace();
-				return null;
-			}
+//			try{
+////			    Context init = new InitialContext();
+////			    Context envinit = (Context)init.lookup("java:comp/env");
+////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+////			    con = ds.getConnection();
+//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//
+//			}catch (TbSQLException te){
+//				te.printStackTrace();
+//				return null;
+//			}
 			
 			try{
-				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				selectPstmt = connection.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, Service.getDeviceCodeByDeviceId(deviceId));
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
@@ -699,12 +701,12 @@ public class Adapter {
 							if(adapter.isValid(eventId, status)){
 								try {
 									String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
-									updatePstmt = con.prepareStatement(adapterUpdateSql);
+									updatePstmt = connection.prepareStatement(adapterUpdateSql);
 									updatePstmt.setString(1, communicationId);
 									boolean result = updatePstmt.execute();
 									if (selectPstmt != null)
 										selectPstmt.close();
-									con.close();
+//									con.close();
 								} catch (SQLException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -726,8 +728,8 @@ public class Adapter {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-				if(con != null)
-					con.close();
+//				if(con != null)
+//					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
