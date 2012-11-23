@@ -25,6 +25,7 @@ import com.tmax.tibero.jdbc.TbSQLException;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.TaskInstance;
+import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.PWInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
@@ -36,6 +37,8 @@ import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.info.SmartFormInfo;
 import net.smartworks.model.work.info.SmartTaskInfo;
+import net.smartworks.server.engine.common.model.Property;
+import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
@@ -330,7 +333,19 @@ public class UcityUtil {
 		requestBody.put("formId", form.getId());
 		requestBody.put("formName", form.getName());
 		if(!SmartUtil.isBlankObject(data.get("externalDisplay"))){
-			requestBody.put("externalDisplay", data.get("externalDisplay"));
+			Property[] extendedProperties = taskInstance.getWorkInstance().getExtentedProperty();
+			String externalDisplay = "";
+			if(!SmartUtil.isBlankObject(extendedProperties)){
+				for(int i=0; i<extendedProperties.length; i++){
+					Property extendedProperty = extendedProperties[i];
+					if(extendedProperty.getName().equals("externalDisplay")){
+						externalDisplay = CommonUtil.toNotNull(extendedProperty.getValue());
+						externalDisplay = SmartUtil.combineStrings(externalDisplay, (String)data.get("externalDisplay"));
+					}
+				}
+			}
+			
+			requestBody.put("externalDisplay", externalDisplay);
 		}
 		if(!SmartUtil.isBlankObject(data.get("isSms")) && data.get("isSms") == "true"){
 			requestBody.put("isSms", data.get("isSms"));
