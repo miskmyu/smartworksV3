@@ -9813,4 +9813,34 @@ public class InstanceServiceImpl implements IInstanceService {
 		return getUcityAuditTaskCountsByTasks(runningOnly, tasks);
 		
 	}
+	@Override
+	public Property[] getUcityExtendedPropertyByTaskInstId(String taskInstId) throws Exception {
+		
+		if (CommonUtil.isEmpty(taskInstId))
+			return null;
+		TskTask task = SwManagerFactory.getInstance().getTskManager().getTask("", taskInstId, IManager.LEVEL_LITE);
+		if (CommonUtil.isEmpty(task))
+			return null;
+		
+		String prcInstId = task.getProcessInstId();
+		
+		UcityWorkListCond ucityWorkListCond = new UcityWorkListCond();
+		ucityWorkListCond.setPrcInstId(prcInstId);
+		UcityWorkList[] workLists = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkLists("", ucityWorkListCond, null);
+		
+		if (CommonUtil.isEmpty(workLists))
+			return null;
+		
+		Property p1 = new Property("serviceName",workLists[0].getServiceName());
+		Property p2 = new Property("eventName",workLists[0].getEventName());
+		Property p3 = new Property("type",workLists[0].getType());
+		Property p4 = new Property("externalDisplay",workLists[0].getExternalDisplay());
+		Property p5 = new Property("eventPlace",workLists[0].getEventPlace());
+		Property p6 = new Property("isSms", CommonUtil.toBoolean(workLists[0].getIsSms())+"");
+		Property p7 = new Property("eventId",workLists[0].getEventId());
+		Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7};
+		
+		return properties;
+	}
+	
 }

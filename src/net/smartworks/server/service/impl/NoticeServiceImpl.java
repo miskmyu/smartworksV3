@@ -675,6 +675,7 @@ public class NoticeServiceImpl implements INoticeService {
 					assignedCond.setRefId(lastNoticeId);//TaskId
 					PublishNotice[] lastNotice = getPublishNoticeManager().getPublishNotices(user.getId(), assignedCond, null);
 					if (lastNotice != null && lastNotice.length != 0) {
+						assignedCond.setRefId(null);
 						Date lastTaskCreationDate = lastNotice[0].getCreationDate();
 						assignedCond.setCreationDateTo(lastTaskCreationDate);
 					}

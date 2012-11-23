@@ -8,6 +8,14 @@
 						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 						http://www.springframework.org/schema/aop
 						http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+		<!-- semiteq Advisor -->
+<!-- <beans:bean id="tskManagerSemiteqAdvisor" class="net.smartworks.server.engine.process.task.manager.impl.TskManageSemiteqAdvisorImpl"/>
+	<aop:config>
+		<aop:aspect id="semiteqAdvisor" ref="tskManagerSemiteqAdvisor">
+			<aop:pointcut id="semiteqMethod" expression="target(net.smartworks.server.engine.process.task.manager.impl.TskManagerImpl)"/>
+			<aop:around pointcut-ref="semiteqMethod" method="invoke"/>
+		</aop:aspect>
+	</aop:config>  -->
 	
 	<!-- ucity Advisor -->
 <!--<beans:bean id="tskManagerUcityAdvisor" class="net.smartworks.server.engine.process.task.manager.impl.TskManageUcityAdvisorImpl"/>
