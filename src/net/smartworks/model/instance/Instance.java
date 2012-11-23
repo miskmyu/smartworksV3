@@ -4,6 +4,7 @@ import net.smartworks.model.community.User;
 import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.Work;
+import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.util.LocalDate;
 
 public class Instance {
@@ -51,6 +52,8 @@ public class Instance {
 	private LocalDate createdDate;
 	private User lastModifier;
 	private LocalDate lastModifiedDate;
+
+	private Property[] extentedProperty;
 
 	public String getId() {
 		return id;
@@ -120,6 +123,12 @@ public class Instance {
 	}
 	public void setAccessPolicy(AccessPolicy accessPolicy) {
 		this.accessPolicy = accessPolicy;
+	}
+	public Property[] getExtentedProperty() {
+		return extentedProperty;
+	}
+	public void setExtentedProperty(Property[] extentedProperty) {
+		this.extentedProperty = extentedProperty;
 	}
 	public Instance() {
 		super();
