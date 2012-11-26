@@ -63,7 +63,6 @@ function submitForms() {
 		// 서비스요청 프로그래스바를 나타나게 한다....
 		var progressSpan = newIwork.find('.js_progress_span');
 		smartPop.progressCont(progressSpan);
-		
 		// create_new_iwork.sw서비스를 요청한다..
 		$.ajax({
 			url : url,

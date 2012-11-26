@@ -86,20 +86,24 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	if(readOnly){
 		$user = $('<div class="form_value" style="width:' + valueWidth + '%"><span></span></div>');
 		var viewUsersHtml = '';
-		for(var i=0; i<users.length; i++) {
-			var separator = ', ';
-			var href = '';
-			if(isEmailAddress(users[i].userId)){
-				href = 'user_space.sw?cid=us.sp.';
-			}else if(users[i].userId.substring(0,6) === "group_"){
-				href = 'group_space.sw?cid=gp.sp.';
-			}else if(users[i].userId.substring(0,5) === "dept_"){
-				href = 'department_space.sw?cid=dp.sp.';
+		if(!isEmpty(usersHtml)){
+			viewUsersHtml = usersHtml;
+		}else{
+			for(var i=0; i<users.length; i++) {
+				var separator = ', ';
+				var href = '';
+				if(isEmailAddress(users[i].userId)){
+					href = 'user_space.sw?cid=us.sp.';
+				}else if(users[i].userId.substring(0,6) === "group_"){
+					href = 'group_space.sw?cid=gp.sp.';
+				}else if(users[i].userId.substring(0,5) === "dept_"){
+					href = 'department_space.sw?cid=dp.sp.';
+				}
+				href = href + users[i].userId + '&wid=' + users[i].userId;
+				if(i == users.length - 1)
+					separator = '';
+				viewUsersHtml = viewUsersHtml + '<a href="' + href + '"><span>' + users[i].longName + separator + '</span></a>';
 			}
-			href = href + users[i].userId + '&wid=' + users[i].userId;
-			if(i == users.length - 1)
-				separator = '';
-			viewUsersHtml = viewUsersHtml + '<a href="' + href + '"><span>' + users[i].longName + separator + '</span></a>';
 		}
 		$user.find('span').html(viewUsersHtml);
 	}else{	
