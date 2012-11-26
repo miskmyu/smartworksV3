@@ -8,7 +8,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head></head>
 <body>
-<%!public static Object getBean(String beanName, HttpServletRequest request) {
+<%-- <%!public static Object getBean(String beanName, HttpServletRequest request) {
 
 	WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
 
@@ -17,10 +17,11 @@
 <%
 	UcityAuthenticationSuccesHandler uas = (UcityAuthenticationSuccesHandler)getBean("authenticationSuccessHandler", request);
 	uas.setDefaultTargetUrl("/situationAudit.sw");
-%>
+%> --%>
 <script type="text/javascript">
 // Popup window code
-	window.open('http://bpm.cnuct.kr:8862/smartworksV3/situationAudit.sw','windowPop','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=1000,height=768 top=10 left=10');
+	window.open('http://bpm.cnuct.kr:8862/smartworksV3/situationAudit.sw?page=audit','windowPop','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=1000,height=768 top=10 left=10');
+
 </script>
 </body>
 </html>

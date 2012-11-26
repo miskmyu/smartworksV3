@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="pro.ucity.model.System"%>
 <%@page import="pro.ucity.util.UcityUtil"%>
 <%@page import="net.smartworks.server.engine.factory.SwManagerFactory"%>
 <%@page import="pro.ucity.manager.ucityWorkList.model.UcityWorkList"%>
@@ -282,7 +283,9 @@
 			for(var i=0; i<taskInstances.length; i++){
 				var taskInstance = $(taskInstances[i]);
 				if(taskInstance.attr('formId') === formId && taskInstance.hasClass("completed")){
-					selectedTasks[selectedCount++] = taskInstance;					
+					selectedTasks[selectedCount] = taskInstance;
+					if(taskInstance.attr('taskName') === "<%=System.TASK_NAME_DISPLAY_HISTORY%>")
+						selectedCount++;
 				}
 			}
 			if(!isEmpty(selectedTasks)){

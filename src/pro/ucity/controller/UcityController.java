@@ -8,7 +8,6 @@
 
 package pro.ucity.controller;
 
-import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,21 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.controller.ExceptionInterceptor;
-import net.smartworks.model.instance.Instance;
-import net.smartworks.model.instance.info.InstanceInfo;
-import net.smartworks.model.sera.Team;
-import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.server.engine.common.util.CommonUtil;
-import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.service.ISmartWorks;
-import net.smartworks.service.impl.SmartWorks;
-import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,7 +44,9 @@ public class UcityController extends ExceptionInterceptor {
 	public ModelAndView loginc(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mnv = new ModelAndView();
 		String type = CommonUtil.toNotNull(request.getParameter("type"));
+		String referer = CommonUtil.toNotNull(request.getParameter("referer"));
 		mnv.addObject("type", type);
+		mnv.addObject("_to", referer);
 		mnv.setViewName("u-city/jsp/login.jsp");
 		return mnv;
 	}

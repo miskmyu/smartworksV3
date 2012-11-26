@@ -680,6 +680,10 @@ public class UcityUtil {
 				Map<String, Object> dataRecord = null;
 				Connection connection = null;
 				try{
+//				    Context init = new InitialContext();
+//				    Context envinit = (Context)init.lookup("java:comp/env");
+//				    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//				    connection = ds.getConnection();
 					connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 				}catch (Exception e){
 					timeout = 0;
@@ -734,8 +738,7 @@ public class UcityUtil {
 							if(OPDisplay.checkIfDisplay(connection, eventId, false))
 								dataRecord = OPDisplay.checkForDisplay(connection, eventId, false, dataRecord);
 							else if(OPDisplay.checkIfDisplay(connection, eventId, true))
-								dataRecord = OPDisplay.checkForDisplay(connection, eventId, true, dataRecord);
-							
+								dataRecord = OPDisplay.checkForDisplay(connection, eventId, true, dataRecord);	
 							if(OPSms.checkIfDisplay(connection, eventId))
 								dataRecord = OPSms.checkForDisplay(connection, eventId, dataRecord);
 						}
@@ -768,6 +771,7 @@ public class UcityUtil {
 				
 				if(connection != null){
 					try{
+						java.lang.System.out.println("#########Connection 끊김#########");
 						connection.close();
 					}catch (Exception e){
 						e.printStackTrace();						

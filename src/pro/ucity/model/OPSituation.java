@@ -432,10 +432,11 @@ public class OPSituation {
 				int count = rs.getRow(); 
 				rs.beforeFirst();
 				if (count != 0) {
+					int processedCount = 0;
 					java.lang.System.out.println("============== PORTAL 이벤트 발생 ===============");
 					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
 					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
-					while(rs.next()) {
+					while(rs.next() && processedCount++ < 20) {
 						try{
 							String situationId = rs.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_SITUATION_ID"));
 							String status = rs.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_STATUS"));
