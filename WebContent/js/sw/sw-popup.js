@@ -745,7 +745,7 @@ smartPop = {
 	createWorkDefinition : function(parentId, parentName, workId, workName, workTypeName, workDesc, categoryId, groupId){
 		var url = "pop_new_work_definition.sw?parentId="+parentId+"&parentName="+parentName + "&workId=" + workId 
 						+ "&workName=" + workName + "&workTypeName=" + workTypeName + "&workDesc=" + workDesc + "&categoryId=" + categoryId + "&groupId=" + groupId;
-		$.get( url, function(data){
+		$.get( url, { contentType : "charset=utf-8"}, function(data){
 			$(data).modal({
 				opacity: 10,
 				overlayCss: {backgroundColor:"#000"},

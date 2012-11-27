@@ -140,6 +140,8 @@ public class OPSituation {
 			return "처리";
 		}else if(this.status.equals(STATUS_SITUATION_RELEASE)){
 			return "종료";
+		}else if(this.status.equals(STATUS_SITUATION_CANCEL)){
+			return "취소";
 		}
 		return "기타";
 	}

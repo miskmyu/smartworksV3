@@ -74,50 +74,50 @@ public class System {
 		if(process<0 || process>MAX_PROCESS) return null;
 		
 		//dev
-		switch(process){
-		case PROCESS_ENV_WEAHTER:
-			return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
-		case PROCESS_ENV_ATMOSPHERE:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_ENV_WATER:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_TRAFFIC_ILLEGAL_PARKING:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_TRAFFIC_INCIDENT:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_DISASTER_FIRE:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_CRIME_CCTV:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_CRIME_VEHICLES:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_WATERWORKS_LEAKS:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		case PROCESS_FACILITY_MANAGEMENT:
-			return "pkg_9564849550184543b06fa46e3290f296";
-		
-//		개발서버
 //		switch(process){
 //		case PROCESS_ENV_WEAHTER:
-//			return "pkg_6247af34746044228556b5366752141e";
+//			return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
 //		case PROCESS_ENV_ATMOSPHERE:
-//			return "pkg_95c0181fcb3f47429fadc3ea50f0d803";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_ENV_WATER:
-//			return "pkg_116c47c171f74fcbaaa69381e8730f25";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_TRAFFIC_ILLEGAL_PARKING:
-//			return "pkg_356e545e04444974bf1c07fadc073a77";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_TRAFFIC_INCIDENT:
-//			return "pkg_e267443deb0b471586759d7dad83bcf4";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_DISASTER_FIRE:
-//			return "pkg_492f63ad6d9b480b8535b0bdb7a2d9a9";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_CRIME_CCTV:
-//			return "pkg_17bb1abf2809465fbde08db85c3103a0";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_CRIME_VEHICLES:
-//			return "pkg_d6c93e05baf546c5a6901328e75a2e12";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_WATERWORKS_LEAKS:
-//			return "pkg_1ef67bf9a18b4ee4bfb86d62504a1223";
+//			return "pkg_9564849550184543b06fa46e3290f296";
 //		case PROCESS_FACILITY_MANAGEMENT:
-//			return "pkg_efa10156dc8445ee8a89df5e95493791";
+//			return "pkg_9564849550184543b06fa46e3290f296";
+		
+//		개발서버
+		switch(process){
+		case PROCESS_ENV_WEAHTER:
+			return "pkg_6247af34746044228556b5366752141e";
+		case PROCESS_ENV_ATMOSPHERE:
+			return "pkg_95c0181fcb3f47429fadc3ea50f0d803";
+		case PROCESS_ENV_WATER:
+			return "pkg_116c47c171f74fcbaaa69381e8730f25";
+		case PROCESS_TRAFFIC_ILLEGAL_PARKING:
+			return "pkg_356e545e04444974bf1c07fadc073a77";
+		case PROCESS_TRAFFIC_INCIDENT:
+			return "pkg_f9b10b352d7b4136a3f7bdd8682a176a";
+		case PROCESS_DISASTER_FIRE:
+			return "pkg_696d2e135f804dd5a2e652d0b10ef8a3";
+		case PROCESS_CRIME_CCTV:
+			return "pkg_ac7357a828eb46b9bd2eaa1d295a42e7";
+		case PROCESS_CRIME_VEHICLES:
+			return "pkg_59a3f0787cb749bbaaa518d471bee01a";
+		case PROCESS_WATERWORKS_LEAKS:
+			return "pkg_a0d39535ff9540e7ae95fdb6bf82329f";
+		case PROCESS_FACILITY_MANAGEMENT:
+			return "pkg_c161ed7d5e6942a2a4e5af43fdc50af4";
 		
 		}
 		
@@ -339,8 +339,13 @@ public class System {
 		return new String[]{ "기상특보 종료",
 							"대기특보 종료",
 							"수질특보 종료",
+							"불법주정차 종료",
+							"돌발상황 종료",
+							"방범 CCTV 종료",
+							"용의차량추적상황 종료",
 							"상수도누수 종료",
 							"시설물관리 종료",
+							"화재특보 종료",
 							"상황종료",
 							"통합관제 종료표출",
 							"종료 SMS발송",
