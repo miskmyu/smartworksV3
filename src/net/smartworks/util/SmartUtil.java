@@ -517,6 +517,16 @@ public class SmartUtil {
 		return info;
 	}
 	
+	public static String getUsersHtml(UserInfo[] users){
+		if(SmartUtil.isBlankObject(users)) return "";
+		String usersHtml = "";
+		for(int i=0; i<users.length; i++){
+			UserInfo user = users[i];
+			usersHtml = usersHtml + "<a href='user_space.sw?cid=us.sp." + user.getId() + "'><span>" + user.getLongName() + ((i<users.length-1) ? ", " : "") + "</span></a>";			
+		}
+		return usersHtml;
+	}
+	
 	public static String getFilesDetailInfo(List<Map<String, String>> files, String workId, String taskInstId, String recordId){
 		String html = "<ul>";
 		if(SmartUtil.isBlankObject(files)) return html;

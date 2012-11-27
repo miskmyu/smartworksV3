@@ -611,13 +611,15 @@ function loadTaskApprovalFields() {
 			
 			var subjectTitle = taskApprovalField.attr("subjectTitle");
 			var forwardeeTitle = taskApprovalField.attr("forwardeeTitle");
+			var forwardees = taskApprovalField.attr("forwardees");
+			var isLazyReferenceTaskTitle = taskApprovalField.attr("isLazyReferenceTaskTitle");
+			var isLazyReferenceTask = taskApprovalField.attr("isLazyReferenceTask");
 			var commentsTitle = taskApprovalField.attr("commentsTitle");
 			var drafterTitle = taskApprovalField.attr("drafterTitle");
 			var draftDateTitle = taskApprovalField.attr("draftDateTitle");
 			var subject = taskApprovalField.attr("subject");
 			var comments = taskApprovalField.attr("content");
-			var drafterId = taskApprovalField.attr("drafterId");
-			var drafterName = taskApprovalField.attr("drafterName");
+			var drafter = taskApprovalField.attr("drafter");
 			var draftDate = taskApprovalField.attr("draftDate");
 			var isReturned = taskApprovalField.attr("isReturned");
 			var isForwarded = taskApprovalField.attr("isForwarded");
@@ -628,8 +630,8 @@ function loadTaskApprovalFields() {
 				fieldId: "txtApprovalSubject",
 				fieldName: subjectTitle,
 				value: subject,
-				columns: 2,
-				colSpan: 2,
+				columns: 4,
+				colSpan: 4,
 				required: true,
 				readOnly: readOnly
 
@@ -640,38 +642,43 @@ function loadTaskApprovalFields() {
 					container: gridRow,
 					fieldId: "txtApprovalForwardee",
 					fieldName: forwardeeTitle,
-					columns: 2,
-					colSpan: 2,
+					columns: 4,
+					colSpan: 3,
 					multiUsers: true,
 					required: false,
 					readOnly: readOnly
 				});
+				SmartWorks.FormRuntime.CheckBoxBuilder.buildEx({
+					container: gridRow,
+					fieldId: "isLazyReferenceTask",
+					fieldName: isLazyReferenceTaskTitle,
+					columns: 4,
+					colSpan: 1,
+					readOnly: false
+				});
 			}
-
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
 				container: gridRow,
 				fieldId: "txtApprovalComments",
 				fieldName: commentsTitle,
 				value: comments,
-				columns: 2,
-				colSpan: 2,
+				columns: 4,
+				colSpan: 4,
 				multiLines: 4,
 				required: false,
 				readOnly: readOnly
 			});
 			
 			if(readOnly){
-				var users = new Array();
-				users.push({userId : drafterId, longName: drafterName});
 				gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 				SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
 					container: gridRow,
 					fieldId: "txtApprovalDrafter",
 					fieldName: drafterTitle,
-					columns: 2,
-					colSpan: 1,
-					users: users,
+					columns: 4,
+					colSpan: 3,
+					usersHtml: drafter,
 					multiUsers: false,
 					required: false,
 					readOnly: readOnly
@@ -681,12 +688,37 @@ function loadTaskApprovalFields() {
 					fieldId: "txtApprovalDraftDate",
 					fieldName: draftDateTitle,
 					value: draftDate,
-					columns: 2,
+					columns: 4,
 					colSpan: 1,
 					required: false,
 					readOnly: readOnly
 
 				});
+
+				if(!isEmpty(forwardees) && isLazyReferenceTask=='true'){
+					gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+					SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+						container: gridRow,
+						fieldId: "txtApprovalForwardee",
+						fieldName: forwardeeTitle,
+						usersHtml: forwardees,
+						columns: 4,
+						colSpan: 3,
+						readOnly: true
+					});
+					SmartWorks.FormRuntime.CheckBoxBuilder.buildEx({
+						container: gridRow,
+						fieldId: "isLazyReferenceTask",
+						fieldName: isLazyReferenceTaskTitle,
+						value: 'on',
+						columns: 4,
+						colSpan: 1,
+						required: false,
+						readOnly: true
+					});
+					
+				}
+
 			}
 
 			var iworkSpace = taskApprovalFields.parents('.js_iwork_space_page');

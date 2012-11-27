@@ -5,6 +5,9 @@ body {background-color: #22282F}
 #content a:link, #content a:visited, #content a:focus, #content a:active{color:#a6a6a6; text-decoration:none}
 #content a:hover { text-decoration:underline}
 
+/* Title Ucity */
+.tx_ucity {display: table-cell; height: 18px; vertical-align: middle;}
+
 /*Search*/	
 .srch {	width:170px; height:15px; margin: 0 10px 0 0}
 .srch input[type="text"] {float: left; width: 146px; margin: 0 2px 0 0;}
