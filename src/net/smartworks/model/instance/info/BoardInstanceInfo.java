@@ -50,10 +50,10 @@ public class BoardInstanceInfo extends WorkInstanceInfo {
 		this.briefContent = briefContent;
 	}
 	public LocalDate getDuration() {
-		if(duration==null){
+		/*if(duration==null){
 			LocalDate createdDate = (this.getCreatedDate()==null) ? new LocalDate() : this.getCreatedDate();
 			duration = new LocalDate(createdDate.getGMTDate() + LocalDate.ONE_DAY*BoardInstance.DEFAULT_BOARD_DURATION);
-		}
+		}*/
 		return duration;
 	}
 	public void setDuration(LocalDate duration) {

@@ -277,7 +277,14 @@ public class InstanceServiceImpl implements IInstanceService {
 			swdRecordCond.setPageNo(0);
 			swdRecordCond.setPageSize(maxLength);
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
-
+			
+			//공지 종료가 오늘 날짜보다 큰것만 가져온다
+			//TODO localDate 로 변경
+			Calendar cal = Calendar.getInstance();			
+			String searchDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + (cal.get(Calendar.DATE) - 1) + " 15:00:00.000";
+			swdRecordCond.setFilter(new Filter[]{new Filter(">=","Duration", searchDate)});
+			//END
+			
 			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
 
 			List<BoardInstanceInfo> boardInstanceInfoList = new ArrayList<BoardInstanceInfo>();
@@ -327,6 +334,11 @@ public class InstanceServiceImpl implements IInstanceService {
 								boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 36, "..."));
 							} else if(swdDataField.getId().equals("1")) {
 								boardInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 40, "..."));
+							} else if(swdDataField.getId().equals("3")) {
+								if(!CommonUtil.isEmpty(value)) {
+									Date result = DateUtil.toDate(value, "yyyy-MM-dd HH:mm:ss");
+									boardInstanceInfo.setDuration(new LocalDate(result.getTime()));
+								}
 							}
 						}
 					}
@@ -3056,7 +3068,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					
 					if (CommonUtil.isEmpty(isLazyReferenceTask)) {
 						isLazyReferenceTask = "false";
-					} else if (isLazyReferenceTask.equalsIgnoreCase("true")) {
+					} else if (isLazyReferenceTask.equalsIgnoreCase("on")) {
 						isLazyReferenceTask = "true";
 					} else {
 						isLazyReferenceTask = "false";
@@ -5514,6 +5526,8 @@ public class InstanceServiceImpl implements IInstanceService {
 						fieldId = "name";
 					else
 						fieldId = "title";
+				} else if (fieldId.equals(FormField.ID_BOARD_DURATION)) {
+					fieldId = "Duration";
 				}
 				isAsc = sf.isAscending();
 
@@ -5586,6 +5600,11 @@ public class InstanceServiceImpl implements IInstanceService {
 											if(fileList.size() > 0)
 												tempWorkInstanceInfo.setFiles(fileList);
 										}
+									}
+								} else if(swdDataField.getId().equals("3")) {
+									if(!CommonUtil.isEmpty(value)) {
+										Date duration = DateUtil.toDate(value, "yyyy-MM-dd HH:mm:ss");
+										tempWorkInstanceInfo.setDuration(new LocalDate(duration.getTime()));
 									}
 								}
 							}

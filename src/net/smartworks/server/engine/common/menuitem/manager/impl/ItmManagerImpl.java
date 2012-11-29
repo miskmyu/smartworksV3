@@ -8,6 +8,7 @@ import java.util.List;
 import net.smartworks.server.engine.category.model.CtgCategory;
 import net.smartworks.server.engine.category.model.CtgCategoryCond;
 import net.smartworks.server.engine.common.manager.AbstractManager;
+import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.menuitem.exception.ItmException;
 import net.smartworks.server.engine.common.menuitem.manager.IItmManager;
 import net.smartworks.server.engine.common.menuitem.model.CategoryChange;
@@ -314,9 +315,35 @@ public class ItmManagerImpl extends AbstractManager implements IItmManager {
 	public void removeMenuItem(String userId, String packageId) throws ItmException {
 		if (CommonUtil.isEmpty(packageId))
 			return;
-		String buffer = "delete swmenuitem from swmenuitemlist where swmenuitem.objid = swmenuitemlist.objid and swmenuitemlist.userId = '" + userId + "' and swmenuitem.packageId = '" + packageId + "'";
-		Query query = this.getSession().createSQLQuery(buffer.toString());
-		query.executeUpdate();
+		
+		ItmMenuItemListCond cond = new ItmMenuItemListCond();
+		cond.setUserId(userId);
+		ItmMenuItemList itemList = this.getMenuItemList(userId, cond, IManager.LEVEL_ALL);
+		
+		if (itemList == null)
+			return;
+		ItmMenuItem[] items = itemList.getMenuItems();
+		if (items == null || items.length == 0)
+			return;
+		
+		ItmMenuItem targetItem = null;
+		for (int i = 0; i < items.length; i++) {
+			ItmMenuItem itm = items[i];
+			String pkgId = itm.getPackageId();
+			if (pkgId.equalsIgnoreCase(packageId))
+				targetItem = itm;
+		}
+		if (targetItem == null)
+			return;
+		
+		itemList.removeMenuItem(targetItem);
+		
+		this.setMenuItemList(userId, itemList, IManager.LEVEL_ALL);
+		
+		//String buffer = "delete swmenuitem from swmenuitemlist where swmenuitem.objid = swmenuitemlist.objid and swmenuitemlist.userId = '" + userId + "' and swmenuitem.packageId = '" + packageId + "'";
+		
+		//Query query = this.getSession().createSQLQuery(buffer.toString());
+		//query.executeUpdate();
 	}
 
 	public int getMaxItmSeq(String userId) throws ItmException {

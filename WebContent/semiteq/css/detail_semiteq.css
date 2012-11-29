@@ -6,7 +6,7 @@ html, body {color:#454545; height:100%}
 select {vertical-align: middle; border:1px solid #C7C7C7}
 .tl {text-align:left !important}
 .tc {text-align:center !important}
-.tr {text-align:right !important}
+.tr {text-align:right !important} 
 table {border-spacing: 0; border-collapse: collapse; width: 100%; line-height: 20px; font-size:12px}
 table td, table th {text-align: left; padding: 2px}
 
@@ -19,7 +19,7 @@ table td, table th {text-align: left; padding: 2px}
 
 .portlet_l {
     background: url("../../images/bg_portlet_l.jpg") repeat-y scroll 0 0 #ffffff;
-    position:relative; height:100%; width:100%; z-index:10}	
+  	height:100%; width:100%; z-index:10}	
 .portlet_r {
     background: url("../../images/bg_portlet_r.jpg") repeat-y scroll 100% 0 transparent;
     height:100%; width:100%; float:none}
@@ -30,7 +30,7 @@ table td, table th {text-align: left; padding: 2px}
 	
 .portlet_t {
     background: url("../../images/bg_portlet_t.jpg") no-repeat 100% 0 transparent;
-    width:100%; height:12px; overflow:hidden}
+    width:100%; height:12px; overflow:hidden; position:relative}
 
 .portlet_t .portlet_tl {
     background: url("../../images/bg_portlet_t.jpg") no-repeat 0 0 transparent;

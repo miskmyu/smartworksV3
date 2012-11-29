@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.DriverManager"%>
@@ -20,14 +21,13 @@
  String body_size = "";
  String part_id = "";
  String operation = "";
- String romcode = "";
  try{
 	   Class.forName(SQL_DRIVER);
   } catch (ClassNotFoundException e) {
 	   e.printStackTrace();
   }
  
- String sql = "SELECT A.PKG_TYPE, A.CUSTOMER, A.BODY_SIZE,A.PART_ID AS DEVICE, B.OPERATION, 'romcode' as romcode FROM PARTSPEC A, LOTSTS B WHERE A.PLANT = 'SEMITEQ' AND A.PLANT = B.PLANT AND B.PART = A.PART_ID AND B.LOT_NUMBER = ?";
+ String sql = "SELECT A.PKG_TYPE, A.CUSTOMER, A.BODY_SIZE,A.PART_ID AS DEVICE, B.OPERATION FROM PARTSPEC A, LOTSTS B WHERE A.PLANT = 'SEMITEQ' AND A.PLANT = B.PLANT AND B.PART = A.PART_ID AND B.LOT_NUMBER = ?";
  PreparedStatement pstmt = null;
  
  Connection con = null;
@@ -43,8 +43,9 @@
    body_size = rs.getString(3);
    device = rs.getString(4);
    operation = rs.getString(5);
-   romcode = rs.getString(6);
   }     
+  
+  
 } catch (SQLException e) {
   e.printStackTrace();
 }finally{
@@ -57,13 +58,12 @@
  }
  JSONObject jsonObject = new JSONObject();
 
-	try {
+ try {
      jsonObject.put("device", device);
      jsonObject.put("pkg_type", pkg_type);
      jsonObject.put("customer", customer);
      jsonObject.put("body_size", body_size);
      jsonObject.put("operation", operation);
-     jsonObject.put("romcode", romcode);
      
 	 out.print(jsonObject.toString());
 	} catch (Exception e) {

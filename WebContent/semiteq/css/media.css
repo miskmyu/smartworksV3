@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+@media screen and (-webkit-min-device-pixel-ratio:1.5) {} /* 안드로이드 계열 */
+@media screen and (-webkit-min-device-pixel-ratio:2) {} /* 레티나  계열, iPhone 4 */
+@media screen and (max-width:1000px){} /* iPad, Tab  */
+
+/* iPad, Tab  */	
+@media screen and (max-width:1000px){
+	.btn_gray .txt_btn_center {line-height: 17px}
+	.icon_btn_tail {line-height: 22px} /* Button */
+	
+	.pop_print_section {height:430px; overflow-y:auto} /* Pop Print */
+	.pop_print {min-height:430px; overflow-y:auto}
+	}
+
+

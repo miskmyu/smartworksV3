@@ -4386,7 +4386,32 @@ public class ModelConverter {
 		}
 		informationWorkInstance.setApprovalWork(isApprovalWork);
 		informationWorkInstance.setApprovalLine(approvalLine);
+		if (aprApprovalLine != null && !CommonUtil.isEmpty(aprApprovalLine.getCorrelation())) {
+			String singleTaskId = aprApprovalLine.getCorrelation();
+			TskTask task = getTskManager().getTask("", singleTaskId, IManager.LEVEL_ALL);
+			if (task != null) {
 
+				String referenceUsers = task.getExtendedPropertyValue("referenceUser");
+				String isLazyReferenceTask = task.getExtendedPropertyValue("isLazyReferenceTask");
+				if (!CommonUtil.isEmpty(referenceUsers)) {
+					
+					String[] ids = StringUtils.tokenizeToStringArray(referenceUsers, ";");
+					SwoUserExtend[] users = getSwoManager().getUsersExtend("", ids);
+					List userInfoList = new ArrayList();
+					for (int i = 0; i < users.length; i++) {
+						UserInfo userInfo = getUserInfoBySwoUserExtend(null, users[i]);
+						userInfoList.add(userInfo);
+					}
+					UserInfo[] forwardees = new UserInfo[userInfoList.size()];
+					userInfoList.toArray(forwardees);
+					informationWorkInstance.setForwardees(forwardees);
+				}
+				if (!CommonUtil.isEmpty(isLazyReferenceTask)) {
+					informationWorkInstance.setLazyreferenceTask(CommonUtil.toBoolean(isLazyReferenceTask));
+				}
+			}
+		}
+		
 		return informationWorkInstance;
 	}
 

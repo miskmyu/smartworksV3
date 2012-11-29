@@ -9,12 +9,11 @@
 
 	String query = "";
 
+	 String SQL_DRIVER="com.microsoft.sqlserver.jdbc.SQLServerDriver";
+	 String URL="jdbc:sqlserver://222.116.101.228:1433;SelectMethod=cursor;DatabaseName=SmartWorks";
+	 String USER = "sa";
+	 String PASS = "admin123!";
 
-
-	String SQL_DRIVER="com.microsoft.sqlserver.jdbc.SQLServerDriver";
-	String URL="jdbc:sqlserver://222.116.101.228:1433;SelectMethod=cursor;DatabaseName=SmartWorks";
-	String USER = "sa";
-	String PASS = "admin123!";
 
 	try{
 		   Class.forName(SQL_DRIVER);
