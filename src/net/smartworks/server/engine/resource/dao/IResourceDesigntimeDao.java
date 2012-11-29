@@ -622,7 +622,16 @@ public interface IResourceDesigntimeDao {
 	 * @throws SmartServerRuntimeException
 	 */
 	public void updateFormContent(String userId, String formUid, String xmlContent) throws SmartServerRuntimeException;
-	
+
+	/**
+	 * 업무 폼의 내용을 폼의 상태에 상관없이 무조건 업데이트한다.
+	 * 
+	 * @param userId
+	 * @param formUid
+	 * @param xmlContent
+	 * @throws SmartServerRuntimeException
+	 */
+	public void updateFormContentWithoutStatus(String formId, int version, String xmlContent) throws SmartServerRuntimeException;
 	/**
 	 * 업무 폼의 내용을 업데이트한다.
 	 * 

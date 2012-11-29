@@ -202,7 +202,7 @@
 				
 				<!-- 상세보기 컨텐츠 -->
 				<div class="contents_space">				            
-			       <div class="up form_read js_form_content">      
+			       <div class="up js_form_content">      
 			       </div>
 				</div>
 		

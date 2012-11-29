@@ -582,7 +582,9 @@ public class ResourceDesigntimeManagerImpl implements IResourceDesigntimeManager
 		this.resourceDesigntimeDao.updateFormContent(userId, formUid, xmlContent);
 		
 	}
-
+	public void updateFormContentWithoutStatus(String formId, int version, String xmlContent) throws SmartServerRuntimeException{
+		this.resourceDesigntimeDao.updateFormContentWithoutStatus(formId, version, xmlContent);
+	}
 	/* (non-Javadoc)
 	 * @see com.maninsoft.smart.server.api.IResourceDesigntimeManager#updateFormContent(java.lang.String, java.lang.String, int, java.lang.String)
 	 */
