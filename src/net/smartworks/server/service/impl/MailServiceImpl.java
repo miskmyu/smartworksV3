@@ -1941,4 +1941,10 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		}
 		return null;
 	}
+
+	@Override
+	public void changeMailPasswordRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -243,6 +243,15 @@
 							</tr>
 							<%
 							if(!SmartUtil.isBlankObject(emailServers)){
+								EmailServer selectedEmailServer = null;
+								boolean existPwChangeAPI = false;
+								for(int i=0; i<emailServers.length; i++){
+									if(emailServers[i].getId().equals(mailAccount.getEmailServerId())){
+										selectedEmailServer = emailServers[i];
+										existPwChangeAPI = !SmartUtil.isBlankObject(selectedEmailServer.getPwChangeAPI());
+										break;
+									}
+								}
 							%>
 								<tr>
 									<th><fmt:message key="profile.title.email.use" /></th>
@@ -276,7 +285,12 @@
 								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
 									<th class="required_label"><fmt:message key="profile.title.email.password" /></th>
 									<td>
-										<input name="pwUserProfileEmailPW" class="fieldline required" type="password" value="<%=CommonUtil.toNotNull(mailAccount.getPassword())%>">		
+										<div <%if(existPwChangeAPI){ %>class="btn_fb_space5" <%} %>>
+											<input name="pwUserProfileEmailPW" class="fieldline required" type="password" value="<%=CommonUtil.toNotNull(mailAccount.getPassword())%>">		
+											<div class="icon_btn_start po_rbtn" <%if(!existPwChangeAPI){ %> style="display:none"<%} %>>
+												<a class="icon_btn_tail js_change_mail_password_btn" href="" mailServerId="<%=mailAccount.getEmailServerId()%>" emailId="<%=mailAccount.getEmailId()%>" userName="<%=mailAccount.getUserName()%>" oldPassword="<%=mailAccount.getPassword()%>"><fmt:message key="profile.button.email.pwchange"/></a>
+											</div>
+										</div>
 									</td>
 								</tr>
 								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>

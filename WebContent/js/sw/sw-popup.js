@@ -1030,6 +1030,38 @@ smartPop = {
 				}
 			});
 		});
+	},
+
+	changeMailPassword : function(mailServerId, emailId, userName, oldPassword){
+		$.get("pop_change_mail_password.sw?mailServerId=" + mailServerId + "&emailId="+ emailId + "&userName=" + userName + "&oldPassword="+ oldPassword, function(data){
+			$(data).modal({
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
+				containerCss:{
+					height:200,
+					width:460
+				},
+				overlayClose: false,
+				onShow: function(dialog){
+					$('.js_close_change_mail_password').die('click');
+					$('.js_close_change_mail_password').live( 'click', function(e){
+						smartPop.close();
+						return false;
+					});
+					$('.js_close_change_mail_password').focus();
+					$('.js_close_change_mail_password').keypress(function (e) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
+				            $('.js_close_change_mail_password').click();
+				            return false;
+				        } else {
+				            return true;
+				        }
+				    });
+				}
+			});
+		});
 	}
 
 };

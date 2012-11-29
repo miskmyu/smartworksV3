@@ -95,9 +95,9 @@
 	<td>
 		<table style="width:100%">
 			<tr>
-				<th style="width:33%"><fmt:message key="settings.title.variable.name"/></th>
-				<th style="width:33%"><fmt:message key="settings.title.variable.element_name"/></th>
-				<th style="width:33%"><fmt:message key="settings.title.variable.element_type"/></th>
+				<th class="tc" style="width:33%"><fmt:message key="settings.title.variable.name"/></th>
+				<th class="tc" style="width:33%"><fmt:message key="settings.title.variable.element_name"/></th>
+				<th class="tc" style="width:33%"><fmt:message key="settings.title.variable.element_type"/></th>
 			</tr>
 			<%
 			if(inputVarExisting){
@@ -107,8 +107,8 @@
 			%>
 					<tr>
 						<td><input class="fieldline required" name="txtInputVariableName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(inputVariable.getName())%>"></td>
-						<td><input readonly name="txtInputElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(inputVariable.getElementName())%>"></td>
-						<td><input readonly name="txtInputElementType<%=count %>" type="text" value="<%=CommonUtil.toNotNull(inputVariable.getElementType())%>"></td>
+						<td><input class="tc" readonly name="txtInputElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(inputVariable.getElementName())%>"></td>
+						<td><input class="tc" readonly name="txtInputElementType<%=count %>" type="text" value="<%=CommonUtil.toNotNull(inputVariable.getElementType())%>"></td>
 					</tr>				
 			<%
 				}
@@ -128,9 +128,9 @@
 	<td>
 		<table style="width:100%">
 			<tr>
-				<th style="width:33%"><fmt:message key="settings.title.variable.name"/></th>
-				<th style="width:33%"><fmt:message key="settings.title.variable.element_name"/></th>
-				<th style="width:33%"><fmt:message key="settings.title.variable.element_type"/></th>
+				<th class="tc" style="width:33%"><fmt:message key="settings.title.variable.name"/></th>
+				<th class="tc" style="width:33%"><fmt:message key="settings.title.variable.element_name"/></th>
+				<th class="tc" style="width:33%"><fmt:message key="settings.title.variable.element_type"/></th>
 			</tr>
 			<%
 			if(returnVarExisting){
@@ -140,8 +140,8 @@
 			%>
 					<tr>
 						<td><input class="fieldline required" name="txtReturnVariableName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getName())%>"></td>
-						<td><input readonly name="txtReturnElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getElementName())%>"></td>
-						<td><input readonly name="txtReturnElementType<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getElementType())%>"></td>
+						<td><input class="tc" readonly name="txtReturnElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getElementName())%>"></td>
+						<td><input class="tc" readonly name="txtReturnElementType<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getElementType())%>"></td>
 					</tr>				
 			<%
 				}

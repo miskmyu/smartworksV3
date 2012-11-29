@@ -770,4 +770,5 @@ public interface ISmartWorks {
 	
 	public abstract Property[] getUcityExtendedPropertyByTaskInstId(String taskInstId) throws Exception;
 	
+	public abstract void changeMailPasswordRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 }

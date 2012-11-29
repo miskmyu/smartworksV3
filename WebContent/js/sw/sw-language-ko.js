@@ -219,6 +219,8 @@ smartMessage.bundle['ko'] = {
 	setWorkManualError : "업무매뉴얼을 수정하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	importFromExcelSuccess : "의 항목이 정상적으로 등록되었습니다.",
 	importFromExcelError : "엑셀로 등록하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	changeMailPasswordSucceed : "메일 비밀번호가 정상적으로 수정되었습니다.",
+	changeMailPasswordError : "메일 비밀번호 수정 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	replyMailError : "메일에 답장하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	forwardMailError : "메일을 전달하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	fetchMailsError : "메일을 가져오는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
@@ -234,6 +236,7 @@ smartMessage.bundle['ko'] = {
 	addAdjunctError : "겸직원을 추가하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다.",
 	removeCommentError : "댓글삭제에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.",
 	boardDurationDateError : "공지종료일자가 현재보다 과거일자 입니다.. 수정 후 다시 하시기 바랍니다.", 
+	newMailPasswordConfirmError : "새로운 비밀번호확인이 잘못되었습니다. 확인 후 다시 하시기 바랍니다.",
 	
 	usableUserId : "사용가능한 사용자 아이디 입니다. 다른아이디로 변경하려면 아이디변경버튼을 클릭하십시요.",
 	duplicatedUserId : "이미사용중인 사용자 아이디 입니다. 다른아이디를 입력하시기 바랍니다.",
