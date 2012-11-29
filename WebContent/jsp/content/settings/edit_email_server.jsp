@@ -100,15 +100,15 @@
 			<tbody>
 				<tr>
 					<th class="required_label" width="15%"><fmt:message key="settings.title.email.name"/></th>
-					<td width="85%"><input name="txtEmailServerName" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(emailServer.getName()) %>" /></td>
+					<td width="85%"><input name="txtEmailServerName" class="up required" type="text" value="<%=CommonUtil.toNotNull(emailServer.getName()) %>" /></td>
 				</tr>
 				<tr>
 					<th class="required_label" width="15%"><fmt:message key="settings.title.email.fetch_server"/></th>
-					<td width="85%"><input name="txtEmailServerFetchServer" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(emailServer.getFetchServer()) %>" /></td>
+					<td width="85%"><input name="txtEmailServerFetchServer" class="up required" type="text" value="<%=CommonUtil.toNotNull(emailServer.getFetchServer()) %>" /></td>
 				</tr>
 				<tr>
 					<th class="required_label" width="15%"><fmt:message key="settings.title.email.fetch_port"/></th>
-					<td width="85%"><input name="txtEmailServerFetchPort" class="fieldline required" type="text" <%if(emailServer.getFetchServerPort()>0){ %>value="<%=emailServer.getFetchServerPort() %>"<%} %> /></td>
+					<td width="85%"><input name="txtEmailServerFetchPort" class="up required" type="text" <%if(emailServer.getFetchServerPort()>0){ %>value="<%=emailServer.getFetchServerPort() %>"<%} %> /></td>
 				</tr>
 				<tr>
 					<th class="" width="15%"><fmt:message key="settings.title.email.fetch_protocol"/></th>
@@ -124,11 +124,11 @@
 				</tr>
 				<tr>
 					<th class="required_label" width="15%"><fmt:message key="settings.title.email.smtp_server"/></th>
-					<td width="85%"><input name="txtEmailServerSmtpServer" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(emailServer.getSmtpServer()) %>" /></td>
+					<td width="85%"><input name="txtEmailServerSmtpServer" class="up required" type="text" value="<%=CommonUtil.toNotNull(emailServer.getSmtpServer()) %>" /></td>
 				</tr>
 				<tr>
 					<th class="required_label" width="15%"><fmt:message key="settings.title.email.smtp_port"/></th>
-					<td width="85%"><input name="txtEmailServerSmtpPort" class="fieldline required" type="text" <%if(emailServer.getSmtpServerPort()>0){ %>value="<%=emailServer.getSmtpServerPort() %>"<%} %> /></td>
+					<td width="85%"><input name="txtEmailServerSmtpPort" class="up required" type="text" <%if(emailServer.getSmtpServerPort()>0){ %>value="<%=emailServer.getSmtpServerPort() %>"<%} %> /></td>
 				</tr>
 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.smtp_authenticated"/></th>
@@ -157,11 +157,6 @@
 						<input name="txtPWChangeParamOldPW" class="up" style="width:80px;" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamOldPW())%>"/>
 						<span class="pl5"><fmt:message key="settings.title.email.pwchange_param_newpw"/></span>
 						<input name="txtPWChangeParamNewPW" class="up" style="width:80px;" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamNewPW())%>"/>
-					</td>
-				</tr>
-				<tr>
-					<th width="15%"></th>
-					<td width="85%">
 					</td>
 				</tr>
 <%-- 				<tr>
