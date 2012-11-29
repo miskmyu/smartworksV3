@@ -80,9 +80,15 @@ public class IModelConverter {
 			} else if (prcInst.getType() != null && prcInst.getType().equalsIgnoreCase(PrcProcessInst.PROCESSINSTTYPE_SCHEDULE)) {
 				instInfo.setType(WorkInstance.TYPE_SCHEDULE);
 			}
-			instInfo.setWork(getSmartWorkInfoByPkgId(prcInst.getPackageId()));
+//Start InstanceInfo Model Changed by ysjung
+			//instInfo.setWork(getSmartWorkInfoByPkgId(prcInst.getPackageId()));
 			// TODO workspaceid > ??
-			instInfo.setWorkSpace(new WorkSpaceInfo());
+			//instInfo.setWorkSpace(new WorkSpaceInfo());
+			instInfo.setWorkInfo(getSmartWorkInfoByPkgId(prcInst.getPackageId()));
+			//eventInstanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+			instInfo.setWorkSpaceInfo(new WorkSpaceInfo());
+			//eventInstanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 
 			instInfos[i] = instInfo;
 		}

@@ -1,6 +1,7 @@
 package net.smartworks.model.instance;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.SocialWork;
@@ -28,6 +29,8 @@ public class WorkInstance extends Instance {
 	private TaskInstanceInfo[] tasks;
 	private int numberOfSubInstances;
 	private String[] likers;// Array of User Id.
+	private UserInfo[] forwardees;
+	private boolean isLazyreferenceTask=false;
 	
 	public String[] getLikers() {
 		return likers;
@@ -46,6 +49,18 @@ public class WorkInstance extends Instance {
 	}
 	public void setNumberOfSubInstances(int numberOfSubInstances) {
 		this.numberOfSubInstances = numberOfSubInstances;
+	}
+	public UserInfo[] getForwardees() {
+		return forwardees;
+	}
+	public void setForwardees(UserInfo[] forwardees) {
+		this.forwardees = forwardees;
+	}
+	public boolean isLazyreferenceTask() {
+		return isLazyreferenceTask;
+	}
+	public void setLazyreferenceTask(boolean isLazyreferenceTask) {
+		this.isLazyreferenceTask = isLazyreferenceTask;
 	}
 	public String getController(){
 		if(getWork()==null) return "";

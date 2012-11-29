@@ -19,4 +19,5 @@ public class WorkSpaceInfo extends CommunityInfo {
 		workSpace.setSmallPictureName(this.getSmallPictureName());
 		return workSpace;
 	}
+	
 }

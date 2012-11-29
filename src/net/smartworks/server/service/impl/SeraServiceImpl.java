@@ -665,7 +665,7 @@ public class SeraServiceImpl implements ISeraService {
 
 					WorkSpaceInfo workSpaceInfo = getSimpleCourseInfoById(workSpaceId);
 
-					missionInstanceInfo.setWorkSpace(workSpaceInfo);
+					missionInstanceInfo.setWorkSpaceInfo(workSpaceInfo);
 
 					SwdRecordCond cond = new SwdRecordCond();
 					cond.setWorkSpaceId(swdRecord.getRecordId());
@@ -682,7 +682,7 @@ public class SeraServiceImpl implements ISeraService {
 
 					WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(workId);
 
-					missionInstanceInfo.setWork(workInfo);
+					missionInstanceInfo.setWorkInfo(workInfo);
 
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
 
@@ -2097,11 +2097,11 @@ public class SeraServiceImpl implements ISeraService {
 
 					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(space);
 
-					boardInstanceInfo.setWorkSpace(workSpaceInfo);
+					boardInstanceInfo.setWorkSpaceInfo(workSpaceInfo);
 
 					WorkInfo workInfo = new WorkInfo(workId, null, SocialWork.TYPE_BOARD);
 
-					boardInstanceInfo.setWork(workInfo);
+					boardInstanceInfo.setWorkInfo(workInfo);
 					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
@@ -2197,11 +2197,11 @@ public class SeraServiceImpl implements ISeraService {
 					eventInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
 					eventInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
 					eventInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-					eventInstanceInfo.setWorkSpace(getWorkSpaceInfoBySwdRecord(swdRecord));
+					eventInstanceInfo.setWorkSpaceInfo(getWorkSpaceInfoBySwdRecord(swdRecord));
 
 					WorkInfo workInfo = new WorkInfo(workId, null, SocialWork.TYPE_EVENT);
 
-					eventInstanceInfo.setWork(workInfo);
+					eventInstanceInfo.setWorkInfo(workInfo);
 					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					eventInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
@@ -2964,11 +2964,11 @@ public class SeraServiceImpl implements ISeraService {
 					noteInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
 					noteInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
 					noteInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-					noteInstanceInfo.setWorkSpace(getWorkSpaceInfoBySwdRecord(swdRecord));
+					noteInstanceInfo.setWorkSpaceInfo(getWorkSpaceInfoBySwdRecord(swdRecord));
 
 					WorkInfo workInfo = new WorkInfo(workId, null, Work.TYPE_SERA_NOTE);
 
-					noteInstanceInfo.setWork(workInfo);
+					noteInstanceInfo.setWorkInfo(workInfo);
 					noteInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					noteInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
@@ -3103,10 +3103,10 @@ public class SeraServiceImpl implements ISeraService {
 					missionReportInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
 					missionReportInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
 					missionReportInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-					missionReportInstanceInfo.setWorkSpace(getWorkSpaceInfoBySwdRecord(swdRecord));
+					missionReportInstanceInfo.setWorkSpaceInfo(getWorkSpaceInfoBySwdRecord(swdRecord));
 
 					WorkInfo workInfo = new WorkInfo(workId, null, Work.TYPE_SERA_MISSION_REPORT);
-					missionReportInstanceInfo.setWork(workInfo);
+					missionReportInstanceInfo.setWorkInfo(workInfo);
 					missionReportInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					missionReportInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 

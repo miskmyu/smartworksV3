@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.														 -->
 <!-- Created Date	: 2011.9.																 -->
 
+<%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.instance.info.WorkInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.TaskInstanceInfo"%>
 <%@page import="net.smartworks.model.mail.MailFolder"%>
@@ -49,10 +50,24 @@
 			if (noticeBox != null && noticeBox.getNoticeType() == Notice.TYPE_SAVEDBOX) {
 				InstanceInfo instance = nMessage.getInstance();
 				if(count == 10) lastTaskId = instance.getId();
-				SmartWorkInfo work = (SmartWorkInfo)instance.getWork();
-				if(instance.getType() == Instance.TYPE_TASK)
-					work = (SmartWorkInfo)((TaskInstanceInfo)instance).getWorkInstance().getWork();
-				WorkSpaceInfo workSpace = instance.getWorkSpace();
+//				SmartWorkInfo work = (SmartWorkInfo)instance.getWork();
+				String workId = instance.getWorkId();
+				String workName = instance.getWorkName();
+				int workType = instance.getWorkType();
+				boolean isWorkRunning = instance.isWorkRunning();
+				String workFullPathName = instance.getWorkFullPathName();
+				if(instance.getType() == Instance.TYPE_TASK){
+//					work = (SmartWorkInfo)((TaskInstanceInfo)instance).getWorkInstance().getWork();
+					workId = ((TaskInstanceInfo)instance).getWorkInstance().getWorkId();
+					workName = ((TaskInstanceInfo)instance).getWorkInstance().getWorkName();
+					workType = ((TaskInstanceInfo)instance).getWorkInstance().getWorkType();
+					isWorkRunning = ((TaskInstanceInfo)instance).getWorkInstance().isWorkRunning();
+					workFullPathName = ((TaskInstanceInfo)instance).getWorkInstance().getWorkFullPathName();
+				}
+//				WorkSpaceInfo workSpace = instance.getWorkSpace();
+				String workSpaceId = instance.getWorkSpaceId();
+				String workSpaceName = instance.getWorkSpaceName();
+				int workSpaceType = instance.getWorkSpaceType();
 				UserInfo owner = instance.getOwner();
 				String targetContent = "", iconType="";
 				switch(instance.getType()){
@@ -79,7 +94,7 @@
 				<li>
 				<div class="info_ms_section">
 					<div class="info_img">
-						<div class="<%=work.getIconClass()%>"><%=work.getName()%></div>
+						<div class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"><%=workName%></div>
 					</div>
 					<div class="info_list ml15">
 						<a href="<%=targetContent %>" ><%=instance.getSubject()%></a>		
@@ -95,7 +110,7 @@
 %>
 			<ul>
 				<li class="tc pt2">
-					<a class="js_more_notice_list" href="saved_list_box.sw" lastTaskId="<%=lastTaskId%>"><fmt:message key="content.more_running_instance"/></a>
+					<a class="js_more_notice_list" href="saved_list_box.sw" lastTaskId="<%=lastTaskId%>"><fmt:message key="common.message.more_work_task"/></a>
 					<span class="js_progress_span"></span>
 				</li>
 			</ul>

@@ -212,7 +212,7 @@
 					serviceType = "종료";
 				}
 
-				String target =  "situationDetail.sw?cid=" + instanceInfo.getContextId() + "&workId=" + instanceInfo.getWork().getId();
+				String target =  "situationDetail.sw?cid=" + instanceInfo.getContextId() + "&workId=" + instanceInfo.getWorkId();
 				String statusImage = "";
 				String statusTitle = "";
 				switch (instanceInfo.getStatus()) {

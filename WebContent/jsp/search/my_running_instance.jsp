@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@page import="net.smartworks.model.instance.info.TaskInstanceInfo"%>
 <%@page import="net.smartworks.model.work.info.SmartWorkInfo"%>
@@ -28,19 +29,24 @@
 			String iconType = null;
 			String workContext = null;
 			String targetContent = null;
-			SmartWorkInfo work = null;
+//			SmartWorkInfo work = null;
 			WorkInstanceInfo workInstance = null;
 			if (instance.getClass().equals(WorkInstanceInfo.class)) {
 				workInstance = (WorkInstanceInfo) instance;
-				work = (SmartWorkInfo) workInstance.getWork();
+//				work = (SmartWorkInfo) workInstance.getWork();
 			} else if (instance.getClass().equals(TaskInstanceInfo.class)) {
 				workInstance = ((TaskInstanceInfo) instance).getWorkInstance();
-				work = (SmartWorkInfo) workInstance.getWork();
+//				work = (SmartWorkInfo) workInstance.getWork();
 			}
+			String workId = workInstance.getWorkId();
+			String workName = workInstance.getWorkName();
+			int workType = workInstance.getWorkType();
+			boolean isWorkRunning = workInstance.isWorkRunning();
+			String workFullPathName = workInstance.getWorkFullPathName();
 	%>
 			<li>
 				<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>" class="js_content">
-					<img class="<%=work.getIconClass()%>" border="0"><%=work.getFullpathName()%><%=workInstance.getSubject()%>
+					<img class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>" border="0"><%=workFullPathName%><%=workInstance.getSubject()%>
 				</a>
 			</li>
 	<%

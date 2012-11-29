@@ -161,6 +161,7 @@
 	}if (params != null){
 		selectedFilterId = params.getFilterId();
 		searchKey = params.getSearchKey();
+		params.setSearchFilter(null);
 	}
 	
 	session.setAttribute("smartWork", work);

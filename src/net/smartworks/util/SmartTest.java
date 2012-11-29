@@ -378,7 +378,7 @@ public class SmartTest {
 			TaskInstanceInfo taskInstance = new TaskInstanceInfo("taskInstance1", "대표이사승인", TaskInstance.TYPE_PROCESS_TASK_ASSIGNED, getUserInfo2(), getUserInfo2(), new LocalDate(LocalDate.convertStringToTime("201110051600")));
 			taskInstance.setStatus(Instance.STATUS_RETURNED);
 			PWInstanceInfo instance = new PWInstanceInfo("inst1", "휴가 신청합니다.", getSmartWorkInfo1(), getUserInfo1(), getUserInfo1(), new LocalDate(LocalDate.convertStringToTime("201110211300")), taskInstance);
-			instance.setWork(SmartTest.getProcessWorkInfo1());
+			instance.setWorkInfo(SmartTest.getProcessWorkInfo1());
 			taskInstance.setWorkInstance(instance);
 			return instance;
 	}
@@ -692,7 +692,7 @@ public class SmartTest {
 		TaskInstanceInfo assignedInstance2 = new TaskInstanceInfo("assignedtask2", "구매기안 기안제출", TaskInstance.TYPE_PROCESS_TASK_FORWARDED,
 			SmartTest.getUserInfo3(), getUserInfo3(), new LocalDate(LocalDate.convertStringToTime("201110251600")));
 		assignedInstance2.setStatus(Instance.STATUS_RETURNED);
-		workInstance2.setWorkSpace(getDepartmentInfo1());
+		workInstance2.setWorkSpaceInfo(getDepartmentInfo1());
 		assignedInstance2.setWorkInstance(workInstance2);
 
 		TaskInstanceInfo assignedInstance3 = new TaskInstanceInfo("assignedtask3", "반도체회사 제안서 공유합니다.", TaskInstance.TYPE_INFORMATION_TASK_FORWARDED,
@@ -704,13 +704,13 @@ public class SmartTest {
 		TaskInstanceInfo assignedInstance5 = new TaskInstanceInfo("assignedtask5", "일일보고 입니다.", TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED,
 				SmartTest.getUserInfo3(), getUserInfo3(),  new LocalDate(LocalDate.convertStringToTime("201110251600")));
 			assignedInstance5.setStatus(Instance.STATUS_RUNNING);
-			workInstance5.setWorkSpace(getGroupInfo1());
+			workInstance5.setWorkSpaceInfo(getGroupInfo1());
 			assignedInstance5.setWorkInstance(workInstance5);
 
 		TaskInstanceInfo createdInstance1 = new TaskInstanceInfo("createdtask1", "사진 입니다.", TaskInstance.TYPE_INFORMATION_TASK_CREATED,
 				SmartTest.getUserInfo3(), getUserInfo3(),  new LocalDate(LocalDate.convertStringToTime("201110251600")));
 		createdInstance1.setStatus(Instance.STATUS_COMPLETED);
-		createdInstance1.setWorkSpace(getGroupInfo1());
+		createdInstance1.setWorkSpaceInfo(getGroupInfo1());
 		ImageInstanceInfo imageInstance = new ImageInstanceInfo("imageinst1", "오늘찍은 사진입니다.", getSmartWorkInfo8(), getUserInfo3(),  new LocalDate(LocalDate.convertStringToTime("201110251600")));
 		imageInstance.setImgSource("images/2011-04-05 15.26.02.jpg");
 		imageInstance.setContent("안녕하세요......?");
@@ -763,15 +763,15 @@ public class SmartTest {
 	public static CommentInstanceInfo[] getCommentInstances() throws Exception{
 		CommentInstanceInfo commentInstance1 = new CommentInstanceInfo("comments1", CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL, "조금더 보강해야 될것 같은데요????",
 				SmartTest.getUserInfo1(), new LocalDate());
-		commentInstance1.setWork(SmartTest.getInformationWorkInfo1());
+		commentInstance1.setWorkInfo(SmartTest.getInformationWorkInfo1());
 
 		CommentInstanceInfo commentInstance2 = new CommentInstanceInfo("comments2", CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL, "잘모르겠습니다. ㅠㅠ",
 				SmartTest.getUserInfo2(), new LocalDate());
-		commentInstance2.setWork(SmartTest.getInformationWorkInfo1());
+		commentInstance2.setWorkInfo(SmartTest.getInformationWorkInfo1());
 
 		CommentInstanceInfo commentInstance3 = new CommentInstanceInfo("comments3", CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL, "휴가잘다녀오세요!!!",
 				SmartTest.getUserInfo3(), new LocalDate());
-		commentInstance3.setWork(SmartTest.getInformationWorkInfo1());
+		commentInstance3.setWorkInfo(SmartTest.getInformationWorkInfo1());
 		return new CommentInstanceInfo[] {commentInstance1, commentInstance2, commentInstance3};
 		
 	}
@@ -785,15 +785,15 @@ public class SmartTest {
 	public static CommentInstanceInfo[] getAllCommentInstances() throws Exception{
 		CommentInstanceInfo commentInstance1 = new CommentInstanceInfo("comments1", CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL, "조금더 보강해야 될것 같은데요????",
 				SmartTest.getUserInfo1(), new LocalDate());
-		commentInstance1.setWork(SmartTest.getInformationWorkInfo1());
+		commentInstance1.setWorkInfo(SmartTest.getInformationWorkInfo1());
 
 		CommentInstanceInfo commentInstance2 = new CommentInstanceInfo("comments2", CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL, "잘모르겠습니다. ㅠㅠ",
 				SmartTest.getUserInfo2(), new LocalDate());
-		commentInstance2.setWork(SmartTest.getInformationWorkInfo1());
+		commentInstance2.setWorkInfo(SmartTest.getInformationWorkInfo1());
 
 		CommentInstanceInfo commentInstance3 = new CommentInstanceInfo("comments3", CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL, "휴가잘다녀오세요!!!",
 				SmartTest.getUserInfo3(), new LocalDate());
-		commentInstance3.setWork(SmartTest.getInformationWorkInfo1());
+		commentInstance3.setWorkInfo(SmartTest.getInformationWorkInfo1());
 		return new CommentInstanceInfo[] {commentInstance1, commentInstance2, commentInstance3, commentInstance1, commentInstance2, commentInstance3};
 		
 	}
@@ -811,13 +811,13 @@ public class SmartTest {
 		NoticeMessage notice1, notice2, notice3, notice4, notice5;
 		CommentInstanceInfo commentsInstance1 = new CommentInstanceInfo("comments1", CommentInstance.COMMENT_TYPE_ON_WORK_SPACE, "기획서좀 올려주세요!!! ㅎ",
 				SmartTest.getUserInfo3(), new LocalDate());
-		commentsInstance1.setWorkSpace(getGroupInfo1());
+		commentsInstance1.setWorkSpaceInfo(getGroupInfo1());
 		notice1 = new NoticeMessage("notice21", 0, SmartTest.getUserInfo3(), new LocalDate());
 		notice1.setInstance(commentsInstance1);
 
 		CommentInstanceInfo commentsInstance2 = new CommentInstanceInfo("comments2", CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL, "잘모르겠습니다. ㅠㅠ",
 				SmartTest.getUserInfo1(), new LocalDate());
-		commentsInstance2.setWork(SmartTest.getSmartWorkInfo3());
+		commentsInstance2.setWorkInfo(SmartTest.getSmartWorkInfo3());
 		notice2 = new NoticeMessage("notice22", 0, SmartTest.getUserInfo1(), new LocalDate());
 		notice2.setInstance(commentsInstance2);
 
@@ -960,12 +960,12 @@ public class SmartTest {
 		EventInstanceInfo event2 = new EventInstanceInfo("event2", "스마트웍스닷넷 디자인회의", SmartTest.getUserInfo1(), new LocalDate());
 		event2.setStart(time3);
 		event2.setEnd(time4);
-		event2.setWorkSpace(SmartTest.getGroupInfo1());
+		event2.setWorkSpaceInfo(SmartTest.getGroupInfo1());
 
 		EventInstanceInfo event3 = new EventInstanceInfo("event3", "주간업무 보고회의", SmartTest.getUserInfo3(), new LocalDate());
 		event3.setStart(time5);
 		event3.setEnd(time6);
-		event3.setWorkSpace(SmartTest.getDepartmentInfo1());
+		event3.setWorkSpaceInfo(SmartTest.getDepartmentInfo1());
 
 		EventInstanceInfo event4 = new EventInstanceInfo("event4", "KT 스마트웍킹팀 저녁", SmartTest.getUserInfo1(), new LocalDate());
 		event4.setStart(time7);
@@ -1102,19 +1102,19 @@ public class SmartTest {
 		time10.plusToGMTTime(-(10 * LocalDate.ONE_DAY + LocalDate.ONE_HOUR * 14));
 
 		BoardInstanceInfo board1 = new BoardInstanceInfo("board1", "워크샵 일정계획 공지 합니다.", SmartTest.getUserInfo1(), time1);
-		board1.setWorkSpace(SmartTest.getGroupInfo2());
+		board1.setWorkSpaceInfo(SmartTest.getGroupInfo2());
 		board1.setBriefContent("좋은내용으로 기획하고 있으니 많은 의견들 주시기 바랍니다........");
 		BoardInstanceInfo board2 = new BoardInstanceInfo("board2", "하반기 해외 B2B마케팅 성공사례 세미나", SmartTest.getUserInfo1(), time2);
-		board2.setWorkSpace(SmartTest.getGroupInfo2());
+		board2.setWorkSpaceInfo(SmartTest.getGroupInfo2());
 		BoardInstanceInfo board3 = new BoardInstanceInfo("board3", "올레캠퍼스 자바개발자 교육과정 소개합니다.", SmartTest.getUserInfo2(), time3);
-		board3.setWorkSpace(SmartTest.getDepartmentInfo2());
+		board3.setWorkSpaceInfo(SmartTest.getDepartmentInfo2());
 		BoardInstanceInfo board4 = new BoardInstanceInfo("board4", "가을 조직개편 조직도 입니다.", SmartTest.getUserInfo3(), time4);
-		board4.setWorkSpace(SmartTest.getGroupInfo1());
+		board4.setWorkSpaceInfo(SmartTest.getGroupInfo1());
 		BoardInstanceInfo board5 = new BoardInstanceInfo("board5", "가을 정기 임직원 승진 발표", SmartTest.getUserInfo3(), time5);
 		BoardInstanceInfo board6 = new BoardInstanceInfo("board6", "2011년도 경영계획 공지합니다.", SmartTest.getUserInfo1(), time6);
 		BoardInstanceInfo board7 = new BoardInstanceInfo("board7", "여름휴가 일정 공지합니다.", SmartTest.getUserInfo3(), time7);
 		BoardInstanceInfo board8 = new BoardInstanceInfo("board8", "제품개발 프로젝트 전체 일정 계획공지합니다.", SmartTest.getUserInfo2(), time8);
-		board8.setWorkSpace(SmartTest.getDepartmentInfo1());
+		board8.setWorkSpaceInfo(SmartTest.getDepartmentInfo1());
 		BoardInstanceInfo board9 = new BoardInstanceInfo("board9", "사무실 이전 계획 입니다.", SmartTest.getUserInfo1(), time9);
 		BoardInstanceInfo board10 = new BoardInstanceInfo("board10", "스마트웍스닷넷 장기 로드맵 입니다.", SmartTest.getUserInfo1(),
 				time10);

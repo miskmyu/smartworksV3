@@ -541,7 +541,7 @@ public class WorkInstanceController extends ExceptionInterceptor {
 			event.ownerId = eventInstance.getOwner().getId();
 			event.ownerName = eventInstance.getOwner().getLongName();
 			event.ownerPicture = eventInstance.getOwner().getMinPicture();
-			event.workSpaceId = eventInstance.getWorkSpace().getId();
+			event.workSpaceId = eventInstance.getWorkSpaceId();
 			events[i] = event;
 		}
 		Map<String, Object> map = new HashMap<String, Object>();

@@ -419,7 +419,7 @@ public class Adapter {
 			if(!this.stopDisplay)
 				this.displayContent = tokens[tokens.length-1];
 			else
-				this.displayContent = "표출요청중지";
+				this.displayContent = "표출중지요청";
 			break;
 		}
 	}
@@ -593,10 +593,11 @@ public class Adapter {
 				int count = rs.getRow(); 
 				rs.beforeFirst();
 				if (count != 0) {
+					int processedCount = 0;
 					java.lang.System.out.println("============== ADAPTER 이벤트 발생 ===============");
 					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
 					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
-					while(rs.next()) {
+					while(rs.next() && processedCount++ <20) {
 						try{
 							String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
 							updatePstmt = connection.prepareStatement(adapterUpdateSql);

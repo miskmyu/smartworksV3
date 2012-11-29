@@ -202,18 +202,18 @@ public class SeraTest {
 		InstanceInfo[] events = SmartTest.getEventInstances();
 		InstanceInfo message = SmartTest.getMessageInstanceInfo();
 		NoteInstanceInfo seraNote1 = new NoteInstanceInfo("note1", "노트제목입니다.", SmartTest.getUserInfo1(), new LocalDate());
-		seraNote1.setWorkSpace(getCourseInfo1());
+		seraNote1.setWorkSpaceInfo(getCourseInfo1());
 		seraNote1.setContent("안녕하세요, 세라 노트 내용입니다.");
 		NoteInstanceInfo seraNote2 = new NoteInstanceInfo("note1", "노트제목입니다.", SmartTest.getUserInfo1(), new LocalDate());
-		seraNote2.setWorkSpace(getCourseInfo2());
+		seraNote2.setWorkSpaceInfo(getCourseInfo2());
 		seraNote2.setContent("세라 이미지 테스트 내용입니다.");
 		seraNote2.setImageSrc("http://localhost:8081/imageServer/Semiteq/Profiles/ysjung@maninsoft.co.kr_big.png");
 		NoteInstanceInfo seraNote3 = new NoteInstanceInfo("note1", "노트제목입니다.", SmartTest.getUserInfo1(), new LocalDate());
-		seraNote3.setWorkSpace(getCourseInfo1());
+		seraNote3.setWorkSpaceInfo(getCourseInfo1());
 		seraNote3.setContent("세라 동영상 테스트 내용입니다.");
 		seraNote3.setVideoId("u1zgFlCw8Aw");
 		MissionReportInstanceInfo report1 = new MissionReportInstanceInfo("report1", "미션 수행입니다.", SmartTest.getUserInfo1(), new LocalDate());
-		report1.setWorkSpace(getCourseInfo1());
+		report1.setWorkSpaceInfo(getCourseInfo1());
 		report1.setContent("미션 수행결과입니다. 좋은 평가 부탁드립니다.");
 		
 		InstanceInfo[] instances = new InstanceInfo[7];

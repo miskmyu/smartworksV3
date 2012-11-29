@@ -300,11 +300,20 @@ public class InstanceServiceImpl implements IInstanceService {
 					String workSpaceType = swdRecord.getWorkSpaceType();
 					if(workSpaceType == null)
 						workSpaceType = String.valueOf(ISmartWorks.SPACE_TYPE_USER);
-					boardInstanceInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
+//Start InstanceInfo Model Changed by ysjung
+					//boardInstanceInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
+					boardInstanceInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
+					//boardInstanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 
 					WorkInfo workInfo = new WorkInfo(workId, null, SocialWork.TYPE_BOARD);
 
-					boardInstanceInfo.setWork(workInfo);
+//Start InstanceInfo Model Changed by ysjung
+					//boardInstanceInfo.setWork(workInfo);
+					boardInstanceInfo.setWorkInfo(workInfo);
+					//boardInstanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+//End InstanceInfo Model Changed by ysjung
+
 					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
@@ -3986,7 +3995,11 @@ public class InstanceServiceImpl implements IInstanceService {
 
 				WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
 
-				iWInstanceInfo.setWorkSpace(workSpaceInfo);
+//Start InstanceInfo Model Changed by ysjung
+				//iWInstanceInfo.setWorkSpace(workSpaceInfo);
+				iWInstanceInfo.setWorkSpaceInfo(workSpaceInfo);
+				//iWInstanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 
 				WorkCategoryInfo groupInfo = null;
 				if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
@@ -3996,7 +4009,11 @@ public class InstanceServiceImpl implements IInstanceService {
 	
 				WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
 
-				iWInstanceInfo.setWork(workInfo);
+//Start InstanceInfo Model Changed by ysjung
+				//iWInstanceInfo.setWork(workInfo);
+				iWInstanceInfo.setWorkInfo(workInfo);
+				//iWInstanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+//End InstanceInfo Model Changed by ysjung
 				iWInstanceInfo.setViews(swdRecord.getHits());
 				SwdDataField[] swdDataFields = swdRecord.getDataFields();
 				List<FieldData> fieldDataList = new ArrayList<FieldData>();
@@ -4650,7 +4667,11 @@ public class InstanceServiceImpl implements IInstanceService {
 					pworkInfo.setStatus(status);
 					pworkInfo.setSubject(workList.getTitle());
 					pworkInfo.setType(WorkInstance.TYPE_PROCESS);
-					pworkInfo.setWork(ModelConverter.getWorkInfoByPackageId(workList.getPackageId()));
+//Start InstanceInfo Model Changed by ysjung
+					//pworkInfo.setWork(ModelConverter.getWorkInfoByPackageId(workList.getPackageId()));
+					pworkInfo.setWorkInfo(ModelConverter.getWorkInfoByPackageId(workList.getPackageId()));
+					//pworkInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+//End InstanceInfo Model Changed by ysjung
 					//pworkInfo.setWorkSpace(workSpace);
 					
 					Property p1 = new Property("serviceName",workList.getServiceName());
@@ -4877,7 +4898,11 @@ public class InstanceServiceImpl implements IInstanceService {
 					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(prcInst.getParentCtgId(), prcInst.getParentCtg());
 					
 					WorkInfo workInfo = new SmartWorkInfo(prcInst.getPrcDid(), prcInst.getPrcName(), SmartWork.TYPE_PROCESS, groupInfo, categoryInfo);
-					pwInstInfo.setWork(workInfo);
+//Start InstanceInfo Model Changed by ysjung
+					//pwInstInfo.setWork(workInfo);
+					pwInstInfo.setWorkInfo(workInfo);
+					//pwInstInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+//End InstanceInfo Model Changed by ysjung
 		
 					TaskInstanceInfo lastTaskInfo = null;
 					
@@ -4915,9 +4940,17 @@ public class InstanceServiceImpl implements IInstanceService {
 						lastTaskInfo.setStatus(tskStatus);
 						lastTaskInfo.setSubject(subject);
 						lastTaskInfo.setType(tskType);
-						lastTaskInfo.setWork(workInfo);
+//Start InstanceInfo Model Changed by ysjung
+						//lastTaskInfo.setWork(workInfo);
+						lastTaskInfo.setWorkInfo(workInfo);
+						//lastTaskInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+//End InstanceInfo Model Changed by ysjung
 						lastTaskInfo.setWorkInstance(pwInstInfo);
-						lastTaskInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getLastTask_tskWorkSpaceType(), prcInst.getLastTask_tskWorkSpaceId()));
+//Start InstanceInfo Model Changed by ysjung
+						//lastTaskInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getLastTask_tskWorkSpaceType(), prcInst.getLastTask_tskWorkSpaceId()));
+						lastTaskInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(prcInst.getLastTask_tskWorkSpaceType(), prcInst.getLastTask_tskWorkSpaceId()));
+						//lastTaskInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 						lastTaskInfo.setName(name);
 						lastTaskInfo.setTaskType(tskType);
 						lastTaskInfo.setAssignee(ModelConverter.getUserInfoByUserId(assignee));
@@ -4926,7 +4959,11 @@ public class InstanceServiceImpl implements IInstanceService {
 						pwInstInfo.setLastTask(lastTaskInfo);//마지막 태스크
 					}
 					pwInstInfo.setLastTaskCount(prcInst.getLastTask_tskCount());
-					pwInstInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getPrcWorkSpaceType(), prcInst.getPrcWorkSpaceId()));
+//Start InstanceInfo Model Changed by ysjung
+					//pwInstInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getPrcWorkSpaceType(), prcInst.getPrcWorkSpaceId()));
+					pwInstInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(prcInst.getPrcWorkSpaceType(), prcInst.getPrcWorkSpaceId()));
+					//pwInstInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 					pwInstanceInfoList.add(pwInstInfo);
 				}
 			}
@@ -5193,7 +5230,11 @@ public class InstanceServiceImpl implements IInstanceService {
 					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(prcInst.getParentCtgId(), prcInst.getParentCtg());
 					
 					WorkInfo workInfo = new SmartWorkInfo(prcInst.getPrcDid(), prcInst.getPrcName(), SmartWork.TYPE_PROCESS, groupInfo, categoryInfo);
-					pwInstInfo.setWork(workInfo);
+//Start InstanceInfo Model Changed by ysjung
+					//pwInstInfo.setWork(workInfo);
+					pwInstInfo.setWorkInfo(workInfo);
+					//pwInstInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+//End InstanceInfo Model Changed by ysjung
 		
 					TaskInstanceInfo lastTaskInfo = null;
 					
@@ -5233,9 +5274,17 @@ public class InstanceServiceImpl implements IInstanceService {
 						lastTaskInfo.setStatus(tskStatus);
 						lastTaskInfo.setSubject(subject);
 						lastTaskInfo.setType(tskType);
-						lastTaskInfo.setWork(workInfo);
+//Start InstanceInfo Model Changed by ysjung
+						//lastTaskInfo.setWork(workInfo);
+						lastTaskInfo.setWorkInfo(workInfo);
+						//lastTaskInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+//End InstanceInfo Model Changed by ysjung
 						lastTaskInfo.setWorkInstance(pwInstInfo);
-						lastTaskInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getLastTask_tskWorkSpaceType(), prcInst.getLastTask_tskWorkSpaceId()));
+//Start InstanceInfo Model Changed by ysjung
+						//lastTaskInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getLastTask_tskWorkSpaceType(), prcInst.getLastTask_tskWorkSpaceId()));
+						lastTaskInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(prcInst.getLastTask_tskWorkSpaceType(), prcInst.getLastTask_tskWorkSpaceId()));
+						//lastTaskInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 						lastTaskInfo.setName(name);
 						lastTaskInfo.setTaskType(tskType);
 						lastTaskInfo.setAssignee(ModelConverter.getUserInfoByUserId(assignee));
@@ -5244,7 +5293,11 @@ public class InstanceServiceImpl implements IInstanceService {
 						pwInstInfo.setLastTask(lastTaskInfo);//마지막 태스크
 					}
 					pwInstInfo.setLastTaskCount(prcInst.getLastTask_tskCount());
-					pwInstInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getPrcWorkSpaceType(), prcInst.getPrcWorkSpaceId()));
+//Start InstanceInfo Model Changed by ysjung
+					//pwInstInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getPrcWorkSpaceType(), prcInst.getPrcWorkSpaceId()));
+					pwInstInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(prcInst.getPrcWorkSpaceType(), prcInst.getPrcWorkSpaceId()));
+					//pwInstInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 					pwInstanceInfoList.add(pwInstInfo);
 				}
 			}
@@ -5604,7 +5657,11 @@ public class InstanceServiceImpl implements IInstanceService {
 
 					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
 
-					workInstanceInfo.setWorkSpace(workSpaceInfo);
+//Start InstanceInfo Model Changed by ysjung
+					//workInstanceInfo.setWorkSpace(workSpaceInfo);
+					workInstanceInfo.setWorkSpaceInfo(workSpaceInfo);
+					//workInstanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 
 					WorkCategoryInfo groupInfo = null;
 					if (!CommonUtil.isEmpty(subCtgId))
@@ -5614,7 +5671,11 @@ public class InstanceServiceImpl implements IInstanceService {
 
 					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SocialWork.TYPE_BOARD, groupInfo, categoryInfo);
 
-					workInstanceInfo.setWork(workInfo);
+//Start InstanceInfo Model Changed by ysjung
+					//workInstanceInfo.setWork(workInfo);
+					workInstanceInfo.setWorkInfo(workInfo);
+					//workInstanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+//End InstanceInfo Model Changed by ysjung
 					workInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					workInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
@@ -6402,7 +6463,11 @@ public class InstanceServiceImpl implements IInstanceService {
 				int type = WorkInstance.TYPE_PROCESS;
 				pwInstInfo.setType(type);
 				WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(prcInst.getDiagramId());
-				pwInstInfo.setWork(workInfo);
+//Start InstanceInfo Model Changed by ysjung
+				//pwInstInfo.setWork(workInfo);
+				pwInstInfo.setWorkInfo(workInfo);
+				//pwInstInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+//End InstanceInfo Model Changed by ysjung
 				TskTask lastTskTask = ModelConverter.getLastExecutedTskTaskByPrcInstId(prcInst.getObjId());
 				TaskInstanceInfo lastTaskInfo = null;
 				TaskInstanceInfo runningTaskInfo = null;
@@ -6432,8 +6497,14 @@ public class InstanceServiceImpl implements IInstanceService {
 					lastTaskInfo.setStatus(status);
 					lastTaskInfo.setSubject(subject);
 					lastTaskInfo.setType(type);
-					lastTaskInfo.setWork(workInfo);
-					lastTaskInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getWorkSpaceType(), prcInst.getWorkSpaceId()));
+//Start InstanceInfo Model Changed by ysjung
+					//lastTaskInfo.setWork(workInfo);
+					//lastTaskInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getWorkSpaceType(), prcInst.getWorkSpaceId()));
+					lastTaskInfo.setWorkInfo(workInfo);
+					//lastTaskInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+					lastTaskInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(prcInst.getWorkSpaceType(), prcInst.getWorkSpaceId()));
+					//lastTaskInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 					lastTaskInfo.setName(name);
 					lastTaskInfo.setTaskType(type);
 					lastTaskInfo.setAssignee(ModelConverter.getUserInfoByUserId(assignee));
@@ -6468,8 +6539,14 @@ public class InstanceServiceImpl implements IInstanceService {
 						runningTaskInfo.setStatus(status);
 						runningTaskInfo.setSubject(subject);
 						runningTaskInfo.setType(type);
-						runningTaskInfo.setWork(workInfo);
-						runningTaskInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(runningTask.getWorkSpaceType(), runningTask.getWorkSpaceId()));
+//Start InstanceInfo Model Changed by ysjung
+						//runningTaskInfo.setWork(workInfo);
+						//runningTaskInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(runningTask.getWorkSpaceType(), runningTask.getWorkSpaceId()));
+						runningTaskInfo.setWorkInfo(workInfo);
+						//runningTaskInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+						runningTaskInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(runningTask.getWorkSpaceType(), runningTask.getWorkSpaceId()));
+						//runningTaskInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 						runningTaskInfo.setName(name);
 						runningTaskInfo.setTaskType(type);
 						runningTaskInfo.setAssignee(ModelConverter.getUserInfoByUserId(assignee));
@@ -6477,7 +6554,11 @@ public class InstanceServiceImpl implements IInstanceService {
 	//					pwInstInfo.setRunningTasks(new TaskInstanceInfo[]{runningTaskInfo});//실행중태스크
 					}
 				}
-				pwInstInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getWorkSpaceType(), prcInst.getWorkSpaceId()));
+//Start InstanceInfo Model Changed by ysjung
+				//pwInstInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getWorkSpaceType(), prcInst.getWorkSpaceId()));
+				pwInstInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(prcInst.getWorkSpaceType(), prcInst.getWorkSpaceId()));
+				//pwInstInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 				pWInstanceInfos[i] = pwInstInfo;
 			}
 	//		instanceInfoList.setInstanceDatas(ModelConverter.getPWInstanceInfoArrayByPrcProcessInstArray(prcInsts));
@@ -7581,7 +7662,11 @@ public class InstanceServiceImpl implements IInstanceService {
 						int type = WorkInstance.TYPE_INFORMATION;
 						iWInstanceInfo.setType(type);
 						iWInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-						iWInstanceInfo.setWorkSpace(null);
+//Start InstanceInfo Model Changed by ysjung
+						//iWInstanceInfo.setWorkSpace(null);
+						iWInstanceInfo.setWorkSpaceInfo(null);
+						//iWInstanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 			
 						WorkCategoryInfo groupInfo = null;
 						if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
@@ -7591,7 +7676,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 						WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
 		
-						iWInstanceInfo.setWork(workInfo);
+//Start InstanceInfo Model Changed by ysjung
+						//iWInstanceInfo.setWork(workInfo);
+						iWInstanceInfo.setWorkInfo(workInfo);
+						//iWInstanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+//End InstanceInfo Model Changed by ysjung
 						iWInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 						iWInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 		

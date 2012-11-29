@@ -96,6 +96,7 @@
 		}
 	}if (params != null){
 		selectedFilterId = params.getFilterId();
+		params.setSearchFilter(null);
 	}
 	
 	session.setAttribute("auditId", auditId);

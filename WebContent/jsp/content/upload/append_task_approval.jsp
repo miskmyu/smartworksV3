@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.									 -->
 <!-- Created Date	: 2011.9.											 -->
 
+<%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.util.SmartMessage"%>
 <%@page import="net.smartworks.model.instance.TaskInstance"%>
 <%@page import="net.smartworks.util.LocalDate"%>
@@ -32,6 +33,8 @@
 	TaskInstanceInfo approvalTask = null;
 	String subject = "";
 	String content = "";
+	UserInfo[] forwardees = null;
+	boolean isLazyReferenceTask = false;
 	String approvalInstId = "";
 	
 	String workInstId = null;
@@ -72,13 +75,11 @@
 	}
 	ApprovalLine approvalLine = null;
 	ApprovalLineInst approvalLineInst = null;
-	String drafterId = "";
-	String drafterName = "";
+	String drafter = "";
 	String draftDate = "";
 	if(!SmartUtil.isBlankObject(approvalInstId) && SmartUtil.isBlankObject(approvalLineId)){
 		approvalLineInst = smartWorks.getApprovalLineInstById(approvalInstId);
-		drafterId = workInstance.getOwner().getId();
-		drafterName = workInstance.getOwner().getLongName();
+		drafter = SmartUtil.getUsersHtml(new UserInfo[]{workInstance.getOwner().getUserInfo()});
 		draftDate = workInstance.getCreatedDate().toLocalDateTimeSimpleString();
 	}else if(!SmartUtil.isBlankObject(approvalLineId)){
 		approvalLine = smartWorks.getApprovalLineById(approvalLineId);
@@ -88,6 +89,11 @@
 
 	boolean isForwarded = SmartUtil.isBlankObject(approvalTask) ? false : (approvalTask.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) ? true : false;
 	String forwardId = SmartUtil.isBlankObject(approvalTask) ? "" : approvalTask.getForwardId();
+	
+	if(!SmartUtil.isBlankObject(workInstance)){
+		forwardees = workInstance.getForwardees();
+		isLazyReferenceTask = workInstance.isLazyreferenceTask();
+	}
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -198,9 +204,10 @@
 		<form class="form_layout js_validation_required" name="frmTaskApproval">
 			<div class="js_task_approval_fields"
 				subjectTitle="<fmt:message key='approval.title.subject'/>" subject="<%=CommonUtil.toNotNull(subject)%>"
-				forwardeeTitle="<fmt:message key='approval.title.forwardee'/>" actionRequired="<%=!SmartUtil.isBlankObject(approvalTask) %>"
+				forwardeeTitle="<fmt:message key='approval.title.forwardee'/>" actionRequired="<%=!SmartUtil.isBlankObject(approvalTask) %>" forwardees="<%=CommonUtil.toNotNull(SmartUtil.getUsersHtml(forwardees)) %>"
+				isLazyReferenceTaskTitle="<fmt:message key='approval.title.lazy_reference_task'/>" isLazyReferenceTask="<%=isLazyReferenceTask %>"
 				CommentsTitle="<fmt:message key='approval.title.comments' />" content="<%=CommonUtil.toNotNull(content)%>"
-				drafterTitle="<fmt:message key='approval.title.drafter' />" drafterId="<%=CommonUtil.toNotNull(drafterId)%>" drafterName="<%=CommonUtil.toNotNull(drafterName)%>"
+				drafterTitle="<fmt:message key='approval.title.drafter' />" drafter="<%=CommonUtil.toNotNull(drafter)%>"
 				draftDateTitle="<fmt:message key='approval.title.draft_date' />" draftDate="<%=CommonUtil.toNotNull(draftDate)%>"
 				<%
 				boolean isReturned = false;

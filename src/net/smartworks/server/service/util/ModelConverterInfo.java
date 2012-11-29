@@ -183,8 +183,14 @@ public class ModelConverterInfo extends ModelConverter {
 		instanceInfo.setOwner(owner);
 		instanceInfo.setSubject(subject);
 		instanceInfo.setType(type);
-		instanceInfo.setWork(work);
-		instanceInfo.setWorkSpace(workSpace);
+//Start InstanceInfo Model Changed by ysjung
+		//instanceInfo.setWork(work);
+		//instanceInfo.setWorkSpace(workSpace);
+		instanceInfo.setWorkInfo(work);
+		//instanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+		instanceInfo.setWorkSpaceInfo(workSpace);
+		//instanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 		SwdDataField[] swdDataFields = swdRecord.getDataFields();
 
 		FieldData[] fieldDatas = ModelConverterInfo.getFieldDataArrayBySwdDataFieldArray(swdDataFields);

@@ -50,7 +50,8 @@ public class System {
 	
 	public static final String TASK_FORM_NAME_USERVICE_END 		= "상황발생 종료화면";
 	public static final String TASK_NAME_USERVICE_END 			= "상황종료";
-
+	public static final String TASK_NAME_DISPLAY_HISTORY 			= "표출이력";
+	
 	public static final String REPORT_OPTION_CATEGORY_BY_TIME = "option.category.byTime";
 	public static final String REPORT_OPTION_CATEGORY_BY_AMPM = "option.category.byAmPm";
 	public static final String REPORT_OPTION_CATEGORY_BY_DAY = "option.category.byDay";

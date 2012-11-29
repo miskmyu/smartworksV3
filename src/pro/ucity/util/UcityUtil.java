@@ -275,7 +275,8 @@ public class UcityUtil {
 		
 		PWInstanceInfo[] instances = (PWInstanceInfo[])instanceList.getInstanceDatas();
 		for(int i=0; i<instances.length; i++){			
-			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
+//			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
+			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWorkId().equals(processId)) continue;
 			ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, instances[i].getId());
 			if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
 			UcityWorkListCond cond = new UcityWorkListCond();
@@ -333,7 +334,8 @@ public class UcityUtil {
 		requestBody.put("formId", form.getId());
 		requestBody.put("formName", form.getName());
 		if(!SmartUtil.isBlankObject(data.get("externalDisplay"))){
-			Property[] extendedProperties = taskInstance.getWorkInstance().getExtentedProperty();
+			Property[] extendedProperties = SwServiceFactory.getInstance().getInstanceService().getUcityExtendedPropertyByTaskInstId(taskInstance.getId());
+
 			String externalDisplay = "";
 			if(!SmartUtil.isBlankObject(extendedProperties)){
 				for(int i=0; i<extendedProperties.length; i++){
@@ -430,7 +432,8 @@ public class UcityUtil {
 		}
 		PWInstanceInfo[] instances = (PWInstanceInfo[])instanceList.getInstanceDatas();
 		for(int i=0; i<instances.length; i++){			
-			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
+//			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
+			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWorkId().equals(processId)) continue;
 			ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, instances[i].getId());
 			if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
 			for(int j=0; j<processInstance.getTasks().length; j++){
@@ -679,6 +682,10 @@ public class UcityUtil {
 				Map<String, Object> dataRecord = null;
 				Connection connection = null;
 				try{
+//				    Context init = new InitialContext();
+//				    Context envinit = (Context)init.lookup("java:comp/env");
+//				    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//				    connection = ds.getConnection();
 					connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 				}catch (Exception e){
 					timeout = 0;
@@ -733,8 +740,7 @@ public class UcityUtil {
 							if(OPDisplay.checkIfDisplay(connection, eventId, false))
 								dataRecord = OPDisplay.checkForDisplay(connection, eventId, false, dataRecord);
 							else if(OPDisplay.checkIfDisplay(connection, eventId, true))
-								dataRecord = OPDisplay.checkForDisplay(connection, eventId, true, dataRecord);
-							
+								dataRecord = OPDisplay.checkForDisplay(connection, eventId, true, dataRecord);	
 							if(OPSms.checkIfDisplay(connection, eventId))
 								dataRecord = OPSms.checkForDisplay(connection, eventId, dataRecord);
 						}
@@ -767,6 +773,7 @@ public class UcityUtil {
 				
 				if(connection != null){
 					try{
+						java.lang.System.out.println("#########Connection 끊김#########");
 						connection.close();
 					}catch (Exception e){
 						e.printStackTrace();						
