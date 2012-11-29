@@ -144,6 +144,18 @@
 					<th width="15%"><fmt:message key="settings.title.email.delete_fetched"/></th>
 					<td width="85%"><input name="chkEmailServerDeleteFetched" class="fieldline" type="checkbox" <%if(emailServer.isDeleteFetched()){ %>checked<%} %>/></td>
 				</tr>
+				<tr>
+					<th width="15%"><fmt:message key="settings.title.email.pwchange_api"/></th>
+					<td width="85%">
+						<input name="chkEmailServerPWChangeAPI" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeAPI())%>"/>
+						<span><fmt:message key="settings.title.email.pwchange_param_id"/></span>
+						<input name="chkEmailServerPWChangeParamId" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamId())%>"/>
+						<span><fmt:message key="settings.title.email.pwchange_param_oldpw"/></span>
+						<input name="chkEmailServerPWChangeParamOldPW" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamOldPW())%>"/>
+						<span><fmt:message key="settings.title.email.pwchange_param_newpw"/></span>
+						<input name="chkEmailServerPWChangeParamNewPW" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamNewPW())%>"/>
+				</td>
+				</tr>
 <%-- 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.auto_backup"/></th>
 					<td width="85%">

@@ -26,6 +26,11 @@ public class EmailServer extends BaseObject {
 	private boolean autoBackup;
 	private int mailKeepingMonths=DEFAULT_MAIL_KEEPING_MONTHS;
 	
+	private String pwChangeAPI;
+	private String pwChangeParamId;
+	private String pwChangeParamOldPW;
+	private String pwChangeParamNewPW;
+	
 	public String getFetchServer() {
 		return fetchServer;
 	}
@@ -91,6 +96,30 @@ public class EmailServer extends BaseObject {
 	}
 	public void setMailKeepingMonths(int mailKeepingMonths) {
 		this.mailKeepingMonths = mailKeepingMonths;
+	}
+	public String getPwChangeAPI() {
+		return pwChangeAPI;
+	}
+	public void setPwChangeAPI(String pwChangeAPI) {
+		this.pwChangeAPI = pwChangeAPI;
+	}
+	public String getPwChangeParamId() {
+		return pwChangeParamId;
+	}
+	public void setPwChangeParamId(String pwChangeParamId) {
+		this.pwChangeParamId = pwChangeParamId;
+	}
+	public String getPwChangeParamOldPW() {
+		return pwChangeParamOldPW;
+	}
+	public void setPwChangeParamOldPW(String pwChangeParamOldPW) {
+		this.pwChangeParamOldPW = pwChangeParamOldPW;
+	}
+	public String getPwChangeParamNewPW() {
+		return pwChangeParamNewPW;
+	}
+	public void setPwChangeParamNewPW(String pwChangeParamNewPW) {
+		this.pwChangeParamNewPW = pwChangeParamNewPW;
 	}
 	public EmailServer() {
 		super();
