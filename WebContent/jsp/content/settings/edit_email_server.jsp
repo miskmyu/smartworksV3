@@ -100,60 +100,60 @@
 			<tbody>
 				<tr>
 					<th class="required_label" width="15%"><fmt:message key="settings.title.email.name"/></th>
-					<td width="85%"><input name="txtEmailServerName" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(emailServer.getName()) %>" /></td>
+					<td width="85%"><input name="txtEmailServerName" class="up required" type="text" value="<%=CommonUtil.toNotNull(emailServer.getName()) %>" /></td>
 				</tr>
 				<tr>
 					<th class="required_label" width="15%"><fmt:message key="settings.title.email.fetch_server"/></th>
-					<td width="85%"><input name="txtEmailServerFetchServer" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(emailServer.getFetchServer()) %>" /></td>
+					<td width="85%"><input name="txtEmailServerFetchServer" class="up required" type="text" value="<%=CommonUtil.toNotNull(emailServer.getFetchServer()) %>" /></td>
 				</tr>
 				<tr>
 					<th class="required_label" width="15%"><fmt:message key="settings.title.email.fetch_port"/></th>
-					<td width="85%"><input name="txtEmailServerFetchPort" class="fieldline required" type="text" <%if(emailServer.getFetchServerPort()>0){ %>value="<%=emailServer.getFetchServerPort() %>"<%} %> /></td>
+					<td width="85%"><input name="txtEmailServerFetchPort" class="up required" type="text" <%if(emailServer.getFetchServerPort()>0){ %>value="<%=emailServer.getFetchServerPort() %>"<%} %> /></td>
 				</tr>
 				<tr>
 					<th class="" width="15%"><fmt:message key="settings.title.email.fetch_protocol"/></th>
 					<td width="85%">
-						<select name="selEmailServerFetchProtocol" class="fieldline" >
+						<select name="selEmailServerFetchProtocol">
 							<option value="<%=EmailServer.PROTOCOL_POP3 %>" <%if(EmailServer.PROTOCOL_POP3.equals(emailServer.getFetchProtocol())){ %>selected<%} %>><%=EmailServer.PROTOCOL_POP3 %></option>
 						</select>
 					</td>
 				</tr>
 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.fetch_ssl"/></th>
-					<td width="85%"><input name="txtEmailServerFetchSsl" class="fieldline" type="checkbox" <%if(emailServer.isFetchSsl()){ %>checked<%} %>/></td>
+					<td width="85%"><input name="txtEmailServerFetchSsl" class="up" type="checkbox" <%if(emailServer.isFetchSsl()){ %>checked<%} %>/></td>
 				</tr>
 				<tr>
 					<th class="required_label" width="15%"><fmt:message key="settings.title.email.smtp_server"/></th>
-					<td width="85%"><input name="txtEmailServerSmtpServer" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(emailServer.getSmtpServer()) %>" /></td>
+					<td width="85%"><input name="txtEmailServerSmtpServer" class="up required" type="text" value="<%=CommonUtil.toNotNull(emailServer.getSmtpServer()) %>" /></td>
 				</tr>
 				<tr>
 					<th class="required_label" width="15%"><fmt:message key="settings.title.email.smtp_port"/></th>
-					<td width="85%"><input name="txtEmailServerSmtpPort" class="fieldline required" type="text" <%if(emailServer.getSmtpServerPort()>0){ %>value="<%=emailServer.getSmtpServerPort() %>"<%} %> /></td>
+					<td width="85%"><input name="txtEmailServerSmtpPort" class="up required" type="text" <%if(emailServer.getSmtpServerPort()>0){ %>value="<%=emailServer.getSmtpServerPort() %>"<%} %> /></td>
 				</tr>
 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.smtp_authenticated"/></th>
-					<td width="85%"><input name="txtEmailServerSmtpAuthenticated" class="fieldline" type="checkbox" <%if(emailServer.isSmtpAuthenticated()){ %>checked<%} %>/></td>
+					<td width="85%"><input name="txtEmailServerSmtpAuthenticated" class="up" type="checkbox" <%if(emailServer.isSmtpAuthenticated()){ %>checked<%} %>/></td>
 				</tr>
 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.smtp_ssl"/></th>
-					<td width="85%"><input name="txtEmailServerSmtpSsl" class="fieldline" type="checkbox" <%if(emailServer.isSmtpSsl()){ %>checked<%} %>/></td>
+					<td width="85%"><input name="txtEmailServerSmtpSsl" class="up" type="checkbox" <%if(emailServer.isSmtpSsl()){ %>checked<%} %>/></td>
 				</tr>
 				
 				<tr></tr>
 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.delete_fetched"/></th>
-					<td width="85%"><input name="chkEmailServerDeleteFetched" class="fieldline" type="checkbox" <%if(emailServer.isDeleteFetched()){ %>checked<%} %>/></td>
+					<td width="85%"><input name="chkEmailServerDeleteFetched" class="up" type="checkbox" <%if(emailServer.isDeleteFetched()){ %>checked<%} %>/></td>
 				</tr>
 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.pwchange_api"/></th>
-					<td width="85%">
-						<input name="chkEmailServerPWChangeAPI" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeAPI())%>"/>
+					<td width="85%" class="w_auto">
+						<input name="chkEmailServerPWChangeAPI" class="up" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeAPI())%>"/>
 						<span><fmt:message key="settings.title.email.pwchange_param_id"/></span>
-						<input name="chkEmailServerPWChangeParamId" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamId())%>"/>
+						<input name="chkEmailServerPWChangeParamId" class="up" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamId())%>"/>
 						<span><fmt:message key="settings.title.email.pwchange_param_oldpw"/></span>
-						<input name="chkEmailServerPWChangeParamOldPW" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamOldPW())%>"/>
+						<input name="chkEmailServerPWChangeParamOldPW" class="up" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamOldPW())%>"/>
 						<span><fmt:message key="settings.title.email.pwchange_param_newpw"/></span>
-						<input name="chkEmailServerPWChangeParamNewPW" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamNewPW())%>"/>
+						<input name="chkEmailServerPWChangeParamNewPW" class="up" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamNewPW())%>"/>
 				</td>
 				</tr>
 <%-- 				<tr>
