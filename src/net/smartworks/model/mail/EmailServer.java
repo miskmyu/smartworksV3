@@ -27,6 +27,7 @@ public class EmailServer extends BaseObject {
 	private int mailKeepingMonths=DEFAULT_MAIL_KEEPING_MONTHS;
 	
 	private String pwChangeAPI;
+	private String pwChangeDefaultData;
 	private String pwChangeParamId;
 	private String pwChangeParamOldPW;
 	private String pwChangeParamNewPW;
@@ -102,6 +103,12 @@ public class EmailServer extends BaseObject {
 	}
 	public void setPwChangeAPI(String pwChangeAPI) {
 		this.pwChangeAPI = pwChangeAPI;
+	}
+	public String getPwChangeDefaultData() {
+		return pwChangeDefaultData;
+	}
+	public void setPwChangeDefaultData(String pwChangeDefaultData) {
+		this.pwChangeDefaultData = pwChangeDefaultData;
 	}
 	public String getPwChangeParamId() {
 		return pwChangeParamId;

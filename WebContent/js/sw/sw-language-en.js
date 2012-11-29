@@ -213,6 +213,8 @@ smartMessage.bundle['en'] = {
 	setWorkManualError : "Error has been occured while modifing Work Manual. Please contact the Administrator!",
 	importFromExcelSuccess : "records has been uploaded successfully.",
 	importFromExcelError : "Error has been occured while importing from Excel File. Please contact the Administrator!",
+	changeMailPasswordSucceed : "Mail password has been changed successfully.",
+	changeMailPasswordError : "Error has been occured while changing Mail password. Please contact the Administrator!",
 	replyMailError : "Error has been occured while repling Mail Instance. Please contact the Administrator!",
 	forwardMailError : "Error has been occured while forwarding Mail Instance. Please contact the Administrator!",
 	fetchMailsError : "Error has been occured while fetching Mail Instances. Please contact the Administrator!",
@@ -228,6 +230,7 @@ smartMessage.bundle['en'] = {
 	addAdjunctError : "Error has beeon occured while adding Adjunct Member. Please contact the Administrator!",
 	removeCommentError : "Error has beeon occured while removing the Comment. Please contact the Administrator!",
 	boardDurationDateError : "The Duration Date of Board must be the future. Please retry with valid Duration Date", 
+	newMailPasswordConfirmError : "Error has been occured while confirming new password, Please retry with valid password confirmation",
 	
 	usableUserId : "The ID is not used, so you can user the ID. Please click the ID Change button to change the ID.",
 	duplicatedUserId : "The ID is already used by other. Please input another ID.",
