@@ -113,14 +113,14 @@
 				<tr>
 					<th class="" width="15%"><fmt:message key="settings.title.email.fetch_protocol"/></th>
 					<td width="85%">
-						<select name="selEmailServerFetchProtocol" class="fieldline" >
+						<select name="selEmailServerFetchProtocol">
 							<option value="<%=EmailServer.PROTOCOL_POP3 %>" <%if(EmailServer.PROTOCOL_POP3.equals(emailServer.getFetchProtocol())){ %>selected<%} %>><%=EmailServer.PROTOCOL_POP3 %></option>
 						</select>
 					</td>
 				</tr>
 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.fetch_ssl"/></th>
-					<td width="85%"><input name="txtEmailServerFetchSsl" class="fieldline" type="checkbox" <%if(emailServer.isFetchSsl()){ %>checked<%} %>/></td>
+					<td width="85%"><input name="txtEmailServerFetchSsl" type="checkbox" <%if(emailServer.isFetchSsl()){ %>checked<%} %>/></td>
 				</tr>
 				<tr>
 					<th class="required_label" width="15%"><fmt:message key="settings.title.email.smtp_server"/></th>
@@ -132,29 +132,37 @@
 				</tr>
 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.smtp_authenticated"/></th>
-					<td width="85%"><input name="txtEmailServerSmtpAuthenticated" class="fieldline" type="checkbox" <%if(emailServer.isSmtpAuthenticated()){ %>checked<%} %>/></td>
+					<td width="85%"><input name="txtEmailServerSmtpAuthenticated" type="checkbox" <%if(emailServer.isSmtpAuthenticated()){ %>checked<%} %>/></td>
 				</tr>
 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.smtp_ssl"/></th>
-					<td width="85%"><input name="txtEmailServerSmtpSsl" class="fieldline" type="checkbox" <%if(emailServer.isSmtpSsl()){ %>checked<%} %>/></td>
+					<td width="85%"><input name="txtEmailServerSmtpSsl" type="checkbox" <%if(emailServer.isSmtpSsl()){ %>checked<%} %>/></td>
 				</tr>
 				
 				<tr></tr>
 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.delete_fetched"/></th>
-					<td width="85%"><input name="chkEmailServerDeleteFetched" class="fieldline" type="checkbox" <%if(emailServer.isDeleteFetched()){ %>checked<%} %>/></td>
+					<td width="85%"><input name="chkEmailServerDeleteFetched" type="checkbox" <%if(emailServer.isDeleteFetched()){ %>checked<%} %>/></td>
 				</tr>
 				<tr>
-					<th width="15%"><fmt:message key="settings.title.email.pwchange_api"/></th>
+					<th width="15%"><fmt:message key="settings.title.email.pwchange"/></th>
 					<td width="85%">
-						<input name="chkEmailServerPWChangeAPI" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeAPI())%>"/>
-						<span><fmt:message key="settings.title.email.pwchange_param_id"/></span>
-						<input name="chkEmailServerPWChangeParamId" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamId())%>"/>
-						<span><fmt:message key="settings.title.email.pwchange_param_oldpw"/></span>
-						<input name="chkEmailServerPWChangeParamOldPW" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamOldPW())%>"/>
-						<span><fmt:message key="settings.title.email.pwchange_param_newpw"/></span>
-						<input name="chkEmailServerPWChangeParamNewPW" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamNewPW())%>"/>
-				</td>
+						<span><fmt:message key="settings.title.email.pwchange_url"/></span>						
+						<input name="txtPWChangeAPI" class="up" style="width:160px;" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeAPI())%>"/>
+						<span class="pl5"><fmt:message key="settings.title.email.pwchange_default_data"/></span>
+						<input name="txtPWChangeDefaultData" class="up" style="width:160px;" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeDefaultData())%>"/>
+						<span class="pl5"><fmt:message key="settings.title.email.pwchange_param_id"/></span>
+						<input name="txtPWChangeParamId" class="up" style="width:80px;" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamId())%>"/>
+						<span class="pl5"><fmt:message key="settings.title.email.pwchange_param_oldpw"/></span>
+						<input name="txtPWChangeParamOldPW" class="up" style="width:80px;" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamOldPW())%>"/>
+						<span class="pl5"><fmt:message key="settings.title.email.pwchange_param_newpw"/></span>
+						<input name="txtPWChangeParamNewPW" class="up" style="width:80px;" type="text" value="<%=CommonUtil.toNotNull(emailServer.getPwChangeParamNewPW())%>"/>
+					</td>
+				</tr>
+				<tr>
+					<th width="15%"></th>
+					<td width="85%">
+					</td>
 				</tr>
 <%-- 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.auto_backup"/></th>

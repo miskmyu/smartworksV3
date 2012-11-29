@@ -271,6 +271,7 @@ mark, rp, rt, ruby, summary, time {
 
 .h_auto {height:auto !important}
 .w_auto {width:auto !important}
+.w_auto input {width:auto !important}
 
 .op10 { filter:progid:DXImageTransform.Microsoft.Alpha(opacity=10); -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(opacity=10)"; opacity:0.1}
 .op20 { filter:progid:DXImageTransform.Microsoft.Alpha(opacity=20); -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(opacity=20)"; opacity:0.2}

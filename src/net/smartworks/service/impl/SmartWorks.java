@@ -1724,4 +1724,9 @@ public class SmartWorks implements ISmartWorks {
 	public Property[] getUcityExtendedPropertyByTaskInstId(String taskInstId) throws Exception {
 		return instanceService.getUcityExtendedPropertyByTaskInstId(taskInstId);
 	}
+
+	@Override
+	public void changeMailPasswordRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.changeMailPasswordRequest(requestBody, request);
+	}
 }

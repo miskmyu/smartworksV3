@@ -40,11 +40,6 @@
 		pwChangeParamNewPW = mailServer.getPwChangeParamNewPW();
 		
 	}
-	pwChangeAPI = "http://post.onegene.com:8000/mailGate.ds";
-	pwChangeDefaultData = "act=modify&domain=onegene.com&newStatus=0";
-	pwChangeParamId = "id";
-	pwChangeParamOldPW = "pw";
-	pwChangeParamNewPW = "newPw";
 	
 %>
 <script type="text/javascript">
@@ -70,12 +65,17 @@
 				return;				
 			}
 
-			var url = pwChangeAPI + "?" + pwChangeDefaultData + "&" + pwChangeParamId + "=" + userName + "&" + pwChangeParamOldPW + "=" + oldPassword + "&" + pwChangeParamNewPW + "=" + newPassword;
-alert(url);
+			var requestData = pwChangeAPI + "?" + pwChangeDefaultData + "&" + pwChangeParamId + "=" + userName + "&" + pwChangeParamOldPW + "=" + oldPassword + "&" + pwChangeParamNewPW + "=" + newPassword;
+			var paramsJson = {};
+			paramsJson['requestData'] = requestData;
+			console.log(JSON.stringify(paramsJson));
 			var progressSpan = changeMailPassword.find('.js_progress_span');
 			smartPop.progressCont(progressSpan);
 			$.ajax({
-				url : url,
+				url : 'change_mail_password_request.sw',
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.confirm(smartMessage.get('changeMailPasswordSucceed'),function(){

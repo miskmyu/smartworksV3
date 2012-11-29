@@ -248,7 +248,7 @@
 								for(int i=0; i<emailServers.length; i++){
 									if(emailServers[i].getId().equals(mailAccount.getEmailServerId())){
 										selectedEmailServer = emailServers[i];
-										existPwChangeAPI = SmartUtil.isBlankObject(selectedEmailServer.getPwChangeAPI());
+										existPwChangeAPI = !SmartUtil.isBlankObject(selectedEmailServer.getPwChangeAPI());
 										break;
 									}
 								}
