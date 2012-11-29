@@ -726,7 +726,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 										receiverId = receiver;
 									}else{
 										receiverId = receiver.substring(start+1, end);
-										receiver = receiver.substring(0, start-1);
+										if (start > 0)
+											receiver = receiver.substring(0, start-1);
 									}
 								}
 								receivers[j] = new UserInfo(receiverId, org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(receiver)));

@@ -77,7 +77,7 @@ $(function() {
 		refreshRecord(input, paramsJson);
 	});
 
-	$('form[name="frmSmartForm"] .form_value > select').live('change', function(e) {
+	$('form[name="frmSmartForm"] .form_value select').live('change', function(e) {
 		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};

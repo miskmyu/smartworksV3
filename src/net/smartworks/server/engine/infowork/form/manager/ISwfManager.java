@@ -19,6 +19,8 @@ import net.smartworks.server.engine.infowork.form.model.SwfFormFieldDef;
 
 public interface ISwfManager extends IManager {
 
+	public void cleanFormMapCache() throws Exception;
+	
 	public SwfForm getForm(String user, String id) throws SwfException;
 
 	public long getFormSize(String user, SwfFormCond cond) throws SwfException;
