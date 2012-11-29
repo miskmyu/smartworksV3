@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.										 -->
 <!-- Created Date	: 2011.9.												 -->
 
+<%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.model.community.info.GroupInfo"%>
@@ -41,13 +42,21 @@
 		
  		// 처음 공지사항은 최근 것이므로 별도로 왼쪽에 내용미리보기와 함께 표시하기 위해 분리한다...
 		BoardInstanceInfo board = boards[0];
-		WorkSpaceInfo workSpace = board.getWorkSpace();
+ 		String workId = board.getWorkId();
+ 		String workName = board.getWorkName();
+ 		int workType = board.getWorkType();
+ 		boolean isWorkRunning = board.isWorkRunning();
+ 		String workFullPathName = board.getWorkFullPathName();
+//		WorkSpaceInfo workSpace = board.getWorkSpace();
+		String workSpaceId = board.getWorkSpaceId();
+		String workSpaceName = board.getWorkSpaceName();
+		int workSpaceType = board.getWorkSpaceType();
 		UserInfo owner = board.getOwner();
  	
 	%>
 		<!-- 공지사항 타이틀 -->
 		<div class="left_title">
-			<a href="<%=board.getWork().getController() %>?cid=<%=board.getWork().getContextId()%>" class="more"><fmt:message key="common.button.view_all"/></a>
+			<a href="<%=WorkInfo.getController(workId, workType) %>?cid=<%=WorkInfo.getContextId(workId, workType)%>" class="more"><fmt:message key="common.button.view_all"/></a>
 			<!-- 처음게시판(헤드라인 공지사항)을 표시한다 -->
 			<%-- <div class="js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>&wid=<%=board.getWorkSpace().getId()%>">
 				<span class="title"><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">&nbsp;<%=board.getSubject() %>
@@ -79,17 +88,20 @@
 				<%
 				for(int i=0; i<boards.length; i++) {
 					board = boards[i];
-					workSpace = board.getWorkSpace();
+//					workSpace = board.getWorkSpace();
+					workSpaceId = board.getWorkSpaceId();
+					workSpaceName = board.getWorkSpaceName();
+					workSpaceType = board.getWorkSpaceType();
 				%>			
-					<tr class="instance_list js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>&wid=<%=board.getWorkSpace().getId()%>">
+					<tr class="instance_list js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>&wid=<%=workSpaceId%>">
 						<td class="title">
 							<span><span  class="js_pop_user_info" userId="<%=board.getOwner().getId()%>" longName="<%=board.getOwner().getLongName() %>" minPicture="<%=board.getOwner().getMinPicture() %>" profile="<%=board.getOwner().getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(board.getOwner().getUser().getUserInfo())%>"><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>"></span>&nbsp;<%=board.getSubject()%></span> 
 							<%if(board.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=board.getSubInstanceCount() %></b>]</font><%} %>
 							<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
 							<%
-							if(!SmartUtil.isBlankObject(workSpace) && !workSpace.getId().equals(cUser.getId())){
+							if(!SmartUtil.isBlankObject(workSpaceId) && !workSpaceId.equals(cUser.getId())){
 							%>
-								<span class="arr">▶</span><span class="space_name"><%=workSpace.getName()%></span>
+								<span class="arr">▶</span><span class="space_name"><%=workSpaceName%></span>
 							<%
 							}
 							%>

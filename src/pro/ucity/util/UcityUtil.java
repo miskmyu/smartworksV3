@@ -275,7 +275,8 @@ public class UcityUtil {
 		
 		PWInstanceInfo[] instances = (PWInstanceInfo[])instanceList.getInstanceDatas();
 		for(int i=0; i<instances.length; i++){			
-			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
+//			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
+			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWorkId().equals(processId)) continue;
 			ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, instances[i].getId());
 			if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
 			UcityWorkListCond cond = new UcityWorkListCond();
@@ -431,7 +432,8 @@ public class UcityUtil {
 		}
 		PWInstanceInfo[] instances = (PWInstanceInfo[])instanceList.getInstanceDatas();
 		for(int i=0; i<instances.length; i++){			
-			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
+//			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
+			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWorkId().equals(processId)) continue;
 			ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, instances[i].getId());
 			if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
 			for(int j=0; j<processInstance.getTasks().length; j++){

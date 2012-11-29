@@ -50,23 +50,28 @@
 				CommentInstanceInfo commentInstance = (CommentInstanceInfo) nMessage.getInstance();
 				if(count == 10) lastTaskId = commentInstance.getId();
 				UserInfo owner = commentInstance.getOwner();
-				WorkInfo work = null;
+//				WorkInfo work = null;
 
 				// 업무 매뉴얼에 댓글로 의견을 남긴 경우  
 				if (commentInstance.getCommentType() == CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL) {
-					work = commentInstance.getWork();
+//					work = commentInstance.getWork();
+					String workId = commentInstance.getWorkId();
+					String workName = commentInstance.getWorkName();
+					int workType = commentInstance.getWorkType();
+					boolean isWorkRunning = commentInstance.isWorkRunning();
+					String workFullPathName = commentInstance.getWorkFullPathName();
 					owner = commentInstance.getOwner();
 %>
 					<ul>
 					<li>
 						<div class="info_ms_section">
-							<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>&workId=<%=work.getId() %>">
-								<span class="<%=work.getIconClass()%>"></span>
-								<span><%=work.getName()%></span>
+							<a href="<%=WorkInfo.getController(workId, workType)%>?cid=<%=WorkInfo.getContextId(workId, workType)%>&workId=<%=workId %>">
+								<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"></span>
+								<span><%=workName%></span>
 							</a>
 							<div class="reply">
 								<div class="info_img">
-									<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>" title="<%=owner.getLongName()%>">
+									<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=workId %>" title="<%=owner.getLongName()%>">
 										<img src="<%=owner.getMinPicture()%>" class="profile_size_s"> </a>
 								</div>
 								<div class="info_list">
@@ -82,18 +87,23 @@
 				<%
 				// 업무 인스턴스 공간에 댓글을 남긴 경우   
 				} else if (commentInstance.getCommentType() == CommentInstance.COMMENT_TYPE_ON_WORK_INSTANCE) {
-					work = commentInstance.getWorkInstance().getWork();
+//					work = commentInstance.getWorkInstance().getWork();
+					String workId = commentInstance.getWorkInstance().getWorkId();
+					String workName = commentInstance.getWorkInstance().getWorkName();
+					int workType = commentInstance.getWorkInstance().getWorkType();
+					boolean isWorkRunning = commentInstance.getWorkInstance().isWorkRunning();
+					String workFullPathName = commentInstance.getWorkInstance().getWorkFullPathName();
 					WorkInstanceInfo workInstance = (WorkInstanceInfo)commentInstance.getWorkInstance();
 				%>
 					<li>
 					<div class="info_ms_section">
-						<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=work.getId() %>">
-							<span class="<%=work.getIconClass()%>"></span>
+						<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=workId %>">
+							<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"></span>
 							<span class="tb"><%=workInstance.getSubject()%></span> 
 						</a>
 						<div class="reply">
 							<div class="info_img">
-								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>"title="<%=owner.getLongName()%>">
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=workId %>"title="<%=owner.getLongName()%>">
 									<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 							</div>
 							<div class="info_list">
@@ -109,17 +119,26 @@
 				<%
 				// Community 및 업무 공간에 댓글을 남긴 경우   
 				} else if (commentInstance.getCommentType() == CommentInstance.COMMENT_TYPE_ON_WORK_SPACE) {
-					WorkSpaceInfo workSpace = commentInstance.getWorkSpace();
+					String workId = commentInstance.getWorkId();
+					String workName = commentInstance.getWorkName();
+					int workType = commentInstance.getWorkType();
+					boolean isWorkRunning = commentInstance.isWorkRunning();
+					String workFullPathName = commentInstance.getWorkFullPathName();
+//					WorkSpaceInfo workSpace = commentInstance.getWorkSpace();
+					String workSpaceId = commentInstance.getWorkSpaceId();
+					String workSpaceName = commentInstance.getWorkSpaceName();
+					int workSpaceType = commentInstance.getWorkSpaceType();
+					String workSpaceMinPicture = commentInstance.getWorkSpaceMinPicture();
 				%>
 					<li>
 					<div class="info_ms_section">
-						<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>&workId=<%=work.getId() %>">
-							<span class="profile_size_m"><%=workSpace.getMinPicture()%></span>
-							<span><%=workSpace.getName()%></span>
+						<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>&workId=<%=workId %>">
+							<span class="profile_size_m"><%=workSpaceMinPicture%></span>
+							<span><%=workSpaceName%></span>
 						</a>	
 						<div class="reply">				
 							<div class="info_img">
-								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>" title="<%=owner.getLongName()%>">
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=workId %>" title="<%=owner.getLongName()%>">
 									<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 							</div>
 							<div class="info_list">
@@ -141,7 +160,7 @@
 %>
 			<ul>
 				<li class="tc pt2">
-					<a class="js_more_notice_list" href="comment_list_box.sw" lastTaskId="<%=lastTaskId%>"><fmt:message key="content.more_running_instance"/></a>
+					<a class="js_more_notice_list" href="comment_list_box.sw" lastTaskId="<%=lastTaskId%>"><fmt:message key="common.message.more_work_task"/></a>
 					<span class="js_progress_span"></span>
 				</li>
 			</ul>

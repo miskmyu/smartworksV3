@@ -86,6 +86,7 @@
 		}
 	}if (params != null){
 		searchKey = params.getSearchKey();
+		params.setSearchFilter(null);
 	}
 	
 	session.setAttribute("cid", cid);
