@@ -19,6 +19,7 @@ import java.util.Map;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.SizeMap;
 import net.smartworks.server.engine.common.util.SmartUtil;
 import net.smartworks.server.engine.common.util.XmlUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
@@ -39,7 +40,11 @@ public class SwfManagerImpl extends AbstractManager implements ISwfManager {
 	public SwfManagerImpl() {
 		super();
 	}
-
+	public void cleanFormMapCache() throws Exception {
+		if (SmartUtil.formMap != null && SmartUtil.formMap.size() != 0) {
+			SmartUtil.formMap = new SizeMap(500);
+		}
+	}
 	public SwfForm getForm(String user, String id) throws SwfException {
 		if (id == null)
 			return null;

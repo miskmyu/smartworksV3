@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.community.info.WorkSpaceInfo"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
@@ -192,7 +193,7 @@
 				FileInstanceInfo fileInstance = (FileInstanceInfo)instanceInfo;
 				UserInfo owner = instanceInfo.getOwner();
 				UserInfo lastModifier = instanceInfo.getLastModifier();
-				String workId = instanceInfo.getWork().getId();
+				String workId = instanceInfo.getWorkId();
 				String target = ((WorkInstanceInfo)instanceInfo).getController() + "?cid=" + ((WorkInstanceInfo)instanceInfo).getContextId() + "&workId=" + workId;
 				List<Map<String, String>> fileNames = fileInstance.getFiles();
 				String fileId = (fileNames.size()==1) ? fileNames.get(0).get("fileId") : "";
@@ -217,7 +218,7 @@
 					if(displayType==FileCategory.DISPLAY_ALL){
 					%>
 						<td>
-							<a class="js_content_work_space" href="<%=target %>"><%=fileInstance.getWorkSpace().getName()%></a>
+							<a class="js_content_work_space" href="<%=target %>"><%=fileInstance.getWorkSpaceName()%></a>
 						</td>
 					<%
 					}
@@ -234,7 +235,7 @@
 					%>
 						<td>
 							<a class="js_content_work_space" href="<%=target %>">				
-								<span class="<%=fileInstance.getWork().getIconClass()%>"><%=((SmartWorkInfo)(fileInstance.getWork())).getFullpathName()%></span>
+								<span class="<%=WorkInfo.getIconClass(fileInstance.getWorkId(), fileInstance.getWorkType(), fileInstance.isWorkRunning())%>"><%=fileInstance.getWorkFullPathName()%></span>
 							</a>
 						</td>
 					<%

@@ -4,6 +4,8 @@
 <!-- Author			: Maninsoft, Inc.												 -->
 <!-- Created Date	: 2011.9.														 -->
 
+<%@page import="java.util.Date"%>
+<%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.model.community.info.WorkSpaceInfo"%>
@@ -54,7 +56,7 @@ boolean assignedOnly = Boolean.parseBoolean(request.getParameter("assignedOnly")
 boolean runningOnly = Boolean.parseBoolean(request.getParameter("runningOnly"));
 
 // lastDate와 assignedOnly값을 가지고 현재 진행중인 모든 인스턴스리스트를 가져온다...
-InstanceInfo[] instances = smartWorks.getMyRunningInstances(lastDate, MAX_INSTANCE_LIST, assignedOnly, runningOnly, params);
+	InstanceInfo[] instances = smartWorks.getMyRunningInstances(lastDate, MAX_INSTANCE_LIST, assignedOnly, runningOnly, params);
 if(!SmartUtil.isBlankObject(instances)) {
 %>
 <div class="space_section">
@@ -87,18 +89,23 @@ if(!SmartUtil.isBlankObject(instances)) {
 							forwardedList.add(lastTask);
 				assignedTasks = (TaskInstanceInfo[]) assignedList.toArray(new TaskInstanceInfo[0]);
 				forwardedTasks = (TaskInstanceInfo[]) forwardedList.toArray(new TaskInstanceInfo[0]);
-				trTarget = workInstance.getController() + "?cid=" + workInstance.getContextId() + "&workId=" + workInstance.getWork().getId();
+				trTarget = workInstance.getController() + "?cid=" + workInstance.getContextId() + "&workId=" + workInstance.getWorkId();
 			// 인스턴스타입이 태스크인 경우.....
 			} else if (instance.getType() == Instance.TYPE_TASK) {
 				isAssignedTask = true;
 				workInstance = (WorkInstanceInfo)((TaskInstanceInfo) instance).getWorkInstance();
 				
 				taskInstance = (TaskInstanceInfo) instance;
-				trTarget = taskInstance.getController() + "?cid=" + taskInstance.getContextId() + "&workId=" + workInstance.getWork().getId() + "&taskInstId=" + taskInstance.getId();
+				trTarget = taskInstance.getController() + "?cid=" + taskInstance.getContextId() + "&workId=" + workInstance.getWorkId() + "&taskInstId=" + taskInstance.getId();
 			}
 			UserInfo owner = workInstance.getOwner();
 			String userDetailInfo = SmartUtil.getUserDetailInfo(owner);
-			SmartWorkInfo work = (SmartWorkInfo) workInstance.getWork();
+//			SmartWorkInfo work = (SmartWorkInfo) workInstance.getWork();
+			String workId = workInstance.getWorkId();
+			String workName = workInstance.getWorkName();
+			int workType = workInstance.getWorkType();
+			boolean isWorkRunning = workInstance.isWorkRunning();
+			String workFullPathName = workInstance.getWorkFullPathName();
 	
 			// 인스턴스가 할당태스크인 경우 중에...
 			if (isAssignedTask) {
@@ -160,11 +167,14 @@ if(!SmartUtil.isBlankObject(instances)) {
 					%>
 					<%
 					// 공간이 사람이 아닌 공간(그룹, 부서) 경우에는 공간 표시를 해준다...
-					if (!workInstance.getWorkSpace().getId().equals(owner.getId())) {
-						WorkSpaceInfo workSpace = workInstance.getWorkSpace();
+					if (!SmartUtil.isBlankObject(workInstance.getWorkSpaceId()) && !workInstance.getWorkSpaceId().equals(owner.getId())) {
+//						WorkSpaceInfo workSpace = workInstance.getWorkSpace();
+						String workSpaceId = workInstance.getWorkSpaceId();
+						String workSpaceName = workInstance.getWorkSpaceName();
+						int workSpaceType = workInstance.getWorkSpaceType();
 					%>
 						<span class="arr">▶</span>
-						<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName()%></span> </a>
+						<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>"><span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName%></span> </a>
 					<%
 					}
 					// 인스턴스 타입에 할당태스크인 경우들 중에서....
@@ -177,7 +187,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 					%>
 							<fmt:message key="content.sentence.itask_assigned">
 								<fmt:param>
-									<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
+									<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>'>
 										<span class='t_woname'><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 									</a>
 								</fmt:param>
@@ -202,7 +212,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 						%>
 							<fmt:message key="content.sentence.itask_forwarded">
 								<fmt:param>
-									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
+									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>">
 										<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span>
 									</a>
 								</fmt:param>
@@ -227,7 +237,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 						%>
 							<fmt:message key="content.sentence.ptask_assigned">
 								<fmt:param>
-									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
+									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>">
 										<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 									</a>
 								</fmt:param>
@@ -252,7 +262,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 						%>
 							<fmt:message key="content.sentence.ptask_forwarded">
 								<fmt:param>
-									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
+									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>">
 										<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
 									</a>
 								</fmt:param>
@@ -277,7 +287,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 						%>
 							<fmt:message key="content.sentence.stask_assigned">
 								<fmt:param>
-									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
+									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>">
 										<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 									</a>
 								</fmt:param>
@@ -302,7 +312,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 						%>
 							<fmt:message key="content.sentence.stask_forwarded">
 								<fmt:param>
-									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
+									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>">
 										<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
 									</a>
 								</fmt:param>
@@ -329,7 +339,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 							<%if(workInstance.getStatus() == Instance.STATUS_RETURNED){ %>
 								<fmt:message key="content.sentence.atask_returned">
 									<fmt:param>
-										<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
+										<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>">
 											<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 										</a>
 									</fmt:param>
@@ -350,7 +360,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 							<% }else{ %>
 								<fmt:message key="content.sentence.atask_assigned">
 									<fmt:param>
-										<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
+										<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>">
 											<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 										</a>
 									</fmt:param>
@@ -376,7 +386,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 						%>
 							<fmt:message key="content.sentence.atask_forwarded">
 								<fmt:param>
-									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
+									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>">
 										<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
 									</a>
 								</fmt:param>
@@ -427,7 +437,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 										</a>
 									</fmt:param>
 									<fmt:param>
-										<a href="<%=assignedTask.getController()%>?cid=<%=assignedTask.getContextId()%>&wid=<%=assignee.getId() %>&workId=<%=workInstance.getWorkSpace().getId()%>">
+										<a href="<%=assignedTask.getController()%>?cid=<%=assignedTask.getContextId()%>&wid=<%=assignee.getId() %>&workId=<%=workInstance.getWorkSpaceId()%>">
 											<span class="t_woname"><%=runningTaskName%></span> 
 										</a>
 									</fmt:param>
@@ -481,11 +491,11 @@ if(!SmartUtil.isBlankObject(instances)) {
 					<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 					<!-- 인스턴스 마지막수정일자 //-->
 					<br/>
-					<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>" class="js_content">
-						<span class="<%=work.getIconClass()%>"></span>
-						<span class="t_date"><%=work.getFullpathName()%></span>
+					<a href="<%=WorkInfo.getController(workId, workType)%>?cid=<%=WorkInfo.getContextId(workId, workType)%>" class="js_content">
+						<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"></span>
+						<span class="t_date"><%=workFullPathName%></span>
 					</a>
-					<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=work.getId() %>" class="js_content">
+					<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=workId %>" class="js_content">
 						<span class="tb"><%=workInstance.getSubject()%></span> 
 					</a>
 					<%if(workInstance.getSubInstanceCount()>0){ %><font class="t_sub_count tb">[<%=workInstance.getSubInstanceCount() %>]</font><%} %>
@@ -502,7 +512,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 		<!-- 더보기 버튼 -->
 		<%if(instances.length > MAX_INSTANCE_LIST){ %>
 			<div class="t_nowork js_more_list">
-				<a href="more_instance_list.sw"><fmt:message key="content.more_running_instance"/></a>
+				<a href="more_instance_list.sw"><fmt:message key="common.message.more_work_task"/></a>
 				<span class="js_progress_span"></span>
 			</div>
 		<%} %>

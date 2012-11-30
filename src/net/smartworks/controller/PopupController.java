@@ -182,4 +182,10 @@ public class PopupController {
 		return SmartUtil.returnMnv(request, "jsp/popup/pop_reassign_performer.jsp", "");
 	}
 
+	@RequestMapping("/pop_change_mail_password")
+	public ModelAndView popChangeMailPassword(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_change_mail_password.jsp", "");
+	}
+
 }

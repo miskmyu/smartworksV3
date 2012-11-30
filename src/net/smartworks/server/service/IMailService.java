@@ -43,4 +43,6 @@ public interface IMailService {
 
 	public boolean authenticateEmailAccount(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 		
+	public void changeMailPasswordRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }

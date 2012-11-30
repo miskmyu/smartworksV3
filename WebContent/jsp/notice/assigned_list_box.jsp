@@ -52,11 +52,14 @@
 						|| taskType == TaskInstance.TYPE_PROCESS_TASK_FORWARDED) {
 					UserInfo owner = taskInstance.getOwner();
 					WorkInstanceInfo workInstance = taskInstance.getWorkInstance();
-					WorkInfo work = workInstance.getWork();
-					String workId = null;
-					if (work != null)
-						workId = work.getId();
-					String workSpaceId = taskInstance.getWorkSpace().getId();
+//					WorkInfo work = workInstance.getWork();
+					String workId = workInstance.getWorkId();
+					String workName = workInstance.getWorkName();
+					int workType = workInstance.getWorkType();
+					boolean isWorkRunning = workInstance.isWorkRunning();
+					String workFullPathName = workInstance.getWorkFullPathName();
+
+					String workSpaceId = taskInstance.getWorkSpaceId();
 %>
 					<ul>
 					<li>
@@ -80,7 +83,7 @@
 %>
 			<ul>
 				<li class="tc pt2">
-					<a class="js_more_notice_list" href="assigned_list_box.sw" lastTaskId="<%=lastTaskId%>"><fmt:message key="content.more_running_instance"/></a>
+					<a class="js_more_notice_list" href="assigned_list_box.sw" lastTaskId="<%=lastTaskId%>"><fmt:message key="common.message.more_work_task"/></a>
 					<span class="js_progress_span"></span>
 				</li>
 			</ul>

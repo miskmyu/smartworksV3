@@ -105,4 +105,11 @@ public class MailController extends ExceptionInterceptor {
 		return result ? "true" : "false";
 		
 	}
+
+	@RequestMapping(value = "/change_mail_password_request", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void changeMailPasswordRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.changeMailPasswordRequest(requestBody, request);
+	}
+
 }

@@ -68,7 +68,7 @@
 						<div class="info_ms_section">
 							<div class="info_img"><div class="icon_pop_event profile_size_s"></div></div>
 							<div class="info_list">
-								<b><%=event.getStart().toLocalString()%> </b><a href="<%=event.getController()%> %>?cid=<%=event.getContextId()%>&wid=<%=event.getWorkSpace().getId()%>"><%=event.getSubject()%></a>
+								<b><%=event.getStart().toLocalString()%> </b><a href="<%=event.getController()%> %>?cid=<%=event.getContextId()%>&wid=<%=event.getWorkSpaceId()%>"><%=event.getSubject()%></a>
 								<div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
 									<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
 										<div class="btn_x js_remove_notice" ></div></a></div>
@@ -88,7 +88,7 @@
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"title="<%=owner.getLongName()%>"><img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 							</div>
 							<div class="info_list">
-								<a href="<%=task.getController() %>?cid=<%=task.getContextId()%>&wid=<%=task.getWorkSpace().getId()%>"><%=work.getSubject()%>▶<%=task.getName()%></a>
+								<a href="<%=task.getController() %>?cid=<%=task.getContextId()%>&wid=<%=task.getWorkSpaceId()%>"><%=work.getSubject()%>▶<%=task.getName()%></a>
 								<fmt:message key="notice.message.task.delayed" />
 								<div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
 									<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
@@ -127,7 +127,7 @@
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>"><img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 							</div>
 							<div class="info_list">
-								<a href="<%=instance.getController()%>?cid=<%=instance.getContextId()%>&wid=<%=instance.getWorkSpace().getId()%>"><%=instance.getSubject()%></a>
+								<a href="<%=instance.getController()%>?cid=<%=instance.getContextId()%>&wid=<%=instance.getWorkSpaceId()%>"><%=instance.getSubject()%></a>
 								<fmt:message key="notice.message.instance.created" />
 								<div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
 									<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
@@ -144,7 +144,7 @@
 %>
 			<ul>
 				<li class="tc pt2">
-					<a class="js_more_notice_list" href="notification_list_box.sw" lastTaskId="<%=lastTaskId%>"><fmt:message key="content.more_running_instance"/></a>
+					<a class="js_more_notice_list" href="notification_list_box.sw" lastTaskId="<%=lastTaskId%>"><fmt:message key="common.message.more_work_task"/></a>
 					<span class="js_progress_span"></span>
 				</li>
 			</ul>

@@ -459,16 +459,6 @@ function loadNewBoardFields() {
 				required: true
 			});
 			
-			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
-			gridRow.hide();
-			SmartWorks.FormRuntime.FileFieldBuilder.buildEx({
-				container: gridRow,
-				fieldId: "txtBoardFiles",
-				fieldName: boardFilesTitle,
-				columns: 1,
-				required: false
-			});
-			
 			var today = new Date();
 			var durationDate = new Date(today.getTime() + 7*24*60*60*1000);
 			var durationDateStr = durationDate.format('yyyy.mm.dd');
@@ -483,6 +473,16 @@ function loadNewBoardFields() {
 				required: true
 			});
 
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			gridRow.hide();
+			SmartWorks.FormRuntime.FileFieldBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtBoardFiles",
+				fieldName: boardFilesTitle,
+				columns: 1,
+				required: false
+			});
+			
 		}		
 	}
 };

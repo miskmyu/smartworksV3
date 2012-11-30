@@ -2516,6 +2516,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append("   and dept.id = :id");
 		query = this.getSession().createQuery(buff.toString());
 		query.setString("id", departmentId);
+		query.setMaxResults(1);
 
 		String headId = null;
 		if(!SmartUtil.isBlankObject(query.uniqueResult()))

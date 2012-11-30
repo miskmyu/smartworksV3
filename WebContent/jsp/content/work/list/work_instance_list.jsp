@@ -133,11 +133,16 @@
 			for (InstanceInfo instanceInfo : instanceInfos) {
 				UserInfo owner = instanceInfo.getOwner();
 				UserInfo lastModifier = instanceInfo.getLastModifier();
-				SmartWorkInfo work = (SmartWorkInfo)instanceInfo.getWork();
+//				SmartWorkInfo work = (SmartWorkInfo)instanceInfo.getWork();
+				String workId = instanceInfo.getWorkId();
+				String workName = instanceInfo.getWorkName();
+				int workType = instanceInfo.getWorkType();
+				boolean isWorkRunning = instanceInfo.isWorkRunning();
+				String workFullPathName = instanceInfo.getWorkFullPathName();
 				TaskInstanceInfo lastTask = ((WorkInstanceInfo)instanceInfo).getLastTask();
 				String target = ((WorkInstanceInfo)instanceInfo).getController() + "?cid=" 
 								+ ((WorkInstanceInfo)instanceInfo).getContextId() + "&wid=" + wid
-								+ "&workId=" + work.getId();
+								+ "&workId=" + workId;
 				%>
 				<tr class="instance_list js_content_work_space" href="<%=target%>">
 					<td class="tc"><%=currentCount%></td>
@@ -162,13 +167,13 @@
 					<td>
 						<a class="js_content_work_space" href="<%=target %>">					
 							<div class="noti_pic">
-								<span class="<%=work.getIconClass()%>"><%=work.getFullpathName() %></span>
+								<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"><%=workFullPathName %></span>
 							</div>
 						</a>
 					</td>
 					<td>
 						<a class="js_content_work_space" href="<%=target %>">					
-							<%if(work.getType() == SmartWork.TYPE_PROCESS){ %><%=lastTask.getName()%><%} %>
+							<%if(workType == SmartWork.TYPE_PROCESS){ %><%=lastTask.getName()%><%} %>
 						</a>
 					</td>
 					<td>

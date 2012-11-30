@@ -404,8 +404,12 @@ public class CalendarServiceImpl implements ICalendarService {
 					String workSpaceType = swdRecord.getWorkSpaceType();
 					if(workSpaceType == null)
 						workSpaceType = String.valueOf(ISmartWorks.SPACE_TYPE_USER);
-					eventInstanceInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
-
+//Start InstanceInfo Model Changed by ysjung
+					//eventInstanceInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
+					eventInstanceInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
+					//eventInstanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
+					
 					/*WorkCategoryInfo workGroupInfo = null;
 					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
 						workGroupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
@@ -414,7 +418,12 @@ public class CalendarServiceImpl implements ICalendarService {
 
 					WorkInfo workInfo = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), type, workGroupInfo, workCategoryInfo);
 */	
-					eventInstanceInfo.setWork(ModelConverter.getWorkInfoByPackageId(workId));
+//Start InstanceInfo Model Changed by ysjung
+					//eventInstanceInfo.setWork(ModelConverter.getWorkInfoByPackageId(workId));
+					eventInstanceInfo.setWorkInfo(ModelConverter.getWorkInfoByPackageId(workId));
+					//eventInstanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+//End InstanceInfo Model Changed by ysjung
+
 					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					eventInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 

@@ -180,7 +180,10 @@
 													if (((cnt == 0) && today.isSameDate(event.getStart())) || ((cnt == 1) && tomorrow.isSameDate(event.getStart()))
 															|| ((cnt == 2) && tomorrow.isAfterDate(event.getStart()))) {
 														UserInfo owner = event.getOwner();
-														WorkSpaceInfo workSpace = event.getWorkSpace();
+//														WorkSpaceInfo workSpace = event.getWorkSpace();
+														String workSpaceId = event.getWorkSpaceId();
+														String workSpaceName = event.getWorkSpaceName();
+														int workSpaceType = event.getWorkSpaceType();
 														if (cnt < 2) {
 															if(cnt==0) hasTodayEvent = true;
 															else hasTomorrowEvent = true;
@@ -196,7 +199,7 @@
 														<%
 														}
 														%>
-				 										<a href="<%=event.getController() %>?cid=<%=event.getContextId()%>&workId=<%=SmartWork.ID_EVENT_MANAGEMENT%>&wid=<%=workSpace.getId()%>"><%=event.getSubject()%></a>														
+				 										<a href="<%=event.getController() %>?cid=<%=event.getContextId()%>&workId=<%=SmartWork.ID_EVENT_MANAGEMENT%>&wid=<%=workSpaceId%>"><%=event.getSubject()%></a>														
 														<%
 														if (!owner.getId().equals(cUser.getId())) {
 														%> 
@@ -205,9 +208,9 @@
 				 										}
 				 										%> 
 				 										<%
-				 										if (!workSpace.getId().equals(owner.getId())) {
+				 										if (!workSpaceId.equals(owner.getId())) {
 				 										%> 
-															<span class="arr">▶</span><span class="space_name"><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><%=workSpace.getName()%></a></span> 
+															<span class="arr">▶</span><span class="space_name"><a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceName)%>"><%=workSpaceName%></a></span> 
 				 										<%
 				 										}
 				 										%>

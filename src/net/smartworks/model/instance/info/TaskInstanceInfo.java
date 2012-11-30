@@ -1,10 +1,12 @@
 package net.smartworks.model.instance.info;
 
+import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.work.SmartWork;
+import net.smartworks.model.work.Work;
 import net.smartworks.model.work.WorkCategory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
@@ -85,9 +87,27 @@ public class TaskInstanceInfo extends InstanceInfo {
 	public void setApprovalLineId(String approvalLineId) {
 		this.approvalLineId = approvalLineId;
 	}
+//	public String getController(){
+//		if(getWork()==null) return "";
+//		switch(getWork().getType()){
+//		case SmartWork.TYPE_INFORMATION:
+//			return WorkInstance.CONTROLLER_IWORK_SPACE;
+//		case SmartWork.TYPE_PROCESS:
+//			return WorkInstance.CONTROLLER_PWORK_SPACE;
+//		case SmartWork.TYPE_SCHEDULE:
+//			return WorkInstance.CONTROLLER_SWORK_SPACE;
+//		case WorkCategory.TYPE_CATEGORY:
+//			return "";
+//		}
+//		return "";
+//	}
 	public String getController(){
-		if(getWork()==null) return "";
-		switch(getWork().getType()){
+		if(SmartUtil.isBlankObject(getWorkId())) return "";
+		return TaskInstanceInfo.getController(getWorkId(), getWorkType());
+	}
+	public static String getController(String workId, int workType){
+		if(SmartUtil.isBlankObject(workId)) return "";
+		switch(workType){
 		case SmartWork.TYPE_INFORMATION:
 			return WorkInstance.CONTROLLER_IWORK_SPACE;
 		case SmartWork.TYPE_PROCESS:
@@ -99,15 +119,34 @@ public class TaskInstanceInfo extends InstanceInfo {
 		}
 		return "";
 	}
+//	public String getContextId(){
+//		if(getWork()==null || getWorkInstance()==null) return "";
+//		switch(getWork().getType()){
+//		case SmartWork.TYPE_INFORMATION:
+//			return ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + getWorkInstance().getId();
+//		case SmartWork.TYPE_PROCESS:
+//			return ISmartWorks.CONTEXT_PREFIX_PWORK_SPACE + getWorkInstance().getId();
+//		case SmartWork.TYPE_SCHEDULE:
+//			return ISmartWorks.CONTEXT_PREFIX_SWORK_SPACE + getWorkInstance().getId();
+//		case WorkCategory.TYPE_CATEGORY:
+//			return "";
+//		}
+//		return "";
+//	}
 	public String getContextId(){
-		if(getWork()==null || getWorkInstance()==null) return "";
-		switch(getWork().getType()){
+		if(SmartUtil.isBlankObject(getWorkId()) || SmartUtil.isBlankObject(getWorkInstance())) return "";
+		return TaskInstanceInfo.getContextId(getWorkId(), getWorkType(), getWorkInstance().getId());
+	}
+	
+	public static String getContextId(String workId, int workType, String workInstanceId){
+		if(SmartUtil.isBlankObject(workId) || SmartUtil.isBlankObject(workInstanceId)) return "";
+		switch(workType){
 		case SmartWork.TYPE_INFORMATION:
-			return ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + getWorkInstance().getId();
+			return ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + workInstanceId;
 		case SmartWork.TYPE_PROCESS:
-			return ISmartWorks.CONTEXT_PREFIX_PWORK_SPACE + getWorkInstance().getId();
+			return ISmartWorks.CONTEXT_PREFIX_PWORK_SPACE + workInstanceId;
 		case SmartWork.TYPE_SCHEDULE:
-			return ISmartWorks.CONTEXT_PREFIX_SWORK_SPACE + getWorkInstance().getId();
+			return ISmartWorks.CONTEXT_PREFIX_SWORK_SPACE + workInstanceId;
 		case WorkCategory.TYPE_CATEGORY:
 			return "";
 		}
@@ -205,6 +244,27 @@ public class TaskInstanceInfo extends InstanceInfo {
 		this.approvalTaskId = approvalTaskId;
 	}
 	
+//	public TaskInstance getTaskInstance(){
+//		TaskInstance taskInstance = new TaskInstance();
+//		taskInstance.setId(this.getId());
+//		taskInstance.setName(this.getName());
+//		taskInstance.setAssignee((this.getAssignee()!=null) ? this.getAssignee().getUser():null);
+//		taskInstance.setAssigner((this.getAssigner()!=null) ? this.getAssigner().getUser():null);
+//		taskInstance.setCreatedDate(this.getCreatedDate());
+//		taskInstance.setForwardId(this.getForwardId());
+//		taskInstance.setLastModifiedDate(this.getLastModifiedDate());
+//		taskInstance.setLastModifier((this.getLastModifier()!=null) ? this.getLastModifier().getUser():null);
+//		taskInstance.setOwner((this.getOwner()!=null) ? this.getOwner().getUser():null);
+//		taskInstance.setPerformer((this.getPerformer()!=null) ? this.getPerformer().getUser():null);
+//		taskInstance.setStatus(this.getStatus());
+//		taskInstance.setSubject(this.getSubject());
+//		taskInstance.setTaskType(this.getTaskType());
+//		taskInstance.setType(this.getType());
+//		taskInstance.setWork((this.getWork()!=null) ? this.getWork().getWork():null);
+//		taskInstance.setWorkInstance((this.getWorkInstance()!=null) ? this.getWorkInstance().getInstance():null);
+//		taskInstance.setWorkSpace((this.getWorkSpace()!=null) ? this.getWorkSpace().getWorkSpace():null);
+//		return taskInstance;
+//	}
 	public TaskInstance getTaskInstance(){
 		TaskInstance taskInstance = new TaskInstance();
 		taskInstance.setId(this.getId());
@@ -221,9 +281,11 @@ public class TaskInstanceInfo extends InstanceInfo {
 		taskInstance.setSubject(this.getSubject());
 		taskInstance.setTaskType(this.getTaskType());
 		taskInstance.setType(this.getType());
-		taskInstance.setWork((this.getWork()!=null) ? this.getWork().getWork():null);
+		Work work = SmartUtil.isBlankObject(getWorkId()) ? null : new Work(getWorkId(), getWorkName(), getWorkType(), "");
+		taskInstance.setWork(work);
 		taskInstance.setWorkInstance((this.getWorkInstance()!=null) ? this.getWorkInstance().getInstance():null);
-		taskInstance.setWorkSpace((this.getWorkSpace()!=null) ? this.getWorkSpace().getWorkSpace():null);
+		WorkSpace workSpace = SmartUtil.isBlankObject(getWorkSpaceId()) ? null : new WorkSpace(getWorkSpaceId(), getWorkSpaceName());
+		taskInstance.setWorkSpace(workSpace);
 		return taskInstance;
 	}
 }

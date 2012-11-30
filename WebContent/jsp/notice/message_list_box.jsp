@@ -66,7 +66,7 @@
 %>
 			<ul>
 				<li class="tc pt2">
-					<a class="js_more_notice_list" href="message_list_box.sw" lastTaskId="<%=lastTaskId%>"><fmt:message key="content.more_running_instance"/></a>
+					<a class="js_more_notice_list" href="message_list_box.sw" lastTaskId="<%=lastTaskId%>"><fmt:message key="common.message.more_work_task"/></a>
 					<span class="js_progress_span"></span>
 				</li>
 			</ul>

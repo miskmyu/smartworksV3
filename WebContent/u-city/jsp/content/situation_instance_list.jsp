@@ -219,7 +219,7 @@
 				if(runningTaskNames.length() > 16)
 					runningTaskNames = runningTaskNames.substring(0,16) + "...";
 
-				String target =  "situationDetail.sw?cid=" + instanceInfo.getContextId() + "&workId=" + instanceInfo.getWork().getId();
+				String target =  "situationDetail.sw?cid=" + instanceInfo.getContextId() + "&workId=" + instanceInfo.getWorkId();
 				String statusImage = "";
 				String statusTitle = "";
 				switch (instanceInfo.getStatus()) {

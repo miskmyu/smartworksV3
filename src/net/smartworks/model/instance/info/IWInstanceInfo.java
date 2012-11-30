@@ -29,9 +29,21 @@ public class IWInstanceInfo extends WorkInstanceInfo {
 		super();
 		super.setType(WorkInstance.TYPE_INFORMATION);
 	}	
+//	public IWInstanceInfo(String id, String name, WorkInfo work, UserInfo owner, UserInfo lastModifier, LocalDate lastModifiedDate){
+//		super(id, name, owner, lastModifier, lastModifiedDate);
+//		super.setWork(work);
+//		super.setType(WorkInstance.TYPE_INFORMATION);
+//	}
+	public IWInstanceInfo(String id, String name, String workId, String workName, int workType, UserInfo owner, UserInfo lastModifier, LocalDate lastModifiedDate){
+		super(id, name, owner, lastModifier, lastModifiedDate);
+		super.setWorkId(workId);
+		super.setWorkName(workName);
+		super.setWorkType(workType);
+		super.setType(WorkInstance.TYPE_INFORMATION);
+	}
 	public IWInstanceInfo(String id, String name, WorkInfo work, UserInfo owner, UserInfo lastModifier, LocalDate lastModifiedDate){
 		super(id, name, owner, lastModifier, lastModifiedDate);
-		super.setWork(work);
+		super.setWorkInfo(work);
 		super.setType(WorkInstance.TYPE_INFORMATION);
 	}
 	

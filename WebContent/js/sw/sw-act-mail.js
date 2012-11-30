@@ -355,6 +355,17 @@ $(function() {
 		
 	});
 
+	$('.js_change_mail_password_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var mailServerId = input.attr('mailServerId');
+		var emailId = input.attr('emailId');
+		var userName = input.attr('userName');
+		var oldPassword = input.attr('oldPassword');
+		smartPop.changeMailPassword(mailServerId, emailId, userName, oldPassword);
+		return false;
+		
+	});
+
 	$('.js_remove_mail_folder_btn').live('click', function(e) {
 		var input = $(targetElement(e));
 		var folderId = input.attr('folderId');

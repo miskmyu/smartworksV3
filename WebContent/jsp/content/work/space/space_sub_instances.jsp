@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.community.info.InstanceSpaceInfo"%>
 <%@page import="net.smartworks.model.instance.info.CommentInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.WorkInstance"%>
@@ -37,7 +38,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	InstanceInfo[] subInstances = (InstanceInfo[])session.getAttribute("subInstances");
-	String workSpaceId = (String)session.getAttribute("workSpaceId");
+	String wsId = (String)session.getAttribute("workSpaceId");
 	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
@@ -58,13 +59,25 @@
 	<%
 				break;
 			}
-			SmartWorkInfo work = (SmartWorkInfo)workInstance.getWork();
+//			SmartWorkInfo work = (SmartWorkInfo)workInstance.getWork();
+			String workId = workInstance.getWorkId();
+			String workName = workInstance.getWorkName();
+			int workType = workInstance.getWorkType();
+			boolean isWorkRunning = workInstance.isWorkRunning();
+			String workFullPathName = workInstance.getWorkFullPathName();
 			UserInfo owner = workInstance.getOwner();
 			String userDetailInfo = SmartUtil.getUserDetailInfo(owner);
-			WorkSpaceInfo workSpace = workInstance.getWorkSpace();
-			if(SmartUtil.isBlankObject(workSpace)) workSpace = workInstance.getOwner();
+//			WorkSpaceInfo workSpace = workInstance.getWorkSpace();
+			String workSpaceId = workInstance.getWorkSpaceId();
+			String workSpaceName = workInstance.getWorkSpaceName();
+			int workSpaceType = workInstance.getWorkSpaceType();
+			if(SmartUtil.isBlankObject(workSpaceId)){
+				workSpaceId = workInstance.getOwner().getId();
+				workSpaceName = workInstance.getOwner().getName();
+				workSpaceType = workInstance.getOwner().getSpaceType();
+			}
 			boolean onWorkSpace = false;
-			if(!(workSpace.getClass().equals(UserInfo.class)) && !workSpace.getId().equals(workSpaceId) )
+			if(workSpaceType != ISmartWorks.SPACE_TYPE_USER && !workSpaceId.equals(wsId) )
 				onWorkSpace = true;
 			BoardInstanceInfo board=null;
 			EventInstanceInfo event=null;
@@ -72,7 +85,6 @@
 			ImageInstanceInfo image=null;
 			MemoInstanceInfo memo=null;
 			CommentInstanceInfo comment=null;
-			int workType = (SmartUtil.isBlankObject(work)) ? -1 : work.getType();
 	%>
 			<li class="sub_instance_list js_sub_instance_list js_space_sub_instance" instanceId="<%=workInstance.getId() %>"  workType="<%=workType%>">
 				<%
@@ -90,16 +102,16 @@
 							</a>
 							<%if(onWorkSpace){ %>
 								<span class="arr">▶</span>
-								<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>">
-									<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
+								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
+									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
 								</a>
 							<%} %>
 								<!-- 인스턴스 마지막수정일자 -->
 								<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 								<!-- 인스턴스 마지막수정일자 //-->
-							<a href="<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
+							<a href="<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>">
 								<div>
-									<span class="<%=work.getIconClass()%>"></span>
+									<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"></span>
 									<div>
 										<%=board.getSubject() %>
 										<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
@@ -108,7 +120,7 @@
 								<div><%=board.getBriefContent()%></div>
 							</a>
 
-							<%if(!SmartUtil.isBlankObject(board.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(board.getFiles(), work.getId(), null, board.getId()) %></div><%} %>
+							<%if(!SmartUtil.isBlankObject(board.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(board.getFiles(), workId, null, board.getId()) %></div><%} %>
 							
 						</div>
 					</div>
@@ -126,8 +138,8 @@
 							</a>
 							<%if(onWorkSpace){ %>
 								<span class="arr">▶</span>
-								<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>">
-									<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
+								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
+									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
 								</a>
 							<%} %>
 								<!-- 인스턴스 마지막수정일자 -->
@@ -155,8 +167,8 @@
 							</a>
 							<%if(onWorkSpace){ %>
 								<span class="arr">▶</span>
-								<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>">
-									<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
+								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
+									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
 								</a>
 							<%} %>
 								<!-- 인스턴스 마지막수정일자 -->
@@ -165,7 +177,7 @@
 							
 							<%if(!SmartUtil.isBlankObject(file.getFiles())){ %>
 								<div>
-								<%=SmartUtil.getFilesDetailInfo(file.getFiles(), work.getId(), null, file.getId()) %>
+								<%=SmartUtil.getFilesDetailInfo(file.getFiles(), workId, null, file.getId()) %>
 								</div>
 							<%} %>
 							<%if(!SmartUtil.isBlankObject(file.getContent())){ %>
@@ -190,8 +202,8 @@
 							</a>
 							<%if(onWorkSpace){ %>
 								<span class="arr">▶</span>
-								<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>">
-									<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
+								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
+									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
 								</a>
 							<%} %>
 							<!-- 인스턴스 마지막수정일자 -->
@@ -218,8 +230,8 @@
 							</a>
 							<%if(onWorkSpace){ %>
 								<span class="arr">▶</span>
-								<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>">
-									<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
+								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
+									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
 								</a>
 							<%} %>
 							<!-- 인스턴스 마지막수정일자 -->
@@ -274,15 +286,15 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
+							<div><%=workFullPathName%></div>
 							
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
 								<span class="t_name"><%=owner.getLongName()%></span>
 							</a>
 							<%if(onWorkSpace){ %>
 								<span class="arr">▶</span>
-								<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>">
-								<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName()%></span>
+								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
+								<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName%></span>
 								</a>
 							<%} %>
 							<!-- 인스턴스 마지막 수정일자 -->

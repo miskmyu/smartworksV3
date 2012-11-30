@@ -726,7 +726,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 										receiverId = receiver;
 									}else{
 										receiverId = receiver.substring(start+1, end);
-										receiver = receiver.substring(0, start-1);
+										if (start > 0)
+											receiver = receiver.substring(0, start-1);
 									}
 								}
 								receivers[j] = new UserInfo(receiverId, org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(receiver)));
@@ -1939,5 +1940,11 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public void changeMailPasswordRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 }

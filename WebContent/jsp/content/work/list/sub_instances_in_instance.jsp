@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.instance.info.MemoInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.ImageInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.FileInstanceInfo"%>
@@ -36,11 +37,23 @@
 <%
 if (subInstances != null) {
 	for (InstanceInfo workInstance : subInstances) {
-		SmartWorkInfo work = (SmartWorkInfo)workInstance.getWork();
+//		SmartWorkInfo work = (SmartWorkInfo)workInstance.getWork();
+		String workId = workInstance.getWorkId();
+		String workName = workInstance.getWorkName();
+		int workType = workInstance.getWorkType();
+		boolean isWorkRunning = workInstance.isWorkRunning();
+		String workFullPathName = workInstance.getWorkFullPathName();
 		UserInfo owner = workInstance.getOwner();
 		String userDetailInfo = SmartUtil.getUserDetailInfo(owner);
-		WorkSpaceInfo workSpace = workInstance.getWorkSpace();
-		if(SmartUtil.isBlankObject(workSpace)) workSpace = workInstance.getOwner();
+//		WorkSpaceInfo workSpace = workInstance.getWorkSpace();
+		String workSpaceId = workInstance.getWorkSpaceId();
+		String workSpaceName = workInstance.getWorkSpaceName();
+		int workSpaceType = workInstance.getWorkSpaceType();
+		if(SmartUtil.isBlankObject(workSpaceId)){
+			workSpaceId = workInstance.getOwner().getId();
+			workSpaceName = workInstance.getOwner().getName();
+			workSpaceType = workInstance.getOwner().getSpaceType();
+		}
 		BoardInstanceInfo board=null;
 		EventInstanceInfo event=null;
 		FileInstanceInfo file=null;
@@ -63,12 +76,12 @@ if (subInstances != null) {
 						</a>
 					</div>
 					<div class="noti_in">
-						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
+						<div><%=workFullPathName%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
-						<a href="<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
+						<a href="<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>">
 							<div>
-								<span class="<%=work.getIconClass()%>"></span>
+								<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"></span>
 								<div><%=board.getSubject() %>
 									<%if(((WorkInstanceInfo)workInstance).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)workInstance).getSubInstanceCount() %></b>]</font><%} %>
 									<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
@@ -76,7 +89,7 @@ if (subInstances != null) {
 							</div>
 							<div><%=board.getBriefContent()%></div>
 						</a>
-						<%if(!SmartUtil.isBlankObject(board.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(board.getFiles(), work.getId(), null, board.getId()) %></div><%} %>
+						<%if(!SmartUtil.isBlankObject(board.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(board.getFiles(), workId, null, board.getId()) %></div><%} %>
 					</div>
 			</div>
 				
@@ -93,7 +106,7 @@ if (subInstances != null) {
 						</a>
 					</div>
 					<div class="noti_in">
-						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
+						<div><%=workFullPathName%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<div><%=event.getSubject() %>
@@ -117,10 +130,10 @@ if (subInstances != null) {
 						</a>
 					</div>
 					<div class="noti_in">
-						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
+						<div><%=workFullPathName%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
-						<%if(!SmartUtil.isBlankObject(file.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(file.getFiles(), work.getId(), null, file.getId()) %>
+						<%if(!SmartUtil.isBlankObject(file.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(file.getFiles(), workId, null, file.getId()) %>
 							<%if(((WorkInstanceInfo)workInstance).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)workInstance).getSubInstanceCount() %></b>]</font><%} %>
 							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 						</div><%} %>
@@ -140,7 +153,7 @@ if (subInstances != null) {
 						</a>
 					</div>
 					<div class="noti_in">
-						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
+						<div><%=workFullPathName%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<div><a href="" class="js_show_picture_detail" instanceId="<%=image.getId()%>" href=""><img src="<%=image.getImgSource()%>" style="min-height:20px;width:100px;"></a>
@@ -163,7 +176,7 @@ if (subInstances != null) {
 						</a>
 					</div>
 					<div class="noti_in">
-						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
+						<div><%=workFullPathName%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<div><%=memo.getContent() %>
@@ -214,7 +227,7 @@ if (subInstances != null) {
 						</a>
 					</div>
 					<div class="noti_in">
-						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
+						<div><%=workFullPathName%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<div><%=workInstance.getSubject() %>

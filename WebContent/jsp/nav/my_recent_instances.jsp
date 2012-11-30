@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.										 -->
 <!-- Created Date	: 2011.9.												 -->
 
+<%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.instance.info.EventInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.FileInstanceInfo"%>
@@ -31,14 +32,19 @@
 	<%
 	if (workInstances != null) {
 		for (InstanceInfo workInstance : workInstances) {
-			SmartWorkInfo work = (SmartWorkInfo) workInstance.getWork();
+//			SmartWorkInfo work = (SmartWorkInfo) workInstance.getWork();
+			String workId = workInstance.getWorkId();
+			String workName = workInstance.getWorkId();
+			int workType = workInstance.getWorkType();
+			boolean isWorkRunning = workInstance.isWorkRunning();
+			String workFullPathName = workInstance.getWorkFullPathName();
 			UserInfo owner = workInstance.getOwner();
 			switch(workInstance.getType()){
 			case Instance.TYPE_IMAGE:
 				ImageInstanceInfo image = (ImageInstanceInfo)workInstance;
 	%>			
 				<li>
-					<a href="<%=image.getController()%>?cid=<%=image.getContextId()%>&workId=<%=work.getId()%>" class="js_content" title="<%=work.getFullpathName()%>">
+					<a href="<%=image.getController()%>?cid=<%=image.getContextId()%>&workId=<%=workId%>" class="js_content" title="<%=workFullPathName%>">
 						<span class="icon_pe">
 							<img src="<%=image.getImgSource()%>" title="<%=CommonUtil.toNotNull(image.getContent())%>" class="profile_size_s">
 						</span> 
@@ -56,8 +62,8 @@
 				WorkInstanceInfo socialInstance = (WorkInstanceInfo)workInstance;
 	%>			
 				<li>
-					<a href="<%=socialInstance.getController()%>?cid=<%=socialInstance.getContextId()%>&workId=<%=work.getId()%>" class="js_content" title="<%=work.getFullpathName()%>">
-						<span class="<%=work.getIconClass() %>"></span>
+					<a href="<%=socialInstance.getController()%>?cid=<%=socialInstance.getContextId()%>&workId=<%=workId%>" class="js_content" title="<%=workFullPathName%>">
+						<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning) %>"></span>
 						<span class="nav_sub_area"><%=socialInstance.getSubject()%>
 							<%if(socialInstance.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=socialInstance.getSubInstanceCount() %></b>]</font><%} %>
 						</span>
@@ -68,7 +74,7 @@
 			default:
 			%>	
 				<li>
-					<a href="<%=((WorkInstanceInfo)workInstance).getController()%>?cid=<%=((WorkInstanceInfo)workInstance).getContextId()%>&workId=<%=work.getId()%>" class="js_content" title="<%=work.getFullpathName()%>">
+					<a href="<%=((WorkInstanceInfo)workInstance).getController()%>?cid=<%=((WorkInstanceInfo)workInstance).getContextId()%>&workId=<%=workId%>" class="js_content" title="<%=workFullPathName%>">
 						<span class="icon_pe">
 							<img src="<%=owner.getMinPicture()%>" title="<%=owner.getLongName()%>" class="profile_size_s">
 						</span> 

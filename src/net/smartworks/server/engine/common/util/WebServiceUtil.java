@@ -3,6 +3,9 @@ package net.smartworks.server.engine.common.util;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.rpc.ServiceException;
@@ -39,6 +42,12 @@ public class WebServiceUtil {
 			returnValue = new String[] {(String)call.invoke(inputParams)};
 		}
 		
+		if (returnValue != null && returnValue.length != 0) {
+			List<String> tempReturnValue = Arrays.asList(returnValue);
+			Collections.reverse(tempReturnValue);
+			returnValue = tempReturnValue.toArray(new String[tempReturnValue.size()]);
+		}
+		
 		Log logger = LogFactory.getLog(WebServiceUtil.class);
 		if (logger.isInfoEnabled()) {
 			StringBuffer infoBuffer = new StringBuffer();
@@ -49,8 +58,10 @@ public class WebServiceUtil {
 				}
 			}
 			infoBuffer.append(", \r\n Result : ");
-			for (int i = 0; i < returnValue.length; i++) {
-				infoBuffer.append(returnValue[i]).append(",");
+			if (returnValue != null) {
+				for (int i = 0; i < returnValue.length; i++) {
+					infoBuffer.append(returnValue[i]).append(",");
+				}
 			}
 			infoBuffer.append("\r\n]\r\n" );
 			logger.info(infoBuffer.toString());

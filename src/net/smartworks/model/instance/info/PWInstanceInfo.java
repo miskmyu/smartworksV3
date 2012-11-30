@@ -20,11 +20,22 @@ public class PWInstanceInfo extends WorkInstanceInfo {
 		super();
 		super.setType(WorkInstance.TYPE_PROCESS);
 	}
+//	public PWInstanceInfo(String id, String subject, WorkInfo work, UserInfo owner, UserInfo lastModifier, LocalDate lastModifiedDate, TaskInstanceInfo lastTas) {
+//	super(id, subject, owner, lastModifier, lastModifiedDate);
+//	super.setWork(work);
+//	super.setType(WorkInstance.TYPE_PROCESS);
+//}
+	public PWInstanceInfo(String id, String subject, String workId, String workName, int workType, UserInfo owner, UserInfo lastModifier, LocalDate lastModifiedDate, TaskInstanceInfo lastTas) {
+		super(id, subject, owner, lastModifier, lastModifiedDate);
+		super.setWorkId(workId);
+		super.setWorkName(workName);
+		super.setWorkType(workType);
+		super.setType(WorkInstance.TYPE_PROCESS);
+	}
 	public PWInstanceInfo(String id, String subject, WorkInfo work, UserInfo owner, UserInfo lastModifier, LocalDate lastModifiedDate, TaskInstanceInfo lastTas) {
 		super(id, subject, owner, lastModifier, lastModifiedDate);
-		super.setWork(work);
+		super.setWorkInfo(work);
 		super.setType(WorkInstance.TYPE_PROCESS);
 	}
 	
-
 }

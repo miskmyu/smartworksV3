@@ -1597,6 +1597,9 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		this.updateFormContent(userId, form.getFormId(), form.getVersion(), xmlContent);
 	}
 
+	public void updateFormContentWithoutStatus(String formId, int version, String xmlContent) throws SmartServerRuntimeException {
+		updateFormContent(formId, version, xmlContent);
+	}
 	/* (non-Javadoc)
 	 * @see com.maninsoft.smart.server.dao.IResourceDesigntimeDao#updateFormContent(java.lang.String, java.lang.String, int, java.lang.String)
 	 */
@@ -1616,6 +1619,9 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 			throw new SmartServerRuntimeException(e);
 		}
 	}
+	
+	
+	
 	private void updateFormContent(String formId, int version, String content) throws SmartServerRuntimeException {
 		String hql = "update HbFormContent set content = :content where formId = :formId and version = :version";
 		Query query = this.getSession().createQuery(hql);
