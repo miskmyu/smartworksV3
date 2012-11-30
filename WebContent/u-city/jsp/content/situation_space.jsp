@@ -343,13 +343,16 @@
 			var taskName = selectedTask.attr("taskName");
 			var formMode = selectedTask.attr("formMode");
 			var instId = selectedTask.attr("taskInstId");
+			
+			var formContentTable = formContent.html('<ul></ul>');	
 	
 			pworkSpace.find('.js_instance_task').removeClass('selected');
 			selectedTask.addClass('selected');
 			formContentPointer.css({"left": selectedTask.position().left + selectedTask.outerWidth()/2 + "px"});
 			pworkSpace.find('.js_selected_task_title').html(taskName);
+			var formContentList = formContent.find('ul').append('<li class="up mt5"></li>').find('li:last');
 			new SmartWorks.GridLayout({
-				target : formContent,
+				target : formContentList,
 				mode : formMode,
 				first : (formMode=='edit'),
 				workId : workId,
