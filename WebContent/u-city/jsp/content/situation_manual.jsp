@@ -31,6 +31,7 @@
 	String STATUS_CODE_OCCURRENCE = "OCCURRENCE";
 	String STATUS_CODE_RECEIPT = "RECEIPT";
 	String STATUS_CODE_FINISH = "FINISH";
+	String STATUS_CODE_CANCEL = "CANCEL";
 
 	String userviceCode = request.getParameter("userviceCode");
 	String serviceCode = request.getParameter("serviceCode");
@@ -44,6 +45,8 @@
 		situationStatus = OPSituation.STATUS_SITUATION_PROCESSING;
 	else if(situationStatus.equals(STATUS_CODE_FINISH))
 		situationStatus = OPSituation.STATUS_SITUATION_RELEASE;
+	else if(situationStatus.equals(STATUS_CODE_CANCEL))
+		situationStatus = OPSituation.STATUS_SITUATION_CANCEL;
 		
 	String eventId = null;
 	if(SmartUtil.isBlankObject(userviceCode) || SmartUtil.isBlankObject(serviceCode) || SmartUtil.isBlankObject(eventCode))
@@ -140,7 +143,7 @@ function submitForms() {
 			<div class="section_lft">
 				<div class="lft_title"></div>
 				<div class="lft_step">
-					<div class="s1 <%if(OPSituation.STATUS_SITUATION_OCCURRED.equals(situationStatus)){ %>current<%}%>">
+					<div class="s1 <%if(OPSituation.STATUS_SITUATION_OCCURRED.equals(situationStatus) || OPSituation.STATUS_SITUATION_CANCEL.equals(situationStatus)){ %>current<%}%>">
 						<a class="js_ucity_content" href="situationManual.sw?userviceCode=<%=userviceCode%>&serviceCode=<%=serviceCode%>&eventCode=<%=eventCode%>&statusCode=<%=OPSituation.STATUS_SITUATION_OCCURRED%>"> </a>
 					</div>
 					<div class="arr"></div>
@@ -227,21 +230,21 @@ function submitForms() {
 
 							<a href="">
 								<span class="txt_btn_start"></span>
-								<span class="txt_btn_center"><fmt:message key='common.button.modify' /> </span> 
+								<span class="txt_btn_center" style="line-height:24px"><fmt:message key='common.button.modify' /> </span> 
 								<span class="txt_btn_end"></span>
 							</a>
 						</span>
 						<span class="fr btn_gray ml5 js_cancel_situation_manual" style="display:none"> 
 							<a href="">
 								<span class="txt_btn_start"></span> 
-								<span class="txt_btn_center"><fmt:message key='common.button.cancel' /> </span>
+								<span class="txt_btn_center" style="line-height:24px"><fmt:message key='common.button.cancel' /> </span>
 								<span class="txt_btn_end"></span>
 							</a>
 						</span>
 						<span class="fr btn_gray js_save_situation_manual" style="display:none"> 
 							<a href="">
 								<span class="txt_btn_start"></span> 
-								<span class="txt_btn_center"><fmt:message key='common.button.save' /> </span>
+								<span class="txt_btn_center" style="line-height:24px"><fmt:message key='common.button.save' /> </span>
 								<span class="txt_btn_end"></span>
 							</a>
 						</span>
