@@ -280,29 +280,65 @@
 		if(!isEmpty(taskInstances)){
 			var selectedTasks = new Array();
 			var selectedCount = 0;
+			var isDisplayHistory = false;
 			for(var i=0; i<taskInstances.length; i++){
 				var taskInstance = $(taskInstances[i]);
 				if(taskInstance.attr('formId') === formId && taskInstance.hasClass("completed")){
 					selectedTasks[selectedCount] = taskInstance;
-					if(taskInstance.attr('taskName') === "<%=System.TASK_NAME_DISPLAY_HISTORY%>")
+					if(taskInstance.attr('taskName') === "<%=System.TASK_NAME_DISPLAY_HISTORY%>"){
+						isDisplayHistory = true;
 						selectedCount++;
+					}
 				}
 			}
 			if(!isEmpty(selectedTasks)){
-				clickOnTask($(selectedTasks));
+				clickOnTask($(selectedTasks), isDisplayHistory);
 			}
 		}
 	}
-	function clickOnTask(input){
+	function clickOnTask(input, isDisplayHistory){
 		var pworkSpace = $('.js_pwork_space_page');
 		var workId = pworkSpace.attr("workId");
-		var formContent = pworkSpace.find('div.js_form_content').html('<ul></ul>');
+		var formContent = pworkSpace.find('div.js_form_content');
 		var formContentPointer = pworkSpace.find('div.js_form_content_pointer');
 
 		var selectedTasks = input;
 		if(isEmpty(selectedTasks)) return;
-		for(var i=0; i<selectedTasks.length; i++){
-			var selectedTask = $(selectedTasks[i]);
+		if(isDisplayHistory){
+			var formContentTable = formContent.html('<table><tr class="tit_bg"><th>표출요청일시</th><th>상황표출 내용</th><th>미디어보드</th><th>환경VMS</th><th>교통VMS</th><th>BIT</th><th>KIOSK</th><th>표출중지</th><th>표출중지일시</th><th>표출중지요청아이디</th></tr><table>');	
+
+			for(var i=0; i<selectedTasks.length; i++){
+				var selectedTask = $(selectedTasks[i]);
+				var formId = selectedTask.attr("formId");
+				var taskName = selectedTask.attr("taskName");
+				var formMode = selectedTask.attr("formMode");
+				var instId = selectedTask.attr("taskInstId");
+		
+				pworkSpace.find('.js_instance_task').removeClass('selected');
+				selectedTask.addClass('selected');
+				formContentPointer.css({"left": selectedTask.position().left + selectedTask.outerWidth()/2 + "px"});
+				pworkSpace.find('.js_selected_task_title').html(taskName);
+				var formContentList = formContentTable.find('table').append('<tr class="instance_list"></tr>').find('tr:last');
+				new SmartWorks.GridData({
+					target : formContentList,
+					mode : formMode,
+					first : (formMode=='edit'),
+					workId : workId,
+					formId : formId,
+					taskInstId : instId,
+					onSuccess : function(){
+						formContent.attr('taskInstId', instId);
+						smartPop.closeProgress();																
+					},
+					onError : function(){
+						smartPop.closeProgress();
+						
+					}
+				});
+			}
+			
+		}else{
+			var selectedTask = $(selectedTasks[0]);
 			var formId = selectedTask.attr("formId");
 			var taskName = selectedTask.attr("taskName");
 			var formMode = selectedTask.attr("formMode");
@@ -312,9 +348,8 @@
 			selectedTask.addClass('selected');
 			formContentPointer.css({"left": selectedTask.position().left + selectedTask.outerWidth()/2 + "px"});
 			pworkSpace.find('.js_selected_task_title').html(taskName);
-			var formContentList = formContent.find('ul').append('<li class="up mt5"></li>').find('li:last');
 			new SmartWorks.GridLayout({
-				target : formContentList,
+				target : formContent,
 				mode : formMode,
 				first : (formMode=='edit'),
 				workId : workId,
