@@ -123,7 +123,7 @@ SmartWorks.GridData = function(config) {
 					}
 				}
 				
-				var $html_cell = $('<td class="tc vm"></td>').html(dataField.value);			
+				var $html_cell = $('<td class="tc vm">' + dataField.value + '</td>');			
 //				if(refreshOnly)
 //					$html_cell = this_.options.target.find('.form_col[fieldId="' + id + '"]');
 //				else
