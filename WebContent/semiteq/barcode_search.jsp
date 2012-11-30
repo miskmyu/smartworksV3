@@ -230,8 +230,8 @@ $(document).ready(function(){
     						var ul = "";
     						for(var i =0 ; i < fileType.length; i++){
 	    						ul  = ul + "<span class='vm icon_file_" + fileType[i] + "'>";
-// 	    						ul  = ul + "</span><a href='../download_file.sw?fileId=" + fileId[i] + "&fileName=" + fileName[i] + "&workId=" + ret.domainId + "&taskInstId=null&recordId=" + ret.recodeId;
-	    						ul  = ul + "</span> <a href='http://sw.semiteq.co.kr/smartserver/servlet/download?fileId=" + fileId[i] + "&userId="+ret.pakageId;
+ 	    						ul  = ul + "</span><a href='../download_file.sw?fileId=" + fileId[i] + "&fileName=" + fileName[i] + "&workId=" + ret.domainId + "&taskInstId=null&recordId=" + ret.recodeId;
+//	    						ul  = ul + "</span> <a href='http://sw.semiteq.co.kr/smartserver/servlet/download?fileId=" + fileId[i] + "&userId="+ret.pakageId;
 	    						ul  = ul + "' class='qq-upload-file'>" + fileName[i] + "</a><br />";
     						}
     						$("#lot_tr").removeClass("end");
@@ -296,8 +296,8 @@ function downLoadFormmater(cellvalue, options, rowObject){
  	ul  = ul + "<table id='tb"+cellvalue+"'><tr><td>";
  	for(var i=0;i<fileName.length;i++){
 		ul  = ul + "<span class='vm icon_file_" + fileType[i] + "'>";
-// 		ul  = ul + "</span><a href='http://sw.semiteq.co.kr/download_file.sw?fileId=" + fileId[i] + "&fileName=" + fileName[i] + "&workId=" + rowObject.domainId + "&taskInstId=null&recordId=" + rowObject.recodeId;
-		ul  = ul + "</span><a href='http://sw.semiteq.co.kr/smartserver/servlet/download?fileId=" + fileId[i] + "&userId="+rowObject.pakageId;
+ 		ul  = ul + "</span><a href='../download_file.sw?fileId=" + fileId[i] + "&fileName=" + fileName[i] + "&workId=" + rowObject.domainId + "&taskInstId=null&recordId=" + rowObject.recodeId;
+//		ul  = ul + "</span><a href='http://sw.semiteq.co.kr/smartserver/servlet/download?fileId=" + fileId[i] + "&userId="+rowObject.pakageId;
 	ul  = ul + "' class='qq-upload-file'>" + fileName[i] + "</a><br />";
  	}
  	ul  = ul + "</td></tr></table></div>";

@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.													 -->
 <!-- Created Date	: 2011.9.															 -->
 
+<%@page import="java.util.Date"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.filter.info.SearchFilterInfo"%>
 <%@page import="net.smartworks.model.filter.SearchFilter"%>
