@@ -1,6 +1,15 @@
 @charset "utf-8";
 /* CSS Document */
 
+/* 상황모니터링 클릭 후 빈페이지 설정 */
+.locationMap {width: 935px; text-align: right; color: #71757a; padding-top: 15px; font-size: 11px}
+.locationMap a:hover {text-decoration: none; color: #35abff}
+.locationMap a {text-decoration: none; color: #71757a}
+.subTop {color:#eaeaea; font-size: 18px; font-weight: bold; margin-bottom: 24px}
+.uCity {background: url("../images/tx_ucity.png") no-repeat 0 10px transparent; width: 50px; height: 20px; margin-left: 10px; display: inline-block; background-attachment: scroll; background-repeat: no-repeat; background-size: auto; background-origin: padding-box; background-clip: border-box; background-color: transparent}
+.uCity_font {font-size: 14px; line-height: 25px}
+
+
 /* 본문- 타이틀 아이콘*/
 .body_titl {padding:0 20px 10px; overflow: hidden} /* 본문 페이지 타이틀*/
 .body_titl .title {font-size: 16px; font-weight: bold; height: 29px; float:left}  /* 타이틀 우측으로 아이콘이 있을때 */

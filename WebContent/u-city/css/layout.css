@@ -3,7 +3,7 @@
 #wrap {height:auto; width: 970px; margin:0; z-index:1;}
 body {background-color: #22282F}
 #content a:link, #content a:visited, #content a:focus, #content a:active{color:#a6a6a6; text-decoration:none}
-#content a:hover { text-decoration:underline}
+#content a:hover {text-decoration: none; color: #35abff}
 
 /* Title Ucity */
 .tx_ucity {display: table-cell; height: 18px; vertical-align: middle;}

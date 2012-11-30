@@ -426,7 +426,7 @@ public class OPSituation {
 //				java.lang.System.out.println("############ END checking PORTAL History To Start  ################");
 //				return;
 //			}
-//			con.setAutoCommit(false);
+			connection.setAutoCommit(false);
 			try{
 				selectPstmt = connection.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = selectPstmt.executeQuery();				
@@ -462,13 +462,13 @@ public class OPSituation {
 									
 									OPSituation opSituation = new OPSituation(rs, joinRs, joinFacilityRs);
 									opSituation.startProcess();
-//									con.commit();
+									connection.commit();
 									java.lang.System.out.println("[SUCCESS] 새로운 PORTAL 발생 이벤트(아이디 : '" + situationId + ")가 정상적으로 시작되었습니다!");
 								}catch (Exception se){
 									java.lang.System.out.println("[ERROR] 새로운 PORTAL 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
 									se.printStackTrace();
-//									if(con != null)
-//										con.rollback();
+									if(connection != null)
+										connection.rollback();
 								}
 							}else{
 								java.lang.System.out.println("[JOIN ERROR] 새로운 PORTAL 발생 이벤트를 시작하는데 오류가 발생하였습니다!");								
