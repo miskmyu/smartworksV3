@@ -122,12 +122,16 @@ SmartWorks.GridData = function(config) {
 						width += parseFloat($columns.eq(j + k).attr('size'));
 					}
 				}
-				
-				var $html_cell = $('<td class="tc vm">' + dataField.value + '</td>');			
+				if(id) {
+					var $entity = $form.find('#' + id);
+					if($entity.find('graphic').attr('hidden') == 'true') continue;
+					var value = isEmpty(dataField.value) ? "" : ((dataField.value == 'true') ? 'Y' : ((dataField.value == 'false') ? 'N' : dataField.value));
+					var $html_cell = $('<td class="tc vm">' + value + '</td>');
 //				if(refreshOnly)
 //					$html_cell = this_.options.target.find('.form_col[fieldId="' + id + '"]');
 //				else
 					$html_cell.appendTo($html_row);					
+				}
 			}
 		}
 		if(isEmpty(refreshTarget) || refreshOnly){
