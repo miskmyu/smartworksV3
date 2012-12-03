@@ -67,7 +67,7 @@ SmartWorks.GridData = function(config) {
 	this.getLayout = function(formXml, formValues, mySelf, refreshTarget ,refreshOnly){
 		var this_ = this;
 		if(!isEmpty(mySelf)) this_ = mySelf;
-		var $htmlForm = $('');
+		var $htmlForm = $('<form name="frmSmartForm" class="js_validation_required form_layout"></form>');//<table><table> 넣으니 또다른 테이블이 생겨 table만 삭제함
 		this_.$table = $htmlForm;
 		$form = [];
 		if(!isEmpty(formXml)){
@@ -98,7 +98,7 @@ SmartWorks.GridData = function(config) {
 		for ( var i = 0; i < $rows.length; i++) {
 			var $row = $rows.eq(i);
 			
-			var $html_row = $('');
+			var $html_row = $('<th></th>'); // th로 변경
 			var $cells = $row.children('gridCell');
 			this_.$table.append($html_row);
 
