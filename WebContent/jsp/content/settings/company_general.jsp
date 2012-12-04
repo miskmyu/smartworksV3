@@ -194,7 +194,7 @@
 					</table>
 				</div>
 				<!-- 메시징서비스 설정 -->
-				<div class="default_title_space pt20"><div class="title"><fmt:message key="settings.title.company.messaging_setting"/></div></div>
+				<div class="default_title_space pt20"><div class="title"><fmt:message key="settings.title.company.service_setting"/></div></div>
 				
 				<div class="boTb">
 					<table>
@@ -203,9 +203,13 @@
 							<col width="75%" />
 						</colgroup>
 						<tbody>
-							<tr class="end">
+							<tr>
 								<th><fmt:message key="settings.title.company.use_messaging"/></th>
 								<td><input name="chkUseMessagingService" type="checkbox" <% if(companyGeneral.isUseMessagingService() == true){%>checked<%} %> /></td>
+							</tr>
+							<tr class="end">
+								<th><fmt:message key="settings.title.company.use_return"/></th>
+								<td><input name="chkUseReturnFunction" type="checkbox" <% if(companyGeneral.isUseReturnFunction() == true){%>checked<%} %> /></td>
 							</tr>
 						</tbody>
 					</table>
