@@ -584,8 +584,7 @@ public class Adapter {
 //				java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
 //				return;
 //			}
-//			con.setAutoCommit(false);
-			
+			connection.setAutoCommit(false);
 			try{
 				selectPstmt = connection.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = selectPstmt.executeQuery();				
@@ -607,27 +606,27 @@ public class Adapter {
 							if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_OCCURRENCE){
 								try{
 									adapter.startProcess();	
-//									con.commit();
+									connection.commit();
 									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 정상적으로 시작되었습니다!");
 								}catch (Exception se){
 									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
 									se.printStackTrace();
-//									if(con != null)
-//										con.rollback();
+									if(connection != null)
+										connection.rollback();
 								}
 							}else if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE){
 								try{
 									adapter.endProcess();
-//									con.commit();
+									connection.commit();
 									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
 								}catch (Exception se){
 									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
 									se.printStackTrace();
-//									if(con != null)
-//										con.rollback();
+									if(connection != null)
+										connection.rollback();
 								}
 							}else{
-//								con.rollback();
+								connection.rollback();
 								java.lang.System.out.println("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
 							}
 						}catch (Exception we){
@@ -651,8 +650,8 @@ public class Adapter {
 					selectPstmt.close();
 				if (updatePstmt != null)
 					updatePstmt.close();
-//				if(con != null)
-//					con.close();
+//				if(connection != null)
+//					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

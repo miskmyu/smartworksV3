@@ -35,6 +35,7 @@
 		var more_smartcaster_home = $('.js_my_running_instance_list_page a.js_space_more_history');
 		var more_group_members = $('.js_space_tab_group_members_page a.js_group_more_members');
 		var more_image_instances = $('.js_image_instance_list_page a.js_more_image_instance_list');
+		var more_space_timeline = $('.js_space_timeline_page a.js_space_more_history');
 		if ($(window).scrollTop() == $(document).height() - $(window).height()){
 			
 			if(!isEmpty(more_anchor) && !more_anchor.isWaiting){
@@ -71,6 +72,13 @@
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						more_image_instances.trigger('click');
 					more_image_instances.isWaiting = false;
+				}, 2000);
+			}else if(!isEmpty(more_space_timeline) && !more_space_timeline.isWaiting){
+				more_space_timeline.isWaiting = true;
+				setTimeout(function() {
+					if ($(window).scrollTop() == $(document).height() - $(window).height())
+						more_space_timeline.trigger('click');
+					more_space_timeline.isWaiting = false;
 				}, 2000);
 			}
 		}

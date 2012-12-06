@@ -96,8 +96,13 @@
 			
 .btn_gray {display:inline-block; line-height:19px}
 .btn_gray .txt_btn_start {background: url("../images/btn_gr_left.png") no-repeat scroll 0 0 transparent; float:left; height:24px; width:5px}
-.btn_gray .txt_btn_center {background: url("../images/btn_gr_center.png") repeat scroll 0 0 transparent; float:left; color:#fff !important; height:24px; line-height: 22px; padding:0 3px; text-align:center}
+.btn_gray .txt_btn_center {background: url("../images/btn_gr_center.png") repeat scroll 0 0 transparent; float:left; height:24px; line-height: 22px; padding:0 3px; text-align:center}
 .btn_gray .txt_btn_end {background: url("../images/btn_gr_right.png") no-repeat scroll 0 0 transparent; float:left; height:24px; width:8px}
+.btn_gray a:hover .txt_btn_center {text-decoration: none; color: #35abff}
+.btn_gray a .txt_btn_center {
+	 text-decoration: none;
+     color: #fff;
+}
 .btn_hpadding {margin:7px 0}
 			
 /* close btn */

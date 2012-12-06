@@ -158,6 +158,7 @@
 				String eventPlace = "";
 				String eventTime = "";
 				String isSms = "";
+				String titleExternalDisplay = "";
 				if(!SmartUtil.isBlankObject(extendedProperties)){
 					for(int i=0; i<extendedProperties.length; i++){
 						Property extendedProperty = extendedProperties[i];
@@ -166,7 +167,10 @@
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_NAME)){
 							eventName = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_EXTERNAL_DISPLAY)){
-							externalDisplay = CommonUtil.toNotNull(extendedProperty.getValue());							
+							externalDisplay = CommonUtil.toNotNull(extendedProperty.getValue());
+							titleExternalDisplay = externalDisplay;
+							if(externalDisplay.length() > 12)
+								externalDisplay = externalDisplay.substring(0,11) + "...";
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_PLACE)){
 							eventPlace = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_TIME)){
@@ -211,6 +215,9 @@
 				}else{
 					serviceType = "종료";
 				}
+				String titleRunrunningTaskNames = runningTaskNames;
+				if(runningTaskNames.length() > 16)
+					runningTaskNames = runningTaskNames.substring(0,16) + "...";
 
 				String target =  "situationDetail.sw?cid=" + instanceInfo.getContextId() + "&workId=" + instanceInfo.getWorkId();
 				String statusImage = "";
@@ -261,7 +268,9 @@
  					</td>
 					<td>
 						<%if(!SmartUtil.isBlankObject(runningTaskNames)){ %>
-	 						<a class="js_ucity_content" href="<%=target %>"><%=runningTaskNames %></a>
+	 						<a class="js_ucity_content" href="<%=target %>">
+	 							<span title="<%=titleRunrunningTaskNames%>"><%=runningTaskNames %></span>
+	 						</a>
 	 					<%} %>
  					</td>
 					<td>
@@ -271,7 +280,9 @@
 						<a class="js_ucity_content" href="<%=target %>"><%=eventPlace%></a>
 					</td>
 					<td>	
-						<a class="js_ucity_content" href="<%=target %>"><%=externalDisplay%></a>
+						<a class="js_ucity_content" href="<%=target %>">
+							<span title="<%=titleExternalDisplay%>"><%=externalDisplay%></span>
+						</a>
 					</td>
 					<td>
 						<a class="js_ucity_content" href="<%=target %>"><%=isSms%></a>

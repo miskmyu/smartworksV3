@@ -159,12 +159,13 @@ $(function() {
 	});
 
 	$('.js_cancel_situation_manual').live('click', function(e){
-		var target = $(targetElement(e)).parents('.js_cancel_situation_manual');
-		target.hide().siblings('.js_modify_situation_manual').show().siblings('.js_save_situation_manual').hide();
-		var workManual = target.parents('.js_iwork_manual_page');
-		if(isEmpty(workManual)) workManual = target.parents('.js_pwork_manual_page');
-		workManual.find('.js_work_desc_view').show().next().hide();
-		workManual.find('.js_form_desc_view').show().next().hide();
+//		var target = $(targetElement(e)).parents('.js_cancel_situation_manual');
+//		target.hide().siblings('.js_modify_situation_manual').show().siblings('.js_save_situation_manual').hide();
+//		var workManual = target.parents('.js_iwork_manual_page');
+//		if(isEmpty(workManual)) workManual = target.parents('.js_pwork_manual_page');
+//		workManual.find('.js_work_desc_view').show().next().hide();
+//		workManual.find('.js_form_desc_view').show().next().hide();
+		window.location.reload();
 		return false;
 	});
 	

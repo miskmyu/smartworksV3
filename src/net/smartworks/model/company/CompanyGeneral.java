@@ -29,6 +29,7 @@ public class CompanyGeneral extends BaseObject {
 	private boolean sendMailNotification;
 	private boolean testAfterSaving;
 	private boolean useMessagingService=true;
+	private boolean useReturnFunction=true;
 	
 	public boolean isUseMessagingService() {
 		return useMessagingService;
@@ -123,7 +124,12 @@ public class CompanyGeneral extends BaseObject {
 	public String getPath(){
 		return PICTURE_PATH + getCompanyId() + "/" + PROFILES_DIR + "/";
 	}
-
+	public boolean isUseReturnFunction() {
+		return useReturnFunction;
+	}
+	public void setUseReturnFunction(boolean useReturnFunction) {
+		this.useReturnFunction = useReturnFunction;
+	}
 	public CompanyGeneral(){
 		super();
 	}

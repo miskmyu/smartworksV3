@@ -50,9 +50,9 @@ public class DBReadScheduler extends QuartzJobBean  {
 		
 		if(!isDbReadSchedulerRunning){
 			try{
-				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 //				connection = dataSource.getConnection();	
-//				startScheduler();
+				startScheduler();
 				connection.close();
 			}catch (Exception e){
 				java.lang.System.out.println("[ERROR] DB접속 끊김.Thread 종료");
@@ -71,7 +71,7 @@ public class DBReadScheduler extends QuartzJobBean  {
 			try{
 				Thread.sleep(5000);
 				System.out.println( schedulerCount + "진행중인 태스크 재시동 시작 : " + new Date());
-				UcityUtil.resumePollingForRunningTasks(null);
+//				UcityUtil.resumePollingForRunningTasks(null);
 				System.out.println( schedulerCount + "진행중인 태스크 재시동 종료 : " + new Date());
 			}catch (Exception e){
 				e.printStackTrace();

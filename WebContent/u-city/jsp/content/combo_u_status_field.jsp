@@ -50,6 +50,9 @@
 		<option value="<%=Instance.STATUS_RUNNING%>" <%if((operandValue != null) && Integer.parseInt(operandValue) == Instance.STATUS_RUNNING){%> selected<%} %>>
 			처리중
 		</option>
+		<option value="<%=Instance.STATUS_ABORTED%>" <%if((operandValue != null) && Integer.parseInt(operandValue) == Instance.STATUS_ABORTED){%> selected<%} %>>
+			이상종료
+		</option>		
 		<option value="<%=Instance.STATUS_COMPLETED%>" <%if((operandValue != null) && Integer.parseInt(operandValue) == Instance.STATUS_COMPLETED){%> selected<%} %>>
 			정상종료
 		</option>

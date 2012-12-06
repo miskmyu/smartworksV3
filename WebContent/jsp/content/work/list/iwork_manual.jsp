@@ -145,7 +145,7 @@ function submitForms() {
 	            	<li class="js_comment_instance" style="display:none">
 						<div class="det_title">
 							<div class="noti_pic">
-								<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" longName="<%=cUser.getLongName() %>" minPicture="<%=cUser.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
+								<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>&wid=<%=cUser.getId() %>" userId="<%=cUser.getId()%>" longName="<%=cUser.getLongName() %>" minPicture="<%=cUser.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
 									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 								</a>
 							</div>

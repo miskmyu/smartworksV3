@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.model.company.CompanyGeneral"%>
 <%@page import="net.smartworks.model.approval.ApprovalLine"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
@@ -108,7 +109,7 @@
 	    <ul class="portlet_r" style="display: block;">		            
 			<!-- 타이틀 -->
 			<div class="body_titl_pic">		
-	                <div class="noti_pic mr7"><a class="js_pop_user_info" href="<%=instance.getOwner().getSpaceController() %>?cid=<%=instance.getOwner().getSpaceContextId()%>" userId="<%=instance.getOwner().getId()%>" longName="<%=instance.getOwner().getLongName() %>" minPicture="<%=instance.getOwner().getMinPicture() %>" profile="<%=instance.getOwner().getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(instance.getOwner().getUserInfo())%>"><img src="<%=instance.getOwner().getMidPicture() %>"  class="profile_size_m"/></a></div>
+	                <div class="noti_pic mr7"><a class="js_pop_user_info" href="<%=instance.getOwner().getSpaceController() %>?cid=<%=instance.getOwner().getSpaceContextId()%>&wid=<%=instance.getOwner().getId() %>" userId="<%=instance.getOwner().getId()%>" longName="<%=instance.getOwner().getLongName() %>" minPicture="<%=instance.getOwner().getMinPicture() %>" profile="<%=instance.getOwner().getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(instance.getOwner().getUserInfo())%>"><img src="<%=instance.getOwner().getMidPicture() %>"  class="profile_size_m"/></a></div>
 	                <div class="noti_in_bodytitle case_2line">
 	                    <div>
 		                    <span class="t_name"><%=instance.getOwner().getLongName()%></span>
@@ -358,15 +359,22 @@
 				            <span class="txt_btn_end"></span>
 				    	</a>
 			   		</span>
-<%--
- 					<span class="btn_gray ml5 js_btn_return" style="display:none">
-			        	<a href="" class="js_return_task_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.return"/></span>
-				            <span class="txt_btn_end"></span>
-				    	</a>
-			   		</span>
---%>
+					
+					<%
+					CompanyGeneral cg = smartWorks.getCompanyGeneral();
+					if(cg.isUseReturnFunction()){
+					%>
+	 					<span class="btn_gray ml5 js_btn_return" style="display:none">
+				        	<a href="" class="js_return_task_instance">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.return"/></span>
+					            <span class="txt_btn_end"></span>
+					    	</a>
+				   		</span>
+				   	<%
+				   	}
+				   	%>
+
 					<span class="btn_gray ml5 js_btn_reassign" style="display:none">
 			        	<a href="" class="js_reassign_task_instance">
 				            <span class="txt_btn_start"></span>
@@ -393,7 +401,7 @@
 			    		User lastModifier = instance.getLastModifier();
 			    		String userDetailInfo = SmartUtil.getUserDetailInfo(lastModifier.getUserInfo());
 			    		%>
-				    	<a class="js_pop_user_info" href="<%=lastModifier.getSpaceController() %>?cid=<%=lastModifier.getSpaceContextId()%>" userId="<%=lastModifier.getId()%>" longName="<%=lastModifier.getLongName() %>" minPicture="<%=lastModifier.getMinPicture() %>" profile="<%=lastModifier.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=lastModifier.getMinPicture() %>" class="profile_size_s" /> <%=lastModifier.getLongName() %></a>
+				    	<a class="js_pop_user_info" href="<%=lastModifier.getSpaceController() %>?cid=<%=lastModifier.getSpaceContextId()%>&wid=<%=lastModifier.getId() %>" userId="<%=lastModifier.getId()%>" longName="<%=lastModifier.getLongName() %>" minPicture="<%=lastModifier.getMinPicture() %>" profile="<%=lastModifier.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=lastModifier.getMinPicture() %>" class="profile_size_s" /> <%=lastModifier.getLongName() %></a>
 				    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
 				    </div>
 				    <%if(numberOfForwardHistories > 0){ %><div class="po_left pt3"><a href="" class="js_toggle_forward_histories"><fmt:message key="common.title.forward_history"/> <span class="t_up_num">[<%=numberOfForwardHistories %>]</span></a></div><%} %>
