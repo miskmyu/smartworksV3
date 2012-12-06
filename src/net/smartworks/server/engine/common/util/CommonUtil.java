@@ -700,7 +700,8 @@ public class CommonUtil {
 	 */
 	public static boolean isExistImage(String imagePath) {
 
-		boolean isExistImage = false;
+		return true;
+		/*boolean isExistImage = false;
 		try {
 			if(imagePath.indexOf(".") == -1) return isExistImage;
 			URL url = new URL(imagePath);
@@ -713,7 +714,7 @@ public class CommonUtil {
 			return isExistImage;
 		} catch (Exception e) {
 			return isExistImage;
-		}
+		}*/
 	}
 
 	public static File getFileRepository(String fileDirectory, String companyId, String fileDivision, Date date) {

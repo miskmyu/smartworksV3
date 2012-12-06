@@ -130,6 +130,7 @@ import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
+import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
@@ -582,7 +583,7 @@ public class ModelConverter {
 
 		return taskInfo;
 	}
-	public static TaskInstanceInfo[] getTaskInstanceInfoArrayByTaskWorkArray(String userId, TaskWork[] tasks, int totalCount) throws Exception {
+	public static TaskInstanceInfo[] getTaskInstanceInfoArrayByTaskWorkArray_THREAD(String userId, TaskWork[] tasks, int totalCount) throws Exception {
 
 		User currentUser = SmartUtil.getCurrentUser();
 		if (tasks == null || tasks.length == 0)
@@ -616,7 +617,7 @@ public class ModelConverter {
 		return resultInfo;
 	}
 
-	/*public static TaskInstanceInfo[] getTaskInstanceInfoArrayByTaskWorkArray(String userId, TaskWork[] tasks, int maxSize) throws Exception {
+	public static TaskInstanceInfo[] getTaskInstanceInfoArrayByTaskWorkArray(String userId, TaskWork[] tasks, int maxSize) throws Exception {
 		if (tasks == null || tasks.length == 0)
 			return null;
 		List<TaskInstanceInfo> resultInfoList = new ArrayList<TaskInstanceInfo>();
@@ -644,9 +645,9 @@ public class ModelConverter {
 			workInfo.setId(task.getPackageId());
 			workInfo.setName(task.getPackageName());
 			
-			TYPE_INFORMATION = 21;
-			TYPE_PROCESS = 22;
-			TYPE_SCHEDULE = 23;
+//			TYPE_INFORMATION = 21;
+//			TYPE_PROCESS = 22;
+//			TYPE_SCHEDULE = 23;
 			if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
 				workInfo.setType(SmartWork.TYPE_PROCESS);
 				taskInfo.setType(SmartWork.TYPE_PROCESS);
@@ -689,9 +690,9 @@ public class ModelConverter {
 			workInfo.setRunning(isRunningPackage);
 			workInfo.setEditing(isEditingPackage);
 			
-			taskInfo.setWork(workInfo); //workInfo
+			taskInfo.setWorkInfo(workInfo); //workInfo
 
-			taskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
+			taskInfo.setWorkSpaceInfo((getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId())));
 
 			
 			if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
@@ -710,7 +711,7 @@ public class ModelConverter {
 			taskInfo.setLastModifier(getUserInfoByUserId(task.getTskAssignee()));
 			taskInfo.setCreatedDate(new LocalDate(task.getTskCreateDate().getTime()));
 			taskInfo.setName(task.getTskName());
-			taskInfo.setWorkInstance(getWorkInstanceInfoByTaskWork(task));//WorkInstanceInfo
+			taskInfo.setWorkInstance(getWorkInstanceInfoByTaskWork(null, task));//WorkInstanceInfo
 			taskInfo.setAssignee(getUserInfoByUserId(task.getTskAssignee()));
 			taskInfo.setPerformer(getUserInfoByUserId(task.getTskAssignee()));
 			taskInfo.setFormId(task.getTskForm());
@@ -726,7 +727,7 @@ public class ModelConverter {
 		TaskInstanceInfo[] resultInfo = new TaskInstanceInfo[resultInfoList.size()];
 		resultInfoList.toArray(resultInfo);
 		return resultInfo;
-	}*/
+	}
 	public static WorkInstanceInfo[] getWorkInstanceInfosByTaskWorks(TaskWork[] tasks) throws Exception {
 		if(CommonUtil.isEmpty(tasks))
 			return null;
@@ -4395,16 +4396,19 @@ public class ModelConverter {
 				String isLazyReferenceTask = task.getExtendedPropertyValue("isLazyReferenceTask");
 				if (!CommonUtil.isEmpty(referenceUsers)) {
 					
-					String[] ids = StringUtils.tokenizeToStringArray(referenceUsers, ";");
+					String[] ids = convertUserIdsByUserAndDeptAndGroupIdArray(StringUtils.tokenizeToStringArray(referenceUsers, ";"));
+					
 					SwoUserExtend[] users = getSwoManager().getUsersExtend("", ids);
-					List userInfoList = new ArrayList();
-					for (int i = 0; i < users.length; i++) {
-						UserInfo userInfo = getUserInfoBySwoUserExtend(null, users[i]);
-						userInfoList.add(userInfo);
+					if (users != null) {
+						List userInfoList = new ArrayList();
+						for (int i = 0; i < users.length; i++) {
+							UserInfo userInfo = getUserInfoBySwoUserExtend(null, users[i]);
+							userInfoList.add(userInfo);
+						}
+						UserInfo[] forwardees = new UserInfo[userInfoList.size()];
+						userInfoList.toArray(forwardees);
+						informationWorkInstance.setForwardees(forwardees);
 					}
-					UserInfo[] forwardees = new UserInfo[userInfoList.size()];
-					userInfoList.toArray(forwardees);
-					informationWorkInstance.setForwardees(forwardees);
 				}
 				if (!CommonUtil.isEmpty(isLazyReferenceTask)) {
 					informationWorkInstance.setLazyreferenceTask(CommonUtil.toBoolean(isLazyReferenceTask));
@@ -4414,7 +4418,55 @@ public class ModelConverter {
 		
 		return informationWorkInstance;
 	}
-
+	
+	/**
+	 * @param ids
+	 * @return 사용자아이디 배열
+	 * @throws Exception
+	 * 사용자 아이디와 부서아이디 그룹아이디가 섞여서 들어온 스트링 어레이를 부서에 속한 사용자, 그룹에 속한 사용자를 모두꺼내어
+	 * 사용자 아이디(스트링 어레이)로 변경한다
+	 */
+	private static String[] convertUserIdsByUserAndDeptAndGroupIdArray(String[] ids) throws Exception {
+		
+		if (!CommonUtil.isEmpty(ids)) {
+			List refUserIdList = new ArrayList();
+			//부서를 선택하였을경우
+			for (int i = 0; i < ids.length; i++) {
+				String users = ids[i];
+				if (users.indexOf("dept_") != -1) {
+					String deptId = users;
+					SwoUserCond userCond = new SwoUserCond();
+					userCond.setDeptId(deptId);
+					SwoUser[] deptUsers = SwManagerFactory.getInstance().getSwoManager().getUsers("", userCond, IManager.LEVEL_LITE);
+					for (int j = 0; j < deptUsers.length; j++) {
+						if (!refUserIdList.contains(deptUsers[j]))
+							refUserIdList.add(deptUsers[j].getId());
+					}
+				} else if (users.indexOf("group_") != -1) {
+					String groupId = users;
+					SwoGroupCond groupCond = new SwoGroupCond();
+					groupCond.setId(groupId);
+					SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup("", groupCond, IManager.LEVEL_ALL);
+					
+					SwoGroupMember[] member = group.getSwoGroupMembers();
+					if (member != null) {
+						for (int j = 0; j < member.length; j++) {
+							if (!refUserIdList.contains(member[j].getUserId()))
+								refUserIdList.add(member[j].getUserId());
+						}
+					}
+				} else{
+					refUserIdList.add(users);
+				}
+			}
+			String[] refUsers = new String[refUserIdList.size()];
+			refUserIdList.toArray(refUsers);
+			
+			return refUsers;
+		} else {
+			return null;
+		}
+	}
 	public static InformationWorkInstance getInformationWorkInstanceBySwdRecord(String userId, InformationWorkInstance informationWorkInstance, SwdRecord swdRecord) throws Exception {
 		if (swdRecord == null)
 			return null;

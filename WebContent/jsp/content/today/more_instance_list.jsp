@@ -56,7 +56,12 @@ boolean assignedOnly = Boolean.parseBoolean(request.getParameter("assignedOnly")
 boolean runningOnly = Boolean.parseBoolean(request.getParameter("runningOnly"));
 
 // lastDate와 assignedOnly값을 가지고 현재 진행중인 모든 인스턴스리스트를 가져온다...
-	InstanceInfo[] instances = smartWorks.getMyRunningInstances(lastDate, MAX_INSTANCE_LIST, assignedOnly, runningOnly, params);
+InstanceInfo[] instances = null;
+try {
+	instances = smartWorks.getMyRunningInstances(lastDate, MAX_INSTANCE_LIST, assignedOnly, runningOnly, params);
+} catch (Exception e) {
+	e.printStackTrace();
+}
 if(!SmartUtil.isBlankObject(instances)) {
 %>
 <div class="space_section">

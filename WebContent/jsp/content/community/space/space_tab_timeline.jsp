@@ -46,7 +46,7 @@
 	}
 	startDateStr = startDate.toLocalDateSimpleString();
 	session.setAttribute("startDate", startDateStr);
-	
+
 	TaskInstanceInfo[] taskInstances = smartWorks.getTaskInstancesByTimeline(contextStr, workSpace.getId(), startDate, 20); 
 	
 %>
