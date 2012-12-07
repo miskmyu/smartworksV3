@@ -212,7 +212,7 @@
 	
 					<!-- 근무시간 후 -->
 					<div class="space_section mt10 js_space_dayly_work_hour" toDate="<%=toDateStr%>">
-						<div class="title off"><fmt:message key="common.title.after_work"/>(<%=LocalDate.convertTimeToString(selectedCalendar.getWorkHour().getEnd())%> ~ )</div>
+						<div class="title"><fmt:message key="common.title.after_work"/>(<%=LocalDate.convertTimeToString(selectedCalendar.getWorkHour().getEnd())%> ~ )</div>
 							<%
 							if(!SmartUtil.isBlankObject(tasksByWorkHours) && tasksByWorkHours.length ==3 && !SmartUtil.isBlankObject(tasksByWorkHours[2])){
 								session.setAttribute("taskHistories", tasksByWorkHours[2]);
