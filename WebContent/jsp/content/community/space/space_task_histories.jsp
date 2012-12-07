@@ -593,7 +593,7 @@
 				            	</div>
 				            	<%
 				            	if(instance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
-				            		session.setAttribute("subComments",  instance.getSubInstances());
+				            		session.setAttribute("subComments", instance.getSubInstances());
 				            	%>
 					            	<li>
 					            		<img class="repl_tinfo">
@@ -606,7 +606,7 @@
 										<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
 									</jsp:include>
 								<%
-								} else if(instance.getSubInstanceCount()>0){
+								} else if(instance.getSubInstanceCount() > 0) {
 									session.setAttribute("subComments", instance.getSubInstances());
 								%>
 	 								<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >

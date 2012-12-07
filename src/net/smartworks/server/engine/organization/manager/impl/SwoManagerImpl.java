@@ -2199,8 +2199,9 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 	public SwoUserExtend getUserExtend(String userId, String id, boolean inMemory) throws SwoException {
 
 		if(inMemory == true) {
-			if(userExtendMap.containsKey(id))
+			if(userExtendMap.containsKey(id)) {
 				return (SwoUserExtend)userExtendMap.get(id);
+			}
 		}
 
 		//user cache 를 사용하여 메모리에서 조회한후 없으면 데이터베이스에서 조회한다.

@@ -35,7 +35,7 @@ public class CommunityInfo extends BaseObject {
 	}
 	
 	public String getOrgPicture() {
-		if(!CommonUtil.isExistImage(getPath() + this.getBigPictureName())) {
+		if(CommonUtil.isEmpty(this.getBigPictureName())) {
 			if(this.getClass().equals(UserInfo.class) || this.getClass().equals(SeraUserInfo.class) || this.getClass().equals(MentorInfo.class))
 				return Community.NO_PICTURE_PATH + User.NO_USER_PICTURE + ".jpg";
 			else if(this.getClass().equals(DepartmentInfo.class))
@@ -47,7 +47,7 @@ public class CommunityInfo extends BaseObject {
 	}
 	
 	public String getMidPicture() {
-		if(!CommonUtil.isExistImage(getPath() + this.getSmallPictureName())) {
+		if(CommonUtil.isEmpty(this.getSmallPictureName())) {
 			if(this.getClass().equals(UserInfo.class) || this.getClass().equals(SeraUserInfo.class) || this.getClass().equals(MentorInfo.class))
 				return Community.NO_PICTURE_PATH + User.NO_USER_PICTURE + "_mid.jpg";
 			else if(this.getClass().equals(DepartmentInfo.class))
@@ -58,7 +58,7 @@ public class CommunityInfo extends BaseObject {
 		return getPath() + this.getSmallPictureName();
 	}
 	public String getMinPicture() {
-		if(!CommonUtil.isExistImage(getPath() + this.getSmallPictureName())) {
+		if(CommonUtil.isEmpty(this.getSmallPictureName())) {
 			if(this.getClass().equals(UserInfo.class) || this.getClass().equals(SeraUserInfo.class) || this.getClass().equals(MentorInfo.class))
 				return Community.NO_PICTURE_PATH + User.NO_USER_PICTURE + "_min.jpg";
 			else if(this.getClass().equals(DepartmentInfo.class))
