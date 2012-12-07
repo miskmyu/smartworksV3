@@ -690,9 +690,13 @@ public class ModelConverter {
 			workInfo.setRunning(isRunningPackage);
 			workInfo.setEditing(isEditingPackage);
 			
+//Start InstanceInfo Model Changed by ysjung
 			taskInfo.setWorkInfo(workInfo); //workInfo
+			//taskInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 
 			taskInfo.setWorkSpaceInfo((getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId())));
+			//taskInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
+//End InstanceInfo Model Changed by ysjung
 
 			
 			if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
@@ -719,7 +723,7 @@ public class ModelConverter {
 			resultInfoList.add(taskInfo);
 		}
 
-		if(taskLenth > maxSize) {
+		if( maxSize > taskLenth) {
 			TaskInstanceInfo taskInstanceInfo = new TaskInstanceInfo();
 			taskInstanceInfo.setType(-21);
 			resultInfoList.add(taskInstanceInfo);
