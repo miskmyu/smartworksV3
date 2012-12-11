@@ -15,7 +15,6 @@ import javax.sql.DataSource;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.work.ProcessWork;
-import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
 import pro.ucity.util.UcityUtil;
@@ -40,16 +39,16 @@ public class Adapter {
 	public static final String STATUS_STOP_DISPLAY = "Y";
 	
 	public static final KeyMap[][] ADAPTER_HISTORY_FIELDS = {		
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("특보분류", "env_event_type"), new KeyMap("발생내용", "event_content"), new KeyMap("링크아이디", "link_id") },
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("오염물질수", "pollution_number"), new KeyMap("오염물질구분", "pollution_type"), new KeyMap("오염물질측정치", "pollution_value"), new KeyMap("오염등급", "pollution_level"), new KeyMap("오염물질 예/경보구분", "pollution_example"), new KeyMap("링크아이디", "link_id")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("링크아이디", "link_id")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code"), new KeyMap("링크아이디", "link_id")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("노트링크 시작 ID", "link_start_id"), new KeyMap("노트링크 종료 ID", "link_end_id"), new KeyMap("돌발상황 유형", "outbreak_type"), new KeyMap("돌발상황 코드", "outbreak_code"), new KeyMap("링크아이디", "link_id")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("탐지분류", "search_type"), new KeyMap("링크아이디", "link_id")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("링크아이디", "link_id")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code"), new KeyMap("링크아이디", "link_id")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("임계치 값", "threshold_value"), new KeyMap("링크아이디", "link_id")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("시설물이상구분", "facility_type"), new KeyMap("링크아이디", "link_id")},		
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("특보분류", "env_event_type"), new KeyMap("발생내용", "event_content")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("오염물질수", "pollution_number"), new KeyMap("오염물질구분", "pollution_type"), new KeyMap("오염물질측정치", "pollution_value"), new KeyMap("오염등급", "pollution_level"), new KeyMap("오염물질 예/경보구분", "pollution_example")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("발생장소명", "location_name"), new KeyMap("오염물질등급", "pollution_level"), new KeyMap("오염물질수치", "pollution_figure")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code"), new KeyMap("이미지경로", "file_path")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("시설물위치", "link_id"), new KeyMap("돌발상황 유형", "outbreak_type"), new KeyMap("돌발상황 코드", "outbreak_code")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("탐지분류", "search_type")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code"), new KeyMap("이미지경로", "file_path")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("임계치 값", "threshold_value")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("시설물이상구분", "facility_type")},		
 		{new KeyMap("장비 ID", "device_id"), new KeyMap("배경색상", "background_color"), new KeyMap("색상", "font_color"), new KeyMap("폰트크기", " font_size"), new KeyMap("폰트타입", "font_type"), new KeyMap("폰트굵기", "font_thickness"), new KeyMap("표출유형", "display_type"), new KeyMap("데이터형식", "data_type"), new KeyMap("표출내용", "message")},		
 		{new KeyMap("장비 ID", "device_id"), new KeyMap("배경색상", "background_color"), new KeyMap("색상", "font_color"), new KeyMap("폰트크기", " font_size"), new KeyMap("폰트타입", "font_type"), new KeyMap("폰트굵기", "font_thickness"), new KeyMap("표출유형", "display_type"), new KeyMap("데이터형식", "data_type"), new KeyMap("표출내용", "message")},		
 		{new KeyMap("장비 ID", "device_id"), new KeyMap("배경색상", "background_color"), new KeyMap("색상", "font_color"), new KeyMap("폰트크기", " font_size"), new KeyMap("폰트타입", "font_type"), new KeyMap("폰트굵기", "font_thickness"), new KeyMap("표출유형", "display_type"), new KeyMap("데이터형식", "data_type"), new KeyMap("표출내용", "message")},		
@@ -90,6 +89,10 @@ public class Adapter {
 	private String displayContent;
 	private boolean stopDisplay;
 	private String linkId;
+	
+	private String pollutionFigure;
+	private String filePath;
+	private String fileName;
 	
 	public String getCommHeader() {
 		return commHeader;
@@ -280,6 +283,24 @@ public class Adapter {
 	public void setLinkId(String linkId) {
 		this.linkId = linkId;
 	}
+	public String getPollutionFigure() {
+		return pollutionFigure;
+	}
+	public void setPollutionFigure(String pollutionFigure) {
+		this.pollutionFigure = pollutionFigure;
+	}
+	public String getFilePath() {
+		return filePath;
+	}
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 	public Adapter(String commHeader, String commBody){
 		super();
 		this.commHeader = commHeader;
@@ -314,13 +335,14 @@ public class Adapter {
 	private void parseCommBody(String commBody){
 		if(SmartUtil.isBlankObject(commBody) || this.process<0 || this.process>System.MAX_PROCESS) return;
 		
-		String[] tokens = commBody.split(Adapter.FIELD_SEPERATOR);
+		int processLen = ADAPTER_HISTORY_FIELDS[process].length;
+		String[] tokens = commBody.split(Adapter.FIELD_SEPERATOR,processLen);
 		if(tokens != null){
 			if(tokens != null && tokens.length < 3 && (this.process == System.PROCESS_ENV_VMS || this.process == System.PROCESS_MEDIABORAD || this.process == System.PROCESS_TRAFFIC_VMS || this.process == System.PROCESS_TRAFFIC_BIT || this.process == System.PROCESS_KIOSK)){
 				this.stopDisplay = true;
 			}else if((this.process == System.PROCESS_ENV_VMS || this.process == System.PROCESS_MEDIABORAD || this.process == System.PROCESS_TRAFFIC_VMS || this.process == System.PROCESS_TRAFFIC_BIT || this.process == System.PROCESS_KIOSK)){
 				this.stopDisplay = false;
-			}else if(tokens.length != ADAPTER_HISTORY_FIELDS[process].length)
+			}else if(tokens.length != processLen)
 				return;
 		}
 		
@@ -330,7 +352,6 @@ public class Adapter {
 			this.occuredDate = tokens[1];
 			this.envEventType = tokens[2];
 			this.eventContent = tokens[3];
-			this.linkId = tokens[4];
 			break;
 		case System.PROCESS_ENV_ATMOSPHERE:
 			this.eventId = tokens[0];
@@ -342,14 +363,13 @@ public class Adapter {
 			this.pollutionValue = tokens[6];
 			this.pollutionLevel = tokens[7];
 			this.pollutionExample = tokens[8];
-			this.linkId = tokens[9];
 			break;
 		case System.PROCESS_ENV_WATER:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
-			this.linkId = tokens[4];
+			this.locationName = tokens[2];
+			this.pollutionLevel = tokens[3];
+			this.pollutionFigure = tokens[4];
 			break;
 		case System.PROCESS_TRAFFIC_ILLEGAL_PARKING:
 			this.eventId = tokens[0];
@@ -359,30 +379,28 @@ public class Adapter {
 			this.carNumber = tokens[4];
 			this.carType = tokens[5];
 			this.crimeCode = tokens[6];
-			this.linkId = tokens[7];
+			this.filePath = tokens[7];			
 			break;
 		case System.PROCESS_TRAFFIC_INCIDENT:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
-			this.linkStartId = tokens[2];
-			this.linkEndId = tokens[3];
-			this.outbreakType = tokens[4];
-			this.outbreakCode = tokens[5];
-			this.linkId = tokens[6];
+			this.facilityId = tokens[2];
+			this.locationName = tokens[3];
+			this.linkId = tokens[4];
+			this.outbreakType = tokens[5];
+			this.outbreakCode = tokens[6];
 			break;
 		case System.PROCESS_DISASTER_FIRE:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
 			this.searchType = tokens[3];
-			this.linkId = tokens[4];
 			break;
 		case System.PROCESS_CRIME_CCTV:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
-			this.linkId = tokens[4];
 			break;
 		case System.PROCESS_CRIME_VEHICLES:
 			this.eventId = tokens[0];
@@ -392,7 +410,7 @@ public class Adapter {
 			this.carNumber = tokens[4];
 			this.carType = tokens[5];
 			this.crimeCode = tokens[6];
-			this.linkId = tokens[7];
+			this.filePath = tokens[7];
 			break;
 		case System.PROCESS_WATERWORKS_LEAKS:
 			this.eventId = tokens[0];
@@ -400,7 +418,6 @@ public class Adapter {
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
 			this.thresholdValue = tokens[4];
-			this.linkId = tokens[5];
 			break;
 		case System.PROCESS_FACILITY_MANAGEMENT:
 			this.eventId = tokens[0];
@@ -408,7 +425,6 @@ public class Adapter {
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
 			this.facilityType = tokens[4];
-			this.linkId = tokens[5];
 			break;
 		case System.PROCESS_ENV_VMS:
 		case System.PROCESS_TRAFFIC_BIT:
@@ -444,7 +460,7 @@ public class Adapter {
 		}
 		dataRecord.put("serviceName", Service.getServiceNameByCode(this.getServiceCode()));
 		if(this.process == System.PROCESS_ENV_WEAHTER)
-			dataRecord.put("eventName", this.envEventType);
+			dataRecord.put("eventName", "환경경보");
 		else
 			dataRecord.put("eventName", Event.getEventNameByCode(this.getEventCode()));
 		dataRecord.put("eventPlace", this.locationName);
@@ -497,6 +513,12 @@ public class Adapter {
 				dataRecord.put(keyMap.getId(), this.displayContent);
 			else if(keyMap.getKey().equals("link_id"))
 				dataRecord.put(keyMap.getId(), this.linkId);
+			else if(keyMap.getKey().equals("pollution_figure"))
+				dataRecord.put(keyMap.getId(), this.pollutionFigure);
+			else if(keyMap.getKey().equals("file_path"))
+				dataRecord.put(keyMap.getId(), this.filePath);
+			else if(keyMap.getKey().equals("file_name"))
+				dataRecord.put(keyMap.getId(), this.fileName);
 		}
 		return dataRecord;
 	}
@@ -506,7 +528,8 @@ public class Adapter {
 		
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null) return;
-		
+		if(this.process == System.PROCESS_FACILITY_MANAGEMENT)
+			eventId = facilityId;		
 		UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.eventId, this.occuredDate, this.getDataRecord());
 	}
 	
@@ -515,7 +538,8 @@ public class Adapter {
 		
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null) return;
-		
+		if(this.process == System.PROCESS_FACILITY_MANAGEMENT)
+			eventId = facilityId;
 		UcityUtil.endUServiceProcess(System.getProcessId(this.process), this.eventId, this.getDataRecord());
 	}
 	
@@ -561,42 +585,46 @@ public class Adapter {
 		return false;
 	}
 	
-	synchronized public static void readHistoryTableToStart(Connection connection){
-		if(SmartUtil.isBlankObject(connection)) return;
+	synchronized public static void readHistoryTableToStart(){
+//		if(SmartUtil.isBlankObject(connection)) return;
 		
 		java.lang.System.out.println("############ START checking ADAPTER History To Start  ################");
 
+		Connection connection = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
+		int number = 1;
 				
-		String adapterSelectSql = UcityConstant.getQueryByKey("Adapter.QUERY_SELECT_FOR_START");
+		String adapterSelectStartSql = UcityConstant.getQueryByKey("Adapter.QUERY_SELECT_FOR_START");
+		String adapterSelectEndSql = UcityConstant.getQueryByKey("Adapter.QUERY_SELECT_FOR_END");
 		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
+		String adapterRollbackSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_ROLLBACK");
 		try {
-//			try{
-////			    Context init = new InitialContext();
-////			    Context envinit = (Context)init.lookup("java:comp/env");
-////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-////			    con = ds.getConnection();
-//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-//			}catch (TbSQLException te){
-//				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
-//				te.printStackTrace();
-//				java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
-//				return;
-//			}
-			connection.setAutoCommit(false);
 			try{
-				selectPstmt = connection.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			    Context init = new InitialContext();
+			    Context envinit = (Context)init.lookup("java:comp/env");
+			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+			    connection = ds.getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+			}catch (TbSQLException te){
+				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+				te.printStackTrace();
+				java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+				return;
+			}
+//			connection.setAutoCommit(false);
+			try{
+				selectPstmt = connection.prepareStatement(adapterSelectStartSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last();
 				int count = rs.getRow(); 
 				rs.beforeFirst();
 				if (count != 0) {
 					int processedCount = 0;
-					java.lang.System.out.println("============== ADAPTER 이벤트 발생 ===============");
+					java.lang.System.out.println("============== ADAPTER 시작이벤트 발생 ===============");
 					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
 					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
-					while(rs.next() && processedCount++ <20) {
+					while(rs.next() && number == 1) {
 						try{
 							String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
 							updatePstmt = connection.prepareStatement(adapterUpdateSql);
@@ -606,39 +634,111 @@ public class Adapter {
 							if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_OCCURRENCE){
 								try{
 									adapter.startProcess();	
-									connection.commit();
+//									connection.commit();
 									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 정상적으로 시작되었습니다!");
 								}catch (Exception se){
 									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
 									se.printStackTrace();
-									if(connection != null)
-										connection.rollback();
+									updatePstmt = connection.prepareStatement(adapterRollbackSql);
+									updatePstmt.setString(1, communicationId);
+									result = updatePstmt.execute();
 								}
-							}else if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE){
-								try{
-									adapter.endProcess();
-									connection.commit();
-									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
-								}catch (Exception se){
-									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
-									se.printStackTrace();
-									if(connection != null)
-										connection.rollback();
+								selectPstmt = connection.prepareStatement(adapterSelectStartSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+								rs = selectPstmt.executeQuery();				
+								rs.last();
+								count = rs.getRow(); 
+								rs.beforeFirst();
+								if (count == 0){
+									number = 0; 
+								}else{
+									java.lang.System.out.println("============== ADAPTER 시작이벤트 발생(while) ===============");
+									java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
+									java.lang.System.out.println("이벤트 발생 갯수 : " + count);														
 								}
 							}else{
-								connection.rollback();
+//								connection.rollback();
 								java.lang.System.out.println("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
+								updatePstmt = connection.prepareStatement(adapterRollbackSql);
+								updatePstmt.setString(1, communicationId);
+								result = updatePstmt.execute();
 							}
 						}catch (Exception we){
-							java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+//							java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 							we.printStackTrace();
 							java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
 							return;
 						}
 					}
+				}else{
+					try{
+						selectPstmt = connection.prepareStatement(adapterSelectEndSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+						rs = selectPstmt.executeQuery();				
+						rs.last();
+						count = rs.getRow(); 
+						rs.beforeFirst();					
+						if (count != 0) {
+							int processedCount = 0;
+							java.lang.System.out.println("============== ADAPTER 종료이벤트 발생 ===============");
+							java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
+							java.lang.System.out.println("이벤트 발생 갯수 : " + count);
+							while(rs.next() && number == 1) {
+								try{
+									String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
+									updatePstmt = connection.prepareStatement(adapterUpdateSql);
+									updatePstmt.setString(1, communicationId);
+									boolean result = updatePstmt.execute();
+									Adapter adapter = new Adapter(rs);
+									if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE){
+										try{
+											adapter.endProcess();
+//											connection.commit();
+											updatePstmt = connection.prepareStatement(adapterRollbackSql);
+											updatePstmt.setString(1, communicationId);
+											result = updatePstmt.execute();
+											java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
+										}catch (Exception se){
+											java.lang.System.out.println("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
+											se.printStackTrace();
+//											if(connection != null)
+//												connection.rollback();
+//											updatePstmt = connection.prepareStatement(adapterRollbackSql);
+//											updatePstmt.setString(1, communicationId);
+//											result = updatePstmt.execute();
+										}
+										selectPstmt = connection.prepareStatement(adapterSelectEndSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+										rs = selectPstmt.executeQuery();				
+										rs.last();
+										count = rs.getRow(); 
+										rs.beforeFirst();	
+										if(count == 0){
+											number = 0;
+										}else{
+											java.lang.System.out.println("============== ADAPTER 종료이벤트 발생(while) ===============");
+											java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
+											java.lang.System.out.println("이벤트 발생 갯수 : " + count);																
+										}
+									}else{
+//										connection.rollback();
+										java.lang.System.out.println("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
+//										updatePstmt = connection.prepareStatement(adapterRollbackSql);
+//										updatePstmt.setString(1, communicationId);
+//										result = updatePstmt.execute();
+									}
+								}catch (Exception we){
+									java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+									we.printStackTrace();
+									java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+									return;
+								}
+							}
+						}							
+					}catch (Exception e1){
+						java.lang.System.out.println("[ERROR] ADAPTER 종료이벤트 데이터베이스 오류 종료");
+						e1.printStackTrace();
+					}
 				}
 			}catch (Exception e1){
-				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+				java.lang.System.out.println("[ERROR] ADAPTER 시작이벤트 데이터베이스 오류 종료");
 				e1.printStackTrace();
 			}
 		} catch (Exception e) {
@@ -650,8 +750,8 @@ public class Adapter {
 					selectPstmt.close();
 				if (updatePstmt != null)
 					updatePstmt.close();
-//				if(connection != null)
-//					connection.close();
+				if(connection != null)
+					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -660,31 +760,31 @@ public class Adapter {
 		}
 	}
 	
-	public static Map<String,Object> readHistoryTable(Connection connection, String eventId, String deviceId, String status){
-		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(Service.getDeviceCodeByDeviceId(deviceId))) return null;
+	public static Map<String,Object> readHistoryTable(String eventId, String deviceId, String status){
+		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(Service.getDeviceCodeByDeviceId(deviceId))) return null;
 
 		for(int i=eventId.length(); i < 20; i++){
 			eventId = eventId + "0";
 		}
 		
-//		Connection con = null;
+		Connection connection = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
 		String adapterSelectSql = UcityConstant.getQueryByKey("Adapter.QUERY_SELECT_FOR_PERFORM");
 		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
-//			try{
-////			    Context init = new InitialContext();
-////			    Context envinit = (Context)init.lookup("java:comp/env");
-////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-////			    con = ds.getConnection();
-//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-//
-//			}catch (TbSQLException te){
-//				te.printStackTrace();
-//				return null;
-//			}
+			try{
+			    Context init = new InitialContext();
+			    Context envinit = (Context)init.lookup("java:comp/env");
+			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+			    connection = ds.getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return null;
+			}
 			
 			try{
 				selectPstmt = connection.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -727,8 +827,8 @@ public class Adapter {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-//				if(con != null)
-//					con.close();
+				if(connection != null)
+					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
