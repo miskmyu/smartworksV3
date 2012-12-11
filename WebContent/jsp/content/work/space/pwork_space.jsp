@@ -109,7 +109,7 @@
 	    <ul class="portlet_r" style="display: block;">		            
 			<!-- 타이틀 -->
 			<div class="body_titl_pic">		
-	                <div class="noti_pic mr7"><a class="js_pop_user_info" href="<%=instance.getOwner().getSpaceController() %>?cid=<%=instance.getOwner().getSpaceContextId()%>" userId="<%=instance.getOwner().getId()%>" longName="<%=instance.getOwner().getLongName() %>" minPicture="<%=instance.getOwner().getMinPicture() %>" profile="<%=instance.getOwner().getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(instance.getOwner().getUserInfo())%>"><img src="<%=instance.getOwner().getMidPicture() %>"  class="profile_size_m"/></a></div>
+	                <div class="noti_pic mr7"><a class="js_pop_user_info" href="<%=instance.getOwner().getSpaceController() %>?cid=<%=instance.getOwner().getSpaceContextId()%>&wid=<%=instance.getOwner().getId() %>" userId="<%=instance.getOwner().getId()%>" longName="<%=instance.getOwner().getLongName() %>" minPicture="<%=instance.getOwner().getMinPicture() %>" profile="<%=instance.getOwner().getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(instance.getOwner().getUserInfo())%>"><img src="<%=instance.getOwner().getMidPicture() %>"  class="profile_size_m"/></a></div>
 	                <div class="noti_in_bodytitle case_2line">
 	                    <div>
 		                    <span class="t_name"><%=instance.getOwner().getLongName()%></span>
@@ -401,7 +401,7 @@
 			    		User lastModifier = instance.getLastModifier();
 			    		String userDetailInfo = SmartUtil.getUserDetailInfo(lastModifier.getUserInfo());
 			    		%>
-				    	<a class="js_pop_user_info" href="<%=lastModifier.getSpaceController() %>?cid=<%=lastModifier.getSpaceContextId()%>" userId="<%=lastModifier.getId()%>" longName="<%=lastModifier.getLongName() %>" minPicture="<%=lastModifier.getMinPicture() %>" profile="<%=lastModifier.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=lastModifier.getMinPicture() %>" class="profile_size_s" /> <%=lastModifier.getLongName() %></a>
+				    	<a class="js_pop_user_info" href="<%=lastModifier.getSpaceController() %>?cid=<%=lastModifier.getSpaceContextId()%>&wid=<%=lastModifier.getId() %>" userId="<%=lastModifier.getId()%>" longName="<%=lastModifier.getLongName() %>" minPicture="<%=lastModifier.getMinPicture() %>" profile="<%=lastModifier.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=lastModifier.getMinPicture() %>" class="profile_size_s" /> <%=lastModifier.getLongName() %></a>
 				    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
 				    </div>
 				    <%if(numberOfForwardHistories > 0){ %><div class="po_left pt3"><a href="" class="js_toggle_forward_histories"><fmt:message key="common.title.forward_history"/> <span class="t_up_num">[<%=numberOfForwardHistories %>]</span></a></div><%} %>

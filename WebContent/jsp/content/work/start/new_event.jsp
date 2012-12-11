@@ -117,7 +117,6 @@ function submitForms() {
 					});
 				}
 			});
-			alert('wait');
 		}
 	}
 }

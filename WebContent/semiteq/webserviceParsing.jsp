@@ -10,7 +10,7 @@
 <%
 	String done = "done.";
 	String SQL_DRIVER="com.microsoft.sqlserver.jdbc.SQLServerDriver";
-	String URL="jdbc:sqlserver://222.116.101.228:1433;SelectMethod=cursor;DatabaseName=SmartworksV3";
+	String URL="jdbc:sqlserver://222.116.101.228:1433;SelectMethod=cursor;DatabaseName=Smartworks";
 	String USER = "sa";
 	String PASS = "admin123!";
 	

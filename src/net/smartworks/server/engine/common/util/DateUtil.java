@@ -211,8 +211,20 @@ public class DateUtil {
 	public static Date toDate(String dateString, String dateFormatString) throws Exception {
 		if (dateString == null || dateFormatString == null)
 			return null;
-		DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
-		Date date = dateFormat.parse(dateString);
+		Date date = null;
+		try {
+			DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
+			date = dateFormat.parse(dateString);
+		} catch (Exception e) {
+			for (int i = 0; i < DATEFORMAT.length; i++) {
+				try {
+					SimpleDateFormat dateFormat = DATEFORMAT[i];
+					date = toDate(dateString, dateFormat);
+					break;
+				} catch (Exception ex) {
+				}
+			}
+		}
 		return date;
 	}
 	public static Date toDate(String dateString) throws Exception {

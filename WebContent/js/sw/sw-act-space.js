@@ -124,7 +124,7 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				input.parents('li:first').remove();
-				target.append(data);
+				target.append($(data).find('li'));
 				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){

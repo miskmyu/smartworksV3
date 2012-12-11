@@ -56,7 +56,12 @@ boolean assignedOnly = Boolean.parseBoolean(request.getParameter("assignedOnly")
 boolean runningOnly = Boolean.parseBoolean(request.getParameter("runningOnly"));
 
 // lastDate와 assignedOnly값을 가지고 현재 진행중인 모든 인스턴스리스트를 가져온다...
-	InstanceInfo[] instances = smartWorks.getMyRunningInstances(lastDate, MAX_INSTANCE_LIST, assignedOnly, runningOnly, params);
+InstanceInfo[] instances = null;
+try {
+	instances = smartWorks.getMyRunningInstances(lastDate, MAX_INSTANCE_LIST, assignedOnly, runningOnly, params);
+} catch (Exception e) {
+	e.printStackTrace();
+}
 if(!SmartUtil.isBlankObject(instances)) {
 %>
 <div class="space_section">
@@ -147,7 +152,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 				<!-- 인스턴스 상태 및 시작자 사진표시 -->
 				<div class="noti_pic">
 					<span class="<%=statusImage%> tc vm" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
-					<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img class="profile_size_m" src="<%=owner.getMidPicture()%>"/></a>
+					<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img class="profile_size_m" src="<%=owner.getMidPicture()%>"/></a>
 				</div>
 				<!-- 인스턴스 상태 및 시작자 사진표시 -->
 				

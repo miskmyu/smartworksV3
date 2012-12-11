@@ -144,7 +144,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 
 /* GR 포인트 */
 .up_point_gr {background: url("../../images/up_point_gr.gif") no-repeat scroll left top transparent; height: 13px; width: 23px}
-.posit_point {left:30px; position: relative; top:7px; z-index:90}
+.posit_point {left:30px; position: relative; top:7px; z-index:30}
 .posit_default {left: 58px; position: relative; top: 1px; margin-top:5px; z-index: 20}
 
 /* GR 포틀릿 */

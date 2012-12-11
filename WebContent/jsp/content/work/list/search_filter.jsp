@@ -72,7 +72,7 @@
 					<select name="selFilterLeftOperand"
 						class="selb_size_fir js_select_filter_operand">
 						<%
-						if (fields != null) {
+						if (fields != null && work.getType() == SmartWork.TYPE_INFORMATION ) {
 							for (FormField field : fields) {
 						%>
 							<option page="<%=field.getPageName() %>" type="<%=field.getType()%>" value="<%=field.getId()%>"><%=field.getName()%></option>

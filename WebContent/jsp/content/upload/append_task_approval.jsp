@@ -212,7 +212,7 @@
 				<%
 				boolean isReturned = false;
 				if (workInstance != null)
-					isReturned = (workInstance.getStatus()==Instance.STATUS_RETURNED);
+					isReturned = (!isForwarded && workInstance.getStatus()==Instance.STATUS_RETURNED);
 				%>
 				isReturned="<%=isReturned%>" isForwarded="<%=isForwarded%>">
 			</div>
@@ -266,7 +266,7 @@
 										<div class="det_title">	
 											<span class="<%=statusImage%> vm" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
 											<span class="approval_stage"><%=task.getName() %></span>
-											<a class="js_pop_user_info vm" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
+											<a class="js_pop_user_info vm" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
 												<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
 											</a>
 											<span class="txt_info">

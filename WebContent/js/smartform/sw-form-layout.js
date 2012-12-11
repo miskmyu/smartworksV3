@@ -136,7 +136,8 @@ SmartWorks.GridLayout = function(config) {
 				if(rowspan)
 					$html_cell.attr('rowspan', rowspan);
 				if(id) {
-					var $entity = $form.find('#' + id);
+					//var $entity = $form.find('#' + id);
+					var $entity = $form.find('formEntity[id="'+ id + '"]');
 //					if(this_.options.requiredOnly !== 'true' || $entity[0].getAttribute('required') === 'true'){
 					SmartWorks.FormFieldBuilder.build(mode, $html_cell, $entity, dataField, this_, refreshOnly);
 //					}

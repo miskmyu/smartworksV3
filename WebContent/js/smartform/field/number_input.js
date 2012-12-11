@@ -38,7 +38,7 @@ SmartWorks.FormRuntime.NumberInputBuilder.build = function(config) {
 	
 	var $number = null;
 	if(readOnly){
-		if(value=='')
+		if(value==='')
 			$number = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span>&nbsp;</span></div>');
 		else
 			//$number = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span>' + $(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true }) + '</span></div>');

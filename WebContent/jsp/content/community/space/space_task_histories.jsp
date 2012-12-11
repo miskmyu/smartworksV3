@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.community.Group"%>
 <%@page import="net.smartworks.model.community.Department"%>
@@ -83,7 +84,7 @@
 	if(!SmartUtil.isBlankObject(tasksHistories) && tasksHistories.length > 0){
 		for(int i=0; i<tasksHistories.length; i++){
 			TaskInstanceInfo taskInstance = tasksHistories[i];
-			if(taskInstance.getType()<0){
+			if(SmartUtil.isBlankObject(taskInstance) || taskInstance.getType()<=0){
 				String lastDateStr = (i>0) ? (new LocalDate(tasksHistories[i-1].getLastModifiedDate().getTime())).toLocalDateString2() : ""; 
 	%>
 				<li class="t_nowork">
@@ -132,7 +133,7 @@
 					board = (BoardInstanceInfo)workInstance;
 				%>
 					<div class="det_title">
-						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
+						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
 							<%
 							if(cUser.getId().equals(owner.getId())){
@@ -169,7 +170,7 @@
 					event = (EventInstanceInfo)workInstance;
 				%>
 					<div class="det_title">
-						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
+						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
 							<%
 							if(cUser.getId().equals(owner.getId())){
@@ -211,7 +212,7 @@
 					file = (FileInstanceInfo)workInstance;
 				%>
 					<div class="det_title">
-						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
+						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
 							<%
 							if(cUser.getId().equals(owner.getId())){
@@ -253,7 +254,7 @@
 					image = (ImageInstanceInfo)workInstance;
 				%>
 					<div class="det_title">
-						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
+						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
 							<%
 							if(cUser.getId().equals(owner.getId())){
@@ -291,7 +292,7 @@
 					memo = (MemoInstanceInfo)workInstance;
 				%>
 					<div class="det_title">
-						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
+						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
 							<%
 							if(cUser.getId().equals(owner.getId())){
@@ -329,7 +330,7 @@
 				%>
 				<!-- 실행된 업무정보 -->
 					<div class="det_title">
-						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
+						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m case_2line">
 							<%
 							if(cUser.getId().equals(owner.getId())){
@@ -579,7 +580,7 @@
 				            	<div class="det_title">
 					            	<li class="comment_list js_comment_instance" style="display:none">
 										<div class="noti_pic">
-											<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
+											<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>&wid=<%=cUser.getId() %>" userId="<%=cUser.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
 												<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
 											</a>
 										</div>
@@ -592,7 +593,7 @@
 				            	</div>
 				            	<%
 				            	if(instance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
-				            		session.setAttribute("subComments", null);
+				            		session.setAttribute("subComments", instance.getSubInstances());
 				            	%>
 					            	<li>
 					            		<img class="repl_tinfo">
@@ -600,19 +601,19 @@
 				            				<span><strong><fmt:message key="common.title.show_all_comments"><fmt:param><%=instance.getSubInstanceCount() %></fmt:param><</fmt:message></strong></span>
 				            			</a>
 					            	</li>
-									<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
+ 									<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
 										<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
 										<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
 									</jsp:include>
 								<%
-								} else {
+								} else if(instance.getSubInstanceCount() > 0) {
 									session.setAttribute("subComments", instance.getSubInstances());
 								%>
-									<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
+	 								<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
 										<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
 										<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
 									</jsp:include>
-								<%
+	 							<%
 								}
 								%>
 							</ul>

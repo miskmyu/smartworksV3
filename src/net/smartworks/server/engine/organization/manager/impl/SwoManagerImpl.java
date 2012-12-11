@@ -2199,8 +2199,9 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 	public SwoUserExtend getUserExtend(String userId, String id, boolean inMemory) throws SwoException {
 
 		if(inMemory == true) {
-			if(userExtendMap.containsKey(id))
+			if(userExtendMap.containsKey(id)) {
 				return (SwoUserExtend)userExtendMap.get(id);
+			}
 		}
 
 		//user cache 를 사용하여 메모리에서 조회한후 없으면 데이터베이스에서 조회한다.
@@ -2563,7 +2564,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			String picture = CommonUtil.toNotNull(swoUserExtends[i].getPictureName());
 
 			if(!picture.equals("")) {
-				String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
+				String extension = picture.lastIndexOf(".") >= 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 				String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
 				swoUserExtends[i].setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 				swoUserExtends[i].setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);

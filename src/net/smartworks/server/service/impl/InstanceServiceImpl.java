@@ -527,9 +527,9 @@ public class InstanceServiceImpl implements IInstanceService {
 					result[tempResult.length] = new TaskInstanceInfo();
 					return result;
 				} else {
-					return ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
+					InstanceInfo[] result =  ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
+					return result;
 				}
-				
 			}
 			return null;
 		}catch (Exception e){
@@ -1965,6 +1965,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			List<Map<String, String>> files = null;
 			List<Map<String, String>> users = null;
 			String groupId = null;
+			List<String> groupIdList = new ArrayList();
 			Map<String, List<Map<String, String>>> fileGroupMap = new HashMap<String, List<Map<String, String>>>();
 			while (itr.hasNext()) {
 				String fieldId = (String)itr.next();
@@ -1995,6 +1996,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						if(!CommonUtil.isEmpty(files)) {
 							fileGroupMap.put(groupId, files);
 							value = groupId;
+							groupIdList.add(groupId);
 						}
 					} else if(!CommonUtil.isEmpty(refForm)) {
 						refFormField = (String)valueMap.get("refFormField");
@@ -2219,7 +2221,28 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 			}
-			if(groupId != null) {
+			if (groupIdList.size() != 0) {
+				for (int i = 0; i < groupIdList.size(); i++) {
+					if (CommonUtil.isEmpty(groupIdList.get(i)))
+						continue;
+					String tempGroupId = groupIdList.get(i);
+					List<IFileModel> iFileModelList = getDocManager().findFileGroup(tempGroupId);
+					if(iFileModelList.size() > 0) {
+						for(int j=0; j<iFileModelList.size(); j++) {
+							IFileModel fileModel = iFileModelList.get(j);
+							String fileId = fileModel.getId();
+							String filePath = fileModel.getFilePath();
+							if(fileModel.isDeleteAction()) {
+								getDocManager().deleteFile(fileId);
+								File f = new File(filePath);
+								if(f.exists())
+									f.delete();
+							}
+						}
+					}
+				}
+			}
+			/*if(groupId != null) {
 				List<IFileModel> iFileModelList = getDocManager().findFileGroup(groupId);
 				if(iFileModelList.size() > 0) {
 					for(int i=0; i<iFileModelList.size(); i++) {
@@ -2234,7 +2257,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						}
 					}
 				}
-			}
+			}*/
 
 			return instanceId;
 
@@ -3649,27 +3672,39 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Override
 	public InstanceInfo[] getRecentSubInstancesInInstance(String instanceId, int length) throws Exception {
 		try{
+			if (CommonUtil.isEmpty(instanceId)) 
+				return null;
+			
 			User cuser = SmartUtil.getCurrentUser();
 			String userId = null;
 			if (cuser != null)
 				userId = cuser.getId();
 			
-			TaskWorkCond cond = new TaskWorkCond();
-			cond.setTskWorkSpaceId(instanceId);
-			cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
-			
-			long tasksSize = getWorkListManager().getTaskWorkListSize(userId, cond);
+			if (length == 0 || length == -1)
+				length = WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT;
 			
 			InstanceInfo[] subInstancesInInstances = null;
 			List<InstanceInfo> instanceInfoList = new ArrayList<InstanceInfo>();
 			
+			//TaskWorkCond cond = new TaskWorkCond();
+			//cond.setTskWorkSpaceId(instanceId);
+			//cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
+			//long tasksSize = getWorkListManager().getTaskWorkListSize(userId, cond);
+			
+			TskTaskCond cond = new TskTaskCond();
+			cond.setWorkSpaceId(instanceId);
+			cond.setStatus(TskTask.TASKSTATUS_COMPLETE);
+			long tasksSize = getTskManager().getTaskSize(userId, cond);
 			if (tasksSize != 0) {
 				
 				cond.setOrders(new Order[]{new Order("taskLastModifyDate", true)});
-				if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
-					cond.setPageSize(length);
+				cond.setPageSize(length);
+
+				TaskWorkCond workCond = new TaskWorkCond();
+				workCond.setTskWorkSpaceId(instanceId);
+				workCond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
+				TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, workCond);
 				
-				TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, cond);
 				List<String> prcInstIdList = new ArrayList<String>();
 				if(!CommonUtil.isEmpty(tasks)) {
 					for (int i = 0; i < tasks.length; i++) {
@@ -3691,8 +3726,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			if (opinionsSize != 0) {
 
-				if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
-					opinionCond.setPageSize(length);
+				//if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
+				opinionCond.setPageSize(length);
 				
 				Opinion[] opinions = getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
 				if(!CommonUtil.isEmpty(opinions)) {
@@ -6660,18 +6695,20 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			//정보관리 업무를 조회할때에는 tasks에 참조업무는 제외된다 단, 전자결재와 동시에 진행된 참조업무및 로그인사용자에게 할당된 
 			//참조업무는 포함되어야 한다
-			for (int i = 0; i < tasks.length; i++) {
-				TaskInstanceInfo task = tasks[i];
-				int type = task.getTaskType();
-				if (type == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED || type == TaskInstance.TYPE_APPROVAL_TASK_DRAFTED 
-						|| type == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED ) {
-					taskResult.add(task);
-				} else if (type == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED ) {
-					UserInfo userInfo = task.getAssignee();
-					if (userInfo != null) {
-						String assigneeId = userInfo.getId();
-						if (userId.equalsIgnoreCase(assigneeId) && task.getStatus() == Instance.STATUS_RUNNING ) {
-							taskResult.add(task);
+			if (tasks != null) {
+				for (int i = 0; i < tasks.length; i++) {
+					TaskInstanceInfo task = tasks[i];
+					int type = task.getTaskType();
+					if (type == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED || type == TaskInstance.TYPE_APPROVAL_TASK_DRAFTED 
+							|| type == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED ) {
+						taskResult.add(task);
+					} else if (type == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED ) {
+						UserInfo userInfo = task.getAssignee();
+						if (userInfo != null) {
+							String assigneeId = userInfo.getId();
+							if (userId.equalsIgnoreCase(assigneeId) && task.getStatus() == Instance.STATUS_RUNNING ) {
+								taskResult.add(task);
+							}
 						}
 					}
 				}
@@ -7969,10 +8006,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (logger.isInfoEnabled()) {
 				logger.info(action + " Task Done [processInstanceId : " + (String)requestBody.get("instanceId") + ", " + (String)requestBody.get("formName") + "( taskId : " + (String)requestBody.get("taskInstId") + ")] ");
 			}
-
+			List<String> groupIdList = new ArrayList<String>();
 			if(fileGroupMap.size() > 0) {
 				for(Map.Entry<String, List<Map<String, String>>> entry : fileGroupMap.entrySet()) {
 					String fileGroupId = entry.getKey();
+					groupIdList.add(fileGroupId);
 					List<Map<String, String>> fileGroups = entry.getValue();
 
 					try {
@@ -7988,7 +8026,28 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 			}
-			if(groupId != null) {
+			if (groupIdList.size() != 0) {
+				for (int i = 0; i < groupIdList.size(); i++) {
+					if (CommonUtil.isEmpty(groupIdList.get(i)))
+						continue;
+					String tempGroupId = groupIdList.get(i);
+					List<IFileModel> iFileModelList = getDocManager().findFileGroup(tempGroupId);
+					if(iFileModelList.size() > 0) {
+						for(int j=0; j<iFileModelList.size(); j++) {
+							IFileModel fileModel = iFileModelList.get(j);
+							String fileId = fileModel.getId();
+							String filePath = fileModel.getFilePath();
+							if(fileModel.isDeleteAction()) {
+								getDocManager().deleteFile(fileId);
+								File f = new File(filePath);
+								if(f.exists())
+									f.delete();
+							}
+						}
+					}
+				}
+			}
+			/*if(groupId != null) {
 				List<IFileModel> iFileModelList = getDocManager().findFileGroup(groupId);
 				if(iFileModelList.size() > 0) {
 					for(int i=0; i<iFileModelList.size(); i++) {
@@ -8003,7 +8062,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						}
 					}
 				}
-			}
+			}*/
 
 			return taskInstId;
 		}  else if (action.equalsIgnoreCase("delegate")) {

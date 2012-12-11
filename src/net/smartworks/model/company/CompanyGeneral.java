@@ -87,21 +87,21 @@ public class CompanyGeneral extends BaseObject {
 	}
 
 	public String getCompanyLogo() {
-		if(!CommonUtil.isExistImage(getPath() + this.getLogoName())) {
+		if(CommonUtil.isEmpty(this.getLogoName())) {
 			return NO_LOGO_PATH + DEFAULT_COMPANY_LOGO;
 		}
 		return getPath() + this.getLogoName();
 	}
 
 	public String getCompanyTitleLogo() {
-		if(!CommonUtil.isExistImage(getPath() + this.getTitleLogoName())) {
+		if(CommonUtil.isEmpty(this.getTitleLogoName())) {
 			return NO_LOGO_PATH + DEFAULT_COMPANY_TITLE_LOGO;
 		}
 		return getPath() + this.getTitleLogoName();
 	}
 
 	public String getCompanyLoginImage() {
-		if(!CommonUtil.isExistImage(getPath() + this.getLoginImageName())) {
+		if(CommonUtil.isEmpty(this.getLoginImageName())) {
 			return NO_LOGO_PATH + DEFAULT_COMPANY_LOGIN_IMAGE;
 		}
 		return getPath() + this.getLoginImageName();
