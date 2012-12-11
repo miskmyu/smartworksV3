@@ -368,13 +368,13 @@ function loadNewEventFields(startDate, endDate) {
 			
 			var staticItems = new Array();
 			staticItems.push(smartMessage.get("alarmPolicyNone"));
-			staticItems.push(smartMessage.get("alarmPolicyOnTime"));
-			staticItems.push(smartMessage.get("alarmPolicy5m"));
-			staticItems.push(smartMessage.get("alarmPolicy10m"));
-			staticItems.push(smartMessage.get("alarmPolicy15m"));
-			staticItems.push(smartMessage.get("alarmPolicy30m"));
-			staticItems.push(smartMessage.get("alarmPolicy1h"));
-			staticItems.push(smartMessage.get("alarmPolicy1d"));
+//			staticItems.push(smartMessage.get("alarmPolicyOnTime"));
+//			staticItems.push(smartMessage.get("alarmPolicy5m"));
+//			staticItems.push(smartMessage.get("alarmPolicy10m"));
+//			staticItems.push(smartMessage.get("alarmPolicy15m"));
+//			staticItems.push(smartMessage.get("alarmPolicy30m"));
+//			staticItems.push(smartMessage.get("alarmPolicy1h"));
+//			staticItems.push(smartMessage.get("alarmPolicy1d"));
 			SmartWorks.FormRuntime.ComboBoxBuilder.buildEx({
 				container: gridRow,
 				fieldId: "selEventAlarmPolicy",

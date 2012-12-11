@@ -67,8 +67,9 @@
 					<input class="fl btn_login" type="submit" value="<fmt:message key="login.button.login"/>">
 					
 					
-					<div class="lo_checkbox cb"><span><fmt:message key="login.title.remember_me"/></span><input class="mr3" name="_spring_security_remember_me" type="checkbox" value="true" tabindex="3" /></div>
-				</form>
+<%--  					<div class="lo_checkbox cb"><span><fmt:message key="login.title.remember_me"/></span><input class="mr3" name="_spring_security_remember_me" type="checkbox" value="true" tabindex="3" /></div>
+ --%>
+ 				</form>
 			</div>
 			<!-- Header //-->
 	
@@ -101,11 +102,7 @@ $(function() {
 	} else if(type.equals("logout")) {
 	%>
 		smartPop.showInfo(smartPop.INFO, smartMessage.get('logoutSucceed'));
-	<%
-	} else if(type.equals("expiredSession")) {
-	%>
-		smartPop.showInfo(smartPop.WARN, smartMessage.get('sessionTimeouted'));
-	<%
+ 	<%
 	}
 	%>
 	

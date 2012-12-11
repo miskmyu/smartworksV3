@@ -447,7 +447,8 @@
 
 	var mode = "view";
 	<%
-	if(instance.getStatus() == Instance.STATUS_RETURNED){
+	boolean isApprovalForwarded = (SmartUtil.isBlankObject(approvalTask)) ? false : (approvalTask.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) ? true : false;
+	if(!isApprovalForwarded && instance.getStatus() == Instance.STATUS_RETURNED){
 	%>
 		mode = "edit";
 	<%
