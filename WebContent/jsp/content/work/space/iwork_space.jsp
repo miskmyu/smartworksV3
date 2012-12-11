@@ -447,8 +447,8 @@
 
 	var mode = "view";
 	<%
-	boolean isApprovalForwarded = (SmartUtil.isBlankObject(approvalTask)) ? false : (approvalTask.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) ? true : false;
-	if(!isApprovalForwarded && instance.getStatus() == Instance.STATUS_RETURNED){
+	boolean isApprovalTask = (SmartUtil.isBlankObject(approvalTaskInstId)) ? false : (approvalTask.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED && approvalTask.getStatus() == Instance.STATUS_RUNNING) ? true : false;
+	if(isApprovalTask && instance.getStatus() == Instance.STATUS_RETURNED){
 	%>
 		mode = "edit";
 	<%
