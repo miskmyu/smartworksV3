@@ -1085,7 +1085,9 @@ public class WorkServiceImpl implements IWorkService {
 					swfFormCond.setPackageId(null);
 				swfForms = getSwfManager().getForms("", swfFormCond, IManager.LEVEL_ALL);
 			}
-
+			if (CommonUtil.isEmpty(swdRecord))
+				return null;
+			
 			SwfField[] swfFields = swfForms[0].getFields();
 
 			SwdDataField[] swdDataFields = swdRecord.getDataFields();

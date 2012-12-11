@@ -16,7 +16,7 @@
 	String user = "kmyu@maninsoft.co.kr";
 	String level = IManager.LEVEL_ALL;
 	SwfFormCond cond = new SwfFormCond();
-	cond.setStatus("DEPLOYED");
+	//cond.setStatus("DEPLOYED");
 	//cond.setObjId("4028800b3b3f95a4013b3fa3914c0003");
 	
 	ISwfManager mgr = SwManagerFactory.getInstance().getSwfManager();
