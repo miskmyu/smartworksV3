@@ -20,7 +20,8 @@
 			<!-- 타이틀 -->
 			<div class="body_titl">
 				<div class="body_titl_area ti_organization title_noico"><fmt:message key="settings.title.organization_management.setting"/></div>
-				<div class="solid_line"></div>
+<%-- 				<div class="fr"><a class="js_popup_org_wizard" href=""><fmt:message key="settings.button.org_wizard"/></a></div>
+ --%>				<div class="solid_line"></div>
 			</div>
 			<!-- 타이틀 //-->
 			
@@ -32,7 +33,7 @@
 							<tr class="end">
 								<td width="35%" class="vt"><div class="pop_list_area mr15"><jsp:include page="/jsp/content/settings/comlist_by_depart.jsp"></jsp:include></div></td>
 								<td width="65%" class="vt">
-									<div class="tr mb2">
+									<div class="tr mb2">									
 										<span class="icon_btn_add"><a class="icon_btn_tail js_new_department" href=""><fmt:message key="settings.button.add_department"/></a></span>
 										<span class="icon_btn_add"><a class="icon_btn_tail js_new_member" href=""><fmt:message key="settings.button.add_member"/></a></span>
 										<span class="icon_btn_add"><a class="icon_btn_tail js_adjunct_member" href=""><fmt:message key="settings.button.add_adjunct_member"/></a></span>
