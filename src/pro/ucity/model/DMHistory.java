@@ -223,28 +223,28 @@ public class DMHistory {
 		return false;
 	}
 
-	public static Map<String,Object> readHistoryTable(Connection connection, String eventId, String status, String deviceId){
+	public static Map<String,Object> readHistoryTable(String eventId, String status, String deviceId){
 		
 		if(SmartUtil.isBlankObject(eventId)) return null;
 
 		Map<String, Object> dataRecord = null;
 
 		if(SmartUtil.isBlankObject(status)) status = "N";
-//		Connection con = null;
+		Connection connection = null;
 		PreparedStatement selectPstmt = null;
 				
 		String cmHistorySelectSql = (status.equals(FLAG_STOP_DISPLAY)) ? UcityConstant.getQueryByKey("DMHistory.QUERY_SELECT_FOR_STOP_PERFORM") : UcityConstant.getQueryByKey("DMHistory.QUERY_SELECT_FOR_DISPLAY_PERFORM");
 		try {
-//			try{
-////			    Context init = new InitialContext();
-////			    Context envinit = (Context)init.lookup("java:comp/env");
-////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-////			    con = ds.getConnection();
+			try{
+			    Context init = new InitialContext();
+			    Context envinit = (Context)init.lookup("java:comp/env");
+			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+			    connection = ds.getConnection();
 //				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-//			}catch (TbSQLException te){
-//				te.printStackTrace();
-//				return null;
-//			}
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return null;
+			}
 			
 			try{
 				selectPstmt = connection.prepareStatement(cmHistorySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -280,8 +280,8 @@ public class DMHistory {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-//				if(con != null)
-//					con.close();
+				if(connection != null)
+					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

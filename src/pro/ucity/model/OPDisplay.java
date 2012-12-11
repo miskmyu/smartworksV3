@@ -269,27 +269,27 @@ public class OPDisplay {
 		return false;
 	}
 	
-	public static Map<String,Object> checkForDisplay(Connection connection, String eventId, boolean isStopRequest, Map<String,Object> dataRecord){
+	public static Map<String,Object> checkForDisplay(String eventId, boolean isStopRequest, Map<String,Object> dataRecord){
 		
-		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(dataRecord)) return dataRecord;
+		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(dataRecord)) return dataRecord;
 
-//		Connection con = null;
+		Connection connection = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
 		String opDisplaySelectSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_STOP_CHECK") : UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_CHECK");
 		String opDisplayUpdateSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_STOP_READ_CONFIRM") : UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
-//			try{
-////			    Context init = new InitialContext();
-////			    Context envinit = (Context)init.lookup("java:comp/env");
-////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-////			    con = ds.getConnection();
+			try{
+			    Context init = new InitialContext();
+			    Context envinit = (Context)init.lookup("java:comp/env");
+			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+			    connection = ds.getConnection();
 //				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-//			}catch (TbSQLException te){
-//				te.printStackTrace();
-//				return null;
-//			}
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return null;
+			}
 			
 			try{
 				selectPstmt = connection.prepareStatement(opDisplaySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -327,8 +327,8 @@ public class OPDisplay {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-//				if(con != null)
-//					con.close();
+				if(connection != null)
+					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -338,27 +338,27 @@ public class OPDisplay {
 		
 	}
 	
-	public static boolean checkIfDisplay(Connection connection, String eventId, boolean isStopRequest){
+	public static boolean checkIfDisplay(String eventId, boolean isStopRequest){
 
-		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId)) return false;
+		if( SmartUtil.isBlankObject(eventId)) return false;
 
-//		Connection con = null;
+		Connection connection = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
 		String opDisplaySelectSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_STOP_CHECK") : UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_CHECK");
 		String opDisplayUpdateSql = (isStopRequest) ? UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_STOP_READ_CONFIRM") : UcityConstant.getQueryByKey("OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
-//			try{
-////			    Context init = new InitialContext();
-////			    Context envinit = (Context)init.lookup("java:comp/env");
-////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-////			    con = ds.getConnection();
+			try{
+			    Context init = new InitialContext();
+			    Context envinit = (Context)init.lookup("java:comp/env");
+			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+			    connection = ds.getConnection();
 //				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-//			}catch (TbSQLException te){
-//				te.printStackTrace();
-//				return false;
-//			}
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return false;
+			}
 			
 			try{
 				selectPstmt = connection.prepareStatement(opDisplaySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -387,8 +387,8 @@ public class OPDisplay {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-//				if(con != null)
-//					con.close();
+				if(connection != null)
+					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -398,25 +398,25 @@ public class OPDisplay {
 		
 	}
 	
-	public static Map<String,Object> readHistoryTable(Connection connection, String eventId, String displayId){
+	public static Map<String,Object> readHistoryTable(String eventId, String displayId){
 		
-		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(displayId)) return null;
+		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(displayId)) return null;
 
-//		Connection con = null;
+		Connection connection = null;
 		PreparedStatement selectPstmt = null;
 				
 		String opDisplaySelectSql = UcityConstant.getQueryByKey("OPDisplay.QUERY_SELECT_FOR_PERFORM");
 		try {
-//			try{
-////			    Context init = new InitialContext();
-////			    Context envinit = (Context)init.lookup("java:comp/env");
-////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-////			    con = ds.getConnection();
+			try{
+			    Context init = new InitialContext();
+			    Context envinit = (Context)init.lookup("java:comp/env");
+			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+			    connection = ds.getConnection();
 //				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-//			}catch (TbSQLException te){
-//				te.printStackTrace();
-//				return null;
-//			}
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return null;
+			}
 			
 			try{
 				selectPstmt = connection.prepareStatement(opDisplaySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -453,8 +453,8 @@ public class OPDisplay {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-//				if(con != null)
-//					con.close();
+				if(connection != null)
+					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

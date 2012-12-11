@@ -34,26 +34,26 @@ public class DBReadScheduler extends QuartzJobBean  {
 	public static DataSource dataSource = null;
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
-		if(connection == null){
-			System.out.println("매번 Connection 하는지 체크 한번만 떠야 됨.");
-			try{
-//			    Context init = new InitialContext();
-//			    Context envinit = (Context)init.lookup("java:comp/env");
-//			    dataSource = (DataSource) envinit.lookup("bpm/tibero");
-//			    connection = ds.getConnection();			
-				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-			}catch (Exception e){
-				java.lang.System.out.println("[ERROR] DB접속 끊김.Thread 종료");
-				return;
-			}
-		}
+//		if(dataSource == null){
+//			System.out.println("매번 Connection 하는지 체크 한번만 떠야 됨.");
+//			try{
+//		        Context init = new InitialContext();
+//		        Context envinit = (Context)init.lookup("java:comp/env");
+//		        dataSource = (DataSource)envinit.lookup("bpm/tibero");
+////			    connection = ds.getConnection();			
+////				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//			}catch (Exception e){
+//				java.lang.System.out.println("[ERROR] DB접속 끊김.Thread 종료");
+//				return;
+//			}
+//		}
 		
 		if(!isDbReadSchedulerRunning){
 			try{
 //				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 //				connection = dataSource.getConnection();	
 				startScheduler();
-				connection.close();
+//				connection.close();
 			}catch (Exception e){
 				java.lang.System.out.println("[ERROR] DB접속 끊김.Thread 종료");
 				return;
@@ -78,8 +78,8 @@ public class DBReadScheduler extends QuartzJobBean  {
 			}
 		}
 		System.out.println( schedulerCount + "번째 스케쥴러 동작 시작 : " + new Date());
-		Adapter.readHistoryTableToStart(connection);
-		OPSituation.readHistoryTableToStart(connection);
+		Adapter.readHistoryTableToStart();
+		OPSituation.readHistoryTableToStart();
 		System.out.println( schedulerCount +"번째 스케쥴러 동작 종료 : " + new Date());
 
 		isDbReadSchedulerRunning = false;		

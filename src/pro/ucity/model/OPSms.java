@@ -197,27 +197,27 @@ public class OPSms {
 		return false;
 	}
 	
-	public static Map<String,Object> checkForDisplay(Connection connection, String eventId,  Map<String,Object> dataRecord){
+	public static Map<String,Object> checkForDisplay(String eventId,  Map<String,Object> dataRecord){
 		
-		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(dataRecord)) return dataRecord;
+		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(dataRecord)) return dataRecord;
 
-//		Connection con = null;
+		Connection connection = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 				
 		String opSmsSelectSql = UcityConstant.getQueryByKey("OPSms.QUERY_SELECT_FOR_CHECK");
 		String opSmsUpdateSql = UcityConstant.getQueryByKey("OPSms.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
-//			try{
-////			    Context init = new InitialContext();
-////			    Context envinit = (Context)init.lookup("java:comp/env");
-////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-////			    con = ds.getConnection();
+			try{
+			    Context init = new InitialContext();
+			    Context envinit = (Context)init.lookup("java:comp/env");
+			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+			    connection = ds.getConnection();
 //				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-//			}catch (TbSQLException te){
-//				te.printStackTrace();
-//				return null;
-//			}
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return null;
+			}
 			
 			try{
 				selectPstmt = connection.prepareStatement(opSmsSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -255,8 +255,8 @@ public class OPSms {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-//				if(con != null)
-//					con.close();
+				if(connection != null)
+					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -266,27 +266,27 @@ public class OPSms {
 		
 	}
 	
-	public static boolean checkIfDisplay(Connection connection, String eventId){
+	public static boolean checkIfDisplay(String eventId){
 		
-		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId)) return false;
+		if(SmartUtil.isBlankObject(eventId)) return false;
 
-//		Connection con = null;
+		Connection connection = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
 						
 		String opSmsSelectSql = UcityConstant.getQueryByKey("OPSms.QUERY_SELECT_FOR_CHECK");
 		String opSmsUpdateSql = UcityConstant.getQueryByKey("OPSms.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
-//			try{
-////			    Context init = new InitialContext();
-////			    Context envinit = (Context)init.lookup("java:comp/env");
-////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-////			    con = ds.getConnection();
+			try{
+			    Context init = new InitialContext();
+			    Context envinit = (Context)init.lookup("java:comp/env");
+			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+			    connection = ds.getConnection();
 //				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-//			}catch (TbSQLException te){
-//				te.printStackTrace();
-//				return false;
-//			}
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return false;
+			}
 			
 			try{
 				selectPstmt = connection.prepareStatement(opSmsSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -315,8 +315,8 @@ public class OPSms {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-//				if(con != null)
-//					con.close();
+				if(connection != null)
+					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -326,25 +326,25 @@ public class OPSms {
 		
 	}
 	
-	public static Map<String,Object> readHistoryTable(Connection connection, String eventId, String smsId){
+	public static Map<String,Object> readHistoryTable(String eventId, String smsId){
 		
-		if(SmartUtil.isBlankObject(connection) || SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(smsId)) return null;
+		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(smsId)) return null;
 
-//		Connection con = null;
+		Connection connection = null;
 		PreparedStatement selectPstmt = null;
 				
 		String opSmsSelectSql = UcityConstant.getQueryByKey("OPSms.QUERY_SELECT_FOR_PERFORM");
 		try {
-//			try{
-////			    Context init = new InitialContext();
-////			    Context envinit = (Context)init.lookup("java:comp/env");
-////			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-////			    con = ds.getConnection();
+			try{
+			    Context init = new InitialContext();
+			    Context envinit = (Context)init.lookup("java:comp/env");
+			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+			    connection = ds.getConnection();
 //				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-//			}catch (TbSQLException te){
-//				te.printStackTrace();
-//				return null;
-//			}
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return null;
+			}
 			
 			try{
 				selectPstmt = connection.prepareStatement(opSmsSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -381,8 +381,8 @@ public class OPSms {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-//				if(con != null)
-//					con.close();
+				if(connection != null)
+					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

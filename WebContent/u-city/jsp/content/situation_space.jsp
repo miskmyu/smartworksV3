@@ -305,7 +305,7 @@
 		var selectedTasks = input;
 		if(isEmpty(selectedTasks)) return;
 		if(isDisplayHistory){
-			var formContentTable = formContent.html('<table><tr class="tit_bg"><th>요청일시</th><th>표출내용</th><th>MB</th><th>환경VMS</th><th>교통VMS</th><th>BIT</th><th>KIOSK</th><th>표출중지</th><th>표출중지일시</th></tr><table>');	
+			var formContentTable = formContent.html('<table class="up mt5"><tr class="tit_bg"><th>요청일시</th><th>표출내용</th><th width="90px">MB</th><th width="90px">환경VMS</th><th width="90px">교통VMS</th><th width="90px">BIT</th><th width="90px">KIOSK</th><th width="90px">표출중지</th><th>표출중지일시</th></tr><table>');	
 
 			for(var i=0; i<selectedTasks.length; i++){
 				var selectedTask = $(selectedTasks[i]);
