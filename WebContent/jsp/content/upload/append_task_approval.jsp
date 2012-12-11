@@ -212,7 +212,7 @@
 				<%
 				boolean isReturned = false;
 				if (workInstance != null)
-					isReturned = (workInstance.getStatus()==Instance.STATUS_RETURNED);
+					isReturned = (!isForwarded && workInstance.getStatus()==Instance.STATUS_RETURNED);
 				%>
 				isReturned="<%=isReturned%>" isForwarded="<%=isForwarded%>">
 			</div>
