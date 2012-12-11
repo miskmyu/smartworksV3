@@ -1620,7 +1620,7 @@ public class CommunityServiceImpl implements ICommunityService {
 						userInfo.setDepartment(department);
 						
 						if(!CommonUtil.isEmpty(picture)) {
-							String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
+							String extension = picture.lastIndexOf(".") >= 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 							String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
 							userInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 							userInfo.setBigPictureName(pictureId + Community.IMAGE_TYPE_ORIGINAL + "." + extension);

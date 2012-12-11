@@ -175,10 +175,10 @@ public class SwdRecord extends BaseObject {
 		return obj;
 	}
 	public static BaseObject toObject(String str) throws Exception {
-		if (str == null)
+		if (CommonUtil.isEmpty(str))
 			return null;
 		Document doc = XmlUtil.toDocument(str);
-		if (doc == null)
+		if (CommonUtil.isEmpty(doc))
 			return null;
 		return toObject(doc.getDocumentElement(), null);
 	}

@@ -78,8 +78,11 @@ public class TskManagerMailAdvisorImpl extends AbstractTskManagerAdvisor {
 		
 		if (assignee == null ||
 				type == null || type.equalsIgnoreCase("route") || type.equalsIgnoreCase("and") 
-				|| type.equalsIgnoreCase("or") || type.equalsIgnoreCase("xor") || !CommonUtil.toBoolean(isEnableReferenceMail)) 
+				|| type.equalsIgnoreCase("or") || type.equalsIgnoreCase("xor")) 
 			return;
+		if (type.equalsIgnoreCase("REFERENCE") && !CommonUtil.toBoolean(isEnableReferenceMail))
+			return;
+			
 		if (obj.getTitle().indexOf("nomail") != -1 || obj.getTitle().indexOf("NOMAIL") != -1)
 			return;
 		try {
@@ -266,7 +269,7 @@ public class TskManagerMailAdvisorImpl extends AbstractTskManagerAdvisor {
 		SwoConfig config = getSwoManager().getConfig(user, userObj.getCompanyId(), null);
 		if (!config.isActivity())
 			return;
-		
+
 		if (config == null || config.getSmtpAddress() == null || config.getUserId() == null || config.getPassword() == null) 
 			throw new Exception("Mail info is null");
 		

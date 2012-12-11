@@ -245,6 +245,7 @@ public class DocFileServiceImpl extends AbstractManager implements IDocFileServi
 		FileDownloadHistory obj = getDocManager().getFileDownloadHistoryInfoByFileId(file.getId());
 		if (obj == null) {
 			obj = new FileDownloadHistory();
+			obj.setRefPackageId("");
 		}
 		obj.setFileId(file.getId());
 		obj.setFileName(file.getFileName());
@@ -252,12 +253,14 @@ public class DocFileServiceImpl extends AbstractManager implements IDocFileServi
 		
 		if (!CommonUtil.isEmpty(packageId) && !obj.getRefPackageId().equalsIgnoreCase(packageId)) {
 
+			TskTask tempTask = null;
 			if (CommonUtil.isEmpty(taskInstId)) {
 				TskTaskCond tskTaskCond = new TskTaskCond();
 				tskTaskCond.setExtendedProperties(new Property[]{new Property("recordId", recordId)});
 				TskTask[] tskTasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, tskTaskCond, IManager.LEVEL_LITE);
 				if (tskTasks != null && tskTasks.length != 0) {
 					taskInstId = tskTasks[0].getObjId();
+					tempTask = tskTasks[0];
 				}
 			}
 			TaskWorkCond taskCond = new TaskWorkCond();
@@ -278,6 +281,13 @@ public class DocFileServiceImpl extends AbstractManager implements IDocFileServi
 				obj.setRefPrcInstName(prcInstName);
 				obj.setRefPackageId(pkgId);
 				obj.setRefPackageName(pkgName);
+			} else {
+				if (tempTask != null) {
+					obj.setRefTaskId(tempTask.getObjId());
+					obj.setRefTaskName(tempTask.getName());
+					obj.setRefPrcInstId(tempTask.getProcessInstId());
+					obj.setRefPackageId(packageId);
+				}
 			}
 		}
 		

@@ -743,7 +743,9 @@ public class NoticeServiceImpl implements INoticeService {
 						if (tempOpinions != null && tempOpinions.length != 0) {
 							for (int i = 0; i < tempOpinions.length; i++) {
 								Opinion tempOpinion = tempOpinions[i];
-								
+								int opinionType = tempOpinion.getRefType();
+								if (opinionType != 4)//정보관리업무 4, 프로세스 2
+									continue;
 								String formId = tempOpinion.getRefFormId();
 								String recordId = tempOpinion.getRefId();
 								

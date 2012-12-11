@@ -890,7 +890,8 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				!(prevTaskType.equalsIgnoreCase("xor") ||  
 				prevTaskType.equalsIgnoreCase("and") || 
 				prevTaskType.equalsIgnoreCase("or") || 
-				prevTaskType.equalsIgnoreCase("route"))) {
+				prevTaskType.equalsIgnoreCase("route") ||
+				prevTaskType.equalsIgnoreCase("SERVICE"))) {
 			return prevTask;
 		}
 		return getPreviousTask(prevTask);
