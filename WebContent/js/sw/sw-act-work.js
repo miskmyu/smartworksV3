@@ -988,8 +988,12 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+					var lastHref = pworkSpace.attr('lastHref');
+					if(isEmpty(lastHref))
+						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
+					else
+						document.location.href = lastHref; 
 					smartPop.closeProgress();
-					document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 					return;
 				},
 				error : function(e) {
@@ -1049,8 +1053,12 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+					var lastHref = pworkSpace.attr('lastHref');
+					if(isEmpty(lastHref))
+						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
+					else
+						document.location.href = lastHref; 
 					smartPop.closeProgress();
-					document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 					return;
 				},
 				error : function(e) {
