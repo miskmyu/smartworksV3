@@ -238,6 +238,74 @@ public class UcityUtil {
 		String instanceId = SwServiceFactory.getInstance().getInstanceService().startProcessWorkInstance(requestBody, null);
 		UcityUtil.startPollingForRunningTasks(processId, instanceId);
 	}
+	public static void startUServiceProcess(String processId, String eventId, String eventTime, Map<String, Object> data, String facilityId) throws Exception{
+		if(processId == null || data == null){
+			throw new Exception("Invalid parameters exception !!!");
+		}
+		
+		IWorkService workService = SwServiceFactory.getInstance().getWorkService();
+		
+		Map<String, Object> requestBody = new HashMap<String, Object>();
+		
+		
+		ProcessWork work = (ProcessWork)workService.getWorkById(processId);
+		SmartForm form = workService.getFormById(work.getDiagram().getStartTask().getForm().getId(), processId);
+		if(SmartUtil.isBlankObject(form) || SmartUtil.isBlankObject(form.getFields())){
+			throw new Exception("Invalid Form information exception !!!");
+		}
+		
+		requestBody.put("workId", processId);
+		requestBody.put("formId", form.getId());
+		requestBody.put("formName", form.getName());
+		requestBody.put("serviceName", data.get("serviceName"));
+		requestBody.put("eventName", data.get("eventName"));
+		requestBody.put("eventPlace", data.get("eventPlace"));
+		requestBody.put("eventId", eventId);
+		requestBody.put("eventTime", eventTime);
+		requestBody.put("isSms", "false");
+		requestBody.put("facilityId", facilityId);
+		
+		Map<String, Object> fieldData = new HashMap<String, Object>();
+		for(int i=0; i<form.getFields().length; i++){
+			FormField field = form.getFields()[i];
+			if(data.containsKey(field.getName())){
+				fieldData.put(field.getId(), data.get(field.getName()));
+			}
+		}
+		requestBody.put("frmSmartForm", fieldData);
+		
+		Map<String, Object> accessData = new HashMap<String, Object>();	
+		accessData.put("selWorkSpace", SmartUtil.getSystemUser().getId());
+		accessData.put("selWorkSpaceType", ISmartWorks.SPACE_TYPE_USER);
+		accessData.put("selAccessLevel", AccessPolicy.LEVEL_PUBLIC);
+		requestBody.put("frmAccessSpace", accessData);
+		
+		String instanceId = SwServiceFactory.getInstance().getInstanceService().startProcessWorkInstance(requestBody, null);
+		UcityUtil.startPollingForRunningTasks(processId, instanceId);
+	}
+	public static boolean ucityWorklistSearch(String processId,String eventId) throws Exception{
+		
+		IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
+		
+		InstanceInfoList instanceList = instanceService.getAllPWorkInstanceList(true, new RequestParams());
+		if(SmartUtil.isBlankObject(instanceList))
+			return true;
+		
+		PWInstanceInfo[] instances = (PWInstanceInfo[])instanceList.getInstanceDatas();
+		for(int i=0; i<instances.length; i++){			
+			ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, instances[i].getId());
+			if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
+			UcityWorkListCond cond = new UcityWorkListCond();
+			cond.setPrcInstId(processInstance.getId());
+			UcityWorkList workList = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkList("", cond, null);
+			if(workList != null){
+				if(eventId.equals(workList.getEventId())){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	
 	public static void endUServiceProcess(String processId, String eventId, Map<String, Object> data) throws Exception{
 		if(processId == null || data == null){
@@ -283,6 +351,85 @@ public class UcityUtil {
 			cond.setPrcInstId(processInstance.getId());
 			UcityWorkList workList = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkList("", cond, null);
 			if(eventId.equals(workList.getEventId())){
+				endProcessInstance = processInstance;
+				break;
+			}
+		}
+		
+		if(SmartUtil.isBlankObject(endProcessInstance)){
+			throw new Exception("Invalid Process Instance exception !!!");						
+		}
+
+		Map<String, Object> requestBody = new HashMap<String, Object>();		
+		requestBody.put("workId", processId);
+		requestBody.put("instanceId", endProcessInstance.getId());
+		requestBody.put("formId", endForm.getId());
+		requestBody.put("formName", endForm.getName());
+		
+		Map<String, Object> fieldData = new HashMap<String, Object>();
+		for(int i=0; i<endForm.getFields().length; i++){
+			FormField field = endForm.getFields()[i];
+			if(data.containsKey(field.getName())){
+				fieldData.put(field.getId(), data.get(field.getName()));
+			}
+		}
+		requestBody.put("frmSmartForm", fieldData);
+		
+		Map<String, Object> accessData = new HashMap<String, Object>();	
+		accessData.put("selWorkSpace", SmartUtil.getSystemUser().getId());
+		accessData.put("selWorkSpaceType", ISmartWorks.SPACE_TYPE_USER);
+		accessData.put("selAccessLevel", AccessPolicy.LEVEL_PUBLIC);
+		requestBody.put("frmAccessSpace", accessData);
+		
+		String instanceId = SwServiceFactory.getInstance().getInstanceService().createTaskInstance(requestBody, null);
+		UcityUtil.startPollingForRunningTasks(processId, instanceId);
+	}
+	public static void endUServiceProcessFacility(String processId, String facilityId, Map<String, Object> data) throws Exception{
+		if(processId == null || data == null){
+			throw new Exception("Invalid parameters exception !!!");
+		}
+		
+		IWorkService workService = SwServiceFactory.getInstance().getWorkService();
+		IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
+		
+		ProcessWork work = (ProcessWork)workService.getWorkById(processId);
+		if(SmartUtil.isBlankObject(work) || SmartUtil.isBlankObject(work.getDiagram()) || SmartUtil.isBlankObject(work.getDiagram().getTasks())){
+			throw new Exception("Invalid Process Work exception !!!");
+		}
+		SmartForm endForm = null;
+		for(int i=0; i<work.getDiagram().getTasks().length; i++){
+			SmartFormInfo form = work.getDiagram().getTasks()[i].getForm();
+			if(SmartUtil.isBlankObject(form)) continue;
+			java.lang.System.out.println("[form no = [" + i + "], form name = [" + form.getName() + "]");
+			if(form.getName().equals(System.TASK_FORM_NAME_USERVICE_END)){
+				endForm = workService.getFormById(form.getId(), processId);
+				java.lang.System.out.println("[endform]"+endForm.getName());
+				break;
+			}
+		}
+		if(SmartUtil.isBlankObject(endForm)){
+			throw new Exception("Invalid U Serive End Form exception !!!");			
+		}
+		
+		InstanceInfoList instanceList = instanceService.getAllPWorkInstanceList(true, new RequestParams());
+		if(SmartUtil.isBlankObject(instanceList) || SmartUtil.isBlankObject(instanceList.getInstanceDatas())){
+			return;
+		}
+		
+		ProcessWorkInstance endProcessInstance = null;
+		
+		PWInstanceInfo[] instances = (PWInstanceInfo[])instanceList.getInstanceDatas();
+		for(int i=0; i<instances.length; i++){			
+//			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
+			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWorkId().equals(processId)) continue;
+			ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, instances[i].getId());
+			if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
+			UcityWorkListCond cond = new UcityWorkListCond();
+			cond.setPrcInstId(processInstance.getId());
+			UcityWorkList workList = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkList("", cond, null);
+			java.lang.System.out.println("facilityId : " + facilityId);
+			java.lang.System.out.println("Worklist facilityId : " + workList.getFacilityId());
+			if(facilityId.equals(workList.getFacilityId()) && SmartUtil.isEmpty(workList.getRunningTaskId())){
 				endProcessInstance = processInstance;
 				break;
 			}
@@ -508,53 +655,55 @@ public class UcityUtil {
 			TaskInstance taskInstance = (TaskInstance)instanceService.getTaskInstanceById(processInstance.getWork().getId(), processInstance.getTasks()[j].getId());
 			if(SmartUtil.isBlankObject(taskInstance)) continue;
 			SwdRecord record = workService.getRecord(processId, null, taskInstance.getId());
-			record = instanceService.refreshDataFields(record);
-			if(SmartUtil.isBlankObject(record.getDataFields())) continue;
-			String eventId = null;
-			String tableName = null;
-			String status = null;
-			String displayId = null;
-			String deviceId = null;
-			String smsId = null;
-			String timeout = null;
-			for(int k=0; k<record.getDataFields().length; k++){
-				SwdDataField dataField = record.getDataFields()[k];
-				if(dataField.getName().equals(System.DATA_FIELD_NAME_EVENT_ID)){
-					eventId = dataField.getValue();
-				}else if(dataField.getName().equals(System.DATA_FIELD_NAME_TABLE_ID)){
-					tableName = System.getTableName(dataField.getValue());
-				}else if(dataField.getName().equals(System.DATA_FIELD_NAME_STATUS)){
-					status = dataField.getValue();
-				}else if(dataField.getName().equals(System.DATA_FIELD_NAME_DISPLAY_ID)){
-					displayId = dataField.getValue();
-				}else if(dataField.getName().equals(System.DATA_FIELD_NAME_DEVICE_ID)){
-					deviceId = dataField.getValue();
-				}else if(dataField.getName().equals(System.DATA_FIELD_NAME_SMS_ID)){
-					smsId = dataField.getValue();
-				}else if(dataField.getName().equals(System.DATA_FIELD_NAME_TIMEOUT)){
-					timeout = dataField.getValue();
+			if(record != null){
+				record = instanceService.refreshDataFields(record);
+				if(SmartUtil.isBlankObject(record.getDataFields())) continue;
+				String eventId = null;
+				String tableName = null;
+				String status = null;
+				String displayId = null;
+				String deviceId = null;
+				String smsId = null;
+				String timeout = null;
+				for(int k=0; k<record.getDataFields().length; k++){
+					SwdDataField dataField = record.getDataFields()[k];
+					if(dataField.getName().equals(System.DATA_FIELD_NAME_EVENT_ID)){
+						eventId = dataField.getValue();
+					}else if(dataField.getName().equals(System.DATA_FIELD_NAME_TABLE_ID)){
+						tableName = System.getTableName(dataField.getValue());
+					}else if(dataField.getName().equals(System.DATA_FIELD_NAME_STATUS)){
+						status = dataField.getValue();
+					}else if(dataField.getName().equals(System.DATA_FIELD_NAME_DISPLAY_ID)){
+						displayId = dataField.getValue();
+					}else if(dataField.getName().equals(System.DATA_FIELD_NAME_DEVICE_ID)){
+						deviceId = dataField.getValue();
+					}else if(dataField.getName().equals(System.DATA_FIELD_NAME_SMS_ID)){
+						smsId = dataField.getValue();
+					}else if(dataField.getName().equals(System.DATA_FIELD_NAME_TIMEOUT)){
+						timeout = dataField.getValue();
+					}
 				}
-			}
-			if(!SmartUtil.isBlankObject(eventId) && !SmartUtil.isBlankObject(tableName)){
-				try{
-					UcityUtil.invokePollingForRunningTask(eventId, tableName, status, displayId, deviceId, smsId, timeout, taskInstance);
-				}catch (Exception e){
-					throw e;
-				}
-			}else if(!SmartUtil.isBlankObject(eventId)){
-				try{
-					Map<String,Object> dataRecord = new HashMap<String,Object>();
-					dataRecord.put(System.DATA_FIELD_NAME_EVENT_ID, eventId);
-					UcityUtil.performUServiceTask(taskInstance, dataRecord);
-				}catch (Exception e){
-					e.printStackTrace();
-				}
-			}else{
-				try{
-					Map<String,Object> dataRecord = new HashMap<String,Object>();
-					UcityUtil.performUServiceTask(taskInstance, dataRecord);
-				}catch (Exception e){
-					e.printStackTrace();
+				if(!SmartUtil.isBlankObject(eventId) && !SmartUtil.isBlankObject(tableName)){
+					try{
+						UcityUtil.invokePollingForRunningTask(eventId, tableName, status, displayId, deviceId, smsId, timeout, taskInstance);
+					}catch (Exception e){
+						throw e;
+					}
+				}else if(!SmartUtil.isBlankObject(eventId)){
+					try{
+						Map<String,Object> dataRecord = new HashMap<String,Object>();
+						dataRecord.put(System.DATA_FIELD_NAME_EVENT_ID, eventId);
+						UcityUtil.performUServiceTask(taskInstance, dataRecord);
+					}catch (Exception e){
+						e.printStackTrace();
+					}
+				}else{
+					try{
+						Map<String,Object> dataRecord = new HashMap<String,Object>();
+						UcityUtil.performUServiceTask(taskInstance, dataRecord);
+					}catch (Exception e){
+						e.printStackTrace();
+					}
 				}
 			}
 			Thread.sleep(100);

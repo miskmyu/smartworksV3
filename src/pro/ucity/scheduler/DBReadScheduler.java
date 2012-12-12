@@ -79,7 +79,7 @@ public class DBReadScheduler extends QuartzJobBean  {
 		}
 		System.out.println( schedulerCount + "번째 스케쥴러 동작 시작 : " + new Date());
 		Adapter.readHistoryTableToStart();
-		OPSituation.readHistoryTableToStart();
+//		OPSituation.readHistoryTableToStart();
 		System.out.println( schedulerCount +"번째 스케쥴러 동작 종료 : " + new Date());
 
 		isDbReadSchedulerRunning = false;		
