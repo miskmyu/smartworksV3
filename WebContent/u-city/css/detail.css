@@ -93,7 +93,9 @@
 .list_contents {clear:both}
 .list_contents table tr .end, .list_contents table td .end {border-bottom: 0 none}
 .list_contents table .tit_bg {background-color:#171b1e; border-top:1px solid #444444; border-bottom:1px solid #444444}
-
+.tit_bg {background-color:#171b1e; border-top:1px solid #444444; border-bottom:1px solid #444444; padding: 5px 0 5px 0}
+.tit_bg th{text-align:center !important; padding: 5px 0 5px 0 }
+.line_display {border-top:1px solid #444444; border-bottom:1px solid #444444; padding: 5px 0 5px 0}
 .list_contents table th {text-align:center}
 .list_contents table td {border-bottom: 1px solid #444444; text-align: center}
 .list_contents table td {padding:4px 5px; border-left:none; border-right:none}

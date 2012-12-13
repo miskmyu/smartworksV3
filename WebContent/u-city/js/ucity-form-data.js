@@ -98,7 +98,7 @@ SmartWorks.GridData = function(config) {
 		for ( var i = 0; i < $rows.length; i++) {
 			var $row = $rows.eq(i);
 			
-			var $html_row = $('<th></th>'); // th로 변경
+			var $html_row = $('<div></div>'); // th로 변경
 			var $cells = $row.children('gridCell');
 			this_.$table.append($html_row);
 
@@ -126,7 +126,7 @@ SmartWorks.GridData = function(config) {
 					var $entity = $form.find('#' + id);
 					if($entity.find('graphic').attr('hidden') == 'true') continue;
 					var value = isEmpty(dataField.value) ? "" : ((dataField.value == 'true') ? 'Y' : ((dataField.value == 'false') ? 'N' : dataField.value));
-					var $html_cell = $('<td class="tc vm">' + value + '</td>');
+					var $html_cell = $('<td class="tc vm line_display">' + value + '</td>');
 //				if(refreshOnly)
 //					$html_cell = this_.options.target.find('.form_col[fieldId="' + id + '"]');
 //				else

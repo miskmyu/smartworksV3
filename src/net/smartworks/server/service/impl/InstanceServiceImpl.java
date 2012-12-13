@@ -7848,6 +7848,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		String isSms = (String)requestBody.get("isSms");
 		String externalDisplay = (String)requestBody.get("externalDisplay");
 		String eventPlace = (String)requestBody.get("eventPlace");
+		String facilityId = (String)requestBody.get("facilityId");
 		
 		obj.setExtendedAttributeValue("ucity_serviceName", serviceName);
 		obj.setExtendedAttributeValue("ucity_eventId", eventId);
@@ -7857,6 +7858,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		obj.setExtendedAttributeValue("ucity_isSms", isSms);
 		obj.setExtendedAttributeValue("ucity_externalDisplay", externalDisplay);
 		obj.setExtendedAttributeValue("ucity_eventPlace", eventPlace);
+		obj.setExtendedAttributeValue("ucity_facilityId", facilityId);
 		
 	}
 	private String executeTask(Map<String, Object> requestBody, HttpServletRequest request, String action) throws Exception {

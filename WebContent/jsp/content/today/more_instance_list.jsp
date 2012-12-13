@@ -500,7 +500,10 @@ if(!SmartUtil.isBlankObject(instances)) {
 						<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"></span>
 						<span class="t_date"><%=workFullPathName%></span>
 					</a>
-					<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=workId %>" class="js_content">
+					<%
+					String taskInstParam = (SmartUtil.isBlankObject(taskInstance)) ? "" : "&taskInstId=" + taskInstance.getId();
+					%>
+					<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=workId %><%=taskInstParam%>" class="js_content">
 						<span class="tb"><%=workInstance.getSubject()%></span> 
 					</a>
 					<%if(workInstance.getSubInstanceCount()>0){ %><font class="t_sub_count tb">[<%=workInstance.getSubInstanceCount() %>]</font><%} %>

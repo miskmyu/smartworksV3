@@ -47,18 +47,23 @@
 		}
 	} else {
 		String from = null;
-		if(request.getParameter("page").equalsIgnoreCase("audit")){
-			from = "/situationAudit.sw";
-		}else if (request.getParameter("page").equalsIgnoreCase("manual")){
-			String userviceCode = request.getParameter("userviceCode");
-			String serviceCode = request.getParameter("serviceCode");
-			String eventCode = request.getParameter("eventCode");
-			String statusCode = request.getParameter("statusCode");
-			
-			from = "/situationManual.sw?userviceCode="+ userviceCode + "&serviceCode=" + serviceCode + "&eventCode=" + eventCode + "&statusCode=" + statusCode;
-			from = from.replace("&","%26");
-		}else{
+		if(request.getParameter("page") == null) {
 			from = "/situationMonitoring.sw";
+		}else{
+			if(request.getParameter("page").equalsIgnoreCase("audit")){
+				from = "/situationAudit.sw";
+			}else if (request.getParameter("page").equalsIgnoreCase("manual")){
+				String userviceCode = request.getParameter("userviceCode");
+				String serviceCode = request.getParameter("serviceCode");
+				String eventCode = request.getParameter("eventCode");
+				String statusCode = request.getParameter("statusCode");
+				
+				from = "/situationManual.sw?userviceCode="+ userviceCode + "&serviceCode=" + serviceCode + "&eventCode=" + eventCode + "&statusCode=" + statusCode;
+				from = from.replace("&","%26");
+			}else{
+				from = "/situationMonitoring.sw";
+			}
+
 		}
 		response.sendRedirect("loginc.sw?referer="+ from);
 		return;

@@ -28,13 +28,19 @@
 				</beans:entry>																
 				
 				<beans:entry key="Adapter.QUERY_SELECT_FOR_START">
-					<beans:value>select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and COMM_DVSN_CD = 'RECV'</beans:value>
+					<beans:value>select * from (select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and COMM_DVSN_CD = 'RECV' and substring(CMNC_TG_CONT,42,2) = '01' order by FRST_RGST_DT) where rownum = 1</beans:value>
 				</beans:entry>
+				<beans:entry key="Adapter.QUERY_SELECT_FOR_END">
+					<beans:value>select * from (select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and COMM_DVSN_CD = 'RECV' and substring(CMNC_TG_CONT,42,2) = '02' order by FRST_RGST_DT) where rownum = 1</beans:value>
+				</beans:entry>				
 				<beans:entry key="Adapter.QUERY_SELECT_FOR_PERFORM">
 					<beans:value>select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and CMNC_DVSN_CD = ?</beans:value>
 				</beans:entry>
 				<beans:entry key="Adapter.QUERY_UPDATE_FOR_READ_CONFIRM">
 					<beans:value>update TB_UAST_CMNC_HS set BPM_CNFM_YN = 'Y' where RECV_CMNC_TG_ID = ?</beans:value>
+				</beans:entry>
+				<beans:entry key="Adapter.QUERY_UPDATE_FOR_READ_ROLLBACK">
+					<beans:value>update TB_UAST_CMNC_HS set BPM_CNFM_YN = 'N' where RECV_CMNC_TG_ID = ?</beans:value>
 				</beans:entry>
 				
 				<!-- CMHistory -->
@@ -336,10 +342,13 @@
 				</beans:entry>
 				
 				<beans:entry key="OPSituation.QUERY_SELECT_FOR_START">
-					<beans:value>select * from USITUATION.TH_ST_SITUATION_HISTORY where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and SITUATION_ID like 'ST%' and STATUS = 'H02'</beans:value>
+					<beans:value>select * from (select * from USITUATION.TH_ST_SITUATION_HISTORY where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and SITUATION_ID like 'ST%' and STATUS = 'H02' order by START_DATE ) where rownum = 1</beans:value>
 				</beans:entry>
 				<beans:entry key="OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM">
 					<beans:value>update USITUATION.TH_ST_SITUATION_HISTORY set BPM_CNFM_YN = 'Y' where SITUATION_ID = ? and STATUS = ?</beans:value>
+				</beans:entry>
+				<beans:entry key="OPSituation.QUERY_UPDATE_FOR_READ_ROLLBACK">
+					<beans:value>update USITUATION.TH_ST_SITUATION_HISTORY set BPM_CNFM_YN = 'N' where SITUATION_ID = ? and STATUS = ?</beans:value>
 				</beans:entry>
 				<beans:entry key="OPSituation.QUERY_SELECT_FOR_OCCURRED">
 					<beans:value>select * from USITUATION.TH_ST_SITUATION_HISTORY where SITUATION_ID = ? and STATUS = 'H01' and END_DATE is not null and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null)</beans:value>
