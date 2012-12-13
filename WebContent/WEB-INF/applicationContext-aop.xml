@@ -27,7 +27,7 @@
 	</aop:config>  --> 
 	 
 	<!-- Mail Advisor -->
- 	<beans:bean id="misExecutor" class="org.springframework.scheduling.quartz.SimpleThreadPoolTaskExecutor" destroy-method="destroy">
+ 	<!-- <beans:bean id="misExecutor" class="org.springframework.scheduling.quartz.SimpleThreadPoolTaskExecutor" destroy-method="destroy">
  		<beans:property name="threadCount" value="10"/>
  	</beans:bean>
 	<beans:bean id="tskManagerMailAdvisor" class="net.smartworks.server.engine.process.task.manager.impl.TskManagerMailAdvisorImpl">
@@ -49,7 +49,7 @@
 			<aop:pointcut id="mailMethod" expression="target(net.smartworks.server.engine.process.task.manager.impl.TskManagerImpl)"/>
 			<aop:around pointcut-ref="mailMethod" method="invoke"/>
 		</aop:aspect>
-	</aop:config>
+	</aop:config> -->
 	
 	<!-- SubProcess Advisor -->
 	<beans:bean id="tskManagerSubFlowAdvisor" class="net.smartworks.server.engine.process.task.manager.impl.TskManagerSubFlowAdvisorImpl"/>
