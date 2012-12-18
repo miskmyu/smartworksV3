@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.work.ProcessWork;
+import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
 import pro.ucity.util.UcityUtil;
@@ -528,9 +529,16 @@ public class Adapter {
 		
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null) return;
-		if(this.process == System.PROCESS_FACILITY_MANAGEMENT)
-			eventId = facilityId;		
-		UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.eventId, this.occuredDate, this.getDataRecord());
+		if(UcityUtil.ucityWorklistSearch(System.getProcessId(this.process),this.eventId) == true ){
+			if(this.process == System.PROCESS_FACILITY_MANAGEMENT){
+				UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.eventId, this.occuredDate, this.getDataRecord(), this.facilityId);
+			}else{
+				UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.eventId, this.occuredDate, this.getDataRecord());			
+			}		
+		}else{
+			java.lang.System.out.println("[PASS] ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 중복실행으로 인해, 중지되었습니다.");
+			return;
+		}
 	}
 	
 	public void endProcess() throws Exception{
@@ -538,9 +546,11 @@ public class Adapter {
 		
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null) return;
-		if(this.process == System.PROCESS_FACILITY_MANAGEMENT)
-			eventId = facilityId;
-		UcityUtil.endUServiceProcess(System.getProcessId(this.process), this.eventId, this.getDataRecord());
+		if(this.process == System.PROCESS_FACILITY_MANAGEMENT){
+			UcityUtil.endUServiceProcessFacility(System.getProcessId(this.process), this.facilityId, this.getDataRecord());
+		}else{
+			UcityUtil.endUServiceProcess(System.getProcessId(this.process), this.eventId, this.getDataRecord());
+		}
 	}
 	
 	public void performTask(String taskInstId) throws Exception{
@@ -571,6 +581,8 @@ public class Adapter {
 	}
 	
 	public boolean isValid(){
+		if( this.process == System.PROCESS_FACILITY_MANAGEMENT)
+			return true;
 		if(	this.process != -1 && !SmartUtil.isBlankObject(this.commHeader) 
 				&& !SmartUtil.isBlankObject(this.commBody) && this.eventType !=0 && !SmartUtil.isBlankObject(this.eventId))
 			return true;
@@ -599,13 +611,16 @@ public class Adapter {
 		String adapterSelectEndSql = UcityConstant.getQueryByKey("Adapter.QUERY_SELECT_FOR_END");
 		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
 		String adapterRollbackSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_ROLLBACK");
+		
+		String opSituationJoinFacilitySql = UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_FACILITY");
+
 		try {
 			try{
-			    Context init = new InitialContext();
-			    Context envinit = (Context)init.lookup("java:comp/env");
-			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-			    connection = ds.getConnection();
-//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//			    Context init = new InitialContext();
+//			    Context envinit = (Context)init.lookup("java:comp/env");
+//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//			    connection = ds.getConnection();
+				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 				te.printStackTrace();
@@ -633,9 +648,17 @@ public class Adapter {
 							Adapter adapter = new Adapter(rs);
 							if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_OCCURRENCE){
 								try{
+									selectPstmt = connection.prepareStatement(opSituationJoinFacilitySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+									selectPstmt.setString(1, adapter.getEventId());
+									ResultSet joinFacilityRs = selectPstmt.executeQuery();
+									joinFacilityRs.first();
+									adapter.setLocationName(joinFacilityRs.getString("LC_NM"));
+									
 									adapter.startProcess();	
 //									connection.commit();
 									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 정상적으로 시작되었습니다!");
+									
+									
 								}catch (Exception se){
 									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
 									se.printStackTrace();
@@ -692,9 +715,6 @@ public class Adapter {
 										try{
 											adapter.endProcess();
 //											connection.commit();
-											updatePstmt = connection.prepareStatement(adapterRollbackSql);
-											updatePstmt.setString(1, communicationId);
-											result = updatePstmt.execute();
 											java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
 										}catch (Exception se){
 											java.lang.System.out.println("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
@@ -775,11 +795,11 @@ public class Adapter {
 		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
-			    Context init = new InitialContext();
-			    Context envinit = (Context)init.lookup("java:comp/env");
-			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-			    connection = ds.getConnection();
-//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//			    Context init = new InitialContext();
+//			    Context envinit = (Context)init.lookup("java:comp/env");
+//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+//			    connection = ds.getConnection();
+				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 
 			}catch (TbSQLException te){
 				te.printStackTrace();

@@ -39,6 +39,7 @@ public class UcityWorkListCond  extends MisObjectCond{
 	private String eventPlace;
 	private String eventId;
 	private Date eventTime;
+	private String facilityId;
 	
 	private String searchKey;
 	
@@ -138,5 +139,11 @@ public class UcityWorkListCond  extends MisObjectCond{
 	}
 	public void setPrcInstIdIns(String[] prcInstIdIns) {
 		this.prcInstIdIns = prcInstIdIns;
+	}
+	public String getFacilityId() {
+		return facilityId;
+	}
+	public void setFacilityId(String facilityId) {
+		this.facilityId = facilityId;
 	}
 }

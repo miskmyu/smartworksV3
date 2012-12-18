@@ -13,6 +13,7 @@
 		<property name="runningTaskName" column="runningTaskName" type="string" length="200"/>
 		<property name="serviceName" column="serviceName" type="string" length="200"/>
 		<property name="eventId" column="eventId" type="string" length="50"/>
+		<property name="facilityId" column="facilityId" type="string" length="50"/>
 		<property name="eventName" column="eventName" type="string" length="200"/>
 		<property name="eventTime" column="eventTime" type="timestamp"/>
 		<property name="type" column="type" type="string" length="100"/>

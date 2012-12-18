@@ -281,8 +281,12 @@ public class OPSituation {
 	public void startProcess() throws Exception{		
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null || SmartUtil.isBlankObject(this.serviceName) || SmartUtil.isBlankObject(this.eventName)) return;
-		
+		if(UcityUtil.ucityWorklistSearch(System.getProcessId(this.process),this.situationId) == true ){
 		UcityUtil.startPortalProcess(System.getProcessId(this.process), this.situationId, this.occurDate, this.getDataRecord());
+		}else{
+			java.lang.System.out.println("[PASS] PORTAL 발생 이벤트(아이디 : '" + situationId + ")가 중복실행으로 인해, 중지되었습니다.");
+			return;
+		}
 	}
 	
 	public void performTask(String processId, String taskInstId) throws Exception{
@@ -435,12 +439,12 @@ public class OPSituation {
 				rs.last(); 
 				int count = rs.getRow(); 
 				rs.beforeFirst();
-				if (rs.next() && count != 0) {
+				if (count != 0) {
 					int processedCount = 0;
 					java.lang.System.out.println("============== PORTAL 이벤트 발생 ===============");
 					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
 					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
-					while(number == 1) {
+					while(rs.next() && number == 1) {
 						try{
 							String situationId = rs.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_SITUATION_ID"));
 							String status = rs.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_STATUS"));
@@ -559,6 +563,7 @@ public class OPSituation {
 			}
 			connection.setAutoCommit(false);
 			try{
+				
 				selectPstmt = connection.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
 				if(!status.equals(STATUS_SITUATION_PROCESSING) && !status.equals(STATUS_SITUATION_OCCURRED))

@@ -38,6 +38,7 @@ public class UcityWorkList  extends MisObject{
 	private String eventPlace;
 	private String eventId;
 	private Date eventTime;
+	private String facilityId;
 	
 	public String getPrcInstId() {
 		return prcInstId;
@@ -122,5 +123,11 @@ public class UcityWorkList  extends MisObject{
 	}
 	public void setIsSms(String isSms) {
 		this.isSms = isSms;
+	}
+	public String getFacilityId() {
+		return facilityId;
+	}
+	public void setFacilityId(String facilityId) {
+		this.facilityId = facilityId;
 	}
 }
