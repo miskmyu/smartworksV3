@@ -19,7 +19,7 @@
 	String departId = request.getParameter("departId");
 	String parentId = request.getParameter("parentId");
 	User user = (SmartUtil.isBlankObject(userId)) ? new User() : smartWorks.getUserById(userId);
-	Department department = (SmartUtil.isBlankObject(departId)) ? new Department() : smartWorks.getDepartmentById(departId);
+	Department department = (!SmartUtil.isBlankObject(departId)) ? smartWorks.getDepartmentById(departId) : ((!SmartUtil.isBlankObject(parentId)) ? smartWorks.getDepartmentById(parentId) : smartWorks.getDepartmentById(cUser.getCompanyId()));
 
 	// 사용가능한 타임존들을 가져와서, 타임존 선택박스에 리스트로 보여준다.
 	KeyMap[] timeZoneNames = LocalDate.getAvailableTimeZoneNames(cUser.getLocale());
@@ -108,15 +108,24 @@
 					<tr>
 						<th width="22%" ><fmt:message key="profile.title.department"/></th>
 						<%
-						if(!SmartUtil.isBlankObject(departId)){
+						if(!SmartUtil.isBlankObject(department)){
 						%>
-							<td width="78%"><%=CommonUtil.toNotNull(department.getName()) %></td>
-							<input name="hdnDepartmentId" type="hidden" value="<%=CommonUtil.toNotNull(department.getId())%>">
-						<%
-						}else{
-						%>
-							<td width="78%"><%=CommonUtil.toNotNull(user.getFullDepartment()) %></td>
-						<%
+							<td width="78%" class="form_col js_type_departmentField" fieldId="memberDepartment" multiUsers="false">
+								<div style="width:100%" class="form_value">
+									<div class="icon_fb_space">
+										<div class="fieldline community_names js_community_names sw_required">
+											<span class="js_community_item user_select" comId="<%=department.getId()%>"><%=CommonUtil.toNotNull(department.getFullpathName()) %>
+												<a href="" class="js_remove_community"> x</a>
+											</span>
+											<input class="m0 js_auto_complete" style="width:100px" href="department_name.sw" type="text">
+										</div>
+										<div class="js_community_list srch_list_nowid" style="display:none"></div>
+										<span class="js_community_popup"></span>
+										<a href="" class="js_departPicker_button"><span class="icon_fb_depart"></span></a>
+									</div>
+								</div>
+							</td>
+ 						<%
 						}
 						%>
 					</tr>

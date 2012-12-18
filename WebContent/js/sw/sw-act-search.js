@@ -191,7 +191,8 @@ $(function() {
 		var communityItems = input.parents('.js_community_list').prev().find('.js_community_item');
 		var selectedApproverInfo = input.parents('.js_community_list').prev().find('.js_selected_approver_info');
 		var userField = input.parents('.js_type_userField');
-		var inputTarget = userField.find('input.js_auto_complete');
+		var departmentField = input.parents('.js_type_departmentField');
+		var inputTarget = (!isEmpty(userField)) ? userField.find('input.js_auto_complete') : (!isEmpty(departmentField)) ? departmentField.find('input.js_auto_complete') : [];
 		if(inputTarget.parents('.sw_required').hasClass('sw_error')){
 			inputTarget.parents('.sw_required').removeClass('sw_error');
 			$('form.js_validation_required').validate({ showErrors: showErrors}).form();
@@ -213,7 +214,7 @@ $(function() {
 			selectedApproverInfo.nextAll('span').hide();
 			selectedApproverInfo.nextAll('input').attr('value', comId);
 		}else{
-			if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true'))
+			if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true') || (!isEmpty(departmentField)))
 				communityItems.remove();
 			var isSameId = false;
 			for(var i=0; i<communityItems.length; i++){

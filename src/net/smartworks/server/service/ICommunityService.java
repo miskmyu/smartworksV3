@@ -24,6 +24,8 @@ public interface ICommunityService {
 
 	public abstract WorkSpaceInfo[] searchCommunity(String key, HttpServletRequest request) throws Exception;
 
+	public abstract DepartmentInfo[] searchDepartment(String key, HttpServletRequest request) throws Exception;
+
 	public abstract User getUserById(String userId) throws Exception;
 
 	public abstract Group getGroupById(String groupId) throws Exception;

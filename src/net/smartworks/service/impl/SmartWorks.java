@@ -1729,4 +1729,9 @@ public class SmartWorks implements ISmartWorks {
 	public void changeMailPasswordRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		mailService.changeMailPasswordRequest(requestBody, request);
 	}
+
+	@Override
+	public DepartmentInfo[] searchDepartment(String key, HttpServletRequest request) throws Exception {
+		return communityService.searchDepartment(key, request);
+	}
 }
