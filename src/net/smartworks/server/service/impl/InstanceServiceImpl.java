@@ -8014,7 +8014,6 @@ public class InstanceServiceImpl implements IInstanceService {
 					String fileGroupId = entry.getKey();
 					groupIdList.add(fileGroupId);
 					List<Map<String, String>> fileGroups = entry.getValue();
-
 					try {
 						for(int i=0; i < fileGroups.subList(0, fileGroups.size()).size(); i++) {
 							Map<String, String> file = fileGroups.get(i);
