@@ -39,6 +39,9 @@ public class TaskInstance extends Instance {
 	private SmartForm smartForm;
 	private String approvalId;
 	private String forwardId;
+	private boolean isSubTask=false;
+	private String subWorkId;
+	private String subWorkInstanceId;
 
 	public String getName() {
 		if(this.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED){
@@ -103,6 +106,24 @@ public class TaskInstance extends Instance {
 	}
 	public void setForwardId(String forwardId) {
 		this.forwardId = forwardId;
+	}
+	public boolean isSubTask() {
+		return isSubTask;
+	}
+	public void setSubTask(boolean isSubTask) {
+		this.isSubTask = isSubTask;
+	}
+	public String getSubWorkId() {
+		return subWorkId;
+	}
+	public void setSubWorkId(String subWorkId) {
+		this.subWorkId = subWorkId;
+	}
+	public String getSubWorkInstanceId() {
+		return subWorkInstanceId;
+	}
+	public void setSubWorkInstanceId(String subWorkInstanceId) {
+		this.subWorkInstanceId = subWorkInstanceId;
 	}
 	public String getController(){
 		if(getWork()==null) return "";

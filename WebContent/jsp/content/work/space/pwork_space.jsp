@@ -213,22 +213,44 @@
 				        			}else{
 				        				statusClass = "proc_task not_yet";
 				        			}
+				        			
+				        			if(!task.isSubTask()){
 				        	%>
-			            			<!-- 태스크 --> 
-						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
-						            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId=<%=CommonUtil.toNotNull(approvalLineId) %>>
-					                    <!-- task 정보 -->
-					                    <%if(isSelectable){%><a class="js_select_task_instance" href=""><%} %>
-						                    <div class="title"><%=count%>) <%=task.getName() %></div>
-						                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
-						                    <div class="noti_in_s">
-							                    <div class="name"><%=task.getPerformer().getLongName()%></div>
-							                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
-						                    </div>
-						                <%if(isSelectable){%></a><%} %>
-					                    <!-- task 정보 //-->
-						            </li>
-				            		<!-- 태스크 //--> 
+				            			<!-- 태스크 --> 
+							            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
+							            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId=<%=CommonUtil.toNotNull(approvalLineId) %>>
+						                    <!-- task 정보 -->
+						                    <%if(isSelectable){%><a class="js_select_task_instance" href=""><%} %>
+							                    <div class="title"><%=count%>) <%=task.getName() %></div>
+							                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
+							                    <div class="noti_in_s">
+								                    <div class="name"><%=task.getPerformer().getLongName()%></div>
+								                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
+							                    </div>
+							                <%if(isSelectable){%></a><%} %>
+						                    <!-- task 정보 //-->
+							            </li>
+					            		<!-- 태스크 //--> 
+					            	<%
+					            	}else{
+					            	%>
+				            			<!-- 태스크 --> 
+							            <li class="<%=statusClass %> js_instance_task js_select_subtask_instance" subWorkId="<%=task.getSubWorkId() %>" subWorkInstanceId="<%=task.getSubWorkInstanceId() %>">
+						                    <!-- task 정보 -->
+						                    <a class="js_select_subtask_instance" href="">
+							                    <div class="title"><%=count%>) <%=task.getName() %></div>
+							                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
+							                    <div class="noti_in_s">
+								                    <div class="name">[<fmt:message key="common.title.sub_task"/>]</div>
+								                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
+							                    </div>
+							                </a>
+						                    <!-- task 정보 //-->
+							            </li>
+					            		<!-- 태스크 //--> 
+					            	<%
+					            	}
+				        			%>
 						            <!--화살표-->
 						            <li class="proc_arr_next fl js_instance_task_arrow"></li>
 						            <!--화살표-->
