@@ -470,7 +470,7 @@ SmartWorks.GridLayout.serializeObject = function(form, valueChanged){
 	if(valueChanged != false) valueChanged=true;
 	var fileFields = SmartWorks.FormRuntime.FileFieldBuilder.serializeObject(form.find('.js_type_fileField'));
 	var userFields = SmartWorks.FormRuntime.UserFieldBuilder.serializeObject(form.find('.js_type_userField'));
-//	var departmentFields = {};//SmartWorks.FormRuntime.DepartmentFieldBuilder.serializeObject(form.find('.js_type_departmentField'));
+	var departmentFields = SmartWorks.FormRuntime.DepartmentFieldBuilder.serializeObject(form.find('.js_type_departmentField'));
 	var richEditors = SmartWorks.FormRuntime.RichEditorBuilder.serializeObject(form.find('.js_type_richEditor'), valueChanged);
 	var refFormFields = SmartWorks.FormRuntime.RefFormFieldBuilder.serializeObject(form.find('.js_type_refFormField'));
 	var imageBoxs = SmartWorks.FormRuntime.ImageBoxBuilder.serializeObject(form.find('.js_type_imageBox'));
@@ -480,15 +480,17 @@ SmartWorks.GridLayout.serializeObject = function(form, valueChanged){
 	var currencyInputs = SmartWorks.FormRuntime.CurrencyInputBuilder.serializeObject(form.find('.js_type_currencyInput'));
 	var autoIndexs = SmartWorks.FormRuntime.AutoIndexBuilder.serializeObject(form.find('.js_type_autoIndex'));
 	var dataGrids = {};
-	return merge3Objects(merge3Objects(fileFields, userFields, richEditors), 
+	return merge3Objects(
+			merge3Objects(fileFields, mergeObjects(userFields, departmentFields), richEditors), 
 			merge3Objects(refFormFields, imageBoxs, videoYTBoxs), 
-			merge3Objects(numberInputs, percentInputs, mergeObjects(currencyInputs, autoIndexs)));
+			merge3Objects(numberInputs, percentInputs, mergeObjects(currencyInputs, autoIndexs))
+			);
 };
 
 SmartWorks.GridLayout.validate = function(form, messageTarget){
 	var fileFields = SmartWorks.FormRuntime.FileFieldBuilder.validate(form.find('.js_type_fileField:visible'));
 	var userFields = SmartWorks.FormRuntime.UserFieldBuilder.validate(form.find('.js_type_userField:visible'));
-//	var departmentFields = true;//SmartWorks.FormRuntime.DepartmentFieldBuilder.validate(form.find('.js_type_departmentField'));
+	var departmentFields = SmartWorks.FormRuntime.DepartmentFieldBuilder.validate(form.find('.js_type_departmentField'));
 	var richEditors = SmartWorks.FormRuntime.RichEditorBuilder.validate(form.find('.js_type_richEditor:visible'));
 	var refFormFields = SmartWorks.FormRuntime.RefFormFieldBuilder.validate(form.find('.js_type_refFormField:visible'));
 	var imageBoxs = SmartWorks.FormRuntime.ImageBoxBuilder.validate(form.find('.js_type_imageBox:visible'));
@@ -508,7 +510,7 @@ SmartWorks.GridLayout.validate = function(form, messageTarget){
 		jq_validate = $(this).validate({ showErrors: showErrors, ignore:":not(:visible)" }).form() && jq_validate;
 	});
 
-	var sw_validate = (fileFields && userFields && richEditors && refFormFields && imageBoxs && videoYTBoxs && dataGrids && radioButtons && numberInputs && percentInputs && currencyInputs && jq_validate);
+	var sw_validate = (fileFields && userFields && departmentFields && richEditors && refFormFields && imageBoxs && videoYTBoxs && dataGrids && radioButtons && numberInputs && percentInputs && currencyInputs && jq_validate);
 	if(!sw_validate || !jq_validate){
 		showErrors();
 	}

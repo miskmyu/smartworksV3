@@ -636,6 +636,56 @@ public class CommunityServiceImpl implements ICommunityService {
 		}
 	}
 
+	@Override
+	public DepartmentInfo[] searchDepartment(String key, HttpServletRequest request) throws Exception {
+
+		try{
+			if (CommonUtil.isEmpty(key))
+				return null;
+	
+			User cUser = SmartUtil.getCurrentUser();
+	
+			SchWorkspace[] workSpaceInfos = getSchManager().getSchWorkspace(cUser.getCompanyId(), cUser.getId(), key);
+			
+			if (CommonUtil.isEmpty(workSpaceInfos))
+				return null;
+			
+			List<DepartmentInfo> deptList = new ArrayList<DepartmentInfo>();
+
+			UserInfo[] availableChatters = getAvailableChatter(request);
+
+			for (int i=0; i < workSpaceInfos.length; i++) {
+				SchWorkspace workSpaceInfo = workSpaceInfos[i];
+				
+				String type = workSpaceInfo.getType();
+
+				if (type.equalsIgnoreCase("department")) {
+					DepartmentInfo deptInfo = new DepartmentInfo();
+	
+					deptInfo.setId(workSpaceInfo.getId());
+					deptInfo.setName(workSpaceInfo.getName());
+					deptInfo.setDesc(workSpaceInfo.getDescription());
+					
+					deptList.add(deptInfo);
+				} 
+			}
+			
+			DepartmentInfo[] schDepartments = new DepartmentInfo[deptList.size()];
+			
+			for (int i = 0; i < deptList.size(); i++) {
+				DepartmentInfo dept = deptList.get(i);
+				schDepartments[i] = dept;
+			}
+			
+			return schDepartments;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

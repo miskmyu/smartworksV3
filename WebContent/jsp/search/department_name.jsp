@@ -12,22 +12,19 @@
 
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String key = request.getParameter("key");
-	WorkSpaceInfo[] communities = smartWorks.searchCommunity(key, request);
+	DepartmentInfo[] departments = smartWorks.searchDepartment(key, request);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <ul>
 	<%
-	if(communities != null){
-		for (CommunityInfo community : communities) {
-			String picName = community.getMinPicture();
-			String comContext = ISmartWorks.CONTEXT_PREFIX_USER_SPACE + community.getId();
-			String comName = null;
-			if(community.getClass().equals(UserInfo.class)) comName = ((UserInfo)community).getLongName();
-			else if(community.getClass().equals(DepartmentInfo.class)) comName = ((DepartmentInfo)community).getFullpathName();
-			else comName = community.getName();
-			String comId = community.getId();
+	if(departments != null){
+		for (DepartmentInfo department : departments) {
+			String picName = department.getMinPicture();
+			String comContext = ISmartWorks.CONTEXT_PREFIX_DEPARTMENT_SPACE + department.getId();
+			String comName = department.getFullpathName();
+			String comId = department.getId();
 	%>
 				<li>
 					<a comName="<%=comName%>" comId="<%=comId %>" class="js_select_community">

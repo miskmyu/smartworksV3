@@ -94,15 +94,34 @@
 				<tbody>
 					<tr>
 						<%
-						String parentName = (SmartUtil.isBlankObject(department.getParent())) ? "" : department.getParent().getName();
-						if(SmartUtil.isBlankObject(departId) && !SmartUtil.isBlankObject(parentDepart)) parentName = parentDepart.getName(); 
+						String parentName = (SmartUtil.isBlankObject(department.getParent())) ? "" : department.getParent().getFullpathName();
+						if(SmartUtil.isBlankObject(departId) && !SmartUtil.isBlankObject(parentDepart)) parentName = parentDepart.getFullpathName(); 
 						%>
 						<th width="20%" ><fmt:message key="settings.title.department.parent_name"/></th>
-						<td width="80%">
-							<input name="txtParentName" readonly type="text" value="<%=parentName %>" />
+						<%
+						if(!SmartUtil.isBlankObject(department)){
+						%>
+							<td width="80%" class="form_col js_type_departmentField" fieldId="parentDepartment" multiUsers="false">
+								<div style="width:100%" class="form_value">
+									<div class="icon_fb_space">
+										<div class="fieldline community_names js_community_names sw_required">
+											<span class="js_community_item user_select" comId="<%=CommonUtil.toNotNull(parentId)%>"><%=CommonUtil.toNotNull(parentName) %>
+												<a href="" class="js_remove_community"> x</a>
+											</span>
+											<input class="m0 js_auto_complete" style="width:100px" href="department_name.sw" type="text">
+										</div>
+										<div class="js_community_list srch_list_nowid" style="display:none"></div>
+										<span class="js_community_popup"></span>
+										<a href="" class="js_departPicker_button"><span class="icon_fb_depart"></span></a>
+									</div>
+								</div>
+							</td>
+ 						<%
+						}
+						%>
+<%-- 							<input name="txtParentName" readonly type="text" value="<%=parentName %>" />
 							<input name="hdnParentId" type="hidden" value="<%=CommonUtil.toNotNull(parentId) %>" />
-						</td>	
-					</tr>
+ --%>					</tr>
 					<tr class="end">
 						<th class="required_label"><fmt:message key="profile.title.department"/></th>
 						<td><input name="txtDepartmentName" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(department.getName()) %>" /></td>

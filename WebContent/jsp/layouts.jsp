@@ -204,6 +204,7 @@ function logout() {
 <script type="text/javascript" src='js/smartform/field/time_chooser.js'></script>
 <script type="text/javascript" src='js/smartform/field/datetime_chooser.js'></script>
 <script type="text/javascript" src='js/smartform/field/user_field.js'></script>
+<script type="text/javascript" src='js/smartform/field/department_field.js'></script>
 <script type="text/javascript" src='js/smartform/field/ref_form_field.js'></script>
 <script type="text/javascript" src='js/smartform/field/image_box.js'></script>
 <script type="text/javascript" src='js/smartform/field/videoYT_box.js'></script>

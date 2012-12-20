@@ -84,7 +84,7 @@
 						<%
 						if(!SmartUtil.isBlankObject(departId)){
 						%>
-							<td width="78%"><%=CommonUtil.toNotNull(department.getName()) %></td>
+							<td width="78%"><%=CommonUtil.toNotNull(department.getFullpathName()) %></td>
 							<input name="hdnDepartmentId" type="hidden" value="<%=CommonUtil.toNotNull(department.getId())%>">
 						<%
 						}
