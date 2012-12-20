@@ -9,7 +9,7 @@ $(function() {
 	$('input.js_auto_complete').live('keyup', function(e) {
 		var e = window.event || e;
 		var keyCode = e.which || e.keyCode;
-		if(keyCode>=9 && keyCode<=45 && keyCode!=186 && keyCode!=188) return;
+		if(keyCode>=9 && keyCode<=45 && keyCode!=13 && keyCode!=32 && keyCode!=186 && keyCode!=188) return;
 		var input = $(targetElement(e));
 		var listWidth = input.parent().outerWidth();
 		var startWork = input.parents('div.js_start_work_page');
@@ -40,9 +40,10 @@ $(function() {
 		var url = input.attr('href');
 		var lastValue = input.attr('value');
 		if(timeoutId != null) clearTimeout(timeoutId);
-		if(keyCode==186 || keyCode==188){
+		if(keyCode==13 || keyCode==32 || keyCode==186 || keyCode==188){
 			if(url !== 'email_address.sw') return false;
-			var emailAddress = lastValue.substr(0, lastValue.length-1);
+			var valueLength = (keyCode == $.ui.keyCode.ENTER) ? lastValue.length : lastValue.length-1;
+			var emailAddress = lastValue.substr(0, valueLength);
 			if(!isEmailAddress(emailAddress)) return false;
 			var data = '<ul><li> <a href="" comName="' + emailAddress + '" comId="' + emailAddress + '" class="js_select_community">' +
 						'<span>' + emailAddress + '</span></a></li></ul>';
@@ -149,6 +150,7 @@ $(function() {
 			}
 		}else if(keyCode == $.ui.keyCode.ENTER){
 			var input = $(targetElement(e));
+
 			var startWork = input.parents('div.js_start_work_page');
 			var chatter_name = input.parents('div.js_chatter_names');
 			var appendTaskApproval = input.parents('.js_append_task_approval_page');
@@ -158,6 +160,14 @@ $(function() {
 			if(!isEmpty(startWork)) target =  startWork.find('#upload_work_list');
 			else if(!isEmpty(chatter_name)) target = chatter_name.siblings('div.js_chatter_list');
 			else if(!isEmpty(appendTaskApproval)) target = appendTaskApproval.find('.js_approval_line_box').next('.js_community_list');
+
+			var url = input.attr('href');
+			var lastValue = input.attr('value');
+			if(url === 'email_address.sw' && !isEmpty(lastValue)){
+				if(isEmailAddress(lastValue)){
+					if(isEmpty(target.find('.sw_hover:first a'))) return true;
+				}
+			}
 			target.find('.sw_hover:first a').click();
 			input.focusout();
 			return false;
@@ -225,6 +235,11 @@ $(function() {
 				}
 			}
 			if(!isSameId){
+				if(inputTarget.attr('href') === "email_address.sw"){
+					if(!isEmailAddress(inputTarget.attr('value')) && isEmailAddress(comId)){
+						comName = comName + "(" + comId + ")";
+					}
+				}
 				$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
 						+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
 
