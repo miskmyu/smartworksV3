@@ -199,8 +199,10 @@ public class InstanceVariables extends MisObject {
 	public InstanceVariable getInstanceVariableById(String id) {
 		for (int i = 0; i < this.instanceVariables.length; i++) {
 			InstanceVariable instVar = this.instanceVariables[i];
-			if (instVar.getId().equalsIgnoreCase(id))
-				return instVar;
+			if (instVar.getId() != null) {
+				if (instVar.getId().equalsIgnoreCase(id))
+					return instVar;
+			}
 		}
 		return null;
 	}

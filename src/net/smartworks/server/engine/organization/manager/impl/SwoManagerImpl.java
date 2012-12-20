@@ -1339,6 +1339,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString("adjunctDeptIdsLike", CommonUtil.toLikeString(adjunctDeptIdsLike));
 			if (deptIdWithAdjunct != null) {
 				query.setString("deptIdWithAdjunct", deptIdWithAdjunct);
+				if (deptIdWithAdjunct.indexOf("|") == -1)
+					deptIdWithAdjunct = deptIdWithAdjunct + "|";
 				query.setString("deptIdWithAdjunct2", CommonUtil.toLikeString(deptIdWithAdjunct));
 			}
 			if (roleId != null)
