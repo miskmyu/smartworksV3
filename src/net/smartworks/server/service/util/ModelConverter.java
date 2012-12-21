@@ -140,6 +140,8 @@ import net.smartworks.server.engine.process.approval.model.AprApproval;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLineCond;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
+import net.smartworks.server.engine.process.process.model.PrcProcess;
+import net.smartworks.server.engine.process.process.model.PrcProcessCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstExtend;
@@ -2733,6 +2735,22 @@ public class ModelConverter {
 			taskInstInfo.setApprovalId(swTask.getApprovalId());
 			taskInstInfo.setApprovalTaskId(swTask.getFromRefId());
 			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
+		} else if(tskType.equalsIgnoreCase(TskTask.TASKTYPE_SUBFLOW)) {
+			taskType = TaskInstance.TYPE_PROCESS_SUB_TASK_CREATED;
+			taskInstInfo.setSubTask(true);
+			
+			String targetPrcId = swTask.getExtendedPropertyValue("targetPrcId");
+			//DB 조회 **********************
+			PrcProcessCond prcCond = new PrcProcessCond();
+			prcCond.setProcessId(targetPrcId);
+			PrcProcess[] prcs = SwManagerFactory.getInstance().getPrcManager().getProcesses("", prcCond, IManager.LEVEL_LITE);
+			if (prcs != null) {
+				String targetPkgId = prcs[0].getDiagramId();
+				taskInstInfo.setSubWorkId(targetPkgId);
+			}
+			String targetPrcInstId = swTask.getExtendedPropertyValue("targetPrcInstId");
+			taskInstInfo.setSubWorkInstanceId(targetPrcInstId);
+			
 		}
 		
 		if (swTask.getIsApprovalSourceTask() != null && swTask.getIsApprovalSourceTask().equalsIgnoreCase("true")) {
@@ -4131,7 +4149,7 @@ public class ModelConverter {
 		
 		TskTaskCond tskCond = new TskTaskCond();
 		tskCond.setProcessInstId(prcInst.getObjId());
-		tskCond.setTypeNotIns(TskTask.NOTUSERTASKTYPES);
+		tskCond.setTypeNotIns(new String[]{"route", "and", "xor", "SERVICE"});
 
 		tskCond.setOrders(new Order[] {new Order(TskTask.A_CREATIONDATE, true)});
 		
