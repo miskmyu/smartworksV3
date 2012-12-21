@@ -19,9 +19,11 @@ public class TaskInstance extends Instance {
 
 	public final static int TYPE_PROCESS_TASK_ASSIGNED = 21;
 	public final static int TYPE_PROCESS_TASK_FORWARDED = 22;
+	public final static int TYPE_PROCESS_SUB_TASK_CREATED = 23;
 
 	public final static int TYPE_SCHEDULE_TASK_ASSIGNED = 31;
 	public final static int TYPE_SCHEDULE_TASK_FORWARDED = 32;
+	public final static int TYPE_SCHEDULE_GROUP_TASK_CREATED = 33;
 
 	public final static int TYPE_APPROVAL_TASK_ASSIGNED = 41;
 	public final static int TYPE_APPROVAL_TASK_FORWARDED = 42;
