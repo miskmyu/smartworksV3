@@ -2746,11 +2746,12 @@ public class ModelConverter {
 			PrcProcess[] prcs = SwManagerFactory.getInstance().getPrcManager().getProcesses("", prcCond, IManager.LEVEL_LITE);
 			if (prcs != null) {
 				String targetPkgId = prcs[0].getDiagramId();
+				String targetPkgName = prcs[0].getName();
 				taskInstInfo.setSubWorkId(targetPkgId);
+				taskInstInfo.setSubWorkFullpathName(targetPkgName);
 			}
 			String targetPrcInstId = swTask.getExtendedPropertyValue("targetPrcInstId");
-			taskInstInfo.setSubWorkInstanceId(targetPrcInstId);
-			
+			taskInstInfo.setSubWorkInstanceId(targetPrcInstId);			
 		}
 		
 		if (swTask.getIsApprovalSourceTask() != null && swTask.getIsApprovalSourceTask().equalsIgnoreCase("true")) {

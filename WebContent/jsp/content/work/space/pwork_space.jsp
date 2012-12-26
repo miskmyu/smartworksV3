@@ -188,15 +188,15 @@
 				        			if(!SmartUtil.isBlankObject(task.getForwardId()) || !SmartUtil.isBlankObject(task.getApprovalId())) continue;
 				        			count++;
 				        			String statusClass = "proc_task not_yet";
-				        			String formMode = (task.getAssignee().getId().equals(cUser.getId()) 
+				        			String formMode = (!SmartUtil.isBlankObject(task.getAssignee()) && (task.getAssignee().getId().equals(cUser.getId()) 
 				        								&& ( 	task.getStatus()==TaskInstance.STATUS_RUNNING
 				        									 || task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING) 
 				        									 || (task.getStatus()==Instance.STATUS_APPROVAL_RUNNING
 				        									 		&& instance.getStatus()==Instance.STATUS_RETURNED
 				        									 		&& !SmartUtil.isBlankObject(approvalTask) 
-				        									 		&& task.getId().equals(approvalTask.getApprovalTaskId()))) ? "edit" : "view";
+				        									 		&& task.getId().equals(approvalTask.getApprovalTaskId())))) ? "edit" : "view";
 				        			boolean isSelectable = ((task.getStatus()==TaskInstance.STATUS_RUNNING||task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING)
-				        										&& !task.getAssignee().getId().equals(cUser.getId())) ? false : true;
+				        										&& (!SmartUtil.isBlankObject(task.getAssignee()) && !task.getAssignee().getId().equals(cUser.getId()))) ? false : true;
 				        			String approvalLineId = "";
 				        			if(task.getStatus() == TaskInstance.STATUS_RETURNED){
 				        				statusClass = "proc_task returned";
@@ -233,17 +233,15 @@
 					            		<!-- 태스크 //--> 
 					            	<%
 					            	}else{
+					            		String targetHref = "pwork_space.sw?cid=pw.sp." + task.getSubWorkInstanceId() + "&workId=" + task.getSubWorkId() + "&instId=" + task.getSubWorkInstanceId();
 					            	%>
 				            			<!-- 태스크 --> 
-							            <li class="<%=statusClass %> js_instance_task js_select_subtask_instance" subWorkId="<%=task.getSubWorkId() %>" subWorkInstanceId="<%=task.getSubWorkInstanceId() %>">
+							            <li class="<%=statusClass %> js_instance_task" subWorkId="<%=task.getSubWorkId() %>" subWorkInstanceId="<%=task.getSubWorkInstanceId() %>">
 						                    <!-- task 정보 -->
-						                    <a class="js_select_subtask_instance" href="">
+						                    <a class="js_content" href="<%=targetHref%>">
 							                    <div class="title"><%=count%>) <%=task.getName() %></div>
-							                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
-							                    <div class="noti_in_s">
-								                    <div class="name">[<fmt:message key="common.title.sub_task"/>]</div>
-								                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
-							                    </div>
+						                    	<div class="icon_pworks name"><%=task.getSubWorkFullpathName() %></div>
+							                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
 							                </a>
 						                    <!-- task 정보 //-->
 							            </li>
@@ -276,6 +274,13 @@
 			</div>
 			<!--프로세스 영역//-->
 				
+			<!-- 서브프로세스 영역 -->
+			<div class="js_subprocess_space" style="display:none; padding: 0 45px; height:88px">
+				<div class="define_space up_point pos_default js_form_content_pointer "></div>
+				<div class="form_wrap up js_subprocess_diagram"></div>
+			</div>
+			<!--프로세스 영역//-->
+
 			<!-- 상세보기 컨텐츠 -->
 			<div class="contents_space js_form_header">
 				<div class="up_point pos_default js_form_content_pointer"></div>

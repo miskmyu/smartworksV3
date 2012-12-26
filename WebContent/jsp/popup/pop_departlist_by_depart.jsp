@@ -11,23 +11,30 @@
 <%@ page import="net.smartworks.model.work.*"%>
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
-	String departmentId = (String)request.getAttribute("departmentId");
-	DepartmentInfo[] departments = (DepartmentInfo[])smartWorks.getAllComsByDepartmentId(CommonUtil.toNotNull(departmentId), true);
+	String departmentId = (String)request.getParameter("departmentId");
+	CommunityInfo[] departments = (CommunityInfo[])smartWorks.getAllComsByDepartmentId(CommonUtil.toNotNull(departmentId), true);
 	String iconType = null;
 %>
 
 <ul>
 	<%
 	if (!SmartUtil.isBlankObject(departments)) {
-		for (DepartmentInfo department : departments) {
-			iconType = "icon_depart";
-	%>
-			<li class="js_drill_down"><a
-				href="pop_departlist_by_depart.sw" departmentId="<%=department.getId()%>"><span class="<%=iconType%>"></span>
-					<span><%=department.getName()%></span></a>
-				<div class="js_drill_down_target" style="display: none"></div>
+		for (CommunityInfo community : departments) {
+			DepartmentInfo department = (DepartmentInfo)community;
+			iconType = "btn_tree_plus fn vm";
+		%>
+			<li class="js_drill_down">
+				<span class="dep">
+					<a href="pop_departlist_by_depart.sw?multiUsers=false" departmentId="<%=department.getId()%>" class="js_popup js_expandable">
+						<span class="<%=iconType%>"></span>
+						<a href="" class="js_pop_select_depart" deaprtId="<%=department.getId()%>" departName="<%=department.getFullpathName()%>" departPicture="<%=department.getMinPicture()%>">
+							<span> <%=department.getName()%> </span>
+						</a>
+					</a>
+				</span>
+				<div style="display: none" class="menu_2dep js_drill_down_target"></div>
 			</li>
-		<%
+	<%
 		}
 	}
 	%>

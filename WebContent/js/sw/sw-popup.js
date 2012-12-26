@@ -519,6 +519,59 @@ smartPop = {
 		});
 	},
 
+	selectDepartment : function(communityItems, target, width, bottomUp){
+		target.html('');
+		var conWidth = (!isEmpty(width) && width>0) ? width : 360;
+		var url = "pop_select_depart.sw"; 
+		var containerCss = (bottomUp) ? {width: conWidth, bottom: 0} : {width: conWidth}; 
+		$.get(url, function(data){
+			$(data).modal({
+				appendTo: target,
+				opacity: 0,
+				autoPosition: false,
+				fixed: false,
+				overlayCss: {backgroundColor:"#000"},
+				containerCss: containerCss,
+				overlayClose: true,
+				onShow: function(dialog){
+
+					var selectionProc = function(comId, comName){
+						var departField = target.parents('.js_type_departmentField:first');
+						var inputTarget = departField.find('input.js_auto_complete:first');
+
+						communityItems.remove();
+						$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
+								+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
+						inputTarget.focus();
+						departField.find('.js_community_names').change();
+					};
+					
+					$('a.js_pop_select_depart').die('click');
+					$('a.js_pop_select_depart').live('click', function(e){
+						var input = $(targetElement(e));
+						var comId = input.attr('departId');
+						var comName = input.attr('departName');
+						selectionProc(comId, comName);
+						smartPop.close();
+						target.html('');
+						return false;
+					});
+					$('a.js_pop_select_depart').focus();
+					$('a.js_pop_select_depart').keypress(function (e) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
+				            $('a.js_pop_select_depart').click();
+				            return false;
+				        } else {
+				            return true;
+				        }
+				    });
+				}
+			});
+		});
+	},
+
 	selectWork : function(target, width){
 		target.html('');
 		var conWidth = (!isEmpty(width) && width>0) ? width : 360;

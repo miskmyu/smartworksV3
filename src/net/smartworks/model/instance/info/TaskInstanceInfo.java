@@ -31,6 +31,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 	private String approvalLineId="";
 	private boolean isSubTask=false;
 	private String subWorkId;
+	private String subWorkFullpathName;
 	private String subWorkInstanceId;
 	
 	public String getName() {
@@ -125,6 +126,12 @@ public class TaskInstanceInfo extends InstanceInfo {
 	}
 	public void setSubWorkInstanceId(String subWorkInstanceId) {
 		this.subWorkInstanceId = subWorkInstanceId;
+	}
+	public String getSubWorkFullpathName() {
+		return subWorkFullpathName;
+	}
+	public void setSubWorkFullpathName(String subWorkFullpathName) {
+		this.subWorkFullpathName = subWorkFullpathName;
 	}
 	public static String getController(String workId, int workType){
 		if(SmartUtil.isBlankObject(workId)) return "";
