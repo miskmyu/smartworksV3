@@ -19,8 +19,6 @@ import org.springframework.util.StringUtils;
 import pro.ucity.manager.ucityWorkList.manager.IUcityWorkListManager;
 import pro.ucity.manager.ucityWorkList.model.UcityWorkList;
 import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
-import pro.ucity.model.System;
-import pro.ucity.util.UcityUtil;
 
 public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 
@@ -28,7 +26,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 	}
 	public void postExecuteTask(String user, TskTask obj, String action) throws Exception {
 		
-		java.lang.System.out.println("########## UCITY ADVISOR START #############");
+		logger.info("########## UCITY ADVISOR START #############");
 		if (obj.getProcessInstId() != null) {
 			
 			String prcInstId = obj.getProcessInstId();
@@ -74,74 +72,70 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 			IUcityWorkListManager ucityMgr = SwManagerFactory.getInstance().getUcityWorkListManager();
 			UcityWorkList ucityWorkList = ucityMgr.getUcityWorkList(user, ucityCond, null);
 			
-			if(UcityUtil.ucityWorklistSearch(prcInstId,eventId) == true ){
-				if (ucityWorkList == null) {
-					//인스턴스 신규 생성
-					ucityWorkList = new UcityWorkList();
+			if (ucityWorkList == null) {
+				//인스턴스 신규 생성
+				ucityWorkList = new UcityWorkList();
+			
+				ucityWorkList.setPrcInstId(prcInstId);
+				ucityWorkList.setPackageId(packageId);
+				ucityWorkList.setStatus(status);
+				ucityWorkList.setTitle(title);
+				ucityWorkList.setRunningTaskId(runningTaskId);
+				ucityWorkList.setRunningTaskName(runningTaskName);
 				
-					ucityWorkList.setPrcInstId(prcInstId);
-					ucityWorkList.setPackageId(packageId);
-					ucityWorkList.setStatus(status);
-					ucityWorkList.setTitle(title);
-					ucityWorkList.setRunningTaskId(runningTaskId);
-					ucityWorkList.setRunningTaskName(runningTaskName);
-					
-					ucityWorkList.setServiceName(serviceName);
-					ucityWorkList.setEventId(eventId);
-					if (!CommonUtil.isEmpty(eventTime)) {
-						Date tempDate = new Date();
-						tempDate.setTime((DateUtil.toDate(eventTime, "yyyyMMddHHmmss").getTime()) - TimeZone.getDefault().getRawOffset());
-						ucityWorkList.setEventTime(tempDate);
-					}
-					ucityWorkList.setEventName(eventName);
-					ucityWorkList.setType(type);
-					ucityWorkList.setExternalDisplay(externalDisplay);
-					ucityWorkList.setIsSms(isSms);
-					ucityWorkList.setEventPlace(eventPlace);
-					ucityWorkList.setFacilityId(facilityId);
-					
-					ucityWorkList.setCreationUser(user);
-					
-					java.lang.System.out.println("INSERT UCITY WORKLIST TABLE");
-					ucityMgr.setUcityWorkList(user, ucityWorkList, null);
-				
-				} else {
-					//이미생성된 인스턴스라면 업데이트
-					PrcProcessInst prcInst = getPrcManager().getProcessInst(user, prcInstId, IManager.LEVEL_LITE);
-					ucityWorkList.setStatus(prcInst.getStatus());
-					ucityWorkList.setRunningTaskId(runningTaskId);
-					ucityWorkList.setRunningTaskName(runningTaskName);
-	
-					if (!CommonUtil.isEmpty(serviceName))
-						ucityWorkList.setServiceName(serviceName);
-					if (!CommonUtil.isEmpty(eventId))
-						ucityWorkList.setEventId(eventId);
-					if (!CommonUtil.isEmpty(eventTime)) {
-						Date tempDate = new Date();
-						tempDate.setTime((DateUtil.toDate(eventTime, "yyyyMMddHHmmss").getTime()) - TimeZone.getDefault().getRawOffset());
-						ucityWorkList.setEventTime(tempDate);
-					}
-					if (!CommonUtil.isEmpty(eventName))
-						ucityWorkList.setEventName(eventName);
-					if (!CommonUtil.isEmpty(type))
-						ucityWorkList.setType(type);
-					if (!CommonUtil.isEmpty(externalDisplay))
-						ucityWorkList.setExternalDisplay(externalDisplay);
-					if (!CommonUtil.isEmpty(isSms))
-						ucityWorkList.setIsSms(isSms);
-					if (!CommonUtil.isEmpty(eventPlace))
-						ucityWorkList.setEventPlace(eventPlace);
-					if (!CommonUtil.isEmpty(facilityId))
-						ucityWorkList.setEventPlace(facilityId);
-	
-					java.lang.System.out.println("UPDATE UCITY WORKLIST TABLE");
-					ucityMgr.setUcityWorkList(user, ucityWorkList, null);
+				ucityWorkList.setServiceName(serviceName);
+				ucityWorkList.setEventId(eventId);
+				if (!CommonUtil.isEmpty(eventTime)) {
+					Date tempDate = new Date();
+					tempDate.setTime((DateUtil.toDate(eventTime, "yyyyMMddHHmmss").getTime()) - TimeZone.getDefault().getRawOffset());
+					ucityWorkList.setEventTime(tempDate);
 				}
-			}else{
-				java.lang.System.out.println("########## UCITY ADVISOR 중복으로 인한 중지처리#############");
+				ucityWorkList.setEventName(eventName);
+				ucityWorkList.setType(type);
+				ucityWorkList.setExternalDisplay(externalDisplay);
+				ucityWorkList.setIsSms(isSms);
+				ucityWorkList.setEventPlace(eventPlace);
+				ucityWorkList.setFacilityId(facilityId);
+				
+				ucityWorkList.setCreationUser(user);
+				
+				logger.info("INSERT UCITY WORKLIST TABLE");
+				ucityMgr.setUcityWorkList(user, ucityWorkList, null);
+			
+			} else {
+				//이미생성된 인스턴스라면 업데이트
+				PrcProcessInst prcInst = getPrcManager().getProcessInst(user, prcInstId, IManager.LEVEL_LITE);
+				ucityWorkList.setStatus(prcInst.getStatus());
+				ucityWorkList.setRunningTaskId(runningTaskId);
+				ucityWorkList.setRunningTaskName(runningTaskName);
+
+				if (!CommonUtil.isEmpty(serviceName))
+					ucityWorkList.setServiceName(serviceName);
+				if (!CommonUtil.isEmpty(eventId))
+					ucityWorkList.setEventId(eventId);
+				if (!CommonUtil.isEmpty(eventTime)) {
+					Date tempDate = new Date();
+					tempDate.setTime((DateUtil.toDate(eventTime, "yyyyMMddHHmmss").getTime()) - TimeZone.getDefault().getRawOffset());
+					ucityWorkList.setEventTime(tempDate);
+				}
+				if (!CommonUtil.isEmpty(eventName))
+					ucityWorkList.setEventName(eventName);
+				if (!CommonUtil.isEmpty(type))
+					ucityWorkList.setType(type);
+				if (!CommonUtil.isEmpty(externalDisplay))
+					ucityWorkList.setExternalDisplay(externalDisplay);
+				if (!CommonUtil.isEmpty(isSms))
+					ucityWorkList.setIsSms(isSms);
+				if (!CommonUtil.isEmpty(eventPlace))
+					ucityWorkList.setEventPlace(eventPlace);
+				if (!CommonUtil.isEmpty(facilityId))
+					ucityWorkList.setEventPlace(facilityId);
+
+				logger.info("UPDATE UCITY WORKLIST TABLE");
+				ucityMgr.setUcityWorkList(user, ucityWorkList, null);
 			}
 		}
-		java.lang.System.out.println("########## UCITY ADVISOR END #############");
+		logger.info("########## UCITY ADVISOR END #############");
 	}
 	public void preSetTask(String user, TskTask obj, String level) throws Exception {
 	}
