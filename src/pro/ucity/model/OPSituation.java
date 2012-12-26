@@ -464,7 +464,7 @@ public class OPSituation {
 					logger.info("============== PORTAL 이벤트 발생 ===============");
 					logger.info("이벤트 발생 시간 : " + new Date());
 					logger.info("이벤트 발생 갯수 : " + count);
-					while(rs.next() && number == 1) {
+					while(rs.next() && number == 1 && !Thread.currentThread().isInterrupted()) {
 						try{
 							String situationId = rs.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_SITUATION_ID"));
 							String status = rs.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_STATUS"));

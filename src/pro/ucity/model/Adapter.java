@@ -644,7 +644,7 @@ public class Adapter {
 					logger.info("============== ADAPTER 시작이벤트 발생 ===============");
 					logger.info("이벤트 발생 시간 : " + new Date());
 					logger.info("이벤트 발생 갯수 : " + count);
-					while(rs.next() && number == 1) {
+					while(rs.next() && number == 1 && !Thread.currentThread().isInterrupted()) {
 						try{
 							String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
 							
@@ -718,7 +718,7 @@ public class Adapter {
 							logger.info("============== ADAPTER 종료이벤트 발생 ===============");
 							logger.info("이벤트 발생 시간 : " + new Date());
 							logger.info("이벤트 발생 갯수 : " + count);
-							while(rs.next() && number == 1) {
+							while(rs.next() && number == 1 && !Thread.currentThread().isInterrupted()) {
 								try{
 									String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
 									updatePstmt = connection.prepareStatement(adapterUpdateSql);
@@ -834,7 +834,7 @@ public class Adapter {
 				int count = rs.getRow();
 				rs.first();
 				if(count>0){
-					while(rs.next()) {
+					while(rs.next() && !Thread.currentThread().isInterrupted()) {
 						try{
 							Adapter adapter = new Adapter(rs);
 							if(adapter.isValid(eventId, status)){
