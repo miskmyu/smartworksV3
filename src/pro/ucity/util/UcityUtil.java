@@ -827,7 +827,7 @@ public class UcityUtil {
 
 				IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
 				
-					while(timeout > 0 && SmartUtil.isBlankObject(dataRecord) && !thisModel.isInterrupted()) {
+					while(timeout > 0 && SmartUtil.isBlankObject(dataRecord) && isPollingInterrupted(Thread.currentThread()) && !Thread.currentThread().isInterrupted()) {
 						try{
 							logger.info("############ START checking Table=" + tableName + ", Event Id=" + eventId + ", Timeout=" + timeout + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 							try {
@@ -919,7 +919,7 @@ public class UcityUtil {
 						}catch (Exception e){
 							logger.error("UcityUtil : invokePollingForRunningTask.Thread.920");
 						}
-					}else if(isPollingInterrupted(Thread.currentThread()) || !Thread.currentThread().isInterrupted()){
+					}else if(isPollingInterrupted(Thread.currentThread()) && Thread.currentThread().isInterrupted()){
 						logger.info("############ END(INTERRUPTED) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 						break;
 					}else{
