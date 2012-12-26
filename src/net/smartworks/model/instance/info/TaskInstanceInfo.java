@@ -33,6 +33,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 	private String subWorkId;
 	private String subWorkFullpathName;
 	private String subWorkInstanceId;
+	private int numberOfDownloadHistories=0;
 	
 	public String getName() {
 		if(this.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED){
@@ -132,6 +133,12 @@ public class TaskInstanceInfo extends InstanceInfo {
 	}
 	public void setSubWorkFullpathName(String subWorkFullpathName) {
 		this.subWorkFullpathName = subWorkFullpathName;
+	}
+	public int getNumberOfDownloadHistories() {
+		return numberOfDownloadHistories;
+	}
+	public void setNumberOfDownloadHistories(int numberOfDownloadHistories) {
+		this.numberOfDownloadHistories = numberOfDownloadHistories;
 	}
 	public static String getController(String workId, int workType){
 		if(SmartUtil.isBlankObject(workId)) return "";

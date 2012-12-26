@@ -26,6 +26,7 @@
 			var forms = editDepartment.find('form');
 			var paramsJson = {};
 			paramsJson['departmentId'] = editDepartment.attr('departId');
+			paramsJson['parentId'] = editDepartment.attr('parentId');
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){

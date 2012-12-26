@@ -90,6 +90,8 @@
 	}
 	TaskInstanceInfo taskInstance = (SmartUtil.isBlankObject(taskInstId)) ? ((SmartUtil.isBlankObject(taskHistories)) ? null : taskHistories[0]) : instance.getTaskInstanceById(taskInstId);
 
+	int numberOfDownloadHistories = (SmartUtil.isBlankObject(taskInstance)) ? 0 : taskInstance.getNumberOfDownloadHistories();
+
  	session.setAttribute("cid", cid);
 	if(SmartUtil.isBlankObject(wid))
 		session.removeAttribute("wid");
@@ -218,7 +220,7 @@
 				        	%>
 				            			<!-- 태스크 --> 
 							            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
-							            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId=<%=CommonUtil.toNotNull(approvalLineId) %>>
+							            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId="<%=CommonUtil.toNotNull(approvalLineId) %>" downloadHistories="<%=task.getNumberOfDownloadHistories() %>">
 						                    <!-- task 정보 -->
 						                    <%if(isSelectable){%><a class="js_select_task_instance" href=""><%} %>
 							                    <div class="title"><%=count%>) <%=task.getName() %></div>
@@ -236,7 +238,7 @@
 					            		String targetHref = "pwork_space.sw?cid=pw.sp." + task.getSubWorkInstanceId() + "&workId=" + task.getSubWorkId() + "&instId=" + task.getSubWorkInstanceId();
 					            	%>
 				            			<!-- 태스크 --> 
-							            <li class="<%=statusClass %> js_instance_task" subWorkId="<%=task.getSubWorkId() %>" subWorkInstanceId="<%=task.getSubWorkInstanceId() %>">
+							            <li class="<%=statusClass %> js_instance_task" subWorkId="<%=task.getSubWorkId() %>" subWorkInstanceId="<%=task.getSubWorkInstanceId() %>" downloadHistories="0">
 						                    <!-- task 정보 -->
 						                    <a class="js_content" href="<%=targetHref%>">
 							                    <div class="title"><%=count%>) <%=task.getName() %></div>
@@ -432,6 +434,7 @@
 				    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
 				    </div>
 				    <%if(numberOfForwardHistories > 0){ %><div class="po_left pt3"><a href="" class="js_toggle_forward_histories"><fmt:message key="common.title.forward_history"/> <span class="t_up_num">[<%=numberOfForwardHistories %>]</span></a></div><%} %>
+					<div class="po_left pt3 js_download_histories" <%if(numberOfDownloadHistories == 0){%>style="display:none"<%} %> ><a href="" class="js_toggle_download_histories"><fmt:message key="common.title.download_history"/><span class="t_up_num js_download_count">[<%=numberOfDownloadHistories %>]</span></a></div>
 				</div>     
 
 				<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
@@ -469,6 +472,7 @@
 		var instId = input.attr("taskInstId");
 		var isApprovalWork = input.attr("isApprovalWork");
 		var approvalLineId = input.attr("approvalLineId"); 
+		var downloadCount = input.attr("downloadHistories");
 		var approvalContent = pworkSpace.find('div.js_form_task_approval').html('').hide();
 		var formContent = pworkSpace.find('div.js_form_content').html('');
 		var formContentPointer = pworkSpace.find('div.js_form_content_pointer');
@@ -496,6 +500,12 @@
 				error : function(xhr, ajaxOptions, thrownError){					
 				}
 			});			
+		}
+		var downloadHistories = pworkSpace.find('.js_download_histories');
+		if(downloadCount === '0'){
+			downloadHistories.show();
+		}else{
+			downloadHistories.show().find('.js_download_count').html('[' + downloadCount + ']');
 		}
 		var selectedTask = input;
 		pworkSpace.find('.js_instance_task').removeClass('selected');
