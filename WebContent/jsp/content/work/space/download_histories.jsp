@@ -20,6 +20,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 	
 	String instanceId = request.getParameter("instanceId");
+	String taskInstanceId = request.getParameter("taskInstanceId");
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
 
 	if(SmartUtil.isBlankObject(params)){
@@ -27,7 +28,7 @@
 		params.setPageSize(20);
 		params.setCurrentPage(1);
 	}
-	InstanceInfoList downloadList = smartWorks.getDownloadHistoryList(instanceId, params);	
+	InstanceInfoList downloadList = smartWorks.getDownloadHistoryList(instanceId, taskInstancId, params);	
 	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->

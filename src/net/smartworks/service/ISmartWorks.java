@@ -752,7 +752,7 @@ public interface ISmartWorks {
 	
 	public abstract InstanceInfoList getForwardHistoryList(String instanceId, RequestParams params) throws Exception;
 	
-	public abstract InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception;
+	public abstract InstanceInfoList getDownloadHistoryList(String instanceId, String taskInstanceId, RequestParams params) throws Exception;
 	
 	public abstract InstanceInfoList getRelatedWorkList(String instanceId, RequestParams params) throws Exception;
 	

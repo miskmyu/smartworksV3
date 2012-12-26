@@ -9701,7 +9701,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		return instanceInfoList;
 	}
 	@Override
-	public InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception {
+	public InstanceInfoList getDownloadHistoryList(String instanceId, String taskInstanceId, RequestParams params) throws Exception {
 
 		String userId = SmartUtil.getCurrentUser().getId();
 
