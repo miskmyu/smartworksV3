@@ -1,7 +1,6 @@
 package pro.ucity.model;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,18 +11,21 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import com.tmax.tibero.jdbc.TbSQLException;
-
-import pro.ucity.util.UcityTest;
-import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
-import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
 
+import org.apache.log4j.Logger;
+
+import pro.ucity.util.UcityUtil;
+
+import com.tmax.tibero.jdbc.TbSQLException;
+
 public class DMHistory {
 
+	private static final Logger logger = Logger.getLogger(DMHistory.class);
+	
 	public static final String DEVICE_ID_MEDIABOARD		= "CIMBMBD";
 	public static final String DEVICE_ID_TRAFFIC_BIT	= "TMEMBIT";
 	public static final String DEVICE_ID_TRAFFIC_VMS	= "TMEMVMS";
@@ -240,12 +242,12 @@ public class DMHistory {
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
-				te.printStackTrace();
+				logger.error("DB Connection error : DMHistory.readHistoryTable");
+//				te.printStackTrace();
 				return null;
-			}
-			
+			}		
 			try{
 				selectPstmt = connection.prepareStatement(cmHistorySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
@@ -264,18 +266,21 @@ public class DMHistory {
 						rs.next();
 						count = rs.getRow();
 					}catch (Exception we){
-						we.printStackTrace();
+						logger.error("Result set error : DMHistory.readHistoryTable");
+//						we.printStackTrace();
 						dataRecord = null;
 						count = 0;
 					}
 				}
 				if(dmHistory!=null && dmHistory.isValid())
 					return dmHistory.getDataRecord();
-			}catch (Exception e1){
-				e1.printStackTrace();
+			}catch (Exception e){
+				logger.error("select error : DMHistory.277");
+//				e.printStackTrace();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("select error : DMHistory.281");
+//			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -284,7 +289,8 @@ public class DMHistory {
 					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Finally error : DMHistory.291");
+//				e.printStackTrace();
 			}
 		}
 		if(dataRecord!=null)

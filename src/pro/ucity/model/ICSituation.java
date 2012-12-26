@@ -1,7 +1,6 @@
 package pro.ucity.model;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,18 +11,21 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import com.tmax.tibero.jdbc.TbSQLException;
-
-import pro.ucity.util.UcityTest;
-import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
-import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
 
+import org.apache.log4j.Logger;
+
+import pro.ucity.util.UcityUtil;
+
+import com.tmax.tibero.jdbc.TbSQLException;
+
 public class ICSituation {
 
+	private static final Logger logger = Logger.getLogger(ICSituation.class);
+	
 	public static final String MSG_TYPE_OCCURRENCE = "O";
 	public static final String MSG_TYPE_RELEASE = "R";
 	
@@ -246,9 +248,10 @@ public class ICSituation {
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
-				te.printStackTrace();
+				logger.error("DB Connection error");
+//				te.printStackTrace();
 				return null;
 			}
 			
@@ -269,19 +272,23 @@ public class ICSituation {
 //								con.close();
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+								logger.error("Select error : ICSituation.275");
+//								e.printStackTrace();
 							}
 							return icSituation.getDataRecord();
 						}
 					}catch (Exception we){
-						we.printStackTrace();
+						logger.error("result set error : ICSituation.281");
+//						we.printStackTrace();
 					}
 				}
 			}catch (Exception e1){
-				e1.printStackTrace();
+				logger.error("Select error : ICSituation.286");
+//				e1.printStackTrace();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Select error : ICSituation.290");
+//			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -289,8 +296,9 @@ public class ICSituation {
 				if(connection != null)
 					connection.close();
 			} catch (SQLException e) {
+				logger.error("Finally close error : ICSituation.299");
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		}
 		return null;

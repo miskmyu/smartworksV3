@@ -60,11 +60,16 @@
 	session.setAttribute("requestParams", params);
 	session.setAttribute("workId", workId);
 
+	System.out.println("############### 리스트 불러오기 시작 "+ System.currentTimeMillis() + "#######################################");
+
 	InstanceInfoList instanceList = null;
 	if(SmartUtil.isBlankObject(auditId))
 		instanceList = smartWorks.getAllUcityPWorkInstanceList(false, params, -1);
 	else
 		instanceList = smartWorks.getAllUcityPWorkInstanceList(true, params, Integer.parseInt(auditId));
+	
+	System.out.println("############### 리스트 불러오기 완료 "+ System.currentTimeMillis() + " #######################################");
+
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -198,26 +203,36 @@
 				}
 				String serviceType = "";
 				String runningTaskNames = "";
-				ProcessWorkInstance instance = (ProcessWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instanceInfo.getId());
+				String titleRunrunningTaskNames = "";
+				ProcessWorkInstance instance = null; //(ProcessWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instanceInfo.getId());
 				if(!SmartUtil.isBlankObject(occurredTaskNames) && UcityUtil.isAbendable(instance))
 					occurredTaskNames = "비정상(" + occurredTaskNames + ")";
 				if(!SmartUtil.isBlankObject(releasedTaskNames) && UcityUtil.isAbendable(instance))
 					releasedTaskNames = "비정상(" + releasedTaskNames + ")";
 				if(!SmartUtil.isBlankObject(occurredTaskNames) && !SmartUtil.isBlankObject(releasedTaskNames)){
 					serviceType =  "발생</br>종료";
+					titleRunrunningTaskNames = occurredTaskNames + ", " + releasedTaskNames;
+					if(occurredTaskNames.length() > 16)
+						occurredTaskNames = occurredTaskNames.substring(0,16) + "...";
+					if(releasedTaskNames.length() > 16)
+						releasedTaskNames = releasedTaskNames.substring(0,16) + "...";
 					runningTaskNames = occurredTaskNames + "</br>" + releasedTaskNames;
 				}else if(!SmartUtil.isBlankObject(occurredTaskNames)){
 					serviceType = "발생";
 					runningTaskNames = occurredTaskNames;
+					titleRunrunningTaskNames = runningTaskNames;
+					if(runningTaskNames.length() > 16)
+						runningTaskNames = runningTaskNames.substring(0,16) + "...";
 				}else if(!SmartUtil.isBlankObject(releasedTaskNames)){
 					serviceType = "종료";
 					runningTaskNames = releasedTaskNames;
+					titleRunrunningTaskNames = runningTaskNames;
+					if(runningTaskNames.length() > 16)
+						runningTaskNames = runningTaskNames.substring(0,16) + "...";
 				}else{
 					serviceType = "종료";
 				}
-				String titleRunrunningTaskNames = runningTaskNames;
-				if(runningTaskNames.length() > 16)
-					runningTaskNames = runningTaskNames.substring(0,16) + "...";
+
 
 				String target =  "situationDetail.sw?cid=" + instanceInfo.getContextId() + "&workId=" + instanceInfo.getWorkId();
 				String statusImage = "";

@@ -43,6 +43,7 @@ public class TaskInstance extends Instance {
 	private String forwardId;
 	private boolean isSubTask=false;
 	private String subWorkId;
+	private String subWorkFullpathName;
 	private String subWorkInstanceId;
 
 	public String getName() {
@@ -126,6 +127,12 @@ public class TaskInstance extends Instance {
 	}
 	public void setSubWorkInstanceId(String subWorkInstanceId) {
 		this.subWorkInstanceId = subWorkInstanceId;
+	}
+	public String getSubWorkName() {
+		return subWorkFullpathName;
+	}
+	public void setSubWorkFullpathName(String subWorkFullpathName) {
+		this.subWorkFullpathName = subWorkFullpathName;
 	}
 	public String getController(){
 		if(getWork()==null) return "";

@@ -516,7 +516,20 @@ $(function() {
 		smartPop.progressCenter();
 		var input = $(targetElement(e));
 		if(!input.hasClass('js_instance_task')) input = input.parents('.js_instance_task:first');
+		input.parents('.js_pwork_space_page').find('.js_subprocess_space').hide().find('.js_subprocess_diagram').html('');
 		clickOnTask(input);
+		smartPop.closeProgress();
+		return false;
+	});
+
+	$('.js_select_subtask_instance').live("click", function(e){
+		smartPop.progressCenter();
+		var input = $(targetElement(e));
+		if(!input.hasClass('js_instance_task')) input = input.parents('.js_instance_task:first');
+		var pworkSpace = input.parents('.js_pwork_space_page');
+		var subprocessSpace = pworkSpace.find('.js_subprocess_space').show();
+		subprocessSpace.find('.js_form_content_pointer').css({"left": input.position().left + input.outerWidth()/2 + "px"});
+//TODO	
 		smartPop.closeProgress();
 		return false;
 	});
@@ -527,7 +540,8 @@ $(function() {
 		var instanceTasksHolder = pworkSpace.find('.js_instance_tasks_holder');
 		var instanceLeft = pworkSpace.find('.js_instance_tasks_left');	
 		var instanceRight = pworkSpace.find('.js_instance_tasks_right');
-
+		pworkSpace.find('.js_subprocess_space').hide().find('.js_subprocess_diagram').html('');
+		
 		var tasksVisible = instanceTasksHolder.find(".js_instance_task:visible");
 		var arrowsVisible = instanceTasksHolder.find('.js_instance_task_arrow:visible');
 		var viewWidth = instanceTasksHolder.width();
@@ -586,6 +600,7 @@ $(function() {
 		var instanceTasksHolder = pworkSpace.find('.js_instance_tasks_holder');
 		var instanceLeft = pworkSpace.find('.js_instance_tasks_left');	
 		var instanceRight = pworkSpace.find('.js_instance_tasks_right');
+		pworkSpace.find('.js_subprocess_space').hide().find('.js_subprocess_diagram').html('');
 
 		var tasksHidden = instanceTasksHolder.find(".js_instance_task:hidden");
 		var arrowsHidden = instanceTasksHolder.find('.js_instance_task_arrow:hidden');
@@ -1280,13 +1295,32 @@ $(function() {
 		var inputOffset = userField.offset();
 		var listTop = inputOffset.top + userField.height();
 		var bottomUp = false;
-		if(listTop + MAX_USERPICKER_HEIGHT > documentHeight){
-			target.css({ "bottom" : inputPosition.top + "px"});
-			target.css({ "position" : "absolute"});
-			bottomUp = true;
-		}
-
+//		if(listTop + MAX_USERPICKER_HEIGHT > documentHeight){
+//			target.css({ "bottom" : inputPosition.top + "px"});
+//			target.css({ "position" : "absolute"});
+//			bottomUp = true;
+//		}
 		smartPop.selectEmailAddress(communityItems, target, width, isMultiUsers, bottomUp);
+		return false;
+	});
+
+	$('a.js_departpicker_button').live('click', function(e) {
+		var departField = $(targetElement(e)).parents('.js_type_departmentField:first');
+		var communityItems = departField.find('.js_community_item');
+		var target = departField.find('.js_community_popup:first');
+		var width = departField.find('.form_value').find('div:first').width();
+
+		var documentHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
+		var inputPosition = departField.position();
+		var inputOffset = departField.offset();
+		var listTop = inputOffset.top + departField.height();
+		var bottomUp = false;
+//		if(listTop + MAX_USERPICKER_HEIGHT > documentHeight){
+//			target.css({ "bottom" : inputPosition.top + "px"});
+//			target.css({ "position" : "absolute"});
+//			bottomUp = true;
+//		}
+		smartPop.selectDepartment(communityItems, target, width, bottomUp);
 		return false;
 	});
 

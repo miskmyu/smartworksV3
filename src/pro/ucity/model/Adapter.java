@@ -18,12 +18,17 @@ import net.smartworks.model.work.ProcessWork;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
+
+import org.apache.log4j.Logger;
+
 import pro.ucity.util.UcityUtil;
 
 import com.tmax.tibero.jdbc.TbSQLException;
 
 public class Adapter {
 
+	private static final Logger logger = Logger.getLogger(Adapter.class);
+	
 	public static final String FIELD_SEPERATOR = "\\|\\|";
 	public static final int LENGTH_COMM_HEADER = 50;
 	public static final int LENGTH_SERVICE_CODE = 4;
@@ -536,7 +541,7 @@ public class Adapter {
 				UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.eventId, this.occuredDate, this.getDataRecord());			
 			}		
 		}else{
-			java.lang.System.out.println("[PASS] ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 중복실행으로 인해, 중지되었습니다.");
+			logger.info("startProcess 에서 null return");
 			return;
 		}
 	}
@@ -576,7 +581,8 @@ public class Adapter {
 				this.parseCommBody(this.commBody);				
 //			}
 		}catch (Exception e){
-			e.printStackTrace();
+			logger.error("전문 분석 오류 : Adapter.setResult");
+//			e.printStackTrace();
 		}
 	}
 	
@@ -600,10 +606,11 @@ public class Adapter {
 	synchronized public static void readHistoryTableToStart(){
 //		if(SmartUtil.isBlankObject(connection)) return;
 		
-		java.lang.System.out.println("############ START checking ADAPTER History To Start  ################");
+		logger.info("############ START checking ADAPTER History To Start  ################");
 
 		Connection connection = null;
 		PreparedStatement selectPstmt = null;
+		PreparedStatement selectPstmt2 = null;
 		PreparedStatement updatePstmt = null;
 		int number = 1;
 				
@@ -616,15 +623,13 @@ public class Adapter {
 
 		try {
 			try{
-//			    Context init = new InitialContext();
-//			    Context envinit = (Context)init.lookup("java:comp/env");
-//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//			    connection = ds.getConnection();
-				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+			    Context init = new InitialContext();
+			    Context envinit = (Context)init.lookup("java:comp/env");
+			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+			    connection = ds.getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
-				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
-				te.printStackTrace();
-				java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+				logger.error("DB Connection 오류 : Adapter.readHistoryTableToStart");
 				return;
 			}
 //			connection.setAutoCommit(false);
@@ -636,35 +641,43 @@ public class Adapter {
 				rs.beforeFirst();
 				if (count != 0) {
 					int processedCount = 0;
-					java.lang.System.out.println("============== ADAPTER 시작이벤트 발생 ===============");
-					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
-					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
-					while(rs.next() && number == 1) {
+					logger.info("============== ADAPTER 시작이벤트 발생 ===============");
+					logger.info("이벤트 발생 시간 : " + new Date());
+					logger.info("이벤트 발생 갯수 : " + count);
+					while(rs.next() && number == 1 && !Thread.currentThread().isInterrupted()) {
 						try{
 							String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
+							
 							updatePstmt = connection.prepareStatement(adapterUpdateSql);
 							updatePstmt.setString(1, communicationId);
 							boolean result = updatePstmt.execute();
 							Adapter adapter = new Adapter(rs);
 							if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_OCCURRENCE){
 								try{
-									selectPstmt = connection.prepareStatement(opSituationJoinFacilitySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-									selectPstmt.setString(1, adapter.getEventId());
-									ResultSet joinFacilityRs = selectPstmt.executeQuery();
-									joinFacilityRs.first();
-									adapter.setLocationName(joinFacilityRs.getString("LC_NM"));
+									selectPstmt2 = connection.prepareStatement(opSituationJoinFacilitySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+									selectPstmt2.setString(1, adapter.getEventId());
+									ResultSet joinFacilityRs = selectPstmt2.executeQuery();	
+									joinFacilityRs.last();
+									int facilitycount = joinFacilityRs.getRow(); 
+									joinFacilityRs.beforeFirst();
+									java.lang.System.out.println("count = "+ facilitycount);
+									if(joinFacilityRs.next() && facilitycount != 0){
+										String location = joinFacilityRs.getString("LC_NM");
+										adapter.setLocationName(location);
+									}
 									
 									adapter.startProcess();	
 //									connection.commit();
-									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 정상적으로 시작되었습니다!");
+									logger.info("[SUCCESS] 새로운 ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 정상적으로 시작되었습니다!");
 									
 									
 								}catch (Exception se){
-									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
-									se.printStackTrace();
-									updatePstmt = connection.prepareStatement(adapterRollbackSql);
-									updatePstmt.setString(1, communicationId);
-									result = updatePstmt.execute();
+//									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
+//									se.printStackTrace();
+									logger.error("startProcese 오류 : adapter.startProcess");
+//									updatePstmt = connection.prepareStatement(adapterRollbackSql);
+//									updatePstmt.setString(1, communicationId);
+//									result = updatePstmt.execute();
 								}
 								selectPstmt = connection.prepareStatement(adapterSelectStartSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 								rs = selectPstmt.executeQuery();				
@@ -674,21 +687,22 @@ public class Adapter {
 								if (count == 0){
 									number = 0; 
 								}else{
-									java.lang.System.out.println("============== ADAPTER 시작이벤트 발생(while) ===============");
-									java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
-									java.lang.System.out.println("이벤트 발생 갯수 : " + count);														
+									logger.info("============== ADAPTER 시작이벤트 발생(while) ===============");
+									logger.info("이벤트 발생 시간 : " + new Date());
+									logger.info("이벤트 발생 갯수 : " + count);
+									
 								}
 							}else{
 //								connection.rollback();
-								java.lang.System.out.println("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
-								updatePstmt = connection.prepareStatement(adapterRollbackSql);
-								updatePstmt.setString(1, communicationId);
-								result = updatePstmt.execute();
+								logger.info("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
+//								updatePstmt = connection.prepareStatement(adapterRollbackSql);
+//								updatePstmt.setString(1, communicationId);
+//								result = updatePstmt.execute();
 							}
 						}catch (Exception we){
-//							java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
-							we.printStackTrace();
-							java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+							logger.info("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+							logger.error("while문 이후 error : adapter.readHistoryTableToStart");
+							logger.info("############ END checking ADAPTER History To Start!  ################");
 							return;
 						}
 					}
@@ -701,10 +715,10 @@ public class Adapter {
 						rs.beforeFirst();					
 						if (count != 0) {
 							int processedCount = 0;
-							java.lang.System.out.println("============== ADAPTER 종료이벤트 발생 ===============");
-							java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
-							java.lang.System.out.println("이벤트 발생 갯수 : " + count);
-							while(rs.next() && number == 1) {
+							logger.info("============== ADAPTER 종료이벤트 발생 ===============");
+							logger.info("이벤트 발생 시간 : " + new Date());
+							logger.info("이벤트 발생 갯수 : " + count);
+							while(rs.next() && number == 1 && !Thread.currentThread().isInterrupted()) {
 								try{
 									String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
 									updatePstmt = connection.prepareStatement(adapterUpdateSql);
@@ -715,10 +729,11 @@ public class Adapter {
 										try{
 											adapter.endProcess();
 //											connection.commit();
-											java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
+											logger.info("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
 										}catch (Exception se){
-											java.lang.System.out.println("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
-											se.printStackTrace();
+											logger.error("endProcess error : adapter.endProcess.734");
+											logger.info("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
+//											se.printStackTrace();
 //											if(connection != null)
 //												connection.rollback();
 //											updatePstmt = connection.prepareStatement(adapterRollbackSql);
@@ -733,37 +748,41 @@ public class Adapter {
 										if(count == 0){
 											number = 0;
 										}else{
-											java.lang.System.out.println("============== ADAPTER 종료이벤트 발생(while) ===============");
-											java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
-											java.lang.System.out.println("이벤트 발생 갯수 : " + count);																
+											logger.info("============== ADAPTER 종료이벤트 발생(while) ===============");
+											logger.info("이벤트 발생 시간 : " + new Date());
+											logger.info("이벤트 발생 갯수 : " + count);																
 										}
 									}else{
 //										connection.rollback();
-										java.lang.System.out.println("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
+										logger.info("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
 //										updatePstmt = connection.prepareStatement(adapterRollbackSql);
 //										updatePstmt.setString(1, communicationId);
 //										result = updatePstmt.execute();
 									}
-								}catch (Exception we){
-									java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
-									we.printStackTrace();
-									java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+								}catch (Exception e){
+									logger.error("종료 이벤트 발생 error : adapter.readHistoryTableToStart.763");
+									logger.info("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+//									we.printStackTrace();
+//									java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
 									return;
 								}
 							}
 						}							
-					}catch (Exception e1){
-						java.lang.System.out.println("[ERROR] ADAPTER 종료이벤트 데이터베이스 오류 종료");
-						e1.printStackTrace();
+					}catch (Exception e){
+						logger.error("종료 이벤트 발생 error : adapter.readHistoryTableToStart.772");
+//						java.lang.System.out.println("[ERROR] ADAPTER 종료이벤트 데이터베이스 오류 종료");
+//						e.printStackTrace();
 					}
 				}
-			}catch (Exception e1){
-				java.lang.System.out.println("[ERROR] ADAPTER 시작이벤트 데이터베이스 오류 종료");
-				e1.printStackTrace();
+			}catch (Exception e){
+				logger.error("이벤트 발생 error 777 : adapter.readHistoryTableToStart.778");
+//				java.lang.System.out.println("[ERROR] ADAPTER 시작이벤트 데이터베이스 오류 종료");
+//				e.printStackTrace();
 			}
 		} catch (Exception e) {
-			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
-			e.printStackTrace();
+			logger.error("이벤트 발생 error 777");
+//			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+//			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -774,9 +793,10 @@ public class Adapter {
 					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("finally close error : adapter.796");
+//				e.printStackTrace();
 			}
-			java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+			logger.info("############ END checking ADAPTER History To Start  ################");
 		}
 	}
 	
@@ -795,14 +815,14 @@ public class Adapter {
 		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
 		try {
 			try{
-//			    Context init = new InitialContext();
-//			    Context envinit = (Context)init.lookup("java:comp/env");
-//			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//			    connection = ds.getConnection();
-				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+			    Context init = new InitialContext();
+			    Context envinit = (Context)init.lookup("java:comp/env");
+			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
+			    connection = ds.getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 
 			}catch (TbSQLException te){
-				te.printStackTrace();
+				logger.error("DB Connection error : adapter.readHistoryTable.825");
 				return null;
 			}
 			
@@ -814,7 +834,7 @@ public class Adapter {
 				int count = rs.getRow();
 				rs.first();
 				if(count>0){
-					while(rs.next()) {
+					while(rs.next() && !Thread.currentThread().isInterrupted()) {
 						try{
 							Adapter adapter = new Adapter(rs);
 							if(adapter.isValid(eventId, status)){
@@ -828,21 +848,25 @@ public class Adapter {
 //									con.close();
 								} catch (SQLException e) {
 									// TODO Auto-generated catch block
-									e.printStackTrace();
+									logger.error("result set error : adapter.readHistoryTable.851");
+//									e.printStackTrace();
 								}
 								return adapter.getDataRecord();
 							}
 //							rs.next();
-						}catch (Exception we){
-							we.printStackTrace();
+						}catch (Exception e){
+							logger.error("rs.next error : adapter.858");
+//							e.printStackTrace();
 						}
 					}
 				}
-			}catch (Exception e1){
-				e1.printStackTrace();
+			}catch (Exception e){
+				logger.error("select error : adapter.864");
+//				e.printStackTrace();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("select error : adapter.868");
+//			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -850,8 +874,9 @@ public class Adapter {
 				if(connection != null)
 					connection.close();
 			} catch (SQLException e) {
+				logger.error("finally close error : adapter.877");
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		}
 		return null;

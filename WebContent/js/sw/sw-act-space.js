@@ -1339,10 +1339,12 @@ $(function() {
 			}
 		}
 		var instanceId = workSpace.attr('instId');
+		var taskInstId = workSpace.attr('taskInstId');
 		$.ajax({
 			url : 'download_histories.sw',
 			data : {
-				instanceId : instanceId
+				instanceId : instanceId,
+				taskInstanceId : taskInstId
 			},
 			success : function(data, status, jqXHR) {
 				target.html(data).show();

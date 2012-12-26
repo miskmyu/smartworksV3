@@ -12,6 +12,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
+
 import com.tmax.tibero.jdbc.TbSQLException;
 
 import pro.ucity.util.UcityTest;
@@ -24,6 +26,8 @@ import net.smartworks.util.SmartUtil;
 
 public class CMHistory {
 
+	private static final Logger logger = Logger.getLogger(CMHistory.class);
+	
 	public static final String MSG_TYPE_OCCURRENCE = "O";
 	public static final String MSG_TYPE_RELEASE = "R";
 	
@@ -310,15 +314,16 @@ public class CMHistory {
 		PreparedStatement selectPstmt = null;
 				
 		String cmHistorySelectSql = (status.equals(MSG_TYPE_OCCURRENCE)) ? UcityConstant.getQueryByKey("CMHistory.QUERY_SELECT_FOR_OCCURRENCE_PERFORM") : UcityConstant.getQueryByKey("CMHistory.QUERY_SELECT_FOR_RELEASE_PERFORM");
-		try {
+		try {	
 			try{
 			    Context init = new InitialContext();
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
-				te.printStackTrace();
+				logger.error("DB Connection error : CMHistory.readHistoryTable");
+//				te.printStackTrace();
 				return null;
 			}
 			
@@ -339,19 +344,23 @@ public class CMHistory {
 //								con.close();
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+								logger.error("select.close : CMHistory.349");
+//								e.printStackTrace();
 							}
 							return cmHistory.getDataRecord();
 						}
-					}catch (Exception we){
-						we.printStackTrace();
+					}catch (Exception e){
+						logger.error("result set error : CMHistory.355");
+//						e.printStackTrace();
 					}
 				}
-			}catch (Exception e1){
-				e1.printStackTrace();
+			}catch (Exception e){
+				logger.error("select.close : CMHistory.360");
+//				e.printStackTrace();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("select.close : CMHistory.360");
+//			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -360,7 +369,8 @@ public class CMHistory {
 					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Finally close : CMHistory.374");
+//				e.printStackTrace();
 			}
 		}
 		return null;

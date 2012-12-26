@@ -26,6 +26,7 @@
 			var forms = editDepartment.find('form');
 			var paramsJson = {};
 			paramsJson['departmentId'] = editDepartment.attr('departId');
+			paramsJson['parentId'] = editDepartment.attr('parentId');
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){
@@ -112,7 +113,7 @@
 										</div>
 										<div class="js_community_list srch_list_nowid" style="display:none"></div>
 										<span class="js_community_popup"></span>
-										<a href="" class="js_departPicker_button"><span class="icon_fb_depart"></span></a>
+										<a href="" class="js_departpicker_button"><span class="icon_fb_depart"></span></a>
 									</div>
 								</div>
 							</td>

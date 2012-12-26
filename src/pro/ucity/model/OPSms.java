@@ -1,7 +1,6 @@
 package pro.ucity.model;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,17 +11,21 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import com.tmax.tibero.jdbc.TbSQLException;
-
-import pro.ucity.util.UcityTest;
-import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
 
+import org.apache.log4j.Logger;
+
+import pro.ucity.util.UcityUtil;
+
+import com.tmax.tibero.jdbc.TbSQLException;
+
 public class OPSms {
+	
+	private static Logger logger = Logger.getLogger(OPSms.class);
 
 	public static final KeyMap[] OPPORTAL_SMS_FIELDS = {
 		new KeyMap("메시지 아이디", UcityConstant.getQueryByKey("OPSms.SMS_ID")), new KeyMap("메시지 구분", UcityConstant.getQueryByKey("OPSms.SEND_TYPE")), new KeyMap("등록일", UcityConstant.getQueryByKey("OPSms.REGIST_DATE")), new KeyMap("발송자", UcityConstant.getQueryByKey("OPSms.SEND_USER_NAME")),
@@ -213,9 +216,10 @@ public class OPSms {
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
-				te.printStackTrace();
+//				te.printStackTrace();
+				logger.error("DB Connection error : OPSms.checkForDisplay.218");
 				return null;
 			}
 			
@@ -238,19 +242,23 @@ public class OPSms {
 //							con.close();
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+//							e.printStackTrace();
+							logger.error("Select error : OPSms.checkForDisplay.242");
 						}
 						dataRecord.put("SMS Id", smsId);
 						return dataRecord;
 					}catch (Exception we){
-						we.printStackTrace();
+//						we.printStackTrace();
+						logger.error("Select error : OPSms.checkForDisplay.248");
 					}
 				}
 			}catch (Exception e1){
-				e1.printStackTrace();
+//				e1.printStackTrace();
+				logger.error("Select error : OPSms.checkForDisplay.253");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			logger.error("Select error : OPSms.checkForDisplay.257");
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -259,7 +267,8 @@ public class OPSms {
 					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
+				logger.error("Select error : OPSms.checkForDisplay.267");
 			}
 		}
 		return dataRecord;
@@ -282,9 +291,10 @@ public class OPSms {
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
-				te.printStackTrace();
+//				te.printStackTrace();
+				logger.error("DB Connection error : OPSms.checkIfDisplay.297");
 				return false;
 			}
 			
@@ -302,15 +312,18 @@ public class OPSms {
 //						con.close();
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+//						e.printStackTrace();
+						logger.error("Select error : OPSms.checkIfDisplay.315");
 					}
 					return true;
 				}
 			}catch (Exception e1){
-				e1.printStackTrace();
+//				e1.printStackTrace();
+				logger.error("Select error : OPSms.checkIfDisplay.321");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			logger.error("Select error : OPSms.checkIfDisplay.325");
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -319,7 +332,8 @@ public class OPSms {
 					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
+				logger.error("Connection Close error : OPSms.checkIfDisplay.336");
 			}
 		}
 		return false;
@@ -340,9 +354,10 @@ public class OPSms {
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
-				te.printStackTrace();
+//				te.printStackTrace();
+				logger.error("DB Conneciton error : OPSms.readHistoryTable.360");
 				return null;
 			}
 			
@@ -364,19 +379,23 @@ public class OPSms {
 //								con.close();
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+//								e.printStackTrace();
+								logger.error("Select error : OPSms.readHistoryTable.383");
 							}
 							return opSms.getDataRecord();
 						}
 					}catch (Exception we){
-						we.printStackTrace();
+//						we.printStackTrace();
+						logger.error("Select error : OPSms.readHistoryTable.389");
 					}
 				}
 			}catch (Exception e1){
-				e1.printStackTrace();
+//				e1.printStackTrace();
+				logger.error("Select error : OPSms.readHistoryTable.394");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			logger.error("Select error : OPSms.readHistoryTable.398");
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -385,7 +404,8 @@ public class OPSms {
 					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
+				logger.error("Connection Close error : OPSms.readHistoryTable.408");
 			}
 		}
 		return null;

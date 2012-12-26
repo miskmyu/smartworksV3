@@ -1651,8 +1651,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception {
-		return instanceService.getDownloadHistoryList(instanceId, params);
+	public InstanceInfoList getDownloadHistoryList(String instanceId, String taskInstanceId, RequestParams params) throws Exception {
+		return instanceService.getDownloadHistoryList(instanceId, taskInstanceId, params);
 	}
 
 	@Override
