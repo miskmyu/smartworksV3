@@ -282,7 +282,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			//TODO localDate 로 변경
 			Calendar cal = Calendar.getInstance();			
 			String searchDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + (cal.get(Calendar.DATE) - 1) + " 15:00:00.000";
-			swdRecordCond.setFilter(new Filter[]{new Filter(">=","Duration", searchDate)});
+			swdRecordCond.setFilter(new Filter[]{new Filter(">=","duration", Filter.OPERANDTYPE_DATETIME, searchDate)});
+			
 			//END
 			
 			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);

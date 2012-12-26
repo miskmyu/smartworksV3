@@ -1906,7 +1906,6 @@ public class SettingsServiceImpl implements ISettingsService {
 			Set<String> keySet = frmEditMember.keySet();
 			Iterator<String> itr = keySet.iterator();
 
-			String hdnDepartmentId = null;
 			String txtMemberName = null;
 			String txtMemberId = null;
 			String pasMemberPassword = null;
@@ -1938,9 +1937,16 @@ public class SettingsServiceImpl implements ISettingsService {
 				String fieldId = (String)itr.next();
 				Object fieldValue = frmEditMember.get(fieldId);
 				if(fieldValue instanceof String) {
-					if(fieldId.equals("hdnDepartmentId")) {
-						hdnDepartmentId = (String)frmEditMember.get("hdnDepartmentId");
-						swoUser.setDeptId(hdnDepartmentId);
+					if(fieldId.equals("memberDepartment")) {
+						Map<String, Object> memberDepartment = (Map<String, Object>)frmEditMember.get("memberDepartment");
+						if (memberDepartment != null && memberDepartment.size() != 0) {
+							Map<String, Object> department = (Map<String, Object>)frmEditMember.get("department");
+							if (department != null && department.size() != 0) {
+								String departmentId = (String)department.get("id");
+								String departmentName = (String)department.get("name");
+								swoUser.setDeptId(departmentId);
+							}
+						}
 					} else if(fieldId.equals("txtMemberName")) {
 						txtMemberName = (String)frmEditMember.get("txtMemberName");
 						swoUser.setName(txtMemberName);
