@@ -8,24 +8,15 @@
 
 package pro.ucity.util;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
-import com.tmax.tibero.jdbc.TbSQLException;
-
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.TaskInstance;
-import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.PWInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
@@ -47,6 +38,9 @@ import net.smartworks.server.service.IWorkService;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.SmartUtil;
+
+import org.apache.log4j.Logger;
+
 import pro.ucity.manager.ucityWorkList.model.UcityWorkList;
 import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
 import pro.ucity.model.Adapter;
@@ -59,6 +53,8 @@ import pro.ucity.model.OPSms;
 import pro.ucity.model.System;
 
 public class UcityUtil {
+	
+	private static Logger logger = Logger.getLogger(UcityUtil.class);
 
 	public UcityUtil() {
 		super();
@@ -68,7 +64,8 @@ public class UcityUtil {
 		if(SmartUtil.isBlankObject(instance) || instance.getStatus() == Instance.STATUS_COMPLETED || instance.getStatus() == Instance.STATUS_ABORTED || SmartUtil.isBlankObject(instance.getTasks())) return false;
 		TaskInstanceInfo[] tasks = instance.getTasks();
 		
-		for(int i=0; i<tasks.length; i++){
+		int tasksLen = tasks.length;
+		for(int i=0; i < tasksLen ; i++){
 			TaskInstanceInfo task = tasks[i];
 			if(task.getStatus() == Instance.STATUS_COMPLETED && task.getName().equals(System.TASK_NAME_USERVICE_END))
 				return true;
@@ -133,8 +130,6 @@ public class UcityUtil {
 		if(!adapter.isValid() || adapter.getEventType() != Adapter.EVENT_TYPE_RELEASE){
 			throw new Exception("Invalid result set exception !!!");
 		}
-		
-		
 		adapter.endProcess();
 	}
 
@@ -179,7 +174,7 @@ public class UcityUtil {
 		for(int i=0; i<form.getFields().length; i++){
 			FormField field = form.getFields()[i];
 			if(data.containsKey(field.getName())){
-				fieldData.put(field.getId(), data.get(field.getName()));
+				fieldData.put(field.getId(), data.get(field.getName()));	
 			}
 		}
 		requestBody.put("frmSmartForm", fieldData);
@@ -323,10 +318,10 @@ public class UcityUtil {
 		for(int i=0; i<work.getDiagram().getTasks().length; i++){
 			SmartFormInfo form = work.getDiagram().getTasks()[i].getForm();
 			if(SmartUtil.isBlankObject(form)) continue;
-			java.lang.System.out.println("[form no = [" + i + "], form name = [" + form.getName() + "]");
+//			java.lang.System.out.println("[form no = [" + i + "], form name = [" + form.getName() + "]");
 			if(form.getName().equals(System.TASK_FORM_NAME_USERVICE_END)){
 				endForm = workService.getFormById(form.getId(), processId);
-				java.lang.System.out.println("[endform]"+endForm.getName());
+//				java.lang.System.out.println("[endform]"+endForm.getName());
 				break;
 			}
 		}
@@ -400,10 +395,10 @@ public class UcityUtil {
 		for(int i=0; i<work.getDiagram().getTasks().length; i++){
 			SmartFormInfo form = work.getDiagram().getTasks()[i].getForm();
 			if(SmartUtil.isBlankObject(form)) continue;
-			java.lang.System.out.println("[form no = [" + i + "], form name = [" + form.getName() + "]");
+//			java.lang.System.out.println("[form no = [" + i + "], form name = [" + form.getName() + "]");
 			if(form.getName().equals(System.TASK_FORM_NAME_USERVICE_END)){
 				endForm = workService.getFormById(form.getId(), processId);
-				java.lang.System.out.println("[endform]"+endForm.getName());
+//				java.lang.System.out.println("[endform]"+endForm.getName());
 				break;
 			}
 		}
@@ -427,9 +422,9 @@ public class UcityUtil {
 			UcityWorkListCond cond = new UcityWorkListCond();
 			cond.setPrcInstId(processInstance.getId());
 			UcityWorkList workList = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkList("", cond, null);
-			java.lang.System.out.println("facilityId : " + facilityId);
-			java.lang.System.out.println("Worklist facilityId : " + workList.getFacilityId());
-			if(facilityId.equals(workList.getFacilityId()) && SmartUtil.isEmpty(workList.getRunningTaskId())){
+//			java.lang.System.out.println("facilityId : " + facilityId);
+//			java.lang.System.out.println("Worklist facilityId : " + workList.getFacilityId());
+			if(facilityId.equals(workList.getFacilityId())){
 				endProcessInstance = processInstance;
 				break;
 			}
@@ -619,7 +614,7 @@ public class UcityUtil {
 					try{
 						UcityUtil.invokePollingForRunningTask(eventId, tableName, status, displayId, deviceId, smsId, timeout, taskInstance);
 					}catch (Exception e){
-						throw e;
+						logger.error("UcityUtil : resumePollingForRunningTasks.617");
 					}
 				}else if(!SmartUtil.isBlankObject(eventId)){
 					try{
@@ -627,14 +622,14 @@ public class UcityUtil {
 						dataRecord.put(System.DATA_FIELD_NAME_EVENT_ID, eventId);
 						UcityUtil.performUServiceTask(taskInstance, dataRecord);
 					}catch (Exception e){
-						e.printStackTrace();
+						logger.error("UcityUtil : resumePollingForRunningTasks.625");
 					}
 				}else{
 					try{
 						Map<String,Object> dataRecord = new HashMap<String,Object>();
 						UcityUtil.performUServiceTask(taskInstance, dataRecord);
 					}catch (Exception e){
-						e.printStackTrace();
+						logger.error("UcityUtil : resumePollingForRunningTasks.632");
 					}
 				}
 			}
@@ -687,7 +682,7 @@ public class UcityUtil {
 					try{
 						UcityUtil.invokePollingForRunningTask(eventId, tableName, status, displayId, deviceId, smsId, timeout, taskInstance);
 					}catch (Exception e){
-						throw e;
+						logger.error("UcityUtil : startPollingForRunningTasks.685");
 					}
 				}else if(!SmartUtil.isBlankObject(eventId)){
 					try{
@@ -695,14 +690,14 @@ public class UcityUtil {
 						dataRecord.put(System.DATA_FIELD_NAME_EVENT_ID, eventId);
 						UcityUtil.performUServiceTask(taskInstance, dataRecord);
 					}catch (Exception e){
-						e.printStackTrace();
+						logger.error("UcityUtil : startPollingForRunningTasks.693");
 					}
 				}else{
 					try{
 						Map<String,Object> dataRecord = new HashMap<String,Object>();
 						UcityUtil.performUServiceTask(taskInstance, dataRecord);
 					}catch (Exception e){
-						e.printStackTrace();
+						logger.error("UcityUtil : startPollingForRunningTasks.700");
 					}
 				}
 			}
@@ -713,7 +708,7 @@ public class UcityUtil {
 	static List<PollingModel> pollingQueue = new LinkedList<PollingModel>();
 	synchronized static int addPolling(String eventId, String tableName, String status, String displayId, String deviceId, String smsId, long timeout, TaskInstance taskInstance){
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(taskInstance)){
-			java.lang.System.out.println("EventId or TaskInstance does not exist Error!!!!, EventId=" + eventId);
+			logger.info("EventId or TaskInstance does not exist Error!!!!, EventId=" + eventId);
 			return -1;
 		}
 		if(SmartUtil.isBlankObject(pollingQueue)){
@@ -724,7 +719,7 @@ public class UcityUtil {
 		for(int index=0; index<pollingQueue.size(); index++){
 			PollingModel pollingModel = pollingQueue.get(index);
 			if(pollingModel.getEventId().equals(eventId) && pollingModel.getTaskInstance().getId().equals(taskInstance.getId())){
-				java.lang.System.out.println("PollingTask is already Running !!!!, Model Event Id=" + pollingModel.getEventId() + ", Task Name=" + taskInstance.getName() + ", Size=" + pollingQueue.size() +  ", Index=" + index);
+				logger.info("PollingTask is already Running !!!!, Model Event Id=" + pollingModel.getEventId() + ", Task Name=" + taskInstance.getName() + ", Size=" + pollingQueue.size() +  ", Index=" + index);
 				return -1;
 			}
 		}
@@ -795,9 +790,9 @@ public class UcityUtil {
 			return;
 		for(int i=0; i<pollingQueue.size(); i++){
 			PollingModel pollingModel = pollingQueue.get(i);
-			java.lang.System.out.println("=============== KILL THREAD BEGIN ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
+			logger.info("=============== KILL THREAD BEGIN ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
 			pollingModel.getThread().stop();
-			java.lang.System.out.println("=============== KILL THREAD DONE ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
+			logger.info("=============== KILL THREAD DONE ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
 		}
 	}
 	synchronized public static void invokePollingForRunningTask(String eventId, String tableName, String status, String displayId, String deviceId, String smsId, String timeout, TaskInstance taskInstance) throws Exception{
@@ -807,13 +802,13 @@ public class UcityUtil {
 		try{
 			timeoutInMilliseconds = Integer.parseInt(timeout) * 60*1000;
 		}catch (Exception e){
-			java.lang.System.out.println("#####parseInt Exception [" + timeout + "]#####" );
-			e.printStackTrace();
+//			java.lang.System.out.println("#####parseInt Exception [" + timeout + "]#####" );
+			logger.error("UcityUtil : invokePollingForRunningTask.806");
 		}
 		
 		int index = -1;
 		if((index = addPolling(eventId, tableName, status, displayId, deviceId, smsId, timeoutInMilliseconds, taskInstance)) == -1){
-			java.lang.System.out.println("Add Polling already running, Event Id=" + eventId + ", Task Name=" + taskInstance.getName());
+//			java.lang.System.out.println("Add Polling already running, Event Id=" + eventId + ", Task Name=" + taskInstance.getName());
 			return;		
 		}
 
@@ -829,145 +824,109 @@ public class UcityUtil {
 				TaskInstance taskInstance = thisModel.getTaskInstance();
 				long timeout = thisModel.getTimeout();
 				Map<String, Object> dataRecord = null;
-//				Connection connection = null;
-//				try{
-//				    Context init = new InitialContext();
-//				    Context envinit = (Context)init.lookup("java:comp/env");
-//				    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//				    connection = ds.getConnection();
-////					connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-//				}catch (Exception e){
-//					timeout = 0;
-//					java.lang.System.out.println("[ERROR] DB접속 끊김.Thread 종료");
-//				}
-				IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();					
-				while(timeout > 0 && SmartUtil.isBlankObject(dataRecord) && !isPollingInterrupted(Thread.currentThread())) {
-//					if(connection != null){
-//						try {
-//							connection.close();
-//							java.lang.System.out.println("[Success] Connection 반환 성공");
-//						} catch (SQLException e1) {
-//							// TODO Auto-generated catch block
-//							java.lang.System.out.println("[ERROR] Connection 반환 실패");
-//							e1.printStackTrace();
-//						}
-//					}
-//					connection = null;
-//					if(connection == null){
-//						try{
-//						    Context init = new InitialContext();
-//						    Context envinit = (Context)init.lookup("java:comp/env");
-//						    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
-//						    connection = ds.getConnection();
-////							connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-//						}catch (Exception e){
-//							timeout = 0;
-//							java.lang.System.out.println("[ERROR] DB접속 끊김.Thread 종료2");
-//						}
-//					}
-					java.lang.System.out.println("############ START checking Table=" + tableName + ", Event Id=" + eventId + ", Timeout=" + timeout + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-					try {
-						taskInstance = (TaskInstance)instanceService.getTaskInstanceById(taskInstance.getWork().getId(), taskInstance.getId());
-						if(!taskInstance.isRunning()) break;
-						if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_DISPLAY)
-							dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId, deviceId);
-						else if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_SMS)
-							dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId, smsId);
-						else
-							dataRecord = UcityUtil.readTaskTable(tableName, eventId, status, deviceId);
-					} catch(Exception e) {
-						if(timeout<System.DEFAULT_POLLING_INTERVAL){
-							timeout=0;
-							break;
-						}
-						timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
-						dataRecord = null;
-						try{
-							java.lang.System.out.println("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-//							connection.close();
-							Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
-							continue;
-						}catch (Exception ex){
-							ex.printStackTrace();
-							timeout=0;
-							break;
-						}
-					}
-					if(SmartUtil.isBlankObject(dataRecord)){
-						if(timeout<System.DEFAULT_POLLING_INTERVAL){
-							timeout=0;
-							break;
-						}
-						timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
-						try{
-							java.lang.System.out.println("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-//							connection.close();
-							Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
-							continue;
-						}catch (Exception ex){
-							ex.printStackTrace();
-							timeout=0;
-							break;
-						}
-					}else{
-						if(System.getTableId(tableName)==System.TABLE_ID_OPPORTAL_SITUATION && OPSituation.isDisplayableStatus(status)){
-							if(OPDisplay.checkIfDisplay(eventId, false))
-								dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
-							else if(OPDisplay.checkIfDisplay(eventId, true))
-								dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);	
-							if(OPSms.checkIfDisplay(eventId))
-								dataRecord = OPSms.checkForDisplay(eventId, dataRecord);
-						}
-						try{
-						java.lang.System.out.println("############ START Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
-						UcityUtil.performUServiceTask(taskInstance, dataRecord);
-						java.lang.System.out.println("############ END Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
-						break;
-						}catch (Exception e){
-							java.lang.System.out.println("############ END(ERROR) Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
-							e.printStackTrace();
-							if(timeout<System.DEFAULT_POLLING_INTERVAL){
-								timeout=0;
-								break;
-							}
-							timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
-							dataRecord = null;
-							try{
-								java.lang.System.out.println("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-								Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
-//								connection.close();
-								continue;
-							}catch (Exception ex){
-								ex.printStackTrace();
-								timeout=0;
-								break;
-							}
-						}
-					}
-				}
+
+				IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
 				
-//				if(connection != null){
-//					try{
-//						java.lang.System.out.println("#########Connection 끊김#########");
-//						connection.close();
-//					}catch (Exception e){
-//						e.printStackTrace();						
-//					}
-//				}
-				if(timeout==0 && SmartUtil.isBlankObject(dataRecord)){
-					java.lang.System.out.println("############ END(TIMEOUT) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-					try{
-						UcityUtil.abendUServiceTask(taskInstance);
-						UcityUtil.stopAllPollingsForEvent(eventId);
-					}catch (Exception e){
-						e.printStackTrace();
+					while(timeout > 0 && SmartUtil.isBlankObject(dataRecord) && !thisModel.isInterrupted()) {
+						try{
+							logger.info("############ START checking Table=" + tableName + ", Event Id=" + eventId + ", Timeout=" + timeout + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
+							try {
+								if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_DISPLAY)
+									dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId, deviceId);
+								else if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_SMS)
+									dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId, smsId);
+								else
+									dataRecord = UcityUtil.readTaskTable(tableName, eventId, status, deviceId);
+							} catch(Exception e) {
+								if(timeout<System.DEFAULT_POLLING_INTERVAL){
+									timeout=0;
+									break;
+								}
+								timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
+								dataRecord = null;
+								try{
+									logger.info("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
+									Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
+									continue;
+								}catch (Exception ex){
+									logger.error("UcityUtil : invokePollingForRunningTask.Thread.852");
+									timeout=0;
+									break;
+								}
+							}
+							if(SmartUtil.isBlankObject(dataRecord)){
+								if(timeout<System.DEFAULT_POLLING_INTERVAL){
+									timeout=0;
+									break;
+								}
+								timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
+								try{
+									logger.info("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
+									Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
+									continue;
+								}catch (Exception ex){
+									logger.error("UcityUtil : invokePollingForRunningTask.Thread.868");
+									timeout=0;
+									break;
+								}
+							}else{
+								taskInstance = (TaskInstance)instanceService.getTaskInstanceById(taskInstance.getWork().getId(), taskInstance.getId());
+								if(!taskInstance.isRunning()) break;
+								
+								if(System.getTableId(tableName)==System.TABLE_ID_OPPORTAL_SITUATION && OPSituation.isDisplayableStatus(status)){
+									if(OPDisplay.checkIfDisplay(eventId, false))
+										dataRecord = OPDisplay.checkForDisplay(eventId, false, dataRecord);
+									else if(OPDisplay.checkIfDisplay(eventId, true))
+										dataRecord = OPDisplay.checkForDisplay(eventId, true, dataRecord);	
+									if(OPSms.checkIfDisplay(eventId))
+										dataRecord = OPSms.checkForDisplay(eventId, dataRecord);
+								}
+								try{
+								logger.info("############ START Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
+								UcityUtil.performUServiceTask(taskInstance, dataRecord);
+								logger.info("############ END Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
+								break;
+								}catch (Exception e){
+									logger.info("############ END(ERROR) Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
+									logger.error("UcityUtil : invokePollingForRunningTask.Thread.891");
+									if(timeout<System.DEFAULT_POLLING_INTERVAL){
+										timeout=0;
+										break;
+									}
+									timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
+									dataRecord = null;
+									try{
+										logger.info("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
+										Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
+										continue;
+									}catch (Exception ex){
+										logger.error("UcityUtil : invokePollingForRunningTask.Thread.903");
+										timeout=0;
+										break;
+									}
+								}
+							}
+						}catch(InterruptedException e){
+							java.lang.System.out.println("Thread Interrupted!!!$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+							break;
+						}catch(Exception e){
+						}
+					if(timeout==0 && SmartUtil.isBlankObject(dataRecord)){
+						logger.info("############ END(TIMEOUT) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
+						try{
+							UcityUtil.abendUServiceTask(taskInstance);
+							UcityUtil.stopAllPollingsForEvent(eventId);
+						}catch (Exception e){
+							logger.error("UcityUtil : invokePollingForRunningTask.Thread.920");
+						}
+					}else if(isPollingInterrupted(Thread.currentThread()) || !Thread.currentThread().isInterrupted()){
+						logger.info("############ END(INTERRUPTED) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
+						break;
+					}else{
+						logger.info("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 					}
-				}else if(isPollingInterrupted(Thread.currentThread())){
-					java.lang.System.out.println("############ END(INTERRUPTED) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-				}else{
-					java.lang.System.out.println("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
+					PollingModel pollingTask = getPolling(Thread.currentThread());					
 				}
-				PollingModel pollingTask = getPolling(Thread.currentThread());					
 			}
 		});
 		addThreadToPolling(index, pollingForRunningTask);

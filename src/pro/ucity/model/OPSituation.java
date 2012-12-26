@@ -13,6 +13,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
+
 import com.tmax.tibero.jdbc.TbSQLException;
 
 import pro.ucity.util.UcityTest;
@@ -26,6 +28,8 @@ import net.smartworks.util.SmartUtil;
 
 public class OPSituation {
 
+	private static Logger logger = Logger.getLogger(OPSituation.class);
+	
 	public static final String STATUS_SITUATION_OCCURRED = "H01";
 	public static final String STATUS_SITUATION_ACCEPTED = "H02";
 	public static final String STATUS_SITUATION_PROCESSING = "H03";
@@ -187,6 +191,20 @@ public class OPSituation {
 	public void setOccurDate(String occurDate) {
 		this.occurDate = occurDate;
 	}
+//	public static int getStatusNumber(String status) {
+//		if(status.equals(STATUS_SITUATION_OCCURRED)){
+//			return 1;
+//		}else if(status.equals(STATUS_SITUATION_ACCEPTED)){
+//			return 2;
+//		}else if(status.equals(STATUS_SITUATION_PROCESSING)){
+//			return 3;
+//		}else if(status.equals(STATUS_SITUATION_RELEASE)){
+//			return 4;
+//		}else if(status.equals(STATUS_SITUATION_CANCEL)){
+//			return 4;
+//		}
+//		return 4;
+//	}
 	public OPSituation(ResultSet resultSet){
 		super();
 		if(SmartUtil.isBlankObject(resultSet)) return;
@@ -284,7 +302,8 @@ public class OPSituation {
 		if(UcityUtil.ucityWorklistSearch(System.getProcessId(this.process),this.situationId) == true ){
 		UcityUtil.startPortalProcess(System.getProcessId(this.process), this.situationId, this.occurDate, this.getDataRecord());
 		}else{
-			java.lang.System.out.println("[PASS] PORTAL 발생 이벤트(아이디 : '" + situationId + ")가 중복실행으로 인해, 중지되었습니다.");
+			logger.info("[PASS] PORTAL 발생 이벤트(아이디 : '" + situationId + ")가 중복실행으로 인해, 중지되었습니다.");
+//			java.lang.System.out.println("[PASS] PORTAL 발생 이벤트(아이디 : '" + situationId + ")가 중복실행으로 인해, 중지되었습니다.");
 			return;
 		}
 	}
@@ -406,7 +425,7 @@ public class OPSituation {
 	public static void readHistoryTableToStart(){
 //		if(SmartUtil.isBlankObject(connection)) return;
 		
-		java.lang.System.out.println("############ START checking PORTAL History To Start  ################");
+		logger.info("############ START checking PORTAL History To Start  ################");
 
 		Connection connection = null;
 		PreparedStatement selectPstmt = null;
@@ -427,9 +446,10 @@ public class OPSituation {
 			    connection = ds.getConnection();
 //				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
-				java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
-				te.printStackTrace();
-				java.lang.System.out.println("############ END checking PORTAL History To Start  ################");
+				logger.error("DB Connection error : OPSituation.readHistoryTableToStart.449");
+//				java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
+//				te.printStackTrace();
+//				java.lang.System.out.println("############ END checking PORTAL History To Start  ################");
 				return;
 			}
 //			connection.setAutoCommit(false);			
@@ -441,9 +461,9 @@ public class OPSituation {
 				rs.beforeFirst();
 				if (count != 0) {
 					int processedCount = 0;
-					java.lang.System.out.println("============== PORTAL 이벤트 발생 ===============");
-					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
-					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
+					logger.info("============== PORTAL 이벤트 발생 ===============");
+					logger.info("이벤트 발생 시간 : " + new Date());
+					logger.info("이벤트 발생 갯수 : " + count);
 					while(rs.next() && number == 1) {
 						try{
 							String situationId = rs.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_SITUATION_ID"));
@@ -469,16 +489,16 @@ public class OPSituation {
 									OPSituation opSituation = new OPSituation(rs, joinRs, joinFacilityRs);
 									opSituation.startProcess();
 //									connection.commit();
-									java.lang.System.out.println("[SUCCESS] 새로운 PORTAL 발생 이벤트(아이디 : '" + situationId + ")가 정상적으로 시작되었습니다!");
+									logger.info("[SUCCESS] 새로운 PORTAL 발생 이벤트(아이디 : '" + situationId + ")가 정상적으로 시작되었습니다!");
 								}catch (Exception se){
-									java.lang.System.out.println("[ERROR] 새로운 PORTAL 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
-									se.printStackTrace();
+//									java.lang.System.out.println("[ERROR] 새로운 PORTAL 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
+									logger.error("startProcess error : opSituation.startProcess.495");
 //									if(connection != null)
 //										connection.rollback();
-									updatePstmt = connection.prepareStatement(opSituationRollbackSql);
-									updatePstmt.setString(1, situationId);
-									updatePstmt.setString(2, status);
-									result = updatePstmt.execute();
+//									updatePstmt = connection.prepareStatement(opSituationRollbackSql);
+//									updatePstmt.setString(1, situationId);
+//									updatePstmt.setString(2, status);
+//									result = updatePstmt.execute();
 								}
 								selectPstmt = connection.prepareStatement(opSituationJoinFacilitySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 								selectPstmt.setString(1, situationId);
@@ -492,32 +512,34 @@ public class OPSituation {
 								if(joinRs.getRow()!=1){
 									number = 0;
 								}else{
-									java.lang.System.out.println("============== PORTAL 이벤트 발생(while) ===============");
-									java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
-									java.lang.System.out.println("이벤트 발생 갯수 : " + count);
+									logger.info("============== PORTAL 이벤트 발생(while) ===============");
+									logger.info("이벤트 발생 시간 : " + new Date());
+									logger.info("이벤트 발생 갯수 : " + count);
 								}
 							}else{
-								java.lang.System.out.println("[JOIN ERROR] 새로운 PORTAL 발생 이벤트를 시작하는데 오류가 발생하였습니다!");								
-								updatePstmt = connection.prepareStatement(opSituationRollbackSql);
-								updatePstmt.setString(1, situationId);
-								updatePstmt.setString(2, status);
-								boolean result = updatePstmt.execute();
+								logger.info("[JOIN ERROR] 새로운 PORTAL 발생 이벤트를 시작하는데 오류가 발생하였습니다!");								
+//								updatePstmt = connection.prepareStatement(opSituationRollbackSql);
+//								updatePstmt.setString(1, situationId);
+//								updatePstmt.setString(2, status);
+//								boolean result = updatePstmt.execute();
 							}
 						}catch (Exception we){
-							java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
-							we.printStackTrace();
-							java.lang.System.out.println("############ END checking PORTAL History To Start  ################");
+//							java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
+							logger.error("startProcess error : opSituation.startProcess.528");
+//							java.lang.System.out.println("############ END checking PORTAL History To Start  ################");
 							return;
 						}
 					}
 				}
 			}catch (Exception e1){
-				java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
-				e1.printStackTrace();
+//				java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
+//				e1.printStackTrace();
+				logger.error("readHistoryTableToStart error : OPSituation.537");
 			}
 		} catch (Exception e) {
-			java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
-			e.printStackTrace();
+//			java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
+//			e.printStackTrace();
+			logger.error("readHistoryTableToStart error : opSituation.startProcess.542");
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -528,9 +550,10 @@ public class OPSituation {
 					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
+				logger.error("connection close error : opSituation.readHistoryTableToStart.554");
 			}
-			java.lang.System.out.println("############ END checking PORTAL History To Start  ################");
+			logger.info("############ END checking PORTAL History To Start  ################");
 		}
 
 	}
@@ -547,7 +570,9 @@ public class OPSituation {
 //		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ?  OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM : OPSituation.QUERY_SELECT_FOR_PERFORM;
 //		String opSituationUpdateSql = OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM;
 		
-		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ? UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM") : ((status.equals(STATUS_SITUATION_OCCURRED)) ? UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_OCCURRED") : UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PERFORM"));
+//		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ? UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM") : ((status.equals(STATUS_SITUATION_OCCURRED)) ? UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_OCCURRED") : UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PERFORM"));
+//		status.equals(STATUS_SITUATION_PROCESSING) ? UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM") :
+		String opSituationSelectSql = UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_PERFORM");
 		String opSituationUpdateSql = UcityConstant.getQueryByKey("OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM");
 		
 		try {
@@ -558,24 +583,25 @@ public class OPSituation {
 			    connection = ds.getConnection();
 //				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
-				te.printStackTrace();
-				return null;
+//				te.printStackTrace()
+//				return null;
+				logger.error("DB Connection error : OPSituation.readHistoryTable.588");
 			}
 			connection.setAutoCommit(false);
 			try{
-				
 				selectPstmt = connection.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
-				if(!status.equals(STATUS_SITUATION_PROCESSING) && !status.equals(STATUS_SITUATION_OCCURRED))
-					selectPstmt.setString(2, status);
+//				if(!status.equals(STATUS_SITUATION_PROCESSING) && !status.equals(STATUS_SITUATION_OCCURRED))
+//					selectPstmt.setString(2, status);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
 				int count = rs.getRow();
 				rs.first();
 				if (count >= 1) {
 					try{
+						String statusId = rs.getString(UcityConstant.getQueryByKey("OPSituation.FIELD_NAME_STATUS"));
 						OPSituation opSituation = new OPSituation(rs);
-						if(opSituation.isValid()){
+						if(opSituation.isValid() && status.equals(statusId) || (status.equals(STATUS_SITUATION_RELEASE) && statusId.equals(STATUS_SITUATION_CANCEL))){
 							updatePstmt = connection.prepareStatement(opSituationUpdateSql);
 							updatePstmt.setString(1, opSituation.getSituationId());
 							updatePstmt.setString(2, status);
@@ -586,23 +612,23 @@ public class OPSituation {
 								    connection.commit();
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+								logger.error("select error : OPSituation.readHistoryTable.616");
 								if(connection != null)
 									connection.rollback();								
 							}
 							return opSituation.getDataRecord();
 						}else{
-							
+							return opSituation.getDataRecord();
 						}
 					}catch (Exception we){
-						we.printStackTrace();
+						logger.error("select error : OPSituation.readHistoryTable.625");
 					}
 				}
 			}catch (Exception e1){
-				e1.printStackTrace();
+				logger.error("select error : OPSituation.readHistoryTable.629");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("select error : OPSituation.readHistoryTable.632");
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -613,7 +639,8 @@ public class OPSituation {
 					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
+				logger.error("Connection Close error : OPSituation.readHistoryTable.644");
 			}
 		}
 

@@ -46,7 +46,7 @@ public class System {
 	public static final String DATA_FIELD_NAME_TIMEOUT			= "Timeout Minutes";
 	
 	public static final long DEFAULT_TASK_TIMEOUT				= 10 * 60 * 1000;
-	public static final long DEFAULT_POLLING_INTERVAL 			= 10 * 1000;
+	public static final long DEFAULT_POLLING_INTERVAL 			= 20 * 1000;
 	
 	public static final String TASK_FORM_NAME_USERVICE_END 		= "상황발생 종료화면";
 	public static final String TASK_NAME_USERVICE_END 			= "상황종료";

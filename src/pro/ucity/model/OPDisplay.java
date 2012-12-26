@@ -1,7 +1,6 @@
 package pro.ucity.model;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,17 +11,21 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import com.tmax.tibero.jdbc.TbSQLException;
-
-import pro.ucity.util.UcityTest;
-import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
 
+import org.apache.log4j.Logger;
+
+import pro.ucity.util.UcityUtil;
+
+import com.tmax.tibero.jdbc.TbSQLException;
+
 public class OPDisplay {
+	
+	private static Logger logger = Logger.getLogger(OPDisplay.class);
 
 	public static final KeyMap[] OPPORTAL_DISPLAY_FIELDS = {
 		new KeyMap("상황표출 아이디", UcityConstant.getQueryByKey("OPDisplay.DISPLAY_ID")), new KeyMap("상황 아이디", UcityConstant.getQueryByKey("OPDisplay.SITUATION_ID")), new KeyMap("상황표출 내용", UcityConstant.getQueryByKey("OPDisplay.DISPLAY_CONTENT")),
@@ -285,9 +288,9 @@ public class OPDisplay {
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
-				te.printStackTrace();
+				logger.error("DB Connection errer : OPDisplay");
 				return null;
 			}
 			
@@ -309,20 +312,24 @@ public class OPDisplay {
 								selectPstmt.close();
 //							con.close();
 						} catch (SQLException e) {
+							logger.error("select error : OPDisplay.315");
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+//							e.printStackTrace();
 						}
 						dataRecord.put("Display Id", displayId);
 						return dataRecord;
 					}catch (Exception we){
-						we.printStackTrace();
+						logger.error("update error : OPDisplay.322");
+//						we.printStackTrace();
 					}
 				}
 			}catch (Exception e1){
-				e1.printStackTrace();
+				logger.error("select error : OPDisplay.327");
+//				e1.printStackTrace();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("select error : OPDisplay.331");
+//			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -331,7 +338,8 @@ public class OPDisplay {
 					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Finally close error : OPDisplay.341");
+//				e.printStackTrace();
 			}
 		}
 		return dataRecord;
@@ -354,9 +362,10 @@ public class OPDisplay {
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
-				te.printStackTrace();
+				logger.error("DB Connection error : OPDisplay.checkIfDisplay");
+//				te.printStackTrace();
 				return false;
 			}
 			
@@ -373,16 +382,19 @@ public class OPDisplay {
 							selectPstmt.close();
 //						con.close();
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.error("Select error : OPDisplay.385");
+						// TODO Auto-generated catch block	
+//						e.printStackTrace();
 					}
 					return true;
 				}
-			}catch (Exception e1){
-				e1.printStackTrace();
+			}catch (Exception e){
+				logger.error("Select error : OPDisplay.392");
+//				e.printStackTrace();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Select error : OPDisplay.checkIfDisplay.396");
+//			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -390,8 +402,9 @@ public class OPDisplay {
 				if(connection != null)
 					connection.close();
 			} catch (SQLException e) {
+				logger.error("Finally close error : OPDisplay.405");
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		}
 		return false;
@@ -412,9 +425,10 @@ public class OPDisplay {
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				con = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
+//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
-				te.printStackTrace();
+				logger.error("DB Connection error");
+//				te.printStackTrace();
 				return null;
 			}
 			
@@ -435,20 +449,24 @@ public class OPDisplay {
 									selectPstmt.close();
 //								con.close();
 							} catch (SQLException e) {
+								logger.error("OPDisplay.readHistoryTable.452");
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+//								e.printStackTrace();
 							}
 							return opDisplay.getDataRecord();
 						}
 					}catch (Exception we){
-						we.printStackTrace();
+						logger.error("OPDisplay.readHistoryTable.459");
+//						we.printStackTrace();
 					}
 				}
-			}catch (Exception e1){
-				e1.printStackTrace();
+			}catch (Exception e){
+				logger.error("OPDisplay.readHistoryTable.464");
+//				e1.printStackTrace();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("OPDisplay.readHistoryTable.468");
+//			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -456,8 +474,9 @@ public class OPDisplay {
 				if(connection != null)
 					connection.close();
 			} catch (SQLException e) {
+				logger.error("OPDisplay.readHistoryTable.477");
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		}
 		return null;

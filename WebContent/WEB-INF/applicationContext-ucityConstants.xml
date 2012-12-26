@@ -28,13 +28,13 @@
 				</beans:entry>																
 				
 				<beans:entry key="Adapter.QUERY_SELECT_FOR_START">
-					<beans:value>select * from (select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and COMM_DVSN_CD = 'RECV' and substring(CMNC_TG_CONT,42,2) = '01' order by FRST_RGST_DT) where rownum = 1</beans:value>
+					<beans:value>select * from (select /*+ INDEX_ASC(TB_UAST_CMNC_HS IX_UAST_CMNC_HS_01) */ * from TB_UAST_CMNC_HS where BPM_CNFM_YN = 'N' and COMM_DVSN_CD = 'RECV' and substring(CMNC_TG_CONT,42,2) = '01' order by FRST_RGST_DT) where rownum = 1</beans:value>
 				</beans:entry>
 				<beans:entry key="Adapter.QUERY_SELECT_FOR_END">
-					<beans:value>select * from (select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and COMM_DVSN_CD = 'RECV' and substring(CMNC_TG_CONT,42,2) = '02' order by FRST_RGST_DT) where rownum = 1</beans:value>
+					<beans:value>select * from (select /*+ INDEX_ASC(TB_UAST_CMNC_HS IX_UAST_CMNC_HS_01) */ * from TB_UAST_CMNC_HS where BPM_CNFM_YN = 'N' and COMM_DVSN_CD = 'RECV' and substring(CMNC_TG_CONT,42,2) = '02' order by FRST_RGST_DT) where rownum = 1</beans:value>
 				</beans:entry>				
 				<beans:entry key="Adapter.QUERY_SELECT_FOR_PERFORM">
-					<beans:value>select * from TB_UAST_CMNC_HS where (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) and CMNC_DVSN_CD = ?</beans:value>
+					<beans:value>select /*+ INDEX(TB_UAST_CMNC_HS IX_UAST_CMNC_HS_01 ) */ * from TB_UAST_CMNC_HS where BPM_CNFM_YN = 'N' and CMNC_DVSN_CD = ?</beans:value>
 				</beans:entry>
 				<beans:entry key="Adapter.QUERY_UPDATE_FOR_READ_CONFIRM">
 					<beans:value>update TB_UAST_CMNC_HS set BPM_CNFM_YN = 'Y' where RECV_CMNC_TG_ID = ?</beans:value>
@@ -368,6 +368,10 @@
 				<beans:entry key="OPSituation.QUERY_SELECT_EVENT_CODE">
 					<beans:value>SELECT A.*, C.OCCUR_DATE FROM CMDB.TM_CM_STAT_EVENT A, USITUATION.TH_ST_SITUATION_HISTORY B, USITUATION.TM_ST_SITUATION C WHERE B.SITUATION_ID = C.SITUATION_ID AND C.CATEGORY_ID = A.CATEGORY_ID AND B.SITUATION_ID = ? AND B.SEQ = '1'</beans:value>
 				</beans:entry>
+				<beans:entry key="OPSituation.QUERY_SELECT_PERFORM">
+					<beans:value>SELECT * FROM USITUATION.TH_ST_SITUATION_HISTORY WHERE SITUATION_ID = ? AND END_DATE IS NOT NULL AND (BPM_CNFM_YN != 'Y' OR BPM_CNFM_YN IS NULL) ORDER BY SEQ</beans:value>
+				</beans:entry>
+		
 				
 				<!-- OPSms -->
 				<beans:entry key="OPSms.SITUATION_ID">
