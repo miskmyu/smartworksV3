@@ -80,11 +80,13 @@ if(!SmartUtil.isBlankObject(instances)) {
 			TaskInstanceInfo[] forwardedTasks = null;
 			boolean isAssignedTask = false;
 			String trTarget = "";
-			
+			String lastTaskInstId = null;
 			// 인스턴스 타입이 Work인경우.....
 			if (instance.getType() == Instance.TYPE_WORK) {
 				workInstance = (WorkInstanceInfo) instance;
 				TaskInstanceInfo lastTask = workInstance.getLastTask();
+				if (!CommonUtil.isEmpty(lastTask))
+					lastTaskInstId = lastTask.getId();
 				int lastTaskCount = workInstance.getLastTaskCount();
 				List<TaskInstanceInfo> assignedList = new ArrayList<TaskInstanceInfo>();
 				List<TaskInstanceInfo> forwardedList = new ArrayList<TaskInstanceInfo>();
@@ -94,7 +96,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 							forwardedList.add(lastTask);
 				assignedTasks = (TaskInstanceInfo[]) assignedList.toArray(new TaskInstanceInfo[0]);
 				forwardedTasks = (TaskInstanceInfo[]) forwardedList.toArray(new TaskInstanceInfo[0]);
-				trTarget = workInstance.getController() + "?cid=" + workInstance.getContextId() + "&workId=" + workInstance.getWorkId();
+				trTarget = workInstance.getController() + "?cid=" + workInstance.getContextId() + "&workId=" + workInstance.getWorkId() + "&taskInstId=" + lastTaskInstId;
 			// 인스턴스타입이 태스크인 경우.....
 			} else if (instance.getType() == Instance.TYPE_TASK) {
 				isAssignedTask = true;
@@ -239,10 +241,16 @@ if(!SmartUtil.isBlankObject(instances)) {
 							break;
 						// 프로세스업무 할당테스크인 경우...
 						case TaskInstance.TYPE_PROCESS_TASK_ASSIGNED:
+							String taskInstParam = (SmartUtil.isBlankObject(taskInstance)) ? "" : "&taskInstId=" + taskInstance.getId();
+							if (CommonUtil.isEmpty(taskInstParam)) {
+								if (!CommonUtil.isEmpty(lastTaskInstId)) {
+									taskInstParam = "&taskInstId=" + lastTaskInstId;
+								}
+							}
 						%>
 							<fmt:message key="content.sentence.ptask_assigned">
 								<fmt:param>
-									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>">
+									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%><%=taskInstParam%>">
 										<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 									</a>
 								</fmt:param>
@@ -502,6 +510,11 @@ if(!SmartUtil.isBlankObject(instances)) {
 					</a>
 					<%
 					String taskInstParam = (SmartUtil.isBlankObject(taskInstance)) ? "" : "&taskInstId=" + taskInstance.getId();
+					if (CommonUtil.isEmpty(taskInstParam)) {
+						if (!CommonUtil.isEmpty(lastTaskInstId)) {
+							taskInstParam = "&taskInstId=" + lastTaskInstId;
+						}
+					}
 					%>
 					<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=workId %><%=taskInstParam%>" class="js_content">
 						<span class="tb"><%=workInstance.getSubject()%></span> 

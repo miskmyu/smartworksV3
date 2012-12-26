@@ -90,6 +90,8 @@
 	}
 	TaskInstanceInfo taskInstance = (SmartUtil.isBlankObject(taskInstId)) ? ((SmartUtil.isBlankObject(taskHistories)) ? null : taskHistories[0]) : instance.getTaskInstanceById(taskInstId);
 
+	int numberOfDownloadHistories = (SmartUtil.isBlankObject(taskInstance)) ? 0 : taskInstance.getNumberOfDownloadHistories();
+
  	session.setAttribute("cid", cid);
 	if(SmartUtil.isBlankObject(wid))
 		session.removeAttribute("wid");
@@ -188,15 +190,15 @@
 				        			if(!SmartUtil.isBlankObject(task.getForwardId()) || !SmartUtil.isBlankObject(task.getApprovalId())) continue;
 				        			count++;
 				        			String statusClass = "proc_task not_yet";
-				        			String formMode = (task.getAssignee().getId().equals(cUser.getId()) 
+				        			String formMode = (!SmartUtil.isBlankObject(task.getAssignee()) && (task.getAssignee().getId().equals(cUser.getId()) 
 				        								&& ( 	task.getStatus()==TaskInstance.STATUS_RUNNING
 				        									 || task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING) 
 				        									 || (task.getStatus()==Instance.STATUS_APPROVAL_RUNNING
 				        									 		&& instance.getStatus()==Instance.STATUS_RETURNED
 				        									 		&& !SmartUtil.isBlankObject(approvalTask) 
-				        									 		&& task.getId().equals(approvalTask.getApprovalTaskId()))) ? "edit" : "view";
+				        									 		&& task.getId().equals(approvalTask.getApprovalTaskId())))) ? "edit" : "view";
 				        			boolean isSelectable = ((task.getStatus()==TaskInstance.STATUS_RUNNING||task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING)
-				        										&& !task.getAssignee().getId().equals(cUser.getId())) ? false : true;
+				        										&& (!SmartUtil.isBlankObject(task.getAssignee()) && !task.getAssignee().getId().equals(cUser.getId()))) ? false : true;
 				        			String approvalLineId = "";
 				        			if(task.getStatus() == TaskInstance.STATUS_RETURNED){
 				        				statusClass = "proc_task returned";
@@ -213,22 +215,42 @@
 				        			}else{
 				        				statusClass = "proc_task not_yet";
 				        			}
+				        			
+				        			if(!task.isSubTask()){
 				        	%>
-			            			<!-- 태스크 --> 
-						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
-						            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId=<%=CommonUtil.toNotNull(approvalLineId) %>>
-					                    <!-- task 정보 -->
-					                    <%if(isSelectable){%><a class="js_select_task_instance" href=""><%} %>
-						                    <div class="title"><%=count%>) <%=task.getName() %></div>
-						                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
-						                    <div class="noti_in_s">
-							                    <div class="name"><%=task.getPerformer().getLongName()%></div>
+				            			<!-- 태스크 --> 
+							            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
+							            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId="<%=CommonUtil.toNotNull(approvalLineId) %>" downloadHistories="<%=task.getNumberOfDownloadHistories() %>">
+						                    <!-- task 정보 -->
+						                    <%if(isSelectable){%><a class="js_select_task_instance" href=""><%} %>
+							                    <div class="title"><%=count%>) <%=task.getName() %></div>
+							                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
+							                    <div class="noti_in_s">
+								                    <div class="name"><%=task.getPerformer().getLongName()%></div>
+								                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
+							                    </div>
+							                <%if(isSelectable){%></a><%} %>
+						                    <!-- task 정보 //-->
+							            </li>
+					            		<!-- 태스크 //--> 
+					            	<%
+					            	}else{
+					            		String targetHref = "pwork_space.sw?cid=pw.sp." + task.getSubWorkInstanceId() + "&workId=" + task.getSubWorkId() + "&instId=" + task.getSubWorkInstanceId();
+					            	%>
+				            			<!-- 태스크 --> 
+							            <li class="<%=statusClass %> js_instance_task" subWorkId="<%=task.getSubWorkId() %>" subWorkInstanceId="<%=task.getSubWorkInstanceId() %>" downloadHistories="0">
+						                    <!-- task 정보 -->
+						                    <a class="js_content" href="<%=targetHref%>">
+							                    <div class="title"><%=count%>) <%=task.getName() %></div>
+						                    	<div class="icon_pworks name"><%=task.getSubWorkFullpathName() %></div>
 							                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
-						                    </div>
-						                <%if(isSelectable){%></a><%} %>
-					                    <!-- task 정보 //-->
-						            </li>
-				            		<!-- 태스크 //--> 
+							                </a>
+						                    <!-- task 정보 //-->
+							            </li>
+					            		<!-- 태스크 //--> 
+					            	<%
+					            	}
+				        			%>
 						            <!--화살표-->
 						            <li class="proc_arr_next fl js_instance_task_arrow"></li>
 						            <!--화살표-->
@@ -254,6 +276,13 @@
 			</div>
 			<!--프로세스 영역//-->
 				
+			<!-- 서브프로세스 영역 -->
+			<div class="js_subprocess_space" style="display:none; padding: 0 45px; height:88px">
+				<div class="define_space up_point pos_default js_form_content_pointer "></div>
+				<div class="form_wrap up js_subprocess_diagram"></div>
+			</div>
+			<!--프로세스 영역//-->
+
 			<!-- 상세보기 컨텐츠 -->
 			<div class="contents_space js_form_header">
 				<div class="up_point pos_default js_form_content_pointer"></div>
@@ -405,6 +434,7 @@
 				    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
 				    </div>
 				    <%if(numberOfForwardHistories > 0){ %><div class="po_left pt3"><a href="" class="js_toggle_forward_histories"><fmt:message key="common.title.forward_history"/> <span class="t_up_num">[<%=numberOfForwardHistories %>]</span></a></div><%} %>
+					<div class="po_left pt3 js_download_histories" <%if(numberOfDownloadHistories == 0){%>style="display:none"<%} %> ><a href="" class="js_toggle_download_histories"><fmt:message key="common.title.download_history"/><span class="t_up_num js_download_count">[<%=numberOfDownloadHistories %>]</span></a></div>
 				</div>     
 
 				<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
@@ -442,6 +472,7 @@
 		var instId = input.attr("taskInstId");
 		var isApprovalWork = input.attr("isApprovalWork");
 		var approvalLineId = input.attr("approvalLineId"); 
+		var downloadCount = input.attr("downloadHistories");
 		var approvalContent = pworkSpace.find('div.js_form_task_approval').html('').hide();
 		var formContent = pworkSpace.find('div.js_form_content').html('');
 		var formContentPointer = pworkSpace.find('div.js_form_content_pointer');
@@ -469,6 +500,12 @@
 				error : function(xhr, ajaxOptions, thrownError){					
 				}
 			});			
+		}
+		var downloadHistories = pworkSpace.find('.js_download_histories');
+		if(downloadCount === '0'){
+			downloadHistories.show();
+		}else{
+			downloadHistories.show().find('.js_download_count').html('[' + downloadCount + ']');
 		}
 		var selectedTask = input;
 		pworkSpace.find('.js_instance_task').removeClass('selected');

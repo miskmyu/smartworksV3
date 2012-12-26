@@ -1651,8 +1651,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception {
-		return instanceService.getDownloadHistoryList(instanceId, params);
+	public InstanceInfoList getDownloadHistoryList(String instanceId, String taskInstanceId, RequestParams params) throws Exception {
+		return instanceService.getDownloadHistoryList(instanceId, taskInstanceId, params);
 	}
 
 	@Override
@@ -1728,5 +1728,10 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void changeMailPasswordRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		mailService.changeMailPasswordRequest(requestBody, request);
+	}
+
+	@Override
+	public DepartmentInfo[] searchDepartment(String key, HttpServletRequest request) throws Exception {
+		return communityService.searchDepartment(key, request);
 	}
 }

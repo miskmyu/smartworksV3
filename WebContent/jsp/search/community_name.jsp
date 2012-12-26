@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.model.community.info.CommunityInfo"%>
 <%@page import="net.smartworks.model.community.info.WorkSpaceInfo"%>
@@ -24,6 +25,7 @@
 			String comContext = ISmartWorks.CONTEXT_PREFIX_USER_SPACE + community.getId();
 			String comName = null;
 			if(community.getClass().equals(UserInfo.class)) comName = ((UserInfo)community).getLongName();
+			else if(community.getClass().equals(DepartmentInfo.class)) comName = ((DepartmentInfo)community).getFullpathName();
 			else comName = community.getName();
 			String comId = community.getId();
 	%>

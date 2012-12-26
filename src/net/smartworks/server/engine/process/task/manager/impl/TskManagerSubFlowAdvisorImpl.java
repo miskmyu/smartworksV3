@@ -302,8 +302,18 @@ public class TskManagerSubFlowAdvisorImpl extends AbstractTskManagerAdvisor {
 			prcInst.setExtendedPropertyValue("parentPrcInstId", parentPrcInstId);
 			prcInst.setExtendedPropertyValue("parentTskDefId", parentTskDefId);
 		}	
-		getPrcManager().setProcessInst(user, prcInst, null);
+		prcInst.setType(PrcProcessInst.PROCESSINSTTYPE_PROCESS);
 		
+		prcInst.setCreationUser(subTask.getAssigner());
+		prcInst.setCreationDate(new LocalDate());
+		
+		prcInst.setPackageId(dId);
+		prcInst.setWorkSpaceId(subTask.getWorkSpaceId());
+		prcInst.setWorkSpaceType(subTask.getWorkSpaceType());
+		prcInst.setAccessLevel(subTask.getAccessLevel());
+		prcInst.setAccessValue(subTask.getAccessValue());
+		
+		getPrcManager().setProcessInst(user, prcInst, null);
 		String tskInstVariables = setChildPrcInstFormalParamter(user, subTask, prcInst, subTaskDef);
 		subTask.setInstVariable(tskInstVariables);
 		
@@ -329,7 +339,8 @@ public class TskManagerSubFlowAdvisorImpl extends AbstractTskManagerAdvisor {
 		} else {
 			task.setDocument(this.toDocumentByInstVariable(user, startTaskDef, tskInstVariables));
 		}
-		task.setAssigner("parentProcess");
+		//task.setAssigner("parentProcess");
+		task.setAssigner(subTask.getAssigner());
 		if (!task.getType().equalsIgnoreCase("SUBFLOW"))
 			task.setAssignee(this.toAssignee(user, startTaskDef, task.getDocument()));
 		task.setForm(startTaskDef.getForm());
@@ -360,6 +371,12 @@ public class TskManagerSubFlowAdvisorImpl extends AbstractTskManagerAdvisor {
 		if (logger.isInfoEnabled()) {
 			logger.info("Initiate Sub Process Instance [ " + title + " " + prcInstId + ", Parent Process InstanceId : " + parentPrcInstId + " ]");
 		}
+		
+		task.setWorkSpaceId(subTask.getWorkSpaceId());
+		task.setWorkSpaceType(subTask.getWorkSpaceType());
+		task.setAccessLevel(subTask.getAccessLevel());
+		task.setAccessValue(subTask.getAccessValue());
+		
 		return task.getProcessInstId();
 	}
 

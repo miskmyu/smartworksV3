@@ -19,9 +19,11 @@ public class TaskInstance extends Instance {
 
 	public final static int TYPE_PROCESS_TASK_ASSIGNED = 21;
 	public final static int TYPE_PROCESS_TASK_FORWARDED = 22;
+	public final static int TYPE_PROCESS_SUB_TASK_CREATED = 23;
 
 	public final static int TYPE_SCHEDULE_TASK_ASSIGNED = 31;
 	public final static int TYPE_SCHEDULE_TASK_FORWARDED = 32;
+	public final static int TYPE_SCHEDULE_GROUP_TASK_CREATED = 33;
 
 	public final static int TYPE_APPROVAL_TASK_ASSIGNED = 41;
 	public final static int TYPE_APPROVAL_TASK_FORWARDED = 42;
@@ -39,6 +41,10 @@ public class TaskInstance extends Instance {
 	private SmartForm smartForm;
 	private String approvalId;
 	private String forwardId;
+	private boolean isSubTask=false;
+	private String subWorkId;
+	private String subWorkFullpathName;
+	private String subWorkInstanceId;
 
 	public String getName() {
 		if(this.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED){
@@ -103,6 +109,30 @@ public class TaskInstance extends Instance {
 	}
 	public void setForwardId(String forwardId) {
 		this.forwardId = forwardId;
+	}
+	public boolean isSubTask() {
+		return isSubTask;
+	}
+	public void setSubTask(boolean isSubTask) {
+		this.isSubTask = isSubTask;
+	}
+	public String getSubWorkId() {
+		return subWorkId;
+	}
+	public void setSubWorkId(String subWorkId) {
+		this.subWorkId = subWorkId;
+	}
+	public String getSubWorkInstanceId() {
+		return subWorkInstanceId;
+	}
+	public void setSubWorkInstanceId(String subWorkInstanceId) {
+		this.subWorkInstanceId = subWorkInstanceId;
+	}
+	public String getSubWorkName() {
+		return subWorkFullpathName;
+	}
+	public void setSubWorkFullpathName(String subWorkFullpathName) {
+		this.subWorkFullpathName = subWorkFullpathName;
 	}
 	public String getController(){
 		if(getWork()==null) return "";

@@ -98,10 +98,6 @@ $(function() {
 	if(type.equals("failedLogin")) {
 	%>
 		smartPop.showInfo(smartPop.ERROR, smartMessage.get('illegalAcountError'));
-	<%
-	} else if(type.equals("logout")) {
-	%>
-		smartPop.showInfo(smartPop.INFO, smartMessage.get('logoutSucceed'));
  	<%
 	}
 	%>

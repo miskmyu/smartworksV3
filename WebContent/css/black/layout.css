@@ -719,7 +719,7 @@ a.js_show_all_users_shown, .js_show_all_users_shown {color:#3377ca !important}
 /* 사람지정  */
 .user_select {background: none repeat scroll 0 0 #E5F3FF; border: 1px solid #97bee2; color: #333333; padding: 1px 6px 0 5px; margin: 0 2px 0 3px;
 -webkit-border-radius:10px; -moz-border-radius:10px; border-radius:10px; font-size:11px}
-.user_select + input[type="text"] {width:100px !important}
+.user_select + input[type="text"] {min-width:100px  !important;max-width:200px}
 
 /* Text style  */
 .t_red, .t_sunday {color:#e54b4b}

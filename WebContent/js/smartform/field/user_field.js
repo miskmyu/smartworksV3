@@ -79,7 +79,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	var $html = $('<div class="form_value" style="width:' + valueWidth + '%"> <div class="icon_fb_space">\
 					<div ' + required + '>\
 						' + usersHtml + '\
-						<input class="m0 js_auto_complete" style="width:100px" href="' + href + '" type="text">\
+						<input class="m0 js_auto_complete" style="min-width:100px !important;max-width:200px" href="' + href + '" type="text">\
 					</div>\
 					<div class="js_community_list srch_list_nowid" style="display: none"></div><span class="js_community_popup"></span><a href=""' + userPicker + '><span ' + icoClass + '></span></a></div></div>');
 
@@ -92,8 +92,10 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 			for(var i=0; i<users.length; i++) {
 				var separator = ', ';
 				var href = '';
+				var desc = '';
 				if(isEmailAddress(users[i].userId)){
 					href = 'user_space.sw?cid=us.sp.';
+					if(options.emailAddress) desc = "(" +  users[i].userId + ")";
 				}else if(users[i].userId.substring(0,6) === "group_"){
 					href = 'group_space.sw?cid=gp.sp.';
 				}else if(users[i].userId.substring(0,5) === "dept_"){
@@ -102,7 +104,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 				href = href + users[i].userId + '&wid=' + users[i].userId;
 				if(i == users.length - 1)
 					separator = '';
-				viewUsersHtml = viewUsersHtml + '<a href="' + href + '"><span>' + users[i].longName + separator + '</span></a>';
+				viewUsersHtml = viewUsersHtml + '<a href="' + href + '"><span>' + users[i].longName + desc + separator + '</span></a>';
 			}
 		}
 		$user.find('span').html(viewUsersHtml);

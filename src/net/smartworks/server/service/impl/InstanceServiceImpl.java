@@ -8014,7 +8014,6 @@ public class InstanceServiceImpl implements IInstanceService {
 					String fileGroupId = entry.getKey();
 					groupIdList.add(fileGroupId);
 					List<Map<String, String>> fileGroups = entry.getValue();
-
 					try {
 						for(int i=0; i < fileGroups.subList(0, fileGroups.size()).size(); i++) {
 							Map<String, String> file = fileGroups.get(i);
@@ -9702,7 +9701,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		return instanceInfoList;
 	}
 	@Override
-	public InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception {
+	public InstanceInfoList getDownloadHistoryList(String instanceId, String taskInstanceId, RequestParams params) throws Exception {
 
 		String userId = SmartUtil.getCurrentUser().getId();
 

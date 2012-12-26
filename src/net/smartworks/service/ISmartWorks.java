@@ -221,6 +221,8 @@ public interface ISmartWorks {
 
 	public abstract WorkSpaceInfo[] searchCommunity(String key, HttpServletRequest request) throws Exception;
 
+	public abstract DepartmentInfo[] searchDepartment(String key, HttpServletRequest request) throws Exception;
+
 	public abstract UserInfo[] searchCommunityMember(String communityId, String key) throws Exception;
 
 	public abstract UserInfo[] searchCommunityNonMember(String communityId, String key) throws Exception;
@@ -750,7 +752,7 @@ public interface ISmartWorks {
 	
 	public abstract InstanceInfoList getForwardHistoryList(String instanceId, RequestParams params) throws Exception;
 	
-	public abstract InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception;
+	public abstract InstanceInfoList getDownloadHistoryList(String instanceId, String taskInstanceId, RequestParams params) throws Exception;
 	
 	public abstract InstanceInfoList getRelatedWorkList(String instanceId, RequestParams params) throws Exception;
 	
