@@ -202,7 +202,7 @@ $(function() {
 		var selectedApproverInfo = input.parents('.js_community_list').prev().find('.js_selected_approver_info');
 		var userField = input.parents('.js_type_userField');
 		var departmentField = input.parents('.js_type_departmentField');
-		var inputTarget = (!isEmpty(userField)) ? userField.find('input.js_auto_complete') : (!isEmpty(departmentField)) ? departmentField.find('input.js_auto_complete') : [];
+		var inputTarget = (!isEmpty(userField)) ? userField.find('input.js_auto_complete') : (!isEmpty(departmentField)) ? departmentField.find('input.js_auto_complete') : $("");
 		if(inputTarget.parents('.sw_required').hasClass('sw_error')){
 			inputTarget.parents('.sw_required').removeClass('sw_error');
 			$('form.js_validation_required').validate({ showErrors: showErrors}).form();
