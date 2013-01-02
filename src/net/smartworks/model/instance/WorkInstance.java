@@ -31,6 +31,7 @@ public class WorkInstance extends Instance {
 	private String[] likers;// Array of User Id.
 	private UserInfo[] forwardees;
 	private boolean isLazyreferenceTask=false;
+	private boolean isTempSaved=false;
 	
 	public String[] getLikers() {
 		return likers;
@@ -61,6 +62,12 @@ public class WorkInstance extends Instance {
 	}
 	public void setLazyreferenceTask(boolean isLazyreferenceTask) {
 		this.isLazyreferenceTask = isLazyreferenceTask;
+	}
+	public boolean isTempSaved() {
+		return isTempSaved;
+	}
+	public void setTempSaved(boolean isTempSaved) {
+		this.isTempSaved = isTempSaved;
 	}
 	public String getController(){
 		if(getWork()==null) return "";

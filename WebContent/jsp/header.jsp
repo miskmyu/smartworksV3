@@ -189,9 +189,9 @@ function logout() {
 			<!-- 메일 알림 영역  //-->
 	
 			<!-- 임시저장 알림 영역  -->
-			<%-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
+			<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
 			<li class="icon_saved js_notice_count">
-				<a id="savedbox_count" href="notice_message_box.sw?noticeType=<%=Notice.TYPE_SAVEDBOX%>"
+				<a id="savedbox_count" class="js_saved_notice" href=""
 					title="<fmt:message key='header.notice.icon.savedbox'/>"> 
 					<%
 				 	if (notices.length > Notice.TYPE_SAVEDBOX && notices[Notice.TYPE_SAVEDBOX].getLength() > 0) {
@@ -202,7 +202,7 @@ function logout() {
 					%>
 				</a>
 			</li>
-			<!-- 임시저장 알림 영역  --%>
+			<!-- 임시저장 알림 영역  -->
 			<li></li>
 		</ul>
 	</span>

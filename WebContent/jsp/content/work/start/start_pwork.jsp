@@ -22,9 +22,10 @@
 <script type="text/javascript">
 
 //완료버튼 클릭시 start_new_pwork.sw 서비스를 실행하기 위해 submit하는 스크립트..
-function submitForms(e) {
+function submitForms(tempSave) {
 	var startPwork = $('.js_start_pwork_page');
 	var workId = startPwork.attr('workId');
+	var instanceId = startPwork.attr('instanceId');
 
 	// 계획업무로 지정하기가 선택되어 있으면, 계획업무관련 입력필드들을 validation하기위한 클래스를 추가한다.. 
 	var scheduleWork = startPwork.find('form[name="frmScheduleWork"]');
@@ -49,6 +50,10 @@ function submitForms(e) {
 			// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
 			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 		}
+		if(tempSave){
+			paramsJson['isTempSave'] = true;
+			paramsJson['instanceId'] = instanceId;
+		}
 		console.log(JSON.stringify(paramsJson));
 		var url = "start_new_pwork.sw";
 		// 서비스요청 프로그래스바를 나타나게 한다....
@@ -62,7 +67,11 @@ function submitForms(e) {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-				window.location.reload(true);
+				if(tempSave){
+					startPwork.attr('instanceId', data.instanceId);
+				}else{
+					window.location.reload(true);
+				}
 				smartPop.closeProgress();
 			},
 			error : function(e) {

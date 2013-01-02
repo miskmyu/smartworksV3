@@ -28,6 +28,7 @@ public class SmartWork extends Work {
 	public final static String ID_CONTACTS_MANAGEMENT = "pkg_dde3f719c50143cd821e6c46e8df8655";
 	public final static String ID_MESSAGE_MANAGEMENT = "";
 	public final static String ID_ALL_WORKS = "allSmartWorks";
+	public final static String ID_SAVED_WORKS = "savedSmartWorks";
 
 	public final static String ID_SERA_MISSION_MANAGEMENT = "pkg_dc3edb6efa47418cbd1f8fef889b4818";
 	public final static String ID_SERA_MISSION_REPORT_MANAGEMENT = "pkg_8fc9ed30a64b467eb89fd35097cc6212";

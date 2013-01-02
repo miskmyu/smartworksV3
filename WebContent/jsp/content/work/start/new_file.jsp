@@ -15,7 +15,7 @@
 <script type="text/javascript">
 
 //완료버튼 클릭시 file_detail_form.sw, get_form_xml.sw, upload_new_file.sw 서비스들을 실행하기 위해 submit하는 스크립트..
-function submitForms(e) {
+function submitForms(tempSave) {
 	var newFile = $('.js_new_file_page');
 	var $frmSmartForm = newFile.find('form[name="frmSmartForm"]');
 	if(isEmpty($frmSmartForm)) {
@@ -70,7 +70,7 @@ function submitForms(e) {
 							smartPop.closeProgress();
 							
 							// 화면이 완성되었으면 다시 자신을 불러서 아래의 서비스 요청을 실행하게 한다..
-							submitForms(e);
+							submitForms(tempSave);
 						}
 					});
 				}
@@ -94,6 +94,10 @@ function submitForms(e) {
 			}
 			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 		}
+		if(tempSave){
+			paramsJson['isTempSave'] = true;
+			paramsJson['instanceId'] = newFile.attr('instanceId');
+		}
 		console.log("JSON", JSON.stringify(paramsJson));
 		var progressSpan = newFile.find('.js_progress_span');
 		smartPop.progressCont(progressSpan);
@@ -105,7 +109,11 @@ function submitForms(e) {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				window.location.reload(true);
+				if(tempSave){
+					newFile.attr('instanceId', data.instanceId);
+				}else{
+					window.location.reload(true);
+				}
 				smartPop.closeProgress();
 			},
 			error : function(e) {

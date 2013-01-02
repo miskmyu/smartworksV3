@@ -15,8 +15,9 @@
 <script type="text/javascript">
 
 //완료버튼 클릭시 file_detail_form.sw, get_form_xml.sw, upload_new_picture.sw 서비스들을 실행하기 위해 submit하는 스크립트..
-function submitForms(e) {
+function submitForms(tempSave) {
 	var newPicture = $('.js_new_picture_page');
+	var instanceId = newPicture.attr('instanceId');
 
 	// new_picture 에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 있으면 리턴한다....
 	if(!SmartWorks.GridLayout.validate(newPicture.find('form.js_validation_required'), $('.js_upload_error_message'))) return
@@ -82,6 +83,10 @@ function submitForms(e) {
 							}
 							paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 						}
+						if(tempSave){
+							paramsJson['isTempSave'] = true;
+							paramsJson['instanceId'] = instanceId;
+						}
 						console.log("JSON", JSON.stringify(paramsJson));
 						
 						// JSON 데이터를 전송하면서 upload_new_picture.sw 서비스를 호출하여 사진 업로드를 실행한다...
@@ -92,7 +97,11 @@ function submitForms(e) {
 							type : 'POST',
 							data : JSON.stringify(paramsJson),
 							success : function(data, status, jqXHR) {
-								window.location.reload(true);
+								if(tempSave){
+									newPicture.attr('instanceId', data.instanceId);
+								}else{
+									window.location.reload(true);
+								}
 								smartPop.closeProgress();
 							},
 							error : function(e) {
