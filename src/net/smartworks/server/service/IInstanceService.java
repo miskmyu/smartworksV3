@@ -60,6 +60,8 @@ public interface IInstanceService {
 
 	public InstanceInfoList getWorkInstanceList(String workSpaceId, RequestParams params) throws Exception;
 
+	public InstanceInfoList getSavedInstanceList(String workSpaceId, RequestParams params) throws Exception;
+
 	public InstanceInfoList getInstanceInfoListByWorkId(String workSpaceId, RequestParams params, String workId) throws Exception;
 
 	public InstanceInfoList getImageInstanceList(String workSpaceId, RequestParams params) throws Exception;
@@ -108,6 +110,8 @@ public interface IInstanceService {
 
 	public String startProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public void removeProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public String setFileInstance(HttpServletRequest request) throws Exception;
 
 	public String setEventInstance(HttpServletRequest request) throws Exception;

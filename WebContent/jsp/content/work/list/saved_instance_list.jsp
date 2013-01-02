@@ -36,7 +36,7 @@
 	if(SmartUtil.isBlankObject(params)){
 		String savedWorkId = (String)session.getAttribute("workId");
 		params = (RequestParams)session.getAttribute("requestParams");
-		if(!SmartWork.ID_ALL_WORKS.equals(savedWorkId) || SmartUtil.isBlankObject(params)){
+		if(!SmartWork.ID_SAVED_WORKS.equals(savedWorkId) || SmartUtil.isBlankObject(params)){
 			params = new RequestParams();
 			params.setPageSize(20);
 			params.setCurrentPage(1);
@@ -48,7 +48,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 	String cid = (String)session.getAttribute("cid");
 	String wid = (String)session.getAttribute("wid");
-	InstanceInfoList instanceList = smartWorks.getWorkInstanceList(wid, params);
+	InstanceInfoList instanceList = smartWorks.getSavedInstanceList(wid, params);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />

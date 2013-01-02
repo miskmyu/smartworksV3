@@ -340,7 +340,7 @@ function loadNewEventFields(startDate, endDate) {
 				var today = new Date();
 				startDate = new Date(today.getTime() - today.getMinutes()*60*1000);
 			}
-			startDateStr = startDate.format('yyyy.mm.dd hh:MM');
+			startDateStr = startDate.format('yyyy.mm.dd HH:MM');
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			gridRow.hide();
 			SmartWorks.FormRuntime.DateTimeChooserBuilder.buildEx({

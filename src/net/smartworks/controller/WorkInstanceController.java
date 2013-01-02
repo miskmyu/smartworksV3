@@ -346,6 +346,12 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		return null;
 	}
 
+	@RequestMapping(value = "/remove_pwork_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody void removePworkInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeProcessWorkInstance(requestBody, request);
+	}
+
 	@RequestMapping(value = "/update_my_profile", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> updateMyProfile(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {

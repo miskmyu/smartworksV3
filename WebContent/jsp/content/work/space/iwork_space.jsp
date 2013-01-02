@@ -23,6 +23,89 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ page import="net.smartworks.service.ISmartWorks"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
+<script type="text/javascript">
+
+// 완료버튼 클릭시 create_new_iwork.sw 서비스를 실행하기 위해 submit하는 스크립트..
+function submitForms(tempSave) {
+	var iworkSpace = $('.js_iwork_space_page');
+	var workId = iworkSpace.attr("workId");
+	var instanceId = iworkSpace.attr("instId");
+	var scheduleWork = iworkSpace.find('form[name="frmScheduleWork"]');
+	
+	// 계획업무로 지정하기가 선택되어 있으면, 계획업무관련 입력필드들을 validation하기위한 클래스를 추가한다.. 
+	if(scheduleWork.find($('input[name="chkScheduleWork"]')).is(':checked')){
+		scheduleWork.addClass('js_validation_required');
+	}else{
+		scheduleWork.removeClass('js_validation_required');	
+	}
+	
+	var approvers = iworkSpace.find('.js_approval_box input[type="hidden"]');
+	if(!isEmpty(approvers)){
+		for(var i=0; i<approvers.length; i++){
+			var approver = $(approvers[i]);
+			var autoComplete = approver.parents('.js_approval_box').find('.js_auto_complete');
+			if(isEmpty(approver.attr('value'))) autoComplete.addClass('required');
+			else autoComplete.removeClass('required');
+		}
+	}
+	
+	// new_iwork에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
+	if (SmartWorks.GridLayout.validate(iworkSpace.find('form.js_validation_required'), $('.js_space_error_message'))) {
+		var forms = iworkSpace.find('form');
+		var paramsJson = {};
+		paramsJson['workId'] = workId;
+		for(var i=0; i<forms.length; i++){
+			var form = $(forms[i]);
+			
+			// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
+			if(form.attr('name') === 'frmSmartForm'){
+				paramsJson['formId'] = form.attr('formId');
+				paramsJson['formName'] = form.attr('formName');
+			}
+			
+			// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
+			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+			
+		}
+		if(tempSave){
+			paramsJson['isTempSave'] = true;
+			paramsJson['instanceId'] = instanceId;
+		}
+		console.log(JSON.stringify(paramsJson));
+		var url = "create_new_iwork.sw";
+		// 서비스요청 프로그래스바를 나타나게 한다....
+		var progressSpan = iworkSpace.find('.js_progress_span');
+		smartPop.progressCont(progressSpan);
+		// create_new_iwork.sw서비스를 요청한다..
+		$.ajax({
+			url : url,
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				
+				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+				if(tempSave){
+					iworkSpace.attr('instId', data.instanceId);
+				}else{
+					window.location.reload(true);
+				}
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.closeProgress();
+				if(e.responseText === "duplicateKeyException")
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("duplicateKeyException"));
+				else
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("createIWorkError"));
+			}
+		});
+	}
+	return;
+}
+
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
@@ -313,7 +396,7 @@
 						%>
 							<span class="btn_gray ml5"> 
 								<!--  완료버튼을 클릭시 해당 업로드 화면페이지에 있는 submitForms()함수를 실행한다.. -->
-								<a href="" class="js_create_iwork_instance"> 
+								<a href="" class="js_complete_action"  onclick='submitForms();return false;'> 
 									<span class="txt_btn_start"></span>
 									<span class="txt_btn_center"><fmt:message key="common.button.complete"/></span> 
 									<span class="txt_btn_end"></span> 
@@ -322,7 +405,7 @@
 									
 							<span class="btn_gray ml5"> 
 								<!--  완료버튼을 클릭시 해당 업로드 화면페이지에 있는 submitForms()함수를 실행한다.. -->
-								<a href="" class="js_temp_save_iwork_instance"> 
+								<a href="" class="js_temp_save_action"  onclick='submitForms(true);return false;'> 
 									<span class="txt_btn_start"></span>
 									<span class="txt_btn_center"><fmt:message key="common.button.temp_save"/></span> 
 									<span class="txt_btn_end"></span> 
