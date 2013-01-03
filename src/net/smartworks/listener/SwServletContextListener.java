@@ -20,6 +20,8 @@ import org.quartz.impl.StdScheduler;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import pro.ucity.util.UcityUtil;
@@ -43,7 +45,7 @@ public class SwServletContextListener implements ServletContextListener{
 		System.out.println("SmartWorks Server Down Done! - SwServletContextlistener !!!!!!!!!!!!!!!!!!!");
 		
 		System.out.println("SmartWorks Schedulers Kill !!!!!!!!!!!!!!!!!!!!!!!!!!");
-		if (event!=null && event.getServletContext()!=null) {
+		/*if (event!=null && event.getServletContext()!=null) {
 	        ServletContext context = event.getServletContext();
 	        //StdSchedulerFactory sch = (StdSchedulerFactory) context.getAttribute("org.quartz.impl.StdSchedulerFactory.KEY");
 	        
@@ -52,7 +54,7 @@ public class SwServletContextListener implements ServletContextListener{
 	        if (sch != null)
 	        	sch.shutdown();
 	        
-	        /*if(sch!=null){
+	        if(sch!=null){
 	            try {
 	                Collection<Scheduler> col = sch.getAllSchedulers();
 	        		System.out.println("SmartWorks Schedulers col Size : " + col.size());
@@ -63,7 +65,22 @@ public class SwServletContextListener implements ServletContextListener{
 	            } catch (SchedulerException e) {
 	                e.printStackTrace();
 	            }
-	        }*/
-	    }
+	        }
+	    }*/
+		/*try{
+            // Get a reference to the Scheduler and shut it down
+            WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+            Scheduler scheduler = (Scheduler) context.getBean("schedulerFactoryBean");
+            scheduler.shutdown(true);
+ 
+            // Sleep for a bit so that we don't get any errors
+            Thread.sleep(1000);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }*/
+		
+		
 	}
 }

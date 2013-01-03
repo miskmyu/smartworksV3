@@ -555,6 +555,7 @@ smartPop = {
 					$('a.js_pop_select_depart').die('click');
 					$('a.js_pop_select_depart').live('click', function(e){
 						var input = $(targetElement(e));
+						if(!input.hasClass('js_pop_select_depart')) input = input.parents().find('.js_pop_select_depart');
 						var comId = input.attr('departId');
 						var comName = input.attr('departName');
 						selectionProc(comId, comName);

@@ -1393,7 +1393,13 @@ public class InstanceServiceImpl implements IInstanceService {
 							dataField.setRefRecordId(null);
 							dataField.setRefForm(null);
 							dataField.setRefFormField(null);
-							dataField.setValue(CommonUtil.newId());
+							
+							//Id를 새로 만들기 전에 이미 생성된 아이디가 있다면 새로 만들지 않고 기존것을 사용한다
+							if (!CommonUtil.isEmpty(oldRecord.getDataFieldValue(fieldId))) {
+								dataField.setValue(oldRecord.getDataFieldValue(fieldId));
+							} else {
+								dataField.setValue(CommonUtil.newId());
+							}
 							resultStack.push(dataField);
 							
 						} else if (functionId.equals("mis:getCurrentDate")) {

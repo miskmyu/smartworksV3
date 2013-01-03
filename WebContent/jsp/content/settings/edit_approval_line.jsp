@@ -21,6 +21,8 @@
 	ApprovalLine approvalLine = new ApprovalLine();
 	if(!SmartUtil.isBlankObject(lineId)){
 		approvalLine =  smartWorks.getApprovalLineById(lineId);
+	} else {
+		approvalLine.setApprovalLevel(1);
 	}
 
 %>
@@ -148,13 +150,13 @@
 						if(approvals!=null && approvals.length>count) approval = approvals[count];
 					%>					
 						<td class="js_approver_type required vt" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden"<%} %>>
-							<select <%if(approvalLine.getApprovalLevel()<count+1){ %>name="selLevelApproverType<%=count+1 %>"<%} %> class="js_approval_approver_type">
+							<select <%if(approvalLine.getApprovalLevel()>count){ %>name="selLevelApproverType<%=count+1 %>"<%} %> class="js_approval_approver_type">
 								<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_ON_RUNNING){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_ON_RUNNING%>"><fmt:message key="settings.title.approver.on_draft"/></option>
 								<option <%if(approval.getApproverType()== Approval.APPROVER_MY_BOSS){ %>selected<%} %> value="<%=Approval.APPROVER_MY_BOSS%>"><fmt:message key="settings.title.approver.team_leader"/></option>
 								<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_USER){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_USER%>"><fmt:message key="settings.title.approver.select_user"/></option>
 							</select>
 							<div class="js_type_userField" fieldId="usrLevelApprover<%=count+1 %>" multiUsers="false" <%if(approval.getApproverType()!=Approval.APPROVER_CHOOSE_USER){ %>style="display:none"<%} %>>
-								<div class="">
+								<div class="form_value">
 									<div class="icon_fb_space" >
 										<div class="fieldline community_names js_community_names sw_required">
 											<%
@@ -218,13 +220,13 @@
 						if(approvals!=null && approvals.length>count) approval = approvals[count];
 					%>					
 						<td class="js_approver_type required vt" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden"<%} %>>
-							<select <%if(approvalLine.getApprovalLevel()<count+1){ %>name="selLevelApproverType<%=count+1 %>"<%} %> class="js_approval_approver_type">
+							<select <%if(approvalLine.getApprovalLevel()>count){ %>name="selLevelApproverType<%=count+1 %>"<%} %> class="js_approval_approver_type">
 								<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_ON_RUNNING){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_ON_RUNNING%>"><fmt:message key="settings.title.approver.on_draft"/></option>
 								<option <%if(approval.getApproverType()== Approval.APPROVER_MY_BOSS){ %>selected<%} %> value="<%=Approval.APPROVER_MY_BOSS%>"><fmt:message key="settings.title.approver.team_leader"/></option>
 								<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_USER){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_USER%>"><fmt:message key="settings.title.approver.select_user"/></option>
 							</select>
 							<div class="js_type_userField" fieldId="usrLevelApprover<%=count+1 %>" multiUsers="false" <%if(approval.getApproverType()!=Approval.APPROVER_CHOOSE_USER){ %>style="display:none"<%} %>>
-								<div class="">
+								<div class="form_value">
 									<div class="icon_fb_space" >
 										<div class="fieldline community_names js_community_names sw_required">
 											<%

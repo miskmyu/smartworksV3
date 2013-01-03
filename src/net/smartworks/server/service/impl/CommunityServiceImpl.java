@@ -666,6 +666,8 @@ public class CommunityServiceImpl implements ICommunityService {
 					deptInfo.setId(workSpaceInfo.getId());
 					deptInfo.setName(workSpaceInfo.getName());
 					deptInfo.setDesc(workSpaceInfo.getDescription());
+
+					deptInfo.setFullpathName(ModelConverter.getFullpathNameByDepartmentId(workSpaceInfo.getId()));
 					
 					deptList.add(deptInfo);
 				} 
@@ -1691,6 +1693,9 @@ public class CommunityServiceImpl implements ICommunityService {
 					departmentInfo.setId(swoUserExtend.getId());
 					departmentInfo.setName(swoUserExtend.getName());
 					departmentInfo.setDesc(swoUserExtend.getDescription());
+					
+					departmentInfo.setFullpathName(ModelConverter.getFullpathNameByDepartmentId(swoUserExtend.getId()));
+					
 					resultList.add(departmentInfo);
 				}
 			}

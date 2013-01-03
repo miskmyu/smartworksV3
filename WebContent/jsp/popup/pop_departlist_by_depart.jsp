@@ -27,7 +27,7 @@
 				<span class="dep">
 					<a href="pop_departlist_by_depart.sw?multiUsers=false" departmentId="<%=department.getId()%>" class="js_popup js_expandable">
 						<span class="<%=iconType%>"></span>
-						<a href="" class="js_pop_select_depart" deaprtId="<%=department.getId()%>" departName="<%=department.getFullpathName()%>" departPicture="<%=department.getMinPicture()%>">
+						<a href="" class="js_pop_select_depart" departId="<%=department.getId()%>" departName="<%=department.getFullpathName()%>" departPicture="<%=department.getMinPicture()%>">
 							<span> <%=department.getName()%> </span>
 						</a>
 					</a>
