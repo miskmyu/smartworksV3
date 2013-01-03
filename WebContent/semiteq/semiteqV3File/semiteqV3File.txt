@@ -1,0 +1,7 @@
+
+이폴더는 세미텍 스마트웍스V3에 적용된 세미텍 고유의 파일 이다
+
+1. /jsp/header.jsp <- spec조회, online교육 프로세스의 링크가 걸려있는 파일
+
+2. /css/black/layout.css 
+

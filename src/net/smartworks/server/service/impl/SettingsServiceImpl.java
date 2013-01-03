@@ -1937,17 +1937,7 @@ public class SettingsServiceImpl implements ISettingsService {
 				String fieldId = (String)itr.next();
 				Object fieldValue = frmEditMember.get(fieldId);
 				if(fieldValue instanceof String) {
-					if(fieldId.equals("memberDepartment")) {
-						Map<String, Object> memberDepartment = (Map<String, Object>)frmEditMember.get("memberDepartment");
-						if (memberDepartment != null && memberDepartment.size() != 0) {
-							Map<String, Object> department = (Map<String, Object>)frmEditMember.get("department");
-							if (department != null && department.size() != 0) {
-								String departmentId = (String)department.get("id");
-								String departmentName = (String)department.get("name");
-								swoUser.setDeptId(departmentId);
-							}
-						}
-					} else if(fieldId.equals("txtMemberName")) {
+					if(fieldId.equals("txtMemberName")) {
 						txtMemberName = (String)frmEditMember.get("txtMemberName");
 						swoUser.setName(txtMemberName);
 					} else if(fieldId.equals("txtMemberId")) {
@@ -1982,6 +1972,48 @@ public class SettingsServiceImpl implements ISettingsService {
 					} else if(fieldId.equals("txtMemberCellPhoneNo")) {
 						txtMemberCellPhoneNo = (String)frmEditMember.get("txtMemberCellPhoneNo");
 						swoUser.setMobileNo(txtMemberCellPhoneNo);
+					}
+				} else {
+					if(fieldId.equals("memberDepartment")) {
+						Map<String, Object> memberDepartment = (Map<String, Object>)frmEditMember.get("memberDepartment");
+						String oldDepartmentId = (String)requestBody.get("departmentId");
+						
+						if (memberDepartment != null && memberDepartment.size() != 0) {
+							Map<String, Object> department = (Map<String, Object>)memberDepartment.get("department");
+							if (department != null && department.size() != 0) {
+								String newDepartmentId = (String)department.get("id");
+								String newDepartmentName = (String)department.get("name");
+								
+								//겸직을 검사하여 겸직에서 이동하는것인지를 판단한다
+								String userDeptId = swoUser.getDeptId();
+								if (userDeptId != null && userDeptId.equalsIgnoreCase(oldDepartmentId)) {
+									swoUser.setDeptId(newDepartmentId);
+									String userAdjunctDeptIds = swoUser.getAdjunctDeptIds();
+									if (userAdjunctDeptIds != null && userAdjunctDeptIds.indexOf(oldDepartmentId + "|") != -1) {
+										userAdjunctDeptIds = StringUtils.replace(userAdjunctDeptIds, oldDepartmentId + "|LEADER;", "");
+										swoUser.setAdjunctDeptIds(userAdjunctDeptIds);
+									}
+								} else {
+									if (userDeptId == null) {
+										swoUser.setDeptId(newDepartmentId);
+									} else {
+										if (userDeptId.equalsIgnoreCase(newDepartmentId)) {
+											String userAdjunctDeptIds = swoUser.getAdjunctDeptIds();
+											if (userAdjunctDeptIds != null && userAdjunctDeptIds.indexOf(oldDepartmentId + "|") != -1) {
+												userAdjunctDeptIds = StringUtils.replace(userAdjunctDeptIds, oldDepartmentId + "|LEADER;", "");
+												swoUser.setAdjunctDeptIds(userAdjunctDeptIds);
+											}
+										} else {
+											String userAdjunctDeptIds = swoUser.getAdjunctDeptIds();
+											if (userAdjunctDeptIds != null && userAdjunctDeptIds.indexOf(oldDepartmentId + "|") != -1) {
+												userAdjunctDeptIds = StringUtils.replace(userAdjunctDeptIds, oldDepartmentId + "|", newDepartmentId + "|");
+												swoUser.setAdjunctDeptIds(userAdjunctDeptIds);
+											}
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -2076,12 +2108,30 @@ public class SettingsServiceImpl implements ISettingsService {
 				String fieldId = (String)itr.next();
 				Object fieldValue = frmEditDepartment.get(fieldId);
 				if(fieldValue instanceof String) {
-					if(fieldId.equals("hdnParentId")) {
-						hdnParentId = (String)frmEditDepartment.get("hdnParentId");
-						swoDepartment.setParentId(hdnParentId);
-					} else if(fieldId.equals("txtDepartmentName")) {
+//					if(fieldId.equals("hdnParentId")) {
+//						hdnParentId = (String)frmEditDepartment.get("hdnParentId");
+//						swoDepartment.setParentId(hdnParentId);
+//					} else 
+					if(fieldId.equals("txtDepartmentName")) {
 						txtDepartmentName = (String)frmEditDepartment.get("txtDepartmentName");
 						swoDepartment.setName(txtDepartmentName);
+					}
+				} else {
+					if(fieldId.equals("parentDepartment")) {
+//						txtDepartmentName = (String)frmEditDepartment.get("txtDepartmentName");
+//						swoDepartment.setName(txtDepartmentName);
+						
+						Map<String, Object> parentDepartment = (Map<String, Object>)frmEditDepartment.get("parentDepartment");
+
+						if (parentDepartment != null && parentDepartment.size() != 0) {
+							Map<String, Object> department = (Map<String, Object>)parentDepartment.get("department");
+
+							if (department != null && department.size() != 0) {
+								String newParentDepartmentId = (String)department.get("id");
+								String newParentDepartmentName = (String)department.get("name");
+								swoDepartment.setParentId(newParentDepartmentId);
+							}
+						}
 					}
 				}
 			}
