@@ -105,6 +105,7 @@ function submitForms(tempSave) {
 	}
 	return;
 }
+</script>
 
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
@@ -188,8 +189,9 @@ function submitForms(tempSave) {
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-    <div class="section_portlet js_iwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" isTempSaved="<%=instance.isTempSaved() %>">
-    	<div class="portlet_t">
+     <div class="section_portlet js_iwork_space_page" lastHref="<%=lastHref%>" workId="<%=workId%>" instId="<%=instId%>" isTempSaved="<%=instance.isTempSaved() %>">
+
+ 		<div class="portlet_t">
       		<div class="portlet_tl"></div>
     	</div>
     	<div class="portlet_l" style="display: block;">
