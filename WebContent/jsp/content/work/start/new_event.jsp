@@ -43,7 +43,7 @@ function submitForms(tempSave) {
 		for(var i=0; i<relatedUserField.length; i++){
 			relatedUsers.push({
 				userId : $(relatedUserField[i]).attr('comId'),
-				longName : relatedUserField[i].childNodes[0].nodeValue
+				longName : $(relatedUserField[i]).attr('comName')
 			});
 		}
 		var content = form.find('textarea[name="txtEventContent"]').attr("value");

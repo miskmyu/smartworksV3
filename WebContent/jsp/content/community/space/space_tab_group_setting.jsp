@@ -135,7 +135,7 @@
 															<%
 															if(!SmartUtil.isBlankObject(group.getLeader())){
 															%>
-																<span class="js_community_item user_select" comId="<%=group.getLeader().getId() %>"><%=group.getLeader().getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
+																<span class="js_community_item user_select" comId="<%=group.getLeader().getId() %>" comName="<%=group.getLeader().getLongName() %>"><%=group.getLeader().getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%
 															}
 															%>
@@ -219,7 +219,7 @@
 																for(int i=0; i<users.length; i++){
 																	UserInfo user = users[i];
 															%>
-																	<span class="js_community_item user_select" comId="<%=user.getId() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
+																	<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%
 																}
 															}
@@ -254,7 +254,7 @@
 																for(int i=0; i<users.length; i++){
 																	UserInfo user = users[i];
 															%>
-																	<span class="js_community_item user_select" comId="<%=user.getId() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
+																	<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%
 																}
 															}
@@ -288,7 +288,7 @@
 																for(int i=0; i<users.length; i++){
 																	UserInfo user = users[i];
 															%>
-																	<span class="js_community_item user_select" comId="<%=user.getId() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
+																	<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%
 																}
 															}
@@ -323,7 +323,7 @@
 																for(int i=0; i<users.length; i++){
 																	UserInfo user = users[i];
 															%>
-																	<span class="js_community_item user_select" comId="<%=user.getId() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
+																	<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%
 																}
 															}
