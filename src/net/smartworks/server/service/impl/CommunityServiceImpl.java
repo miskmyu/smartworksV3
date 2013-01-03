@@ -27,6 +27,7 @@ import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
+import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.engine.authority.model.SwaDepartment;
 import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
 import net.smartworks.server.engine.authority.model.SwaGroup;
@@ -1124,7 +1125,7 @@ public class CommunityServiceImpl implements ICommunityService {
 	public CommunityInfo[] getMyCommunitiesForUpload(String workId) throws Exception {
 
 		try{
-			if (workId.equalsIgnoreCase("pkg_62eeb90b11e1466b86d2d7c4dadf63ca")) {
+			if (workId.equalsIgnoreCase(SmartWork.ID_BOARD_MANAGEMENT)) {
 				//공지사항
 				//내가 등록할수 있는 부서
 				DepartmentInfo[] departmentInfos =  getDepartmentInfoForUpload(SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE);
@@ -1144,7 +1145,7 @@ public class CommunityServiceImpl implements ICommunityService {
 				}
 				return communityInfos;
 				
-			} else if (workId.equalsIgnoreCase("pkg_c08a02b36192489fbc13fdb6bed6f5fc")) {
+			} else if (workId.equalsIgnoreCase(SmartWork.ID_EVENT_MANAGEMENT)) {
 				//이벤트
 				//내가 등록할수 있는 부서
 				DepartmentInfo[] departmentInfos =  getDepartmentInfoForUpload(SwaDepartment.DEPT_AUTHTYPE_EVENT_WRITE);
@@ -2859,10 +2860,10 @@ public class CommunityServiceImpl implements ICommunityService {
 		}
 		
 		String type = null;
-		if (workId.equalsIgnoreCase("pkg_62eeb90b11e1466b86d2d7c4dadf63ca")) {
+		if (workId.equalsIgnoreCase(SmartWork.ID_BOARD_MANAGEMENT)) {
 			//공지사항
 			type = SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE;
-		} else if (workId.equalsIgnoreCase("pkg_c08a02b36192489fbc13fdb6bed6f5fc")) {
+		} else if (workId.equalsIgnoreCase(SmartWork.ID_EVENT_MANAGEMENT)) {
 			//일정
 			type = SwaDepartment.DEPT_AUTHTYPE_EVENT_WRITE;
 		} else {

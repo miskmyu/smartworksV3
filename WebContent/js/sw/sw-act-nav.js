@@ -128,6 +128,19 @@ $(function() {
 				}
 			});
 			
+		}else if(input.hasClass('js_saved_notice')){
+			$.ajax({
+				url : "saved_list.sw?cid=tw.li",
+				data : {},
+				success : function(data, status, jqXHR) {
+					$('#content').html(data);
+					smartPop.closeProgress();
+				},
+				error : function(xhr, ajaxOptions, thrownError){
+					smartPop.closeProgress();
+				}
+			});
+				
 		}else if(!isEmpty(input.children())){
 			var href = input.attr('href');
 			$.ajax({

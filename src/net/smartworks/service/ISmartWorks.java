@@ -274,6 +274,8 @@ public interface ISmartWorks {
 	
 	public abstract InstanceInfoList getWorkInstanceList(String workSpaceId, RequestParams params) throws Exception;
 	
+	public abstract InstanceInfoList getSavedInstanceList(String workSpaceId, RequestParams params) throws Exception;
+	
 	public abstract InstanceInfoList getImageInstanceList(String workSpaceId, RequestParams params) throws Exception;
 	
 	public abstract ImageInstanceInfo[] getImageInstancesByDate(int displayBy, String wid, String parentId, LocalDate lastDate, int maxCount) throws Exception;
@@ -327,6 +329,9 @@ public interface ISmartWorks {
 	public abstract void approvalPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract String startProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void removeProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	/**
 	 * @deprecated
 	 */

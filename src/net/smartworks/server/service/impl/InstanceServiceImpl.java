@@ -5903,6 +5903,11 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	
+	public InstanceInfoList getSavedInstanceList(String workSpaceId, RequestParams params) throws Exception {
+		return null;
+	}
+
+	
 	public InstanceInfoList getImageInstanceList(String workSpaceId, RequestParams params) throws Exception {
 		return getInstanceInfoListByRefType(workSpaceId, params, TskTask.TASKREFTYPE_IMAGE, -1, "");
 	}
@@ -10016,6 +10021,11 @@ public class InstanceServiceImpl implements IInstanceService {
 		Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7};
 		
 		return properties;
+	}
+	@Override
+	public void removeProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

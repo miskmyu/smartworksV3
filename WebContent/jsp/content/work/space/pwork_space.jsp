@@ -25,6 +25,74 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ page import="net.smartworks.service.ISmartWorks"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
+<script type="text/javascript">
+
+//완료버튼 클릭시 start_new_pwork.sw 서비스를 실행하기 위해 submit하는 스크립트..
+function submitForms(tempSave) {
+	var pworkSpace = $('.js_pwork_space_page');
+	var workId = pworkSpace.attr('workId');
+	var instanceId = pworkSpace.attr('instId');
+
+	// 계획업무로 지정하기가 선택되어 있으면, 계획업무관련 입력필드들을 validation하기위한 클래스를 추가한다.. 
+	var scheduleWork = pworkSpace.find('form[name="frmScheduleWork"]');
+	if(scheduleWork.find($('input[name="chkScheduleWork"]')).is(':checked')){
+		scheduleWork.addClass('js_validation_required');
+	}else{
+		scheduleWork.removeClass('js_validation_required');	
+	}
+
+	// start_pwork에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
+	if (SmartWorks.GridLayout.validate(pworkSpace.find('form.js_validation_required'), $('.js_space_error_message'))) {
+		var forms = pworkSpace.find('form');
+		var paramsJson = {};
+		paramsJson['workId'] = workId;
+		for(var i=0; i<forms.length; i++){
+			var form = $(forms[i]);
+			// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
+			if(form.attr('name') === 'frmSmartForm'){
+				paramsJson['formId'] = form.attr('formId');
+				paramsJson['formName'] = form.attr('formName');
+			}
+			// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
+			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+		}
+		if(tempSave){
+			paramsJson['isTempSave'] = true;
+			paramsJson['instanceId'] = instanceId;
+		}
+		console.log(JSON.stringify(paramsJson));
+		var url = "start_new_pwork.sw";
+		// 서비스요청 프로그래스바를 나타나게 한다....
+		var progressSpan = pworkSpace.find('.js_progress_span');
+		smartPop.progressCont(progressSpan);
+		// start_new_pwork.sw서비스를 요청한다..
+		$.ajax({
+			url : url,
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+				if(tempSave){
+					pworkSpace.attr('instId', data.instanceId);
+				}else{
+					window.location.reload(true);
+				}
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("startPWorkError"));
+			}
+		});
+	}
+	return;
+}
+
+</script>
+
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
@@ -105,7 +173,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_pwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>">
+<div class="section_portlet js_pwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>" isTempSaved="<%=instance.isTempSaved() %>">
     <div class="portlet_t"><div class="portlet_tl"></div></div>
     <div class="portlet_l" style="display: block;">
 	    <ul class="portlet_r" style="display: block;">		            
@@ -316,108 +384,142 @@
 			
 				<!-- 수정, 삭제버튼 -->
 			    <div class="fr">
-
-			        <span class="btn_gray js_btn_do_forward" style="display:none">
-			        	<a href="" class="js_forward_work_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.do_forward"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_reply_forward" style="display:none">
-			        	<a href="" class="js_reply_forward">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.reply_forward"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_do_approval" style="display:none">
-			        	<a href="" class="js_approval_work_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.do_approval"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_approve_approval" style="display:none">
-			        	<a href="" class="js_reply_approval">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.approve_approval"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_submit_approval" style="display:none">
-			        	<a href="" class="js_reply_approval">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.submit_approval"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_return_approval" style="display:none">
-			        	<a href="" class="js_reply_approval">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.return_approval"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_reject_approval" style="display:none">
-			        	<a href="" class="js_reply_approval">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.reject_approval"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_do_email" style="display:none">
-			        	<a href="" class="js_email_iwork_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.do_email"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-				
-					<span class="btn_gray ml5 js_btn_complete" style="display:none">
-			        	<a href="" class="js_perform_task_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.complete"/></span>
-				            <span class="txt_btn_end"></span>
-				    	</a>
-			   		</span>
-					
 					<%
-					CompanyGeneral cg = smartWorks.getCompanyGeneral();
-					if(cg.isUseReturnFunction()){
+					if(!instance.isTempSaved()){
 					%>
-	 					<span class="btn_gray ml5 js_btn_return" style="display:none">
-				        	<a href="" class="js_return_task_instance">
+				        <span class="btn_gray js_btn_do_forward" style="display:none">
+				        	<a href="" class="js_forward_work_instance">
 					            <span class="txt_btn_start"></span>
-					            <span class="txt_btn_center"><fmt:message key="common.button.return"/></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.do_forward"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+				
+				        <span class="btn_gray js_btn_reply_forward" style="display:none">
+				        	<a href="" class="js_reply_forward">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.reply_forward"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+				
+				        <span class="btn_gray js_btn_do_approval" style="display:none">
+				        	<a href="" class="js_approval_work_instance">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.do_approval"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+				
+				        <span class="btn_gray js_btn_approve_approval" style="display:none">
+				        	<a href="" class="js_reply_approval">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.approve_approval"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+				
+				        <span class="btn_gray js_btn_submit_approval" style="display:none">
+				        	<a href="" class="js_reply_approval">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.submit_approval"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+				
+				        <span class="btn_gray js_btn_return_approval" style="display:none">
+				        	<a href="" class="js_reply_approval">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.return_approval"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+				
+				        <span class="btn_gray js_btn_reject_approval" style="display:none">
+				        	<a href="" class="js_reply_approval">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.reject_approval"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+				
+				        <span class="btn_gray js_btn_do_email" style="display:none">
+				        	<a href="" class="js_email_iwork_instance">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.do_email"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+					
+						<span class="btn_gray ml5 js_btn_complete" style="display:none">
+				        	<a href="" class="js_perform_task_instance">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.complete"/></span>
+					            <span class="txt_btn_end"></span>
+					    	</a>
+				   		</span>
+						
+						<%
+						CompanyGeneral cg = smartWorks.getCompanyGeneral();
+						if(cg.isUseReturnFunction()){
+						%>
+		 					<span class="btn_gray ml5 js_btn_return" style="display:none">
+					        	<a href="" class="js_return_task_instance">
+						            <span class="txt_btn_start"></span>
+						            <span class="txt_btn_center"><fmt:message key="common.button.return"/></span>
+						            <span class="txt_btn_end"></span>
+						    	</a>
+					   		</span>
+					   	<%
+					   	}
+					   	%>
+	
+						<span class="btn_gray ml5 js_btn_reassign" style="display:none">
+				        	<a href="" class="js_reassign_task_instance">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.reassign"/></span>
+					            <span class="txt_btn_end"></span>
+					    	</a>
+				   		</span>
+						<span class="btn_gray ml5 js_btn_temp_save" style="display:none">
+				        	<a href="" class="js_temp_save_task_instance">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.temp_save"/></span>
 					            <span class="txt_btn_end"></span>
 					    	</a>
 				   		</span>
 				   	<%
+				   	}else{
+				   	%>
+							<span class="btn_gray ml5"> 
+								<!--  완료버튼을 클릭시 해당 업로드 화면페이지에 있는 submitForms()함수를 실행한다.. -->
+								<a href="" class="js_complete_action" onclick='submitForms();return false;'> 
+									<span class="txt_btn_start"></span>
+									<span class="txt_btn_center"><fmt:message key="common.button.complete"/></span> 
+									<span class="txt_btn_end"></span> 
+								</a>
+							</span> 
+									
+							<span class="btn_gray ml5"> 
+								<!--  완료버튼을 클릭시 해당 업로드 화면페이지에 있는 submitForms()함수를 실행한다.. -->
+								<a href="" class="js_temp_save_action" onclick='submitForms(true);return false;'> 
+									<span class="txt_btn_start"></span>
+									<span class="txt_btn_center"><fmt:message key="common.button.temp_save"/></span> 
+									<span class="txt_btn_end"></span> 
+								</a>
+							</span> 
+							
+							<span class="btn_gray ml5">
+					        	<a href="" class="js_delete_pwork_instance">
+						            <span class="txt_btn_start"></span>
+						            <span class="txt_btn_center"><fmt:message key="common.button.delete"/></span>
+						            <span class="txt_btn_end"></span>
+						    	</a>
+					   		</span>
+				   	<%
 				   	}
 				   	%>
-
-					<span class="btn_gray ml5 js_btn_reassign" style="display:none">
-			        	<a href="" class="js_reassign_task_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.reassign"/></span>
-				            <span class="txt_btn_end"></span>
-				    	</a>
-			   		</span>
-					<span class="btn_gray ml5 js_btn_temp_save" style="display:none">
-			        	<a href="" class="js_temp_save_task_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.temp_save"/></span>
-				            <span class="txt_btn_end"></span>
-				    	</a>
-			   		</span>
+				   	
 				</div>
 				<!-- 수정, 삭제버튼 //-->    					  
 
