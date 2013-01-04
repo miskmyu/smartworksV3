@@ -1,4 +1,3 @@
-
 <!-- Name 			: iwork_space.jsp						 -->
 <!-- Description	: 정보관리업무 인스턴스 공간을 표시하는 페이지    -->
 <!-- Author			: Maninsoft, Inc.						 -->
