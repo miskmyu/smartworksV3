@@ -609,6 +609,7 @@ function submitForms(tempSave) {
 		}else{
 			downloadHistories.show().find('.js_download_count').html('[' + downloadCount + ']');
 		}
+		pworkSpace.find('.js_instance_histories').html('').hide();
 		var selectedTask = input;
 		pworkSpace.find('.js_instance_task').removeClass('selected');
 		selectedTask.addClass('selected');
