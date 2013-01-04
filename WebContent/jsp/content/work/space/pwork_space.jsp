@@ -605,7 +605,7 @@ function submitForms(tempSave) {
 		}
 		var downloadHistories = pworkSpace.find('.js_download_histories');
 		if(downloadCount === '0'){
-			downloadHistories.show();
+			downloadHistories.hide().find('.js_download_count').html('');
 		}else{
 			downloadHistories.show().find('.js_download_count').html('[' + downloadCount + ']');
 		}
