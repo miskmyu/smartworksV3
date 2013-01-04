@@ -1161,7 +1161,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				}
 				
 //				if(!SmartUtil.isBlankObject(subject)) subject = subject.replaceAll("\"", "\'");
-				Date sentDate = (SmartUtil.isBlankObject(email.getBaseHeader().getDate())) ? new Date() : email.getBaseHeader().getDate();
+				Date sentDate = (SmartUtil.isBlankObject(email.getBaseHeader().getDate())) ? new LocalDate() : email.getBaseHeader().getDate();
 				instance = new MailInstance(msgId, subject, sender, new LocalDate(sentDate.getTime()));
 				instance.setCreatedDate(new LocalDate(sentDate.getTime()));
 				instance.setReceivers(receivers);
