@@ -105,7 +105,7 @@ function submitForms(tempSave) {
 	}
 	return;
 }
-
+</script>
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");

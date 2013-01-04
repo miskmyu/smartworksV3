@@ -9721,15 +9721,21 @@ public class InstanceServiceImpl implements IInstanceService {
 		int pageCount = params.getPageSize();
 		//instanceId = recordId
 		
-		TskTaskCond taskCond = new TskTaskCond();
-		taskCond.setExtendedProperties(new Property[]{new Property("recordId", instanceId)});
-		TskTask[] tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, taskCond, IManager.LEVEL_ALL);
-		if (tasks == null || tasks.length == 0)
-			return new InstanceInfoList();
-		
-		String prcInstId = tasks[0].getProcessInstId();
 		FileDownloadHistoryCond cond = new FileDownloadHistoryCond();
-		cond.setRefPrcInstId(prcInstId);
+		
+		TskTask[] tasks = null;
+		if (!CommonUtil.isEmpty(taskInstanceId)) {
+			cond.setRefTaskId(taskInstanceId);
+		} else {
+			TskTaskCond taskCond = new TskTaskCond();
+			taskCond.setExtendedProperties(new Property[]{new Property("recordId", instanceId)});
+			tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, taskCond, IManager.LEVEL_ALL);
+			if (tasks == null || tasks.length == 0)
+				return new InstanceInfoList();
+			
+			String prcInstId = tasks[0].getProcessInstId();
+			cond.setRefPrcInstId(prcInstId);
+		}
 		
 		long totalSize = SwManagerFactory.getInstance().getDocManager().getFileDownloadHistorySize(userId, cond);
 		
