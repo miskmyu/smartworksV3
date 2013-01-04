@@ -235,12 +235,13 @@ $(function() {
 				}
 			}
 			if(!isSameId){
+				var comNameLong = comName;
 				if(inputTarget.attr('href') === "email_address.sw"){
-					if(!isEmailAddress(inputTarget.attr('value')) && isEmailAddress(comId)){
-						comName = comName + "(" + comId + ")";
+					if(!isEmailAddress(inputTarget.attr('value')) && isEmailAddress(comId) && !isEmailAddress(comName)){
+						comNameLong = comName + "&lt;" + comId + "&gt;";
 					}
 				}
-				$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
+				$("<span class='js_community_item user_select' comId='" + comId + "' comName='" + comName+ "'>" + comNameLong
 						+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
 
 				var searchFilter = input.parents('.js_search_filter_page');

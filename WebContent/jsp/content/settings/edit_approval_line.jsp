@@ -162,7 +162,7 @@
 											<%
 											if(!SmartUtil.isBlankObject(approval.getApprover())){
 											%>
-												<span class='js_community_item user_select' comId="<%=approval.getApprover().getId()%>"><%=approval.getApprover().getLongName() %>
+												<span class='js_community_item user_select' comId="<%=approval.getApprover().getId()%>" comName="<%=approval.getApprover().getLongName()%>"><%=approval.getApprover().getLongName() %>
 													<a class='js_remove_community' href=''> x</a>
 												</span>
 											<%
@@ -232,7 +232,7 @@
 											<%
 											if(!SmartUtil.isBlankObject(approval.getApprover())){
 											%>
-												<span class='js_community_item user_select' comId="<%=approval.getApprover().getId()%>"><%=approval.getApprover().getLongName() %>
+												<span class='js_community_item user_select' comId="<%=approval.getApprover().getId()%>" comName="<%=approval.getApprover().getLongName()%>"><%=approval.getApprover().getLongName() %>
 													<a class='js_remove_community' href=''> x</a>
 												</span>
 											<%

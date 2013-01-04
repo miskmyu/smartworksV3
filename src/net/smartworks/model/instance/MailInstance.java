@@ -196,7 +196,7 @@ public class MailInstance extends Instance {
 		String userField = "";
 		for(int i=0; i<this.receivers.length; i++){
 			String name = (SmartUtil.isBlankObject(receivers[i].getLongName())) ? receivers[i].getId() : receivers[i].getLongName();
-			userField = userField + "<span class='js_community_item user_select' comId='" + receivers[i].getId() + "'>" + name + "(" + receivers[i].getId() + ")<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+			userField = userField + "<span class='js_community_item user_select' comId='" + receivers[i].getId() + "' comName='" + name + "'>" + name + "&lt;" + receivers[i].getId() + "&gt;<a class='js_remove_community' href=''>&nbsp;x</a></span>";
 		}
 		return userField;
 	}
@@ -234,7 +234,7 @@ public class MailInstance extends Instance {
 		String userField = "";
 		for(int i=0; i<this.ccReceivers.length; i++){
 			String name = (SmartUtil.isBlankObject(ccReceivers[i].getLongName())) ? ccReceivers[i].getId() : ccReceivers[i].getLongName();
-			userField = userField + "<span class='js_community_item user_select' comId='" + ccReceivers[i].getId() + "'>" + name + "(" + ccReceivers[i].getId() + ")<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+			userField = userField + "<span class='js_community_item user_select' comId='" + ccReceivers[i].getId() + "' comName='" + name + "'>" + name + "&lt;" + ccReceivers[i].getId() + "&gt;<a class='js_remove_community' href=''>&nbsp;x</a></span>";
 		}
 		return userField;
 	}
@@ -272,7 +272,7 @@ public class MailInstance extends Instance {
 		String userField = "";
 		for(int i=0; i<this.bccReceivers.length; i++){
 			String name = (SmartUtil.isBlankObject(bccReceivers[i].getLongName())) ? bccReceivers[i].getId() : bccReceivers[i].getLongName();
-			userField = userField + "<span class='js_community_item user_select' comId='" + bccReceivers[i].getId() + "'>" + name + "(" + bccReceivers[i].getId() + ")<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+			userField = userField + "<span class='js_community_item user_select' comId='" + bccReceivers[i].getId() + "' comName='" + name + "'>" + name + "&lt;" + bccReceivers[i].getId() + "&gt;<a class='js_remove_community' href=''>&nbsp;x</a></span>";
 		}
 		return userField;
 	}

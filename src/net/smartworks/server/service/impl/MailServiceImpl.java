@@ -1051,23 +1051,43 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				if (i == -1) {
 					i = findTextBody(email.getParts());
 				}
-	
-				String from = org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(email.getBaseHeader().getFromShown()));
-				String to = org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(email.getBaseHeader().getToShown()));
-				String cc = org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(email.getBaseHeader().getCcShown()));
-				String date = org.claros.intouch.common.utility.Utility.htmlCheck(email.getBaseHeader().getDateShown());
+//				
+						
+				InternetAddress from = (InternetAddress)email.getBaseHeader().getFrom()[0];
+				InternetAddress[] to = (InternetAddress[])email.getBaseHeader().getTo();
+				InternetAddress[] cc = (InternetAddress[])email.getBaseHeader().getCc();
+				String fromShown = (new User(from.getAddress(), from.getPersonal())).getEmailAddressShown();
+				String toShown = "";
+				if(to != null){
+					for(int k=0; k<to.length; k++)
+						toShown = toShown + (k!=0 ? "; " : "") + (new User(to[k].getAddress(), to[k].getPersonal())).getEmailAddressShown();
+				}
+				String ccShown = "";
+				if(cc != null){
+					for(int k=0; k<cc.length; k++)
+						ccShown = ccShown + (k!=0 ? "; " : "") + (new User(cc[k].getAddress(), cc[k].getPersonal())).getEmailAddressShown();
+				}
+
+				String date = org.claros.intouch.common.utility.Utility.htmlCheck(email.getBaseHeader().getDate().toString());
 				String subject = org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(email.getBaseHeader().getSubject()));
 				Boolean sendReceiptNotification = email.getBaseHeader().getRequestReceiptNotification();
 				String sendReceiptNotificationEmail = email.getBaseHeader().getReceiptNotificationEmail();
 				String notificationEmail = "";
 
-				String contentHeader = 	"</br><ul>" +
-						"<li><span>" + SmartMessage.getString("common.title.sender") + ":</span>" + from + "</li>" + 
-						"<li><span>" + SmartMessage.getString("common.title.send_date") + ":</span>" + date + "</li>" +
-						"<li><span>" + SmartMessage.getString("common.title.receivers") + ":</span>" + to + "</li>" +
-						"<li><span>" + SmartMessage.getString("common.title.cc_receivers") + ":</span>" + cc + "</li>" +
-						"<li><span>" + SmartMessage.getString("common.title.subject") + ":</span>" + subject + "</li>" +
-						"</ul></br></br>";
+//				String contentHeader = 	"</br><ul>" +
+//						"<li><span>" + SmartMessage.getString("common.title.sender") + ":</span>" + org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(fromShown)) + "</li>" + 
+//						"<li><span>" + SmartMessage.getString("common.title.receivers") + ":</span>" + org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(toShown)) + "</li>" +
+//						"<li><span>" + SmartMessage.getString("common.title.cc_receivers") + ":</span>" + org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(ccShown)) + "</li>" +
+//						"<li><span>" + SmartMessage.getString("common.title.send_date") + ":</span>" + date + "</li>" +
+//						"<li><span>" + SmartMessage.getString("common.title.subject") + ":</span>" + subject + "</li>" +
+//						"</ul></br></br>";
+				String contentHeader = 	
+						"<div><b>" + SmartMessage.getString("common.title.sender") + ":</b>" + org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(fromShown)) + "</div>" + 
+						"<div><b>" + SmartMessage.getString("common.title.receivers") + ":</b>" + org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(toShown)) + "</div>" +
+						"<div><b>" + SmartMessage.getString("common.title.cc_receivers") + ":</b>" + org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(ccShown)) + "</div>" +
+						"<div><b>" + SmartMessage.getString("common.title.send_date") + ":</b>" + date + "</div>" +
+						"<div><b>" + SmartMessage.getString("common.title.subject") + ":</b>" + subject + "</div>" +
+						"</br>";
 			
 				if(sendReceiptNotification != null && sendReceiptNotification.booleanValue() && sendReceiptNotificationEmail !=null && email.getBaseHeader().getUnread().booleanValue()){
 					notificationEmail = org.claros.commons.utility.Utility.convertTRCharsToHtmlSafe(sendReceiptNotificationEmail);
@@ -1077,9 +1097,6 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					mailCont.markAsRead(new Long(msgId));
 				}
 				
-				if (from == null || from.equals("")) {
-					from = SmartMessage.getString("mail.title.unknown.sender");
-				}
 				if (subject == null || subject.equals("")) {
 					subject = SmartMessage.getString("mail.title.no.subject");
 				}
@@ -1177,12 +1194,12 @@ public class MailServiceImpl extends BaseService implements IMailService {
 								String contentPostfix = 
 											(sendType == MailFolder.SEND_TYPE_FORWARD || 
 											 sendType == MailFolder.SEND_TYPE_REPLY || 
-											 sendType == MailFolder.SEND_TYPE_REPLY_ALL) ? SmartMessage.getString("mail.title.content.postfix") + contentHeader : "";
+											 sendType == MailFolder.SEND_TYPE_REPLY_ALL) ? "<p>" + SmartMessage.getString("mail.title.content.postfix") + "</p>" + "</br>" +  contentHeader : "";
 //								if(mailContent == null &&  mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
 								if(mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
 									mailContent = "";
 				                	Object obj = tmp.getContent();
-				                	if(null!=obj) mailContent = contentPostfix + obj.toString();
+				                	if(null!=obj) mailContent = obj.toString();
 									HtmlCleaner cleaner = new HtmlCleaner(mailContent);
 									cleaner.setOmitXmlDeclaration(true);
 									cleaner.setOmitXmlnsAttributes(true);
@@ -1191,6 +1208,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 									mailContent = cleaner.getCompactXmlAsString();
 									mailContent = HTMLMessageParser.prepareInlineHTMLContent(email, mailContent);
 									mailContent = org.claros.commons.utility.Utility.updateTRChars(mailContent);
+									mailContent = contentPostfix + mailContent;
 									i = j;
 									gotMailContent = true;
 									continue;
@@ -1205,6 +1223,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 									cleaner.clean(true,false);
 									mailContent = cleaner.getXmlAsString();
 									mailContent = org.claros.commons.utility.Utility.updateTRChars(mailContent);
+									mailContent = contentPostfix + mailContent;
 									i = j;
 									continue;
 								}

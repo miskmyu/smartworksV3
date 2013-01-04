@@ -57,7 +57,7 @@
 			<div class='fieldline community_names js_community_names sw_required'>
 				<div class="js_selected_communities user_sel_area">
 					<%if (operandValue != null) {%>
-						<span class='js_community_item user_select' comId='<%=operandValueSecond%>'><%=operandValue%>
+						<span class='js_community_item user_select' comId='<%=operandValueSecond%>' comName='<%=operandValue%>'><%=operandValue%>
 							<a class='js_remove_community' href=''> x</a>
 						</span>
 					<%}%>

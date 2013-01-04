@@ -130,7 +130,7 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.serializeObject = function(departm
 		if(!isEmpty(departmentList)){
 			department = {
 				id : $(departmentList[0]).attr('comId'),
-				name : $.trim(departmentList[0].childNodes[0].nodeValue)
+				name : $.trim($(departmentList[0]).attr('comName'))
 			};
 		}
 		departmentsJson[fieldId] =  {department: department};

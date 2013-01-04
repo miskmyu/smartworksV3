@@ -91,6 +91,7 @@ public class UserInfo extends WorkSpaceInfo {
 
 	public String getEmailAddressShown(){
 		if(this.getLongName() == null) return super.getId();
+		if(SmartUtil.isEmailAddress(this.getLongName())) return this.getLongName();
 		return this.getLongName() + "&lt;" + super.getId() + "&gt;";
 	}
 

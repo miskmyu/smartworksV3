@@ -64,7 +64,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	if(multiUsers === 'true'){
 		if(!isEmpty(users) && isEmpty(usersHtml)){
 			for(var i=0; i<users.length; i++)
-				usersHtml = usersHtml +  "<span class='js_community_item user_select' comId='" + users[i].userId + "'>" + users[i].longName + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";		
+				usersHtml = usersHtml +  "<span class='js_community_item user_select' comId='" + users[i].userId + "' comName='" + users[i].longName + "'>" + users[i].longName + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";		
 		}
 		href = "community_name.sw";
 		if(!isEmpty(options.courseId))
@@ -73,7 +73,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 			href = "email_address.sw";
 		icoClass = ' class="icon_fb_users"';
 	}else if (!isEmpty(users) && isEmpty(usersHtml)) {
-		usersHtml = "<span class='js_community_item user_select' comId='" + users[0].userId + "'>" + users[0].longName + "<a class='js_remove_community' href=''> x</a></span>";
+		usersHtml = "<span class='js_community_item user_select' comId='" + users[0].userId + "' comName='" + users[0].longName + "'>" + users[0].longName + "<a class='js_remove_community' href=''> x</a></span>";
 	}
 
 	var $html = $('<div class="form_value" style="width:' + valueWidth + '%"> <div class="icon_fb_space">\
@@ -184,7 +184,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.serializeObject = function(userFields){
 		for(var j=0; j<userList.length; j++)
 			users.push({
 				id : $(userList[j]).attr('comId'),
-				name : $.trim(userList[j].childNodes[0].nodeValue)
+				name : $.trim($(userList[j]).attr('comName'))
 			});
 		usersJson[fieldId] =  {users: users};
 	}
