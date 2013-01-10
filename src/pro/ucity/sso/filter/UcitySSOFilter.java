@@ -25,6 +25,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
+import pro.ucity.model.Adapter;
 import pro.ucity.model.UcityConstant;
 
 import net.smartworks.server.engine.factory.SwManagerFactory;
@@ -32,6 +35,7 @@ import net.smartworks.util.SmartUtil;
 
 public class UcitySSOFilter implements Filter {
     
+	private static final Logger logger = Logger.getLogger(UcitySSOFilter.class);
 	private FilterConfig fc; 
 	private List<String> passUrls = new ArrayList<String>();
 
@@ -43,7 +47,7 @@ public class UcitySSOFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-		System.out.println("####################   SSO FILTER START!   ########################");
+//		System.out.println("####################   SSO FILTER START!   ########################");
 		
 		HttpServletRequest request = (HttpServletRequest)servletRequest;
 		
@@ -55,10 +59,10 @@ public class UcitySSOFilter implements Filter {
 		HttpSession session = request.getSession(false);  // 미리 생성된 Session 이 없으면  null 리턴
 		ArrayList<UserProgramAuthInfoVO> authProgramList = null;  // 프로그램 권한 리스트
 		
-		System.out.println("호출 url = " + url);    // /cimb/wti/retrieveWeatherInfoList.do
-		System.out.println("Referer IP = " + addr);    // 10.2.10.20
+//		System.out.println("호출 url = " + url);    // /cimb/wti/retrieveWeatherInfoList.do
+//		System.out.println("Referer IP = " + addr);    // 10.2.10.20
 		
-		// 직접 호출하였거나, eco 플랫폼 운영 포털을 통해 호출하지 않은 경우, 또는 예외 신청 URL 로 호출한 경우
+		// 직접 호출하였거나, eco 플랫폼 운영 포털을 통해 호출하지 않은 경우, 또는 예외 신청 URL 로 호출한 경우 ( 아래 소스 무조껀 주석 69까지)
 //		if ( !urlRefererCheck(request)) {
 //			
 //			System.out.println("U-Service URL 직접 호출");
@@ -66,7 +70,7 @@ public class UcitySSOFilter implements Filter {
 //			request.setAttribute("errorCode", "100"); 
 //			throw new CommonException(commonMessageSource.getMessage("biz.error.com.001"));  // 잘못된 접근입니다. 로그인 후 이용해 주십시오.
 //		}
-		System.out.println("=========== NO SESSION ======== session = " + ((session!=null) ? session.getId() : "null"));
+//		System.out.println("=========== NO SESSION ======== session = " + ((session!=null) ? session.getId() : "null"));
 		
 		if( session != null && session.getAttribute("SSO_ID") != null ){
 
@@ -85,7 +89,7 @@ public class UcitySSOFilter implements Filter {
 //		    	}
 		    	
 		    	String ssoId = session.getAttribute("SSO_ID").toString(); //mnApi.getID();
-		    	System.out.println("ession.getAttribute('SSO_ID') = " + session.getAttribute("SSO_ID"));
+//		    	System.out.println("ession.getAttribute('SSO_ID') = " + session.getAttribute("SSO_ID"));
 		    	
 			    userSessionVO.setUserId(ssoId);
 			    
@@ -93,8 +97,7 @@ public class UcitySSOFilter implements Filter {
 			    try {
 			    	userSessionVO = SwManagerFactory.getInstance().getSsoManager().selectUser(userSessionVO);
 				} catch (Exception e) {
-					System.out.println("############### SsoManagerImpl Excetpion!!!");
-					throw new ServletException(e);
+					throw new ServletException("############### SsoManagerImpl Excetpion!!!");
 				}
 		        userSessionVO.setReqLocal(request.getLocale().getCountry());
 
@@ -102,8 +105,7 @@ public class UcitySSOFilter implements Filter {
 		        try {
 		        	authProgramList = (ArrayList<UserProgramAuthInfoVO>)SwManagerFactory.getInstance().getSsoManager().retriveUserProgramAuthInfo( userSessionVO );
 		        } catch (Exception e) {
-					System.out.println("############### SsoManagerImpl Excetpion!!!");
-					throw new ServletException(e);
+					throw new ServletException("############### SsoManagerImpl Excetpion!!!");
 				}		        		        
 		        SessionVO svo = new SessionVO();          
 		        svo.setUserInfo(userSessionVO);
@@ -115,28 +117,28 @@ public class UcitySSOFilter implements Filter {
 		        result = true;
 		             
 		}else if( exceptionPassUrlCheck(url) ) {  // SSO 를 거치지 않은 예외 통과 URL 인 경우
-			System.out.println("=========== NO SESSION ======== session = " + ((session!=null) ? session.getId() : "null"));
+//			System.out.println("=========== NO SESSION ======== session = " + ((session!=null) ? session.getId() : "null"));
 			result = true;
 		}else{
-			System.out.println("SSO 연계를 통한 접근이 아닙니다. Session 이 생성되지 않았습니다. ");
+//			System.out.println("SSO 연계를 통한 접근이 아닙니다. Session 이 생성되지 않았습니다. ");
 			request.setAttribute("errorCode", "100"); 
 			//throw new CommonException(commonMessageSource.getMessage("biz.error.com.001"));  // 잘못된 접근입니다. 로그인 후 이용해 주십시오.
-			throw new ServletException("잘못된 접근입니다. 로그인 후 이용해 주십시오.");  // 잘못된 접근입니다. 로그인 후 이용해 주십시오.
+			logger.error("잘못된 접근입니다. 로그인 후 이용해 주십시오.");  // 잘못된 접근입니다. 로그인 후 이용해 주십시오.
 		}
 		
 		if( !retriveUserProgramAuthInfo(authProgramList , url) && !exceptionPassUrlCheck(url) ){
-			System.out.println("해당 화면에 대한 접근 권한이 없습니다.");
+//			System.out.println("해당 화면에 대한 접근 권한이 없습니다.");
 			request.setAttribute("errorCode", "400"); 
 			//throw new CommonException(commonMessageSource.getMessage("biz.error.com.004"));  // 해당 화면에 대한 접근 권한이 없습니다.        	
-			throw new ServletException("해당 화면에 대한 접근 권한이 없습니다.");  // 해당 화면에 대한 접근 권한이 없습니다.    	
+			logger.error("해당 화면에 대한 접근 권한이 없습니다.");  // 해당 화면에 대한 접근 권한이 없습니다.    	
         }
 
 //		return result;
-		System.out.println("################################################return 바로 전까지 들어왔습니다.###########################################");
+//		System.out.println("################################################return 바로 전까지 들어왔습니다.###########################################");
 		try {
 			filterChain.doFilter(servletRequest, servletResponse);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("filterChain.doFilter, 137");
 		}
 		
 		
@@ -172,7 +174,7 @@ public class UcitySSOFilter implements Filter {
 				}
 			}  
 		}
-		System.out.println("return false");
+		logger.info("return false");
 		return false;
 	}
 	

@@ -8,31 +8,27 @@
 
 package pro.ucity.scheduler;
 
-import java.sql.Connection;
 import java.util.Date;
 
-import javax.sql.DataSource;
-
 import org.apache.log4j.Logger;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.stereotype.Service;
 
 import pro.ucity.model.Adapter;
 import pro.ucity.model.OPSituation;
+import pro.ucity.util.UcityUtil;
 
-public class DBReadScheduler extends QuartzJobBean  {
+
+@Service("DBReadScheduler")
+public class DBReadScheduler{
 	
 	
 	public static boolean isDbReadSchedulerRunning = false;
 	public static long schedulerCount = 0;
-	public static Connection connection = null;
-	public static DataSource dataSource = null;
 	
 	private static Logger logger = Logger.getLogger(DBReadScheduler.class);
 	
-	@Override
-	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
+	
+	public void startDb() {
 		
 		if(!isDbReadSchedulerRunning){
 			try{
@@ -42,11 +38,12 @@ public class DBReadScheduler extends QuartzJobBean  {
 				return;
 			}
 		}else{
-			logger.info("진행중인 스케쥴려가 있습니다.");	
+			logger.info("진행중인 스케줄러가 있습니다.");
+			return;
 		}
 	}
 	
-	synchronized static void startScheduler(){
+	public synchronized void startScheduler(){
 		isDbReadSchedulerRunning = true;
 		schedulerCount++;
 		
@@ -54,17 +51,19 @@ public class DBReadScheduler extends QuartzJobBean  {
 			try{
 				Thread.sleep(5000);
 				logger.info( schedulerCount + "진행중인 태스크 재시동 시작 : " + new Date());
-//				UcityUtil.resumePollingForRunningTasks(null);
+				UcityUtil.resumePollingForRunningTasks(null);
 				logger.info( schedulerCount + "진행중인 태스크 재시동 종료 : " + new Date());
 			}catch (Exception e){
 				logger.error("startScheduler error : DBReadScheduler.startScheduler.78");
 			}
 		}
 		logger.info( schedulerCount + "번째 스케쥴러 동작 시작 : " + new Date());
-		Adapter.readHistoryTableToStart();
-		OPSituation.readHistoryTableToStart();
+		Adapter.scheduler();
+		OPSituation.scheduler();
 		logger.info( schedulerCount +"번째 스케쥴러 동작 종료 : " + new Date());
 
-		isDbReadSchedulerRunning = false;		
+		isDbReadSchedulerRunning = false;	
+		
+		return;
 	}
 }

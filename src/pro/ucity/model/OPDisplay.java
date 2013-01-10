@@ -28,18 +28,26 @@ public class OPDisplay {
 	private static Logger logger = Logger.getLogger(OPDisplay.class);
 
 	public static final KeyMap[] OPPORTAL_DISPLAY_FIELDS = {
-		new KeyMap("상황표출 아이디", UcityConstant.getQueryByKey("OPDisplay.DISPLAY_ID")), new KeyMap("상황 아이디", UcityConstant.getQueryByKey("OPDisplay.SITUATION_ID")), new KeyMap("상황표출 내용", UcityConstant.getQueryByKey("OPDisplay.DISPLAY_CONTENT")),
-		new KeyMap("상황표출 이미지경로", UcityConstant.getQueryByKey("OPDisplay.DISPLAY_IMAGE_PATH")), new KeyMap("상황표출 동영상경로", UcityConstant.getQueryByKey("OPDisplay.DISPLAY_MOVIE_PATH")), new KeyMap("상황표출시간(초)", UcityConstant.getQueryByKey("OPDisplay.DISPLAY_SECOND")), new KeyMap("미디어보드표출여부", UcityConstant.getQueryByKey("OPDisplay.MB_YN")),
-		new KeyMap("환경VMS표출여부", UcityConstant.getQueryByKey("OPDisplay.ENV_VMS_YN")), new KeyMap("교통VMS표출여부", UcityConstant.getQueryByKey("OPDisplay.TRA_VMS_YN")), new KeyMap("BIT표출여부", UcityConstant.getQueryByKey("OPDisplay.BIT_YN")), new KeyMap("KIOSK표출여부", UcityConstant.getQueryByKey("OPDisplay.KIOSK_YN")),
-		new KeyMap("표출요청일시", UcityConstant.getQueryByKey("OPDisplay.REQUEST_DATE")), new KeyMap("표출중지", UcityConstant.getQueryByKey("OPDisplay.STOP_REQUEST")), new KeyMap("표출중지일시", UcityConstant.getQueryByKey("OPDisplay.STOP_REQUEST_DATE")), new KeyMap("표출중지요청아이디", UcityConstant.getQueryByKey("OPDisplay.STOP_REQUEST_USER_ID"))
+		new KeyMap("상황표출 아이디", UcityConstant.getQueryByKey("OPDisplay.DISPLAY_ID")), 
+		new KeyMap("상황 아이디", UcityConstant.getQueryByKey("OPDisplay.SITUATION_ID")), 
+		new KeyMap("상황표출 내용", UcityConstant.getQueryByKey("OPDisplay.DISPLAY_CONTENT")),
+//		new KeyMap("상황표출 이미지경로", UcityConstant.getQueryByKey("OPDisplay.DISPLAY_IMAGE_PATH")), 
+//		new KeyMap("상황표출 동영상경로", UcityConstant.getQueryByKey("OPDisplay.DISPLAY_MOVIE_PATH")), 
+//		new KeyMap("상황표출시간(초)", UcityConstant.getQueryByKey("OPDisplay.DISPLAY_SECOND")), 
+		new KeyMap("미디어보드표출여부", UcityConstant.getQueryByKey("OPDisplay.MB_YN")),
+		new KeyMap("환경VMS표출여부", UcityConstant.getQueryByKey("OPDisplay.ENV_VMS_YN")), 
+		new KeyMap("교통VMS표출여부", UcityConstant.getQueryByKey("OPDisplay.TRA_VMS_YN")), 
+		new KeyMap("BIT표출여부", UcityConstant.getQueryByKey("OPDisplay.BIT_YN")), 
+		new KeyMap("KIOSK표출여부", UcityConstant.getQueryByKey("OPDisplay.KIOSK_YN")),
+		new KeyMap("표출요청일시", UcityConstant.getQueryByKey("OPDisplay.REQUEST_DATE")), 
+		new KeyMap("표출중지", UcityConstant.getQueryByKey("OPDisplay.STOP_REQUEST")), 
+		new KeyMap("표출중지일시", UcityConstant.getQueryByKey("OPDisplay.STOP_REQUEST_DATE")), 
+//		new KeyMap("표출중지요청아이디", UcityConstant.getQueryByKey("OPDisplay.STOP_REQUEST_USER_ID"))
 	};
 	
 	private String situationId;
 	private String displayId;
 	private String displayContent;
-	private String displayImagePath;
-	private String displayMoviePath;
-	private String displaySecond;
 	private String mbYn;
 	private String envVmsYn;
 	private String traVmsYn;
@@ -48,7 +56,6 @@ public class OPDisplay {
 	private String requestDate;
 	private String stopRequest;
 	private String stopRequestDate;
-	private String stopRequestUserId;
 	
 	public String getSituationId() {
 		return situationId;
@@ -67,24 +74,6 @@ public class OPDisplay {
 	}
 	public void setDisplayContent(String displayContent) {
 		this.displayContent = displayContent;
-	}
-	public String getDisplayImagePath() {
-		return displayImagePath;
-	}
-	public void setDisplayImagePath(String displayImagePath) {
-		this.displayImagePath = displayImagePath;
-	}
-	public String getDisplayMoviePath() {
-		return displayMoviePath;
-	}
-	public void setDisplayMoviePath(String displayMoviePath) {
-		this.displayMoviePath = displayMoviePath;
-	}
-	public String getDisplaySecond() {
-		return displaySecond;
-	}
-	public void setDisplaySecond(String displaySecond) {
-		this.displaySecond = displaySecond;
 	}
 	public String getMbYn() {
 		return mbYn;
@@ -134,12 +123,6 @@ public class OPDisplay {
 	public void setStopRequestDate(String stopRequestDate) {
 		this.stopRequestDate = stopRequestDate;
 	}
-	public String getStopRequestUserId() {
-		return stopRequestUserId;
-	}
-	public void setStopRequestUserId(String stopRequstUserId) {
-		this.stopRequestUserId = stopRequestUserId;
-	}
 	public OPDisplay(ResultSet resultSet){
 		super();
 		if(SmartUtil.isBlankObject(resultSet)) return;
@@ -163,12 +146,6 @@ public class OPDisplay {
 				dataRecord.put(keyMap.getId(), this.displayId);
 			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPDisplay.DISPLAY_CONTENT")))
 				dataRecord.put(keyMap.getId(), this.displayContent);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPDisplay.DISPLAY_IMAGE_PATH")))
-				dataRecord.put(keyMap.getId(), this.displayImagePath);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPDisplay.DISPLAY_MOVIE_PATH")))
-				dataRecord.put(keyMap.getId(), this.displayMoviePath);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPDisplay.DISPLAY_SECOND")))
-				dataRecord.put(keyMap.getId(), this.displaySecond);
 			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPDisplay.MB_YN"))){
 				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.mbYn) ? "on" : "");
 				if("Y".equalsIgnoreCase(this.mbYn))
@@ -195,8 +172,6 @@ public class OPDisplay {
 				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.stopRequest) ? "on" : "");
 		     else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPDisplay.STOP_REQUEST_DATE")))
 				dataRecord.put(keyMap.getId(), this.stopRequestDate);
-		     else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPDisplay.STOP_REQUEST_USER_ID")))
-				dataRecord.put(keyMap.getId(), this.stopRequestUserId);
 		}
 		
 		if(!SmartUtil.isBlankObject(externalDisplay))
@@ -230,15 +205,6 @@ public class OPDisplay {
 			this.displayContent = result.getString(UcityConstant.getQueryByKey("OPDisplay.DISPLAY_CONTENT"));
 		}catch (Exception ex){}
 		try{
-			this.displayImagePath = result.getString(UcityConstant.getQueryByKey("OPDisplay.DISPLAY_IMAGE_PATH"));
-		}catch (Exception ex){}
-		try{
-			this.displayMoviePath = result.getString(UcityConstant.getQueryByKey("OPDisplay.DISPLAY_MOVIE_PATH"));
-		}catch (Exception ex){}
-		try{
-			this.displaySecond = result.getString(UcityConstant.getQueryByKey("OPDisplay.DISPLAY_SECOND"));
-		}catch (Exception ex){}
-		try{
 			this.mbYn = result.getString(UcityConstant.getQueryByKey("OPDisplay.MB_YN"));
 		}catch (Exception ex){}
 		try{
@@ -261,9 +227,6 @@ public class OPDisplay {
 		}catch (Exception ex){}
 		try{
 			this.stopRequestDate = result.getString(UcityConstant.getQueryByKey("OPDisplay.STOP_REQUEST_DATE"));
-		}catch (Exception ex){}
-		try{
-			this.stopRequestUserId = result.getString(UcityConstant.getQueryByKey("OPDisplay.STOP_REQUEST_USER_ID"));
 		}catch (Exception ex){}
 	}
 	

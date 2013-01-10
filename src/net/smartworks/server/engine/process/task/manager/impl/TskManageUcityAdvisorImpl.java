@@ -3,6 +3,7 @@ package net.smartworks.server.engine.process.task.manager.impl;
 import java.util.Date;
 import java.util.TimeZone;
 
+import net.smartworks.model.instance.Instance;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -64,6 +65,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 			String isSms = obj.getExtendedAttributeValue("ucity_isSms");
 			String eventPlace = obj.getExtendedAttributeValue("ucity_eventPlace");
 			String facilityId = obj.getExtendedAttributeValue("ucity_facilityId");
+			String runningTaskNames = obj.getExtendedAttributeValue("ucity_runningtaskname");
 			
 			UcityWorkListCond ucityCond = new UcityWorkListCond();
 			ucityCond.setPrcInstId(prcInstId);
@@ -106,9 +108,11 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				//이미생성된 인스턴스라면 업데이트
 				PrcProcessInst prcInst = getPrcManager().getProcessInst(user, prcInstId, IManager.LEVEL_LITE);
 				ucityWorkList.setStatus(prcInst.getStatus());
-				ucityWorkList.setRunningTaskId(runningTaskId);
-				ucityWorkList.setRunningTaskName(runningTaskName);
-
+				//이상종료일 경우 진행중인 단계를 지우지 않음.
+				if(!prcInst.getStatus().equalsIgnoreCase("6")){
+					ucityWorkList.setRunningTaskId(runningTaskId);
+					ucityWorkList.setRunningTaskName(runningTaskName);	
+				}				
 				if (!CommonUtil.isEmpty(serviceName))
 					ucityWorkList.setServiceName(serviceName);
 				if (!CommonUtil.isEmpty(eventId))
@@ -129,7 +133,7 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				if (!CommonUtil.isEmpty(eventPlace))
 					ucityWorkList.setEventPlace(eventPlace);
 				if (!CommonUtil.isEmpty(facilityId))
-					ucityWorkList.setEventPlace(facilityId);
+					ucityWorkList.setFacilityId(facilityId);
 
 				logger.info("UPDATE UCITY WORKLIST TABLE");
 				ucityMgr.setUcityWorkList(user, ucityWorkList, null);

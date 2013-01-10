@@ -1,6 +1,5 @@
 <%@page import="pro.ucity.model.Audit"%>
 <%@page import="pro.ucity.model.System"%>
-<%@page import="pro.ucity.util.UcityTest"%>
 <%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.model.filter.info.SearchFilterInfo"%>
 <%@page import="net.smartworks.model.work.ProcessWork"%>
@@ -80,7 +79,8 @@
  	if(SmartUtil.isBlankObject(auditId)) auditId = Audit.DEFAULT_AUDIT_ID_STR;
  	int auditNumber = Integer.parseInt(auditId);
  	
- 	int[][] auditTasks = smartWorks.getUcityAuditTaskCounts(true);
+ 	//int[][] auditTasks = smartWorks.getUcityAuditTaskCounts(true);
+ 	int[][] auditTasks = null;
  	
 	String workId = System.getProcessId(System.PROCESS_ENV_WEAHTER);
 	User cUser = SmartUtil.getCurrentUser();

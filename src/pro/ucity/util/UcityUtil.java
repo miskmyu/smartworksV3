@@ -924,9 +924,9 @@ public class UcityUtil {
 						break;
 					}else{
 						logger.info("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-					}
-					PollingModel pollingTask = getPolling(Thread.currentThread());					
+					}				
 				}
+					PollingModel pollingTask = getPolling(Thread.currentThread());	
 			}
 		});
 		addThreadToPolling(index, pollingForRunningTask);
