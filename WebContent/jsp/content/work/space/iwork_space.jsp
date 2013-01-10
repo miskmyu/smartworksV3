@@ -3,6 +3,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.instance.Instance"%>
 <%@page import="net.smartworks.model.instance.WorkInstance"%>
@@ -505,13 +506,27 @@ function submitForms(tempSave) {
 				
 						<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 -->
 						<%
-						if(workAccessLevel == AccessPolicy.LEVEL_PUBLIC) {
+						if(workAccessLevel == AccessPolicy.LEVEL_PUBLIC || workAccessLevel == AccessPolicy.LEVEL_CUSTOM) {
 						%>
 							<div class="fr form_space js_access_level_custom" style="display:none">
 								<span class="js_type_userField" fieldId="txtAccessableUsers" multiUsers="true">
 									<div class="form_value">
 										<div class="icon_fb_space">
 											<div class="fieldline community_names js_community_names sw_required">
+												<%
+												if(workAccessLevel == AccessPolicy.LEVEL_CUSTOM){
+													CommunityInfo[] communitiesToOpen = instance.getAccessPolicy().getCommunitiesToOpen();
+													if(!SmartUtil.isBlankObject(communitiesToOpen)){
+														for(CommunityInfo community : communitiesToOpen){
+															String comName = (community.getClass().equals(UserInfo.class)) ? ((UserInfo)community).getLongName() : community.getName();
+												%>
+															<span class="js_community_item user_select" comId="<%=community.getId() %>" comName="<%=comName%>"><%=comName %><a class="js_remove_community" href="">&nbsp;x</a></span>		
+												
+												<%												
+														}
+													}
+												}
+												%>
 												<input class="js_auto_complete" href="community_name.sw" type="text">
 											</div>
 											<div class="js_community_list com_list" style="display: none"></div>
