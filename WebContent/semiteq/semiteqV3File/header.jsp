@@ -46,6 +46,10 @@ function logout() {
 	document.location.href = "logout.sw?userId=" + currentUser.userId;
 };
 
+function gospecsearch(){
+	window.open("./semiteq/barcode_search.jsp","","");
+}
+
 </script>
 </script>
 <%
@@ -189,9 +193,9 @@ function logout() {
 			<!-- 메일 알림 영역  //-->
 	
 			<!-- 임시저장 알림 영역  -->
-			<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
-<%-- 			<li class="icon_saved js_notice_count">
-				<a id="savedbox_count" class="js_saved_notice" href=""
+			<%-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
+			<li class="icon_saved js_notice_count">
+				<a id="savedbox_count" href="notice_message_box.sw?noticeType=<%=Notice.TYPE_SAVEDBOX%>"
 					title="<fmt:message key='header.notice.icon.savedbox'/>"> 
 					<%
 				 	if (notices.length > Notice.TYPE_SAVEDBOX && notices[Notice.TYPE_SAVEDBOX].getLength() > 0) {
@@ -202,7 +206,7 @@ function logout() {
 					%>
 				</a>
 			</li>
- --%>			<!-- 임시저장 알림 영역  -->
+			<!-- 임시저장 알림 영역  --%>
 			<li></li>
 		</ul>
 	</span>
@@ -215,15 +219,17 @@ function logout() {
 
 <!-- 헤더에 있는 메뉴들 및 연결 기능 -->
 <div class="top_menu">
-	<ul class="fl">
+	<ul class="fl"  Style="width:470px;">
 		<!--  홈메뉴  -->
 		<li class="idx1">
 				<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>"><fmt:message key="header.top_menu.home" /></a>
 		</li>
-		<!--  홈메뉴  //-->
+		<!--  관리자 권한이 있는 사람만 메일 기능 설정  //-->
+	
+		<!--  관리자 권한이 있는 사람만 메일 기능 설정  //-->
 <%-- 
 		<!--  스마트케스트 메뉴  -->
-		<li class="idx2">
+		<li class="idx3">
  			<span>
  				<a href="smartcaster.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_SMARTCASTER + cUser.getId()%>"><fmt:message key="header.top_menu.smartcaster" /></a> 
  			</span> 
@@ -231,12 +237,22 @@ function logout() {
 		<!--  스마트케스트 메뉴 // -->
 
 		<!--  대시보드 메뉴  -->
-		<li class="idx3">
+		<li class="idx4">
  				<a href="dashboard.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>"><fmt:message key="header.top_menu.dashboard" /></a> 
 		</li>
 		<!--  대시보드 메뉴  //-->
  --%>
+ 		<!--  SPEC 조회  -->
+		<li class="idx2">
+				<a href="javascript:gospecsearch();">SPEC조회</a>
+		</li>
+		<li class="idx2">
+				<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>&#pwork_list.sw%3Fcid%3Dpw.li.pkg_c5136ce19f674f6d8e65345bd5393b23">OnLine교육</a>
+		</li>
+	
  	</ul>
+ 
+	
 	
 	<!-- 통합 검색 기능  -->
 	<div class="global_srch" style="display:none">
@@ -267,10 +283,11 @@ function logout() {
 		<!-- 관리자 권한이 있는 사용자에게 제공되는 시스템설정, 스마트빌더, 앱스토어 버튼들  -->
 		<div class="pop_admin">
 			<a href="settings_home.sw"><span class="btn_setting" title="<fmt:message key='header.global_menu.settings'/>" ></span></a>
-<%-- 
-			<a href="http://appstore.smartworks.net" target="_blank"><span class="btn_appstore" title="<fmt:message key='header.global_menu.appstore'/>"></span></a>
- --%>
+
+<%-- 			<a href="http://appstore.smartworks.net" target="_blank"><span class="btn_appstore" title="<fmt:message key='header.global_menu.appstore'/>"></span></a> --%>
+
 			<a href="builder_home.sw"><span class="btn_builder" title="<fmt:message key='header.global_menu.smartbuilder'/>"></span></a>
+			
 		</div>
 	<%
 	}

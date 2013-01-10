@@ -785,6 +785,21 @@ public class UcityUtil {
 		}
 		
 	}
+	
+	public static void stopAllPollingsForInstance(String instanceId) throws Exception{
+		if(SmartUtil.isBlankObject(instanceId) || SmartUtil.isBlankObject(UcityUtil.pollingQueue)) return;
+		for(int i=0; i<pollingQueue.size(); i++){
+			PollingModel pollingModel = pollingQueue.get(i);
+			if(!SmartUtil.isBlankObject(pollingModel.getTaskInstance()) 
+					&& !SmartUtil.isBlankObject(pollingModel.getTaskInstance().getWorkInstance()) 
+					&& !SmartUtil.isBlankObject(pollingModel.getTaskInstance().getWorkInstance().getId()) 
+					&& SmartUtil.isBlankObject(pollingModel.getTaskInstance().getWorkInstance().getId().equals(instanceId))){
+				pollingModel.setInterrupted(true);
+			}
+		}
+		
+	}
+	
 	public static void stopAllThread() throws Exception{
 		if(SmartUtil.isBlankObject(UcityUtil.pollingQueue)) 
 			return;

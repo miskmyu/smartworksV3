@@ -480,6 +480,11 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public InstanceInfoList getSavedInstanceList(String workSpaceId, RequestParams params) throws Exception {
+		return instanceService.getSavedInstanceList(workSpaceId, params);
+	}
+
+	@Override
 	public InstanceInfoList getImageInstanceList(String workSpaceId, RequestParams params) throws Exception {
 		return instanceService.getImageInstanceList(workSpaceId, params);
 	}
@@ -1733,5 +1738,10 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public DepartmentInfo[] searchDepartment(String key, HttpServletRequest request) throws Exception {
 		return communityService.searchDepartment(key, request);
+	}
+
+	@Override
+	public void removeProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeProcessWorkInstance(requestBody, request);		
 	}
 }

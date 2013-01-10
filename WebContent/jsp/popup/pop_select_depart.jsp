@@ -21,7 +21,7 @@
 					<div>
 						<a href="pop_departlist_by_depart.sw?multiUsers=false" departmentId="<%=cUser.getCompanyId()%>" class="js_popup js_expandable">
 							<span class="btn_tree_plus vm"></span>
-							<a href="" class="js_pop_select_depart" deaprtId="<%=cUser.getCompanyId()%>" departName="<%=cUser.getCompany()%>">
+							<a href="" class="js_pop_select_depart" departId="<%=cUser.getCompanyId()%>" departName="<%=cUser.getCompany()%>">
 								<span><%=cUser.getCompany() %></span>
 							</a>
 						</a>

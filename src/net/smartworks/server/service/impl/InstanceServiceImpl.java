@@ -282,7 +282,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			//TODO localDate 로 변경
 			Calendar cal = Calendar.getInstance();			
 			String searchDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + (cal.get(Calendar.DATE) - 1) + " 15:00:00.000";
-			swdRecordCond.setFilter(new Filter[]{new Filter(">=","Duration", searchDate)});
+			swdRecordCond.setFilter(new Filter[]{new Filter(">=","duration", Filter.OPERANDTYPE_DATETIME, searchDate)});
+			
 			//END
 			
 			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
@@ -1392,7 +1393,13 @@ public class InstanceServiceImpl implements IInstanceService {
 							dataField.setRefRecordId(null);
 							dataField.setRefForm(null);
 							dataField.setRefFormField(null);
-							dataField.setValue(CommonUtil.newId());
+							
+							//Id를 새로 만들기 전에 이미 생성된 아이디가 있다면 새로 만들지 않고 기존것을 사용한다
+							if (!CommonUtil.isEmpty(oldRecord.getDataFieldValue(fieldId))) {
+								dataField.setValue(oldRecord.getDataFieldValue(fieldId));
+							} else {
+								dataField.setValue(CommonUtil.newId());
+							}
 							resultStack.push(dataField);
 							
 						} else if (functionId.equals("mis:getCurrentDate")) {
@@ -5896,6 +5903,11 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	
+	public InstanceInfoList getSavedInstanceList(String workSpaceId, RequestParams params) throws Exception {
+		return null;
+	}
+
+	
 	public InstanceInfoList getImageInstanceList(String workSpaceId, RequestParams params) throws Exception {
 		return getInstanceInfoListByRefType(workSpaceId, params, TskTask.TASKREFTYPE_IMAGE, -1, "");
 	}
@@ -9709,15 +9721,21 @@ public class InstanceServiceImpl implements IInstanceService {
 		int pageCount = params.getPageSize();
 		//instanceId = recordId
 		
-		TskTaskCond taskCond = new TskTaskCond();
-		taskCond.setExtendedProperties(new Property[]{new Property("recordId", instanceId)});
-		TskTask[] tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, taskCond, IManager.LEVEL_ALL);
-		if (tasks == null || tasks.length == 0)
-			return new InstanceInfoList();
-		
-		String prcInstId = tasks[0].getProcessInstId();
 		FileDownloadHistoryCond cond = new FileDownloadHistoryCond();
-		cond.setRefPrcInstId(prcInstId);
+		
+		TskTask[] tasks = null;
+		if (!CommonUtil.isEmpty(taskInstanceId)) {
+			cond.setRefTaskId(taskInstanceId);
+		} else {
+			TskTaskCond taskCond = new TskTaskCond();
+			taskCond.setExtendedProperties(new Property[]{new Property("recordId", instanceId)});
+			tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, taskCond, IManager.LEVEL_ALL);
+			if (tasks == null || tasks.length == 0)
+				return new InstanceInfoList();
+			
+			String prcInstId = tasks[0].getProcessInstId();
+			cond.setRefPrcInstId(prcInstId);
+		}
 		
 		long totalSize = SwManagerFactory.getInstance().getDocManager().getFileDownloadHistorySize(userId, cond);
 		
@@ -10009,6 +10027,11 @@ public class InstanceServiceImpl implements IInstanceService {
 		Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7};
 		
 		return properties;
+	}
+	@Override
+	public void removeProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

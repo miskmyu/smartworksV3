@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.									 -->
 <!-- Created Date	: 2011.9.											 -->
 
+<%@page import="org.springframework.util.StringUtils"%>
 <%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.model.instance.info.InstanceInfoList"%>
 <%@page import="net.smartworks.model.instance.TaskInstance"%>
@@ -40,7 +41,7 @@
 
 		if(SmartUtil.isBlankObject(params)){
 			params = new RequestParams();
-			params.setPageSize(20);
+			params.setPageSize(100);
 			params.setCurrentPage(1);
 		}
 		InstanceInfoList instanceList = smartWorks.getForwardTasksById(forwardId, params);
@@ -71,6 +72,10 @@
 			<!-- 업무전달을 위한 입력화면들을 자동으로 그려주는 곳 -->
 			<!-- js_task_forward_fields : js/sw/sw-formFields.js 의 loadTaskForwardFields()에서 자동으로 화면을 그려준다. -->
 			<div class="js_task_forward_fields" 
+			<%
+				subject = StringUtils.replace(subject, "\"", "&quot;");
+				content = StringUtils.replace(content, "\"", "&quot;");
+			%>
 				subjectTitle="<fmt:message key='forward.title.subject'/>" subject="<%=CommonUtil.toNotNull(subject)%>" 
 				forwardeeTitle="<fmt:message key='forward.title.forwardee'/>" 
 				CommentsTitle="<fmt:message key='forward.title.comments' />" content="<%=CommonUtil.toNotNull(content)%>"

@@ -336,7 +336,7 @@ smartPop = {
 							}
 						}
 						if(!isSameId){
-							$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
+							$("<span class='js_community_item user_select' comId='" + comId + "' comName='" + comName + "'>" + comName
 									+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
 
 							var searchFilter = target.parents('.js_search_filter_page');
@@ -456,7 +456,13 @@ smartPop = {
 							}
 						}
 						if(!isSameId){
-							$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
+							var comNameLong = comName;
+							if(inputTarget.attr('href') === "email_address.sw"){
+								if(!isEmailAddress(inputTarget.attr('value')) && isEmailAddress(comId) && !isEmailAddress(comName)){
+									comNameLong = comName + "&lt;" + comId + "&gt;";
+								}
+							}
+							$("<span class='js_community_item user_select' comId='" + comId + "' comName='" + comName + "'>" + comNameLong
 									+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
 						}
 						inputTarget.focus();
@@ -540,7 +546,7 @@ smartPop = {
 						var inputTarget = departField.find('input.js_auto_complete:first');
 
 						communityItems.remove();
-						$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
+						$("<span class='js_community_item user_select' comId='" + comId + "' comName='" + comName + "'>" + comName
 								+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
 						inputTarget.focus();
 						departField.find('.js_community_names').change();
@@ -549,6 +555,7 @@ smartPop = {
 					$('a.js_pop_select_depart').die('click');
 					$('a.js_pop_select_depart').live('click', function(e){
 						var input = $(targetElement(e));
+						if(!input.hasClass('js_pop_select_depart')) input = input.parents().find('.js_pop_select_depart');
 						var comId = input.attr('departId');
 						var comName = input.attr('departName');
 						selectionProc(comId, comName);

@@ -310,7 +310,7 @@
 																CommunityInfo community = communities[i];
 																String comName = (community.getClass().equals(UserInfo.class)) ? ((UserInfo)community).getLongName() : community.getName();
 														%>
-																<span class="js_community_item user_select" comId="<%=community.getId() %>"><%=comName %><a class="js_remove_community" href="">&nbsp;x</a></span>		
+																<span class="js_community_item user_select" comId="<%=community.getId() %>" comName="<%=comName%>"><%=comName %><a class="js_remove_community" href="">&nbsp;x</a></span>		
 														
 														<%
 															}
@@ -354,7 +354,7 @@
 																CommunityInfo community = communities[i];
 																String comName = (community.getClass().equals(UserInfo.class)) ? ((UserInfo)community).getLongName() : community.getName();
 														%>
-																<span class="js_community_item user_select" comId="<%=community.getId() %>"><%=comName %><a class="js_remove_community" href="">&nbsp;x</a></span>		
+																<span class="js_community_item user_select" comId="<%=community.getId() %>" comName="<%=comName%>"><%=comName %><a class="js_remove_community" href="">&nbsp;x</a></span>		
 														
 														<%
 															}
@@ -404,7 +404,7 @@
 																CommunityInfo community = communities[i];
 																String comName = (community.getClass().equals(UserInfo.class)) ? ((UserInfo)community).getLongName() : community.getName();
 														%>
-																<span class="js_community_item user_select" comId="<%=community.getId() %>"><%=comName %><a class="js_remove_community" href="">&nbsp;x</a></span>		
+																<span class="js_community_item user_select" comId="<%=community.getId() %>" comName="<%=comName%>"><%=comName %><a class="js_remove_community" href="">&nbsp;x</a></span>		
 														
 														<%
 															}
@@ -448,7 +448,7 @@
 															for(int i=0; i<users.length; i++){
 																UserInfo user = users[i];
 														%>
-																<span class="js_community_item user_select" comId="<%=user.getId() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
+																<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 														<%
 															}
 														}

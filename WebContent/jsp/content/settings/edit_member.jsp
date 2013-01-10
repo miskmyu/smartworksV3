@@ -39,7 +39,7 @@
 			var forms = editMember.find('form');
 			var paramsJson = {};
 			paramsJson['userId'] = editMember.attr('userId');
-			paramsJson['departmentId'] = editMember.attr('departId');
+			paramsJson['departmentId'] = editMember.attr('parentId');
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){
@@ -115,7 +115,7 @@
 								<div style="width:100%" class="form_value">
 									<div class="icon_fb_space">
 										<div class="fieldline community_names js_community_names sw_required">
-											<span class="js_community_item user_select" comId="<%=department.getId()%>"><%=CommonUtil.toNotNull(department.getFullpathName()) %>
+											<span class="js_community_item user_select" comId="<%=department.getId()%>" comName="<%=department.getName()%>"><%=CommonUtil.toNotNull(department.getFullpathName()) %>
 												<a href="" class="js_remove_community"> x</a>
 											</span>
 											<input class="m0 js_auto_complete" style="width:100px" href="department_name.sw" type="text">

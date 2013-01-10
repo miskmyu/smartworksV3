@@ -44,7 +44,7 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.build = function(config) {
 	var hideStyle = '';
 
 	if (!isEmpty(departments)) {
-		departmentsHtml = "<span><span class='js_community_item user_select' comId='" + departments[0].departmentId + "'>" + departments[0].departmentName + "<span class='btn_x_gr'><a class='js_remove_community' href=''> x</a></span></span></span>";
+		departmentsHtml = "<span><span class='js_community_item user_select' comId='" + departments[0].departmentId + "' comName='" + departments[0].departmentName "'>" + departments[0].departmentName + "<span class='btn_x_gr'><a class='js_remove_community' href=''> x</a></span></span></span>";
 		hideStyle = ' style="display:none" ';
 	}
 

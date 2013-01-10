@@ -12,10 +12,10 @@
 		<beans:property name="jndiName" value="java:/comp/env/bpm/tibero"/>
 	</beans:bean>
  --> 
-    <beans:bean id="misDs" class="org.springframework.jndi.JndiObjectFactoryBean">
+     <beans:bean id="misDs" class="org.springframework.jndi.JndiObjectFactoryBean">
 		<beans:property name="jndiName" value="java:comp/env/jdbc/SmartWorksDS"/>
 	</beans:bean> 
-<!--  <beans:bean id="misDs"
+ <!-- <beans:bean id="misDs"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<beans:property name="driverClassName" value="${smartworksDs.driverClassName}" />
 		<beans:property name="url" value="${smartworksDs.url}" />

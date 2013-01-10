@@ -26,8 +26,13 @@ public class TskManagerSemiteqAdvisorImpl extends AbstractTskManagerAdvisor {
 		if (!type.equalsIgnoreCase(TskTask.TASKTYPE_COMMON))
 			return;
 		
-		String targetDefId = "pkg_f7b2074fbad042d19684951b23b17fc5|prc_8a4747ac45204658bd7f0889a14e3c58|2";
-		String targetFieldId = "3";
+		//semiteq
+		//String targetDefId = "pkg_f7b2074fbad042d19684951b23b17fc5|prc_8a4747ac45204658bd7f0889a14e3c58|2";
+		//String targetFieldId = "3";
+		
+		//local
+		String targetDefId = "pkg_17d5f9a3ea144811809b2eedc62bff23|prc_380b87b5db724e149a5c33fd7c2bbbaf|2";
+		String targetFieldId = "1";
 
 		String taskDefId = obj.getDef();
 		String prcInstId = obj.getProcessInstId();

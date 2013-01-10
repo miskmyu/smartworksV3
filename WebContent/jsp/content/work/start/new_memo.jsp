@@ -16,7 +16,7 @@
 <script type="text/javascript">
 
 //완료버튼 클릭시 create_new_memo.sw 서비스를 실행하기 위해 submit하는 스크립트..
-function submitForms() {
+function submitForms(tempSave) {
 	var newMemo = $('.js_new_memo_page');
 
 	// new_memo 에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
@@ -29,6 +29,7 @@ function submitForms() {
 	if(!isEmpty(formContent)) {
 
 		var workId = newMemo.attr('workId');
+		var instanceId = newMemo.attr('instanceId');
 		$.ajax({
 			url : "get_form_xml.sw",
 			data : {
@@ -62,6 +63,10 @@ function submitForms() {
 					// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
 					paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 				}
+				if(tempSave){
+					paramsJson['isTempSave'] = true;
+					paramsJson['instanceId'] = instanceId;
+				}
 				console.log(JSON.stringify(paramsJson));
 				// 서비스요청 프로그래스바를 나타나게 한다....
 				var progressSpan = newMemo.find('.js_progress_span');
@@ -75,7 +80,11 @@ function submitForms() {
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
 						// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-						window.location.reload(true);
+						if(tempSave){
+							newMemo.attr('instanceId', data.instanceId);
+						}else{
+							window.location.reload(true);
+						}
 						smartPop.closeProgress();
 					},
 					error : function(e) {

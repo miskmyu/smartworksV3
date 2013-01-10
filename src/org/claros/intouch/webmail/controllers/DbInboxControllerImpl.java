@@ -15,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.mail.MailAttachment;
 import net.smartworks.model.notice.Notice;
+import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
 import org.claros.commons.auth.models.AuthProfile;
@@ -315,7 +316,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item.setReplyTo(header.getReplyToShown());
 										item.setMultipart(hasAttachment((MimeMessage)msg));
 										if(SmartUtil.isBlankObject(header.getDate()))
-											item.setSentDate(new Date());
+											item.setSentDate(new LocalDate());
 										else
 											item.setSentDate(header.getDate());
 										item.setPriority(new Integer(header.getPriority()));

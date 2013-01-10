@@ -2752,6 +2752,12 @@ public class ModelConverter {
 			}
 			String targetPrcInstId = swTask.getExtendedPropertyValue("targetPrcInstId");
 			taskInstInfo.setSubWorkInstanceId(targetPrcInstId);			
+		} else if (tskType.equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+			
+			FileDownloadHistoryCond cond = new FileDownloadHistoryCond();
+			cond.setRefTaskId(swTask.getObjId());
+			long downloadCount = SwManagerFactory.getInstance().getDocManager().getFileDownloadHistorySize("", cond);
+			taskInstInfo.setNumberOfDownloadHistories((int)downloadCount);
 		}
 		
 		if (swTask.getIsApprovalSourceTask() != null && swTask.getIsApprovalSourceTask().equalsIgnoreCase("true")) {
@@ -2774,7 +2780,7 @@ public class ModelConverter {
 		taskInstInfo.setPerformer(getUserInfoByUserId(performer));
 		taskInstInfo.setWorkInstance(workInstanceInfo);
 		taskInstInfo.setFormId(formId);
-
+		
 		return taskInstInfo;
 	}
 

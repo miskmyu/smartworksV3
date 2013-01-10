@@ -139,7 +139,7 @@
 												}
 										%>
 												
-													<span class='js_community_item user_select' comId="<%=community.getId()%>"><%=comName %>
+													<span class='js_community_item user_select' comId="<%=community.getId()%>" comName="<%=comName%>"><%=comName %>
 														<span class='btn_x_gr'>
 															<a class='js_remove_community' href=''> x</a>
 														</span>

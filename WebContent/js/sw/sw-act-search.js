@@ -202,7 +202,7 @@ $(function() {
 		var selectedApproverInfo = input.parents('.js_community_list').prev().find('.js_selected_approver_info');
 		var userField = input.parents('.js_type_userField');
 		var departmentField = input.parents('.js_type_departmentField');
-		var inputTarget = (!isEmpty(userField)) ? userField.find('input.js_auto_complete') : (!isEmpty(departmentField)) ? departmentField.find('input.js_auto_complete') : [];
+		var inputTarget = (!isEmpty(userField)) ? userField.find('input.js_auto_complete') : (!isEmpty(departmentField)) ? departmentField.find('input.js_auto_complete') : $("");
 		if(inputTarget.parents('.sw_required').hasClass('sw_error')){
 			inputTarget.parents('.sw_required').removeClass('sw_error');
 			$('form.js_validation_required').validate({ showErrors: showErrors}).form();
@@ -235,12 +235,13 @@ $(function() {
 				}
 			}
 			if(!isSameId){
+				var comNameLong = comName;
 				if(inputTarget.attr('href') === "email_address.sw"){
-					if(!isEmailAddress(inputTarget.attr('value')) && isEmailAddress(comId)){
-						comName = comName + "(" + comId + ")";
+					if(!isEmailAddress(inputTarget.attr('value')) && isEmailAddress(comId) && !isEmailAddress(comName)){
+						comNameLong = comName + "&lt;" + comId + "&gt;";
 					}
 				}
-				$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
+				$("<span class='js_community_item user_select' comId='" + comId + "' comName='" + comName+ "'>" + comNameLong
 						+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
 
 				var searchFilter = input.parents('.js_search_filter_page');

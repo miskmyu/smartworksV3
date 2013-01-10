@@ -18,9 +18,10 @@
 <script type="text/javascript">
 
 // 완료버튼 클릭시 create_new_iwork.sw 서비스를 실행하기 위해 submit하는 스크립트..
-function submitForms() {
+function submitForms(tempSave) {
 	var newIwork = $('.js_new_iwork_page');
 	var workId = newIwork.attr("workId");
+	var instanceId = newIwork.attr("instanceId");
 	var scheduleWork = newIwork.find('form[name="frmScheduleWork"]');
 	
 	// 계획업무로 지정하기가 선택되어 있으면, 계획업무관련 입력필드들을 validation하기위한 클래스를 추가한다.. 
@@ -58,6 +59,10 @@ function submitForms() {
 			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 			
 		}
+		if(tempSave){
+			paramsJson['isTempSave'] = true;
+			paramsJson['instanceId'] = instanceId;
+		}
 		console.log(JSON.stringify(paramsJson));
 		var url = "create_new_iwork.sw";
 		// 서비스요청 프로그래스바를 나타나게 한다....
@@ -72,7 +77,11 @@ function submitForms() {
 			success : function(data, status, jqXHR) {
 				
 				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-				window.location.reload(true);
+				if(tempSave){
+					newIwork.attr('instanceId', data.instanceId);
+				}else{
+					window.location.reload(true);
+				}
 				smartPop.closeProgress();
 			},
 			error : function(e) {

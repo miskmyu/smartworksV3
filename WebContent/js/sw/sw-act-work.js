@@ -1165,6 +1165,52 @@ $(function() {
 		return false;
 	});
 
+	$('a.js_delete_pwork_instance').live('click', function(e){
+		smartPop.confirm(smartMessage.get('removeConfirmation'), function(){
+			var input = $(targetElement(e));
+			var pworkSpace = input.parents('.js_pwork_space_page');
+			var workId = pworkSpace.attr("workId");
+			var instId = pworkSpace.attr("instId");
+			var lastHref = pworkSpace.attr("lastHref");
+
+			var paramsJson = {};
+			paramsJson['workId'] = workId;
+			paramsJson['instanceId'] = instId;
+			console.log(JSON.stringify(paramsJson));
+			var url = "remove_pwork_instance.sw";
+			
+			// 서비스요청 프로그래스바를 나타나게 한다....
+			var progressSpan = pworkSpace.find('.js_progress_span');
+			smartPop.progressCont(progressSpan);
+			
+			// set_iwork_instance.sw서비스를 요청한다..
+			$.ajax({
+				url : url,
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					
+					// 정보관리업무 목록 페이지로 이동한다.....
+					smartPop.closeProgress();
+					document.location.href = lastHref;					
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeIWorkInstanceError"), function(){
+						return false;
+					});
+					smartPop.closeProgress();					
+				}
+			});
+			
+		},
+		function(){
+			return false;
+		});
+		return false;
+	});
+
 	$('input.js_file_upload').live('change', function(e) {
 		var input = $(targetElement(e));
 		var newInput = document.createElement( 'input' );

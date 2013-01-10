@@ -75,8 +75,7 @@ public class SwServletContextListener implements ServletContextListener{
 
 //            System.out.println("scheduler null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             try{
-            	if (scheduler != null)
-            		scheduler.shutdown(true);
+            	scheduler.shutdown(true);
             }catch(Exception e){
             	e.printStackTrace();
             	UcityUtil.stopAllThread();
