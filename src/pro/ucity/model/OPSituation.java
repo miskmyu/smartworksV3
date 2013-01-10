@@ -422,6 +422,10 @@ public class OPSituation {
 		return false;
 	}
 	
+	public static void scheduler(){
+		readHistoryTableToStart();
+	}
+	
 	public static void readHistoryTableToStart(){
 //		if(SmartUtil.isBlankObject(connection)) return;
 		
@@ -500,22 +504,22 @@ public class OPSituation {
 //									updatePstmt.setString(2, status);
 //									result = updatePstmt.execute();
 								}
-								selectPstmt = connection.prepareStatement(opSituationJoinFacilitySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-								selectPstmt.setString(1, situationId);
-								joinFacilityRs = selectPstmt.executeQuery();
-								joinFacilityRs.first();
-								
-								selectPstmt = connection.prepareStatement(opSituationJoinSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-								selectPstmt.setString(1, situationId);
-								joinRs = selectPstmt.executeQuery();
-								joinRs.last();
-								if(joinRs.getRow()!=1){
-									number = 0;
-								}else{
-									logger.info("============== PORTAL 이벤트 발생(while) ===============");
-									logger.info("이벤트 발생 시간 : " + new Date());
-									logger.info("이벤트 발생 갯수 : " + count);
-								}
+//								selectPstmt = connection.prepareStatement(opSituationJoinFacilitySql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//								selectPstmt.setString(1, situationId);
+//								joinFacilityRs = selectPstmt.executeQuery();
+//								joinFacilityRs.first();
+//								
+//								selectPstmt = connection.prepareStatement(opSituationJoinSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//								selectPstmt.setString(1, situationId);
+//								joinRs = selectPstmt.executeQuery();
+//								joinRs.last();
+//								if(joinRs.getRow()!=1){
+//									number = 0;
+//								}else{
+//									logger.info("============== PORTAL 이벤트 발생(while) ===============");
+//									logger.info("이벤트 발생 시간 : " + new Date());
+//									logger.info("이벤트 발생 갯수 : " + count);
+//								}
 							}else{
 								logger.info("[JOIN ERROR] 새로운 PORTAL 발생 이벤트를 시작하는데 오류가 발생하였습니다!");								
 //								updatePstmt = connection.prepareStatement(opSituationRollbackSql);

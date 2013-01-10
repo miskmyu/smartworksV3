@@ -100,6 +100,8 @@ public class Adapter {
 	private String filePath;
 	private String fileName;
 	
+	private String nextOccuredDate;
+	
 	public String getCommHeader() {
 		return commHeader;
 	}
@@ -307,6 +309,12 @@ public class Adapter {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+	public String getNextOccuredDate() {
+		return nextOccuredDate;
+	}
+	public void setNextOccuredDate(String nextOccuredDate) {
+		this.nextOccuredDate = nextOccuredDate;
+	}
 	public Adapter(String commHeader, String commBody){
 		super();
 		this.commHeader = commHeader;
@@ -358,6 +366,8 @@ public class Adapter {
 			this.occuredDate = tokens[1];
 			this.envEventType = tokens[2];
 			this.eventContent = tokens[3];
+			if( occuredDate.length() > 14)
+				occuredDate = occuredDate.substring(0, 14);
 			break;
 		case System.PROCESS_ENV_ATMOSPHERE:
 			this.eventId = tokens[0];
@@ -369,6 +379,8 @@ public class Adapter {
 			this.pollutionValue = tokens[6];
 			this.pollutionLevel = tokens[7];
 			this.pollutionExample = tokens[8];
+			if( occuredDate.length() > 14)
+				occuredDate = occuredDate.substring(0, 14);
 			break;
 		case System.PROCESS_ENV_WATER:
 			this.eventId = tokens[0];
@@ -376,6 +388,8 @@ public class Adapter {
 			this.locationName = tokens[2];
 			this.pollutionLevel = tokens[3];
 			this.pollutionFigure = tokens[4];
+			if( occuredDate.length() > 14)
+				occuredDate = occuredDate.substring(0, 14);
 			break;
 		case System.PROCESS_TRAFFIC_ILLEGAL_PARKING:
 			this.eventId = tokens[0];
@@ -386,6 +400,8 @@ public class Adapter {
 			this.carType = tokens[5];
 			this.crimeCode = tokens[6];
 			this.filePath = tokens[7];			
+			if( occuredDate.length() > 14)
+				occuredDate = occuredDate.substring(0, 14);
 			break;
 		case System.PROCESS_TRAFFIC_INCIDENT:
 			this.eventId = tokens[0];
@@ -395,18 +411,24 @@ public class Adapter {
 			this.linkId = tokens[4];
 			this.outbreakType = tokens[5];
 			this.outbreakCode = tokens[6];
+			if( occuredDate.length() > 14)
+				occuredDate = occuredDate.substring(0, 14);
 			break;
 		case System.PROCESS_DISASTER_FIRE:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
 			this.searchType = tokens[3];
+			if( occuredDate.length() > 14)
+				occuredDate = occuredDate.substring(0, 14);
 			break;
 		case System.PROCESS_CRIME_CCTV:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
+			if( occuredDate.length() > 14)
+				occuredDate = occuredDate.substring(0, 14);
 			break;
 		case System.PROCESS_CRIME_VEHICLES:
 			this.eventId = tokens[0];
@@ -417,6 +439,8 @@ public class Adapter {
 			this.carType = tokens[5];
 			this.crimeCode = tokens[6];
 			this.filePath = tokens[7];
+			if( occuredDate.length() > 14)
+				occuredDate = occuredDate.substring(0, 14);
 			break;
 		case System.PROCESS_WATERWORKS_LEAKS:
 			this.eventId = tokens[0];
@@ -424,6 +448,8 @@ public class Adapter {
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
 			this.thresholdValue = tokens[4];
+			if( occuredDate.length() > 14)
+				occuredDate = occuredDate.substring(0, 14);
 			break;
 		case System.PROCESS_FACILITY_MANAGEMENT:
 			this.eventId = tokens[0];
@@ -431,6 +457,8 @@ public class Adapter {
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
 			this.facilityType = tokens[4];
+			if( occuredDate.length() > 14)
+				occuredDate = occuredDate.substring(0, 14);
 			break;
 		case System.PROCESS_ENV_VMS:
 		case System.PROCESS_TRAFFIC_BIT:
@@ -438,10 +466,13 @@ public class Adapter {
 		case System.PROCESS_MEDIABORAD:
 		case System.PROCESS_KIOSK:
 			this.eventId = tokens[0];
-			if(!this.stopDisplay)
-				this.displayContent = tokens[tokens.length-1];
-			else
+			int tokenLen = 0;
+			if(!this.stopDisplay){
+				tokenLen = tokens.length-1;
+				this.displayContent = tokens[tokenLen];
+			}else{
 				this.displayContent = "표출중지요청";
+			}		
 			break;
 		}
 	}
@@ -460,10 +491,10 @@ public class Adapter {
 		Map<String, Object> dataRecord = new HashMap<String, Object>();
 		KeyMap[] keyMaps = Adapter.ADAPTER_HISTORY_FIELDS[this.process];
 		
-		int len = 20; 
-		if(len != eventId.length()){
-			if(!this.isValid()) return null;
-		}
+//		int len = 20; 
+//		if(len != eventId.length()){
+//			if(!this.isValid()) return null;
+//		}
 		dataRecord.put("serviceName", Service.getServiceNameByCode(this.getServiceCode()));
 		if(this.process == System.PROCESS_ENV_WEAHTER)
 			dataRecord.put("eventName", "환경경보");
@@ -534,16 +565,16 @@ public class Adapter {
 		
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null) return;
-		if(UcityUtil.ucityWorklistSearch(System.getProcessId(this.process),this.eventId) == true ){
+//		if(UcityUtil.ucityWorklistSearch(System.getProcessId(this.process),this.eventId) == true ){
 			if(this.process == System.PROCESS_FACILITY_MANAGEMENT){
 				UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.eventId, this.occuredDate, this.getDataRecord(), this.facilityId);
 			}else{
 				UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.eventId, this.occuredDate, this.getDataRecord());			
 			}		
-		}else{
-			logger.info("startProcess 에서 null return");
-			return;
-		}
+//		}else{
+//			logger.info("startProcess 에서 null return");
+//			return;
+//		}
 	}
 	
 	public void endProcess() throws Exception{
@@ -603,6 +634,10 @@ public class Adapter {
 		return false;
 	}
 	
+	public static void scheduler(){
+		readHistoryTableToStart();
+	}
+	
 	synchronized public static void readHistoryTableToStart(){
 //		if(SmartUtil.isBlankObject(connection)) return;
 		
@@ -660,7 +695,6 @@ public class Adapter {
 									joinFacilityRs.last();
 									int facilitycount = joinFacilityRs.getRow(); 
 									joinFacilityRs.beforeFirst();
-									java.lang.System.out.println("count = "+ facilitycount);
 									if(joinFacilityRs.next() && facilitycount != 0){
 										String location = joinFacilityRs.getString("LC_NM");
 										adapter.setLocationName(location);
@@ -679,19 +713,19 @@ public class Adapter {
 //									updatePstmt.setString(1, communicationId);
 //									result = updatePstmt.execute();
 								}
-								selectPstmt = connection.prepareStatement(adapterSelectStartSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-								rs = selectPstmt.executeQuery();				
-								rs.last();
-								count = rs.getRow(); 
-								rs.beforeFirst();
-								if (count == 0){
-									number = 0; 
-								}else{
-									logger.info("============== ADAPTER 시작이벤트 발생(while) ===============");
-									logger.info("이벤트 발생 시간 : " + new Date());
-									logger.info("이벤트 발생 갯수 : " + count);
-									
-								}
+//								selectPstmt = connection.prepareStatement(adapterSelectStartSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//								rs = selectPstmt.executeQuery();				
+//								rs.last();
+//								count = rs.getRow(); 
+//								rs.beforeFirst();
+//								if (count == 0){
+//									number = 0; 
+//								}else{
+//									logger.info("============== ADAPTER 시작이벤트 발생(while) ===============");
+//									logger.info("이벤트 발생 시간 : " + new Date());
+//									logger.info("이벤트 발생 갯수 : " + count);
+//									
+//								}
 							}else{
 //								connection.rollback();
 								logger.info("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
@@ -731,7 +765,7 @@ public class Adapter {
 //											connection.commit();
 											logger.info("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
 										}catch (Exception se){
-											logger.error("endProcess error : adapter.endProcess.734");
+											logger.error("endProcess error : adapter.endProcess.734",se);
 											logger.info("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
 //											se.printStackTrace();
 //											if(connection != null)
@@ -740,18 +774,18 @@ public class Adapter {
 //											updatePstmt.setString(1, communicationId);
 //											result = updatePstmt.execute();
 										}
-										selectPstmt = connection.prepareStatement(adapterSelectEndSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-										rs = selectPstmt.executeQuery();				
-										rs.last();
-										count = rs.getRow(); 
-										rs.beforeFirst();	
-										if(count == 0){
-											number = 0;
-										}else{
-											logger.info("============== ADAPTER 종료이벤트 발생(while) ===============");
-											logger.info("이벤트 발생 시간 : " + new Date());
-											logger.info("이벤트 발생 갯수 : " + count);																
-										}
+//										selectPstmt = connection.prepareStatement(adapterSelectEndSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//										rs = selectPstmt.executeQuery();				
+//										rs.last();
+//										count = rs.getRow(); 
+//										rs.beforeFirst();	
+//										if(count == 0){
+//											number = 0;
+//										}else{
+//											logger.info("============== ADAPTER 종료이벤트 발생(while) ===============");
+//											logger.info("이벤트 발생 시간 : " + new Date());
+//											logger.info("이벤트 발생 갯수 : " + count);																
+//										}
 									}else{
 //										connection.rollback();
 										logger.info("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
@@ -806,7 +840,6 @@ public class Adapter {
 		for(int i=eventId.length(); i < 20; i++){
 			eventId = eventId + "0";
 		}
-		
 		Connection connection = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement updatePstmt = null;
@@ -829,10 +862,11 @@ public class Adapter {
 			try{
 				selectPstmt = connection.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, Service.getDeviceCodeByDeviceId(deviceId));
+				selectPstmt.setString(2, eventId);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
 				int count = rs.getRow();
-				rs.first();
+				rs.beforeFirst();
 				if(count>0){
 					while(rs.next() && !Thread.currentThread().isInterrupted()) {
 						try{

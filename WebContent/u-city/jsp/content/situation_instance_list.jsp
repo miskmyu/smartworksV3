@@ -39,6 +39,7 @@
 	String FIELD_ID_EVENT_PLACE = "eventPlace";
 	String FIELD_ID_EVENT_TIME = "eventTime";
 	String FIELD_ID_IS_SMS = "isSms";
+	String FIELD_ID_RUNNING_TASK_NAME = "runningTaskName";
 
 	ISmartWorks smartWorks = (ISmartWorks)request.getAttribute("smartWorks");
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
@@ -60,15 +61,13 @@
 	session.setAttribute("requestParams", params);
 	session.setAttribute("workId", workId);
 
-	System.out.println("############### 리스트 불러오기 시작 "+ System.currentTimeMillis() + "#######################################");
 
 	InstanceInfoList instanceList = null;
 	if(SmartUtil.isBlankObject(auditId))
 		instanceList = smartWorks.getAllUcityPWorkInstanceList(false, params, -1);
 	else
 		instanceList = smartWorks.getAllUcityPWorkInstanceList(true, params, Integer.parseInt(auditId));
-	
-	System.out.println("############### 리스트 불러오기 완료 "+ System.currentTimeMillis() + " #######################################");
+
 
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -164,6 +163,7 @@
 				String eventTime = "";
 				String isSms = "";
 				String titleExternalDisplay = "";
+				String runningTaskName = "";
 				if(!SmartUtil.isBlankObject(extendedProperties)){
 					for(int i=0; i<extendedProperties.length; i++){
 						Property extendedProperty = extendedProperties[i];
@@ -182,6 +182,8 @@
 							eventTime = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_IS_SMS)){
 							isSms = ("true".equals(extendedProperty.getValue())) ? "예" : "아니요";			
+						}else if(extendedProperty.getName().equals(FIELD_ID_RUNNING_TASK_NAME)){
+							runningTaskName = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}
 					}
 				}
@@ -257,6 +259,7 @@
 				case Instance.STATUS_ABORTED:
 					statusImage = "icon_status_aborted";
 					statusTitle = "이상종료";
+					runningTaskNames = runningTaskName;
 					break;
 				// 기타 잘못되어 상태가 없는 경우..
 				default:
@@ -282,7 +285,7 @@
 	 					<%} %>
  					</td>
 					<td>
-						<%if(!SmartUtil.isBlankObject(runningTaskNames)){ %>
+						<%if(!SmartUtil.isBlankObject(runningTaskNames) || instanceInfo.getStatus() == Instance.STATUS_ABORTED ){ %>
 	 						<a class="js_ucity_content" href="<%=target %>">
 	 							<span title="<%=titleRunrunningTaskNames%>"><%=runningTaskNames %></span>
 	 						</a>

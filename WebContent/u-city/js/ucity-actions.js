@@ -189,6 +189,7 @@ $(function() {
 		smartPop.progressCenter();
 		console.log(JSON.stringify(paramsJson));
 		$.ajax({
+			url : "abend_process_instance.sw",
 			url : "abend_ucity_instance.sw",
 			contentType : 'application/json',
 			type : 'POST',

@@ -1,3 +1,5 @@
+<%@page import="pro.ucity.sso.filter.UcitySSOFilter"%>
+<%@page import="pro.ucity.model.Adapter"%>
 <%@page import="net.smartworks.server.engine.common.manager.IManager"%>
 <%@page import="net.smartworks.server.service.factory.SwServiceFactory"%>
 <%@page import="net.smartworks.server.engine.common.loginuser.model.LoginUser"%>
@@ -24,6 +26,7 @@
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@page import="net.smartworks.service.ISmartWorks"%>
+<%@page import="org.apache.log4j.Logger"%>
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -36,35 +39,43 @@
 <!-- For Development Purpose -->
 <%
 
-	System.out.println("situation monitoring in============");
+	Logger logger = Logger.getLogger(this.getClass());
+//	System.out.println("situation monitoring in============");
 	SecurityContext context = (SecurityContext) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
-	System.out.println("context = " + ((context!=null)? context.getAuthentication() : "null"));
+//	System.out.println("context = " + ((context!=null)? context.getAuthentication() : "null"));
 	if (!SmartUtil.isBlankObject(context)) {
 		Authentication auth = context.getAuthentication();
-		System.out.println("auth = " + ((auth!=null)? auth.getPrincipal() : "null"));
+//		System.out.println("auth = " + ((auth!=null)? auth.getPrincipal() : "null"));
 		if(!SmartUtil.isBlankObject(auth)) {
 			String connectUserId = ((Login) auth.getPrincipal()).getId();
 		}
 	} else {
 		String from = null;
-		if(request.getParameter("page") == null) {
-			from = "/situationMonitoring.sw";
-		}else{
-			if(request.getParameter("page").equalsIgnoreCase("audit")){
-				from = "/situationAudit.sw";
-			}else if (request.getParameter("page").equalsIgnoreCase("manual")){
-				String userviceCode = request.getParameter("userviceCode");
-				String serviceCode = request.getParameter("serviceCode");
-				String eventCode = request.getParameter("eventCode");
-				String statusCode = request.getParameter("statusCode");
-				
-				from = "/situationManual.sw?userviceCode="+ userviceCode + "&serviceCode=" + serviceCode + "&eventCode=" + eventCode + "&statusCode=" + statusCode;
-				from = from.replace("&","%26");
-			}else{
+		String url = request.getParameter("page");
+		
+		if(url == null || url.equalsIgnoreCase("audit") || url.equalsIgnoreCase("manual") || url.equalsIgnoreCase("monitoring")){
+			if(request.getParameter("page") == null) {
 				from = "/situationMonitoring.sw";
+			}else{
+				if(url.equalsIgnoreCase("audit")){
+					from = "/situationAudit.sw";
+				}else if (url.equalsIgnoreCase("manual")){
+					String userviceCode = request.getParameter("userviceCode");
+					String serviceCode = request.getParameter("serviceCode");
+					String eventCode = request.getParameter("eventCode");
+					String statusCode = request.getParameter("statusCode");
+					
+					from = "/situationManual.sw?userviceCode="+ userviceCode + "&serviceCode=" + serviceCode + "&eventCode=" + eventCode + "&statusCode=" + statusCode;
+					from = from.replace("&","%26");
+				}else{
+					from = "/situationMonitoring.sw";
+				}
 			}
-
+		}else{
+			logger.error("잘못된 url 주소 입니다.");
+			return;
 		}
+		url = null;
 		response.sendRedirect("loginc.sw?referer="+ from);
 		return;
 	}
@@ -77,9 +88,9 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User currentUser = SmartUtil.getCurrentUser();
 	if(SmartUtil.isBlankObject(currentUser))
-		System.out.println("current user =  NULL");
+		logger.info("current user =  NULL");
 	else
-	System.out.println("current user = " + currentUser.getId());
+		logger.info("current user = " + currentUser.getId());
 	
 %>
 <fmt:setLocale value="<%=currentUser.getLocale() %>" scope="request" />

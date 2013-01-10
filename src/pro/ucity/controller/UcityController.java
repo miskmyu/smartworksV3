@@ -157,16 +157,16 @@ public class UcityController extends ExceptionInterceptor {
 		return map;
 	}	
 
-	@RequestMapping(value = "/abend_ucity_instance", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody void abendUcityInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		UcityUtil.stopAllPollingsForInstance(request.getParameter("instanceId"));
-		Map<String, Object> accessData = new HashMap<String, Object>();	
-		accessData.put("selWorkSpace", SmartUtil.getSystemUser().getId());
-		accessData.put("selWorkSpaceType", ISmartWorks.SPACE_TYPE_USER);
-		accessData.put("selAccessLevel", AccessPolicy.LEVEL_PUBLIC);
-		requestBody.put("frmAccessSpace", accessData);
-		smartworks.abendTaskInstance(requestBody, request);
-	}
-	
+	@RequestMapping(value = "/abend_ucity_instance", method = RequestMethod.POST) 
+	@ResponseStatus(HttpStatus.OK) 
+	public @ResponseBody void abendUcityInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception { 
+	UcityUtil.stopAllPollingsForInstance((String)requestBody.get("instanceId")); 
+    Map<String, Object> accessData = new HashMap<String, Object>();   
+    accessData.put("selWorkSpace", SmartUtil.getSystemUser().getId()); 
+    accessData.put("selWorkSpaceType", ISmartWorks.SPACE_TYPE_USER); 
+    accessData.put("selAccessLevel", AccessPolicy.LEVEL_PUBLIC); 
+    requestBody.put("frmAccessSpace", accessData); 
+    smartworks.abendTaskInstance(requestBody, request); 
+    } 
+
 }

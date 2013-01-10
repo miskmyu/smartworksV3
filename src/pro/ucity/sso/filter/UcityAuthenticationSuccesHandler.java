@@ -16,21 +16,11 @@ public class UcityAuthenticationSuccesHandler extends SavedRequestAwareAuthentic
 	protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) { 
 		
 		String s = request.getParameter("_to"); 
-		System.out.println("이전페이지 주소는 "+s+"입니다.");
-			
+//		System.out.println("이전페이지 주소는 "+s+"입니다.");
+//		이전 주소 기억
 		if(s != null) 
 			return s; 
 		else 
 			return super.determineTargetUrl(request, response);
 	}
 }
-	
-	
-	/*	public void  onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-		
-		System.out.println("######### UcityAuthenticationHandler ##########");
-		super.onAuthenticationSuccess(request, response, authentication);
-	}
-
-}
-*/
