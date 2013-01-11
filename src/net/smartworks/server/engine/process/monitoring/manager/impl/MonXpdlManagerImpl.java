@@ -280,7 +280,10 @@ public class MonXpdlManagerImpl implements IMonManager{
 						if (task.getStatus().equalsIgnoreCase((String)MisUtil.taskStatusMap().get("started"))) {
 							endDateLong = new LocalDate().getTime();//date to localdate - 
 						} else if (task.getStatus().equalsIgnoreCase((String)MisUtil.taskStatusMap().get("executed"))) {
+							// 프로세스맵 불러올때 에러 나서 수정 U-City
+							if(task.getExecutionDate() != null){
 							endDateLong = task.getExecutionDate().getTime();
+							}
 						}
 						
 						long passedTimeLong = endDateLong - realStartDateLong;
