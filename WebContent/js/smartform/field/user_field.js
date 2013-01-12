@@ -86,7 +86,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	if(readOnly){
 		$user = $('<div class="form_value" style="width:' + valueWidth + '%"><span></span></div>');
 		var viewUsersHtml = '';
-		if(!isEmpty(usersHtml)){
+		if(isEmpty(users) && !isEmpty(usersHtml)){
 			viewUsersHtml = usersHtml;
 		}else{
 			for(var i=0; i<users.length; i++) {
