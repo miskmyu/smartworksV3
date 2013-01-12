@@ -69,7 +69,13 @@
 	    <filter-name>SSORequest</filter-name>
 	    <url-pattern>*.sw</url-pattern>
 	</filter-mapping> -->
+	<!-- Ucity 소켓 
+	<listener>
+		<listener-class>pro.ucity.util.UcityUtilServer</listener-class>
+	</listener>
+	-->
 	<!-- UCITY END -->
+	
 
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
