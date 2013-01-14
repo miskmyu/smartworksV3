@@ -426,7 +426,7 @@
 		</beans:property>
 		
 		
-		<!-- PassUrl List -->
+		<!-- PassUrl List ( : 로 구분 ) -->
 		<beans:property name="passUrlList">
 			<beans:map>
 				<beans:entry key="BPM.PASSURLLIST">
@@ -435,6 +435,15 @@
 			</beans:map>
 		</beans:property>
 		
-	</beans:bean>
+		<!-- Host Ip ( , 로 구분) -->
+		<beans:property name="hostIp">
+			<beans:map>
+				<beans:entry key="BPM.SERVERLIST">
+					<beans:value>10.2.20.26,10.2.20.27</beans:value>
+				</beans:entry>
+			</beans:map>
+		</beans:property>
+		
+</beans:bean>
 	<beans:bean id="authenticationSuccessHandler" class="pro.ucity.sso.filter.UcityAuthenticationSuccesHandler"/>
 </beans:beans>
