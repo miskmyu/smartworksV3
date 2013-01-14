@@ -8,6 +8,9 @@
 
 package pro.ucity.util;
 
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -845,12 +848,25 @@ public class UcityUtil {
 		
 	}
 	
+	public static void sendAbendMessage(String instanceId){
+		if(SmartUtil.isBlankObject(instanceId)) return;
+		try{
+			DatagramSocket ds = new DatagramSocket(UcityUtilServer.UDP_ABEND_PORT);
+			byte[] buffer = instanceId.getBytes();   
+		    DatagramPacket dp = new DatagramPacket(buffer, buffer.length, InetAddress.getByName("10.2.20.27"), UcityUtilServer.UDP_ABEND_PORT);
+		    ds.send(dp);
+		}catch (Exception e){
+			
+		}
+	}
+	
 	public static void stopAllPollingsForInstance(String instanceId) throws Exception{
 		logger.info("1단계 통과");
 		logger.info(UcityUtil.pollingQueue);
+		sendAbendMessage(instanceId);
 		if(SmartUtil.isBlankObject(instanceId) || UcityUtil.pollingQueue.isEmpty()){
 			logger.info("2단계 통과");
-			UcityUtilSocket.UcitySocketIn(instanceId);
+//			UcityUtilSocket.UcitySocketIn(instanceId);
 			return;
 		}
 		for(int i=0; i<pollingQueue.size(); i++){
@@ -862,8 +878,8 @@ public class UcityUtil {
 					&& !SmartUtil.isBlankObject(pollingModel.getTaskInstance().getWorkInstance().getId()) 
 					&& pollingModel.getTaskInstance().getWorkInstance().getId().equals(instanceId)){
 				pollingModel.setInterrupted(true);
-			}else{
-				UcityUtilSocket.UcitySocketIn(instanceId);
+//			}else{
+//				UcityUtilSocket.UcitySocketIn(instanceId);
 			}
 		}
 		

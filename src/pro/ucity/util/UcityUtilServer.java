@@ -5,13 +5,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
 
 import net.smartworks.util.SmartUtil;
 
@@ -19,20 +19,27 @@ import org.apache.log4j.Logger;
 
 public class UcityUtilServer implements ServletContextListener{
 	
+	public static final int TCP_CONNECTION_PORT = 5775;
+	public static final int UDP_ABEND_PORT  = 5776;
+	
 	ServerSocket serverSocket = null;
 
 	private static Logger logger = Logger.getLogger(UcityUtilServer.class);
 	
 	DataOutputStream dou;
 	DataInputStream din;
+	
+	DatagramSocket ds;
+	
 	/**
 	 * @param args
 	 */
 	// TODO Auto-generated method stub
 	
 	public void go(){
-		Thread serverThread = new Thread(new listenConection());
-		serverThread.start();
+//		Thread serverThread = new Thread(new listenConection());
+//		serverThread.start();
+		(new Thread(new UdpServer())).start();
 	}
 	
 	public class listenConection implements Runnable{
@@ -63,6 +70,39 @@ public class UcityUtilServer implements ServletContextListener{
 					logger.info("서버에러",e);
 				}
 			}
+	}
+	
+	public class UdpServer implements Runnable{
+		
+		public UdpServer() {
+			try {
+			   ds = new DatagramSocket(UDP_ABEND_PORT);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				logger.info("ABEND UDP 소켓에러",e);
+			}
+		}
+
+		public void run() {
+			try{
+				logger.info("================");
+				logger.info("서버소켓 생성 성공");
+				logger.info("================");
+				while(!Thread.currentThread().isInterrupted()){
+				    byte[] buffer = new byte[512];
+				    DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
+				    ds.receive(dp);
+				    String instanceId = new String(dp.getData());
+				    try{
+				    	UcityUtil.stopAllPollingsForInstanceSocket(instanceId);
+				    }catch (Exception e){
+						logger.info("stopAllPolling error",e);				    	
+				    }
+				}
+			}catch(Exception e){
+				logger.info("서버에러",e);
+			}
+		}
 	}
 	
 	public void instanceIdSend(String instanceId){
