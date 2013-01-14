@@ -43,6 +43,11 @@
 		<property name="smtpServerPort" column="smtpServerPort" type="int"/>
 		<property name="smtpAuthenticated" column="smtpAuthenticated" type="boolean"/>
 		<property name="smtpSsl" column="smtpSsl" type="boolean"/>
+		<property name="pwChangeAPI" column="pwChangeAPI" type="string" length="300"/>
+		<property name="pwChangeDefaultData" column="pwChangeDefaultData" type="string" length="100"/>
+		<property name="pwChangeParamId" column="pwChangeParamId" type="string" length="50"/>
+		<property name="pwChangeParamOldPW" column="pwChangeParamOldPW" type="string" length="50"/>
+		<property name="pwChangeParamNewPW" column="pwChangeParamNewPW" type="string" length="50"/>
 		<property name="creationUser" column="creator" type="string" length="30"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>
 		<property name="modificationUser" column="modifier" type="string" length="30"/>

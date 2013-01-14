@@ -51,6 +51,12 @@
 		if (SmartWorks.GridLayout.validate(changeMailPassword.find('form.js_validation_required'), $('.js_pop_error_message'))) {
 			var forms = changeMailPassword.find('form');
 			var userName = changeMailPassword.attr('userName');
+			var userNameWithMailAddress = '';
+			if (userName.indexOf('@') === -1) {
+				userNameWithMailAddress = userName;
+			} else {
+				userNameWithMailAddress = userName.substr(0, userName.indexOf('@'));
+			}
 			var pwChangeAPI = changeMailPassword.attr('pwChangeAPI');
 			var pwChangeDefaultData = changeMailPassword.attr('pwChangeDefaultData');
 			var pwChangeParamId = changeMailPassword.attr('pwChangeParamId');
@@ -65,9 +71,12 @@
 				return;				
 			}
 
-			var requestData = pwChangeAPI + "?" + pwChangeDefaultData + "&" + pwChangeParamId + "=" + userName + "&" + pwChangeParamOldPW + "=" + oldPassword + "&" + pwChangeParamNewPW + "=" + newPassword;
+			var requestData = pwChangeAPI + "?" + pwChangeDefaultData + "&" + pwChangeParamId + "=" + userNameWithMailAddress + "&" + pwChangeParamOldPW + "=" + oldPassword + "&" + pwChangeParamNewPW + "=" + newPassword;
 			var paramsJson = {};
 			paramsJson['requestData'] = requestData;
+			paramsJson['userName'] = userName;
+			paramsJson['oldPassword'] = oldPassword;
+			paramsJson['newPassword'] = newPassword;
 			console.log(JSON.stringify(paramsJson));
 			var progressSpan = changeMailPassword.find('.js_progress_span');
 			smartPop.progressCont(progressSpan);

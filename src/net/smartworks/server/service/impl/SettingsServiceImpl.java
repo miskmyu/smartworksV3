@@ -2317,6 +2317,11 @@ public class SettingsServiceImpl implements ISettingsService {
 				emailServer.setSmtpServerPort(mailServer.getSmtpServerPort());
 				emailServer.setSmtpAuthenticated(mailServer.isSmtpAuthenticated());
 				emailServer.setSmtpSsl(mailServer.isSmtpSsl());
+				emailServer.setPwChangeAPI(mailServer.getPwChangeAPI());
+				emailServer.setPwChangeDefaultData(mailServer.getPwChangeDefaultData());
+				emailServer.setPwChangeParamId(mailServer.getPwChangeParamId());
+				emailServer.setPwChangeParamOldPW(mailServer.getPwChangeParamOldPW());
+				emailServer.setPwChangeParamNewPW(mailServer.getPwChangeParamNewPW());
 			}
 			return emailServer;
 		} catch (Exception e) {
@@ -2328,6 +2333,24 @@ public class SettingsServiceImpl implements ISettingsService {
 	@Override
 	public void setEmailServer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try {
+			/*{
+				   txtEmailServerName=hanmail.net,
+				   txtEmailServerFetchServer=pop.daum.net,
+				   txtEmailServerFetchPort=995,
+				   selEmailServerFetchProtocol=pop3,
+				   txtEmailServerFetchSsl=on,
+				   txtEmailServerSmtpServer=smtp.daum.net,
+				   txtEmailServerSmtpPort=465,
+				   txtEmailServerSmtpAuthenticated=on,
+				   txtEmailServerSmtpSsl=on,
+				  
+				   txtPWChangeAPI=http:   //localhost:8080   /smartworksV3/emailApi.jsp,
+				   txtPWChangeDefaultData=defaultValue,
+				   txtPWChangeParamId=idValue,
+				   txtPWChangeParamOldPW=oldPassValue,
+				   txtPWChangeParamNewPW=newPassValue
+				}*/
+			
 			User cUser = SmartUtil.getCurrentUser();
 			String userId = cUser.getId();
 			String companyId = cUser.getCompanyId();
@@ -2347,6 +2370,12 @@ public class SettingsServiceImpl implements ISettingsService {
 			String txtEmailServerSmtpPort = null;
 			boolean txtEmailServerSmtpAuthenticated = false;
 			boolean txtEmailServerSmtpSsl = false;
+
+			String txtPWChangeAPI = null;
+			String txtPWChangeDefaultData = null;
+			String txtPWChangeParamId = null;
+			String txtPWChangeParamOldPW = null;
+			String txtPWChangeParamNewPW = null;
 
 			while(itr.hasNext()) {
 				String fieldId = (String)itr.next();
@@ -2371,6 +2400,16 @@ public class SettingsServiceImpl implements ISettingsService {
 						txtEmailServerSmtpAuthenticated = true;
 					} else if(fieldId.equals("txtEmailServerSmtpSsl")) {
 						txtEmailServerSmtpSsl = true;
+					} else if(fieldId.equals("txtPWChangeAPI")) {
+						txtPWChangeAPI = valueString;
+					} else if(fieldId.equals("txtPWChangeDefaultData")) {
+						txtPWChangeDefaultData = valueString;
+					} else if(fieldId.equals("txtPWChangeParamId")) {
+						txtPWChangeParamId = valueString;
+					} else if(fieldId.equals("txtPWChangeParamOldPW")) {
+						txtPWChangeParamOldPW = valueString;
+					} else if(fieldId.equals("txtPWChangeParamNewPW")) {
+						txtPWChangeParamNewPW = valueString;
 					}
 				}
 			} 
@@ -2391,7 +2430,12 @@ public class SettingsServiceImpl implements ISettingsService {
 			mailServer.setSmtpServerPort(Integer.parseInt(txtEmailServerSmtpPort));
 			mailServer.setSmtpAuthenticated(txtEmailServerSmtpAuthenticated);
 			mailServer.setSmtpSsl(txtEmailServerSmtpSsl);
-
+			mailServer.setPwChangeAPI(txtPWChangeAPI);
+			mailServer.setPwChangeDefaultData(txtPWChangeDefaultData);
+			mailServer.setPwChangeParamId(txtPWChangeParamId);
+			mailServer.setPwChangeParamOldPW(txtPWChangeParamOldPW);
+			mailServer.setPwChangeParamNewPW(txtPWChangeParamNewPW);
+			
 			getMailManager().setMailServer(userId, mailServer, IManager.LEVEL_ALL);
 
 		} catch(Exception e) {
@@ -2442,6 +2486,11 @@ public class SettingsServiceImpl implements ISettingsService {
 				emailServer.setSmtpServerPort(mailServer.getSmtpServerPort());
 				emailServer.setSmtpAuthenticated(mailServer.isSmtpAuthenticated());
 				emailServer.setSmtpSsl(mailServer.isSmtpSsl());
+				emailServer.setPwChangeAPI(mailServer.getPwChangeAPI());
+				emailServer.setPwChangeDefaultData(mailServer.getPwChangeDefaultData());
+				emailServer.setPwChangeParamId(mailServer.getPwChangeParamId());
+				emailServer.setPwChangeParamOldPW(mailServer.getPwChangeParamOldPW());
+				emailServer.setPwChangeParamNewPW(mailServer.getPwChangeParamNewPW());
 				emailServerList.add(emailServer);
 			}
 		}
