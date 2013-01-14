@@ -28,7 +28,7 @@
 
 /* Layer popup list */
 .pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; padding-top:5px; font-size: 12px; line-height:19px}
-.pop_list_area > form > ul {max-height:330px; overflow-y:auto}
+.pop_list_area > form > ul {max-height:330px; overflow-y:auto;}
 .pop_list_area.mail_address > ul {max-height: 500px; overflow-y: auto; padding: 0 10px 5px}
 
 .pop_list_area li {display:block}

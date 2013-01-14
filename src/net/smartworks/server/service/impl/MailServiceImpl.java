@@ -1,6 +1,7 @@
 package net.smartworks.server.service.impl;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +23,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
@@ -39,11 +42,14 @@ import net.smartworks.model.notice.Notice;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.ServletUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.mail.manager.IMailManager;
 import net.smartworks.server.engine.mail.model.MailAccountCond;
 import net.smartworks.server.engine.mail.model.MailContent;
 import net.smartworks.server.engine.mail.model.MailContentCond;
+import net.smartworks.server.engine.mail.model.MailServer;
+import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.ISettingsService;
@@ -82,9 +88,17 @@ import org.claros.intouch.webmail.models.FolderDbObjectWrapper;
 import org.claros.intouch.webmail.models.MsgDbObject;
 import org.htmlcleaner.HtmlCleaner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 @Service
 public class MailServiceImpl extends BaseService implements IMailService {
@@ -1961,9 +1975,93 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		return null;
 	}
 
+	//(주)원진 에서 사용하는 포스티안 메일 연동에 대한 결과값을 파싱한다
+	//원진 회사에 관련된 메소드 이기 때문에 다른 프로젝트에서 영향을 주지 않도록 코딩해야 하며
+	//평상시에는 주석처리한다 
+	private boolean parsingResultXml(String resultXml) throws Exception {
+		
+		/* 호출성공시 리턴받게되는 Xml
+		<?xml version='1.0' encoding='utf-8' ?>
+		<data>
+		   <returnCode>0</returnCode>
+		   <returnMsg>Success to modify a mail account</returnMsg>
+		</data>
+		*/
+		//xml 파싱
+		
+		String returnCode = null;
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		
+		Document doc = builder.parse(new ByteArrayInputStream(resultXml.getBytes()));
+		
+		Element root = doc.getDocumentElement();
+		
+		System.out.println(root.getNodeName());
+
+		NodeList nodeList = root.getChildNodes();
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node returnCodeNode = nodeList.item(i);
+			if (returnCodeNode.getNodeType() != Node.ELEMENT_NODE || !returnCodeNode.getNodeName().equals("returnCode"))
+				continue;
+			
+			System.out.println(returnCodeNode.getNodeName());
+			NodeList textNodeList = returnCodeNode.getChildNodes();
+			for (int j = 0; j < textNodeList.getLength(); j++) {
+				Node textNode = textNodeList.item(j);
+				returnCode = textNode.getNodeValue();
+			}
+		}
+		System.out.println("result : " + returnCode);
+		if (returnCode.equalsIgnoreCase("0")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
 	@Override
 	public void changeMailPasswordRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
+
+	    User currentUser = SmartUtil.getCurrentUser();
+	    String userId = currentUser.getId();
+	    
+		String requestUrl = (String)requestBody.get("requestData");
+		String userName = (String)requestBody.get("userName");
+		String oldPassword = (String)requestBody.get("oldPassword");
+		String newPassword = (String)requestBody.get("newPassword");
 		
+		//원진 소스
+//		if (userId.indexOf("@modineonegene.com") != -1) {
+//			requestUrl = StringUtils.replace(requestUrl, "domain=onegene.com", "domain=modineonegene.com");
+//		}
+		
+		String result = ServletUtil.request(requestUrl);
+		
+		if (!parsingResultXml(result)) {
+			throw new Exception("Change Mail Password Fail!! " + result);
+		} else {
+			System.out.println("############## Change Mail Password Success!! ##############");
+		}
+		//mailAccount 의 계정비밀번호도 바꾸어 준다
+
+		MailAccountCond mailAccountCond = new MailAccountCond();
+		mailAccountCond.setUserId(userId);
+		net.smartworks.server.engine.mail.model.MailAccount mailAccount = getMailManager().getMailAccount(userId, mailAccountCond, IManager.LEVEL_ALL);
+		mailAccount.setMailPassword(newPassword);
+		getMailManager().setMailAccount(userId, mailAccount, IManager.LEVEL_ALL);
+		
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		Authentication authentication = securityContext.getAuthentication();
+		if(authentication != null) {
+			Object principal = authentication.getPrincipal();
+			if(!principal.equals("anonymousUser")) {
+				Login login = (Login)(principal instanceof Login ? principal : null);
+				login.setMailPassword(newPassword);
+			}
+		}
 	}
 }
