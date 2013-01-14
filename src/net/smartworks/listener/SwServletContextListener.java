@@ -29,32 +29,26 @@ import pro.ucity.util.UcityUtil;
 public class SwServletContextListener implements ServletContextListener{
 
 	@Override
-	public void contextInitialized(ServletContextEvent arg0) {
-		System.out.println("SmartWorks Server Start Begin! - SwServletContextlistener !!!!!!!!!!!!!!!!!!");
-		System.out.println("SmartWorks Server Start Done! - SwServletContextlistener !!!!!!!!!!!!!!!!!!");
-	}
-
-	@Override
 	public void contextDestroyed(ServletContextEvent event) {
-		System.out.println("SmartWorks Server Down Begin! - SwServletContextlistener !!!!!!!!!!!!!!!!!!!");
-		try {
-			UcityUtil.stopAllThread();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println("SmartWorks Server Down Done! - SwServletContextlistener !!!!!!!!!!!!!!!!!!!");
-		
-		System.out.println("SmartWorks Schedulers Kill !!!!!!!!!!!!!!!!!!!!!!!!!!");
-		/*if (event!=null && event.getServletContext()!=null) {
-	        ServletContext context = event.getServletContext();
-	        //StdSchedulerFactory sch = (StdSchedulerFactory) context.getAttribute("org.quartz.impl.StdSchedulerFactory.KEY");
+//		System.out.println("SmartWorks Server Down Begin! - SwServletContextlistener !!!!!!!!!!!!!!!!!!!");
+//		try {
+//			UcityUtil.stopAllThread();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println("SmartWorks Server Down Done! - SwServletContextlistener !!!!!!!!!!!!!!!!!!!");
+//		
+//		System.out.println("SmartWorks Schedulers Kill !!!!!!!!!!!!!!!!!!!!!!!!!!");
+//		if (event!=null && event.getServletContext()!=null) {
+//	        ServletContext context = event.getServletContext();
+//	        //StdSchedulerFactory sch = (StdSchedulerFactory) context.getAttribute("org.quartz.impl.StdSchedulerFactory.KEY");
+//	        
+//		ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(event.getServletContext());
+//	        StdScheduler sch = (StdScheduler) ctx.getBean("schedulerFactoryBean");
+//	        if (sch != null)
+//	        	sch.shutdown();
 	        
-	        ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(event.getServletContext());
-	        StdScheduler sch = (StdScheduler) ctx.getBean("schedulerFactoryBean");
-	        if (sch != null)
-	        	sch.shutdown();
-	        
-	        if(sch!=null){
+	        /*if(sch!=null){
 	            try {
 	                Collection<Scheduler> col = sch.getAllSchedulers();
 	        		System.out.println("SmartWorks Schedulers col Size : " + col.size());
@@ -65,22 +59,48 @@ public class SwServletContextListener implements ServletContextListener{
 	            } catch (SchedulerException e) {
 	                e.printStackTrace();
 	            }
-	        }
-	    }*/
-		/*try{
+	        }*/
+		try {
+			UcityUtil.stopAllThread();
+			
+			Thread.sleep(3000);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try
+        {
             // Get a reference to the Scheduler and shut it down
             WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
             Scheduler scheduler = (Scheduler) context.getBean("schedulerFactoryBean");
-            scheduler.shutdown(true);
- 
+
+//            System.out.println("scheduler null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            try{
+            	scheduler.shutdown(true);
+            }catch(Exception e){
+            	e.printStackTrace();
+            	UcityUtil.stopAllThread();
+            	scheduler.shutdown();
+            }
+//            System.out.println("scheduler boolean!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            try {
+    			UcityUtil.stopAllThread();
+    			
+    			Thread.sleep(3000);
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    		}
+            scheduler.shutdown();
             // Sleep for a bit so that we don't get any errors
             Thread.sleep(1000);
         }
-        catch (Exception e)
+			catch (Exception e)
         {
             e.printStackTrace();
-        }*/
-		
-		
+        }
+	}
+	@Override
+	public void contextInitialized(ServletContextEvent arg0) {
+		System.out.println("SmartWorks Server Start Begin! - SwServletContextlistener !!!!!!!!!!!!!!!!!!");
+		System.out.println("SmartWorks Server Start Done! - SwServletContextlistener !!!!!!!!!!!!!!!!!!");
 	}
 }

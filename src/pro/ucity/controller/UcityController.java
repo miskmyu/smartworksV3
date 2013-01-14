@@ -15,14 +15,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.controller.ExceptionInterceptor;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.SmartUtil;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,9 +33,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import pro.ucity.util.UcityUtil;
+
 @Controller
 public class UcityController extends ExceptionInterceptor {
 	
+	private static Logger logger = Logger.getLogger(UcityController.class);
 	ISmartWorks smartworks;
 
 	@Autowired
@@ -153,5 +159,20 @@ public class UcityController extends ExceptionInterceptor {
 		return map;
 	}	
 
+	@RequestMapping(value = "/abend_ucity_instance", method = RequestMethod.POST) 
+	@ResponseStatus(HttpStatus.OK) 
+	public @ResponseBody void abendUcityInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception { 
+		String instanceId = (String)requestBody.get("instanceId");
+		logger.info("=======UcityController=======");
+		logger.info("instanceId = " + instanceId);
+		logger.info("=============================");
+		UcityUtil.stopAllPollingsForInstance(instanceId); 
+		Map<String, Object> accessData = new HashMap<String, Object>();   
+		accessData.put("selWorkSpace", SmartUtil.getSystemUser().getId()); 
+		accessData.put("selWorkSpaceType", ISmartWorks.SPACE_TYPE_USER); 
+		accessData.put("selAccessLevel", AccessPolicy.LEVEL_PUBLIC); 
+		requestBody.put("frmAccessSpace", accessData); 
+		smartworks.abendTaskInstance(requestBody, request); 
+    } 
 
 }

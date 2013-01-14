@@ -27,17 +27,20 @@ public class DMHistory {
 	private static final Logger logger = Logger.getLogger(DMHistory.class);
 	
 	public static final String DEVICE_ID_MEDIABOARD		= "CIMBMBD";
-	public static final String DEVICE_ID_TRAFFIC_BIT	= "TMEMBIT";
+	public static final String DEVICE_ID_TRAFFIC_BIT	= "TMPTBIS";
 	public static final String DEVICE_ID_TRAFFIC_VMS	= "TMEMVMS";
-	public static final String DEVICE_ID_KIOSK			= "TMEMKIOSK";
+	public static final String DEVICE_ID_KIOSK			= "TMPTKIO";
 	public static final String DEVICE_ID_ENV_VMS		= "EVEIVMS";
 
 	public static final String FLAG_STOP_DISPLAY 	= "Y";
 	
 	public static final KeyMap[] DEVMID_TRACE_FIELDS = {
-		new KeyMap("상황 아이디", "situation_id"), new KeyMap("미디어보드", "cimbmbd"), new KeyMap("환경VMS", "eveivms"), new KeyMap("교통VMS", "tmemvms"), new KeyMap("교통BIT", "tmembit"), 
-		new KeyMap("KIOSK", "tmemkiosk"), new KeyMap("미디어보드 표출중지", "cimbmbd_stop"), new KeyMap("환경VMS 표출중지", "eveivms_stop"), new KeyMap("교통VMS 표출중지", "tmemvms_stop"), new KeyMap("교통BIT 표출중지", "tmembit_stop"), 
-		new KeyMap("KIOSK 표출중지", "tmemkiosk_stop")
+		new KeyMap("상황 아이디", "situation_id"), 
+		new KeyMap("미디어보드", "cimbmbd"), 
+		new KeyMap("환경VMS", "eveivms"), 
+		new KeyMap("교통VMS", "tmemvms"), 
+		new KeyMap("교통BIT", "tmembit"), 
+		new KeyMap("KIOSK", "tmemkiosk"),
 	};
 
 	private String eventId;
@@ -46,11 +49,6 @@ public class DMHistory {
 	private String tmemVms;
 	private String tmemKiosk;
 	private String eveiVms;;
-	private String cimbMbdStop;
-	private String tmemBitStop;
-	private String tmemVmsStop;
-	private String tmemKioskStop;
-	private String eveiVmsStop;
 	
 	public String getEventId() {
 		return eventId;
@@ -100,46 +98,6 @@ public class DMHistory {
 		this.eveiVms = eveiVms;
 	}
 
-	public String getCimbMbdStop() {
-		return cimbMbdStop;
-	}
-
-	public void setCimbMbdStop(String cimbMbdStop) {
-		this.cimbMbdStop = cimbMbdStop;
-	}
-
-	public String getTmemBitStop() {
-		return tmemBitStop;
-	}
-
-	public void setTmemBitStop(String tmemBitStop) {
-		this.tmemBitStop = tmemBitStop;
-	}
-
-	public String getTmemVmsStop() {
-		return tmemVmsStop;
-	}
-
-	public void setTmemVmsStop(String tmemVmsStop) {
-		this.tmemVmsStop = tmemVmsStop;
-	}
-
-	public String getTmemKioskStop() {
-		return tmemKioskStop;
-	}
-
-	public void setTmemKioskStop(String tmemKioskStop) {
-		this.tmemKioskStop = tmemKioskStop;
-	}
-
-	public String getEveiVmsStop() {
-		return eveiVmsStop;
-	}
-
-	public void setEveiVmsStop(String eveiVmsStop) {
-		this.eveiVmsStop = eveiVmsStop;
-	}
-
 	public DMHistory(){
 		super();
 	}
@@ -164,16 +122,6 @@ public class DMHistory {
 				dataRecord.put(keyMap.getId(), this.tmemKiosk);
 			else if(keyMap.getKey().equals("eveivms"))
 				dataRecord.put(keyMap.getId(), this.eveiVms);
-			else if(keyMap.getKey().equals("cimbmbd_stop"))
-				dataRecord.put(keyMap.getId(), this.cimbMbdStop);
-			else if(keyMap.getKey().equals("tmembit_stop"))
-				dataRecord.put(keyMap.getId(), this.tmemBitStop);
-			else if(keyMap.getKey().equals("tmemvms_stop"))
-				dataRecord.put(keyMap.getId(), this.tmemVmsStop);
-			else if(keyMap.getKey().equals("tmemkiosk_stop"))
-				dataRecord.put(keyMap.getId(), this.tmemKioskStop);
-			else if(keyMap.getKey().equals("eveivms_stop"))
-				dataRecord.put(keyMap.getId(), this.eveiVmsStop);
 		}
 		return dataRecord;
 	}

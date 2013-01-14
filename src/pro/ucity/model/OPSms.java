@@ -28,17 +28,21 @@ public class OPSms {
 	private static Logger logger = Logger.getLogger(OPSms.class);
 
 	public static final KeyMap[] OPPORTAL_SMS_FIELDS = {
-		new KeyMap("메시지 아이디", UcityConstant.getQueryByKey("OPSms.SMS_ID")), new KeyMap("메시지 구분", UcityConstant.getQueryByKey("OPSms.SEND_TYPE")), new KeyMap("등록일", UcityConstant.getQueryByKey("OPSms.REGIST_DATE")), new KeyMap("발송자", UcityConstant.getQueryByKey("OPSms.SEND_USER_NAME")),
-		new KeyMap("예약발송일자", UcityConstant.getQueryByKey("OPSms.RESERVATION_SEND_DATE")), new KeyMap("알림구분", UcityConstant.getQueryByKey("OPSms.NOTICE_TYPE")), new KeyMap("상태", UcityConstant.getQueryByKey("OPSms.STATUS")), new KeyMap("메시지 내용", UcityConstant.getQueryByKey("OPSms.SMS_CONTENT"))
+		new KeyMap("메시지 아이디", UcityConstant.getQueryByKey("OPSms.SMS_ID")), 
+//		new KeyMap("메시지 구분", UcityConstant.getQueryByKey("OPSms.SEND_TYPE")), 
+		new KeyMap("등록일", UcityConstant.getQueryByKey("OPSms.REGIST_DATE")), 
+		new KeyMap("발송자", UcityConstant.getQueryByKey("OPSms.SEND_USER_NAME")),
+//		new KeyMap("예약발송일자", UcityConstant.getQueryByKey("OPSms.RESERVATION_SEND_DATE")), 
+		new KeyMap("알림구분", UcityConstant.getQueryByKey("OPSms.NOTICE_TYPE")), 
+		new KeyMap("상태", UcityConstant.getQueryByKey("OPSms.STATUS")), 
+		new KeyMap("메시지 내용", UcityConstant.getQueryByKey("OPSms.SMS_CONTENT"))
 	};
 	
 	private String situationId;
 	
 	private String smsId;
-	private String sendType;
 	private String registDate;
 	private String sendUserName;
-	private String reservationSendDate;
 	private String noticeType;
 	private String status;
 	private String smsContent;
@@ -60,14 +64,6 @@ public class OPSms {
 		this.smsId = smsId;
 	}
 
-	public String getSendType() {
-		return sendType;
-	}
-
-	public void setSendType(String sendType) {
-		this.sendType = sendType;
-	}
-
 	public String getRegistDate() {
 		return registDate;
 	}
@@ -82,14 +78,6 @@ public class OPSms {
 
 	public void setSendUserName(String sendUserName) {
 		this.sendUserName = sendUserName;
-	}
-
-	public String getReservationSendDate() {
-		return reservationSendDate;
-	}
-
-	public void setReservationSendDate(String reservationSendDate) {
-		this.reservationSendDate = reservationSendDate;
 	}
 
 	public String getNoticeType() {
@@ -135,8 +123,6 @@ public class OPSms {
 			KeyMap keyMap = keyMaps[i];
 			if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.SMS_ID")))
 				dataRecord.put(keyMap.getId(), this.smsId);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.SEND_TYPE")))
-				dataRecord.put(keyMap.getId(), this.sendType);
 			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.REGIST_DATE")))
 				dataRecord.put(keyMap.getId(), this.registDate);
 			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.SEND_USER_NAME")))
@@ -147,8 +133,6 @@ public class OPSms {
 				dataRecord.put(keyMap.getId(), this.status);
 			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.SMS_CONTENT")))
 				dataRecord.put(keyMap.getId(), this.smsContent);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("OPSms.RESERVATION_SEND_DATE")))
-				dataRecord.put(keyMap.getId(), this.reservationSendDate);
 		}	
 		return dataRecord;
 	}
@@ -173,9 +157,6 @@ public class OPSms {
 			this.smsId = result.getString(UcityConstant.getQueryByKey("OPSms.SMS_ID"));
 		}catch (Exception ex){}
 		try{
-			this.sendType = result.getString(UcityConstant.getQueryByKey("OPSms.SEND_TYPE"));
-		}catch (Exception ex){}
-		try{
 			this.registDate = result.getString(UcityConstant.getQueryByKey("OPSms.REGIST_DATE"));
 		}catch (Exception ex){}
 		try{
@@ -189,9 +170,6 @@ public class OPSms {
 		}catch (Exception ex){}
 		try{
 			this.smsContent = result.getString(UcityConstant.getQueryByKey("OPSms.SMS_CONTENT"));
-		}catch (Exception ex){}
-		try{
-			this.reservationSendDate = result.getString(UcityConstant.getQueryByKey("OPSms.RESERVATION_SEND_DATE"));
 		}catch (Exception ex){}
 	}
 	

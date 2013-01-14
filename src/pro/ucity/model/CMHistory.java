@@ -32,29 +32,20 @@ public class CMHistory {
 	public static final String MSG_TYPE_RELEASE = "R";
 	
 	public static final KeyMap[] COMMID_TRACE_FIELDS = {
-		new KeyMap("트랜잭션 아이디", UcityConstant.getQueryByKey("CMHistory.TRST_ID")), new KeyMap("송수신 구분", UcityConstant.getQueryByKey("CMHistory.SR_FLAG")), new KeyMap("메시지 아이디", UcityConstant.getQueryByKey("CMHistory.MSG_ID")), new KeyMap("시스템 코드", UcityConstant.getQueryByKey("CMHistory.SYS_CD")),
-		new KeyMap("데이터 타입", UcityConstant.getQueryByKey("CMHistory.DATA_TYP")), new KeyMap("발생 일시", UcityConstant.getQueryByKey("CMHistory.OUTB_DTM")), new KeyMap("성공여부", UcityConstant.getQueryByKey("CMHistory.SCSS_YN")), new KeyMap("에러 코드", UcityConstant.getQueryByKey("CMHistory.ERR_CD")),
-		new KeyMap("요청 응답 키", UcityConstant.getQueryByKey("CMHistory.RR_KEY")), new KeyMap("수신 프로토콜 타입", UcityConstant.getQueryByKey("CMHistory.R_PRTCL_TYP")), new KeyMap("수신 MEP 타입", UcityConstant.getQueryByKey("CMHistory.R_MEP")), new KeyMap("메시지 원본",UcityConstant.getQueryByKey("CMHistory.MSG_ORIG")), new KeyMap("메시지 종류 구분", UcityConstant.getQueryByKey("CMHistory.MSG_KND_GUBN")),
-		new KeyMap("송신 프로토콜 타입", UcityConstant.getQueryByKey("CMHistory.S_PRTCL_TYP")), new KeyMap("재시도 횟수", UcityConstant.getQueryByKey("CMHistory.RTR_CNT")), new KeyMap("송신 MEP 타입", UcityConstant.getQueryByKey("CMHistory.S_MEP")), new KeyMap("수신 이벤트 내용", UcityConstant.getQueryByKey("CMHistory.RCV_EVET_CNTN")),
-		new KeyMap("이벤트 발생 아이디", UcityConstant.getQueryByKey("CMHistory.EVET_OUTB_ID"))
+		new KeyMap("트랜잭션 아이디", UcityConstant.getQueryByKey("CMHistory.TRST_ID")), 
+		new KeyMap("송수신 구분", UcityConstant.getQueryByKey("CMHistory.SR_FLAG")), 
+		new KeyMap("메시지 아이디", UcityConstant.getQueryByKey("CMHistory.MSG_ID")),
+        new KeyMap("발생 일시", UcityConstant.getQueryByKey("CMHistory.OUTB_DTM")), 
+        new KeyMap("성공여부", UcityConstant.getQueryByKey("CMHistory.SCSS_YN")),
+	    new KeyMap("수신 이벤트 내용", UcityConstant.getQueryByKey("CMHistory.RCV_EVET_CNTN")),
+	    new KeyMap("이벤트 발생 아이디", UcityConstant.getQueryByKey("CMHistory.EVET_OUTB_ID"))
 	};
 	
 	private String trstId;
 	private String srFlag;
 	private String msgId;
-	private String sysCd;
-	private String dataTyp;
 	private String outbDtm;
 	private String scssYn;
-	private String errCd;
-	private String rrKey;
-	private String rPrtclTyp;
-	private String rMep;
-	private String msgOrig;
-	private String msgKndGubn;
-	private String sPrtclTyp;
-	private String rtrCnt;
-	private String sMep;
 	private String rcvEvetCntn;
 	private String evetOutbId;
 	
@@ -85,18 +76,6 @@ public class CMHistory {
 	public void setMsgId(String msgId) {
 		this.msgId = msgId;
 	}
-	public String getSysCd() {
-		return sysCd;
-	}
-	public void setSysCd(String sysCd) {
-		this.sysCd = sysCd;
-	}
-	public String getDataTyp() {
-		return dataTyp;
-	}
-	public void setDataTyp(String dataTyp) {
-		this.dataTyp = dataTyp;
-	}
 	public String getOutbDtm() {
 		return outbDtm;
 	}
@@ -108,60 +87,6 @@ public class CMHistory {
 	}
 	public void setScssYn(String scssYn) {
 		this.scssYn = scssYn;
-	}
-	public String getErrCd() {
-		return errCd;
-	}
-	public void setErrCd(String errCd) {
-		this.errCd = errCd;
-	}
-	public String getRrKey() {
-		return rrKey;
-	}
-	public void setRrKey(String rrKey) {
-		this.rrKey = rrKey;
-	}
-	public String getrPrtclTyp() {
-		return rPrtclTyp;
-	}
-	public void setrPrtclTyp(String rPrtclTyp) {
-		this.rPrtclTyp = rPrtclTyp;
-	}
-	public String getrMep() {
-		return rMep;
-	}
-	public void setrMep(String rMep) {
-		this.rMep = rMep;
-	}
-	public String getMsgOrig() {
-		return msgOrig;
-	}
-	public void setMsgOrig(String msgOrig) {
-		this.msgOrig = msgOrig;
-	}
-	public String getMsgKndGubn() {
-		return msgKndGubn;
-	}
-	public void setMsgKndGubn(String msgKndGubn) {
-		this.msgKndGubn = msgKndGubn;
-	}
-	public String getsPrtclTyp() {
-		return sPrtclTyp;
-	}
-	public void setsPrtclTyp(String sPrtclTyp) {
-		this.sPrtclTyp = sPrtclTyp;
-	}
-	public String getRtrCnt() {
-		return rtrCnt;
-	}
-	public void setRtrCnt(String rtrCnt) {
-		this.rtrCnt = rtrCnt;
-	}
-	public String getsMep() {
-		return sMep;
-	}
-	public void setsMep(String sMep) {
-		this.sMep = sMep;
 	}
 	public String getRcvEvetCntn() {
 		return rcvEvetCntn;
@@ -196,32 +121,10 @@ public class CMHistory {
 				dataRecord.put(keyMap.getId(), this.getSrFlagName());
 			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.MSG_ID")))
 				dataRecord.put(keyMap.getId(), this.msgId);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.SYS_CD")))
-				dataRecord.put(keyMap.getId(), this.sysCd);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.DATA_TYP")))
-				dataRecord.put(keyMap.getId(), this.dataTyp);
 			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.OUTB_DTM")))
 				dataRecord.put(keyMap.getId(), this.outbDtm);
 			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.SCSS_YN")))
 				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.scssYn) ? "on" : "");
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.ERR_CD")))
-				dataRecord.put(keyMap.getId(), this.errCd);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.RR_KEY")))
-				dataRecord.put(keyMap.getId(), this.rrKey);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.R_PRTCL_TYP")))
-				dataRecord.put(keyMap.getId(), this.rPrtclTyp);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.R_MEP")))
-				dataRecord.put(keyMap.getId(), this.rMep);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.MSG_ORIG")))
-				dataRecord.put(keyMap.getId(), this.msgOrig);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.MSG_KND_GUBN")))
-				dataRecord.put(keyMap.getId(), this.msgKndGubn);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.S_PRTCL_TYP")))
-				dataRecord.put(keyMap.getId(), this.sPrtclTyp);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.RTR_CNT")))
-				dataRecord.put(keyMap.getId(), this.rtrCnt);
-			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.S_MEP")))
-				dataRecord.put(keyMap.getId(), this.sMep);
 			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.RCV_EVET_CNTN")))
 				dataRecord.put(keyMap.getId(), this.rcvEvetCntn);
 			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.EVET_OUTB_ID")))
@@ -241,7 +144,7 @@ public class CMHistory {
 		
 		UcityUtil.performUServiceTask(taskInstance, this.getDataRecord());		
 	}
-	
+
 	public void setResult(ResultSet result){
 		if(SmartUtil.isBlankObject(result)) return;
 		try{
@@ -254,50 +157,18 @@ public class CMHistory {
 			this.msgId = result.getString(UcityConstant.getQueryByKey("CMHistory.MSG_ID"));
 		}catch (Exception ex){}
 		try{
-			this.sysCd = result.getString(UcityConstant.getQueryByKey("CMHistory.SYS_CD"));
-		}catch (Exception ex){}
-		try{
-			this.dataTyp = result.getString(UcityConstant.getQueryByKey("CMHistory.DATA_TYP"));
-		}catch (Exception ex){}
-		try{
 			this.outbDtm = result.getString(UcityConstant.getQueryByKey("CMHistory.OUTB_DTM"));
 		}catch (Exception ex){}
 		try{
 			this.scssYn = result.getString(UcityConstant.getQueryByKey("CMHistory.SCSS_YN"));
 		}catch (Exception ex){}
 		try{
-			this.errCd = result.getString(UcityConstant.getQueryByKey("CMHistory.ERR_CD"));
-		}catch (Exception ex){}
-		try{
-			this.rrKey = result.getString(UcityConstant.getQueryByKey("CMHistory.RR_KEY"));
-		}catch (Exception ex){}
-		try{
-			this.rPrtclTyp = result.getString(UcityConstant.getQueryByKey("CMHistory.R_PRTCL_TYP"));
-		}catch (Exception ex){}
-		try{
-			this.rMep = result.getString(UcityConstant.getQueryByKey("CMHistory.R_MEP"));
-		}catch (Exception ex){}
-		try{
-			this.rMep = result.getString(UcityConstant.getQueryByKey("CMHistory.MSG_ORIG"));
-		}catch (Exception ex){}
-		try{
-			this.msgKndGubn = result.getString(UcityConstant.getQueryByKey("CMHistory.MSG_KND_GUBN"));
-		}catch (Exception ex){}
-		try{
-			this.sPrtclTyp = result.getString(UcityConstant.getQueryByKey("CMHistory.S_PRTCL_TYP"));
-		}catch (Exception ex){}
-		try{
-			this.rtrCnt = result.getString(UcityConstant.getQueryByKey("CMHistory.RTR_CNT"));
-		}catch (Exception ex){}
-		try{
-			this.sMep = result.getString(UcityConstant.getQueryByKey("CMHistory.S_MEP"));
+			this.evetOutbId = result.getString(UcityConstant.getQueryByKey("CMHistory.EVET_OUTB_ID"));
 		}catch (Exception ex){}
 		try{
 			this.rcvEvetCntn = result.getString(UcityConstant.getQueryByKey("CMHistory.RCV_EVET_CNTN"));
 		}catch (Exception ex){}
-		try{
-			this.evetOutbId = result.getString(UcityConstant.getQueryByKey("CMHistory.EVET_OUTB_ID"));
-		}catch (Exception ex){}
+		
 	}
 
 	public boolean isValid(){
