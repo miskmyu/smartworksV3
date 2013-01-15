@@ -359,6 +359,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 				buf.append("update MailServer set ");
 				buf.append(" name=:name, fetchServer=:fetchServer, fetchServerPort=:fetchServerPort, fetchProtocol=:fetchProtocol, fetchSsl=:fetchSsl,");
 				buf.append(" smtpServer=:smtpServer, smtpServerPort=:smtpServerPort, smtpAuthenticated=:smtpAuthenticated, smtpSsl=:smtpSsl");
+				buf.append(" pwChangeAPI=:pwChangeAPI, pwChangeDefaultData=:pwChangeDefaultData, pwChangeParamId=:pwChangeParamId, pwChangeParamOldPW=:pwChangeParamOldPW, pwChangeParamNewPW=:pwChangeParamNewPW");
 				buf.append(" where objId=:objId");
 				Query query = this.getSession().createQuery(buf.toString());
 				query.setString(MailServer.A_NAME, obj.getName());
@@ -370,6 +371,11 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 				query.setInteger(MailServer.A_SMTPSERVERPORT, obj.getSmtpServerPort());
 				query.setBoolean(MailServer.A_SMTPAUTHENTICATED, obj.isSmtpAuthenticated());
 				query.setBoolean(MailServer.A_SMTPSSL, obj.isSmtpSsl());
+				query.setString(MailServer.A_PWCHANGEAPI, obj.getPwChangeAPI());
+				query.setString(MailServer.A_PWCHANGEDEFAULTDATA, obj.getPwChangeDefaultData());
+				query.setString(MailServer.A_PWCHANGEPARAMID, obj.getPwChangeParamId());
+				query.setString(MailServer.A_PWCHANGEPARAMOLDPW, obj.getPwChangeParamOldPW());
+				query.setString(MailServer.A_PWCHANGEPARAMNEWPW, obj.getPwChangeParamNewPW());
 				query.setString(MailServer.A_OBJID, obj.getObjId());
 				query.executeUpdate();
 			}
@@ -498,6 +504,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 				buf.append(" obj.objId,");
 				buf.append(" obj.name, obj.fetchServer, obj.fetchServerPort, obj.fetchProtocol, obj.fetchSsl, obj.smtpServer, obj.smtpServerPort,");
 				buf.append(" obj.smtpAuthenticated, obj.smtpSsl, obj.creationUser, obj.creationDate, obj.modificationUser, obj.modificationDate");
+				buf.append(" obj.pwChangeAPI, obj.pwChangeDefaultData, obj.pwChangeParamId, obj.pwChangeParamOldPW, obj.pwChangeParamNewPW");
 			}
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
@@ -523,6 +530,11 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 					obj.setCreationDate((Timestamp)fields[j++]);
 					obj.setModificationUser((String)fields[j++]);
 					obj.setModificationDate((Timestamp)fields[j++]);
+					obj.setPwChangeAPI((String)fields[j++]);
+					obj.setPwChangeDefaultData((String)fields[j++]);
+					obj.setPwChangeParamId((String)fields[j++]);
+					obj.setPwChangeParamOldPW((String)fields[j++]);
+					obj.setPwChangeParamNewPW((String)fields[j++]);
 					objList.add(obj);
 				}
 				list = objList;

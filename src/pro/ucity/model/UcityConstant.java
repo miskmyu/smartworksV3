@@ -22,4 +22,8 @@ public class UcityConstant {
 		// TODO Auto-generated method stub
 		return SwManagerFactory.getInstance().getUcityContantsManager().getUrlByKey(key);
 	}
+	public static String getHostIpByKey(String key) {
+		// TODO Auto-generated method stub
+		return SwManagerFactory.getInstance().getUcityContantsManager().getHostIpByKey(key);
+	}	
 }

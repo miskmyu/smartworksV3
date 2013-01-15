@@ -15,4 +15,5 @@ public interface IUcityConstantsManager {
 	public String getQueryByKey(String key);
 	public String getCodeByKey(String key);
 	public String getUrlByKey(String key);
+	public String getHostIpByKey(String key);
 }

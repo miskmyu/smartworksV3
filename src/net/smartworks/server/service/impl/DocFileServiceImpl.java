@@ -242,6 +242,8 @@ public class DocFileServiceImpl extends AbstractManager implements IDocFileServi
 	}
 	private void saveFileDownloadHistory(String userId, IFileModel file, String packageId, String taskInstId, String recordId) throws Exception {
 		
+		System.out.println(userId + "-" + packageId  + "-" + taskInstId  + "-" + recordId);
+		
 		FileDownloadHistory obj = getDocManager().getFileDownloadHistoryInfoByFileId(file.getId());
 		if (obj == null) {
 			obj = new FileDownloadHistory();
@@ -287,6 +289,15 @@ public class DocFileServiceImpl extends AbstractManager implements IDocFileServi
 					obj.setRefTaskName(tempTask.getName());
 					obj.setRefPrcInstId(tempTask.getProcessInstId());
 					obj.setRefPackageId(packageId);
+				}
+			}
+		} else {
+			if (!CommonUtil.isEmpty(taskInstId)) {
+				TskTask task = SwManagerFactory.getInstance().getTskManager().getTask(userId, taskInstId, IManager.LEVEL_LITE);
+				if (task != null) {
+					obj.setRefTaskId(task.getObjId());
+					obj.setRefPrcInstId(task.getProcessInstId());
+					obj.setRefTaskName(task.getName());
 				}
 			}
 		}

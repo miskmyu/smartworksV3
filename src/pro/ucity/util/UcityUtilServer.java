@@ -3,17 +3,12 @@ package pro.ucity.util;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.InetAddress;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
-import net.smartworks.util.SmartUtil;
 
 import org.apache.log4j.Logger;
 
@@ -22,7 +17,7 @@ public class UcityUtilServer implements ServletContextListener{
 	public static final int TCP_CONNECTION_PORT = 5775;
 	public static final int UDP_ABEND_PORT  = 5776;
 	
-	ServerSocket serverSocket = null;
+//	ServerSocket serverSocket = null;
 
 	private static Logger logger = Logger.getLogger(UcityUtilServer.class);
 	
@@ -30,46 +25,15 @@ public class UcityUtilServer implements ServletContextListener{
 	DataInputStream din;
 	
 	DatagramSocket ds;
-	
+	public static boolean start;
+
 	/**
 	 * @param args
 	 */
 	// TODO Auto-generated method stub
 	
 	public void go(){
-//		Thread serverThread = new Thread(new listenConection());
-//		serverThread.start();
 		(new Thread(new UdpServer())).start();
-	}
-	
-	public class listenConection implements Runnable{
-		
-		public listenConection() {
-			try {
-				serverSocket = new ServerSocket(6775);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				logger.info("클라이언트 소켓에러",e);
-			}
-		}
-			public void run() {
-				try{
-					logger.info("================");
-					logger.info("서버소켓 생성 성공");
-					logger.info("================");
-					while(true){
-						Socket socket = serverSocket.accept();
-						logger.info("=================");
-						logger.info("다른서버에 연결성공");
-						logger.info("=================");
-						
-						Thread clientThread = new Thread(new ClientHandler(socket));
-						clientThread.start();
-					}
-				}catch(Exception e){
-					logger.info("서버에러",e);
-				}
-			}
 	}
 	
 	public class UdpServer implements Runnable{
@@ -77,91 +41,59 @@ public class UcityUtilServer implements ServletContextListener{
 		public UdpServer() {
 			try {
 			   ds = new DatagramSocket(UDP_ABEND_PORT);
+			   ds.setSoTimeout(10000);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				logger.info("ABEND UDP 소켓에러",e);
+				logger.info("ABEND UDP Error",e);
 			}
 		}
 
 		public void run() {
 			try{
-				logger.info("================");
-				logger.info("서버소켓 생성 성공");
-				logger.info("================");
-				while(!Thread.currentThread().isInterrupted()){
+				InetAddress addr = InetAddress.getLocalHost();
+				String hostAddr = addr.getHostAddress();
+				logger.info("======================================================");
+				logger.info("서버소켓 생성 성공(현재 IP 주소) : " + hostAddr + " 입니다");
+				logger.info("======================================================");
+				while(start == true){
 				    byte[] buffer = new byte[512];
 				    DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
-				    ds.receive(dp);
-				    String instanceId = new String(dp.getData());
 				    try{
-				    	UcityUtil.stopAllPollingsForInstanceSocket(instanceId);
-				    }catch (Exception e){
-						logger.info("stopAllPolling error",e);				    	
-				    }
-				}
-			}catch(Exception e){
-				logger.info("서버에러",e);
-			}
-		}
-	}
-	
-	public void instanceIdSend(String instanceId){
-		try {
-			UcityUtil.stopAllPollingsForInstanceSocket(instanceId);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.info("instanceIdSend error", e);
-		}
-	}
-
-	public class ClientHandler implements Runnable {
-			
-			Socket clientSocket;
-			String msg;
-			
-			public ClientHandler(Socket socket) {
-				clientSocket = socket;
-				try{
-					InputStream in = socket.getInputStream();
-					OutputStream out = socket.getOutputStream();
-					
-					din = new DataInputStream(in);
-					msg = din.readUTF();
-
-					dou = new DataOutputStream(out);
-					dou.writeUTF("END");
-				}catch(Exception e){
-					logger.info("ClientHandler error",e);
-				}
-			}
-			
-			public void run() {
-				
-				String instanceId = null;
-				
-				try{
-					while(true){
-						while(!SmartUtil.isEmpty(msg)){
-							instanceId = msg;
-							instanceIdSend(instanceId);
+				    	ds.receive(dp);
+//				    String instanceId = new String(dp.getData());
+				    String instanceId = new String(buffer, 0, dp.getLength());
+					    try{
+					    	UcityUtil.stopAllPollingsForInstanceSocket(instanceId);
+					    }catch (Exception e){
+							logger.info("stopAllPolling error",e);				    	
+					    }
+					    break;
+					}catch(Exception e){
+						if(start == false){
 							break;
 						}
-						break;
+						continue;	
 					}
-				}catch(Exception e){
-					logger.info("run() error",e);
 				}
+			}catch(Exception e){
+				logger.info("Server Socket Start Error",e);
 			}
+			logger.info("=================");
+			logger.info("Server Socket End");
+			logger.info("=================");			
+		}
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		// TODO Auto-generated method stub
 		try {
-			serverSocket.close();
-		} catch (IOException e) {
+//			serverSocket.close();
+            start = false;
+			logger.info("Servcer Socket Closing....");
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.info("해당 서버소켓 종료 실패");
+			logger.info("Servcer Socket Error ( Closing... )", e);
 		}
 		logger.info("종료");
 	}
@@ -170,6 +102,7 @@ public class UcityUtilServer implements ServletContextListener{
 	public void contextInitialized(ServletContextEvent arg0) {
 		// TODO Auto-generated method stub
 		UcityUtilServer server = new UcityUtilServer();
+		start = true;
 		server.go();
 	}
 }

@@ -755,7 +755,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		
 		TskTaskCond taskCond = new TskTaskCond();
 		taskCond.setProcessInstId(prcInstId);
-		if (!prcInst.getType().equalsIgnoreCase("SINGLE"))
+		//if (!prcInst.getType().equalsIgnoreCase("SINGLE"))
 			taskCond.setTypeNotIns(new String[] {CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("reference"), "refernece")});
 		taskCond.setStatusNotIns(CommonUtil.toStringArray(MisUtil.taskExecutedStatusSet()));
 		long taskSize = getTskManager().getTaskSize(user, taskCond);

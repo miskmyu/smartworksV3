@@ -247,8 +247,8 @@ function gospecsearch(){
 				<a href="javascript:gospecsearch();">SPEC조회</a>
 		</li>
 		<li class="idx2">
-				<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>&#pwork_list.sw%3Fcid%3Dpw.li.pkg_c5136ce19f674f6d8e65345bd5393b23">OnLine교육</a>
-		</li>
+				<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>&#pwork_list.sw%3Fcid%3Dpw.li.pkg_f7b2074fbad042d19684951b23b17fc5">OnLine교육</a>
+		</li> 
 	
  	</ul>
  

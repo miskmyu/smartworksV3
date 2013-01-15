@@ -598,6 +598,7 @@ public class CommunityServiceImpl implements ICommunityService {
 					deptInfo.setId(workSpaceInfo.getId());
 					deptInfo.setName(workSpaceInfo.getName());
 					deptInfo.setDesc(workSpaceInfo.getDescription());
+					deptInfo.setFullpathName(ModelConverter.getFullpathNameByDepartmentId(workSpaceInfo.getId()));
 					
 					deptList.add(deptInfo);
 				} else if (type.equalsIgnoreCase("group")) {
@@ -840,7 +841,7 @@ public class CommunityServiceImpl implements ICommunityService {
 				for(Map.Entry<String, LoginUser> entry : connectionUserMap.entrySet()) {
 					String loginUserId = (String)entry.getKey();
 					LoginUser loginUser = (LoginUser)entry.getValue();
-					getLoginUserManager().createLoginUser(loginUserId, loginUser);
+					//getLoginUserManager().createLoginUser(loginUserId, loginUser);
 				}
 			}
 

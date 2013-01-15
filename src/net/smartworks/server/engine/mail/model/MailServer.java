@@ -36,6 +36,12 @@ public class MailServer extends MisObject {
 	public static final String A_SMTPAUTHENTICATED = "smtpAuthenticated";
 	public static final String A_SMTPSSL = "smtpSsl";
 
+	public static final String A_PWCHANGEAPI = "pwChangeAPI";
+	public static final String A_PWCHANGEDEFAULTDATA = "pwChangeDefaultData";
+	public static final String A_PWCHANGEPARAMID = "pwChangeParamId";
+	public static final String A_PWCHANGEPARAMOLDPW = "pwChangeParamOldPW";
+	public static final String A_PWCHANGEPARAMNEWPW = "pwChangeParamNewPW";
+
 	private String fetchServer;
 	private int fetchServerPort;
 	private String fetchProtocol;
@@ -45,6 +51,12 @@ public class MailServer extends MisObject {
 	private boolean smtpAuthenticated;
 	private boolean smtpSsl;
 
+	private String pwChangeAPI;
+	private String pwChangeDefaultData;
+	private String pwChangeParamId;
+	private String pwChangeParamOldPW;
+	private String pwChangeParamNewPW;
+	
 	public MailServer() {
 		super();
 	}
@@ -275,5 +287,34 @@ public class MailServer extends MisObject {
 	public void setSmtpSsl(boolean smtpSsl) {
 		this.smtpSsl = smtpSsl;
 	}
-
+	public String getPwChangeAPI() {
+		return pwChangeAPI;
+	}
+	public void setPwChangeAPI(String pwChangeAPI) {
+		this.pwChangeAPI = pwChangeAPI;
+	}
+	public String getPwChangeDefaultData() {
+		return pwChangeDefaultData;
+	}
+	public void setPwChangeDefaultData(String pwChangeDefaultData) {
+		this.pwChangeDefaultData = pwChangeDefaultData;
+	}
+	public String getPwChangeParamId() {
+		return pwChangeParamId;
+	}
+	public void setPwChangeParamId(String pwChangeParamId) {
+		this.pwChangeParamId = pwChangeParamId;
+	}
+	public String getPwChangeParamOldPW() {
+		return pwChangeParamOldPW;
+	}
+	public void setPwChangeParamOldPW(String pwChangeParamOldPW) {
+		this.pwChangeParamOldPW = pwChangeParamOldPW;
+	}
+	public String getPwChangeParamNewPW() {
+		return pwChangeParamNewPW;
+	}
+	public void setPwChangeParamNewPW(String pwChangeParamNewPW) {
+		this.pwChangeParamNewPW = pwChangeParamNewPW;
+	}
 }
