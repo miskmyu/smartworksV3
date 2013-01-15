@@ -168,5 +168,7 @@
 </div>
 <!-- 업무계획하기 //-->
 <script type="text/javascript">
+$(function() {
 	loadTaskForwardFields();
+});
 </script>
