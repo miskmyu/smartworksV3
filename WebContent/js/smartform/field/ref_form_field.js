@@ -21,9 +21,10 @@ SmartWorks.FormRuntime.RefFormFieldBuilder.build = function(config) {
 	var $refFormField = $refForm.find('field');	
 	var refFormId = $refForm.attr('id');
 	var refFormFieldId = $refFormField.attr('id');
+	var refFormFieldType = $refFormField.attr('type');
 	var refRecordId = (options.dataField && options.dataField.refRecordId) || '';
 	var value = (options.dataField && options.dataField.value) || '';
-	options.container.attr('refForm', refFormId).attr('refFormField', refFormFieldId).attr('refRecordId', refRecordId);
+	options.container.attr('refForm', refFormId).attr('refFormField', refFormFieldId).attr('refRecordId', refRecordId).attr('refFormFieldType', refFormFieldType);
 
 	var $graphic = $entity.find('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
@@ -117,7 +118,7 @@ SmartWorks.FormRuntime.RefFormFieldBuilder.serializeObject = function(refFormFie
 	var refFormsJson = {};
 	for(var i=0; i<refFormFields.length; i++){
 		var refFormField = $(refFormFields[i]);
-		refFormsJson[refFormField.attr('fieldId')] =  {refForm: refFormField.attr('refForm'), refFormField: refFormField.attr('refFormField'), refRecordId: refFormField.attr('refRecordId'), value: refFormField.find('input').attr('value')};
+		refFormsJson[refFormField.attr('fieldId')] =  {refForm: refFormField.attr('refForm'), refFormField: refFormField.attr('refFormField'), refRecordId: refFormField.attr('refRecordId'), refFormFieldType: refFormField.attr('refFormFieldType'), value: refFormField.find('input').attr('value')};
 	}
 	return refFormsJson;
 };

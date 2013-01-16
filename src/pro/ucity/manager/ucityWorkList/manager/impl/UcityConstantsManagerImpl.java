@@ -28,9 +28,10 @@ public class UcityConstantsManagerImpl implements IUcityConstantsManager {
 		this.dataSource = dataSource;
 	}
 	
-	private Map<String, String> queryMap = new Hashtable<String, String>();
-	private Map<String, String> codeMap = new Hashtable<String, String>();
-	private Map<String, String> passUrlList = new Hashtable<String, String>();
+	private Map<String, String> queryMap = new Hashtable<String, String>();      // U-city 쿼리목록
+	private Map<String, String> codeMap = new Hashtable<String, String>();       // 코드 목록
+	private Map<String, String> passUrlList = new Hashtable<String, String>();   // sso 필터 예외처리 목록
+	private Map<String, String> hostIp = new Hashtable<String, String>();        // BPM Server Host Ip 목록
 	
 	public Map<String, String> getQueryMap() {
 		return queryMap;
@@ -60,6 +61,7 @@ public class UcityConstantsManagerImpl implements IUcityConstantsManager {
 		return this.codeMap.get(key);
 	}
 	
+	//sso 필터 중 예외처리 주소들 
 	public Map<String, String> getPassUrlList() {
 		return passUrlList;
 	}
@@ -72,5 +74,18 @@ public class UcityConstantsManagerImpl implements IUcityConstantsManager {
 			return null;
 		return this.passUrlList.get(key);
 	}
-
+	
+	//hostIp 목록
+	public Map<String, String> getHostIp() {
+		return hostIp;
+	}
+	public void setHostIp(Map<String, String> hostIp) {
+		this.hostIp = hostIp;
+	}
+	@Override
+	public String getHostIpByKey(String key) {
+		if (CommonUtil.isEmpty(key))
+			return null;
+		return this.hostIp.get(key);
+	}
 }

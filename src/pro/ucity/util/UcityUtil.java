@@ -11,6 +11,7 @@ package pro.ucity.util;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -54,6 +55,7 @@ import pro.ucity.model.OPDisplay;
 import pro.ucity.model.OPSituation;
 import pro.ucity.model.OPSms;
 import pro.ucity.model.System;
+import pro.ucity.model.UcityConstant;
 
 public class UcityUtil {
 	
@@ -850,13 +852,37 @@ public class UcityUtil {
 	
 	public static void sendAbendMessage(String instanceId){
 		if(SmartUtil.isBlankObject(instanceId)) return;
+		
+		InetAddress addr;
+		String hostAddr = null;
+		
+		try {
+			addr = InetAddress.getLocalHost();
+			hostAddr = addr.getHostAddress();
+		} catch (UnknownHostException e) {
+			logger.info("Localhost Not Found");
+		}		
 		try{
-			DatagramSocket ds = new DatagramSocket(UcityUtilServer.UDP_ABEND_PORT);
-			byte[] buffer = instanceId.getBytes();   
-		    DatagramPacket dp = new DatagramPacket(buffer, buffer.length, InetAddress.getByName("10.2.20.27"), UcityUtilServer.UDP_ABEND_PORT);
-		    ds.send(dp);
-		}catch (Exception e){
+			DatagramSocket ds = new DatagramSocket();
+			byte[] buffer = instanceId.getBytes();
+			String hostIpList = UcityConstant.getHostIpByKey("BPM.SERVERLIST"); // applicataionContext-ucityConstants.xml 에서 목록 받아옴.
 			
+			if( hostIpList != null && hostIpList.trim().length() != 0 ){
+				String[] hostIpListArray = hostIpList.split(",");            // hostIpList 에서 , 로 구분 하여, array 변환.
+				int hostIpLen = hostIpListArray.length;                      // array 갯수
+				for( int i = 0 ; i < hostIpLen ; i++  ){                    
+					String hostIp = hostIpListArray[i];
+					if(!hostAddr.equalsIgnoreCase(hostIp)){               // 자기 hostIp와 확인하여, 틀릴 시만 send.
+					    DatagramPacket dp = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(hostIp), UcityUtilServer.UDP_ABEND_PORT);
+					    ds.send(dp);
+					    ds.close();				
+					}				
+				}				
+			}else{
+				logger.info("hostIpList Not Found");
+			}
+		}catch (Exception e){
+			logger.info("DatagramSocket Error",e);
 		}
 	}
 	

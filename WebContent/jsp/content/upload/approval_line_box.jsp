@@ -90,5 +90,7 @@
 </form>
 
 <script type="text/javascript">
+$(function() {
 	$('.js_append_task_approval_page .js_approval_line_name').html('<%=approvalLine.getName()%>');
+});
 </script>
