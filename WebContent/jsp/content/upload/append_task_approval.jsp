@@ -324,5 +324,7 @@
 </div>
 
 <script type="text/javascript">
+$(function() {
 	loadTaskApprovalFields();
+});
 </script>

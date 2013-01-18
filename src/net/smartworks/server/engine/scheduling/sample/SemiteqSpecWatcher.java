@@ -43,13 +43,13 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 public class SemiteqSpecWatcher  extends QuartzJobBean   {
 	
-	private final static String from = "kmyu@maninsoft.co.kr";
-	private final static String companyId = "Maninsoft";
-	private final static String formId = "frm_d170b5bdf2314881bdcc73e5ab3d8da2";
+	private final static String from = "administrator@semiteq.co.kr";
+	private final static String companyId = "Semiteq";
+	private final static String formId = "frm_5c111516a4474d8baa963eeb8e0e487c";
 	//유효기간필드아이디
-	private final static String targetDateFieldId = "4";
-	private final static String targetDraftUserFieldId = "1";
-	private final static String targetSpecChargerFieldId = "2";
+	private final static String targetDateFieldId = "5";
+	private final static String targetDraftUserFieldId = "4";
+	private final static String targetSpecChargerFieldId = "20";
 	private final static String targetSpecTitleFieldId = "0";
 	
 	@Override
