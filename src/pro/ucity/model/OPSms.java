@@ -204,7 +204,8 @@ public class OPSms {
 			try{
 				selectPstmt = connection.prepareStatement(opSmsSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
-				ResultSet rs = selectPstmt.executeQuery();				
+				ResultSet rs = selectPstmt.executeQuery();	
+				rs.setFetchSize(10);
 				rs.last(); 
 				int count = rs.getRow();
 				rs.first();
@@ -279,7 +280,8 @@ public class OPSms {
 			try{
 				selectPstmt = connection.prepareStatement(opSmsSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
-				ResultSet rs = selectPstmt.executeQuery();				
+				ResultSet rs = selectPstmt.executeQuery();	
+				rs.setFetchSize(10);
 				rs.last(); 
 				int count = rs.getRow();
 				rs.first();
@@ -343,7 +345,8 @@ public class OPSms {
 				selectPstmt = connection.prepareStatement(opSmsSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
 				selectPstmt.setString(2, smsId);
-				ResultSet rs = selectPstmt.executeQuery();				
+				ResultSet rs = selectPstmt.executeQuery();	
+				rs.setFetchSize(10);
 				rs.last(); 
 				int count = rs.getRow();
 				rs.first();

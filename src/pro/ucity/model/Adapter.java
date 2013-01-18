@@ -670,7 +670,8 @@ public class Adapter {
 //			connection.setAutoCommit(false);
 			try{
 				selectPstmt = connection.prepareStatement(adapterSelectStartSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				ResultSet rs = selectPstmt.executeQuery();				
+				ResultSet rs = selectPstmt.executeQuery();		
+				rs.setFetchSize(10);
 				rs.last();
 				int count = rs.getRow(); 
 				rs.beforeFirst();
@@ -702,7 +703,7 @@ public class Adapter {
 									
 									adapter.startProcess();	
 //									connection.commit();
-									logger.info("[SUCCESS] 새로운 ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 정상적으로 시작되었습니다!");
+									logger.info("[SUCCESS] 새로운 ADAPTER 발생 이벤트가 정상적으로 시작되었습니다!");
 									
 									
 								}catch (Exception se){
@@ -743,7 +744,8 @@ public class Adapter {
 				}else{
 					try{
 						selectPstmt = connection.prepareStatement(adapterSelectEndSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-						rs = selectPstmt.executeQuery();				
+						rs = selectPstmt.executeQuery();
+						rs.setFetchSize(10);
 						rs.last();
 						count = rs.getRow(); 
 						rs.beforeFirst();					
@@ -763,7 +765,7 @@ public class Adapter {
 										try{
 											adapter.endProcess();
 //											connection.commit();
-											logger.info("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
+											logger.info("[SUCCESS] 새로운 ADAPTER 종료 이벤트가 정상적으로 처리되었습니다!");
 										}catch (Exception se){
 											logger.error("endProcess error : adapter.endProcess.734",se);
 											logger.info("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
@@ -863,7 +865,8 @@ public class Adapter {
 				selectPstmt = connection.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, Service.getDeviceCodeByDeviceId(deviceId));
 				selectPstmt.setString(2, eventId);
-				ResultSet rs = selectPstmt.executeQuery();				
+				ResultSet rs = selectPstmt.executeQuery();	
+				rs.setFetchSize(10);
 				rs.last(); 
 				int count = rs.getRow();
 				rs.beforeFirst();

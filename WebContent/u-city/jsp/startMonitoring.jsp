@@ -21,7 +21,7 @@
 %> --%>
 <script type="text/javascript">
 // Popup window code
-	window.open('http://bpm.cnuct.kr:8862/smartworksV3/situationMonitoring.sw?page=monitoring','windowPop','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=1000,height=768 top=10 left=10');
+	window.open('http://bpm.cnuct.kr:8862/smartworksV3/situationMonitoring.sw?page=monitoring','MonitoringPop','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=1000,height=768 top=10 left=10');
 </script>
 </body>
 </html>
