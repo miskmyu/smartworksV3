@@ -108,6 +108,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		String title = null;
 		String runningTaskId = null;
 		String runningTaskName = null;
+		String[] runningTaskNameIns = null;
 
 		String serviceName = null;
 		String eventId = null;
@@ -138,6 +139,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			title = cond.getTitle();
 			runningTaskId = cond.getRunningTaskId();
 			runningTaskName = cond.getRunningTaskName();
+			runningTaskNameIns = cond.getRunningTaskNameIns();
 			serviceName = cond.getServiceName();
 			eventId = cond.getEventId();
 			eventTime = cond.getEventTime();
@@ -185,6 +187,15 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 				buf.append(" and obj.runningTaskId = :runningTaskId");
 			if (runningTaskName != null)
 				buf.append(" and obj.runningTaskName = :runningTaskName");
+			if (runningTaskNameIns != null && runningTaskNameIns.length != 0) {
+				buf.append(" and obj.runningTaskName in (");
+				for (int i=0; i<runningTaskNameIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":runningTaskNameIn").append(i);
+				}
+				buf.append(")");
+			}
 			if (serviceName != null)
 				buf.append(" and obj.serviceName = :serviceName");
 			if (eventId != null)
@@ -326,6 +337,11 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 				query.setString("runningTaskId", runningTaskId);
 			if (runningTaskName != null)
 				query.setString("runningTaskName", runningTaskName);
+			if (runningTaskNameIns != null && runningTaskNameIns.length != 0) {
+				for (int i=0; i<runningTaskNameIns.length; i++) {
+					query.setString("runningTaskNameIn"+i, runningTaskNameIns[i]);
+				}
+			}
 			if (serviceName != null)
 				query.setString("serviceName", serviceName);
 			if (eventId != null)

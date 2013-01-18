@@ -756,6 +756,10 @@ public class ModelConverter {
 		if (cUser != null) {
 			userId = cUser.getId();
 			companyId = cUser.getCompanyId();
+		} else {
+			cUser = SmartUtil.getCurrentUser();
+			userId = cUser.getId();
+			companyId = cUser.getCompanyId();
 		}
 
 		WorkInstanceInfo workInstanceInfo = null;

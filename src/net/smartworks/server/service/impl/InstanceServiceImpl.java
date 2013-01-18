@@ -4480,8 +4480,279 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 		return false;
 	}
+
 	
 	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params, int auditId) throws Exception {
+		String[] taskNames = Audit.getTaskNamesByAuditId(auditId);
+		if (taskNames == null || taskNames.length == 0)
+			return getAllUcityPWorkInstanceListByTaskNames(runningOnly, params, null);
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		
+		return getAllUcityPWorkInstanceListByTaskNames(runningOnly, params, taskNames);
+	}
+
+	public InstanceInfoList getAllUcityPWorkInstanceListByTaskNames(boolean runningOnly, RequestParams params, String[] taskNames) throws Exception {
+	
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			
+			UcityWorkListCond ucityWorkListCond = new UcityWorkListCond();
+			
+			SearchFilter searchFilter = params.getSearchFilter();
+			List<Filter> filterList = new ArrayList<Filter>();
+			if(searchFilter != null) {
+				Condition[] conditions = searchFilter.getConditions();
+				for(Condition condition : conditions) {
+					Filter filter = new Filter();
+
+					FormField leftOperand = condition.getLeftOperand();
+					String formFieldId = leftOperand.getId();
+					String tableColName = getProcessTableColName(formFieldId);
+
+					String formFieldType = leftOperand.getType();
+					String operator = condition.getOperator();
+					String rightOperand = (String)condition.getRightOperand();
+
+					if(formFieldId.equalsIgnoreCase("status")) {
+						int rightOperandInt = Integer.parseInt(rightOperand);
+						if(rightOperandInt == Instance.STATUS_RUNNING)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_DELAYED_RUNNING)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_RETURNED)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_COMPLETED)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_COMPLETE;
+						else if(rightOperandInt == Instance.STATUS_ABORTED)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_ABORTED;
+					}
+
+					filter.setLeftOperandType(formFieldType);
+					if (tableColName.equalsIgnoreCase("lastTask_tskname")) {
+						tableColName = "runningTaskName";
+					} else if (tableColName.equalsIgnoreCase("prcStatus")) {
+						tableColName = "status";
+					} else if (tableColName.equalsIgnoreCase("prcTitle")) {
+						tableColName = "title";
+					} else if (tableColName.equalsIgnoreCase("prcCreateDate")) {
+						tableColName = "createdTime";
+					} else if (tableColName.equalsIgnoreCase("lastTask_tskexecuteDate")) {
+						tableColName = "modifiedTime";
+					}
+					
+					filter.setLeftOperandValue(tableColName);
+					filter.setOperator(operator);
+					filter.setRightOperandType(formFieldType);
+					filter.setRightOperandValue(rightOperand);
+					filterList.add(filter);
+				}
+
+				Filter[] filters = new Filter[filterList.size()];
+				filterList.toArray(filters);
+
+				ucityWorkListCond.setFilter(filters);
+			}
+
+			LocalDate priviousDate = new LocalDate(new LocalDate().getTime() - LocalDate.ONE_DAY*7);
+			
+			String filterId = params.getFilterId();
+			if(filterId != null) {
+				if(filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {
+				} else if(filterId.equals(SearchFilter.FILTER_RECENT_INSTANCES)) {
+					ucityWorkListCond.addFilter(new Filter(">=", FormField.ID_LAST_MODIFIED_DATE, Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
+				} else if(filterId.equals(SearchFilter.FILTER_RUNNING_INSTANCES)) {
+					ucityWorkListCond.addFilter(new Filter("=", "status", Filter.OPERANDTYPE_STRING, PrcProcessInst.PROCESSINSTSTATUS_RUNNING));
+				}
+			}
+			
+			String searchKey = params.getSearchKey();
+			ucityWorkListCond.setSearchKey(CommonUtil.toNull(searchKey));
+			
+			if (taskNames != null && taskNames.length != 0) {
+				ucityWorkListCond.setRunningTaskNameIns(taskNames);
+			}
+
+			long totalCount = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkListSize(user.getId(), ucityWorkListCond);
+
+			int pageSize = params.getPageSize();
+			if(pageSize == 0) pageSize = 20;
+
+			int currentPage = params.getCurrentPage();
+			if(currentPage == 0) currentPage = 1;
+
+			int totalPages = (int)totalCount % pageSize;
+
+			if(totalPages == 0)
+				totalPages = (int)totalCount / pageSize;
+			else
+				totalPages = (int)totalCount / pageSize + 1;
+
+			int result = 0;
+
+			if(params.getPagingAction() != 0) {
+				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
+					result = (((currentPage - 1) / 10) * 10) + 11;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
+					result = totalPages;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
+					result = ((currentPage - 1) / 10) * 10;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
+					result = 1;
+				}
+				currentPage = result;
+			}
+
+			if(previousPageSize != pageSize)
+				currentPage = 1;
+
+			previousPageSize = pageSize;
+
+			if((long)((pageSize * (currentPage - 1)) + 1) > (int)totalCount)
+				currentPage = 1;
+
+			if (currentPage > 0)
+				ucityWorkListCond.setPageNo(currentPage-1);
+
+			ucityWorkListCond.setPageSize(pageSize);
+
+			SortingField sf = params.getSortingField();
+
+			//화면에서 사용하고 있는 컬럼의 상수값과 실제 프로세스 인스턴스 데이터 베이스의 컬럼 이름이 맞지 않아 컨버팅 작업
+			//한군데에서 관리 하도록 상수로 변경 필요
+			if (sf == null) {
+				sf = new SortingField();
+				sf.setFieldId(FormField.ID_CREATED_DATE);
+				sf.setAscending(false);
+			}
+			String sfColumnNameTemp = sf.getFieldId();
+			
+			if (sfColumnNameTemp.equalsIgnoreCase("status")) {
+				sfColumnNameTemp = "status"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("subject")) {
+				sfColumnNameTemp = "title";
+			} else if (sfColumnNameTemp.equalsIgnoreCase("lastTask")) {
+				sfColumnNameTemp = "runningTaskName"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("creator")) {
+				sfColumnNameTemp = "creationUser"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("createdTime")) {
+				sfColumnNameTemp = "creationDate"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("modifier")) {
+				sfColumnNameTemp = "modificationUser"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("modifiedTime")) {
+				sfColumnNameTemp = "modificationDate"; 
+			} 
+			if (CommonUtil.isEmpty(sfColumnNameTemp)){
+				sfColumnNameTemp = "creationDate";
+			}
+
+			ucityWorkListCond.setOrders(new Order[]{new Order(sfColumnNameTemp, sf.isAscending())});
+
+			UcityWorkList[] workLists = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkLists(userId, ucityWorkListCond, null);
+			
+			InstanceInfoList instanceInfoList = new InstanceInfoList();
+			List<PWInstanceInfo> pwInstanceInfoList = new ArrayList<PWInstanceInfo>();
+			PWInstanceInfo[] pWInstanceInfos = null;
+			
+			if (workLists != null) {
+				for (int i = 0; i < workLists.length; i++) {
+					UcityWorkList workList = workLists[i];
+					PWInstanceInfo pworkInfo = new PWInstanceInfo();
+					
+					pworkInfo.setId(workList.getPrcInstId());
+					pworkInfo.setCreatedDate(new LocalDate(workList.getCreationDate().getTime()));
+					pworkInfo.setLastModifiedDate(new LocalDate(workList.getModificationDate().getTime()));
+					pworkInfo.setLastModifier(ModelConverter.getUserInfoByUserId(workList.getModificationUser()));
+					
+					if (!CommonUtil.isEmpty(workList.getRunningTaskId())) {
+	//					TaskWorkCond taskWorkCond = new TaskWorkCond();
+	//					taskWorkCond.setTskObjId(workList.getRunningTaskId());
+	//					TaskWork[] taskWork = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(userId, taskWorkCond);
+	//					pworkInfo.setLastTask(ModelConverter.getTaskInstanceInfo(user, taskWork[0]));
+						TskTask lastTask = SwManagerFactory.getInstance().getTskManager().getTask(userId, workList.getRunningTaskId(), IManager.LEVEL_ALL);
+						if (lastTask != null) {
+							UserInfo assigneeInfo = ModelConverter.getUserInfoByUserId(lastTask.getAssignee());
+							pworkInfo.setLastTask(new TaskInstanceInfo(lastTask.getObjId(), lastTask.getName(), SmartWork.TYPE_PROCESS, assigneeInfo , assigneeInfo, new LocalDate(lastTask.getModificationDate().getTime())));
+							pworkInfo.setLastTaskCount(1);
+						}
+					}
+					pworkInfo.setOwner(ModelConverter.getUserInfoByUserId(workList.getCreationUser()));
+					int status = -1;
+					if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+						boolean isDelayedProcessInst = isDelayedProcessInstanceWithSetRunningTasks(userId, workList.getPrcInstId(), pworkInfo);
+						if (isDelayedProcessInst) {
+							status = Instance.STATUS_DELAYED_RUNNING;
+						} else {
+							status = Instance.STATUS_RUNNING;
+						}
+						
+					} else if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
+						status = Instance.STATUS_COMPLETED;
+					} else if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
+						status = Instance.STATUS_ABORTED;
+					}
+					pworkInfo.setStatus(status);
+					pworkInfo.setSubject(workList.getTitle());
+					pworkInfo.setType(WorkInstance.TYPE_PROCESS);
+//Start InstanceInfo Model Changed by ysjung
+					//pworkInfo.setWork(ModelConverter.getWorkInfoByPackageId(workList.getPackageId()));
+					pworkInfo.setWorkInfo(ModelConverter.getWorkInfoByPackageId(workList.getPackageId()));
+					//pworkInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
+//End InstanceInfo Model Changed by ysjung
+					//pworkInfo.setWorkSpace(workSpace);
+					
+					Property p1 = new Property("serviceName",workList.getServiceName());
+					Property p2 = new Property("eventName",workList.getEventName());
+					Property p3 = new Property("type",workList.getType());
+					Property p4 = new Property("externalDisplay",workList.getExternalDisplay());
+					Property p5 = new Property("eventPlace",workList.getEventPlace());
+					Property p6 = new Property("isSms", CommonUtil.toBoolean(workList.getIsSms())+"");
+					Property p7 = new Property("eventId",workList.getEventId());
+					Property p8;
+					if (workList.getEventTime() != null) {
+						Date tempDate = new Date();
+						tempDate.setTime(workList.getEventTime().getTime() + TimeZone.getDefault().getRawOffset());
+						 p8 = new Property("eventTime", DateUtil.toDateString(tempDate).replace(".000", ""));
+					} else {
+						p8 = new Property("eventTime", null);
+					}
+					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7, p8};
+
+					pworkInfo.setExtentedProperty(properties);
+					
+					pwInstanceInfoList.add(pworkInfo);
+				}
+			}
+			if(pwInstanceInfoList.size() > 0) {
+				pWInstanceInfos = new PWInstanceInfo[pwInstanceInfoList.size()];
+				pwInstanceInfoList.toArray(pWInstanceInfos);
+			}
+			
+			instanceInfoList.setInstanceDatas(pWInstanceInfos);
+			instanceInfoList.setPageSize(pageSize);
+			instanceInfoList.setTotalSize((int)totalCount);
+			instanceInfoList.setSortedField(sf);
+			instanceInfoList.setTotalPages(totalPages);
+			instanceInfoList.setCurrentPage(currentPage);
+			instanceInfoList.setType(InstanceInfoList.TYPE_PROCESS_INSTANCE_LIST);
+			
+			return instanceInfoList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}	
+	
+	
+	
+	
+	
+	//태스크를 조회 한후 그인스턴스아이디로 업무를 조회하는 방식(prcInstIdIns)은 인스턴스의 아이디가 많아지면 
+	//prcInsId in (','','' .......) 갯수만큼 늘어나므로 성능에 영향이 크다
+	//변경됨
+	public InstanceInfoList getAllUcityPWorkInstanceList_old(boolean runningOnly, RequestParams params, int auditId) throws Exception {
 		String[] taskNames = Audit.getTaskNamesByAuditId(auditId);
 		if (taskNames == null || taskNames.length == 0)
 			return getAllUcityPWorkInstanceList(runningOnly, params, null);
@@ -4517,7 +4788,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 	}
 	
-	
+	//삭제예정
 	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params, String[] instanceIdIns) throws Exception {
 	
 		try {

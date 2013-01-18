@@ -1816,7 +1816,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			cond.setPageSize(1);
 			cond.setProcessInstId(exeTask.getProcessInstId());
 			cond.setStatus(CommonUtil.toDefault((String) MisUtil.taskStatusMap().get("executed"), "executed"));
-			cond.setTypeNotIns(new String[]{"xor", "or", "and", "route", "reference", "approval"});
+			//cond.setTypeNotIns(new String[]{"xor", "or", "and", "route", "reference", "approval"});
+			cond.setTypeNotIns(new String[]{"xor", "or", "and", "route", "REFERENCE", "APPROVAL"});
 			cond.setFormIns(CommonUtil.toStringArray(formIdFieldMappingMap.keySet()));
 			cond.setOrders(new Order[] {new Order("executionDate", false)});
 			TskTask[] tasks = SwManagerFactory.getInstance().getTskManager().getTasks("smartAdvisor", cond, null);
