@@ -10212,6 +10212,44 @@ public class InstanceServiceImpl implements IInstanceService {
 		return SwManagerFactory.getInstance().getUcityWorkListManager().getUcityChartXml(categoryName, periodName, serviceName, eventName);
 	}
 
+	//테스크의 이름으로 auditId 숫자만큼 쿼리를 날려서 카운터를 샌다
+	private int[][] getUcityAuditTaskCountsByTasks(boolean runningOnly) throws Exception {
+
+		int[][] result = null;
+		if (runningOnly) {
+			result = new int[1][Audit.MAX_AUDIT_ID];
+			for (int i = 0; i < 1; i++) {
+				for (int j = 0; j < Audit.MAX_AUDIT_ID; j++) {
+					String[] taskNames = Audit.getTaskNamesByAuditId(j);
+					TskTaskCond taskCond = new TskTaskCond();
+					taskCond.setNameIns(taskNames);
+					taskCond.setStatus(TskTask.TASKSTATUS_ASSIGN);
+					long size = getTskManager().getTaskSize("", taskCond);
+					result[i][j] = (int)size;
+				}
+			}
+		} else {
+			result = new int[2][Audit.MAX_AUDIT_ID];
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < Audit.MAX_AUDIT_ID; j++) {
+					String[] taskNames = Audit.getTaskNamesByAuditId(j);
+					TskTaskCond taskCond = new TskTaskCond();
+					taskCond.setNameIns(taskNames);
+					long size = 0;
+					if (i == 0) {
+						taskCond.setStatus(TskTask.TASKSTATUS_ASSIGN);
+						size = getTskManager().getTaskSize("", taskCond);
+					} else {
+						taskCond.setStatus(TskTask.TASKSTATUS_ABORTED);
+						size = getTskManager().getTaskSize("", taskCond);
+					}
+					result[i][j] = (int)size;
+				}
+			}
+		}
+		return result;
+	}
+	//모든 테스크를 우선 가져와서 auditId별로 분류작업을 한다
 	private int[][] getUcityAuditTaskCountsByTasks(boolean runningOnly, TskTask[] tasks) throws Exception {
 
 		int[][] result = null;
@@ -10258,7 +10296,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		User cUser = SmartUtil.getCurrentUser();
 		String userId = cUser.getId();
 		
-		TskTask[] tasks = null;
+		/*TskTask[] tasks = null;
 		TskTaskCond taskCond = new TskTaskCond();
 		if (runningOnly) {
 			taskCond.setStatusIns(new String[]{TskTask.TASKSTATUS_ASSIGN});
@@ -10267,7 +10305,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskCond.setStatusIns(new String[]{TskTask.TASKSTATUS_ASSIGN, TskTask.TASKSTATUS_ABORTED});
 			tasks = getTskManager().getTasks(userId, taskCond, IManager.LEVEL_LITE);
 		}
-		return getUcityAuditTaskCountsByTasks(runningOnly, tasks);
+		return getUcityAuditTaskCountsByTasks(runningOnly, tasks);*/
+		return getUcityAuditTaskCountsByTasks(runningOnly);
 		
 	}
 	@Override
