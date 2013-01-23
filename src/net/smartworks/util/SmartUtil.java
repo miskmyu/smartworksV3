@@ -793,7 +793,7 @@ public class SmartUtil {
 			ISettingsService settingsService = SwServiceFactory.getInstance().getSettingsService();
 			if(settingsService!=null){
 				CompanyGeneral companyGeneral = settingsService.getCompanyGeneral();
-				if(!companyGeneral.isUseMessagingService()) return;				
+				if(!companyGeneral.isUseMessagingService() && !companyGeneral.isUseChattingService()) return;				
 			}
 			
 			HttpClient httpClient = new HttpClient();

@@ -147,7 +147,7 @@ function logout() {
 <script type="text/javascript" src="js/jquery/fullcalendar.js"></script>
 <script type="text/javascript" src="js/jquery/jquery-ui-1.8.21.custom.min.js"></script>
 
-<%if(companyGeneral.isUseMessagingService()){ %>
+<%if(companyGeneral.isUseMessagingService() || companyGeneral.isUseChattingService()){ %>
 	<script type="text/javascript" src="js/jstorage/jstorage.js"></script>
 	<script type="text/javascript" src="js/faye/faye-browser-min.js"></script>
 <%} %>
@@ -165,7 +165,7 @@ function logout() {
 <script type="text/javascript" src="js/sw/sw-flash.js"></script>
 <script type="text/javascript" src="js/sw/sw-iframe-autoheight.js"></script>
 
-<%if(companyGeneral.isUseMessagingService()){ %>
+<%if(companyGeneral.isUseMessagingService() || companyGeneral.isUseChattingService()){ %>
 	<script type="text/javascript" src="js/sw/sw-faye.js"></script>
 	<script type="text/javascript" src="js/sw/sw-chat.js"></script>
 <%} %>
@@ -253,7 +253,7 @@ function logout() {
 		<!-- Footer //-->
 
 	</div>
- 	<%if(companyGeneral.isUseMessagingService()){ %>
+ 	<%if(companyGeneral.isUseChattingService()){ %>
  		<jsp:include page="/jsp/chatting/chatter_list.jsp" />
  	<%} %>
 
