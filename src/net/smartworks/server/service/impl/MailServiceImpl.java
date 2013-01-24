@@ -1082,7 +1082,10 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						ccShown = ccShown + (k!=0 ? "; " : "") + (new User(cc[k].getAddress(), cc[k].getPersonal())).getEmailAddressShown();
 				}
 
-				String date = org.claros.intouch.common.utility.Utility.htmlCheck(email.getBaseHeader().getDate().toString());
+				String date = "";
+				if (email.getBaseHeader().getDate() != null) {
+					date = org.claros.intouch.common.utility.Utility.htmlCheck(email.getBaseHeader().getDate().toString());
+				}
 				String subject = org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(email.getBaseHeader().getSubject()));
 				Boolean sendReceiptNotification = email.getBaseHeader().getRequestReceiptNotification();
 				String sendReceiptNotificationEmail = email.getBaseHeader().getReceiptNotificationEmail();
