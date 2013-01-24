@@ -6,7 +6,7 @@
  * Copyright (c) 2012 ManinSoft, Inc. All rights reserved.
  */
 
-package net.smartworks.server.engine.scheduling.sample;
+package semiteq.scheduler.manager.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;

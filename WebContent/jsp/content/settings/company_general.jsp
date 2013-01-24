@@ -207,6 +207,10 @@
 								<th><fmt:message key="settings.title.company.use_messaging"/></th>
 								<td><input name="chkUseMessagingService" type="checkbox" <% if(companyGeneral.isUseMessagingService() == true){%>checked<%} %> /></td>
 							</tr>
+							<tr>
+								<th><fmt:message key="settings.title.company.use_chatting"/></th>
+								<td><input name="chkUseChattingService" type="checkbox" <% if(companyGeneral.isUseChattingService() == true){%>checked<%} %> /></td>
+							</tr>
 							<tr class="end">
 								<th><fmt:message key="settings.title.company.use_return"/></th>
 								<td><input name="chkUseReturnFunction" type="checkbox" <% if(companyGeneral.isUseReturnFunction() == true){%>checked<%} %> /></td>

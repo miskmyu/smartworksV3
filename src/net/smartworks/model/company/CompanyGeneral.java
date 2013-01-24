@@ -29,6 +29,7 @@ public class CompanyGeneral extends BaseObject {
 	private boolean sendMailNotification;
 	private boolean testAfterSaving;
 	private boolean useMessagingService=true;
+	private boolean useChattingService=true;
 	private boolean useReturnFunction=true;
 	
 	public boolean isUseMessagingService() {
@@ -129,6 +130,12 @@ public class CompanyGeneral extends BaseObject {
 	}
 	public void setUseReturnFunction(boolean useReturnFunction) {
 		this.useReturnFunction = useReturnFunction;
+	}
+	public boolean isUseChattingService() {
+		return useChattingService;
+	}
+	public void setUseChattingService(boolean useChattingService) {
+		this.useChattingService = useChattingService;
 	}
 	public CompanyGeneral(){
 		super();

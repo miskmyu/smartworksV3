@@ -30,6 +30,7 @@ public class UcityWorkListCond  extends MisObjectCond{
 	private String title;
 	private String runningTaskId;
 	private String runningTaskName;
+	private String[] runningTaskNameIns;
 
 	private String serviceName;
 	private String eventName;
@@ -145,5 +146,11 @@ public class UcityWorkListCond  extends MisObjectCond{
 	}
 	public void setFacilityId(String facilityId) {
 		this.facilityId = facilityId;
+	}
+	public String[] getRunningTaskNameIns() {
+		return runningTaskNameIns;
+	}
+	public void setRunningTaskNameIns(String[] runningTaskNameIns) {
+		this.runningTaskNameIns = runningTaskNameIns;
 	}
 }
