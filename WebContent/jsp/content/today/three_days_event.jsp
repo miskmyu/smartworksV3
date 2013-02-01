@@ -210,7 +210,7 @@
 				 										<%
 				 										if (!workSpaceId.equals(owner.getId())) {
 				 										%> 
-															<span class="arr">▶</span><span class="space_name"><a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceName)%>"><%=workSpaceName%></a></span> 
+															<span class="arr">▶</span><span class="space_name"><a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>"><%=workSpaceName%></a></span> 
 				 										<%
 				 										}
 				 										%>

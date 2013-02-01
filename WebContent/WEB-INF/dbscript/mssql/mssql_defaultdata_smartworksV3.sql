@@ -1,6 +1,5 @@
 -- config
 INSERT INTO swconfig (id, logo) VALUES ('Maninsoft', 'logo_company.gif');
-
 -- language
 --INSERT INTO swlanguage (id, kor, eng) VALUES ('Add', '추가', 'Add');
 --INSERT INTO swlanguage (id, kor, eng) VALUES ('AdvancedSearch', '상세필터', 'Advanced Search');
@@ -397,7 +396,7 @@ INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldna
 INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('notice_filegroupid', 'frm_notice_SYSTEM', '2', NULL, '첨부파일', 'string', 'filegroupid', NULL, 'N', 'Y', NULL, 2, 0);
 INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('notice_title', 'frm_notice_SYSTEM', '0', NULL, '제목', 'string', 'title', NULL, 'N', 'Y', NULL, 1, 0);
 INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('notice_content', 'frm_notice_SYSTEM', '1', NULL, '내용', 'text', 'content', NULL, 'N', 'Y', NULL, 3, 0);
-
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('notice_duration', 'frm_notice_SYSTEM', '3', NULL, '공지종료', 'datetime', 'duration', NULL, 'N', 'N', NULL, -1, 0);
 -- form
 INSERT INTO swform (id, formid, version, name, type, status, creator, createdtime, modifier, modifiedtime, content)
 VALUES ('DEFAULTFORM', 'DEFAULTFORM', 1, '기본업무', 'PROCESS', 'DEPLOYED', 'admin@maninsoft.co.kr', getdate(), 'admin@maninsoft.co.kr', getdate(), '<form id="DEFAULTFORM" version="1" name="기본업무" title="기본업무" formType="null" systemName="">
@@ -2539,46 +2538,79 @@ VALUES ('402880ec34e3d85d0134e3eb5768000c', 'pkg_c08a02b36192489fbc13fdb6bed6f5f
 INSERT INTO swform (id, packageid, formid, version, name, type, status, keyword, creator, createdtime, modifier, modifiedtime, ownerdept, owner, encoding, description, content, publishmode) 
 VALUES ('402880ec34e3d85d0134e3e13ea00005', 'pkg_62eeb90b11e1466b86d2d7c4dadf63ca', 'frm_notice_SYSTEM', 1, '공지사항', 'SINGLE', 'DEPLOYED', NULL, 'admin@maninsoft.co.kr', getdate(), 'admin@maninsoft.co.kr', getdate(), NULL, NULL, NULL, '',
 '<form id="frm_notice_SYSTEM" version="1" name="공지사항">
-  <children>
-    <formEntity id="0" name="제목" systemType="string" required="true" system="false">
-      <children/>
-      <format type="textInput" viewingType="textInput"></format>
-      <graphic hidden="false" readOnly="false" labelWidth="113" contentWidth="269" height="23" cellSize="1" fitWidth="false" verticalScrollPolicy="true" textAlign="left" fitToScreen="false" listEditable="false" multipleUsers="false"/>
-    </formEntity>
-    <formEntity id="1" name="내용" systemType="text" required="true" system="false">
-      <children/>
-      <format type="richEditor" viewingType="richEditor"></format>
-      <graphic hidden="false" readOnly="false" labelWidth="113" contentWidth="709" height="354" cellSize="1" fitWidth="false" verticalScrollPolicy="true" textAlign="left" fitToScreen="false" listEditable="false" multipleUsers="false"/>
-    </formEntity>
-    <formEntity id="2" name="첨부파일" systemType="string" required="false" system="false">
-      <children/>
-      <format type="fileField" viewingType="fileField"></format>
-      <graphic hidden="false" readOnly="false" labelWidth="113" contentWidth="390" height="23" cellSize="1" fitWidth="false" verticalScrollPolicy="true" textAlign="left" fitToScreen="false" listEditable="false" multipleUsers="false"/>
-    </formEntity>
-  </children>
-  <mappingForms/>
-  <mappingServices/>
-  <layout type="grid_layout">
-    <columns>
-      <gridColumn size="536.5610859728507" labelSize="78.04524886877827"/>
-      <gridColumn size="536.5610859728507" labelSize="78.04524886877827"/>
-    </columns>
-    <gridRow size="30">
-      <gridCell size="536.5610859728507" span="2" rowSpan="1" gridColumnIndex="0" fieldId="0"/>
-    </gridRow>
-    <gridRow size="271">
-      <gridCell size="536.5610859728507" span="2" rowSpan="4" gridColumnIndex="0" fieldId="1"/>
-    </gridRow>
-    <gridRow size="30"/>
-    <gridRow size="30"/>
-    <gridRow size="30"/>
-    <gridRow size="30">
-      <gridCell size="536.5610859728507" span="2" rowSpan="1" gridColumnIndex="0" fieldId="2"/>
-    </gridRow>
-  </layout>
-  <graphic width="1080" height="577" currentEntityNum="3" currentMappingNum="0">
-    <space/>
-  </graphic>
+	<children>
+		<formEntity id="0" name="제목" systemType="string" required="true"
+			system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="124"
+				contentWidth="296" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="1" name="내용" systemType="text" required="true"
+			system="false">
+			<children />
+			<format type="richEditor" viewingType="richEditor"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="124"
+				contentWidth="780" height="354" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="2" name="첨부파일" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="fileField" viewingType="fileField"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="124"
+				contentWidth="429" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="3" name="공지종료" systemType="datetime"
+			required="false" system="false">
+			<children />
+			<format type="dateChooser" viewingType="dateChooser">
+				<date yearUse="false" sunNotUse="false" monNotUse="false"
+					tueNotUse="false" wedNotUse="false" thuNotUse="false" friNotUse="false"
+					satNotUse="false" />
+			</format>
+			<graphic hidden="false" readOnly="false" labelWidth="88"
+				contentWidth="143" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+	</children>
+	<mappingForms />
+	<mappingServices />
+	<layout type="grid_layout">
+		<columns>
+			<gridColumn size="590.4973889794043" labelSize="85.89052930609516" />
+			<gridColumn size="590.4973889794043" labelSize="85.89052930609516" />
+		</columns>
+		<gridRow size="30">
+			<gridCell size="590.4973889794043" span="2" rowSpan="1"
+				gridColumnIndex="0" fieldId="0" />
+		</gridRow>
+		<gridRow size="271">
+			<gridCell size="590.4973889794043" span="2" rowSpan="4"
+				gridColumnIndex="0" fieldId="1" />
+		</gridRow>
+		<gridRow size="30" />
+		<gridRow size="30" />
+		<gridRow size="30" />
+		<gridRow size="30">
+			<gridCell size="0" span="2" rowSpan="1" gridColumnIndex="0"
+				fieldId="3" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="590.4973889794043" span="2" rowSpan="1"
+				gridColumnIndex="0" fieldId="2" />
+		</gridRow>
+	</layout>
+	<graphic width="1194" height="609" currentEntityNum="4"
+		currentMappingNum="0">
+		<space />
+	</graphic>
 </form>', 'PUB_ALL');
 
 --INSERT INTO swform (id, packageid, formid, version, name, type, status, keyword, creator, createdtime, modifier, modifiedtime, ownerdept, owner, encoding, description, content, publishmode) 
