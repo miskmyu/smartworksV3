@@ -897,7 +897,7 @@ CREATE TABLE tsktask (
     tskAccessLevel varchar(50),
     tskAccessValue varchar(4000),
     tskRefType varchar(100),
-	primary key(tskobjid)
+    primary key(tskobjid)
 );
 
 
@@ -959,6 +959,7 @@ CREATE TABLE SWNotice (
 	filegroupid varchar(255) NULL,
 	title varchar(255) NULL,
 	content text NULL,
+	Duration datetime NULL,
 	primary key (id)
 );
 
@@ -1216,6 +1217,7 @@ CREATE TABLE sworgconfig(
 	modifier varchar(50) NULL,
 	modifiedtime datetime NULL,
 	isactivity int NULL,
+	useMessagingService bit,
 	primary key (id)
 )
 ;
@@ -2370,6 +2372,7 @@ CREATE TABLE SWPublishNotice (
 );
 
 
+
 -- SwMailServer (메일서버정보)
 CREATE TABLE SwMailServer (
 	id varchar(50) NOT NULL,
@@ -2383,11 +2386,15 @@ CREATE TABLE SwMailServer (
 	smtpServerPort int,
 	smtpAuthenticated bit,
 	smtpSsl bit,
+	pwChangeAPI varchar(300),
+	pwChangeDefaultData  varchar(100),
+	pwChangeParamOldPW varchar(50),
+	pwChangeParamNewPW varchar(50),
 	creator	varchar(50),
 	createdtime datetime,
 	modifier varchar(50),
 	modifiedtime datetime,
-    primary key (id)
+	primary key (id)
 );
 
 -- SwMailAccount (사용자메일계정)
@@ -2512,6 +2519,8 @@ CREATE TABLE SWScheduleDef (
 	createdtime datetime,
 	modifier varchar(50),
 	modifiedtime datetime,
-    primary key (id)
+    primary key (objId)
 );
+
+
 
