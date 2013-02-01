@@ -158,6 +158,17 @@ public class UcityController extends ExceptionInterceptor {
 		map.put("record", chartXml);
 		return map;
 	}	
+	//Excel download 구현.
+	@RequestMapping(value = "/ucity_get_chart_excel", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void  ucityGetChartExcel(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String categoryName = request.getParameter("categoryName");
+		String periodName = request.getParameter("periodName");
+		String serviceName = request.getParameter("serviceName");
+		String eventName = request.getParameter("eventName");
+		
+		smartworks.getUcityChartExcel(categoryName, periodName, serviceName, eventName, request, response);
+	}	
 
 	@RequestMapping(value = "/abend_ucity_instance", method = RequestMethod.POST) 
 	@ResponseStatus(HttpStatus.OK) 

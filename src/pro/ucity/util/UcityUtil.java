@@ -324,10 +324,8 @@ public class UcityUtil {
 		for(int i=0; i<work.getDiagram().getTasks().length; i++){
 			SmartFormInfo form = work.getDiagram().getTasks()[i].getForm();
 			if(SmartUtil.isBlankObject(form)) continue;
-//			java.lang.System.out.println("[form no = [" + i + "], form name = [" + form.getName() + "]");
 			if(form.getName().equals(System.TASK_FORM_NAME_USERVICE_END)){
 				endForm = workService.getFormById(form.getId(), processId);
-//				java.lang.System.out.println("[endform]"+endForm.getName());
 				break;
 			}
 		}
@@ -342,11 +340,10 @@ public class UcityUtil {
 		
 		ProcessWorkInstance endProcessInstance = null;
 		//종료안된 process 중에 data 유무 파악
-		boolean processRunningData = false;
+		boolean processRunningData = true;
 		
 		PWInstanceInfo[] instances = (PWInstanceInfo[])instanceList.getInstanceDatas();
 		for(int i=0; i<instances.length; i++){			
-//			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
 			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWorkId().equals(processId)) continue;
 			ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, instances[i].getId());
 			if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
@@ -359,7 +356,7 @@ public class UcityUtil {
 			}
 			logger.info("eventId : " + eventId);
 			logger.info("workListEventId : " + workList.getEventId());
-			processRunningData = true;
+			processRunningData = false;
 		}
 		if(processRunningData == false){
 			InstanceInfoList nInstanceList = instanceService.getAllPWorkInstanceList(false, new RequestParams());
@@ -369,7 +366,6 @@ public class UcityUtil {
 			
 			PWInstanceInfo[] nInstances = (PWInstanceInfo[])nInstanceList.getInstanceDatas();
 			for(int i=0; i<nInstances.length; i++){			
-//				if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
 				if(!SmartUtil.isBlankObject(processId) && !nInstances[i].getWorkId().equals(processId)) continue;
 				ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, nInstances[i].getId());
 				if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
@@ -430,10 +426,8 @@ public class UcityUtil {
 		for(int i=0; i<work.getDiagram().getTasks().length; i++){
 			SmartFormInfo form = work.getDiagram().getTasks()[i].getForm();
 			if(SmartUtil.isBlankObject(form)) continue;
-//			java.lang.System.out.println("[form no = [" + i + "], form name = [" + form.getName() + "]");
 			if(form.getName().equals(System.TASK_FORM_NAME_USERVICE_END)){
 				endForm = workService.getFormById(form.getId(), processId);
-//				java.lang.System.out.println("[endform]"+endForm.getName());
 				break;
 			}
 		}
@@ -452,15 +446,13 @@ public class UcityUtil {
 		
 		PWInstanceInfo[] instances = (PWInstanceInfo[])instanceList.getInstanceDatas();
 		for(int i=0; i<instances.length; i++){			
-//			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
 			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWorkId().equals(processId)) continue;
 			ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, instances[i].getId());
 			if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
 			UcityWorkListCond cond = new UcityWorkListCond();
 			cond.setPrcInstId(processInstance.getId());
 			UcityWorkList workList = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkList("", cond, null);
-//			java.lang.System.out.println("facilityId : " + facilityId);
-//			java.lang.System.out.println("Worklist facilityId : " + workList.getFacilityId());
+
 			if(facilityId.equals(workList.getFacilityId())){
 				endProcessInstance = processInstance;
 				break;
@@ -479,15 +471,12 @@ public class UcityUtil {
 			
 			PWInstanceInfo[] nInstances = (PWInstanceInfo[])nInstanceList.getInstanceDatas();
 			for(int i=0; i<nInstances.length; i++){			
-//				if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
 				if(!SmartUtil.isBlankObject(processId) && !nInstances[i].getWorkId().equals(processId)) continue;
 				ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, nInstances[i].getId());
 				if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
 				UcityWorkListCond cond = new UcityWorkListCond();
 				cond.setPrcInstId(processInstance.getId());
 				UcityWorkList workList = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkList("", cond, null);
-//				java.lang.System.out.println("facilityId : " + facilityId);
-//				java.lang.System.out.println("Worklist facilityId : " + workList.getFacilityId());
 				if(facilityId.equals(workList.getFacilityId())){
 					endProcessInstance = processInstance;
 					break;
@@ -631,8 +620,11 @@ public class UcityUtil {
 		
 		IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
 		IWorkService workService = SwServiceFactory.getInstance().getWorkService();
+		//처음 was 올릴때 페이지를 20개가 아닌 200개를 읽음.
+		RequestParams params = new RequestParams();
+		params.setPageSize(500);
 		
-		InstanceInfoList instanceList = instanceService.getAllUcityPWorkInstanceList(true, new RequestParams(), -1);
+		InstanceInfoList instanceList = instanceService.getAllUcityPWorkInstanceList(true, params, -1);
 		if(SmartUtil.isBlankObject(instanceList) || SmartUtil.isBlankObject(instanceList.getInstanceDatas())){
 			return;
 		}
@@ -855,10 +847,14 @@ public class UcityUtil {
 		
 		InetAddress addr;
 		String hostAddr = null;
+		String serverIp = null;
 		
 		try {
+			//자신의 host를 받아오며, ip주소의 마지막 2~3글자를 가져옴.
 			addr = InetAddress.getLocalHost();
 			hostAddr = addr.getHostAddress();
+			String[] serverIps = hostAddr.split("\\.");
+		    serverIp = serverIps[3];
 		} catch (UnknownHostException e) {
 			logger.info("Localhost Not Found");
 		}		
@@ -872,7 +868,9 @@ public class UcityUtil {
 				int hostIpLen = hostIpListArray.length;                      // array 갯수
 				for( int i = 0 ; i < hostIpLen ; i++  ){                    
 					String hostIp = hostIpListArray[i];
-					if(!hostAddr.equalsIgnoreCase(hostIp)){               // 자기 hostIp와 확인하여, 틀릴 시만 send.
+					String[] hostIps = hostIp.split("\\.");
+					String ipEnd = hostIps[3]; 
+					if(!serverIp.equalsIgnoreCase(ipEnd)){               // 자기 hostIp의 마지막 2~3글자와 비교하여, 틀릴 시만 send.
 					    DatagramPacket dp = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(hostIp), UcityUtilServer.UDP_ABEND_PORT);
 					    ds.send(dp);
 					    ds.close();				
@@ -887,25 +885,20 @@ public class UcityUtil {
 	}
 	
 	public static void stopAllPollingsForInstance(String instanceId) throws Exception{
-		logger.info("1단계 통과");
-		logger.info(UcityUtil.pollingQueue);
+		//소켓통신으로 자기 Host주소와 비교하여,다른 곳에다 쏨.
 		sendAbendMessage(instanceId);
 		if(SmartUtil.isBlankObject(instanceId) || UcityUtil.pollingQueue.isEmpty()){
-			logger.info("2단계 통과");
 //			UcityUtilSocket.UcitySocketIn(instanceId);
 			return;
 		}
 		for(int i=0; i<pollingQueue.size(); i++){
-			logger.info("3단계 통과");
 			PollingModel pollingModel = pollingQueue.get(i);
-			logger.info("pollingQuere count = " + i + " 개");
 			if(!SmartUtil.isBlankObject(pollingModel.getTaskInstance()) 
 					&& !SmartUtil.isBlankObject(pollingModel.getTaskInstance().getWorkInstance()) 
 					&& !SmartUtil.isBlankObject(pollingModel.getTaskInstance().getWorkInstance().getId()) 
 					&& pollingModel.getTaskInstance().getWorkInstance().getId().equals(instanceId)){
 				pollingModel.setInterrupted(true);
-//			}else{
-//				UcityUtilSocket.UcitySocketIn(instanceId);
+				logger.info("정상적으로 이상종료 처리 되었습니다.");
 			}
 		}
 		
@@ -914,12 +907,12 @@ public class UcityUtil {
 		if(SmartUtil.isBlankObject(instanceId) || SmartUtil.isBlankObject(UcityUtil.pollingQueue)) return;
 		for(int i=0; i<pollingQueue.size(); i++){
 			PollingModel pollingModel = pollingQueue.get(i);
-			logger.info("pollingQuere count = " + i + " 개");
 			if(!SmartUtil.isBlankObject(pollingModel.getTaskInstance()) 
 					&& !SmartUtil.isBlankObject(pollingModel.getTaskInstance().getWorkInstance()) 
 					&& !SmartUtil.isBlankObject(pollingModel.getTaskInstance().getWorkInstance().getId()) 
 					&& pollingModel.getTaskInstance().getWorkInstance().getId().equals(instanceId)){
 				pollingModel.setInterrupted(true);
+				logger.info("정상적으로 이상종료 처리 되었습니다.");
 			}
 		}
 		
@@ -931,25 +924,27 @@ public class UcityUtil {
 			return;
 		for(int i=0; i<pollingQueue.size(); i++){
 			PollingModel pollingModel = pollingQueue.get(i);
-			logger.info("=============== KILL THREAD BEGIN ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
-			pollingModel.getThread().stop();
-			logger.info("=============== KILL THREAD DONE ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
+			pollingModel.getThread().stop();			
 		}
+		logger.info("Thread Exit");
 	}
 	synchronized public static void invokePollingForRunningTask(String eventId, String tableName, String status, String displayId, String deviceId, String smsId, String timeout, TaskInstance taskInstance) throws Exception{
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(taskInstance)) return;
-		
+		String tbName = UcityConstant.getQueryByKey("System.TABLE_NAME_COMMID_TRACE");
 		long timeoutInMilliseconds =  System.DEFAULT_TASK_TIMEOUT;
 		try{
-			timeoutInMilliseconds = Integer.parseInt(timeout) * 60*1000;
+			if(tableName.equalsIgnoreCase(tbName)){
+				timeoutInMilliseconds = Integer.parseInt(timeout) * 6*1;
+			}else{
+				timeoutInMilliseconds = Integer.parseInt(timeout) * 60*1000;
+			}
+			
 		}catch (Exception e){
-//			java.lang.System.out.println("#####parseInt Exception [" + timeout + "]#####" );
 			logger.error("UcityUtil : invokePollingForRunningTask.806");
 		}
 		
 		int index = -1;
 		if((index = addPolling(eventId, tableName, status, displayId, deviceId, smsId, timeoutInMilliseconds, taskInstance)) == -1){
-//			java.lang.System.out.println("Add Polling already running, Event Id=" + eventId + ", Task Name=" + taskInstance.getName());
 			return;		
 		}
 
@@ -974,8 +969,9 @@ public class UcityUtil {
 							try {
 								if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_DISPLAY)
 									dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId, deviceId);
-								else if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_SMS)
+								else if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_SMS){
 									dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId, smsId);
+								}
 								else
 									dataRecord = UcityUtil.readTaskTable(tableName, eventId, status, deviceId);
 							} catch(Exception e) {
@@ -1046,11 +1042,14 @@ public class UcityUtil {
 										break;
 									}
 								}
-							}
+							}	
 						}catch(InterruptedException e){
 							break;
 						}catch(Exception e){
+							
 						}
+					}
+					
 					if(timeout==0 && SmartUtil.isBlankObject(dataRecord)){
 						logger.info("############ END(TIMEOUT) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 						try{
@@ -1061,12 +1060,9 @@ public class UcityUtil {
 						}
 					}else if(isPollingInterrupted(Thread.currentThread())){
 						logger.info("############ END(INTERRUPTED) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-						break;
 					}else{
 						logger.info("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-					}
-//					PollingModel pollingTask = getPolling(Thread.currentThread());					
-				}
+					}			
 					PollingModel pollingTask = getPolling(Thread.currentThread());
 					logger.info("pollingTask = " + pollingTask);
 			}

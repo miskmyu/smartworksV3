@@ -365,13 +365,13 @@
 				</beans:entry>
 
 				<beans:entry key="OPSms.QUERY_SELECT_FOR_CHECK">
-					<beans:value>select SMS_ID,REGIST_DATE,SEND_USER_NAME,NOTICE_TYPE,STATUS,SMS_CONTENT from USITUATION.TM_SM_SMS_ITEM where SITUATION_ID = ? and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) order by REGIST_DATE desc</beans:value>
+					<beans:value>select SITUATION_ID,SMS_ID,REGIST_DATE,SEND_USER_NAME,NOTICE_TYPE,STATUS,SMS_CONTENT from USITUATION.TM_SM_SMS_ITEM where SITUATION_ID = ? and (BPM_CNFM_YN != 'Y' or BPM_CNFM_YN is null) order by REGIST_DATE desc</beans:value>
 				</beans:entry>
 				<beans:entry key="OPSms.QUERY_UPDATE_FOR_READ_CONFIRM">
 					<beans:value>update USITUATION.TM_SM_SMS_ITEM set BPM_CNFM_YN = 'Y' where SITUATION_ID = ?</beans:value>
 				</beans:entry>
 				<beans:entry key="OPSms.QUERY_SELECT_FOR_PERFORM">
-					<beans:value>select SMS_ID,REGIST_DATE,SEND_USER_NAME,NOTICE_TYPE,STATUS,SMS_CONTENT from USITUATION.TM_SM_SMS_ITEM where SITUATION_ID = ? and SMS_ID = ?</beans:value>
+					<beans:value>select SITUATION_ID,SMS_ID,REGIST_DATE,SEND_USER_NAME,NOTICE_TYPE,STATUS,SMS_CONTENT from USITUATION.TM_SM_SMS_ITEM where SITUATION_ID = ? and SMS_ID = ?</beans:value>
 				</beans:entry>
 				
 				<!-- System -->
@@ -430,7 +430,7 @@
 		<beans:property name="passUrlList">
 			<beans:map>
 				<beans:entry key="BPM.PASSURLLIST">
-					<beans:value>/smartworksV3/loginc.sw</beans:value>
+					<beans:value></beans:value>
 				</beans:entry>
 			</beans:map>
 		</beans:property>

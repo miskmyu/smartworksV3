@@ -56,6 +56,32 @@ $(function() {
 		return false;
 	});
 
+	//Excel Download 소스 2013.01.31 추가
+	
+	$('.js_excel_download_click').live('click', function(e) {
+		var workReport = $('div.js_work_report_page');
+		var categoryName = workReport.find('.js_select_ucity_category option:selected').attr('value');
+		var periodName = workReport.find('.js_select_ucity_period option:selected').attr('value');
+		var serviceName = workReport.find('.js_select_ucity_service option:selected').attr('value');
+		var eventName = workReport.find('.js_select_ucity_event:visible option:selected').attr('value');
+		$.ajax({
+					url : "ucity_get_chart_excel.sw",
+					data : {
+						categoryName : categoryName, 
+						periodName : periodName, 
+						serviceName :  serviceName, 
+						eventName : eventName, 
+					},
+					success : function(data) {
+						console.log("Excel다운로드");
+					},
+					error : function(xhr, ajaxOptions, thrownError){
+					}
+				});
+		
+		return false;
+	});
+
 	$('.js_close_situation_report').live('click', function(e) {
 		var input = $(targetElement(e));
 		input.hide().siblings().show();

@@ -86,7 +86,14 @@
 
 	<div class="glo_btn_space">
 		<div class="fr">
-	
+           <!-- Excel Download 구현 -->
+			<span class="btn_gray"> 
+				<a href="" class="js_excel_download_click"> 
+					<span class="txt_btn_start"></span> 
+					<span class="txt_btn_center"><fmt:message key="Excel"/></span> 
+					<span class="txt_btn_end"></span>
+				</a> 
+			</span> 	
 			<span class="btn_gray"> 
 				<a href="" class="js_situation_report_execute"> 
 					<span class="txt_btn_start"></span> 

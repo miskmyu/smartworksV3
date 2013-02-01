@@ -30,6 +30,25 @@ import pro.ucity.manager.ucityWorkList.manager.IUcityWorkListManager;
 import pro.ucity.manager.ucityWorkList.model.UcityWorkList;
 import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+
 public class UcityWorkListManagerImpl extends AbstractManager implements IUcityWorkListManager {
 
 	@Override
@@ -692,5 +711,171 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			}
 		}
 		return getXmlDataForChart(categoryName, resultMap);
+	}
+	
+	//Excel Download 구현
+	public void getUcityChartExcel(String categoryName, String periodName, String serviceName, String eventName, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		StringBuffer chartQuery = new StringBuffer();
+		chartQuery.append("select tbl.").append(getCategoryColumnName(categoryName)).append(", count(*) as count from (");
+		chartQuery.append(getUcityWorkListTableQueryForChart());
+		chartQuery.append(") tbl where 1=1 ");
+		if(!serviceName.equalsIgnoreCase("option.service.all") || !eventName.equalsIgnoreCase("option.event.all")) {
+			if (!serviceName.equalsIgnoreCase("option.service.all")) {
+				chartQuery.append(" and tbl.serviceName = '").append(serviceName).append("' ");
+			}
+			if (!eventName.equalsIgnoreCase("option.event.all")) {
+				chartQuery.append(" and tbl.eventName = '").append(eventName).append("' ");
+			}
+		}
+		if (!periodName.equalsIgnoreCase("option.period.all")) {
+			chartQuery.append("and tbl.eventTime_year >= '").append(getPeriod(periodName)).append("' ");
+		}
+		chartQuery.append(" group by tbl.").append(getCategoryColumnName(categoryName)).append(" order by tbl.").append(getCategoryColumnName(categoryName));
+
+		Query query = this.getSession().createSQLQuery(chartQuery.toString());
+		
+		List list = query.list();
+		Map<String,Object> resultMap = new HashMap<String, Object>();
+		if (list == null || list.isEmpty())
+			getXmlDataForExcel(categoryName, resultMap, request, response);
+		for (Iterator itr = list.iterator(); itr.hasNext();) {
+			Object[] fields = (Object[]) itr.next();
+			if (fields[0] instanceof Character) {
+				if(((Character)fields[0]).toString().equalsIgnoreCase("상")) {
+					resultMap.put("상반기", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("하")) {
+					resultMap.put("하반기", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("1")) {
+					resultMap.put("1분기", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("2")) {
+					resultMap.put("2분기", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("3")) {
+					resultMap.put("3분기", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("4")) {
+					resultMap.put("4분기", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("A")) {
+					resultMap.put("오전(AM)", (BigDecimal)fields[1]);
+				} else if (((Character)fields[0]).toString().equalsIgnoreCase("P")) {
+					resultMap.put("오후(PM)", (BigDecimal)fields[1]);
+				}
+				
+			} else if(fields[0] instanceof String){
+				if(((String)fields[0]).toString().equalsIgnoreCase("sun요일")) {
+					resultMap.put("일요일", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("mon요일")) {
+					resultMap.put("월요일", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("tue요일")) {
+					resultMap.put("화요일", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("wed요일")) {
+					resultMap.put("수요일", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("thu요일")) {
+					resultMap.put("목요일", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("fri요일")) {
+					resultMap.put("금요일", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("sat요일")) {
+					resultMap.put("토요일", (BigDecimal)fields[1]);
+				}else{
+					resultMap.put((String)fields[0], (BigDecimal)fields[1]);
+				}
+			}
+		}
+		getXmlDataForExcel(categoryName, resultMap, request, response);
+	}
+	
+	//Excel Download 구현
+	
+	private void getXmlDataForExcel(String categoryName, Map<String, Object> resultMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+
+		FileOutputStream fileOut = null;
+		OutputStream out = null; 
+		try{
+			List<String> categoryScop = getCategoryScop(categoryName);
+			HSSFWorkbook workbook = new HSSFWorkbook();
+
+			// Sheet 이름 설정 
+			HSSFSheet sheet = workbook.createSheet("통합모니터링목록");
+
+			//Font 설정.
+			HSSFFont titleFont = workbook.createFont();
+			titleFont.setFontHeightInPoints((short)20); 
+			titleFont.setFontName("굴림체"); 
+			titleFont.setBoldweight((short) 1);
+			
+			HSSFFont font = workbook.createFont();
+			titleFont.setFontHeightInPoints((short)17); 
+			titleFont.setFontName("굴림체"); 
+			
+
+
+			//제목의 스타일 지정
+			HSSFCellStyle titlestyle = workbook.createCellStyle();
+			titlestyle.setBorderBottom(HSSFCellStyle.BORDER_THICK);
+			titlestyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+			titlestyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+			titlestyle.setBorderTop(HSSFCellStyle.BORDER_THICK);
+			titlestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+			titlestyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+
+			//Row 생성
+			HSSFRow row = sheet.createRow((short)1);
+			//Cell 생성 ( 컬럼 제목 생성 월별,시간별,계절별 등등 ) 
+			//들어온 CategoryName에 따라 size를 구해서, size 만큼 셀을 생성
+			int number = categoryScop.size();  
+			for(int i=0 ; i < number; i++){
+				HSSFCell cell = row.createCell((short) i);
+				cell.setCellValue(categoryScop.get(i));
+				cell.setCellStyle(titlestyle);
+
+			}
+		
+			//내용 스타일 지정
+			HSSFCellStyle style = workbook.createCellStyle();
+			style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+			style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+			style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+			style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+			style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+			style.setFillForegroundColor(HSSFColor.WHITE.index);
+
+			row = sheet.createRow((short)(2));
+			
+			//내용 생성 (컬럼 생성이랑 동일 하나, 내용이 null이면 0으로 표시함)
+			for(int i=0 ; i < number; i++){
+				HSSFCell cell = row.createCell((short) i);
+				if(resultMap.get(categoryScop.get(i)) == null){
+					cell.setCellValue("0");
+				}else{
+					cell.setCellValue(resultMap.get(categoryScop.get(i)) + "");
+				}
+				cell.setCellStyle(style);
+			}				
+			for(int i=0 ; i < number; i++){
+				sheet.autoSizeColumn((short)i);
+				sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+512 );
+			}
+			//해당폴더에 임시파일을 생성한다
+			String fileName = "Monitoring.xls";
+			File paths = new File("/ssw/bpm/was/file/");
+			File path = new File("/ssw/bpm/was/file/" + fileName);
+			if(!path.exists()){
+				paths.mkdirs();
+			}
+			//서버에 파일저장
+			fileOut = new FileOutputStream(path);//파일 출력하기 위한 아웃풋 파일 스크립을 열기.
+			workbook.write(fileOut);// 워크북(엑셀)에 작성된 문서를 일괄적으로 파일로 작성합니다.
+			/* 다운로드 구현( 작동 안됨 )
+			out = response.getOutputStream();
+			response.setHeader("Content-Type","application/vnd.ms-xls");
+	        response.setHeader("Content-Disposition","filename=\""+fileName+"\"");
+	        workbook.write(out);
+*/
+		} catch (FileNotFoundException e) {
+			logger.info("파일을 찾을수 없습니다.",e);
+		} catch (IOException e) {
+			logger.info("예기치 않는 오류입니다.",e);
+		} finally {
+			if(fileOut != null) fileOut.close();
+		}
 	}
 }
