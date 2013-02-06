@@ -1,3 +1,7 @@
+/*U-city 이벤트 별 코드 및 매뉴얼 코드 작성
+ * 
+ */
+
 package pro.ucity.model;
 
 import net.smartworks.util.SmartUtil;

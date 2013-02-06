@@ -190,10 +190,8 @@ public class DMHistory {
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				logger.error("DB Connection error : DMHistory.readHistoryTable");
-//				te.printStackTrace();
 				return null;
 			}		
 			try{
@@ -216,7 +214,6 @@ public class DMHistory {
 						count = rs.getRow();
 					}catch (Exception we){
 						logger.error("Result set error : DMHistory.readHistoryTable");
-//						we.printStackTrace();
 						dataRecord = null;
 						count = 0;
 					}
@@ -225,11 +222,9 @@ public class DMHistory {
 					return dmHistory.getDataRecord();
 			}catch (Exception e){
 				logger.error("select error : DMHistory.277");
-//				e.printStackTrace();
 			}
 		} catch (Exception e) {
 			logger.error("select error : DMHistory.281");
-//			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -237,9 +232,7 @@ public class DMHistory {
 				if(connection != null)
 					connection.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				logger.error("Finally error : DMHistory.291");
-//				e.printStackTrace();
 			}
 		}
 		if(dataRecord!=null)

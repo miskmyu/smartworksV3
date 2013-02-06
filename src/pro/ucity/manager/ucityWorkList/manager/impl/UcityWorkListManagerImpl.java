@@ -8,6 +8,8 @@
 
 package pro.ucity.manager.ucityWorkList.manager.impl;
 
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,36 +20,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jxls.exception.ParsePropertyException;
+import net.sf.jxls.transformer.XLSTransformer;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.DateUtil;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.hibernate.Query;
 
 import pro.ucity.manager.ucityWorkList.exception.UcityWorkListException;
 import pro.ucity.manager.ucityWorkList.manager.IUcityWorkListManager;
 import pro.ucity.manager.ucityWorkList.model.UcityWorkList;
 import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import pro.ucity.util.UcityUtil;
 
 public class UcityWorkListManagerImpl extends AbstractManager implements IUcityWorkListManager {
 
@@ -640,6 +630,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			resultXml.append("<name><![CDATA[").append(categoryScop.get(i)).append("]]></name>");
 			resultXml.append("<value><![CDATA[").append(CommonUtil.toDefault((BigDecimal)resultMap.get(categoryScop.get(i)) + "", "0")).append("]]></value>");
 			resultXml.append("</grouping>");
+			logger.info(categoryScop.get(i));
 		}
 		resultXml.append("</ChartData>");
 		
@@ -713,8 +704,11 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		return getXmlDataForChart(categoryName, resultMap);
 	}
 	
-	//Excel Download 구현
+	//Excel Download 구현 ( jxls 라이브러리가 한글 변수를 인식 못하여, 영어변수로 재정의함. )
 	public void getUcityChartExcel(String categoryName, String periodName, String serviceName, String eventName, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		BigDecimal value = new BigDecimal(0);
+		
 		StringBuffer chartQuery = new StringBuffer();
 		chartQuery.append("select tbl.").append(getCategoryColumnName(categoryName)).append(", count(*) as count from (");
 		chartQuery.append(getUcityWorkListTableQueryForChart());
@@ -735,147 +729,186 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		Query query = this.getSession().createSQLQuery(chartQuery.toString());
 		
 		List list = query.list();
+		List<Map<String, Object>> dataValue = new ArrayList<Map<String,Object>>();
+		
 		Map<String,Object> resultMap = new HashMap<String, Object>();
 		if (list == null || list.isEmpty())
-			getXmlDataForExcel(categoryName, resultMap, request, response);
+			getXmlDataForExcel(dataValue, serviceName, eventName, categoryName, periodName, resultMap, request, response);
 		for (Iterator itr = list.iterator(); itr.hasNext();) {
 			Object[] fields = (Object[]) itr.next();
 			if (fields[0] instanceof Character) {
 				if(((Character)fields[0]).toString().equalsIgnoreCase("상")) {
-					resultMap.put("상반기", (BigDecimal)fields[1]);
+					resultMap.put("firstHalf", (BigDecimal)fields[1]);
 				} else if (((Character)fields[0]).toString().equalsIgnoreCase("하")) {
-					resultMap.put("하반기", (BigDecimal)fields[1]);
+					resultMap.put("secondHalf", (BigDecimal)fields[1]);
 				} else if (((Character)fields[0]).toString().equalsIgnoreCase("1")) {
-					resultMap.put("1분기", (BigDecimal)fields[1]);
+					resultMap.put("oQuarter", (BigDecimal)fields[1]);
 				} else if (((Character)fields[0]).toString().equalsIgnoreCase("2")) {
-					resultMap.put("2분기", (BigDecimal)fields[1]);
+					resultMap.put("sQuarter", (BigDecimal)fields[1]);
 				} else if (((Character)fields[0]).toString().equalsIgnoreCase("3")) {
-					resultMap.put("3분기", (BigDecimal)fields[1]);
+					resultMap.put("tQuarter", (BigDecimal)fields[1]);
 				} else if (((Character)fields[0]).toString().equalsIgnoreCase("4")) {
-					resultMap.put("4분기", (BigDecimal)fields[1]);
+					resultMap.put("fQuarter", (BigDecimal)fields[1]);
 				} else if (((Character)fields[0]).toString().equalsIgnoreCase("A")) {
-					resultMap.put("오전(AM)", (BigDecimal)fields[1]);
+					resultMap.put("am", (BigDecimal)fields[1]);
 				} else if (((Character)fields[0]).toString().equalsIgnoreCase("P")) {
-					resultMap.put("오후(PM)", (BigDecimal)fields[1]);
+					resultMap.put("pm", (BigDecimal)fields[1]);
 				}
 				
 			} else if(fields[0] instanceof String){
 				if(((String)fields[0]).toString().equalsIgnoreCase("sun요일")) {
-					resultMap.put("일요일", (BigDecimal)fields[1]);
+					resultMap.put("sun", (BigDecimal)fields[1]);
 				} else if (((String)fields[0]).toString().equalsIgnoreCase("mon요일")) {
-					resultMap.put("월요일", (BigDecimal)fields[1]);
+					resultMap.put("mon", (BigDecimal)fields[1]);
 				} else if (((String)fields[0]).toString().equalsIgnoreCase("tue요일")) {
-					resultMap.put("화요일", (BigDecimal)fields[1]);
+					resultMap.put("tue", (BigDecimal)fields[1]);
 				} else if (((String)fields[0]).toString().equalsIgnoreCase("wed요일")) {
-					resultMap.put("수요일", (BigDecimal)fields[1]);
+					resultMap.put("wed", (BigDecimal)fields[1]);
 				} else if (((String)fields[0]).toString().equalsIgnoreCase("thu요일")) {
-					resultMap.put("목요일", (BigDecimal)fields[1]);
+					resultMap.put("thu", (BigDecimal)fields[1]);
 				} else if (((String)fields[0]).toString().equalsIgnoreCase("fri요일")) {
-					resultMap.put("금요일", (BigDecimal)fields[1]);
+					resultMap.put("fri", (BigDecimal)fields[1]);
 				} else if (((String)fields[0]).toString().equalsIgnoreCase("sat요일")) {
-					resultMap.put("토요일", (BigDecimal)fields[1]);
+					resultMap.put("sat", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("새벽(3시~6시)")) {
+					if((BigDecimal)fields[1] == null || ((BigDecimal)fields[1]).equals(0)){
+						resultMap.put("dawn", value);
+					}else{
+						resultMap.put("dawn", (BigDecimal)fields[1]);
+					}
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("아침(6시~11시)")) {
+					if((BigDecimal)fields[1] == null || "".equals((BigDecimal)fields[1])){
+						resultMap.put("morning", value);
+					}else{
+						resultMap.put("morning", (BigDecimal)fields[1]);
+					}
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("점심(11시~14시)")) {
+					if((BigDecimal)fields[1] == null || "".equals((BigDecimal)fields[1])){
+						resultMap.put("lunch", value);
+					}else{
+						resultMap.put("lunch", (BigDecimal)fields[1]);
+					}
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("낮(14시~18시)")) {
+					if((BigDecimal)fields[1] == null || "".equals((BigDecimal)fields[1])){
+						resultMap.put("day", value);
+					}else{
+						resultMap.put("day", (BigDecimal)fields[1]);
+					}
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("저녁(18시~23시)")) {
+					if((BigDecimal)fields[1] == null || "".equals((BigDecimal)fields[1])){
+						resultMap.put("evening", value);
+					}else{
+						resultMap.put("evening", (BigDecimal)fields[1]);
+					}
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("심야(23시~3시)")) {
+					if((BigDecimal)fields[1] == null || "".equals((BigDecimal)fields[1])){
+						resultMap.put("night", value);
+					}else{
+						resultMap.put("night", (BigDecimal)fields[1]);
+					}
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("1월")) {
+					resultMap.put("jan", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("2월")) {
+					resultMap.put("feb", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("3월")) {
+					resultMap.put("mar", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("4월")) {
+					resultMap.put("apr", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("5월")) {
+					resultMap.put("may", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("6월")) {
+					resultMap.put("jun", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("7월")) {
+					resultMap.put("jul", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("8월")) {
+					resultMap.put("aug", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("9월")) {
+					resultMap.put("sep", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("10월")) {
+					resultMap.put("oct", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("11월")) {
+					resultMap.put("nov", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("12월")) {
+					resultMap.put("dec", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("봄")) {
+					resultMap.put("spring", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("여름")) {
+					resultMap.put("summer", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("가을")) {
+					resultMap.put("fall", (BigDecimal)fields[1]);
+				} else if (((String)fields[0]).toString().equalsIgnoreCase("겨울")) {
+					resultMap.put("winter", (BigDecimal)fields[1]);
 				}else{
 					resultMap.put((String)fields[0], (BigDecimal)fields[1]);
 				}
 			}
 		}
-		getXmlDataForExcel(categoryName, resultMap, request, response);
+		dataValue.add(resultMap);
+		getXmlDataForExcel(dataValue, serviceName, eventName, categoryName, periodName, resultMap, request, response);
 	}
-	
-	//Excel Download 구현
-	
-	private void getXmlDataForExcel(String categoryName, Map<String, Object> resultMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	//엑셀 템플릿으로 원하는 엑셀파일 생성함.
+	private void getXmlDataForExcel(List<Map<String, Object>> dataValue, String serviceName,String eventName, String categoryName, String periodName, Map<String, Object> resultMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-
 		FileOutputStream fileOut = null;
-		OutputStream out = null; 
-		try{
-			List<String> categoryScop = getCategoryScop(categoryName);
-			HSSFWorkbook workbook = new HSSFWorkbook();
-
-			// Sheet 이름 설정 
-			HSSFSheet sheet = workbook.createSheet("통합모니터링목록");
-
-			//Font 설정.
-			HSSFFont titleFont = workbook.createFont();
-			titleFont.setFontHeightInPoints((short)20); 
-			titleFont.setFontName("굴림체"); 
-			titleFont.setBoldweight((short) 1);
-			
-			HSSFFont font = workbook.createFont();
-			titleFont.setFontHeightInPoints((short)17); 
-			titleFont.setFontName("굴림체"); 
-			
-
-
-			//제목의 스타일 지정
-			HSSFCellStyle titlestyle = workbook.createCellStyle();
-			titlestyle.setBorderBottom(HSSFCellStyle.BORDER_THICK);
-			titlestyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-			titlestyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
-			titlestyle.setBorderTop(HSSFCellStyle.BORDER_THICK);
-			titlestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-			titlestyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-
-			//Row 생성
-			HSSFRow row = sheet.createRow((short)1);
-			//Cell 생성 ( 컬럼 제목 생성 월별,시간별,계절별 등등 ) 
-			//들어온 CategoryName에 따라 size를 구해서, size 만큼 셀을 생성
-			int number = categoryScop.size();  
-			for(int i=0 ; i < number; i++){
-				HSSFCell cell = row.createCell((short) i);
-				cell.setCellValue(categoryScop.get(i));
-				cell.setCellStyle(titlestyle);
-
-			}
+		OutputStream out = null;
 		
-			//내용 스타일 지정
-			HSSFCellStyle style = workbook.createCellStyle();
-			style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-			style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-			style.setBorderRight(HSSFCellStyle.BORDER_THIN);
-			style.setBorderTop(HSSFCellStyle.BORDER_THIN);
-			style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-			style.setFillForegroundColor(HSSFColor.WHITE.index);
-
-			row = sheet.createRow((short)(2));
-			
-			//내용 생성 (컬럼 생성이랑 동일 하나, 내용이 null이면 0으로 표시함)
-			for(int i=0 ; i < number; i++){
-				HSSFCell cell = row.createCell((short) i);
-				if(resultMap.get(categoryScop.get(i)) == null){
-					cell.setCellValue("0");
-				}else{
-					cell.setCellValue(resultMap.get(categoryScop.get(i)) + "");
-				}
-				cell.setCellStyle(style);
-			}				
-			for(int i=0 ; i < number; i++){
-				sheet.autoSizeColumn((short)i);
-				sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+512 );
-			}
-			//해당폴더에 임시파일을 생성한다
-			String fileName = "Monitoring.xls";
-			File paths = new File("/ssw/bpm/was/file/");
-			File path = new File("/ssw/bpm/was/file/" + fileName);
-			if(!path.exists()){
-				paths.mkdirs();
-			}
-			//서버에 파일저장
-			fileOut = new FileOutputStream(path);//파일 출력하기 위한 아웃풋 파일 스크립을 열기.
-			workbook.write(fileOut);// 워크북(엑셀)에 작성된 문서를 일괄적으로 파일로 작성합니다.
-			/* 다운로드 구현( 작동 안됨 )
-			out = response.getOutputStream();
-			response.setHeader("Content-Type","application/vnd.ms-xls");
-	        response.setHeader("Content-Disposition","filename=\""+fileName+"\"");
-	        workbook.write(out);
-*/
-		} catch (FileNotFoundException e) {
-			logger.info("파일을 찾을수 없습니다.",e);
-		} catch (IOException e) {
-			logger.info("예기치 않는 오류입니다.",e);
-		} finally {
-			if(fileOut != null) fileOut.close();
+		//템플릿을 선택에 따라 골라 사용함.
+		//PATH는 절대경로사용.
+		final String TEMPLATE_PATH = "/ssw/bpm/was/Template/";
+		
+		String templateFileName = "";
+		List<String> categoryScop = getCategoryScop(categoryName);
+		
+		if(categoryName.equalsIgnoreCase("option.category.byTime")){
+			templateFileName = TEMPLATE_PATH + "MonitoringTemplate1.xls";
+		}else if(categoryName.equalsIgnoreCase("option.category.byAmPm")){
+			templateFileName = TEMPLATE_PATH + "MonitoringTemplate2.xls";
+		}else if(categoryName.equalsIgnoreCase("option.category.byDay")){
+			templateFileName = TEMPLATE_PATH + "MonitoringTemplate3.xls";
+		}else if(categoryName.equalsIgnoreCase("option.category.byMonth")){
+			templateFileName = TEMPLATE_PATH + "MonitoringTemplate4.xls";
+		}else if(categoryName.equalsIgnoreCase("option.category.bySeason")){
+			templateFileName = TEMPLATE_PATH + "MonitoringTemplate5.xls";
+		}else if(categoryName.equalsIgnoreCase("option.category.byQuarter")){
+			templateFileName = TEMPLATE_PATH + "MonitoringTemplate6.xls";
+		}else if(categoryName.equalsIgnoreCase("option.category.byHalfYear")){
+			templateFileName = TEMPLATE_PATH + "MonitoringTemplate7.xls";
+		}else{
+			logger.error("해당 템플릿이 없습니다.");
+		}
+		
+		//템플릿을 사용하여, 엑셀파일을 만듬.
+		final String DESTFILE_NAME = "/ssw/bpm/was/file/MonitoringChart.xls";
+		
+		//해당 파라미터를 알맞게 변환
+		String eventNameEdit = UcityUtil.getEventName(eventName,serviceName);
+		String serviceNameEdit = UcityUtil.getServiceName(serviceName);
+		String periodNameEdit = UcityUtil.getPeriodName(periodName);
+		String categoryNameEdit = UcityUtil.getCategoryName(categoryName);
+		
+		//해당 이벤트네임과 서비스 이름 등을 지정 이름
+		Map<String, String> title = new HashMap<String, String>();
+		title.put("titleEvent", eventNameEdit);
+		title.put("titleService", serviceNameEdit);
+		title.put("titlePeriod", periodNameEdit);
+		title.put("titleCategory", categoryNameEdit );
+		
+		//컬럼도 지정하려 했으나, 컬럼은 변하지 않으므로 그냥 템플릿에 적음.
+//		Map <String, List> beans = new HashMap< String, List>();
+//		beans.put("monitoring", categoryScop);
+		
+		//내용쓰기(시간대 별, 계절 별 등등 과 해당 값 )
+		Map <String, Object> beans2 = new HashMap< String, Object>();
+		beans2.put("title", title);
+		beans2.put("monitoringData", dataValue);
+		
+		XLSTransformer transformer = new XLSTransformer();
+		
+		try{
+			//엑셀템플릿으로 데이터넣은 엑셀파일 생성
+			transformer.transformXLS(templateFileName, beans2, DESTFILE_NAME);
+		}catch(ParsePropertyException e){
+			logger.error("jxls 변환 중에 오류 발생");
 		}
 	}
 }

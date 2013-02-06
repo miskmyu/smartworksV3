@@ -17,6 +17,7 @@ public class Audit {
 
 	public static final String DEFAULT_AUDIT_ID_STR		= "4";
 	
+	//상황 이벤트 감시 일때, 사용하는 모델
 	private static final String[][] TASK_NAMES_BY_AUDIT_ID = {
 		new String[]{"상황발생"},
 		new String[]{"통신 미들웨어(발생)", "통신 미들웨어(종료)"},

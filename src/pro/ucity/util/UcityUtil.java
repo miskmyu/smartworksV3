@@ -50,10 +50,12 @@ import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
 import pro.ucity.model.Adapter;
 import pro.ucity.model.CMHistory;
 import pro.ucity.model.DMHistory;
+import pro.ucity.model.Event;
 import pro.ucity.model.ICSituation;
 import pro.ucity.model.OPDisplay;
 import pro.ucity.model.OPSituation;
 import pro.ucity.model.OPSms;
+import pro.ucity.model.Service;
 import pro.ucity.model.System;
 import pro.ucity.model.UcityConstant;
 
@@ -63,6 +65,142 @@ public class UcityUtil {
 
 	public UcityUtil() {
 		super();
+	}
+
+	//Excel Download 시 service,eventname,periodName,categoryName 변경
+	public static String getServiceName(String serviceName) throws Exception{
+		
+		String[] allServices = Service.getAllServiceNames();
+		if(serviceName.isEmpty()) return null;
+		if(serviceName.equalsIgnoreCase(System.REPORT_OPTION_ALL_SERVICES)){
+			serviceName = "모든 서비스";
+		}else if(serviceName.equalsIgnoreCase(allServices[0])){
+			serviceName = "환경";
+		}else if(serviceName.equalsIgnoreCase(allServices[1])){
+			serviceName = "교통";
+		}else if(serviceName.equalsIgnoreCase(allServices[2])){
+			serviceName = "방범/방재";
+		}else if(serviceName.equalsIgnoreCase(allServices[3])){
+			serviceName = "시설물관리";
+		}else if(serviceName.equalsIgnoreCase(allServices[4])){
+			serviceName = "플랫폼";
+		}
+		return serviceName;
+	}
+		
+	public static String getEventName(String eventName, String serviceName) throws Exception{
+		
+		String[] allServices = Service.getAllServiceNames();
+		String[] eventNames = Event.getAllEventNames(serviceName);
+		
+		if(eventName.isEmpty()) return null;
+		if(serviceName.equalsIgnoreCase(allServices[0])){
+			if(eventName.equalsIgnoreCase(eventNames[0])){
+				eventName = "대기오염";
+			}else if(eventName.equalsIgnoreCase(eventNames[1])){
+				eventName = "환경경보";
+			}else if(eventName.equalsIgnoreCase(eventNames[2])){
+				eventName = "수질";
+			}else if(eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
+				eventName = "모든 이벤트";
+			}		
+		}else if(serviceName.equalsIgnoreCase(allServices[1])){
+			if(eventName.equalsIgnoreCase(eventNames[0])){
+				eventName = "교통혼잡";
+			}else if(eventName.equalsIgnoreCase(eventNames[1])){
+				eventName = "차량고장";
+			}else if(eventName.equalsIgnoreCase(eventNames[2])){
+				eventName = "뺑소니";
+			}else if(eventName.equalsIgnoreCase(eventNames[3])){
+				eventName = "교통사고";
+			}else if(eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
+				eventName = "모든 이벤트";
+			}		
+		}else if(serviceName.equalsIgnoreCase(allServices[2])){
+			if(eventName.equalsIgnoreCase(eventNames[0])){
+				eventName = "호우";
+			}else if(eventName.equalsIgnoreCase(eventNames[1])){
+				eventName = "지하차도침수";
+			}else if(eventName.equalsIgnoreCase(eventNames[2])){
+				eventName = "태풍";
+			}else if(eventName.equalsIgnoreCase(eventNames[3])){
+				eventName = "화재";
+			}else if(eventName.equalsIgnoreCase(eventNames[4])){
+				eventName = "수위경보";
+			}else if(eventName.equalsIgnoreCase(eventNames[5])){
+				eventName = "비상벨요청";
+			}else if(eventName.equalsIgnoreCase(eventNames[6])){
+				eventName = "용의차량추적";
+			}else if(eventName.equalsIgnoreCase(eventNames[7])){
+				eventName = "응급";
+			}else if(eventName.equalsIgnoreCase(eventNames[8])){
+				eventName = "미아";
+			}else if(eventName.equalsIgnoreCase(eventNames[9])){
+				eventName = "강도";
+			}else if(eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
+				eventName = "모든 이벤트";
+			}	
+		}else if(serviceName.equalsIgnoreCase(allServices[3])){
+			if(eventName.equalsIgnoreCase(eventNames[0])){
+				eventName = "상수도누수발생가능";
+			}else if(eventName.equalsIgnoreCase(eventNames[1])){
+				eventName = "시설물고장";
+			}else if(eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
+				eventName = "모든 이벤트";
+			}	
+		}else if(serviceName.equalsIgnoreCase(allServices[4])){
+			if(eventName.equalsIgnoreCase(eventNames[0])){
+				eventName = "도로통제";
+			}else if(eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
+				eventName = "모든 이벤트";
+			}	
+		}else{
+			if(eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS))
+				eventName = "모든 이벤트";
+		}
+		return eventName;
+	}
+
+	public static String getCategoryName(String categoryName) throws Exception{
+		
+		if(categoryName.isEmpty()) return null;
+		if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_TIME)){
+			categoryName = "시간대 별";
+		}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_AMPM)){
+			categoryName = "오전/오후";
+		}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_DAY)){
+			categoryName = "요일별";
+		}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_MONTH)){
+			categoryName = "월별";
+		}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_SEASON)){
+			categoryName = "계절별";
+		}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_QUARTER)){
+			categoryName = "분기별";
+		}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_HALFYEAR)){
+			categoryName = "반기별";
+		}else{
+			logger.error("CategoryName is Null");
+		}
+		return categoryName;
+	}
+
+	public static String getPeriodName(String periodName) throws Exception{
+		
+		if(periodName.isEmpty()) return null;
+		if(periodName.equalsIgnoreCase(System.REPORT_OPTION_ALL_HISTORY)){
+			periodName = "전체";
+		}else if(periodName.equalsIgnoreCase(System.REPORT_OPTION_THIS_YEAR)){
+			periodName = "올해";
+		}else if(periodName.equalsIgnoreCase(System.REPORT_OPTION_RECENT_A_YEAR)){
+			periodName = "최근 1년";
+		}else if(periodName.equalsIgnoreCase(System.REPORT_OPTION_RECENT_THREE_YEARS)){
+			periodName = "최근 3년";
+		}else if(periodName.equalsIgnoreCase(System.REPORT_OPTION_RECENT_FIVE_YEARS)){
+			periodName = "최근 5년";
+		}else{
+			logger.error("period null");
+		}
+		return periodName;
 	}
 
 	public static boolean isAbendable(ProcessWorkInstance instance){

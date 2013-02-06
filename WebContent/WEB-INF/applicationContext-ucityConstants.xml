@@ -42,7 +42,10 @@
 				<beans:entry key="Adapter.QUERY_UPDATE_FOR_READ_ROLLBACK">
 					<beans:value>update TB_UAST_CMNC_HS set BPM_CNFM_YN = 'N' where RECV_CMNC_TG_ID = ?</beans:value>
 				</beans:entry>
-				
+				<beans:entry key="Adapter.QUERY_SELECT_FOR_TRAFFIC">
+					<beans:value>select BLOCK_ID, ROAD_NM from TM_TRAFFIC_INFO_INSTANT WHERE BLOCK_ID = ?</beans:value>
+				</beans:entry>
+
 				<!-- CMHistory -->
 				<beans:entry key="CMHistory.TRST_ID">
 					<beans:value>TRST_ID</beans:value>
@@ -430,7 +433,7 @@
 		<beans:property name="passUrlList">
 			<beans:map>
 				<beans:entry key="BPM.PASSURLLIST">
-					<beans:value></beans:value>
+					<beans:value>/smartworksV3/ucity_get_chart_excel.sw</beans:value>
 				</beans:entry>
 			</beans:map>
 		</beans:property>

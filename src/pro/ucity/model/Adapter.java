@@ -65,7 +65,7 @@ public class Adapter {
 	private String commHeader;
 	private String commBody;
 	
-	private int process=-1;
+	private static int process=-1;
 	private int eventType;	
 	private String serviceCode;
 	private String eventCode;
@@ -328,6 +328,8 @@ public class Adapter {
 		if(SmartUtil.isBlankObject(resultSet)) return;
 		this.setResult(resultSet);
 	}
+	
+	// TB_UAST_CMNC_HS 테이블의 전문 중 Header를 쪼개어 각 각 해당 변수에 SET
 	private void parseCommHeader(String commHeader){
 		int sizeHeader = commHeader.length();
 		if(SmartUtil.isBlankObject(commHeader) || commHeader.length() != LENGTH_COMM_HEADER) return;
@@ -346,6 +348,7 @@ public class Adapter {
 			this.eventType = EVENT_TYPE_RELEASE;
 		
 	}
+	// TB_UAST_CMNC_HS 테이블의 전문 중 Body를 쪼개어 각 각 해당 변수에 SET
 	private void parseCommBody(String commBody){
 		if(SmartUtil.isBlankObject(commBody) || this.process<0 || this.process>System.MAX_PROCESS) return;
 		
@@ -490,7 +493,8 @@ public class Adapter {
 		
 		Map<String, Object> dataRecord = new HashMap<String, Object>();
 		KeyMap[] keyMaps = Adapter.ADAPTER_HISTORY_FIELDS[this.process];
-		
+
+//	    eventId의 길이를 20크기로 맞쳐주는데 수정하여, like 검색으로 수정( 추 후를 위해 남겨둠 )
 //		int len = 20; 
 //		if(len != eventId.length()){
 //			if(!this.isValid()) return null;
@@ -560,11 +564,13 @@ public class Adapter {
 		return dataRecord;
 	}
 	
+	//U-Service 상황 발생 후, BPM 프로세스 시작.
 	public void startProcess() throws Exception{
 		if(this.process<0 || this.process>System.MAX_PROCESS || this.eventType!=EVENT_TYPE_OCCURRENCE) return;
 		
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null) return;
+//		리스트에 해당 이벤트아이디가 있는지 확인 메소드지만, 사용안해도 무방함( 사용 하면 성능이 나빠짐 )
 //		if(UcityUtil.ucityWorklistSearch(System.getProcessId(this.process),this.eventId) == true ){
 			if(this.process == System.PROCESS_FACILITY_MANAGEMENT){
 				UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.eventId, this.occuredDate, this.getDataRecord(), this.facilityId);
@@ -576,7 +582,7 @@ public class Adapter {
 //			return;
 //		}
 	}
-	
+	//U-Service 상황 종료 후, BPM 프로세스 시작.
 	public void endProcess() throws Exception{
 		if(this.process<0 || this.process>System.MAX_PROCESS || this.eventType!=EVENT_TYPE_RELEASE) return;
 		
@@ -602,7 +608,6 @@ public class Adapter {
 	
 	public void setResult(ResultSet result){
 		try{
-//			if(result.getRow()>0){
 				this.communicationId = result.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
 				String commContent = result.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_CONTENT"));
 				if(SmartUtil.isBlankObject(commContent) || commContent.length()<Adapter.LENGTH_COMM_HEADER) return;
@@ -610,10 +615,8 @@ public class Adapter {
 				this.commBody = commContent.substring(Adapter.LENGTH_COMM_HEADER);
 				this.parseCommHeader(this.commHeader);
 				this.parseCommBody(this.commBody);				
-//			}
 		}catch (Exception e){
 			logger.error("전문 분석 오류 : Adapter.setResult");
-//			e.printStackTrace();
 		}
 	}
 	
@@ -638,14 +641,13 @@ public class Adapter {
 		readHistoryTableToStart();
 	}
 	
+	// 20초 마다 TB_UAST_CMNC_HS 테이블을 읽어, BPM프로세스 진행시킴.
 	synchronized public static void readHistoryTableToStart(){
-//		if(SmartUtil.isBlankObject(connection)) return;
-		
-		logger.info("############ START checking ADAPTER History To Start  ################");
 
 		Connection connection = null;
 		PreparedStatement selectPstmt = null;
 		PreparedStatement selectPstmt2 = null;
+		PreparedStatement selectPstmt3 = null;
 		PreparedStatement updatePstmt = null;
 		int number = 1;
 				
@@ -653,8 +655,10 @@ public class Adapter {
 		String adapterSelectEndSql = UcityConstant.getQueryByKey("Adapter.QUERY_SELECT_FOR_END");
 		String adapterUpdateSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_CONFIRM");
 		String adapterRollbackSql = UcityConstant.getQueryByKey("Adapter.QUERY_UPDATE_FOR_READ_ROLLBACK");
+		String adapterJoinTrafficSql = UcityConstant.getQueryByKey("Adapter.QUERY_SELECT_FOR_TRAFFIC");
 		
 		String opSituationJoinFacilitySql = UcityConstant.getQueryByKey("OPSituation.QUERY_SELECT_FOR_FACILITY");
+		
 
 		try {
 			try{
@@ -662,7 +666,6 @@ public class Adapter {
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				logger.error("DB Connection 오류 : Adapter.readHistoryTableToStart");
 				return;
@@ -678,8 +681,7 @@ public class Adapter {
 				if (count != 0) {
 					int processedCount = 0;
 					logger.info("============== ADAPTER 시작이벤트 발생 ===============");
-					logger.info("이벤트 발생 시간 : " + new Date());
-					logger.info("이벤트 발생 갯수 : " + count);
+					
 					while(rs.next() && number == 1 && !Thread.currentThread().isInterrupted()) {
 						try{
 							String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
@@ -700,48 +702,43 @@ public class Adapter {
 										String location = joinFacilityRs.getString("LC_NM");
 										adapter.setLocationName(location);
 									}
-									
+									try{
+										/*교통사고 상황일 경우, 발생장소에 linkId가 들어감.
+										해당 상황 일 시, 해당 발생장소 맵핑테이블을 찾아, 장소를 바꿔줌. */
+										if(process == System.PROCESS_TRAFFIC_INCIDENT){
+											selectPstmt3 = connection.prepareStatement(adapterJoinTrafficSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+											selectPstmt3.setString(1, adapter.getLocationName());
+											ResultSet joinTrafficRs = selectPstmt3.executeQuery();	
+											joinTrafficRs.last();
+											int trafficCount = joinTrafficRs.getRow(); 
+											joinTrafficRs.beforeFirst();
+											if(joinTrafficRs.next() && trafficCount != 0){
+												String location = joinTrafficRs.getString("ROAD_NM");
+												adapter.setLocationName(location);											
+											}
+										}
+									}catch(Exception e){
+										logger.error("========================================");
+										logger.error("링크아이디로 장소를 찾아오는데 실패하였습니다.");
+										logger.error("========================================");
+									}	
 									adapter.startProcess();	
-//									connection.commit();
 									logger.info("[SUCCESS] 새로운 ADAPTER 발생 이벤트가 정상적으로 시작되었습니다!");
 									
 									
 								}catch (Exception se){
-//									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
-//									se.printStackTrace();
 									logger.error("startProcese 오류 : adapter.startProcess");
-//									updatePstmt = connection.prepareStatement(adapterRollbackSql);
-//									updatePstmt.setString(1, communicationId);
-//									result = updatePstmt.execute();
 								}
-//								selectPstmt = connection.prepareStatement(adapterSelectStartSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-//								rs = selectPstmt.executeQuery();				
-//								rs.last();
-//								count = rs.getRow(); 
-//								rs.beforeFirst();
-//								if (count == 0){
-//									number = 0; 
-//								}else{
-//									logger.info("============== ADAPTER 시작이벤트 발생(while) ===============");
-//									logger.info("이벤트 발생 시간 : " + new Date());
-//									logger.info("이벤트 발생 갯수 : " + count);
-//									
-//								}
 							}else{
-//								connection.rollback();
-								logger.info("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
-//								updatePstmt = connection.prepareStatement(adapterRollbackSql);
-//								updatePstmt.setString(1, communicationId);
-//								result = updatePstmt.execute();
+								logger.error("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
 							}
 						}catch (Exception we){
-							logger.info("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 							logger.error("while문 이후 error : adapter.readHistoryTableToStart");
-							logger.info("############ END checking ADAPTER History To Start!  ################");
 							return;
 						}
 					}
 				}else{
+					//시작이벤트가 아니고, 종료 이벤트 상황일 시..
 					try{
 						selectPstmt = connection.prepareStatement(adapterSelectEndSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 						rs = selectPstmt.executeQuery();
@@ -752,8 +749,7 @@ public class Adapter {
 						if (count != 0) {
 							int processedCount = 0;
 							logger.info("============== ADAPTER 종료이벤트 발생 ===============");
-							logger.info("이벤트 발생 시간 : " + new Date());
-							logger.info("이벤트 발생 갯수 : " + count);
+							
 							while(rs.next() && number == 1 && !Thread.currentThread().isInterrupted()) {
 								try{
 									String communicationId = rs.getString(UcityConstant.getQueryByKey("Adapter.FIELD_NAME_COMM_TG_ID"));
@@ -764,61 +760,28 @@ public class Adapter {
 									if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE){
 										try{
 											adapter.endProcess();
-//											connection.commit();
 											logger.info("[SUCCESS] 새로운 ADAPTER 종료 이벤트가 정상적으로 처리되었습니다!");
 										}catch (Exception se){
 											logger.error("endProcess error : adapter.endProcess.734",se);
-											logger.info("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
-//											se.printStackTrace();
-//											if(connection != null)
-//												connection.rollback();
-//											updatePstmt = connection.prepareStatement(adapterRollbackSql);
-//											updatePstmt.setString(1, communicationId);
-//											result = updatePstmt.execute();
 										}
-//										selectPstmt = connection.prepareStatement(adapterSelectEndSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-//										rs = selectPstmt.executeQuery();				
-//										rs.last();
-//										count = rs.getRow(); 
-//										rs.beforeFirst();	
-//										if(count == 0){
-//											number = 0;
-//										}else{
-//											logger.info("============== ADAPTER 종료이벤트 발생(while) ===============");
-//											logger.info("이벤트 발생 시간 : " + new Date());
-//											logger.info("이벤트 발생 갯수 : " + count);																
-//										}
 									}else{
-//										connection.rollback();
-										logger.info("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
-//										updatePstmt = connection.prepareStatement(adapterRollbackSql);
-//										updatePstmt.setString(1, communicationId);
-//										result = updatePstmt.execute();
+										logger.error("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
 									}
 								}catch (Exception e){
 									logger.error("종료 이벤트 발생 error : adapter.readHistoryTableToStart.763");
-									logger.info("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
-//									we.printStackTrace();
-//									java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
 									return;
 								}
 							}
 						}							
 					}catch (Exception e){
 						logger.error("종료 이벤트 발생 error : adapter.readHistoryTableToStart.772");
-//						java.lang.System.out.println("[ERROR] ADAPTER 종료이벤트 데이터베이스 오류 종료");
-//						e.printStackTrace();
 					}
 				}
 			}catch (Exception e){
 				logger.error("이벤트 발생 error 777 : adapter.readHistoryTableToStart.778");
-//				java.lang.System.out.println("[ERROR] ADAPTER 시작이벤트 데이터베이스 오류 종료");
-//				e.printStackTrace();
 			}
 		} catch (Exception e) {
 			logger.error("이벤트 발생 error 777");
-//			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
-//			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -830,12 +793,10 @@ public class Adapter {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				logger.error("finally close error : adapter.796");
-//				e.printStackTrace();
 			}
-			logger.info("############ END checking ADAPTER History To Start  ################");
 		}
 	}
-	
+	// 상황 처리 상황에서, 외부표출 및 SMS를 보냇는지 확인.
 	public static Map<String,Object> readHistoryTable(String eventId, String deviceId, String status){
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(Service.getDeviceCodeByDeviceId(deviceId))) return null;
 
@@ -854,8 +815,6 @@ public class Adapter {
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
-
 			}catch (TbSQLException te){
 				logger.error("DB Connection error : adapter.readHistoryTable.825");
 				return null;
@@ -882,28 +841,22 @@ public class Adapter {
 									boolean result = updatePstmt.execute();
 									if (selectPstmt != null)
 										selectPstmt.close();
-//									con.close();
 								} catch (SQLException e) {
 									// TODO Auto-generated catch block
 									logger.error("result set error : adapter.readHistoryTable.851");
-//									e.printStackTrace();
 								}
 								return adapter.getDataRecord();
 							}
-//							rs.next();
 						}catch (Exception e){
 							logger.error("rs.next error : adapter.858");
-//							e.printStackTrace();
 						}
 					}
 				}
 			}catch (Exception e){
 				logger.error("select error : adapter.864");
-//				e.printStackTrace();
 			}
 		} catch (Exception e) {
 			logger.error("select error : adapter.868");
-//			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -912,8 +865,6 @@ public class Adapter {
 					connection.close();
 			} catch (SQLException e) {
 				logger.error("finally close error : adapter.877");
-				// TODO Auto-generated catch block
-//				e.printStackTrace();
 			}
 		}
 		return null;

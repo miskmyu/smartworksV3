@@ -130,8 +130,7 @@ public class CMHistory {
 			else if(keyMap.getKey().equals(UcityConstant.getQueryByKey("CMHistory.EVET_OUTB_ID")))
 				dataRecord.put(keyMap.getId(), this.evetOutbId);
 		}
-		return dataRecord;
-//		return UcityTest.getCMHistoryDataRecord();		
+		return dataRecord;	
 	}
 	
 	public void performTask(String processId, String taskInstId) throws Exception{
@@ -177,6 +176,7 @@ public class CMHistory {
 		return false;
 	}
 
+	//통신미들웨어상황에서, 통신미들웨어 테이블을 읽는다.
 	public static Map<String,Object> readHistoryTable(String eventId, String status){
 		
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(status)) return null;
@@ -191,10 +191,8 @@ public class CMHistory {
 			    Context envinit = (Context)init.lookup("java:comp/env");
 			    DataSource ds = (DataSource) envinit.lookup("bpm/tibero");
 			    connection = ds.getConnection();
-//				connection = SwManagerFactory.getInstance().getUcityContantsManager().getDataSource().getConnection();
 			}catch (TbSQLException te){
 				logger.error("DB Connection error : CMHistory.readHistoryTable");
-//				te.printStackTrace();
 				return null;
 			}
 			
@@ -213,26 +211,20 @@ public class CMHistory {
 							try {
 								if (selectPstmt != null)
 									selectPstmt.close();
-//								con.close();
 							} catch (SQLException e) {
-								// TODO Auto-generated catch block
 								logger.error("select.close : CMHistory.349");
-//								e.printStackTrace();
 							}
 							return cmHistory.getDataRecord();
 						}
 					}catch (Exception e){
 						logger.error("result set error : CMHistory.355");
-//						e.printStackTrace();
 					}
 				}
 			}catch (Exception e){
 				logger.error("select.close : CMHistory.360");
-//				e.printStackTrace();
 			}
 		} catch (Exception e) {
 			logger.error("select.close : CMHistory.360");
-//			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -240,9 +232,7 @@ public class CMHistory {
 				if(connection != null)
 					connection.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				logger.error("Finally close : CMHistory.374");
-//				e.printStackTrace();
 			}
 		}
 		return null;
