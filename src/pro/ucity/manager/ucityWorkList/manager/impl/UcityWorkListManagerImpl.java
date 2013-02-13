@@ -37,6 +37,7 @@ import pro.ucity.manager.ucityWorkList.exception.UcityWorkListException;
 import pro.ucity.manager.ucityWorkList.manager.IUcityWorkListManager;
 import pro.ucity.manager.ucityWorkList.model.UcityWorkList;
 import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
+import pro.ucity.model.Event;
 import pro.ucity.model.Service;
 import pro.ucity.model.System;
 import pro.ucity.util.UcityUtil;
@@ -708,34 +709,48 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			resultXml.append("<valueInfoDefineUnit><![CDATA[건]]></valueInfoDefineUnit>");
 			
 			Iterator<String> keyIt = resultMap.keySet().iterator();
-			logger.info("키잇은 멀까??" + keyIt);
-			
-			while(keyIt.hasNext()) {
-				int k = 0;
-				in = false;
-				String groupName = (String)keyIt.next();
-				List<Object[]> valueList = (List)resultMap.get(groupName);
-				
-				resultXml.append("<grouping>");
-				resultXml.append("<name><![CDATA[").append(groupName).append("]]></name>");
-				for(int i = 0 ; i < group2List.size() ; i++) {    // 그룹리스트 만큼 돔 ( 환경, 교통, 5번 돌겠지)
-					Object group2Obj = group2List.get(i);         // 0 이니까 아마 환경?
-					logger.info("투스트링!!" + group2Obj.toString());
-					Object[] resultSet = findResultSet(valueList, group2Obj.toString());		
-					if(resultSet == null) {
-						 logger.info("result는 null");
-						resultXml.append("<remark>");
-						resultXml.append("<name><![CDATA[").append(group2Obj.toString()).append("]]></name>");
-						resultXml.append("<value><![CDATA[0]]></value>");
-						resultXml.append("</remark>");	
-					} else {
-						logger.info("result값이 있음");
-						resultXml.append("<remark>");
-						resultXml.append("<name><![CDATA[").append(resultSet[0]).append("]]></name>");
-						resultXml.append("<value><![CDATA[").append((BigDecimal)resultSet[2]).append("]]></value>");
-						resultXml.append("</remark>");
-					}								
-				}				
+			int n = 0;
+			int k = 0;
+			while(n < categoryScop.size()) {
+				String categoryList = categoryScop.get(k);
+				List<Object[]> valueList = (List)resultMap.get(categoryList);
+					resultXml.append("<grouping>");
+					resultXml.append("<name><![CDATA[").append(categoryList).append("]]></name>");
+					if(valueList != null){
+						for(int i = 0 ; i < group2List.size() ; i++) {    // 그룹리스트 만큼 돔 ( 환경, 교통, 5번 돌겠지)
+							Object group2Obj = group2List.get(i);         // 0 이니까 아마 환경?
+							Object[] resultSet = findResultSet(valueList, group2Obj.toString());		
+							if(resultSet == null) {
+								resultXml.append("<remark>");
+								resultXml.append("<name><![CDATA[").append(group2Obj.toString()).append("]]></name>");
+								resultXml.append("<value><![CDATA[0]]></value>");
+								resultXml.append("</remark>");	
+							} else {
+								resultXml.append("<remark>");
+								resultXml.append("<name><![CDATA[").append(resultSet[0]).append("]]></name>");
+								resultXml.append("<value><![CDATA[").append((BigDecimal)resultSet[2]).append("]]></value>");
+								resultXml.append("</remark>");
+							}								
+						}				
+					}else{
+						if(serviceName.equalsIgnoreCase("option.service.all")){
+							for(int s = 0; s < Service.getAllServiceNames().length; s++){
+								resultXml.append("<remark>");
+								resultXml.append("<name><![CDATA[").append(Service.getAllServiceNames()[s]).append("]]></name>");
+								resultXml.append("<value><![CDATA[0]]></value>");
+								resultXml.append("</remark>");	
+							}	
+						}else{
+							for(int s = 0; s < Event.getAllEventNames(serviceName).length; s++){
+								resultXml.append("<remark>");
+								resultXml.append("<name><![CDATA[").append(Event.getAllEventNames(serviceName)[s]).append("]]></name>");
+								resultXml.append("<value><![CDATA[0]]></value>");
+								resultXml.append("</remark>");	
+						}
+					}
+					}
+					k++;
+					n++;
 				resultXml.append("</grouping>");
 			}
 			if (categoryName.equalsIgnoreCase("option.category.byTime")) {
@@ -900,14 +915,14 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 						}
 					}
 					List<Object[]> valueList = null;
-					if(resultMap.containsKey(groupName)) {          // 만든 resultMap에서 해당 groupNames(환경,방범)가 잇으면 불러옴.
+					if(resultMap.containsKey(groupName)) {          // 만든 resultMap에서 해당 항목이(아침,점심,낮) 있으면 불러옴.
 						valueList = (List)resultMap.get(groupName);  // valueList는 만든 resultMap에 있는 주소,
 					} else {
 						valueList = new ArrayList<Object[]>();
 						resultMap.put(groupName, valueList);        // 없으면 valueList를 새로 만들어, resultMap을 만듬.
 					}
 					valueList.add(fields);
-					if(!group2List.contains(groupNames)) // 용도
+					if(!group2List.contains(groupNames)) // 분류( 환경,교통,방범)
 						group2List.add(groupNames);
 				}
 			}	
