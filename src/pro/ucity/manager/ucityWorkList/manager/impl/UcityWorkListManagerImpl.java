@@ -861,7 +861,6 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 				}else if(groupByCount == 2) {
 					groupNames = fields[0] == null? "null" : fields[0].toString();
 					groupName = fields[1] == null? "null" : fields[1] instanceof Character ? ((Character)fields[1]).toString() : ((String)fields[1]).toString();
-					groupValue = fields[2] == null? "null" : (BigDecimal)fields[2];
 					
 					if (fields[1] instanceof Character) {
 						if(groupName.toString().equalsIgnoreCase("상")) {
@@ -908,7 +907,6 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 						resultMap.put(groupName, valueList);        // 없으면 valueList를 새로 만들어, resultMap을 만듬.
 					}
 					valueList.add(fields);
-					groupLists = new Object[]{groupName, groupValue};// 같은 주소에 add하거나, 새로운 곳에 add
 					if(!group2List.contains(groupNames)) // 용도
 						group2List.add(groupNames);
 				}
@@ -1459,20 +1457,21 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 				logger.error("해당 템플릿이 없습니다.");
 			}		
 		}else if(serviceName.equalsIgnoreCase(System.REPORT_OPTION_ALL_SERVICES)){
-//			if(categoryName.equalsIgnoreCase("option.category.byTime")){
+			if(categoryName.equalsIgnoreCase("option.category.byTime")){
 				templateFileName = TEMPLATE_PATH + "MonitoringTemplate8.xls";
-//			}else if(categoryName.equalsIgnoreCase("option.category.byAmPm")){
-//				templateFileName = TEMPLATE_PATH + "MonitoringTemplate9.xls";
-//			}else if(categoryName.equalsIgnoreCase("option.category.byDay")){
-//				templateFileName = TEMPLATE_PATH + "MonitoringTemplate10.xls";
-//			}else if(categoryName.equalsIgnoreCase("option.category.byMonth")){
-//				templateFileName = TEMPLATE_PATH + "MonitoringTemplate11.xls";
-//			}else if(categoryName.equalsIgnoreCase("option.category.bySeason")){
-//				templateFileName = TEMPLATE_PATH + "MonitoringTemplate12.xls";
-//			}else if(categoryName.equalsIgnoreCase("option.category.byQuarter")){
-//				templateFileName = TEMPLATE_PATH + "MonitoringTemplate13.xls";
-//			}else if(categoryName.equalsIgnoreCase("option.category.byHalfYear")){
-//				templateFileName = TEMPLATE_PATH + "MonitoringTemplate14.xls";
+			}else if(categoryName.equalsIgnoreCase("option.category.byAmPm")){
+				templateFileName = TEMPLATE_PATH + "MonitoringTemplate9.xls";
+			}else if(categoryName.equalsIgnoreCase("option.category.byDay")){
+				templateFileName = TEMPLATE_PATH + "MonitoringTemplate10.xls";
+			}else if(categoryName.equalsIgnoreCase("option.category.byMonth")){
+				templateFileName = TEMPLATE_PATH + "MonitoringTemplate11.xls";
+			}else if(categoryName.equalsIgnoreCase("option.category.bySeason")){
+				templateFileName = TEMPLATE_PATH + "MonitoringTemplate12.xls";
+			}else if(categoryName.equalsIgnoreCase("option.category.byQuarter")){
+				templateFileName = TEMPLATE_PATH + "MonitoringTemplate13.xls";
+			}else if(categoryName.equalsIgnoreCase("option.category.byHalfYear")){
+				templateFileName = TEMPLATE_PATH + "MonitoringTemplate14.xls";
+			}
 	
 		}else if(!serviceName.equalsIgnoreCase(System.REPORT_OPTION_ALL_SERVICES) && eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
 			templateFileName = TEMPLATE_PATH + "MonitoringTemplate9.xls";
