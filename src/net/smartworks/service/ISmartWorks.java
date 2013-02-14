@@ -773,6 +773,8 @@ public interface ISmartWorks {
 	
 	public abstract String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception;
 	
+	public abstract void getUcityChartExcel(String categoryName, String periodName, String serviceName, String eventName, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	
 	public abstract int[][] getUcityAuditTaskCounts(boolean runningOnly) throws Exception;
 	
 	public abstract Property[] getUcityExtendedPropertyByTaskInstId(String taskInstId) throws Exception;

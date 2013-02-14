@@ -108,6 +108,7 @@
 		<property name="useMessagingService" type="boolean"/>
 		<property name="useChattingService" type="boolean"/>
 		<property name="companyId" type="string" length="100"/>
+		<property name="userReturnFunction" type="boolean"/>	
 		<property name="creationUser" column="creator" type="string" length="50"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>
 		<property name="modificationUser" column="modifier" type="string" length="50"/>

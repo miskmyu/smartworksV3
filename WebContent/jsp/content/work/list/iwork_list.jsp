@@ -208,13 +208,11 @@
 
 			<!-- 목록영역  -->
 			<div class="contents_space">
-<%-- 
-				<div>
+				<%-- <div>
 					<jsp:include page="/jsp/content/work/report/work_report.jsp">
 						<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
 					</jsp:include>
-				</div>
- --%>
+				</div> --%>
 				<!-- 목록보기 -->
 				<div>
 					<!-- 목록보기 타이틀-->
@@ -229,6 +227,9 @@
 								</div>
 								<div class="icon_btn_start">
 									<a href="" class="icon_btn_tail js_import_from_excel"><fmt:message key="common.button.excel_import"/></a>
+								</div>
+								<div class="icon_btn_start">
+									<a href="" class="icon_btn_tail js_export_to_excel"><fmt:message key="common.button.excel_export"/></a>
 								</div>
 							<%
 								}

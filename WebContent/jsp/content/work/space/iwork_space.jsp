@@ -576,7 +576,7 @@ function submitForms(tempSave) {
 
 	var mode = "view";
 	<%
-	boolean isApprovalTask = (SmartUtil.isBlankObject(approvalTaskInstId)) ? false : (approvalTask.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED && approvalTask.getStatus() == Instance.STATUS_RUNNING) ? true : false;
+	boolean isApprovalTask = (SmartUtil.isBlankObject(approvalTaskInstId) || SmartUtil.isBlankObject(approvalTask)) ? false : (approvalTask.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED && approvalTask.getStatus() == Instance.STATUS_RUNNING) ? true : false;
 	if((isApprovalTask && instance.getStatus() == Instance.STATUS_RETURNED) || instance.isTempSaved()){
 	%>
 		mode = "edit";
@@ -602,6 +602,9 @@ function submitForms(tempSave) {
 		iworkSpace.find('.js_btn_approve_approval').hide().siblings().hide();			
 	<%
 	}
+	
+	
+	
 	%>
 </script>
 
@@ -621,4 +624,3 @@ function submitForms(tempSave) {
 	</div>
 </div>
 <!-- 목록 버튼//-->
-

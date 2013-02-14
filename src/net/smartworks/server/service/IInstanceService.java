@@ -24,6 +24,7 @@ import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
+import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.util.LocalDate;
 
 public interface IInstanceService {
@@ -206,10 +207,27 @@ public interface IInstanceService {
 	
 	public TaskInstance getTaskInstanceById(String workId, String taskInstId) throws Exception;
 	
+	//외부화면실행기
+	
+	public String initiateProcessByExternalFormInfo(String user,String title, String processId, Property[] props) throws Exception;
+	
+	public TskTask executeTaskByExternalFormInfo(String user, String action, String taskId, Property[] props) throws Exception;
+	
+	public TskTask executeInstanceByUserIdAndExternalFormInfo(String user, String action, String instanceId, Property[] props) throws Exception;
+		
+	
 	public int[][] getUcityAuditTaskCounts(boolean runningOnly) throws Exception;
 	
 	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception;
+
+	public void getUcityChartExcel(String categoryName, String periodName, String serviceName, String eventName, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 	public Property[] getUcityExtendedPropertyByTaskInstId(String taskInstId) throws Exception;
+	
+	
+	
+	
+	
+	
 	
 }

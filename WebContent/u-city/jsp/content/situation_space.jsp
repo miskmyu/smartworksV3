@@ -28,6 +28,8 @@
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ page import="net.smartworks.service.ISmartWorks"%>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="javax.xml.bind.ValidationException" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
@@ -41,6 +43,11 @@
 	String instId = SmartUtil.getSpaceIdFromContentContext(cid);
 	String workId = request.getParameter("workId");
 	String taskInstId = request.getParameter("taskInstId");
+    
+	Pattern pattern = Pattern.compile("^[가-힣a-zA-Z0-9_.]");
+
+	if(pattern.matcher(cid).matches() || pattern.matcher(workId).matches())
+		throw new ValidationException("전달된 파라미터가 유효한 형식의 값이 아닙니다.");
 	
 	ProcessWorkInstance instance = null;
 	WorkInstance workInstance = (WorkInstance)session.getAttribute("workInstance");

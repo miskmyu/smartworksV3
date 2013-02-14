@@ -77,6 +77,8 @@ import net.smartworks.server.engine.autoindex.model.AutoIndexRule;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.Filters;
+import net.smartworks.server.engine.common.model.InstanceVariable;
+import net.smartworks.server.engine.common.model.InstanceVariables;
 import net.smartworks.server.engine.common.model.MappingService;
 import net.smartworks.server.engine.common.model.MisObjectCond;
 import net.smartworks.server.engine.common.model.Order;
@@ -153,6 +155,7 @@ import net.smartworks.server.engine.process.approval.model.AprApprovalDef;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLineDef;
 import net.smartworks.server.engine.process.deploy.model.AcpActualParameter;
+import net.smartworks.server.engine.process.deploy.model.AcpActualParameters;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.process.model.PrcProcess;
@@ -4622,9 +4625,11 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			//화면에서 사용하고 있는 컬럼의 상수값과 실제 프로세스 인스턴스 데이터 베이스의 컬럼 이름이 맞지 않아 컨버팅 작업
 			//한군데에서 관리 하도록 상수로 변경 필요
+			//이벤트시간으로 정렬되게 수정
 			if (sf == null) {
 				sf = new SortingField();
-				sf.setFieldId(FormField.ID_CREATED_DATE);
+				sf.setFieldId("eventTime");
+//				sf.setFieldId(FormField.ID_CREATED_DATE);
 				sf.setAscending(false);
 			}
 			String sfColumnNameTemp = sf.getFieldId();
@@ -4650,6 +4655,9 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			ucityWorkListCond.setOrders(new Order[]{new Order(sfColumnNameTemp, sf.isAscending())});
 
+			// 이상종료 인 것은 조회 하지 않기
+			if(runningOnly)
+				ucityWorkListCond.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 			UcityWorkList[] workLists = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkLists(userId, ucityWorkListCond, null);
 			
 			InstanceInfoList instanceInfoList = new InstanceInfoList();
@@ -4711,6 +4719,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					Property p6 = new Property("isSms", CommonUtil.toBoolean(workList.getIsSms())+"");
 					Property p7 = new Property("eventId",workList.getEventId());
 					Property p8;
+					Property p9 = new Property("runningTaskName", workList.getRunningTaskName());
 					if (workList.getEventTime() != null) {
 						Date tempDate = new Date();
 						tempDate.setTime(workList.getEventTime().getTime() + TimeZone.getDefault().getRawOffset());
@@ -4718,7 +4727,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					} else {
 						p8 = new Property("eventTime", null);
 					}
-					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7, p8};
+					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7, p8, p9};
 
 					pworkInfo.setExtentedProperty(properties);
 					
@@ -4918,9 +4927,11 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			//화면에서 사용하고 있는 컬럼의 상수값과 실제 프로세스 인스턴스 데이터 베이스의 컬럼 이름이 맞지 않아 컨버팅 작업
 			//한군데에서 관리 하도록 상수로 변경 필요
+			// 이벤트 시간으로 정렬
 			if (sf == null) {
 				sf = new SortingField();
-				sf.setFieldId(FormField.ID_CREATED_DATE);
+	            sf.setFieldId("eventTime");
+//				sf.setFieldId(FormField.ID_CREATED_DATE);
 				sf.setAscending(false);
 			}
 			String sfColumnNameTemp = sf.getFieldId();
@@ -5007,6 +5018,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					Property p6 = new Property("isSms", CommonUtil.toBoolean(workList.getIsSms())+"");
 					Property p7 = new Property("eventId",workList.getEventId());
 					Property p8;
+					Property p9 = new Property("runningTaskName", workList.getRunningTaskName());
 					if (workList.getEventTime() != null) {
 						Date tempDate = new Date();
 						tempDate.setTime(workList.getEventTime().getTime() + TimeZone.getDefault().getRawOffset());
@@ -5014,7 +5026,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					} else {
 						p8 = new Property("eventTime", null);
 					}
-					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7, p8};
+					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7, p8, p9};
 
 					pworkInfo.setExtentedProperty(properties);
 					
@@ -8132,6 +8144,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		String externalDisplay = (String)requestBody.get("externalDisplay");
 		String eventPlace = (String)requestBody.get("eventPlace");
 		String facilityId = (String)requestBody.get("facilityId");
+		String runningTaskName = (String)requestBody.get("runningTaskName");
 		
 		obj.setExtendedAttributeValue("ucity_serviceName", serviceName);
 		obj.setExtendedAttributeValue("ucity_eventId", eventId);
@@ -8142,7 +8155,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		obj.setExtendedAttributeValue("ucity_externalDisplay", externalDisplay);
 		obj.setExtendedAttributeValue("ucity_eventPlace", eventPlace);
 		obj.setExtendedAttributeValue("ucity_facilityId", facilityId);
-		
+		obj.setExtendedAttributeValue("ucity_runningtaskname", runningTaskName);
 	}
 	private String executeTask(Map<String, Object> requestBody, HttpServletRequest request, String action) throws Exception {
 		User cuser = SmartUtil.getCurrentUser();
@@ -10211,6 +10224,11 @@ public class InstanceServiceImpl implements IInstanceService {
 	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception {
 		return SwManagerFactory.getInstance().getUcityWorkListManager().getUcityChartXml(categoryName, periodName, serviceName, eventName);
 	}
+    // Excel Download 구현
+	@Override
+	public void getUcityChartExcel(String categoryName, String periodName, String serviceName, String eventName, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		SwManagerFactory.getInstance().getUcityWorkListManager().getUcityChartExcel(categoryName, periodName, serviceName, eventName, request, response);
+	}
 
 	//테스크의 이름으로 auditId 숫자만큼 쿼리를 날려서 카운터를 샌다
 	private int[][] getUcityAuditTaskCountsByTasks(boolean runningOnly) throws Exception {
@@ -10342,6 +10360,193 @@ public class InstanceServiceImpl implements IInstanceService {
 	public void removeProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
 		
+	}
+
+	//////////////////////////////////////////////////////////////// externalService //////////////////////////////////////////////
+	private static String toInstVariableByProps(String user, TskTask task, TskTaskDef taskDef, Property[] props) throws Exception {
+		
+		if (taskDef == null || CommonUtil.isEmpty(taskDef.getDocument()))
+			return null;
+		if (taskDef.getDocument().indexOf("actualParameters") < 0)
+			return null;
+		
+		AcpActualParameters actualParams = (AcpActualParameters)AcpActualParameters.toObject(taskDef.getDocument());
+		AcpActualParameter[] actualParamArray = actualParams.getActualParameters();
+		
+		InstanceVariables instVariables = new InstanceVariables();
+		for (int i = 0; i < actualParamArray.length; i++) {
+			AcpActualParameter actualParam = actualParamArray[i];
+			if (actualParam.getMode().equalsIgnoreCase("IN"))
+				continue;
+			InstanceVariable instVariable = new InstanceVariable();
+			
+			instVariable.setInstType("task");
+			instVariable.setId(actualParam.getId());
+			instVariable.setInstId(task.getProcessInstId());
+			instVariable.setVariableType(actualParam.getDataType());
+			instVariable.setVariableName(actualParam.getName());
+			instVariable.setVariableMode(actualParam.getMode());
+//			if (actualParam.getTargetType().equalsIgnoreCase("expression")) {
+//				instVariable.setVariableValue(actualParam.getExpression());
+//				instVariables.addInstanceVariable(instVariable);
+//				continue;
+//			}
+			if (props == null) {
+				instVariables.addInstanceVariable(instVariable);
+				continue;
+			}
+			for (int j = 0; j < props.length; j++) {
+				Property property = props[j];
+				if (property.getName().equalsIgnoreCase(actualParam.getId())) {
+					instVariable.setVariableValue(property.getValue());
+				} else {
+					continue;
+				}
+			}
+			instVariables.addInstanceVariable(instVariable);
+		}
+		return instVariables.toString();
+	}
+	private static TskTaskDef getStartTaskDef(String user, String processId) throws Exception {
+		Property[] extProps = new Property[] {new Property("processId", processId), new Property("startActivity", "true")};
+		TskTaskDefCond taskCond = new TskTaskDefCond();
+		taskCond.setExtendedProperties(extProps);
+		TskTaskDef[] taskDefs = SwManagerFactory.getInstance().getTskManager().getTaskDefs(user, taskCond, IManager.LEVEL_ALL);
+		if (CommonUtil.isEmpty(taskDefs))
+			throw new Exception(new StringBuffer("No start activity. -> processId:").append(processId).toString());
+		TskTaskDef taskDef = taskDefs[0];
+		taskDef.setExtendedPropertyValue("startActivity", "true");
+		return taskDefs[0];
+	}
+	@Override
+	public String initiateProcessByExternalFormInfo(String user, String title, String processId, Property[] props) throws Exception {
+		//시작 하려하는 프로세스의 시작태스크가 외부업무폼이 아니라면 에러 발생
+				if (CommonUtil.isEmpty(processId))
+					return null;
+				TskTaskDef taskDef = getStartTaskDef(user, processId);
+				
+				if (taskDef.getType().equalsIgnoreCase("SUBFLOW")) {
+					
+				} else {
+					if (taskDef == null || taskDef.getForm().indexOf("ef_") < 0)
+						throw new Exception("initiateProcessByExternalFormInfo fail : StartTaskDef Is Null Or FormId Is Not ExternalForm");
+				}
+
+				TskTask task = new TskTask();
+
+				task.setProcessInstId(CommonUtil.newId());
+				task.setType(taskDef.getType());
+				task.setTitle(title);
+				task.setStatus(CommonUtil.toDefault((String)MisUtil.taskStatusMap().get("started"), "started"));
+				
+				//시작 태스크의 리턴 ActualParameter정보를 가져와서 props 파라미터와 비교하여 instanceVaraible화 시켜서 시작 태스크에 저장하고 업무를 시작한다
+				if (taskDef.getType().equalsIgnoreCase("SUBFLOW")) {
+					String targetSubPackageId = taskDef.getSubFlowTargetId();
+					
+					PrcProcessCond cond = new PrcProcessCond();
+					cond.setDiagramId(targetSubPackageId);
+					PrcProcess[] prcs = SwManagerFactory.getInstance().getPrcManager().getProcesses(user, cond, IManager.LEVEL_ALL);
+					
+					if (prcs == null || prcs.length == 0)
+						return null;
+					
+					String targetSubProcessId = prcs[0].getProcessId();
+					
+					TskTaskDef subProcessStartTaskDef = getStartTaskDef(user, targetSubProcessId);
+					if (subProcessStartTaskDef == null)
+						return null;
+					
+					//task.setInstVariable(toInstVariableByProps(user, task, subProcessStartTaskDef, props));
+					task.setExtendedAttributeValue("externalFormInstValue", toInstVariableByProps(user, task, subProcessStartTaskDef, props));
+					
+				} else {
+					task.setInstVariable(toInstVariableByProps(user, task, taskDef, props));
+					
+				}
+				
+				task.setAssigner(user);
+				task.setAssignee(user);
+				task.setForm(taskDef.getForm());
+				task.setDef(taskDef.getObjId());
+				
+				task.setExtendedPropertyValue("processInstCreationUser", user);
+				
+				Date now = new Date();
+				task.setExpectStartDate(now);
+				task.setRealStartDate(now);
+				Date expectEndDate = new Date();
+				if (taskDef != null &&  !CommonUtil.isEmpty(taskDef.getDueDate())) {
+					//dueDate 는 분단위로 설정이 되어 있다
+					expectEndDate.setTime(now.getTime() + ((Long.parseLong(taskDef.getDueDate())) * 60 * 1000));
+				} else {
+					expectEndDate.setTime(now.getTime() + 1800000);
+				}
+				task.setExpectEndDate(expectEndDate);
+				
+				task.setIsStartActivity("true");
+				task.setWorkSpaceId(user);
+				task.setWorkSpaceType("4");
+				task.setAccessLevel("3");
+				
+				if (task.getType().equalsIgnoreCase("SUBFLOW")) {
+					task = SwManagerFactory.getInstance().getTskManager().setTask(user, task, IManager.LEVEL_ALL);
+				} else {
+					task = SwManagerFactory.getInstance().getTskManager().executeTask(user, task, "execute");
+				}
+				
+				return task.getProcessInstId();
+	}
+	@Override
+	public TskTask executeTaskByExternalFormInfo(String user, String action, String taskId, Property[] props) throws Exception {
+		if (CommonUtil.isEmpty(taskId))
+			return null;
+		TskTask task = SwManagerFactory.getInstance().getTskManager().getTask(user, taskId, IManager.LEVEL_ALL);
+		if (task == null)
+			throw new Exception("Not Exist Task Id : " + taskId);
+		if (task.getStatus().equalsIgnoreCase("21"))//완료 , 11:진행중
+			throw new Exception("ExecuteTask Id : " + task.getObjId() + " is Not Executable Status."  );
+		TskTaskDef taskDef = SwManagerFactory.getInstance().getTskManager().getTaskDef(user, task.getDef(), IManager.LEVEL_ALL);
+		task.setInstVariable(toInstVariableByProps(user, task, taskDef, props));
+		
+		if (!CommonUtil.isEmpty(user)) {
+			task.setAssignee(user);
+		} else {
+			task.setAssignee(task.getAssignee());
+		}
+		task = SwManagerFactory.getInstance().getTskManager().executeTask(user, task, CommonUtil.toDefault(action, "execute"));
+		return task;
+	}
+	public TskTask executeInstanceByUserIdAndExternalFormInfo(String user, String action, String instanceId, Property[] props) throws Exception {
+		//인스턴스 아디디로 업무를 실행시키되 담당자와 실행자가 같지 않으면 Exception발생
+		if (CommonUtil.isEmpty(instanceId))
+			return null;
+		TskTaskCond cond = new TskTaskCond();
+		cond.setProcessInstId(instanceId);
+		cond.setStatus("11");//진행중, 21:완료
+		//할당자가 실행자와 같아야 한다
+		cond.setAssignee(user);
+		
+		TskTask[] tasks = SwManagerFactory.getInstance().getTskManager().getTasks(user, cond, IManager.LEVEL_ALL);
+		
+		if (tasks == null || tasks.length == 0)
+			throw new Exception("Not Exist assignTask to user : " + user + " or Not Exist InstanceId : " + instanceId);
+		if (tasks.length > 1) {
+			StringBuffer tasksIds = new StringBuffer();
+			for (int i = 0 ; i < tasks.length; i++) {
+				tasksIds.append(tasks[i].getObjId()).append(",");;
+			}
+			throw new Exception("More than 1 Task result - instanceId : " + instanceId + ", taskIds : " + tasksIds.toString());
+		}
+		TskTask tsk = SwManagerFactory.getInstance().getTskManager().getTask(user, tasks[0].getObjId(), IManager.LEVEL_ALL);
+		TskTaskDef taskDef = SwManagerFactory.getInstance().getTskManager().getTaskDef(user, tsk.getDef(), IManager.LEVEL_ALL);
+		tsk.setInstVariable(toInstVariableByProps(user, tsk, taskDef, props));
+		if (!CommonUtil.isEmpty(user)) {
+			tsk.setAssignee(user);
+		} else {
+			tsk.setAssignee(tsk.getAssignee());
+		}
+		tsk = SwManagerFactory.getInstance().getTskManager().executeTask(user, tsk, CommonUtil.toDefault(action, "execute"));
+		return tsk;
 	}
 	
 }

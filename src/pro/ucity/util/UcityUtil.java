@@ -50,10 +50,12 @@ import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
 import pro.ucity.model.Adapter;
 import pro.ucity.model.CMHistory;
 import pro.ucity.model.DMHistory;
+import pro.ucity.model.Event;
 import pro.ucity.model.ICSituation;
 import pro.ucity.model.OPDisplay;
 import pro.ucity.model.OPSituation;
 import pro.ucity.model.OPSms;
+import pro.ucity.model.Service;
 import pro.ucity.model.System;
 import pro.ucity.model.UcityConstant;
 
@@ -63,6 +65,142 @@ public class UcityUtil {
 
 	public UcityUtil() {
 		super();
+	}
+
+	//Excel Download 시 service,eventname,periodName,categoryName 변경
+	public static String getServiceName(String serviceName) throws Exception{
+		
+		String[] allServices = Service.getAllServiceNames();
+		if(serviceName.isEmpty()) return null;
+		if(serviceName.equalsIgnoreCase(System.REPORT_OPTION_ALL_SERVICES)){
+			serviceName = "모든 서비스";
+		}else if(serviceName.equalsIgnoreCase(allServices[0])){
+			serviceName = "환경";
+		}else if(serviceName.equalsIgnoreCase(allServices[1])){
+			serviceName = "교통";
+		}else if(serviceName.equalsIgnoreCase(allServices[2])){
+			serviceName = "방범/방재";
+		}else if(serviceName.equalsIgnoreCase(allServices[3])){
+			serviceName = "시설물관리";
+		}else if(serviceName.equalsIgnoreCase(allServices[4])){
+			serviceName = "플랫폼";
+		}
+		return serviceName;
+	}
+		
+	public static String getEventName(String eventName, String serviceName) throws Exception{
+		
+		String[] allServices = Service.getAllServiceNames();
+		String[] eventNames = Event.getAllEventNames(serviceName);
+		
+		if(eventName.isEmpty()) return null;
+		if(serviceName.equalsIgnoreCase(allServices[0])){
+			if(eventName.equalsIgnoreCase(eventNames[0])){
+				eventName = "대기오염";
+			}else if(eventName.equalsIgnoreCase(eventNames[1])){
+				eventName = "환경경보";
+			}else if(eventName.equalsIgnoreCase(eventNames[2])){
+				eventName = "수질";
+			}else if(eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
+				eventName = "모든 이벤트";
+			}		
+		}else if(serviceName.equalsIgnoreCase(allServices[1])){
+			if(eventName.equalsIgnoreCase(eventNames[0])){
+				eventName = "교통혼잡";
+			}else if(eventName.equalsIgnoreCase(eventNames[1])){
+				eventName = "차량고장";
+			}else if(eventName.equalsIgnoreCase(eventNames[2])){
+				eventName = "뺑소니";
+			}else if(eventName.equalsIgnoreCase(eventNames[3])){
+				eventName = "교통사고";
+			}else if(eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
+				eventName = "모든 이벤트";
+			}		
+		}else if(serviceName.equalsIgnoreCase(allServices[2])){
+			if(eventName.equalsIgnoreCase(eventNames[0])){
+				eventName = "호우";
+			}else if(eventName.equalsIgnoreCase(eventNames[1])){
+				eventName = "지하차도침수";
+			}else if(eventName.equalsIgnoreCase(eventNames[2])){
+				eventName = "태풍";
+			}else if(eventName.equalsIgnoreCase(eventNames[3])){
+				eventName = "화재";
+			}else if(eventName.equalsIgnoreCase(eventNames[4])){
+				eventName = "수위경보";
+			}else if(eventName.equalsIgnoreCase(eventNames[5])){
+				eventName = "비상벨요청";
+			}else if(eventName.equalsIgnoreCase(eventNames[6])){
+				eventName = "용의차량추적";
+			}else if(eventName.equalsIgnoreCase(eventNames[7])){
+				eventName = "응급";
+			}else if(eventName.equalsIgnoreCase(eventNames[8])){
+				eventName = "미아";
+			}else if(eventName.equalsIgnoreCase(eventNames[9])){
+				eventName = "강도";
+			}else if(eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
+				eventName = "모든 이벤트";
+			}	
+		}else if(serviceName.equalsIgnoreCase(allServices[3])){
+			if(eventName.equalsIgnoreCase(eventNames[0])){
+				eventName = "상수도누수발생가능";
+			}else if(eventName.equalsIgnoreCase(eventNames[1])){
+				eventName = "시설물고장";
+			}else if(eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
+				eventName = "모든 이벤트";
+			}	
+		}else if(serviceName.equalsIgnoreCase(allServices[4])){
+			if(eventName.equalsIgnoreCase(eventNames[0])){
+				eventName = "도로통제";
+			}else if(eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
+				eventName = "모든 이벤트";
+			}	
+		}else{
+			if(eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS))
+				eventName = "모든 이벤트";
+		}
+		return eventName;
+	}
+
+	public static String getCategoryName(String categoryName) throws Exception{
+		
+		if(categoryName.isEmpty()) return null;
+		if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_TIME)){
+			categoryName = "시간대 별";
+		}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_AMPM)){
+			categoryName = "오전/오후";
+		}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_DAY)){
+			categoryName = "요일별";
+		}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_MONTH)){
+			categoryName = "월별";
+		}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_SEASON)){
+			categoryName = "계절별";
+		}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_QUARTER)){
+			categoryName = "분기별";
+		}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_HALFYEAR)){
+			categoryName = "반기별";
+		}else{
+			logger.error("CategoryName is Null");
+		}
+		return categoryName;
+	}
+
+	public static String getPeriodName(String periodName) throws Exception{
+		
+		if(periodName.isEmpty()) return null;
+		if(periodName.equalsIgnoreCase(System.REPORT_OPTION_ALL_HISTORY)){
+			periodName = "전체";
+		}else if(periodName.equalsIgnoreCase(System.REPORT_OPTION_THIS_YEAR)){
+			periodName = "올해";
+		}else if(periodName.equalsIgnoreCase(System.REPORT_OPTION_RECENT_A_YEAR)){
+			periodName = "최근 1년";
+		}else if(periodName.equalsIgnoreCase(System.REPORT_OPTION_RECENT_THREE_YEARS)){
+			periodName = "최근 3년";
+		}else if(periodName.equalsIgnoreCase(System.REPORT_OPTION_RECENT_FIVE_YEARS)){
+			periodName = "최근 5년";
+		}else{
+			logger.error("period null");
+		}
+		return periodName;
 	}
 
 	public static boolean isAbendable(ProcessWorkInstance instance){
@@ -324,10 +462,8 @@ public class UcityUtil {
 		for(int i=0; i<work.getDiagram().getTasks().length; i++){
 			SmartFormInfo form = work.getDiagram().getTasks()[i].getForm();
 			if(SmartUtil.isBlankObject(form)) continue;
-//			java.lang.System.out.println("[form no = [" + i + "], form name = [" + form.getName() + "]");
 			if(form.getName().equals(System.TASK_FORM_NAME_USERVICE_END)){
 				endForm = workService.getFormById(form.getId(), processId);
-//				java.lang.System.out.println("[endform]"+endForm.getName());
 				break;
 			}
 		}
@@ -342,11 +478,10 @@ public class UcityUtil {
 		
 		ProcessWorkInstance endProcessInstance = null;
 		//종료안된 process 중에 data 유무 파악
-		boolean processRunningData = false;
+		boolean processRunningData = true;
 		
 		PWInstanceInfo[] instances = (PWInstanceInfo[])instanceList.getInstanceDatas();
 		for(int i=0; i<instances.length; i++){			
-//			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
 			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWorkId().equals(processId)) continue;
 			ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, instances[i].getId());
 			if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
@@ -359,7 +494,7 @@ public class UcityUtil {
 			}
 			logger.info("eventId : " + eventId);
 			logger.info("workListEventId : " + workList.getEventId());
-			processRunningData = true;
+			processRunningData = false;
 		}
 		if(processRunningData == false){
 			InstanceInfoList nInstanceList = instanceService.getAllPWorkInstanceList(false, new RequestParams());
@@ -369,7 +504,6 @@ public class UcityUtil {
 			
 			PWInstanceInfo[] nInstances = (PWInstanceInfo[])nInstanceList.getInstanceDatas();
 			for(int i=0; i<nInstances.length; i++){			
-//				if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
 				if(!SmartUtil.isBlankObject(processId) && !nInstances[i].getWorkId().equals(processId)) continue;
 				ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, nInstances[i].getId());
 				if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
@@ -430,10 +564,8 @@ public class UcityUtil {
 		for(int i=0; i<work.getDiagram().getTasks().length; i++){
 			SmartFormInfo form = work.getDiagram().getTasks()[i].getForm();
 			if(SmartUtil.isBlankObject(form)) continue;
-//			java.lang.System.out.println("[form no = [" + i + "], form name = [" + form.getName() + "]");
 			if(form.getName().equals(System.TASK_FORM_NAME_USERVICE_END)){
 				endForm = workService.getFormById(form.getId(), processId);
-//				java.lang.System.out.println("[endform]"+endForm.getName());
 				break;
 			}
 		}
@@ -452,15 +584,13 @@ public class UcityUtil {
 		
 		PWInstanceInfo[] instances = (PWInstanceInfo[])instanceList.getInstanceDatas();
 		for(int i=0; i<instances.length; i++){			
-//			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
 			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWorkId().equals(processId)) continue;
 			ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, instances[i].getId());
 			if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
 			UcityWorkListCond cond = new UcityWorkListCond();
 			cond.setPrcInstId(processInstance.getId());
 			UcityWorkList workList = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkList("", cond, null);
-//			java.lang.System.out.println("facilityId : " + facilityId);
-//			java.lang.System.out.println("Worklist facilityId : " + workList.getFacilityId());
+
 			if(facilityId.equals(workList.getFacilityId())){
 				endProcessInstance = processInstance;
 				break;
@@ -479,15 +609,12 @@ public class UcityUtil {
 			
 			PWInstanceInfo[] nInstances = (PWInstanceInfo[])nInstanceList.getInstanceDatas();
 			for(int i=0; i<nInstances.length; i++){			
-//				if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
 				if(!SmartUtil.isBlankObject(processId) && !nInstances[i].getWorkId().equals(processId)) continue;
 				ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, nInstances[i].getId());
 				if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
 				UcityWorkListCond cond = new UcityWorkListCond();
 				cond.setPrcInstId(processInstance.getId());
 				UcityWorkList workList = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkList("", cond, null);
-//				java.lang.System.out.println("facilityId : " + facilityId);
-//				java.lang.System.out.println("Worklist facilityId : " + workList.getFacilityId());
 				if(facilityId.equals(workList.getFacilityId())){
 					endProcessInstance = processInstance;
 					break;
@@ -631,8 +758,11 @@ public class UcityUtil {
 		
 		IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
 		IWorkService workService = SwServiceFactory.getInstance().getWorkService();
+		//처음 was 올릴때 페이지를 20개가 아닌 200개를 읽음.
+		RequestParams params = new RequestParams();
+		params.setPageSize(500);
 		
-		InstanceInfoList instanceList = instanceService.getAllUcityPWorkInstanceList(true, new RequestParams(), -1);
+		InstanceInfoList instanceList = instanceService.getAllUcityPWorkInstanceList(true, params, -1);
 		if(SmartUtil.isBlankObject(instanceList) || SmartUtil.isBlankObject(instanceList.getInstanceDatas())){
 			return;
 		}
@@ -855,10 +985,14 @@ public class UcityUtil {
 		
 		InetAddress addr;
 		String hostAddr = null;
+		String serverIp = null;
 		
 		try {
+			//자신의 host를 받아오며, ip주소의 마지막 2~3글자를 가져옴.
 			addr = InetAddress.getLocalHost();
 			hostAddr = addr.getHostAddress();
+			String[] serverIps = hostAddr.split("\\.");
+		    serverIp = serverIps[3];
 		} catch (UnknownHostException e) {
 			logger.info("Localhost Not Found");
 		}		
@@ -872,7 +1006,9 @@ public class UcityUtil {
 				int hostIpLen = hostIpListArray.length;                      // array 갯수
 				for( int i = 0 ; i < hostIpLen ; i++  ){                    
 					String hostIp = hostIpListArray[i];
-					if(!hostAddr.equalsIgnoreCase(hostIp)){               // 자기 hostIp와 확인하여, 틀릴 시만 send.
+					String[] hostIps = hostIp.split("\\.");
+					String ipEnd = hostIps[3]; 
+					if(!serverIp.equalsIgnoreCase(ipEnd)){               // 자기 hostIp의 마지막 2~3글자와 비교하여, 틀릴 시만 send.
 					    DatagramPacket dp = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(hostIp), UcityUtilServer.UDP_ABEND_PORT);
 					    ds.send(dp);
 					    ds.close();				
@@ -887,25 +1023,20 @@ public class UcityUtil {
 	}
 	
 	public static void stopAllPollingsForInstance(String instanceId) throws Exception{
-		logger.info("1단계 통과");
-		logger.info(UcityUtil.pollingQueue);
+		//소켓통신으로 자기 Host주소와 비교하여,다른 곳에다 쏨.
 		sendAbendMessage(instanceId);
 		if(SmartUtil.isBlankObject(instanceId) || UcityUtil.pollingQueue.isEmpty()){
-			logger.info("2단계 통과");
 //			UcityUtilSocket.UcitySocketIn(instanceId);
 			return;
 		}
 		for(int i=0; i<pollingQueue.size(); i++){
-			logger.info("3단계 통과");
 			PollingModel pollingModel = pollingQueue.get(i);
-			logger.info("pollingQuere count = " + i + " 개");
 			if(!SmartUtil.isBlankObject(pollingModel.getTaskInstance()) 
 					&& !SmartUtil.isBlankObject(pollingModel.getTaskInstance().getWorkInstance()) 
 					&& !SmartUtil.isBlankObject(pollingModel.getTaskInstance().getWorkInstance().getId()) 
 					&& pollingModel.getTaskInstance().getWorkInstance().getId().equals(instanceId)){
 				pollingModel.setInterrupted(true);
-//			}else{
-//				UcityUtilSocket.UcitySocketIn(instanceId);
+				logger.info("정상적으로 이상종료 처리 되었습니다.");
 			}
 		}
 		
@@ -914,12 +1045,12 @@ public class UcityUtil {
 		if(SmartUtil.isBlankObject(instanceId) || SmartUtil.isBlankObject(UcityUtil.pollingQueue)) return;
 		for(int i=0; i<pollingQueue.size(); i++){
 			PollingModel pollingModel = pollingQueue.get(i);
-			logger.info("pollingQuere count = " + i + " 개");
 			if(!SmartUtil.isBlankObject(pollingModel.getTaskInstance()) 
 					&& !SmartUtil.isBlankObject(pollingModel.getTaskInstance().getWorkInstance()) 
 					&& !SmartUtil.isBlankObject(pollingModel.getTaskInstance().getWorkInstance().getId()) 
 					&& pollingModel.getTaskInstance().getWorkInstance().getId().equals(instanceId)){
 				pollingModel.setInterrupted(true);
+				logger.info("정상적으로 이상종료 처리 되었습니다.");
 			}
 		}
 		
@@ -931,25 +1062,27 @@ public class UcityUtil {
 			return;
 		for(int i=0; i<pollingQueue.size(); i++){
 			PollingModel pollingModel = pollingQueue.get(i);
-			logger.info("=============== KILL THREAD BEGIN ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
-			pollingModel.getThread().stop();
-			logger.info("=============== KILL THREAD DONE ! Thread Id :  "+ pollingModel.getThread().getId() +" ==================");
+			pollingModel.getThread().stop();			
 		}
+		logger.info("Thread Exit");
 	}
 	synchronized public static void invokePollingForRunningTask(String eventId, String tableName, String status, String displayId, String deviceId, String smsId, String timeout, TaskInstance taskInstance) throws Exception{
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(taskInstance)) return;
-		
+		String tbName = UcityConstant.getQueryByKey("System.TABLE_NAME_COMMID_TRACE");
 		long timeoutInMilliseconds =  System.DEFAULT_TASK_TIMEOUT;
 		try{
-			timeoutInMilliseconds = Integer.parseInt(timeout) * 60*1000;
+			if(tableName.equalsIgnoreCase(tbName)){
+				timeoutInMilliseconds = Integer.parseInt(timeout) * 6*1;
+			}else{
+				timeoutInMilliseconds = Integer.parseInt(timeout) * 60*1000;
+			}
+			
 		}catch (Exception e){
-//			java.lang.System.out.println("#####parseInt Exception [" + timeout + "]#####" );
 			logger.error("UcityUtil : invokePollingForRunningTask.806");
 		}
 		
 		int index = -1;
 		if((index = addPolling(eventId, tableName, status, displayId, deviceId, smsId, timeoutInMilliseconds, taskInstance)) == -1){
-//			java.lang.System.out.println("Add Polling already running, Event Id=" + eventId + ", Task Name=" + taskInstance.getName());
 			return;		
 		}
 
@@ -974,8 +1107,9 @@ public class UcityUtil {
 							try {
 								if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_DISPLAY)
 									dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId, deviceId);
-								else if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_SMS)
+								else if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_SMS){
 									dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId, smsId);
+								}
 								else
 									dataRecord = UcityUtil.readTaskTable(tableName, eventId, status, deviceId);
 							} catch(Exception e) {
@@ -1046,11 +1180,14 @@ public class UcityUtil {
 										break;
 									}
 								}
-							}
+							}	
 						}catch(InterruptedException e){
 							break;
 						}catch(Exception e){
+							
 						}
+					}
+					
 					if(timeout==0 && SmartUtil.isBlankObject(dataRecord)){
 						logger.info("############ END(TIMEOUT) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 						try{
@@ -1061,12 +1198,9 @@ public class UcityUtil {
 						}
 					}else if(isPollingInterrupted(Thread.currentThread())){
 						logger.info("############ END(INTERRUPTED) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-						break;
 					}else{
 						logger.info("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-					}
-//					PollingModel pollingTask = getPolling(Thread.currentThread());					
-				}
+					}			
 					PollingModel pollingTask = getPolling(Thread.currentThread());
 					logger.info("pollingTask = " + pollingTask);
 			}

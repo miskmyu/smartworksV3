@@ -13,6 +13,7 @@
 			value="org.springframework.web.servlet.view.JstlView" />
 		<beans:property name="prefix" value="" />
 		<beans:property name="suffix" value="" />
+		<beans:property name="order" value="1"/>
 	</beans:bean>
 
 	<resources location="/**" mapping="/" />
@@ -21,6 +22,16 @@
 		<!-- <beans:property name="uploadTempDir" ref="uploadDirResource" /> -->
 		<beans:property name="defaultEncoding"><beans:value>UTF-8</beans:value></beans:property>
 	</beans:bean>
+	
+	<!-- ================================= DOWNLOAD VIEW RESOLVER (U-CITY에서 사용함(안쓸경우 아래 주석 후, 위의 viewResolver에서 order 프로퍼티 주석할 것))==================================== -->
+	<beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+	      	<beans:property name="order" value="0"/>
+    </beans:bean>
+    <beans:bean id="down" class="pro.ucity.controller.UcityController"/>
+    <beans:bean id="download" class="pro.ucity.util.ExcelDownload"/>
+    <!-- 여기까기 DOWNLOAD VIEW RESOLVER -->
+    
+    
 	<!-- <beans:bean id="uploadDirResource" class="org.springframework.core.io.FileSystemResource">
 		<beans:constructor-arg><beans:value>D:/apache-tomcat-7.0.22-windows-x64/apache-tomcat-7.0.22/uploadFiles/temp</beans:value></beans:constructor-arg>
 	</beans:bean> -->

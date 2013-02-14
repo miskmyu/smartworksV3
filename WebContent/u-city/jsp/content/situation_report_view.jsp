@@ -16,7 +16,19 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page import="net.smartworks.service.ISmartWorks"%>
-
+<script type="text/javascript">
+function ExcelPage() {
+	var workReport = $('div.js_work_report_page');
+	var categoryName = workReport.find('.js_select_ucity_category option:selected').attr('value');
+	var periodName = workReport.find('.js_select_ucity_period option:selected').attr('value');
+	var serviceName = workReport.find('.js_select_ucity_service option:selected').attr('value');
+	var eventName = workReport.find('.js_select_ucity_event:visible option:selected').attr('value');
+	var url = "/smartworksV3/ucity_get_chart_excel.sw?categoryName="+ encodeURIComponent(categoryName) +"&periodName="+ encodeURIComponent(periodName) +"&serviceName="+ encodeURIComponent(serviceName) +"&eventName="+ encodeURIComponent(eventName);
+	
+    document.getElementById('fileDown').src = url;
+	document.getElementById('fileDown').location.reload();
+}
+</script>
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
@@ -86,7 +98,14 @@
 
 	<div class="glo_btn_space">
 		<div class="fr">
-	
+           <!-- Excel Download 구현 -->
+			<span class="btn_gray"> 
+				<a href="javascript:ExcelPage()"> 
+					<span class="txt_btn_start"></span> 
+					<span class="txt_btn_center"><fmt:message key="common.button.excel_download"/></span> 
+					<span class="txt_btn_end"></span>
+				</a> 
+			</span> 	
 			<span class="btn_gray"> 
 				<a href="" class="js_situation_report_execute"> 
 					<span class="txt_btn_start"></span> 
@@ -111,4 +130,8 @@
  -->		
 	</div>
 </div>
+<!-- 파일다운로드시 새창 안띄우기 -->
+<iframe id="fileDown" style='visibility:hidden' src="" width="1" height="1"></iframe>
+<!-- 파일다운로드시 새창 안띄우기 -->
+
 <!-- 전체 레이아웃//-->

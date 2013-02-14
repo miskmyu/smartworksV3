@@ -57,10 +57,8 @@ public class DBReadScheduler{
 				logger.error("startScheduler error : DBReadScheduler.startScheduler.78");
 			}
 		}
-		logger.info( schedulerCount + "번째 스케쥴러 동작 시작 : " + new Date());
 		Adapter.scheduler();
 		OPSituation.scheduler();
-		logger.info( schedulerCount +"번째 스케쥴러 동작 종료 : " + new Date());
 
 		isDbReadSchedulerRunning = false;	
 		

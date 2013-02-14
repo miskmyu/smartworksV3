@@ -1214,11 +1214,13 @@ CREATE TABLE sworgconfig(
 	companyid varchar(100) NULL,
 	useMessagingService bit,
 	useChattingService bit,
+	isactivity int NULL,
+	useMessagingService bit,
+	userReturnFunction bit,
 	creator varchar(50) NULL,
 	createdtime datetime NULL,
 	modifier varchar(50) NULL,
 	modifiedtime datetime NULL,
-	isactivity int NULL,
 	primary key (id)
 )
 ;

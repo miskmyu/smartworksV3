@@ -8,6 +8,7 @@
 
 package pro.ucity.sso.filter;
 
+import ifez.framework.exception.CommonException;
 import ifez.framework.session.SessionVO;
 import ifez.framework.session.UserProgramAuthInfoVO;
 import ifez.framework.session.service.UserSessionVO;
@@ -25,13 +26,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
-
-import pro.ucity.model.Adapter;
-import pro.ucity.model.UcityConstant;
-
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.util.SmartUtil;
+
+import org.apache.log4j.Logger;
+
+import pro.ucity.model.UcityConstant;
 
 public class UcitySSOFilter implements Filter {
     
@@ -122,15 +122,22 @@ public class UcitySSOFilter implements Filter {
 		}else{
 //			System.out.println("SSO 연계를 통한 접근이 아닙니다. Session 이 생성되지 않았습니다. ");
 			request.setAttribute("errorCode", "100"); 
-			//throw new CommonException(commonMessageSource.getMessage("biz.error.com.001"));  // 잘못된 접근입니다. 로그인 후 이용해 주십시오.
+	//		throw new CommonException(commonMessageSource.getMessage("biz.error.com.001"));  // 잘못된 접근입니다. 로그인 후 이용해 주십시오.
 			logger.error("잘못된 접근입니다. 로그인 후 이용해 주십시오.");  // 잘못된 접근입니다. 로그인 후 이용해 주십시오.
+				try {
+					throw new CommonException("잘못된 접근입니다. 로그인 후 이용해 주십시오.");
+				} catch (CommonException e) {
+					// TODO Auto-generated catch block
+				}
 		}
 		
 		if( !retriveUserProgramAuthInfo(authProgramList , url) && !exceptionPassUrlCheck(url) ){
 //			System.out.println("해당 화면에 대한 접근 권한이 없습니다.");
-			request.setAttribute("errorCode", "400"); 
-			//throw new CommonException(commonMessageSource.getMessage("biz.error.com.004"));  // 해당 화면에 대한 접근 권한이 없습니다.        	
+			request.setAttribute("errorCode", "400");  
+			//throw new CommonException(commonMessageSource.getMessage("biz.error.com.004"));  // 해당 화면에 대한 접근 권한이 없습니다.
+			
 			logger.error("해당 화면에 대한 접근 권한이 없습니다.");  // 해당 화면에 대한 접근 권한이 없습니다.    	
+			throw new ServletException("해당 화면에 대한 접근 권한이 없습니다."); // 500
         }
 
 //		return result;
@@ -149,7 +156,7 @@ public class UcitySSOFilter implements Filter {
 		
 		if( authProgramList != null){
 			for( UserProgramAuthInfoVO userProgram : authProgramList ){
-				if(  userProgram.getProgramUrl().indexOf(url) >= 0 ){
+				if( userProgram.getProgramUrl().indexOf(url) >= 0 ){
 					authCheck = true;
 					break;
 				}
@@ -165,16 +172,20 @@ public class UcitySSOFilter implements Filter {
 //		} else {
 //			return false;
 //		}
-		String exceptionPassUrlList = UcityConstant.getUrlByKey("BPM.PASSURLLIST");
-		if( exceptionPassUrlList != null && exceptionPassUrlList.trim().length() != 0 ){
-			String[] exceptionPassUrlArray = exceptionPassUrlList.split(":");
-			for( int i = 0 ; i < exceptionPassUrlArray.length ; i++  ){
-				if(  url.indexOf(exceptionPassUrlArray[i]) >= 0 ){
-					return true;
-				}
-			}  
+		if(!SmartUtil.isEmpty(UcityConstant.getUrlByKey("BPM.PASSURLLIST"))){
+			String exceptionPassUrlList = UcityConstant.getUrlByKey("BPM.PASSURLLIST");
+			
+			if( exceptionPassUrlList != null && exceptionPassUrlList.trim().length() != 0 ){
+				String[] exceptionPassUrlArray = exceptionPassUrlList.split(":");
+				for( int i = 0 ; i < exceptionPassUrlArray.length ; i++  ){
+					if(  url.indexOf(exceptionPassUrlArray[i]) >= 0 ){
+						return true;
+					}
+				}  
+			}
+			logger.info("return false");	
 		}
-		logger.info("return false");
+		
 		return false;
 	}
 	

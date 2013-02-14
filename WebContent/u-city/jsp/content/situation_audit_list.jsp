@@ -79,8 +79,8 @@
  	if(SmartUtil.isBlankObject(auditId)) auditId = Audit.DEFAULT_AUDIT_ID_STR;
  	int auditNumber = Integer.parseInt(auditId);
  	
- 	//int[][] auditTasks = smartWorks.getUcityAuditTaskCounts(true);
- 	int[][] auditTasks = null;
+ 	int[][] auditTasks = smartWorks.getUcityAuditTaskCounts(true);
+ 	//int[][] auditTasks = null;
  	
 	String workId = System.getProcessId(System.PROCESS_ENV_WEAHTER);
 	User cUser = SmartUtil.getCurrentUser();

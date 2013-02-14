@@ -839,12 +839,15 @@ ALTER TABLE swmailaccount add senderUserTitle varchar(50);
 ALTER TABLE sworgconfig add useMessagingService bit;
 update sworgconfig set useMessagingService='0'
 
-ALTER TABLE sworgconfig add useChattingService bit;
-update sworgconfig set useChattingService='0'
-
 ALTER TABLE SwMailServer add pwChangeAPI character varying(300);
 ALTER TABLE SwMailServer add pwChangeDefaultData character varying(100);
 ALTER TABLE SwMailServer add pwChangeParamId character varying(50);
 ALTER TABLE SwMailServer add pwChangeParamOldPW character varying(50);
 ALTER TABLE SwMailServer add pwChangeParamNewPW character varying(50);
 
+
+ALTER TABLE sworgconfig add userReturnFunction bit;
+update sworgconfig set userReturnFunction='0'
+
+ALTER TABLE sworgconfig add useChattingService bit;
+update sworgconfig set useChattingService='0'
