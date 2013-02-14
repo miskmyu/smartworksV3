@@ -1,3 +1,6 @@
+<%@page import="net.smartworks.server.engine.config.model.SwcExternalFormParameter"%>
+<%@page import="net.smartworks.server.engine.config.model.SwcExternalForm"%>
+<%@page import="net.smartworks.server.engine.config.model.SwcExternalFormCond"%>
 <%@page language="java" contentType="text/xml; charset=UTF-8" pageEncoding="UTF-8"%> 
 <%@page import="net.smartworks.server.engine.process.approval.model.AprApprovalDef"%>
 <%@page import="net.smartworks.model.approval.ApprovalLine"%>
@@ -1312,7 +1315,122 @@
 			
 			
 		} else if(method.equals("webAppServiceList") ) {
-			throw new Exception("method : webAppServiceList - Not Include From V2");
+
+
+			String objId = request.getParameter("objId");
+			compId = request.getParameter("compId");
+			
+			SwManagerFactory factory = SwManagerFactory.getInstance();
+			ISwcManager webMgr = factory.getSwcManager();
+			SwcExternalFormCond cond = new SwcExternalFormCond();
+			SwcExternalForm[] webAppService = null;
+			
+			if(objId != null) {
+				cond.setObjId(objId);
+				webAppService = webMgr.getExternalForms(userId, cond, "all");	
+			} else if(compId != null) {
+				cond.setCompanyId(compId);
+				webAppService = webMgr.getExternalForms(userId, cond, "all");
+			}
+			
+			StringBuffer buffers = new StringBuffer();
+			StringBuffer inparmeter = new StringBuffer();
+			StringBuffer outparmeter = new StringBuffer();
+			
+			if(webAppService != null) {
+				
+				buffer.append(" <Result status=\"OK\">");
+				buffer.append(" <webAppServiceList size=\""+webAppService.length+"\"> ");
+				
+				for (int j=0; j<webAppService.length; j++) {
+					String webcompanyId = webAppService[j].getCompanyId();
+					String serviceUrl = webAppService[j].getWebAppServiceUrl();
+					String serviceName = webAppService[j].getWebAppServiceName();
+					String modifyMethod = webAppService[j].getModifyMethod();
+					String viewMethod = webAppService[j].getViewMethod();
+					String webobjId = webAppService[j].getObjId();
+					String description = webAppService[j].getDescription();
+					
+					buffers.append(" <webAppService compId=\""+ webcompanyId +"\" objId=\""+webobjId+"\" webAppServiceName=\""+serviceName+"\" webAppServiceUrl=\""+serviceUrl+"\"  modifyMethod=\""+modifyMethod+"\" viewMethod=\""+viewMethod+"\"> ");
+					buffers.append(" <description><![CDATA[ ");
+					buffers.append(description);
+					buffers.append(" ]]></description> ");	
+					
+					SwcExternalFormParameter[] params = webAppService[j].getSwcExternalFormParameters();
+					
+					if (!CommonUtil.isEmpty(params)) {
+						List<SwcExternalFormParameter> viewParamList = new ArrayList<SwcExternalFormParameter>();
+						List<SwcExternalFormParameter> editParamList = new ArrayList<SwcExternalFormParameter>();
+						List<SwcExternalFormParameter> returnParamList = new ArrayList<SwcExternalFormParameter>();
+						
+						for(int u = 0; u < params.length; u++) {
+							String type = params[u].getType();
+							if(type.equals("M")) {
+								editParamList.add(params[u]);
+							} else if (type.equals("V")) {
+								viewParamList.add(params[u]);
+							} else if (type.equals("R")) {
+								returnParamList.add(params[u]);
+							}
+						}	
+						
+						if (CommonUtil.isEmpty(editParamList)) {
+							buffers.append("<webAppServiceModifyParameters/>");
+						} else {
+							buffers.append("<webAppServiceModifyParameters>");
+							for (int i = 0; i < editParamList.size(); i++) {
+								SwcExternalFormParameter appServiceParam = editParamList.get(i);
+								String modifyName = appServiceParam.getParameterName();
+								String modifyType = appServiceParam.getParameterType();
+								String modifyVariable = appServiceParam.getVariableName();
+								buffers.append("<webAppServiceModifyParameter modifyName=\"" +modifyName+"\" modifyType=\""+modifyType+"\" modifyVariableName=\""+modifyVariable+"\">");
+								buffers.append("</webAppServiceModifyParameter>");
+								
+							}
+							buffers.append("</webAppServiceModifyParameters>");
+						}
+
+						if (CommonUtil.isEmpty(viewParamList)) {
+							buffers.append("<webAppServiceViewParameters/>");
+						} else {
+							buffers.append("<webAppServiceViewParameters>");
+							for (int i = 0; i < viewParamList.size(); i++) {
+								SwcExternalFormParameter appServiceParam = viewParamList.get(i);
+								String viewName = appServiceParam.getParameterName();
+								String viewType = appServiceParam.getParameterType();
+								String viewVariable = appServiceParam.getVariableName();
+								buffers.append("<webAppServiceViewParameter viewName=\"" +viewName+"\" viewType=\""+viewType+"\" viewVariableName=\""+viewVariable+"\">");
+								buffers.append("</webAppServiceViewParameter>");	
+							}
+							buffers.append("</webAppServiceViewParameters>");
+						}
+
+						if (CommonUtil.isEmpty(returnParamList)) {
+							buffers.append("<webAppServiceReturnParameters/>");
+						} else {
+							buffers.append("<webAppServiceReturnParameters>");
+							for (int i = 0; i < returnParamList.size(); i++) {
+								SwcExternalFormParameter appServiceParam = returnParamList.get(i);
+								String returnName = appServiceParam.getParameterName();
+								String returnType = appServiceParam.getParameterType();
+								String returnVariable = appServiceParam.getVariableName();
+								buffers.append("<webAppServiceReturnParameter returnName=\"" +returnName+"\" returnType=\""+returnType+"\" returnVariableName=\""+returnVariable+"\">");
+								buffers.append("</webAppServiceReturnParameter>");	
+							}
+							buffers.append("</webAppServiceReturnParameters>");
+						}
+						
+					}	
+					buffers.append("</webAppService>");
+					
+				}
+				buffer.append(buffers.toString());
+				buffer.append("</webAppServiceList>");
+				buffer.append("</Result>");
+			}
+			
+			
+			
 		} else {
 			// 에러 - 지원하지 않는 메소드
 			buffer.append("<Result status=\"Failed\"><message>Invalid method! Not found method parameter</message><trace/></Result>");

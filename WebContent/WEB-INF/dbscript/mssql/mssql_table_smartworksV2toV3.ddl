@@ -845,3 +845,7 @@ ALTER TABLE SwMailServer add pwChangeParamId character varying(50);
 ALTER TABLE SwMailServer add pwChangeParamOldPW character varying(50);
 ALTER TABLE SwMailServer add pwChangeParamNewPW character varying(50);
 
+
+ALTER TABLE sworgconfig add userReturnFunction bit;
+update sworgconfig set userReturnFunction='0'
+
