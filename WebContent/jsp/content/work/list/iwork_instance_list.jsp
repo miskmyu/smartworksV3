@@ -25,6 +25,7 @@
 <%@ page import="net.smartworks.service.ISmartWorks"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%
+
 	ISmartWorks smartWorks = (ISmartWorks)request.getAttribute("smartWorks");
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
 

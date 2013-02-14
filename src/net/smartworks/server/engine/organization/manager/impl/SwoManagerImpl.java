@@ -1624,7 +1624,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append("update SwoConfig set");
 				buf.append(" companyId=:companyId, name=:name, domainId=:domainId, smtpAddress=:smtpAddress, userId=:userId, password=:password,");
 				buf.append(" creationDate=:creationDate, creationUser=:creationUser,");
-				buf.append(" modificationUser=:modificationUser, modificationDate=:modificationDate, isActivity=:isActivity, useMessagingService=:useMessagingService");
+				buf.append(" modificationUser=:modificationUser, modificationDate=:modificationDate, isActivity=:isActivity, useMessagingService=:useMessagingService, userReturnFunction=:userReturnFunction " );
 				buf.append(" where id=:id");
 				Query query = this.getSession().createQuery(buf.toString());
 				query.setString(SwoConfig.A_COMPANYID, obj.getCompanyId());
@@ -1639,6 +1639,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setTimestamp(SwoConfig.A_MODIFICATIONDATE, obj.getModificationDate());
 				query.setBoolean(SwoConfig.A_ISACTIVITY, obj.isActivity());
 				query.setBoolean(SwoConfig.A_USEMESSAGINGSERVICE, obj.isUseMessagingService());
+				query.setBoolean(SwoConfig.A_USERRETURNFUNCTION, obj.isUserReturnFunction());
 				query.setString(SwoConfig.A_ID, obj.getId());
 				
 			}				
@@ -1782,7 +1783,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			if (level.equals(LEVEL_ALL)) {
 				buf.append(" obj");
 			} else {
-				buf.append(" obj.userId, obj.smtpAddress, obj.password, obj.isActivity, obj.useMessagingService");
+				buf.append(" obj.userId, obj.smtpAddress, obj.password, obj.isActivity, obj.useMessagingService, obj.userReturnFunction ");
 			}
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
@@ -1799,6 +1800,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					obj.setPassword((String)fields[j++]);
 					obj.setActivity(CommonUtil.toBoolean(fields[j++]));
 					obj.setUseMessagingService(CommonUtil.toBoolean(fields[j++]));
+					obj.setUserReturnFunction(CommonUtil.toBoolean(fields[j++]));
 					objList.add(obj);
 				}
 				list = objList;
