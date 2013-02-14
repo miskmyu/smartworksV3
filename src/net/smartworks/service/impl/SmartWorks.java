@@ -1719,6 +1719,11 @@ public class SmartWorks implements ISmartWorks {
 	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception {
 		return instanceService.getUcityChartXml(categoryName, periodName, serviceName, eventName);
 	}
+	
+	@Override
+	public void getUcityChartExcel(String categoryName, String periodName, String serviceName, String eventName, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		instanceService.getUcityChartExcel(categoryName, periodName, serviceName, eventName, request, response);
+	}
 
 	@Override
 	public int[][] getUcityAuditTaskCounts(boolean runningOnly) throws Exception {

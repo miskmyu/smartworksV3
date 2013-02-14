@@ -8,6 +8,7 @@
 
 package pro.ucity.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,9 +25,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -158,7 +157,34 @@ public class UcityController extends ExceptionInterceptor {
 		map.put("record", chartXml);
 		return map;
 	}	
+	//Excel download 구현.
+//	@RequestMapping(value = "/ucity_get_chart_excel", method = RequestMethod.GET)
+//	public @ResponseBody void  ucityGetChartExcel(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//		String categoryName = request.getParameter("categoryName");
+//		String periodName = request.getParameter("periodName");
+//		String serviceName = request.getParameter("serviceName");
+//		String eventName = request.getParameter("eventName");
+//		smartworks.getUcityChartExcel(categoryName, periodName, serviceName, eventName, request, response);
+//	}	
+	@RequestMapping("/ucity_get_chart_excel")
+	public ModelAndView  ucityGetChartExcel(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		//파일 경로는 절대 경로로 지정해준다.
+		final String FULLPATH = "/ssw/bpm/was/file/MonitoringChart.xls";
+		//javaScript 한글깨짐수정
+		request.setCharacterEncoding("UTF-8");
+		String categoryName = request.getParameter("categoryName");
+		String periodName = request.getParameter("periodName");
+		String serviceName = request.getParameter("serviceName");
+		String eventName = request.getParameter("eventName");
 
+		//엑셀템플릿에 데이터를 쓰는 메소드
+		smartworks.getUcityChartExcel(categoryName, periodName, serviceName, eventName, request, response);
+        //파일만들고, DOWNLOAD VIEW RESOLVER 로 Return
+		File file = new File(FULLPATH);
+		return new ModelAndView("download", "downloadFile", file);
+		
+	}	
 	@RequestMapping(value = "/abend_ucity_instance", method = RequestMethod.POST) 
 	@ResponseStatus(HttpStatus.OK) 
 	public @ResponseBody void abendUcityInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception { 

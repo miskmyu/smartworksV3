@@ -16,15 +16,16 @@ public class UcityUtilServer implements ServletContextListener{
 	
 	public static final int TCP_CONNECTION_PORT = 5775;
 	public static final int UDP_ABEND_PORT  = 5776;
+	public static final int CONNECT_TIME_OUT = 10000;
 	
 //	ServerSocket serverSocket = null;
 
 	private static Logger logger = Logger.getLogger(UcityUtilServer.class);
 	
 	DataOutputStream dou;
-	DataInputStream din;
-	
+	DataInputStream din;	
 	DatagramSocket ds;
+	
 	public static boolean start;
 
 	/**
@@ -41,7 +42,7 @@ public class UcityUtilServer implements ServletContextListener{
 		public UdpServer() {
 			try {
 			   ds = new DatagramSocket(UDP_ABEND_PORT);
-			   ds.setSoTimeout(10000);
+			   ds.setSoTimeout(CONNECT_TIME_OUT);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				logger.info("ABEND UDP Error",e);
@@ -67,7 +68,6 @@ public class UcityUtilServer implements ServletContextListener{
 					    }catch (Exception e){
 							logger.info("stopAllPolling error",e);				    	
 					    }
-					    break;
 					}catch(Exception e){
 						if(start == false){
 							break;
@@ -95,7 +95,7 @@ public class UcityUtilServer implements ServletContextListener{
 			// TODO Auto-generated catch block
 			logger.info("Servcer Socket Error ( Closing... )", e);
 		}
-		logger.info("종료");
+		logger.info("[ Server Socket End ]");
 	}
 
 	@Override

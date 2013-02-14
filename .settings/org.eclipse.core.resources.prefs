@@ -14,5 +14,7 @@ encoding//WebContent/jsp/nav/mail.jsp=UTF-8
 encoding//WebContent/jsp/nav/space_profile.jsp=UTF-8
 encoding//WebContent/sera/jsp/login.jsp=UTF-8
 encoding//WebContent/sera/jsp/user_personal_terms.jsp=UTF-8
+encoding//WebContent/u-city/jsp/error/error404.jsp=UTF-8
+encoding//WebContent/u-city/jsp/error/error500.jsp=UTF-8
 encoding//WebContent/u-city/jsp/startEmpty.jsp=UTF-8
 encoding/<project>=UTF-8

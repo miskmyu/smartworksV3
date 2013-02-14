@@ -23,6 +23,8 @@
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ page import="net.smartworks.service.ISmartWorks"%>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="javax.xml.bind.ValidationException" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
@@ -37,6 +39,11 @@
 	String serviceCode = request.getParameter("serviceCode");
 	String eventCode = request.getParameter("eventCode");
 	String situationStatus = request.getParameter("statusCode");
+	
+	Pattern manualPattern = Pattern.compile(".*[^가-힣a-zA-Z0-9].*");
+	
+
+		
 	if(SmartUtil.isBlankObject(situationStatus))
 		situationStatus = OPSituation.STATUS_SITUATION_OCCURRED;
 	else if(situationStatus.equals(STATUS_CODE_OCCURRENCE))
@@ -53,6 +60,10 @@
 	 	eventId = Event.ID_ENV_GALE;
 	else
 		eventId = Event.getEventIdByCode(userviceCode, serviceCode, eventCode);
+	
+	if(manualPattern.matcher(userviceCode).matches() || manualPattern.matcher(serviceCode).matches() ||
+			manualPattern.matcher(eventCode).matches() || manualPattern.matcher(situationStatus).matches()	)
+		throw new ValidationException("전달된 파라미터가 유효한 형식의 값이 아닙니다.");
 
 	String workId = System.getManualProcessId(userviceCode, serviceCode, eventCode, situationStatus);
 	// TEST PURPOSE

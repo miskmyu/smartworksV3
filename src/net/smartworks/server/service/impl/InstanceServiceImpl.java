@@ -4625,9 +4625,11 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			//화면에서 사용하고 있는 컬럼의 상수값과 실제 프로세스 인스턴스 데이터 베이스의 컬럼 이름이 맞지 않아 컨버팅 작업
 			//한군데에서 관리 하도록 상수로 변경 필요
+			//이벤트시간으로 정렬되게 수정
 			if (sf == null) {
 				sf = new SortingField();
-				sf.setFieldId(FormField.ID_CREATED_DATE);
+				sf.setFieldId("eventTime");
+//				sf.setFieldId(FormField.ID_CREATED_DATE);
 				sf.setAscending(false);
 			}
 			String sfColumnNameTemp = sf.getFieldId();
@@ -4653,6 +4655,9 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			ucityWorkListCond.setOrders(new Order[]{new Order(sfColumnNameTemp, sf.isAscending())});
 
+			// 이상종료 인 것은 조회 하지 않기
+			if(runningOnly)
+				ucityWorkListCond.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 			UcityWorkList[] workLists = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkLists(userId, ucityWorkListCond, null);
 			
 			InstanceInfoList instanceInfoList = new InstanceInfoList();
@@ -4714,6 +4719,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					Property p6 = new Property("isSms", CommonUtil.toBoolean(workList.getIsSms())+"");
 					Property p7 = new Property("eventId",workList.getEventId());
 					Property p8;
+					Property p9 = new Property("runningTaskName", workList.getRunningTaskName());
 					if (workList.getEventTime() != null) {
 						Date tempDate = new Date();
 						tempDate.setTime(workList.getEventTime().getTime() + TimeZone.getDefault().getRawOffset());
@@ -4721,7 +4727,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					} else {
 						p8 = new Property("eventTime", null);
 					}
-					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7, p8};
+					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7, p8, p9};
 
 					pworkInfo.setExtentedProperty(properties);
 					
@@ -4921,9 +4927,11 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			//화면에서 사용하고 있는 컬럼의 상수값과 실제 프로세스 인스턴스 데이터 베이스의 컬럼 이름이 맞지 않아 컨버팅 작업
 			//한군데에서 관리 하도록 상수로 변경 필요
+			// 이벤트 시간으로 정렬
 			if (sf == null) {
 				sf = new SortingField();
-				sf.setFieldId(FormField.ID_CREATED_DATE);
+	            sf.setFieldId("eventTime");
+//				sf.setFieldId(FormField.ID_CREATED_DATE);
 				sf.setAscending(false);
 			}
 			String sfColumnNameTemp = sf.getFieldId();
@@ -5010,6 +5018,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					Property p6 = new Property("isSms", CommonUtil.toBoolean(workList.getIsSms())+"");
 					Property p7 = new Property("eventId",workList.getEventId());
 					Property p8;
+					Property p9 = new Property("runningTaskName", workList.getRunningTaskName());
 					if (workList.getEventTime() != null) {
 						Date tempDate = new Date();
 						tempDate.setTime(workList.getEventTime().getTime() + TimeZone.getDefault().getRawOffset());
@@ -5017,7 +5026,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					} else {
 						p8 = new Property("eventTime", null);
 					}
-					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7, p8};
+					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6, p7, p8, p9};
 
 					pworkInfo.setExtentedProperty(properties);
 					
@@ -8135,6 +8144,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		String externalDisplay = (String)requestBody.get("externalDisplay");
 		String eventPlace = (String)requestBody.get("eventPlace");
 		String facilityId = (String)requestBody.get("facilityId");
+		String runningTaskName = (String)requestBody.get("runningTaskName");
 		
 		obj.setExtendedAttributeValue("ucity_serviceName", serviceName);
 		obj.setExtendedAttributeValue("ucity_eventId", eventId);
@@ -8145,7 +8155,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		obj.setExtendedAttributeValue("ucity_externalDisplay", externalDisplay);
 		obj.setExtendedAttributeValue("ucity_eventPlace", eventPlace);
 		obj.setExtendedAttributeValue("ucity_facilityId", facilityId);
-		
+		obj.setExtendedAttributeValue("ucity_runningtaskname", runningTaskName);
 	}
 	private String executeTask(Map<String, Object> requestBody, HttpServletRequest request, String action) throws Exception {
 		User cuser = SmartUtil.getCurrentUser();
@@ -10213,6 +10223,11 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Override
 	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception {
 		return SwManagerFactory.getInstance().getUcityWorkListManager().getUcityChartXml(categoryName, periodName, serviceName, eventName);
+	}
+    // Excel Download 구현
+	@Override
+	public void getUcityChartExcel(String categoryName, String periodName, String serviceName, String eventName, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		SwManagerFactory.getInstance().getUcityWorkListManager().getUcityChartExcel(categoryName, periodName, serviceName, eventName, request, response);
 	}
 
 	//테스크의 이름으로 auditId 숫자만큼 쿼리를 날려서 카운터를 샌다

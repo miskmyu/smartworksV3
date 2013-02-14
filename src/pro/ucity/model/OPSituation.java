@@ -459,7 +459,8 @@ public class OPSituation {
 //			connection.setAutoCommit(false);			
 			try{
 				selectPstmt = connection.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				ResultSet rs = selectPstmt.executeQuery();				
+				ResultSet rs = selectPstmt.executeQuery();		
+				rs.setFetchSize(10);
 				rs.last(); 
 				int count = rs.getRow(); 
 				rs.beforeFirst();
@@ -597,7 +598,8 @@ public class OPSituation {
 				selectPstmt.setString(1, eventId);
 //				if(!status.equals(STATUS_SITUATION_PROCESSING) && !status.equals(STATUS_SITUATION_OCCURRED))
 //					selectPstmt.setString(2, status);
-				ResultSet rs = selectPstmt.executeQuery();				
+				ResultSet rs = selectPstmt.executeQuery();	
+				rs.setFetchSize(10);
 				rs.last(); 
 				int count = rs.getRow();
 				rs.first();

@@ -8,6 +8,9 @@
 
 package pro.ucity.manager.ucityWorkList.manager;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import net.smartworks.server.engine.common.manager.IManager;
 import pro.ucity.manager.ucityWorkList.exception.UcityWorkListException;
 import pro.ucity.manager.ucityWorkList.model.UcityWorkList;
@@ -23,4 +26,5 @@ public interface IUcityWorkListManager extends IManager {
 	public long getUcityWorkListSize(String userId, UcityWorkListCond cond) throws UcityWorkListException;
 	public UcityWorkList[] getUcityWorkLists(String userId, UcityWorkListCond cond, String level) throws UcityWorkListException;
 	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception;
+	public void getUcityChartExcel(String categoryName, String periodName, String serviceName, String eventName, HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

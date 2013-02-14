@@ -219,6 +219,8 @@ public interface IInstanceService {
 	public int[][] getUcityAuditTaskCounts(boolean runningOnly) throws Exception;
 	
 	public String getUcityChartXml(String categoryName, String periodName, String serviceName, String eventName) throws Exception;
+
+	public void getUcityChartExcel(String categoryName, String periodName, String serviceName, String eventName, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 	public Property[] getUcityExtendedPropertyByTaskInstId(String taskInstId) throws Exception;
 	
