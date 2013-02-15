@@ -148,6 +148,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		String status = null;
 		String title = null;
 		String titleLike = null;
+		String nameLike = null;
 		String type = null;
 		String packageId = null;
 		String priority = null;
@@ -178,6 +179,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 			status = cond.getStatus();
 			title = cond.getTitle();
 			titleLike = cond.getTitleLike();
+			nameLike = cond.getNameLike();
 			type = cond.getType();
 			packageId = cond.getPackageId();
 			priority = cond.getPriority();
@@ -227,6 +229,8 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				buf.append(" and obj.title = :title");
 			if (titleLike != null)
 				buf.append(" and obj.title like :titleLike");
+			if (nameLike != null)
+				buf.append(" and obj.name like :nameLike");
 			if (type != null)
 				buf.append(" and obj.type = :type");
 			if (packageId != null)
@@ -394,6 +398,8 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				query.setString("packageId", packageId);
 			if (titleLike != null)
 				query.setString("titleLike", CommonUtil.toLikeString(titleLike));
+			if (nameLike != null)
+				query.setString("nameLike", CommonUtil.toLikeString(nameLike));
 			if (priority != null)
 				query.setString("priority", priority);
 			if (diagramId != null)
