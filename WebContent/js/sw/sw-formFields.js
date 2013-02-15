@@ -652,6 +652,7 @@ function loadTaskApprovalFields() {
 					container: gridRow,
 					fieldId: "isLazyReferenceTask",
 					fieldName: isLazyReferenceTaskTitle,
+					value: isLazyReferenceTask,
 					columns: 4,
 					colSpan: 1,
 					readOnly: false
