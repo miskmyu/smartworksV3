@@ -30,6 +30,7 @@ public class SwoConfig extends SwoObject {
 	public static final String A_PASSWORD = "password";
 	public static final String A_ISACTIVITY = "isActivity";
 	public static final String A_USEMESSAGINGSERVICE = "useMessagingService";
+	public static final String A_USECHATTINGSERVICE = "useChattingService";
 	public static final String A_USERRETURNFUNCTION = "userReturnFunction";
 
 	private String smtpAddress;
@@ -37,6 +38,7 @@ public class SwoConfig extends SwoObject {
 	private String password;
 	private boolean isActivity = true;
 	private boolean useMessagingService = true;
+	private boolean useChattingService = true;
 	private boolean userReturnFunction = true;
 	
 	public SwoConfig() {
@@ -231,11 +233,16 @@ public class SwoConfig extends SwoObject {
 	public void setUseMessagingService(boolean useMessagingService) {
 		this.useMessagingService = useMessagingService;
 	}
+	public boolean isUseChattingService() {
+		return useChattingService;
+	}
+	public void setUseChattingService(boolean useChattingService) {
+		this.useChattingService = useChattingService;
+	}
 	public boolean isUserReturnFunction() {
 		return userReturnFunction;
 	}
 	public void setUserReturnFunction(boolean userReturnFunction) {
 		this.userReturnFunction = userReturnFunction;
 	}
-
 }

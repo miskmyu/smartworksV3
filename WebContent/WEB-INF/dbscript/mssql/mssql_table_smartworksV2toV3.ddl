@@ -849,3 +849,5 @@ ALTER TABLE SwMailServer add pwChangeParamNewPW character varying(50);
 ALTER TABLE sworgconfig add userReturnFunction bit;
 update sworgconfig set userReturnFunction='0'
 
+ALTER TABLE sworgconfig add useChattingService bit;
+update sworgconfig set useChattingService='0'

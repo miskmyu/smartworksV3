@@ -1212,6 +1212,8 @@ CREATE TABLE sworgconfig(
 	name varchar(255) NULL,
 	domainid varchar(50) NULL,
 	companyid varchar(100) NULL,
+	useMessagingService bit,
+	useChattingService bit,
 	isactivity int NULL,
 	useMessagingService bit,
 	userReturnFunction bit,
