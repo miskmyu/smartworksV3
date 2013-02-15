@@ -36,7 +36,9 @@
 	session.setAttribute("workId", workId);
 	InstanceInfoList instanceList = smartWorks.getIWorkInstanceList(workId, params);
 	
-	String name = java.net.URLEncoder.encode(work.getName() + "_LIST.xls","UTF-8");
+	String workName = work.getName()+ "_LIST.xls";
+	String name = new String(workName.getBytes(),"ISO8859_1"); 
+	
 	String arg1 = "Content-Disposition";
 	String arg2 = "attachment; filename=" + name;
   	response.setHeader(arg1, arg2);

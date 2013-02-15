@@ -1799,10 +1799,22 @@ $(function() {
 		return false;
 	});
 
-	$('a.js_export_to_excel').live('click', function(e) {
+	$('a.js_export_to_pwork_list_excel').live('click', function(e) {
 		var input = $(targetElement(e));		
 		var iworkList = input.parents('.js_iwork_list_page');
-		window.open('download_excel_list.sw?workId=' + iworkList.attr('workId'));
+		var iframe = input.parent().next();
+		var url = 'download_pwork_excel_list.sw?workId=' + iworkList.attr('workId');
+		iframe.attr('src', url);
+		//window.open('download_pwork_excel_list.sw?workId=' + iworkList.attr('workId'));
+		return false;
+	});
+	$('a.js_export_to_iwork_list_excel').live('click', function(e) {
+		var input = $(targetElement(e));
+		var iworkList = input.parents('.js_iwork_list_page');
+		var iframe = input.parent().next();
+		var url = 'download_iwork_excel_list.sw?workId=' + iworkList.attr('workId');
+		iframe.attr('src', url);
+		//window.open('download_iwork_excel_list.sw?workId=' + iworkList.attr('workId'));
 		return false;
 	});
 	
