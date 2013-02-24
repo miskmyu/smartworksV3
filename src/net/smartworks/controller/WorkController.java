@@ -137,13 +137,22 @@ public class WorkController extends ExceptionInterceptor {
 
 		return SmartUtil.returnMnv(request, "jsp/content/work/list/import_from_excel.jsp", "");
 	}
-
 	@RequestMapping("/download_excel_template")
 	public ModelAndView downloadExcelTemplate(HttpServletRequest request, HttpServletResponse response) {
  		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
 		return new ModelAndView("jsp/content/work/list/download_excel_template.jsp", "smartWorks", smartworks);
 	}
-
+	@RequestMapping("/download_iwork_excel_list")
+	public ModelAndView downloadIWorkExcelList(HttpServletRequest request, HttpServletResponse response) {
+ 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+		return new ModelAndView("jsp/content/work/list/download_excel_iwork_list.jsp", "smartWorks", smartworks);
+	}
+	@RequestMapping("/download_pwork_excel_list")
+	public ModelAndView downloadPWorkExcelList(HttpServletRequest request, HttpServletResponse response) {
+ 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+		return new ModelAndView("jsp/content/work/list/download_excel_pwork_list.jsp", "smartWorks", smartworks);
+	}
+	
 	@RequestMapping(value = "/get_form_xml", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<String> getFormXml(HttpServletRequest request, HttpServletResponse response) {

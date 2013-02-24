@@ -138,6 +138,8 @@ public class SettingsServiceImpl implements ISettingsService {
 			String sendMailPassword = "";
 			boolean sendMailNotification = false;
 			boolean useMessagingService = true;
+			boolean useChattingService = false;
+			boolean userReturnFunction = true;
 			if(swoCompany != null) {
 				id = swoCompany.getId();
 				name = swoCompany.getName();
@@ -150,6 +152,8 @@ public class SettingsServiceImpl implements ISettingsService {
 				sendMailPassword = swoConfig.getPassword();
 				sendMailNotification = swoConfig.isActivity();
 				useMessagingService = swoConfig.isUseMessagingService();
+				useChattingService = swoConfig.isUseChattingService();
+				userReturnFunction = swoConfig.isUserReturnFunction();
 			}
 
 			CompanyGeneral companyGeneral = new CompanyGeneral();
@@ -163,6 +167,8 @@ public class SettingsServiceImpl implements ISettingsService {
 			companyGeneral.setSendMailNotification(sendMailNotification);
 			companyGeneral.setTestAfterSaving(true);
 			companyGeneral.setUseMessagingService(useMessagingService);
+			companyGeneral.setUseChattingService(useChattingService);
+			companyGeneral.setUseReturnFunction(userReturnFunction);
 			return companyGeneral;
 		} catch(Exception e){
 			e.printStackTrace();
@@ -180,7 +186,7 @@ public class SettingsServiceImpl implements ISettingsService {
 			String companyName = cUser.getCompany();
 
 			Map<String, Object> frmCompanyGeneral = (Map<String, Object>)requestBody.get("frmCompanyGeneral");
-	
+			
 			Set<String> keySet = frmCompanyGeneral.keySet();
 			Iterator<String> itr = keySet.iterator();
 			List<Map<String, String>> logoFiles = null;
@@ -190,6 +196,8 @@ public class SettingsServiceImpl implements ISettingsService {
 			String pasMailPassword = null;
 			boolean isActivity = false;
 			boolean useMessagingService = false;
+			boolean useChattingService = false;
+			boolean chkUseReturnFunction = false;
 			String imgCompanyLogo = null;
 			String imgCompanyLoginImage = null;
 			String companyFileId = null;
@@ -216,6 +224,10 @@ public class SettingsServiceImpl implements ISettingsService {
 						isActivity = true;
 					} else if(fieldId.equals("chkUseMessagingService")) {
 						useMessagingService = true;
+					} else if(fieldId.equals("chkUseChattingService")){
+						useChattingService = true;
+					} else if (fieldId.equals("chkUseReturnFunction")) {
+						chkUseReturnFunction = true;
 					}
 				}
 			}
@@ -252,6 +264,8 @@ public class SettingsServiceImpl implements ISettingsService {
 			swoConfig.setPassword(pasMailPassword);
 			swoConfig.setActivity(isActivity);
 			swoConfig.setUseMessagingService(useMessagingService);
+			swoConfig.setUseChattingService(useChattingService);
+			swoConfig.setUserReturnFunction(chkUseReturnFunction);
 			getSwoManager().setConfig(userId, swoConfig, IManager.LEVEL_ALL);
 			
 			String chkTestAfterSaving = (String)frmCompanyGeneral.get("chkTestAfterSaving");

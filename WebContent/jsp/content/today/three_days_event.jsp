@@ -189,13 +189,13 @@
 															else hasTomorrowEvent = true;
 											%>
 															<li class="event_list">
-																<span class="t_gbold"><%=event.getStart().toTimeShortString()%></span>
+																<span class="t_gbold"><%=event.getStart().toLocalTimeShortString()%></span>
 														<%
 														} else {
 															hasAfterEvent = true;
 														%>
 															<li class="event_list">
-																<span class="t_gbold"><%=event.getStart().toString()%></span>
+																<span class="t_gbold"><%=event.getStart().toLocalString()%></span>
 														<%
 														}
 														%>

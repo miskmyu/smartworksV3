@@ -203,13 +203,11 @@
 
 			<!-- 목록보기 -->
 			<div class=" contents_space">
-<%-- 
-				<div>
+				<%-- <div>
 					<jsp:include page="/jsp/content/work/report/work_report.jsp">
 						<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
 					</jsp:include>
-				</div>
---%>
+				</div> --%>
 				<!-- 목록보기 타이틀-->
 				<div class="list_title_space js_work_list_title mt15">
 					<div class="title"><fmt:message key="common.title.instance_list" /></div>
@@ -220,6 +218,10 @@
 						<div class="icon_btn_start">
 							<a href="start_pwork.sw?workId=<%=workId%>" class="js_create_new_work icon_btn_tail" workId="<%=workId%>"><fmt:message key="common.button.start_new_pwork"/></a>
 						</div>
+						<div class="icon_btn_start">
+							<a href="" class="icon_btn_tail js_export_to_pwork_list_excel"><fmt:message key="common.button.excel_export"/></a>
+						</div>
+						<iframe class='js_excel_export' style='visibility: hidden;' src='' width='1' height='1'></iframe>
 					<%
 						}
 					%>
