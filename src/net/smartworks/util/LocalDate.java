@@ -278,7 +278,8 @@ public class LocalDate extends Date{
 	}
 
 	public boolean isSameDate(LocalDate when){
-		if( getLocalDateOnly(this).getTime() == getLocalDateOnly(when).getTime()) return true;
+		if((this).toLocalDateSimple2String().equals(when.toLocalDateSimple2String())) return true;
+//		if( getLocalDateOnly(this).getTime() == getLocalDateOnly(when).getTime()) return true;
 		return false;
 	}
 
@@ -475,7 +476,8 @@ public class LocalDate extends Date{
 	}
 
 	private boolean isToday(){
-		if(getLocalDateOnly(this).getTime() == getLocalDateOnly(new LocalDate()).getTime())
+		if((new LocalDate()).toLocalDateSimple2String().equals(this.toLocalDateSimple2String()))
+//		if(getLocalDateOnly(this).getTime() == getLocalDateOnly(new LocalDate()).getTime())
 			return true;
 		return false;
 	}

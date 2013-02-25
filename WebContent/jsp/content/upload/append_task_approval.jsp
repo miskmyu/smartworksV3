@@ -34,7 +34,7 @@
 	String subject = "";
 	String content = "";
 	UserInfo[] forwardees = null;
-	boolean isLazyReferenceTask = false;
+	boolean isLazyReferenceTask = true;
 	String approvalInstId = "";
 	
 	String workInstId = null;

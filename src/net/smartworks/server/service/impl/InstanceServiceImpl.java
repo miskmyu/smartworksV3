@@ -6690,7 +6690,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			return null;
 		}*/
 
-		return calendarService.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate, 0);
+		return calendarService.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate, 0, false);
 
 	}
 
