@@ -78,8 +78,9 @@ function ExcelPage() {
 			if(!SmartUtil.isBlankObject(events)){
 		%>
 				<select class="js_select_ucity_event" service="<%=allServices[i]%>" style="display:none">
+				<%if(!allServices[i].equalsIgnoreCase("플랫폼")){ %>
 					<option value="<%=System.REPORT_OPTION_ALL_EVENTS%>">모든이벤트</option>
-					<%
+					<%}
 					for(int j=0; j<events.length; j++){
 					%>
 						<option value="<%=events[j]%>"><%=events[j] %></option>
