@@ -513,7 +513,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		tableBuff.append(" 						when TO_CHAR(eventTime + 9/24, 'HH24') between '23' and '24' then '심야(23시~3시)'  ");
 		tableBuff.append(" 							when TO_CHAR(eventTime + 9/24, 'HH24') between '00' and '02' then '심야(23시~3시)' ");						
 		tableBuff.append(" 		end as eventTime_hour ");
-		tableBuff.append("	, case when TO_CHAR(eventTime + 9/24, 'HH24') between '01' and '12' then 'A' when TO_CHAR(createdtime + 9/24, 'HH24') between '13' and '24' then 'P' end as eventTime_ampm  ");
+		tableBuff.append("	, case when TO_CHAR(eventTime + 9/24, 'HH24') between '00' and '12' then 'A' when TO_CHAR(eventTime + 9/24, 'HH24') between '13' and '24' then 'P' end as eventTime_ampm  ");
 		tableBuff.append("	, TO_CHAR(eventTime + 9/24, 'dy') || '요일' as eventTime_dy ");
 		tableBuff.append("	, TO_CHAR(eventTime + 9/24, 'MM') || '월' as eventTime_month ");
 		tableBuff.append("	, case when TO_CHAR(eventTime + 9/24, 'MM') between '01' and '06' then '상반기'   ");
@@ -562,11 +562,11 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		if (periodName.equalsIgnoreCase("option.period.thisYear")) {
 			return nowYear + "0101";
 		} else if (periodName.equalsIgnoreCase("option.period.recentAYear")) {
-			return (nowYear - 1) + nowMonth + nowDay;
+			return (nowYear - 1) + "0101";
 		} else if (periodName.equalsIgnoreCase("option.period.recentThreeYears")) {
-			return (nowYear - 3) + nowMonth + nowDay;
+			return (nowYear - 3) + "0101";
 		} else if (periodName.equalsIgnoreCase("option.period.recentFiveYears")) {
-			return (nowYear - 5) + nowMonth + nowDay;
+			return (nowYear - 5) + "0101";
 		}
 		return null;
 	}
@@ -630,9 +630,6 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 	
 	private Object[] findResultSet(List<Object[]> valueList, String group2ObjName) throws Exception {
 		for(Object[] value : valueList) {
-			logger.info("value[0]은? " + value[0]);
-			logger.info("value[1]은? " + value[1]);
-			logger.info("value[2]은? " + value[2]);
 			Object value1 = value[0] == null? "null" : value[0];
 			if(value1.equals(group2ObjName))
 				return value;
@@ -713,6 +710,11 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			int k = 0;
 			while(n < categoryScop.size()) {
 				String categoryList = categoryScop.get(k);
+				if(categoryName.equalsIgnoreCase("option.category.byMonth")){
+					if(categoryList.length() == 2){
+						categoryList = "0" + categoryList;
+					}		
+				}
 				List<Object[]> valueList = (List)resultMap.get(categoryList);
 					resultXml.append("<grouping>");
 					resultXml.append("<name><![CDATA[").append(categoryList).append("]]></name>");
@@ -841,12 +843,12 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			Object groupValue = null;
 			Object[] groupLists = null;
 			
-			for (Iterator itr = list.iterator(); itr.hasNext();) {
-				Object[] fields = (Object[]) itr.next();
+			for (int i = 0; i < list.size(); i++) {
+				Object[] fields = (Object[]) list.get(i);
 				
 				if(groupByCount == 0){
 					groupByCount = fields.length - 1;
-
+				}
 					//카운트가 1이면 2차원 차트 생성함.
 					if(groupByCount == 1) {
 						groupName = fields[0] == null? "null" : fields[0] instanceof Character ? ((Character)fields[0]).toString() : ((String)fields[0]).toString();
@@ -890,7 +892,6 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 								resultMap.put(groupName, groupValue);
 							}
 						}
-					}
 				}else if(groupByCount == 2) {
 					groupNames = fields[0] == null? "null" : fields[0].toString();
 					groupName = fields[1] == null? "null" : fields[1] instanceof Character ? ((Character)fields[1]).toString() : ((String)fields[1]).toString();
@@ -996,7 +997,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			getXmlDataForExcel(dataValue, serviceName, eventName, categoryName, periodName, resultMap, request, response);
 			for (Iterator itr = list.iterator(); itr.hasNext();) {
 				Object[] fields = (Object[]) itr.next();
-				if(!serviceName.equalsIgnoreCase("option.service.all") || !eventName.equalsIgnoreCase("option.event.all")){
+				if(!serviceName.equalsIgnoreCase("option.service.all") && !eventName.equalsIgnoreCase("option.event.all")){
 					if (fields[0] instanceof Character) {
 						if(((Character)fields[0]).toString().equalsIgnoreCase("상")) {
 							resultMap.put("firstHalf", (BigDecimal)fields[1]);
@@ -1067,23 +1068,23 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 							}else{
 								resultMap.put("night", (BigDecimal)fields[1]);
 							}
-						} else if (((String)fields[0]).toString().equalsIgnoreCase("1월")) {
+						} else if (((String)fields[0]).toString().equalsIgnoreCase("01월")) {
 							resultMap.put("jan", (BigDecimal)fields[1]);
-						} else if (((String)fields[0]).toString().equalsIgnoreCase("2월")) {
+						} else if (((String)fields[0]).toString().equalsIgnoreCase("02월")) {
 							resultMap.put("feb", (BigDecimal)fields[1]);
-						} else if (((String)fields[0]).toString().equalsIgnoreCase("3월")) {
+						} else if (((String)fields[0]).toString().equalsIgnoreCase("03월")) {
 							resultMap.put("mar", (BigDecimal)fields[1]);
-						} else if (((String)fields[0]).toString().equalsIgnoreCase("4월")) {
+						} else if (((String)fields[0]).toString().equalsIgnoreCase("04월")) {
 							resultMap.put("apr", (BigDecimal)fields[1]);
-						} else if (((String)fields[0]).toString().equalsIgnoreCase("5월")) {
+						} else if (((String)fields[0]).toString().equalsIgnoreCase("05월")) {
 							resultMap.put("may", (BigDecimal)fields[1]);
-						} else if (((String)fields[0]).toString().equalsIgnoreCase("6월")) {
+						} else if (((String)fields[0]).toString().equalsIgnoreCase("06월")) {
 							resultMap.put("jun", (BigDecimal)fields[1]);
-						} else if (((String)fields[0]).toString().equalsIgnoreCase("7월")) {
+						} else if (((String)fields[0]).toString().equalsIgnoreCase("07월")) {
 							resultMap.put("jul", (BigDecimal)fields[1]);
-						} else if (((String)fields[0]).toString().equalsIgnoreCase("8월")) {
+						} else if (((String)fields[0]).toString().equalsIgnoreCase("08월")) {
 							resultMap.put("aug", (BigDecimal)fields[1]);
-						} else if (((String)fields[0]).toString().equalsIgnoreCase("9월")) {
+						} else if (((String)fields[0]).toString().equalsIgnoreCase("09월")) {
 							resultMap.put("sep", (BigDecimal)fields[1]);
 						} else if (((String)fields[0]).toString().equalsIgnoreCase("10월")) {
 							resultMap.put("oct", (BigDecimal)fields[1]);
@@ -1141,23 +1142,23 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 							getTempList((String)fields[0],(BigDecimal)fields[2],5,7);
 						}
 					}else if(categoryName.equalsIgnoreCase(System.REPORT_OPTION_CATEGORY_BY_MONTH)){
-						if (((String)fields[1]).toString().equalsIgnoreCase("1월")) {
+						if (((String)fields[1]).toString().equalsIgnoreCase("01월")) {
 							getTempList((String)fields[0],(BigDecimal)fields[2],0,12);
-						} else if (((String)fields[1]).toString().equalsIgnoreCase("2월")) {
+						} else if (((String)fields[1]).toString().equalsIgnoreCase("02월")) {
 							getTempList((String)fields[0],(BigDecimal)fields[2],1,12);
-						} else if (((String)fields[1]).toString().equalsIgnoreCase("3월")) {
+						} else if (((String)fields[1]).toString().equalsIgnoreCase("03월")) {
 							getTempList((String)fields[0],(BigDecimal)fields[2],2,12);
-						} else if (((String)fields[1]).toString().equalsIgnoreCase("4월")) {
+						} else if (((String)fields[1]).toString().equalsIgnoreCase("04월")) {
 							getTempList((String)fields[0],(BigDecimal)fields[2],3,12);
-						} else if (((String)fields[1]).toString().equalsIgnoreCase("5월")) {
+						} else if (((String)fields[1]).toString().equalsIgnoreCase("05월")) {
 							getTempList((String)fields[0],(BigDecimal)fields[2],4,12);
-						} else if (((String)fields[1]).toString().equalsIgnoreCase("6월")) {
+						} else if (((String)fields[1]).toString().equalsIgnoreCase("06월")) {
 							getTempList((String)fields[0],(BigDecimal)fields[2],5,12);
-						} else if (((String)fields[1]).toString().equalsIgnoreCase("7월")) {
+						} else if (((String)fields[1]).toString().equalsIgnoreCase("07월")) {
 							getTempList((String)fields[0],(BigDecimal)fields[2],6,12);
-						} else if (((String)fields[1]).toString().equalsIgnoreCase("8월")) {
+						} else if (((String)fields[1]).toString().equalsIgnoreCase("08월")) {
 							getTempList((String)fields[0],(BigDecimal)fields[2],7,12);
-						} else if (((String)fields[1]).toString().equalsIgnoreCase("9월")) {
+						} else if (((String)fields[1]).toString().equalsIgnoreCase("09월")) {
 							getTempList((String)fields[0],(BigDecimal)fields[2],8,12);
 						} else if (((String)fields[1]).toString().equalsIgnoreCase("10월")) {
 							getTempList((String)fields[0],(BigDecimal)fields[2],9,12);
@@ -1230,212 +1231,429 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 	private void getTempList(String column,BigDecimal value ,int number, int size) {
 		// TODO Auto-generated method stub
 		int i;
+		if(tempList1.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList1.add(new BigDecimal(0));
+			}
+		}
+		if(tempList2.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList2.add(new BigDecimal(0));
+			}
+		}
+		if(tempList3.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList3.add(new BigDecimal(0));
+			}
+		}
+		if(tempList4.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList4.add(new BigDecimal(0));
+			}
+		}
+		if(tempList5.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList5.add(new BigDecimal(0));
+			}
+		}
+		if(tempList6.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList6.add(new BigDecimal(0));
+			}
+		}
+		if(tempList7.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList7.add(new BigDecimal(0));
+			}
+		}
+		if(tempList8.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList8.add(new BigDecimal(0));
+			}
+		}
+		if(tempList9.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList9.add(new BigDecimal(0));
+			}
+		}
+		if(tempList10.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList10.add(new BigDecimal(0));
+			}
+		}
+		if(tempList11.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList11.add(new BigDecimal(0));
+			}
+		}
+		if(tempList12.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList12.add(new BigDecimal(0));
+			}
+		}
+		if(tempList13.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList13.add(new BigDecimal(0));
+			}
+		}
+		if(tempList14.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList14.add(new BigDecimal(0));
+			}
+		}
+		if(tempList15.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList15.add(new BigDecimal(0));
+			}
+		}
+		if(tempList16.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList16.add(new BigDecimal(0));
+			}
+		}
+		if(tempList17.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList17.add(new BigDecimal(0));
+			}
+		}
+		if(tempList18.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList18.add(new BigDecimal(0));
+			}
+		}
+		if(tempList19.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList19.add(new BigDecimal(0));
+			}
+		}
+		if(tempList20.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList20.add(new BigDecimal(0));
+			}
+		}
+		if(tempList21.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList21.add(new BigDecimal(0));
+			}
+		}
+		if(tempList22.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList22.add(new BigDecimal(0));
+			}
+		}
+		if(tempList23.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList23.add(new BigDecimal(0));
+			}
+		}
+		if(tempList24.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList24.add(new BigDecimal(0));
+			}
+		}
+		if(tempList25.isEmpty()){
+			for(i = 0;i < size; i++){
+				tempList25.add(new BigDecimal(0));
+			}
+		}
 		if ((column).toString().equalsIgnoreCase("환경")) {
 			if(tempList1.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList1.add(new BigDecimal(i));
+					tempList1.add(new BigDecimal(0));
 				}
 			}
-			tempList1.add(number,value);
-			tempList1.remove(number+1);
+			try{
+				tempList1.add(number,value);
+				tempList1.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList1.clear();	
+			}
 			listNumber = 1;
 		}else if ((column).toString().equalsIgnoreCase("교통")) {
 			if(tempList2.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList2.add(new BigDecimal(i));
+					tempList2.add(new BigDecimal(0));
 				}
 			}
-			tempList2.add(number,value);  //getTempList((String)fields[0],(BigDecimal)fields[2],3,7);
-			tempList2.remove(number+1);
+			try{
+				tempList2.add(number,value);
+				tempList2.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList2.clear();	
+			}
 			listNumber = 2;
 		}else if ((column).toString().equalsIgnoreCase("방범/방재")) {
 			if(tempList3.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList3.add(new BigDecimal(i));
+					tempList3.add(new BigDecimal(0));
 				}
 			}
-			tempList3.add(number,value);
-			tempList3.remove(number+1);
+			try{
+				tempList3.add(number,value);
+				tempList3.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList3.clear();	
+			}
 			listNumber = 3;
 		} else if ((column).toString().equalsIgnoreCase("시설물관리")) {
 			if(tempList4.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList4.add(new BigDecimal(i));
+					tempList4.add(new BigDecimal(0));
 				}
 			}
-			tempList4.add(number,value);
-			tempList4.remove(number+1);
+			try{
+				tempList4.add(number,value);
+				tempList4.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList4.clear();	
+			}
 			listNumber = 4;
 		} else if ((column).toString().equalsIgnoreCase("플랫폼")) {
 			if(tempList5.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList5.add(new BigDecimal(i));
+					tempList5.add(new BigDecimal(0));
 				}
 			}
-			tempList5.add(number,value);
-			tempList5.remove(number+1);
+			try{
+				tempList5.add(number,value);
+				tempList5.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList5.clear();	
+			}
 			listNumber = 5;
 		} else if ((column).toString().equalsIgnoreCase("대기오염")) {
 			if(tempList6.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList6.add(new BigDecimal(i));
+					tempList6.add(new BigDecimal(0));
 				}
 			}
-			tempList6.add(number,value);
-			tempList6.remove(number+1);
+			try{
+				tempList6.add(number,value);
+				tempList6.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList6.clear();	
+			}
 			listNumber = 6;
 		} else if ((column).toString().equalsIgnoreCase("환경경보")) {
 			if(tempList7.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList7.add(new BigDecimal(i));
+					tempList7.add(new BigDecimal(0));
 				}
 			}
-			tempList7.add(number,value);
-			tempList7.remove(number+1);
+			try{
+				tempList7.add(number,value);
+				tempList7.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList7.clear();	
+			}
 			listNumber = 7;
 		} else if ((column).toString().equalsIgnoreCase("수질")) {
 			if(tempList8.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList8.add(new BigDecimal(i));
+					tempList8.add(new BigDecimal(0));
 				}
 			}
-			tempList8.add(number,value);
-			tempList8.remove(number+1);
+			try{
+				tempList8.add(number,value);
+				tempList8.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList8.clear();	
+			}
 			listNumber = 8;
 		} else if ((column).toString().equalsIgnoreCase("교통혼잡")) {
 			if(tempList9.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList9.add(new BigDecimal(i));
+					tempList9.add(new BigDecimal(0));
 				}
 			}
-			tempList9.add(number,value);
-			tempList9.remove(number+1);
+			try{
+				tempList9.add(number,value);
+				tempList9.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList9.clear();	
+			}
 			listNumber = 9;
 		} else if ((column).toString().equalsIgnoreCase("차량고장")) {
 			if(tempList10.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList10.add(new BigDecimal(i));
+					tempList10.add(new BigDecimal(0));
 				}
 			}
-			tempList10.add(number,value);
-			tempList10.remove(number+1);
+			try{
+				tempList10.add(number,value);
+				tempList10.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList10.clear();	
+			}
 			listNumber = 10;
 		} else if ((column).toString().equalsIgnoreCase("뺑소니")) {
 			if(tempList11.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList11.add(new BigDecimal(i));
+					tempList11.add(new BigDecimal(0));
 				}
 			}
-			tempList11.add(number,value);
-			tempList11.remove(number+1);
+			try{
+				tempList11.add(number,value);
+				tempList11.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList11.clear();	
+			}
 			listNumber = 11;
 		} else if ((column).toString().equalsIgnoreCase("교통사고")) {
 			if(tempList12.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList12.add(new BigDecimal(i));
+					tempList12.add(new BigDecimal(0));
 				}
 			}
-			tempList12.add(number,value);
-			tempList12.remove(number+1);
+			try{
+				tempList12.add(number,value);
+				tempList12.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList12.clear();	
+			}
 			listNumber = 12;
 		} else if ((column).toString().equalsIgnoreCase("호우")) {
 			if(tempList13.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList13.add(new BigDecimal(i));
+					tempList13.add(new BigDecimal(0));
 				}
 			}
-			tempList13.add(number,value);
-			tempList13.remove(number+1);
-			listNumber = 13;
+			try{
+				tempList13.add(number,value);
+				tempList13.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList13.clear();	
+			}
+     		listNumber = 13;
 		} else if ((column).toString().equalsIgnoreCase("지하차도침수")) {
 			if(tempList14.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList14.add(new BigDecimal(i));
+					tempList14.add(new BigDecimal(0));
 				}
 			}
-			tempList14.add(number,value);
-			tempList14.remove(number+1);
+			try{
+				tempList14.add(number,value);
+				tempList14.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList14.clear();	
+			}
 			listNumber = 14;
 		} else if ((column).toString().equalsIgnoreCase("태풍")) {
 			if(tempList15.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList15.add(new BigDecimal(i));
+					tempList15.add(new BigDecimal(0));
 				}
 			}
-			tempList15.add(number,value);
-			tempList15.remove(number+1);
+			try{
+				tempList15.add(number,value);
+				tempList15.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList15.clear();	
+			}
 			listNumber = 15;
 		} else if ((column).toString().equalsIgnoreCase("화재")) {
 			if(tempList16.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList16.add(new BigDecimal(i));
+					tempList16.add(new BigDecimal(0));
 				}
 			}
-			tempList16.add(number,value);
-			tempList16.remove(number+1);
+			try{
+				tempList16.add(number,value);
+				tempList16.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList16.clear();	
+			}
 			listNumber = 16;
 		} else if ((column).toString().equalsIgnoreCase("수위경보")) {
 			if(tempList17.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList17.add(new BigDecimal(i));
+					tempList17.add(new BigDecimal(0));
 				}
 			}
-			tempList17.add(number,value);
-			tempList17.remove(number+1);
+			try{
+				tempList17.add(number,value);
+				tempList17.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList17.clear();	
+			}
 			listNumber = 17;
 		} else if ((column).toString().equalsIgnoreCase("비상벨요청")) {
 			if(tempList18.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList18.add(new BigDecimal(i));
+					tempList18.add(new BigDecimal(0));
 				}
 			}
-			tempList18.add(number,value);
-			tempList18.remove(number+1);
+			try{
+				tempList18.add(number,value);
+				tempList18.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList18.clear();	
+			}
 			listNumber = 18;
 		} else if ((column).toString().equalsIgnoreCase("용의차량추적")) {
 			if(tempList19.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList19.add(new BigDecimal(i));
+					tempList19.add(new BigDecimal(0));
 				}
 			}
-			tempList19.add(number,value);
-			tempList19.remove(number+1);
+			try{
+				tempList19.add(number,value);
+				tempList19.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList19.clear();	
+			}
 			listNumber = 19;
 		} else if ((column).toString().equalsIgnoreCase("응급")) {
 			if(tempList20.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList20.add(new BigDecimal(i));
+					tempList20.add(new BigDecimal(0));
 				}
 			}
-			tempList20.add(number,value);
-			tempList20.remove(number+1);
+			try{
+				tempList20.add(number,value);
+				tempList20.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList20.clear();	
+			}
 			listNumber = 20;
 		} else if ((column).toString().equalsIgnoreCase("미아")) {
 			if(tempList21.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList21.add(new BigDecimal(i));
+					tempList21.add(new BigDecimal(0));
 				}
 			}
-			tempList21.add(number,value);
-			tempList21.remove(number+1);
+			try{
+				tempList21.add(number,value);
+				tempList21.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList21.clear();	
+			}
 			listNumber = 21;
 		} else if ((column).toString().equalsIgnoreCase("강도")) {
 			if(tempList22.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList22.add(new BigDecimal(i));
+					tempList22.add(new BigDecimal(0));
 				}
 			}
-			tempList22.add(number,value);
-			tempList22.remove(number+1);
+			try{
+				tempList22.add(number,value);
+				tempList22.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList22.clear();	
+			}
 			listNumber = 22;
 		} else if ((column).toString().equalsIgnoreCase("상수도누수발생가능")) {
 			if(tempList23.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList23.add(new BigDecimal(i));
+					tempList23.add(new BigDecimal(0));
 				}
 			}
-			tempList23.add(number,value);
-			tempList23.remove(number+1);
+			try{
+				tempList23.add(number,value);
+				tempList23.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList23.clear();	
+			}
 			listNumber = 23;
 		} else if ((column).toString().equalsIgnoreCase("시설물고장")) {
 			if(tempList24.isEmpty()){
@@ -1443,17 +1661,25 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 					tempList24.add(new BigDecimal(0));
 				}
 			}
-			tempList24.add(number,value);
-			tempList24.remove(number+1);
+			try{
+				tempList24.add(number,value);
+				tempList24.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList24.clear();	
+			}
 			listNumber = 24;
 		} else if ((column).toString().equalsIgnoreCase("도로통제")) {
 			if(tempList25.isEmpty()){
 				for(i = 0;i < size; i++){
-					tempList25.add(new BigDecimal(i));
+					tempList25.add(new BigDecimal(0));
 				}
 			}
-			tempList25.add(number,value);
-			tempList25.remove(number+1);
+			try{
+				tempList25.add(number,value);
+				tempList25.remove(number+1);
+			}catch(IndexOutOfBoundsException e){
+				tempList25.clear();	
+			}
 			listNumber = 25;
 		} 
 		return;
@@ -1467,11 +1693,14 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		
 		//템플릿을 선택에 따라 골라 사용함.
 		//PATH는 절대경로사용.
+		
 		final String TEMPLATE_PATH = "/ssw/bpm/was/Template/";
+//		final String TEMPLATE_PATH = "D:/5_업체정보/청라지구/Excel_Templet/";
+		
 		
 		String templateFileName = "";
 		List<String> categoryScop = getCategoryScop(categoryName);
-		if(!serviceName.equalsIgnoreCase(System.REPORT_OPTION_ALL_SERVICES) || !eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
+		if(!serviceName.equalsIgnoreCase(System.REPORT_OPTION_ALL_SERVICES) && !eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
 			if(categoryName.equalsIgnoreCase("option.category.byTime")){
 				templateFileName = TEMPLATE_PATH + "MonitoringTemplate1.xls";
 			}else if(categoryName.equalsIgnoreCase("option.category.byAmPm")){
@@ -1492,26 +1721,79 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		}else if(serviceName.equalsIgnoreCase(System.REPORT_OPTION_ALL_SERVICES)){
 			if(categoryName.equalsIgnoreCase("option.category.byTime")){
 				templateFileName = TEMPLATE_PATH + "MonitoringTemplate8.xls";
-			}else if(categoryName.equalsIgnoreCase("option.category.byAmPm")){
+			}else if(categoryName.equalsIgnoreCase("option.category.byAmPm") || categoryName.equalsIgnoreCase("option.category.byHalfYear")){
 				templateFileName = TEMPLATE_PATH + "MonitoringTemplate9.xls";
 			}else if(categoryName.equalsIgnoreCase("option.category.byDay")){
 				templateFileName = TEMPLATE_PATH + "MonitoringTemplate10.xls";
 			}else if(categoryName.equalsIgnoreCase("option.category.byMonth")){
 				templateFileName = TEMPLATE_PATH + "MonitoringTemplate11.xls";
-			}else if(categoryName.equalsIgnoreCase("option.category.bySeason")){
+			}else if(categoryName.equalsIgnoreCase("option.category.bySeason") || categoryName.equalsIgnoreCase("option.category.byQuarter")){
 				templateFileName = TEMPLATE_PATH + "MonitoringTemplate12.xls";
-			}else if(categoryName.equalsIgnoreCase("option.category.byQuarter")){
-				templateFileName = TEMPLATE_PATH + "MonitoringTemplate13.xls";
-			}else if(categoryName.equalsIgnoreCase("option.category.byHalfYear")){
-				templateFileName = TEMPLATE_PATH + "MonitoringTemplate14.xls";
 			}
-	
 		}else if(!serviceName.equalsIgnoreCase(System.REPORT_OPTION_ALL_SERVICES) && eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS)){
-			templateFileName = TEMPLATE_PATH + "MonitoringTemplate9.xls";
-			templateFileName = TEMPLATE_PATH + "MonitoringTemplate10.xls";
-			templateFileName = TEMPLATE_PATH + "MonitoringTemplate11.xls";
-			templateFileName = TEMPLATE_PATH + "MonitoringTemplate12.xls";
-			templateFileName = TEMPLATE_PATH + "MonitoringTemplate13.xls";
+			if(serviceName.equalsIgnoreCase("환경")){
+				if(categoryName.equalsIgnoreCase("option.category.byTime")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate15.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byAmPm") || categoryName.equalsIgnoreCase("option.category.byHalfYear")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate16.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byDay")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate17.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byMonth")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate18.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.bySeason") || categoryName.equalsIgnoreCase("option.category.byQuarter")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate19.xls";
+				}			
+			}else if(serviceName.equalsIgnoreCase("교통")){
+				if(categoryName.equalsIgnoreCase("option.category.byTime")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate20.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byAmPm") || categoryName.equalsIgnoreCase("option.category.byHalfYear")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate21.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byDay")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate22.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byMonth")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate23.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.bySeason") || categoryName.equalsIgnoreCase("option.category.byQuarter")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate24.xls";
+				}				
+			}else if(serviceName.equalsIgnoreCase("방범/방재")){
+				if(categoryName.equalsIgnoreCase("option.category.byTime")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate25.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byAmPm") || categoryName.equalsIgnoreCase("option.category.byHalfYear")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate26.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byDay")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate27.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byMonth")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate28.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.bySeason") || categoryName.equalsIgnoreCase("option.category.byQuarter")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate29.xls";
+				}				
+			}else if(serviceName.equalsIgnoreCase("시설물관리")){
+				if(categoryName.equalsIgnoreCase("option.category.byTime")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate30.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byAmPm") || categoryName.equalsIgnoreCase("option.category.byHalfYear")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate31.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byDay")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate32.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byMonth")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate33.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.bySeason") || categoryName.equalsIgnoreCase("option.category.byQuarter")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate34.xls";
+				}				
+			}else if(serviceName.equalsIgnoreCase("플랫폼")){
+				if(categoryName.equalsIgnoreCase("option.category.byTime")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate35.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byAmPm") || categoryName.equalsIgnoreCase("option.category.byHalfYear")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate36.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byDay")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate37.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.byMonth")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate38.xls";
+				}else if(categoryName.equalsIgnoreCase("option.category.bySeason") || categoryName.equalsIgnoreCase("option.category.byQuarter")){
+					templateFileName = TEMPLATE_PATH + "MonitoringTemplate39.xls";
+				}				
+			}else{
+				logger.error("error : 해당 템플릿이 존재하지 않습니다.");
+			}
 		}else{
 			logger.error("해당 템플릿이 없습니다.");
 		}	
@@ -1542,7 +1824,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		beans2.put("monitoringData", dataValue);	
 
 		XLSTransformer transformer = new XLSTransformer();
-		if((!serviceName.equalsIgnoreCase(System.REPORT_OPTION_ALL_SERVICES) || !eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS))){	
+		if((!serviceName.equalsIgnoreCase(System.REPORT_OPTION_ALL_SERVICES) && !eventName.equalsIgnoreCase(System.REPORT_OPTION_ALL_EVENTS))){	
 			try{
 				//엑셀템플릿으로 데이터넣은 엑셀파일 생성
 				transformer.transformXLS(templateFileName, beans2, DESTFILE_NAME);
