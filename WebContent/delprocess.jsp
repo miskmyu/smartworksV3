@@ -49,6 +49,7 @@
     User cUser = SmartUtil.getCurrentUser();
 
    final String LNK_TYPE = "processinst";
+   final String PROCESS_TYPE = "process";
     // 삭제 소스
     String objId = request.getParameter("objId") == null ? "":request.getParameter("objId");
     
@@ -83,6 +84,8 @@
 	
 	cond.setPageSize(20);
 	cond.setPageNo(pageNo);
+	cond.setType(PROCESS_TYPE);
+	cond2.setType(PROCESS_TYPE);
 	cond.setOrders(new Order[]{new Order(PrcProcessInst.A_CREATIONDATE, false)});
 if(!search_Text.equals("")){
 	if(search_Select.equals("1")){
@@ -94,22 +97,22 @@ if(!search_Text.equals("")){
 	}else{
 	}
 }
-    PrcProcessInst[] prcInstListPaging = SwManagerFactory.getInstance().getPrcManager().getProcessInsts("admin", cond2 , IManager.LEVEL_LITE);
+    long prcInstListPaging = SwManagerFactory.getInstance().getPrcManager().getProcessInstSize("admin", cond2);
 	PrcProcessInst[] prcInstList = SwManagerFactory.getInstance().getPrcManager().getProcessInsts("admin", cond , IManager.LEVEL_LITE);
-	PrcProcessInst[] prcInstListsize = SwManagerFactory.getInstance().getPrcManager().getProcessInsts("admin", null , IManager.LEVEL_LITE);
+	long prcInstListsize = SwManagerFactory.getInstance().getPrcManager().getProcessInstSize("admin", null);
 	
 	
 	int listsize = 1;
 	if(search_Text != ""){
-		if(prcInstListPaging != null){
-			listsize = prcInstListPaging.length;
+		if(prcInstListPaging != 0){
+			listsize = (int)prcInstListPaging;
 		}else{
 			listsize = 1;
 		}
 	}else{
-		listsize = prcInstListsize.length;
+		listsize = (int)prcInstListsize;
 	}
-	int totalpage = listsize > 1 ? (listsize/cond.getPageSize()) : 1;
+	int totalpage = listsize > 0 ? (listsize/cond.getPageSize()) : 1;
 %>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
@@ -179,7 +182,7 @@ if(cUser.getId().equals("anonymous@smartworks.net") || cUser == null){
 	function search(){
 		var search_Text = document.delProcess.search_Text.value;
 		var search_Select = document.delProcess.search_Select.value;
-	    var url = "./delprocess.jsp?pageNo=" + <%=pageNo%> + "&searchType=" + search_Select + "&searchText=" + search_Text;
+	    var url = "./delprocess.jsp?pageNo=0&searchType=" + search_Select + "&searchText=" + search_Text;
 		
 	 	var form = document.getElementById("delProcess");
 	    form.action = url;

@@ -228,13 +228,13 @@
 								<div class="icon_btn_start">
 									<a href="" class="icon_btn_tail js_import_from_excel"><fmt:message key="common.button.excel_import"/></a>
 								</div>
-								<div class="icon_btn_start">
-									<a href="" class="icon_btn_tail js_export_to_iwork_list_excel"><fmt:message key="common.button.excel_export"/></a>
-								</div>
-								<iframe class='js_excel_export' style='visibility: hidden;' src='' width='1' height='1'></iframe>
 							<%
 								}
 							%>
+							<div class="icon_btn_start">
+								<a href="" class="icon_btn_tail js_export_to_iwork_list_excel"><fmt:message key="common.button.excel_export"/></a>
+							</div>
+							<iframe class='js_excel_export' style='visibility: hidden;' src='' width='1' height='1'></iframe>
 						</div>
 					
 						<div class="title_line_options">
