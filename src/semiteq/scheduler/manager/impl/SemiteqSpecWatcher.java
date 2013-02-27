@@ -149,11 +149,26 @@ public class SemiteqSpecWatcher  extends QuartzJobBean   {
 		} else {
 			System.out.println("유효기간 1일 지난 스펙 발견!! 총 " + records.length + " 건!");
 			sendMail(records, true);
+			removeSpec(records);
 		}
 		return true;
 	}
-	private boolean removeSpec(String recordId) throws Exception {
-		return false;
+	private void removeSpec(SwdRecord[] records) throws Exception {
+		if (CommonUtil.isEmpty(records))
+			return;
+		for (int i = 0; i < records.length; i++) {
+			SwdRecord record = records[i];
+			removeSpec(record);
+		}
+	}
+	private boolean removeSpec(SwdRecord record) throws Exception {
+		if (CommonUtil.isEmpty(record))
+			return false;
+		SwdRecordCond cond = new SwdRecordCond();
+		cond.setFormId(record.getFormId());
+		cond.setRecordId(record.getRecordId());
+		SwManagerFactory.getInstance().getSwdManager().removeRecord("", cond);
+		return true;
 	}
 	private void sendMail(SwdRecord[] records, boolean chargerOnly) throws Exception {
 		

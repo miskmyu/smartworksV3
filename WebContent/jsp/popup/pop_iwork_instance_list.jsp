@@ -64,7 +64,7 @@
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
 	if(SmartUtil.isBlankObject(params)){
 		params = new RequestParams();
-		params.setPageSize(10);
+		params.setPageSize(5);
 		params.setCurrentPage(1);		
 	}
 	User cUser = SmartUtil.getCurrentUser();
