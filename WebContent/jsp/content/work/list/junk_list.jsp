@@ -44,18 +44,18 @@
 			</tr>
 			<tr>
 				<td style="width:300px;height:25px">
-					<input class="fieldline" type="text" style="width:270px;height:16px;padding-left:2px">
+					<input class="fieldline" type="text" style="width:270px;height:16px;padding-left:2px;margin-bottom:7px">
 					<!-- 추가 버튼  -->
 					<span class="btn_plus_space vb">
-						<span class="btn_plus js_add_junk_mail" /> </span>
+						<span class="btn_plus js_add_junk_mail" title="<fmt:message key='mail.title.add_junk_mail'/>" /> </span>
 					</span>
 				</td>
 				<td style="width:20px"></td>
 				<td style="width:300px">
-	 					<input  class="fieldline" type="text" style="width:270px;height:16px;padding-left:2px">
+	 					<input  class="fieldline" type="text" style="width:270px;height:16px;padding-left:2px;margin-bottom:7px">
 					<!-- 추가 버튼  -->
 					<span class="btn_plus_space vb">
-						<span class="btn_plus js_add_junk_domain" /> </span>
+						<span class="btn_plus js_add_junk_domain" title="<fmt:message key='mail.title.add_junk_domain'/>" /> </span>
 					</span>
 				</td>
 			</tr>

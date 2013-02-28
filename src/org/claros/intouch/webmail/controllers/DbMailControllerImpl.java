@@ -352,9 +352,10 @@ public class DbMailControllerImpl implements MailController {
 			QueryRunner run = new QueryRunner(DbConfigList.getDataSourceById("file"));
 			String username = auth.getEmailId();
 			try {
-				String sql = "SELECT READER FROM MSG_DB_OBJECTS WHERE USERNAME=? AND MESSAGEID = ?";
-				String reader = (String)dao.read(MsgDbObject.class, sql, new Object[] {userId, messageId});
+				String sql = "SELECT * FROM MSG_DB_OBJECTS WHERE USERNAME=? AND MESSAGE_ID = ?";
+				MsgDbObject result = (MsgDbObject)dao.read(MsgDbObject.class, sql, new Object[] {userId, messageId});
 
+				String reader = result.getReader();
 				if(SmartUtil.isBlankObject(reader))
 					reader = org.claros.commons.mail.utility.Utility.userToString(SmartUtil.getCurrentUser());
 				else if(reader.contains(username)) 
@@ -362,12 +363,13 @@ public class DbMailControllerImpl implements MailController {
 				else
 					reader = reader + ", " + org.claros.commons.mail.utility.Utility.userToString(SmartUtil.getCurrentUser());
 				
-				sql = "UPDATE MSG_DB_OBJECTS SET READER = ? WHERE USERNAME=? AND MESSAGEID=?";
+				sql = "UPDATE MSG_DB_OBJECTS SET READER = ? WHERE USERNAME=? AND MESSAGE_ID=?";
 				run.update(sql, new Object[] {reader, username, messageId});
 			} catch (SQLException e) {
-				throw e;
+			} catch(Exception ex){
 			} finally {
-				JdbcUtil.close(dao);
+				if(dao!=null)
+					JdbcUtil.close(dao);
 				dao = null;
 			}
 		}

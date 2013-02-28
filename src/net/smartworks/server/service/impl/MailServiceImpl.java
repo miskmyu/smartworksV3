@@ -755,11 +755,13 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					UserInfo[] readers = null;
 					String  strReaders = mailContent.getReader();
 					if(!SmartUtil.isBlankObject(strReaders)){
-						InternetAddress[] addrReaders = (InternetAddress[])Utility.stringToAddressArray(strReaders);
+						Address[] addrReaders = Utility.stringToAddressArray(strReaders);
 						if(addrReaders != null){
 							readers = new UserInfo[addrReaders.length];
-							for(int k=0; addrReaders!=null && k<addrReaders.length; k++)
-								readers[k] = new UserInfo(addrReaders[k].getAddress(), addrReaders[k].getPersonal());						
+							for(int k=0; addrReaders!=null && k<addrReaders.length; k++){
+								InternetAddress addr = (InternetAddress)addrReaders[k];
+								readers[k] = new UserInfo(addr.getAddress(), addr.getPersonal());
+							}
 						}
 					}
 
@@ -1081,8 +1083,6 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				if (i == -1) {
 					i = findTextBody(email.getParts());
 				}
-//				
-				sentMessageId = email.getBaseHeader().getSentMessageId();
 				
 				InternetAddress from = (InternetAddress)email.getBaseHeader().getFrom()[0];
 				InternetAddress[] to = (InternetAddress[])email.getBaseHeader().getTo();
@@ -1197,11 +1197,13 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				User[] readers = null;
 				String  strReaders = email.getReaders();
 				if(!SmartUtil.isBlankObject(strReaders)){
-					InternetAddress[] addrReaders = (InternetAddress[])Utility.stringToAddressArray(strReaders);
+					Address[] addrReaders = Utility.stringToAddressArray(strReaders);
 					if(addrReaders != null){
 						readers = new User[addrReaders.length];
-						for(int k=0; addrReaders!=null && k<addrReaders.length; k++)
-							readers[k] = new User(addrReaders[k].getAddress(), addrReaders[k].getPersonal());						
+						for(int k=0; addrReaders!=null && k<addrReaders.length; k++){
+							InternetAddress addr = (InternetAddress)addrReaders[k];
+							readers[k] = new User(addr.getAddress(), addr.getPersonal());
+						}
 					}
 				}
 				
@@ -1311,7 +1313,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				
 				SmartUtil.publishNoticeCount(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId(), new Notice(Notice.TYPE_MAILBOX, getUnreadEmails()));
 
-				mailCont.appendMailReader(sender.getId(), sentMessageId);
+				mailCont.appendMailReader(sender.getId(), email.getBaseHeader().getSentMessageId());
 				
 			} catch (Exception e) {
 				throw e;

@@ -103,6 +103,8 @@ public class MessageParser {
             	tmp = (Header)en.nextElement();
             	name = tmp.getName();
             	val = tmp.getValue();
+            	if(name.equals("Sent-Message-Id"))
+            		msg.getBaseHeader().setSentMessageId(val);
             	/*
             	name = (tmp == null) ? "" : tmp.toString();
             	tmp = pop3Msg.getHeader(name);
