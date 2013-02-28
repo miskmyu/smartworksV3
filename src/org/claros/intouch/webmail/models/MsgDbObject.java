@@ -12,7 +12,6 @@ public class MsgDbObject {
 	private String uniqueId;
 	private String uid;
 	private String messageId;
-	private String sentMessageId;
 	private String sender;
 	private String receiver;
 	private String cc;
@@ -61,12 +60,6 @@ public class MsgDbObject {
 	}
 	public void setMessageId(String messageId) {
 		this.messageId = messageId;
-	}
-	public String getSentMessageId() {
-		return sentMessageId;
-	}
-	public void setSentMessageId(String sentMessageId) {
-		this.sentMessageId = sentMessageId;
 	}
 	public String getSender() {
 		return sender;
