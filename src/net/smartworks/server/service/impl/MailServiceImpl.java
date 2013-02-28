@@ -55,6 +55,7 @@ import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.ISettingsService;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
+import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -380,6 +381,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		FolderDbObject fItem = foldCont.getSentItems();
 
 		item.setUniqueId(md5Header);
+		item.setMessageId(msg.getMessageID());
 		item.setFolderId(fItem.getId());
 		item.setUnread(new Boolean(false));
 		item.setUsername(auth.getEmailId());
@@ -749,6 +751,18 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						}
 					}					
 					// end -- added by sjlee
+					
+					UserInfo[] readers = null;
+					String  strReaders = mailContent.getReader();
+					if(!SmartUtil.isBlankObject(strReaders)){
+						InternetAddress[] addrReaders = (InternetAddress[])Utility.stringToAddressArray(strReaders);
+						if(addrReaders != null){
+							readers = new UserInfo[addrReaders.length];
+							for(int k=0; addrReaders!=null && k<addrReaders.length; k++)
+								readers[k] = new UserInfo(addrReaders[k].getAddress(), addrReaders[k].getPersonal());						
+						}
+					}
+
 					String subject = org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(mailContent.getSubject()));
 					if(SmartUtil.isBlankObject(subject)){
 						subject = SmartMessage.getString("mail.title.no.subject");
@@ -758,6 +772,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					mailInstanceInfo.setSubject(subject);
 					mailInstanceInfo.setSender(new UserInfo(senderId, org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(sender))));
 					mailInstanceInfo.setReceivers(receivers);
+					mailInstanceInfo.setReaders(readers);
 					if(!SmartUtil.isBlankObject(mailContent.getSentDate()))
 						mailInstanceInfo.setSendDate(new LocalDate(mailContent.getSentDate().getTime()-TimeZone.getDefault().getRawOffset()));
 					mailInstanceInfo.setPriority(mailContent.getPriority());
@@ -1053,6 +1068,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			MailControllerFactory factory = new MailControllerFactory(auth, profile, handler, folderId);
 			MailController mailCont = factory.getMailController();
 
+			String sentMessageId = null;
 			try {
 				Email email = mailCont.getEmailById(new Long(msgId));
 				request.getSession().setAttribute("email", email);
@@ -1066,7 +1082,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					i = findTextBody(email.getParts());
 				}
 //				
-						
+				sentMessageId = email.getBaseHeader().getSentMessageId();
+				
 				InternetAddress from = (InternetAddress)email.getBaseHeader().getFrom()[0];
 				InternetAddress[] to = (InternetAddress[])email.getBaseHeader().getTo();
 				InternetAddress[] cc = (InternetAddress[])email.getBaseHeader().getCc();
@@ -1177,6 +1194,17 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						bccReceivers[k] = new User(addrBcc[k].getAddress(), addrBcc[k].getPersonal());
 				}
 				
+				User[] readers = null;
+				String  strReaders = email.getReaders();
+				if(!SmartUtil.isBlankObject(strReaders)){
+					InternetAddress[] addrReaders = (InternetAddress[])Utility.stringToAddressArray(strReaders);
+					if(addrReaders != null){
+						readers = new User[addrReaders.length];
+						for(int k=0; addrReaders!=null && k<addrReaders.length; k++)
+							readers[k] = new User(addrReaders[k].getAddress(), addrReaders[k].getPersonal());						
+					}
+				}
+				
 //				if(!SmartUtil.isBlankObject(subject)) subject = subject.replaceAll("\"", "\'");
 				Date sentDate = (SmartUtil.isBlankObject(email.getBaseHeader().getDate())) ? new LocalDate() : email.getBaseHeader().getDate();
 				instance = new MailInstance(msgId, subject, sender, new LocalDate(sentDate.getTime()));
@@ -1184,6 +1212,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				instance.setReceivers(receivers);
 				instance.setCcReceivers(ccReceivers);
 				instance.setBccReceivers(bccReceivers);
+				instance.setReaders(readers);
 				
 				MailAttachment[] attachments = null;
 				int count = 0;
@@ -1282,6 +1311,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				
 				SmartUtil.publishNoticeCount(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId(), new Notice(Notice.TYPE_MAILBOX, getUnreadEmails()));
 
+				mailCont.appendMailReader(sender.getId(), sentMessageId);
+				
 			} catch (Exception e) {
 				throw e;
 			}
@@ -1291,7 +1322,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		}
 		return null;
 	}
-
+	
 	@Override
 	public MailFolder getMailFolderById(String folderId) throws Exception {
 		try{
@@ -2066,5 +2097,18 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				login.setMailPassword(newPassword);
 			}
 		}
+	}
+
+	@Override
+	public void addJunk(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	}
+
+	@Override
+	public void removeJunk(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	}
+
+	@Override
+	public String[][] getJunkIds() throws Exception {
+		return SmartTest.getJunkIds();
 	}
 }

@@ -38,6 +38,7 @@ public class MailContent extends MisObject {
 	public static final String A_RECEIVER = "receiver";
 	public static final String A_CC = "cc";
 	public static final String A_BCC = "bcc";
+	public static final String A_READER = "reader";
 	public static final String A_REPLYTO = "replyTo";
 	public static final String A_SUBJECT = "subject";
 	public static final String A_MULTIPART = "multipart";
@@ -55,6 +56,7 @@ public class MailContent extends MisObject {
 	private String receiver;
 	private String cc;
 	private String bcc;
+	private String reader;
 	private String replyTo;
 	private String subject;
 	private int multipart;
@@ -324,6 +326,12 @@ public class MailContent extends MisObject {
 	}
 	public void setBcc(String bcc) {
 		this.bcc = bcc;
+	}
+	public String getReader() {
+		return reader;
+	}
+	public void setReader(String reader) {
+		this.reader = reader;
 	}
 	public String getReplyTo() {
 		return replyTo;

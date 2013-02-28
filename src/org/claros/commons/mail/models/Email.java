@@ -17,6 +17,7 @@ public class Email implements Serializable {
 	private EmailHeader baseHeader;
 	private ArrayList headers = new ArrayList();
 	private String bodyText;
+	private String readers;
 
 	public ArrayList getParts() {
 		return parts;
@@ -131,6 +132,14 @@ public class Email implements Serializable {
 	 */
 	public void setMsgId(Long long1) {
 		msgId = long1;
+	}
+
+	public String getReaders() {
+		return readers;
+	}
+
+	public void setReaders(String readers) {
+		this.readers = readers;
 	}
 
 }

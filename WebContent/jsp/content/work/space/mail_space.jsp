@@ -24,6 +24,7 @@
 
 	MailInstance instance = smartWorks.getMailInstanceById(folderId, msgId, MailFolder.SEND_TYPE_NONE);
 
+	String senderId = (SmartUtil.isBlankObject(instance.getSender())) ? "" : instance.getSender().getId();
 	String targetPrev = "mail_space.sw?folderId=" + folderId + "&msgId=" + instance.getPrevMsgId();
 	String targetNext = "mail_space.sw?folderId=" + folderId + "&msgId=" + instance.getNextMsgId();
 
@@ -33,7 +34,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>" partId="<%=instance.getPartId()%>">
+<div class="section_portlet js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" senderId="<%=senderId %>" folderId="<%=folderId%>" partId="<%=instance.getPartId()%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
@@ -63,7 +64,8 @@
 			<div class="contents_space">
 				<div class="buttonSet">
 					<button class="js_delete_mail_btn"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
- 					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_move_mail_btn" targetId="<%=smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_JUNK) %>"><fmt:message key="mail.button.register_spam"/></button><%} %>
+ 					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_move_mail_btn js_add_junk_btn" targetId="<%=smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_JUNK) %>"><fmt:message key="mail.button.register_spam"/></button><%} %>
+ 					<%if(mailFolder.getType() == MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_move_mail_btn js_remove_junk_btn" targetId="<%=smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_INBOX) %>"><fmt:message key="mail.button.recover_spam"/></button><%} %>
 					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_REPLY %>" class="js_content"><fmt:message key="mail.button.reply"/></button>
 					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_REPLY_ALL %>" class="js_content"><fmt:message key="mail.button.reply_all"/></button>
 					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_FORWARD %>" class="js_content"><fmt:message key="mail.button.forward"/></button>
@@ -123,6 +125,12 @@
 							%>
 						        <dt><fmt:message key="common.title.bcc_receivers"/> :</dt>
 						        <dd><%=CommonUtil.toNotNull(instance.getBccReceiversShownBrief()) %></dd>
+							<%
+							}
+							if(!SmartUtil.isBlankObject(instance.getReaders())){
+							%>
+						        <dt><fmt:message key="common.title.mail_readers"/> :</dt>
+						        <dd><%=CommonUtil.toNotNull(instance.getReadersShownBrief()) %></dd>
 							<%
 							}
 							if(!SmartUtil.isBlankObject(instance.getAttachments())){

@@ -32,6 +32,8 @@ $(function() {
 
 	$('.js_move_mail_btn').live('click', function(e) {
 		var input = $(targetElement(e));
+		var addJunk = input.hasClass('js_add_junk_btn');
+		var removeJunk = input.hasClass('js_remove_junk_btn');
 		var mailSpace = input.parents('.js_mail_space_page');
 		var sourceId = mailSpace.attr('folderId');
 		var msgId = mailSpace.attr('msgId');
@@ -50,6 +52,35 @@ $(function() {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
+				if(addJunk){
+					paramsJson = {};
+					var senderIds = new Array();
+					senderIds.push(mailSpace.attr('senderId'));
+					paramsJson['senderIds'] = senderIds;
+					console.log(JSON.stringify(paramsJson));
+					$.ajax({
+						url : "add_junk.sw",
+						contentType : 'application/json',
+						type : 'POST',
+						data : JSON.stringify(paramsJson),
+						success : function(data, status, jqXHR) {},
+						error : function(e) {}
+					});
+				}else if(removeJunk){
+					paramsJson = {};
+					var senderIds = new Array();
+					senderIds.push(mailSpace.attr('senderId'));
+					paramsJson['senderIds'] = senderIds;
+					console.log(JSON.stringify(paramsJson));
+					$.ajax({
+						url : "remove_junk.sw",
+						contentType : 'application/json',
+						type : 'POST',
+						data : JSON.stringify(paramsJson),
+						success : function(data, status, jqXHR) {},
+						error: function(e){}
+					});
+				}
 				smartPop.closeProgress();
 				var lastHref = mailSpace.attr('lastHref');
 				if(isEmpty(lastHref))
@@ -122,6 +153,8 @@ $(function() {
 
 	$('.js_move_mails_btn').live('click', function(e) {
 		var input = $(targetElement(e));
+		var addJunk = input.hasClass('js_add_junk_btn');
+		var removeJunk = input.hasClass('js_remove_junk_btn');
 		var mailList = input.parents('.js_mail_list_page');
 		var sourceId = mailList.attr('folderId');
 		var targetId = input.attr('targetId');
@@ -132,8 +165,11 @@ $(function() {
 		}
 		var paramsJson = {};
 		var msgIds = new Array();
-		for(var i=0; i<mails.length; i++)
+		var senderIds = new Array();
+		for(var i=0; i<mails.length; i++){
 			msgIds.push($(mails[i]).attr('value'));
+			senderIds.push($(mails[i]).attr('senderId'));
+		}
 		paramsJson['ids'] = msgIds;
 		paramsJson['source'] = sourceId;
 		paramsJson['target'] = targetId;
@@ -146,6 +182,31 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
+					if(addJunk){
+						paramsJson = {};
+						paramsJson['senderIds'] = senderIds;
+						console.log(JSON.stringify(paramsJson));
+						$.ajax({
+							url : "add_junk.sw",
+							contentType : 'application/json',
+							type : 'POST',
+							data : JSON.stringify(paramsJson),
+							success : function(data, status, jqXHR) {},
+							error: function(e){}
+						});
+					}else if(removeJunk){
+						paramsJson = {};
+						paramsJson['senderIds'] = senderIds;
+						console.log(JSON.stringify(paramsJson));
+						$.ajax({
+							url : "remove_junk.sw",
+							contentType : 'application/json',
+							type : 'POST',
+							data : JSON.stringify(paramsJson),
+							success : function(data, status, jqXHR) {},
+							error: function(e){}
+						});
+					}
 					smartPop.closeProgress();
 					var currentHref = mailList.attr('currentHref');
 					if(isEmpty(currentHref))
@@ -235,6 +296,39 @@ $(function() {
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeMailError"));
+					smartPop.closeProgress();
+				}
+			});
+		});
+		return false;
+	});
+
+	$('.js_empty_trash_btn').live('click', function(e) {
+		var input = $(targetElement(e));
+		var mailList = input.parents('.js_mail_list_page');
+		var folderId = mailList.attr('folderId');
+		var paramsJson = {};
+		paramsJson['folderId'] = folderId;
+		paramsJson['removeAll'] = true;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.confirm(smartMessage.get("emptyTrashConfirmation"), function(){
+			smartPop.progressCenter();
+			$.ajax({
+				url : "delete_mails.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.closeProgress();
+					var currentHref = mailList.attr('currentHref');
+					if(isEmpty(currentHref))
+						window.location.reload(true);
+					else
+						document.location.href = currentHref; 
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("emptyTrashError"));
 					smartPop.closeProgress();
 				}
 			});
@@ -442,4 +536,164 @@ $(function() {
 		input.parent().html(usersShown);
 		return false;
 	});
+
+	$('.js_junk_list_btn').live('click', function(e) {
+		var input = $(targetElement(e));
+		smartPop.progressCont(input.next('span:first'));
+		var target = $('.js_junk_list_form');
+		$.ajax({
+			url : "junk_list.sw",
+			data : {},
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				target.slideDown(500);
+				input.parent('a.js_junk_list_btn').hide();
+				smartPop.closeProgress();
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+
+	$('a.js_junk_list_close').live('click', function(e) {
+		var input = $(targetElement(e));
+		$('.js_junk_list_form').slideUp(500).html('');
+		$('a.js_junk_list_btn').show();
+		return false;
+	});
+
+	$('.js_add_junk_mail').live('click', function(e) {
+		var input = $(targetElement(e)).parents('td:first').find('input:first');
+		if(!isEmailAddress(input.attr('value'))){
+			smartPop.showInfo(smartPop.ERROR, smartMessage.get("notMailError"));			
+			return false;
+		}
+		var paramsJson = {};
+		var senderIds = new Array();
+		senderIds.push(input.attr('value'));
+		paramsJson['senderIds'] = senderIds;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();
+		$.ajax({
+			url : "add_junk.sw",
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				var target = $('.js_junk_list_form');
+				$.ajax({
+					url : "junk_list.sw",
+					data : {},
+					success : function(data, status, jqXHR) {
+						target.html(data);
+						smartPop.closeProgress();
+					},
+					error : function(xhr, ajaxOptions, thrownError){
+						smartPop.closeProgress();
+					}
+				});
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("addJunkMailError"));
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
+	$('.js_add_junk_domain').live('click', function(e) {
+		var input = $(targetElement(e)).parents('td:first').find('input:first');
+		if(!isEmailAddress('a@' + input.attr('value'))){
+			smartPop.showInfo(smartPop.ERROR, smartMessage.get("notDomainError"));			
+			return false;
+		}
+		var paramsJson = {};
+		var senderDomains = new Array();
+		senderDomains.push(input.attr('value'));
+		paramsJson['senderDomains'] = senderDomains;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();
+		$.ajax({
+			url : "add_junk.sw",
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				var target = $('.js_junk_list_form');
+				$.ajax({
+					url : "junk_list.sw",
+					data : {},
+					success : function(data, status, jqXHR) {
+						target.html(data);
+						smartPop.closeProgress();
+					},
+					error : function(xhr, ajaxOptions, thrownError){
+						smartPop.closeProgress();
+					}
+				});
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("addJunkDomainError"));
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
+	$('.js_remove_junk_mail').live('click', function(e) {
+		var input = $(targetElement(e)).parents('li:first');
+		var paramsJson = {};
+		var senderIds = new Array();
+		senderIds.push(input.attr('junkId'));
+		paramsJson['senderIds'] = senderIds;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();
+		$.ajax({
+			url : "remove_junk.sw",
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				input.remove();
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeJunkMailError"));
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
+	$('.js_remove_junk_domain').live('click', function(e) {
+		var input = $(targetElement(e)).parents('li:first');
+		var paramsJson = {};
+		var senderDomains = new Array();
+		senderDomains.push(input.attr('junkId'));
+		paramsJson['senderDomains'] = senderDomains;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();
+		$.ajax({
+			url : "remove_junk.sw",
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				input.remove();
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeJunkDomainError"));
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
 });

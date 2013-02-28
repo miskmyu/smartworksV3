@@ -33,7 +33,7 @@
 	%>
 	<li>
 		<span class="dep">
-			<a href="<%=targetContent%>?workId=<%=work.getId()%>" class="<%=classType%>" workId="<%=work.getId()%>"><span class="<%=iconType%>"></span><%=work.getName()%></a>
+			<a href="<%=targetContent%>?workId=<%=work.getId()%>" class="<%=classType%>" workId="<%=work.getId()%>"><span class="<%=work.getIconClass()%>"></span><%=work.getName()%></a>
 		</span>
 	</li>
 	<%
@@ -41,7 +41,7 @@
 	%>
 	<li class="js_drill_down">
 		<span class="dep">
-			<a href="<%=targetContent%>" categoryId="<%=work.getId()%>" class="js_popup"><span class="<%=iconType%>"></span>
+			<a href="<%=targetContent%>" categoryId="<%=work.getId()%>" class="js_popup"><span class="<%=work.getIconClass()%>"></span>
 			<span><%=work.getName()%></span>
 			</a>
 		</span>

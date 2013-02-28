@@ -43,6 +43,12 @@ public class MailController extends ExceptionInterceptor {
 		return SmartUtil.returnMnv(request, "jsp/content/work/start/new_mail.jsp", "");
 	}
 
+	@RequestMapping("/junk_list")
+	public ModelAndView junkList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		return SmartUtil.returnMnv(request, "jsp/content/work/list/junk_list.jsp", "");
+	}
+
 	@RequestMapping(value = "/new_mail_post", method = RequestMethod.POST)
 	public ModelAndView sendMailPost(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String mailContents = (String)requestBody.get("contents");
@@ -72,6 +78,18 @@ public class MailController extends ExceptionInterceptor {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void moveMailS(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.moveMails(requestBody, request);
+	}
+
+	@RequestMapping(value = "/add_junk", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void addJunk(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.addJunk(requestBody, request);
+	}
+
+	@RequestMapping(value = "/remove_junk", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeJunk(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeJunk(requestBody, request);
 	}
 
 	@RequestMapping(value = "/delete_mails", method = RequestMethod.POST)

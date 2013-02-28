@@ -29,6 +29,12 @@ public interface IMailService {
 	
 	public void moveMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public void addJunk(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void removeJunk(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public String[][] getJunkIds() throws Exception;
+	
 	public void deleteMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public void newMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;

@@ -215,6 +215,8 @@ smartMessage.bundle['ko'] = {
 	moveMailError : "메일을 이동하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	removeMailSucceed : "메일이 정상적으로 삭제되었습니다.",
 	removeMailError : "메일을 삭제하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	emptyTrashSucceed : "휴지통이 정상적으로 비워져습니다.",
+	emptyTrashError : "휴지통을 비우는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	setWorkManualSucceed : "업무매뉴얼이 정상적으로 수정되었습니다.",
 	setWorkManualError : "업무매뉴얼을 수정하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	importFromExcelSuccess : "의 항목이 정상적으로 등록되었습니다.",
@@ -238,6 +240,13 @@ smartMessage.bundle['ko'] = {
 	boardDurationDateError : "공지종료일자가 현재보다 과거일자 입니다.. 수정 후 다시 하시기 바랍니다.", 
 	newMailPasswordConfirmError : "새로운 비밀번호확인이 잘못되었습니다. 확인 후 다시 하시기 바랍니다.",
 	
+	addJunkMailError : "차단할 메일을 추가하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.",
+	addJunkDomainError : "차단할 도메인을 추가하는데 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.",
+	removeJunkMailError : "차단할 메일을 삭제하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.",
+	removeJunkDomainError : "차단할 도메인을 삭제하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.",
+	notMailError : "메일아이디가 아닙니다. 확인 후 다시 입력하여 주시기 바랍니다.",
+	notDomainError : "도메인이름이 아닙니다. 확인 후 다시 입력하여 주시기 바랍니다.",
+	
 	usableUserId : "사용가능한 사용자 아이디 입니다. 다른아이디로 변경하려면 아이디변경버튼을 클릭하십시요.",
 	duplicatedUserId : "이미사용중인 사용자 아이디 입니다. 다른아이디를 입력하시기 바랍니다.",
 	missingCommentTaskForward : "참조의견을 반드시 입력하여야 합니다. 입력 후 다시 하시기 바랍니다.",
@@ -249,6 +258,7 @@ smartMessage.bundle['ko'] = {
 	
 	moveConfirmation : "선택한 항목들을 이동하려고 합니다. 정말로 이동하시겠습니까? ",
 	removeConfirmation : "항목을 삭제하려고 합니다. 정말로 삭제하시겠습니까? ",
+	emptyTrashConfirmation : "휴지통을 비우려 합니다. 정말로 휴지통을 비우시겠습니까? ",
 	saveConfirmation : "항목을 수정하려고 합니다. 정말로 수정하시겠습니까? ",
 	createConfirmation : "항목을 생성하려고 합니다. 정말로 생성하시겠습니까? ",
 	forwardConfirmation : "항목을 전달하려고 합니다. 정말로 전달하시겠습니까? ",

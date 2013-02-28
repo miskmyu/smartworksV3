@@ -122,6 +122,16 @@
 		<div class="title myspace_h"><%=mailFolder.getFullName() %>
 			<span class="t_mail"><span class="t_s11"><fmt:message key="mail.title.count.unread"/></span><span class="new_mail <%=unreadCountTarget%>"><%=mailFolder.getUnreadItemCount() %></span><span class="bar"> / </span><%=mailFolder.getTotalItemCount() %></span><span class=" t_s11"><fmt:message key="mail.title.count"/></span>
 		</div>
+		<%
+		if(mailFolder.getType() == MailFolder.TYPE_SYSTEM_JUNK){
+		%>
+			<a href="" class="js_junk_list_btn" title="<fmt:message key='common.button.edit_junk_list' />">
+				<span class="icon_btn_edit ml10 mt8"></span>
+			</a>
+			<span class="js_progress_span"></span>
+		<%
+		}
+		%>
 	</div>
 
 	<!-- 메일 검색 -->
@@ -137,6 +147,9 @@
 	<div class="solid_line cb"></div>
 </div>
 <!-- 타이틀 //-->
+
+<div class="js_junk_list_form"></div>
+
 			
 <!-- 컨텐츠 레이아웃-->
 <div class="section_portlet js_mail_list_page js_work_list_page" currentHref="<%=SmartUtil.getLastHref(request) %>" workId=<%=work.getId()%> folderId="<%=folderId%>">
@@ -148,10 +161,12 @@
 			<div class="contents_space">
 				<div class="buttonSet">
 					<button class="js_delete_mails_btn"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
- 					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_move_mails_btn" targetId="<%=smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_JUNK)%>"><fmt:message key="mail.button.register_spam"/></button><%} %>
-					<button class="js_reply_mail_btn" ><fmt:message key="mail.button.reply"/></button>
-					<button class="js_reply_all_mail_btn" ><fmt:message key="mail.button.reply_all"/></button>
-					<button class="js_forward_mail_btn" ><fmt:message key="mail.button.forward"/></button>
+					<%if(mailFolder.getType() == MailFolder.TYPE_SYSTEM_TRASH){ %><button class="js_empty_trash_btn"><fmt:message key="common.button.empty_trash"/></button><%} %>
+ 					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK && mailFolder.getType() != MailFolder.TYPE_SYSTEM_SENT && mailFolder.getType() != MailFolder.TYPE_SYSTEM_DRAFTS){ %><button class="js_move_mails_btn js_add_junk_btn" targetId="<%=smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_JUNK)%>"><fmt:message key="mail.button.register_spam"/></button><%} %>
+ 					<%if(mailFolder.getType() == MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_move_mails_btn js_remove_junk_btn" targetId="<%=smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_INBOX)%>"><fmt:message key="mail.button.recover_spam"/></button><%} %>
+					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_reply_mail_btn" ><fmt:message key="mail.button.reply"/></button><%} %>
+					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_reply_all_mail_btn" ><fmt:message key="mail.button.reply_all"/></button><%} %>
+					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_forward_mail_btn" ><fmt:message key="mail.button.forward"/></button><%} %>
 					<select class="js_select_move_folder">
 						<option>[<fmt:message key="mail.button.move"/>]</option>
 						<%
@@ -165,7 +180,8 @@
 									|| folder.getType() == MailFolder.TYPE_SYSTEM_B_INBOX 
 									|| folder.getType() == MailFolder.TYPE_SYSTEM_B_SENT
 									|| folder.getId().equals(folderId) 
-									|| folder.getType() == MailFolder.TYPE_SYSTEM_TRASH) continue;
+									|| folder.getType() == MailFolder.TYPE_SYSTEM_TRASH
+									|| (folder.getType() == MailFolder.TYPE_SYSTEM_SENT && folderId.equals(MailFolder.ID_STRING_JUNK)) ) continue;
 						%>
 								<option value=<%=folder.getId() %>><%=folder.getFullName() %></option>
 						<%

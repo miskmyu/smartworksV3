@@ -12,6 +12,7 @@ import javax.mail.internet.InternetAddress;
 
 import net.smartworks.model.community.Department;
 import net.smartworks.model.community.Group;
+import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
@@ -60,6 +61,31 @@ public class Utility {
 			return str;
 		}
 		return null;
+	}
+
+	public static String userToString(User user) {
+		String str = null;
+		String personal = org.claros.commons.utility.Utility.doCharsetCorrections(user.getLongName());
+		String address = org.claros.commons.utility.Utility.doCharsetCorrections(user.getId());
+
+		if (personal != null && personal.length() > 0) {
+			personal = personal.replaceAll("\"", " ");
+			personal = personal.replaceAll("\'", " ");
+			personal = personal.replaceAll("&quot;", " ");
+			personal = personal.replaceAll("&#39;", " ");
+			if (address != null && address.length() > 0) {
+				str = personal + " <" + address + ">";
+			} else {
+				str = personal;
+			}
+		} else {
+			if (address != null && address.length() > 0) {
+				str = address;
+			} else {
+				str = "";
+			}
+		}
+		return str;
 	}
 
 	/**

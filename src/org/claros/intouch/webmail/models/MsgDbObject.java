@@ -11,11 +11,14 @@ public class MsgDbObject {
 	private Long folderId;
 	private String uniqueId;
 	private String uid;
+	private String messageId;
+	private String sentMessageId;
 	private String sender;
 	private String receiver;
 	private String cc;
 	private String bcc;
 	private String replyTo;
+	private String reader;
 	private String subject;
 	private Boolean multipart;
 	private Integer priority;
@@ -53,6 +56,18 @@ public class MsgDbObject {
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
+	public String getMessageId() {
+		return messageId;
+	}
+	public void setMessageId(String messageId) {
+		this.messageId = messageId;
+	}
+	public String getSentMessageId() {
+		return sentMessageId;
+	}
+	public void setSentMessageId(String sentMessageId) {
+		this.sentMessageId = sentMessageId;
+	}
 	public String getSender() {
 		return sender;
 	}
@@ -82,6 +97,12 @@ public class MsgDbObject {
 	}
 	public void setReplyTo(String replyTo) {
 		this.replyTo = replyTo;
+	}
+	public String getReader() {
+		return reader;
+	}
+	public void setReader(String reader) {
+		this.reader = reader;
 	}
 	public String getSubject() {
 		return subject;

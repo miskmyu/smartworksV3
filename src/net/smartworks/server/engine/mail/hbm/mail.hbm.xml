@@ -19,6 +19,7 @@
 		<property name="receiver" column="receiver" type="text"/>
 		<property name="cc" column="cc" type="text"/>
 		<property name="bcc" column="bcc" type="text"/>
+		<property name="reader" column="reader" type="text"/>
 		<property name="replyTo" column="replyTo" type="string" length="255"/>
 		<property name="subject" column="subject" type="string" length="255"/>
 		<property name="multipart" column="multipart" type="integer"/>

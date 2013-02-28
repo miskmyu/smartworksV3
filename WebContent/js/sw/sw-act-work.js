@@ -1290,7 +1290,7 @@ $(function() {
 			var inputPosition = input.position(); 
 			var approvalLineBoxPosition = approvalLineBox.position(); 
 			target = approvalLineBox.nextAll('.js_community_popup');
-			listWidth = 300;
+			listWidth = 360;
 			listTop = inputPosition.top + input.height();
 			listLeft = inputPosition.left;
 			var widthGap = listWidth - (approvalLineBox.width() - (inputPosition.left - approvalLineBoxPosition.left));
@@ -1300,12 +1300,12 @@ $(function() {
 			target.css({ "top" : listTop + "px"});
 			target.css({ "left" : listLeft + "px"});
 			target.css({ "position" : "absolute"});
-			smartPop.selectUser(input, target, 300, false);			
+			smartPop.selectUser(input, target, listWidth, false);			
 		}else if(!isEmpty(input.parents('.js_search_filter_page'))){
 			var userField = $(targetElement(e)).parents('.js_type_userField:first');
 			var communityItems = userField.find('.js_community_item');
 			var target = userField.find('.js_community_popup:first');
-			smartPop.selectUser(communityItems, target, 240, false);
+			smartPop.selectUser(communityItems, target, 360, false);
 		}else{
 			var userField = $(targetElement(e)).parents('.js_type_userField:first');
 			var communityItems = userField.find('.js_community_item');

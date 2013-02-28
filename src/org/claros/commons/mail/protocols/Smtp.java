@@ -194,6 +194,9 @@ public class Smtp {
 		mimeMsg.addHeader("X-Mailer", "SmartWorks.net");
 		mimeMsg.saveChanges();
 
+		String mid = mimeMsg.getMessageID();
+        mimeMsg.addHeader("Sent-Message-Id", mid);		
+		
 		// we are sending the message and generating a sent report on the fly.
 		HashMap out = new HashMap();
 		out.put("msg", mimeMsg);

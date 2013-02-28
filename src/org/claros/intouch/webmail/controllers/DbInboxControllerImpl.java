@@ -10,11 +10,14 @@ import java.util.Locale;
 
 import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.mail.MailAttachment;
+import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
+import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
@@ -262,6 +265,8 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					ArrayList toBeDeleted = new ArrayList();
 					if (msgs != null) {
 						EmailHeader header = null;
+						String[][] junkIds = SwServiceFactory.getInstance().getMailService().getJunkIds();
+
 						for (int i=0;i<msgs.length && toBeDeleted.size()<MailAccount.MAX_MESSAGES_PER_FETCH;i++) {
 							Message msg = msgs[i];
 							int msgId = i+1;
@@ -305,6 +310,25 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item.setUniqueId(md5Header);
 										item.setUid(uid);
 										item.setFolderId(new Long(folderId));
+										if(!SmartUtil.isBlankObject(junkIds) && !SmartUtil.isBlankObject(header.getFrom())){
+											String senderId = ((InternetAddress)header.getFrom()[0]).getAddress();
+											for(int j=0; j<junkIds[0].length; j++){
+												if(junkIds[0][j].equals(senderId)){
+													FolderControllerFactory folderFactory = new FolderControllerFactory(auth, profile, handler);
+													FolderController fc = folderFactory.getFolderController();
+													item.setFolderId(new Long(fc.getJunkFolder().getId()));
+													break;
+												}
+											}
+											for(int j=0; j<junkIds[1].length; j++){
+												if(senderId.contains("@" + junkIds[1][j])){
+													FolderControllerFactory folderFactory = new FolderControllerFactory(auth, profile, handler);
+													FolderController fc = folderFactory.getFolderController();
+													item.setFolderId(new Long(fc.getJunkFolder().getId()));
+													break;
+												}
+											}
+										}
 										item.setUnread(new Boolean(true));
 										item.setUsername(auth.getEmailId());
 										item.setMsgSize(new Long(bMsg.length));
@@ -322,6 +346,8 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item.setPriority(new Integer(header.getPriority()));
 										item.setSubject(header.getSubject());
 
+										if(!SmartUtil.isBlankObject(header.getSentMessageId()))
+											item.setSentMessageId(header.getSentMessageId());
 										// save the email db item.
 										mailCont.appendEmail(item, thisModel.getCompanyId());
 										msg = null;

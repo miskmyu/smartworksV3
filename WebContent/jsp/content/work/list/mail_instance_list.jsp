@@ -101,7 +101,14 @@
 					</th>
 				<%
 				}
+				if(folder.getType() == MailFolder.TYPE_SYSTEM_SENT){
 				%>
+					<th class="r_line" style="max-width:200px">
+			 			<span><fmt:message key='common.title.mail_readers'/></span>				
+					</th>
+				<%
+				}
+				%>				
 				<th class="r_line">
 		 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SUBJECT%>"><fmt:message key='common.title.instance_subject'/>
 				 		<span class="<%
@@ -155,17 +162,22 @@
 				MailInstanceInfo[] instanceInfos = (MailInstanceInfo[]) instanceList.getInstanceDatas();
 				for (MailInstanceInfo instanceInfo : instanceInfos) {
 					String sender = (SmartUtil.isBlankObject(instanceInfo.getSender())) ? SmartMessage.getString("mail.title.no.sender") : instanceInfo.getSender().getName();
+					String senderId = (SmartUtil.isBlankObject(instanceInfo.getSender())) ? "" : instanceInfo.getSender().getId();
 					//String receivers = (SmartUtil.isBlankObject(instanceInfo.getReceivers())) ? SmartMessage.getString("mail.title.no.receivers") : instanceInfo.getReceiversShown();
 					String receivers = (SmartUtil.isBlankObject(instanceInfo.getReceivers())) ? SmartMessage.getString("mail.title.no.receivers") : instanceInfo.getReceivers()[0].getLongName();
+
+					UserInfo[] readers = instanceInfo.getReaders();
+					String mailReaders = (SmartUtil.isBlankObject(readers)) ? "" : (readers.length == 1) ? readers[0].getLongName() : readers[0].getLongName() + SmartMessage.getString("content.sentence.with_other_users",new Object[] {readers.length-1});
 					String subject = (SmartUtil.isBlankObject(instanceInfo.getSubject())) ? SmartMessage.getString("mail.title.unknown.subject") : instanceInfo.getSubject();
 					String target = (savedInstance ? "new_mail.sw?folderId=" : "mail_space.sw?folderId=") + folderId + "&msgId=" + instanceInfo.getId();
 					String sendDateStr = (SmartUtil.isBlankObject(instanceInfo.getSendDate())) ? "" : instanceInfo.getSendDate().toLocalString();
 				%>
 					<tr class="instance_list <%if(instanceInfo.isUnread()){%>not_read<%}%>">
-						<td class="tc"><input name="chkSelectMail" type="checkbox" value="<%=instanceInfo.getId()%>"/></td>
+						<td class="tc"><input name="chkSelectMail" type="checkbox" value="<%=instanceInfo.getId()%>" senderId="<%=senderId %>"/></td>
 						<td><div class="<%if(instanceInfo.getPriority()>0 && instanceInfo.getPriority()<EmailPriority.NORMAL){ %>icon_important<%}%>"></div></td>
 						<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read<%}%>"></div></td>
 						<td><a href="<%=target%>" class="js_content"><%if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){%><%=receivers%><%}else{%><%=sender%><%} %></a></td>
+						<%if(folder.getType() == MailFolder.TYPE_SYSTEM_SENT){ %><td><a href="<%=target%>" class="js_content"><%=mailReaders%></a></td><%} %>
 						<td><a href="<%=target%>" class="js_content"><%=subject%></a></td>
 						<td><%if(instanceInfo.isMultipart()){ %><a href="<%=target%>" class="js_content"><img src="images/icon_file.gif"></a><%} %></td>
 						<td class="tr"><a href="<%=target%>" class="js_content"><%=sendDateStr%></a></td>
@@ -198,6 +210,13 @@
 							%>"></span>
 						</a>				
 						<span class="js_progress_span"></span>
+					</th>
+				<%
+				}
+				if(folder.getType() == MailFolder.TYPE_SYSTEM_SENT){
+				%>
+					<th class="r_line" style="max-width:200px">
+			 			<span><fmt:message key='common.title.mail_readers'/></span>				
 					</th>
 				<%
 				}

@@ -1545,5 +1545,10 @@ public class SmartTest {
 		profile.setFolderNameSpace("");
 		
 		return new ConnectionProfile[]{profile};
-	}	
+	}
+	
+	public static String[][] getJunkIds() throws Exception{
+		String[][] ids = {{"ysjung@maninsoft.co.kr", "kmyu@maninsoft.co.kr"}, {"maninsoft.co.kr", "miracom.co.kr"}};
+		return ids;
+	}
 }

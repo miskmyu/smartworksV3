@@ -10,6 +10,7 @@ package net.smartworks.server.service.factory;
 
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
+import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.INoticeService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.ISettingsService;
@@ -43,6 +44,7 @@ public class SwServiceFactory {
 	private ICommunityService communityService;
 	private INoticeService noticeService;
 	private ISettingsService settingsService;
+	private IMailService mailService;
 	private ISeraService seraService;
 
 	public ICommunityService getCommunityService() {
@@ -74,6 +76,12 @@ public class SwServiceFactory {
 	}
 	public void setSettingsService(ISettingsService settingsService) {
 		this.settingsService = settingsService;
+	}
+	public IMailService getMailService() {
+		return mailService;
+	}
+	public void setMailService(IMailService mailService) {
+		this.mailService = mailService;
 	}
 	public ISeraService getSeraService() {
 		return seraService;

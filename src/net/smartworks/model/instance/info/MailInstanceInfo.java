@@ -13,6 +13,7 @@ public class MailInstanceInfo extends InstanceInfo {
 	private LocalDate sendDate;
 	private UserInfo[] receivers;
 	private UserInfo[] ccReceivers;
+	private UserInfo[] readers;
 	private int priority;
 	private long size;
 	private boolean multipart;
@@ -74,6 +75,14 @@ public class MailInstanceInfo extends InstanceInfo {
 
 	public void setCcReceivers(UserInfo[] ccReceivers) {
 		this.ccReceivers = ccReceivers;
+	}
+
+	public UserInfo[] getReaders() {
+		return readers;
+	}
+
+	public void setReaders(UserInfo[] readers) {
+		this.readers = readers;
 	}
 
 	public int getPriority() {

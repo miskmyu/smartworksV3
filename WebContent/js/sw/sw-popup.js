@@ -300,7 +300,7 @@ smartPop = {
 	
 	selectUser : function(communityItems, target, width, isMultiUsers, courseId, friendOnly, bottomUp){
 		target.html('');
-		var conWidth = (!isEmpty(width) && width>0) ? width : 360;
+		var conWidth = (!isEmpty(width) && width>360) ? width : 360;
 		var url = (!isEmpty(courseId)) ? "pop_select_course_member.sw?multiUsers="+isMultiUsers + "&courseId=" + courseId 
 					: (!isEmpty(friendOnly) && friendOnly) ? "pop_select_friend.sw?multiUsers=" + isMultiUsers 
 					: "pop_select_user.sw?multiUsers="+isMultiUsers;
@@ -423,7 +423,7 @@ smartPop = {
 
 	selectEmailAddress : function(communityItems, target, width, isMultiUsers, bottomUp){
 		target.html('');
-		var conWidth = (!isEmpty(width) && width>0) ? width : 360;
+		var conWidth = (!isEmpty(width) && width>360) ? width : 360;
 		var url = "pop_select_email.sw?multiUsers="+isMultiUsers; 
 		var containerCss = (bottomUp) ? {width: conWidth, bottom: 0} : {width: conWidth}; 
 		$.get(url, function(data){
@@ -527,7 +527,7 @@ smartPop = {
 
 	selectDepartment : function(communityItems, target, width, bottomUp){
 		target.html('');
-		var conWidth = (!isEmpty(width) && width>0) ? width : 360;
+		var conWidth = (!isEmpty(width) && width>360) ? width : 360;
 		var url = "pop_select_depart.sw"; 
 		var containerCss = (bottomUp) ? {width: conWidth, bottom: 0} : {width: conWidth}; 
 		$.get(url, function(data){
@@ -581,7 +581,7 @@ smartPop = {
 
 	selectWork : function(target, width){
 		target.html('');
-		var conWidth = (!isEmpty(width) && width>0) ? width : 360;
+		var conWidth = (!isEmpty(width) && width>360) ? width : 360;
 		$.get("pop_select_work.sw", function(data){
 			$(data).modal({
 				appendTo: target,
@@ -637,7 +637,7 @@ smartPop = {
 				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:500,
-					width:800
+					width:960
 				},
 				autoResize : true,
 				overlayClose: false,

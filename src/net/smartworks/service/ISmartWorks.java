@@ -665,6 +665,12 @@ public interface ISmartWorks {
 	
 	public abstract void moveMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract void addJunk(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void removeJunk(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract String[][] getJunkIds() throws Exception;
+
 	public abstract void deleteMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract void newMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;

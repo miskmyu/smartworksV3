@@ -15,4 +15,5 @@ public interface MailController {
 	public void appendEmail(MsgDbObject item, String companyId) throws Exception;
 	public void markAsRead(Long msgId) throws Exception;
 	public void markAsDeleted(int[] ids) throws Exception;
+	public void appendMailReader(String userId, String messageId) throws Exception;
 }

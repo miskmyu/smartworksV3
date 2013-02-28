@@ -1749,4 +1749,19 @@ public class SmartWorks implements ISmartWorks {
 	public void removeProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		instanceService.removeProcessWorkInstance(requestBody, request);		
 	}
+
+	@Override
+	public void addJunk(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.addJunk(requestBody, request);
+	}
+
+	@Override
+	public void removeJunk(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.removeJunk(requestBody, request);
+	}
+
+	@Override
+	public String[][] getJunkIds() throws Exception {
+		return mailService.getJunkIds();
+	}
 }

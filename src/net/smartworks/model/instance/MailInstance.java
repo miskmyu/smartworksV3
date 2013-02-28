@@ -19,6 +19,7 @@ public class MailInstance extends Instance {
 	private User[] receivers;
 	private User[] ccReceivers;
 	private User[] bccReceivers;
+	private User[] readers;
 	private int priority;
 	private String mailContents;
 	private long size;
@@ -60,6 +61,14 @@ public class MailInstance extends Instance {
 
 	public void setCcReceivers(User[] ccReceivers) {
 		this.ccReceivers = ccReceivers;
+	}
+
+	public User[] getReaders() {
+		return readers;
+	}
+
+	public void setReaders(User[] readers) {
+		this.readers = readers;
 	}
 
 	public int getPriority() {
@@ -197,6 +206,45 @@ public class MailInstance extends Instance {
 		for(int i=0; i<this.receivers.length; i++){
 			String name = (SmartUtil.isBlankObject(receivers[i].getLongName())) ? receivers[i].getId() : receivers[i].getLongName();
 			userField = userField + "<span class='js_community_item user_select' comId='" + receivers[i].getId() + "' comName='" + name + "'>" + name + "&lt;" + receivers[i].getId() + "&gt;<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+		}
+		return userField;
+	}
+	
+	public String getReadersShown(){
+		if(SmartUtil.isBlankObject(this.readers)) return "";
+		String shown = readers[0].getEmailAddressShown();
+		for(int i=1; i<this.readers.length; i++)
+			shown = shown + ", " +  readers[i].getEmailAddressShown();
+		return shown;
+	}
+	
+	public String getReadersShownBrief(){
+		if(SmartUtil.isBlankObject(this.readers)) return "";
+		String shown = readers[0].getEmailAddressShown();
+		for(int i=1; i<this.readers.length; i++){
+			if(i==BRIEF_EMAILADDRESS_COUNT){
+				//Start 2012.09.10 받는사람 클릭시 사라지는 버그 수정 잘못된 메소드 호출
+				String usersShown = this.getReadersShown().replaceAll("<", "&lt;");
+				//End jybae 
+				usersShown = usersShown.replaceAll(">", "&gt;");
+				usersShown = usersShown.replaceAll("\"", "&quot;");
+				usersShown = usersShown.replaceAll("\'", "&#39;");
+				shown = shown + " <a href='' class='js_show_all_users_shown' usersShown=\"" + usersShown + "\">" 
+						+ SmartMessage.getString("content.sentence.with_other_users", new Object[]{this.readers.length-BRIEF_EMAILADDRESS_COUNT})
+						+ "</a>";
+				break;
+			}
+			shown = shown + ", " +  readers[i].getEmailAddressShown();
+		}
+		return shown;
+	}
+	
+	public String getReadersHtml(){
+		if(SmartUtil.isBlankObject(this.readers)) return "";
+		String userField = "";
+		for(int i=0; i<this.readers.length; i++){
+			String name = (SmartUtil.isBlankObject(readers[i].getLongName())) ? readers[i].getId() : readers[i].getLongName();
+			userField = userField + "<span class='js_community_item user_select' comId='" + readers[i].getId() + "' comName='" + name + "'>" + name + "&lt;" + readers[i].getId() + "&gt;<a class='js_remove_community' href=''>&nbsp;x</a></span>";
 		}
 		return userField;
 	}

@@ -206,7 +206,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 				buf.append(" obj");
 			} else {
 				buf.append(" obj.id, obj.username, obj.folderId, obj.uniqueId,");
-				buf.append(" obj.sender, obj.receiver, obj.cc, obj.bcc,");
+				buf.append(" obj.sender, obj.receiver, obj.cc, obj.bcc, obj.reader,");
 				buf.append(" obj.replyTo, obj.subject, obj.multipart, obj.priority,");
 				buf.append(" obj.sentDate, obj.unread, obj.msgSize ");
 			}
@@ -228,6 +228,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 					obj.setReceiver((String)fields[j++]);
 					obj.setCc((String)fields[j++]);
 					obj.setBcc((String)fields[j++]);
+					obj.setReader((String)fields[j++]);
 					obj.setReplyTo((String)fields[j++]);
 					obj.setSubject((String)fields[j++]);
 					obj.setMultipart((Integer)fields[j++]);

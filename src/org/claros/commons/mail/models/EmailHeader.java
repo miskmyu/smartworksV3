@@ -25,6 +25,7 @@ public class EmailHeader implements Serializable {
 	private String receiptNotificationEmail;
 	private short priority;
 	private short sensitivity;
+	private String sentMessageId;
 	
 	// human readable portions. These are shown on jsps.
 	private String sizeShown;
@@ -300,6 +301,14 @@ public class EmailHeader implements Serializable {
 	 */
 	public void setSensitivity(short sensitivity) {
 		this.sensitivity = sensitivity;
+	}
+
+	public String getSentMessageId() {
+		return sentMessageId;
+	}
+
+	public void setSentMessageId(String sentMessageId) {
+		this.sentMessageId = sentMessageId;
 	}
 
 	public String getBccShown() {

@@ -123,4 +123,8 @@ public class ImapMailControllerImpl implements MailController {
 		ImapProtocolImpl protocol = (ImapProtocolImpl)factory.getImap(folder);
 		protocol.flagAsDeleted(ids);
 	}
+	
+	public void appendMailReader(String userId, String messageId) throws Exception{
+		
+	}
 }

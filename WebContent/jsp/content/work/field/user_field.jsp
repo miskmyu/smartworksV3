@@ -66,7 +66,7 @@
 				<input name="txtFilterStringOperand" type="hidden" value="<%=operandId%>">
 			</div>
 			<div class="js_community_list com_list" style="display: none"></div>
-			<span class="js_community_popup"></span>
+			<span class="js_community_popup" style="position:absolute;left:-183px"></span>
 			<a href="" class="js_userpicker_button"><span class="icon_fb_user"></span></a>
 		</div>
 	</div>

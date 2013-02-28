@@ -113,6 +113,8 @@ public class DbMailControllerImpl implements MailController {
 			if (email != null) {
 				email.setMsgId(item.getId());
 			}
+			
+			email.setReaders(item.getReader());
 		}
 		return email;
 	}
@@ -332,6 +334,41 @@ public class DbMailControllerImpl implements MailController {
 				run.update(sql, new Object[] {new Integer(0), username, msgId});
 			} catch (SQLException e) {
 				throw e;
+			}
+		}
+	}
+
+	public void appendMailReader(String userId, String messageId) throws Exception {
+		if(SmartUtil.isBlankObject(userId) || SmartUtil.isBlankObject(messageId)) return;
+		IGenericDao dao = null;
+		FolderControllerFactory fact = new FolderControllerFactory(auth, profile, handler);
+		FolderController cont = fact.getFolderController();
+		FolderDbObject foldObj = cont.getInboxFolder();
+		if (false /*foldObj.getId().toString().equals(folder)*/) {
+			// it is the INBOX
+			// do nothing
+		} else {
+			dao = Utility.getDbConnection();
+			QueryRunner run = new QueryRunner(DbConfigList.getDataSourceById("file"));
+			String username = auth.getEmailId();
+			try {
+				String sql = "SELECT READER FROM MSG_DB_OBJECTS WHERE USERNAME=? AND MESSAGEID = ?";
+				String reader = (String)dao.read(MsgDbObject.class, sql, new Object[] {userId, messageId});
+
+				if(SmartUtil.isBlankObject(reader))
+					reader = org.claros.commons.mail.utility.Utility.userToString(SmartUtil.getCurrentUser());
+				else if(reader.contains(username)) 
+					return;
+				else
+					reader = reader + ", " + org.claros.commons.mail.utility.Utility.userToString(SmartUtil.getCurrentUser());
+				
+				sql = "UPDATE MSG_DB_OBJECTS SET READER = ? WHERE USERNAME=? AND MESSAGEID=?";
+				run.update(sql, new Object[] {reader, username, messageId});
+			} catch (SQLException e) {
+				throw e;
+			} finally {
+				JdbcUtil.close(dao);
+				dao = null;
 			}
 		}
 	}
