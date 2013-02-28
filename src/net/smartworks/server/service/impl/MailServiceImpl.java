@@ -1701,10 +1701,19 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	public void deleteMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try {
 
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			
 			List<String> ids = (List<String>)requestBody.get("ids");
 			String folderId = (String)requestBody.get("folderId");
+			//휴지통 비우기시에 넘어오는 파라미터
+			boolean removeAll = false;
+			if (requestBody.get("removeAll") != null) {
+				if (requestBody.get("removeAll") instanceof Boolean)
+					removeAll = (Boolean)requestBody.get("removeAll");
+			}
 			
-			if (ids != null && folderId != null) {
+			if (ids != null && folderId != null && !removeAll) {
 				AuthProfile auth = getAuthProfile(request);
 				ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
 				ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
@@ -1735,6 +1744,29 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					} else {
 						mailCont.moveEmails(msgs, fItem.getFolderName());
 					}
+				}
+			} else if (ids == null && !CommonUtil.isEmpty(folderId) && removeAll) {
+
+				AuthProfile auth = getAuthProfile(request);
+				ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+				ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+
+				MailControllerFactory factory = new MailControllerFactory(auth, profile, handler, folderId);
+				MailController mailCont = factory.getMailController();
+				
+				//휴지통비우
+				MailContentCond mailCond = new MailContentCond();
+				mailCond.setFolderId(Long.parseLong(folderId));
+				mailCond.setUsername(userId);
+				mailCond.setUnread(-1);
+				MailContent[] mailContents = getMailManager().getMailContents(userId, mailCond, IManager.LEVEL_ALL);
+				if (!CommonUtil.isEmpty(mailContents)) {
+					int msgs[] = new int[mailContents.length];
+					for (int j = 0; j < mailContents.length; j++) {
+						MailContent mailContent = mailContents[j];
+						msgs[j] = (int)mailContent.getId();
+					}
+					mailCont.deleteEmails(msgs);
 				}
 			}
 
