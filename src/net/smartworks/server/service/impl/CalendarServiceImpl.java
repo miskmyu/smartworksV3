@@ -28,6 +28,7 @@ import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.DateUtil;
 import net.smartworks.server.engine.common.util.StringUtil;
 import net.smartworks.server.engine.config.manager.ISwcManager;
 import net.smartworks.server.engine.config.model.SwcEventDay;
@@ -287,9 +288,8 @@ public class CalendarServiceImpl implements ICalendarService {
 		}
 		return false;
 	}
-
 	@Override
-	public EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String workSpaceId, LocalDate fromDate, LocalDate toDate, int maxLength) throws Exception {
+	public EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String workSpaceId, LocalDate fromDate, LocalDate toDate, int maxLength, boolean isGmtDate) throws Exception {
 		try{
 			String workId = SmartWork.ID_EVENT_MANAGEMENT;
 			User user = SmartUtil.getCurrentUser();
@@ -437,11 +437,22 @@ public class CalendarServiceImpl implements ICalendarService {
 						} else if(swdDataField.getId().equals("6")) {
 							eventInstanceInfo.setContent(value);
 						} else if(swdDataField.getId().equals("1")) {
-							LocalDate start = LocalDate.convertGMTStringToLocalDate(value);
-							eventInstanceInfo.setStart(start);
+							if (isGmtDate) {
+								Date date = DateUtil.toDate(value, "yyyy-MM-dd HH:mm.ss");
+								eventInstanceInfo.setStart(new LocalDate(date.getTime()));
+							} else {
+								LocalDate start = LocalDate.convertGMTStringToLocalDate(value);
+								eventInstanceInfo.setStart(start);
+							}
 						} else if(swdDataField.getId().equals("2")) {
-							if(value != null)
-								eventInstanceInfo.setEnd(LocalDate.convertGMTStringToLocalDate(value));
+							if(value != null) {
+								if (isGmtDate) {
+									Date date = DateUtil.toDate(value, "yyyy-MM-dd HH:mm.ss");
+									eventInstanceInfo.setEnd(new LocalDate(date.getTime()));
+								} else {
+									eventInstanceInfo.setEnd(LocalDate.convertGMTStringToLocalDate(value));
+								}
+							}
 						} else if(swdDataField.getId().equals("5")) {
 							CommunityInfo[] relatedUsers = null;
 							if(refRecordId != null) {
@@ -486,6 +497,10 @@ public class CalendarServiceImpl implements ICalendarService {
 			return null;			
 			// Exception Handling Required			
 		}
+	}
+	@Override
+	public EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String workSpaceId, LocalDate fromDate, LocalDate toDate, int maxLength) throws Exception {
+		return getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate, maxLength, true);
 	}
 
 	/*

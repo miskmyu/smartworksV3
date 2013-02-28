@@ -176,8 +176,15 @@
 				<input name="selWorkSpaceType" type="hidden" value="<%=spaceType %>">
 			<%
 			}else{
+				int boardSpaceType= ISmartWorks.SPACE_TYPE_GROUP;
+				for (CommunityInfo community : communities) {
+					if (community.getClass().equals(DepartmentInfo.class)){
+						boardSpaceType = ISmartWorks.SPACE_TYPE_DEPARTMENT;
+						break;
+					}
+				}
 			%>
-				<input name="selWorkSpaceType" type="hidden" <%if(!SmartUtil.isBlankObject(workId) && workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ %>value="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT%>" <%}else{ %>value="<%=ISmartWorks.SPACE_TYPE_USER %>"<%} %>>
+				<input name="selWorkSpaceType" type="hidden" <%if(!SmartUtil.isBlankObject(workId) && workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ %>value="<%=boardSpaceType%>" <%}else{ %>value="<%=ISmartWorks.SPACE_TYPE_USER %>"<%} %>>
 				<select name="selWorkSpace" class="js_select_work_space">
 					<%
 					if(!workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ 

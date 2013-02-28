@@ -2401,8 +2401,15 @@ public class CommunityServiceImpl implements ICommunityService {
 
 			UserInfo[] userInfos = new UserInfo[userExtends.length];
 				
+			String groupLeader = group.getGroupLeader();
 			for (int i = 0; i < userExtends.length; i++) {
 				userInfos[i] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtends[i]);
+				
+				//그룹의 리더가 아니라면 부서의 리더들도 롤이 그룹 맴버이
+				String tempMember = userInfos[i].getId();
+				if (!groupLeader.equalsIgnoreCase(tempMember)) {
+					userInfos[i].setRole(User.USER_ROLE_MEMBER);
+				}
 			}
 			
 			memberInformList.setMembers(userInfos);
