@@ -346,9 +346,6 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item.setPriority(new Integer(header.getPriority()));
 										item.setSubject(header.getSubject());
 
-										if(!SmartUtil.isBlankObject(header.getSentMessageId()))
-											item.setSentMessageId(header.getSentMessageId());
-										// save the email db item.
 										mailCont.appendEmail(item, thisModel.getCompanyId());
 										msg = null;
 										bMsg = null;
