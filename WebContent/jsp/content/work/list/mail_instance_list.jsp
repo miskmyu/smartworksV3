@@ -103,7 +103,7 @@
 				}
 				if(folder.getType() == MailFolder.TYPE_SYSTEM_SENT){
 				%>
-					<th class="r_line" style="max-width:200px">
+					<th class="r_line" style="width:130px">
 			 			<span><fmt:message key='common.title.mail_readers'/></span>				
 					</th>
 				<%
@@ -215,7 +215,7 @@
 				}
 				if(folder.getType() == MailFolder.TYPE_SYSTEM_SENT){
 				%>
-					<th class="r_line" style="max-width:200px">
+					<th class="r_line" style="width:130px">
 			 			<span><fmt:message key='common.title.mail_readers'/></span>				
 					</th>
 				<%
