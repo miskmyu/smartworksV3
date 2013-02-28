@@ -364,7 +364,7 @@ public class DbMailControllerImpl implements MailController {
 					reader = reader + ", " + org.claros.commons.mail.utility.Utility.userToString(SmartUtil.getCurrentUser());
 				
 				sql = "UPDATE MSG_DB_OBJECTS SET READER = ? WHERE USERNAME=? AND MESSAGE_ID=?";
-				run.update(sql, new Object[] {reader, username, messageId});
+				run.update(sql, new Object[] {reader, userId, messageId});
 			} catch (SQLException e) {
 			} catch(Exception ex){
 			} finally {
