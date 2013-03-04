@@ -85,6 +85,9 @@ if(subInstances != null) {
 		ImageInstanceInfo image=null;
 		MemoInstanceInfo memo=null;
 		CommentInstanceInfo comment=null;
+		boolean isUpdatedInstance = (workInstance.getCreatedDate().getTime() != workInstance.getLastModifiedDate().getTime());
+		if(isUpdatedInstance && !SmartUtil.isBlankObject(workInstance.getLastModifier()))
+			owner = workInstance.getLastModifier();
 	%>
 		<li class="sub_instance_list js_sub_instance_list" instanceId="<%=workInstance.getId() %>">
 			<%
@@ -112,6 +115,13 @@ if(subInstances != null) {
 						<%
 						}
 						%>
+						<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+							<fmt:param>
+								<a class="js_content" href='<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+									<span class="t_woname"><%=workInstance.getWorkName()%></span>
+								</a>
+							</fmt:param>
+						</fmt:message><%}%>
 						<!-- 인스턴스 마지막수정일자 -->
 						<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<!-- 인스턴스 마지막수정일자 //-->
@@ -152,6 +162,13 @@ if(subInstances != null) {
 						<%
 						}
 						%>
+						<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+							<fmt:param>
+								<a class="js_content" href='<%=event.getController() %>?cid=<%=event.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+									<span class="t_woname"><%=workInstance.getWorkName()%></span>
+								</a>
+							</fmt:param>
+						</fmt:message><%}%>
 						<!-- 인스턴스 마지막수정일자 -->
 						<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<!-- 인스턴스 마지막수정일자 //-->
@@ -193,14 +210,23 @@ if(subInstances != null) {
 						<%
 						}
 						%>
+						<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+							<fmt:param>
+								<a class="js_content" href='<%=file.getController() %>?cid=<%=file.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+									<span class="t_woname"><%=workInstance.getWorkName()%></span>
+								</a>
+							</fmt:param>
+						</fmt:message><%}%>
 						<!-- 인스턴스 마지막수정일자 -->
 						<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<!-- 인스턴스 마지막수정일자 //-->
 						
-						<%if(!SmartUtil.isBlankObject(file.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(file.getFiles(), workId, null, file.getId()) %>
+						<div>
+							<a class="js_content" href='<%=file.getController() %>?cid=<%=file.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'><%=file.getSubject() %></a>
 							<%if(file.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=file.getSubInstanceCount() %></b>]</font><%} %>
 							<%if(file.isNew()){ %><span class="icon_new"></span><%} %>
-						</div><%} %>
+						</div>
+						<%if(!SmartUtil.isBlankObject(file.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(file.getFiles(), workId, null, file.getId()) %></div><%} %>
 						<%if(!SmartUtil.isBlankObject(file.getContent())){ %><div><%=file.getContent() %></div><%} %>
 					</div>
 				</div>
@@ -228,6 +254,13 @@ if(subInstances != null) {
 						<%
 						}
 						%>
+						<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+							<fmt:param>
+								<a class="js_content" href='<%=image.getController() %>?cid=<%=image.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+									<span class="t_woname"><%=workInstance.getWorkName()%></span>
+								</a>
+							</fmt:param>
+						</fmt:message><%}%>
 						<!-- 인스턴스 마지막수정일자 -->
 						<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<!-- 인스턴스 마지막수정일자 //-->
@@ -235,8 +268,8 @@ if(subInstances != null) {
 						<div>
 							<a class="js_show_picture_detail" instanceId="<%=image.getId()%>" href="">
 							<img src="<%=image.getImgSource()%>" style="max-width:200px"></a>
-							<%if(image.getSubInstanceCount()>0){ %><font class="vt t_sub_count">[<b><%=image.getSubInstanceCount() %></b>]</font><%} %>
-							<%if(image.isNew()){ %><span class="icon_new vt"></span><%} %>
+							<%if(image.getSubInstanceCount()>0){ %><font class="vc t_sub_count">[<b><%=image.getSubInstanceCount() %></b>]</font><%} %>
+							<%if(image.isNew()){ %><span class="icon_new vc"></span><%} %>
 						</div>
 						<%if(!SmartUtil.isBlankObject(image.getContent())){ %><div><%=image.getContent() %></div><%} %>
 					</div>
@@ -265,6 +298,13 @@ if(subInstances != null) {
 						<%
 						}
 						%>
+						<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+							<fmt:param>
+								<a class="js_content" href='<%=memo.getController() %>?cid=<%=memo.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+									<span class="t_woname"><%=workInstance.getWorkName()%></span>
+								</a>
+							</fmt:param>
+						</fmt:message><%}%>
 						<!-- 인스턴스 마지막수정일자 -->
 						<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<!-- 인스턴스 마지막수정일자 //-->
@@ -315,7 +355,7 @@ if(subInstances != null) {
 			default:
 			%>
 				<div class="det_title">
-					<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
+					<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_c"></a></div>
 					<div class="noti_in">
 						<%
 						if(cUser.getId().equals(owner.getId())){
@@ -328,6 +368,13 @@ if(subInstances != null) {
 						<%
 						}
 						%>
+						<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+							<fmt:param>
+								<a class="js_content" href='<%=((WorkInstanceInfo)workInstance).getController() %>?cid=<%=((WorkInstanceInfo)workInstance).getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+									<span class="t_woname"><%=workInstance.getWorkName()%></span>
+								</a>
+							</fmt:param>
+						</fmt:message><%}%>
 						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<div>
 							<a class="js_content" href="<%=((WorkInstanceInfo)workInstance).getController()%>?cid=<%=((WorkInstanceInfo)workInstance).getContextId()%>&wid=<%=workSpaceId%>&workId=<%=workId%>">

@@ -123,6 +123,11 @@
 			FileInstanceInfo file=null;
 			ImageInstanceInfo image=null;
 			MemoInstanceInfo memo=null;
+
+			boolean isUpdatedInstance = (workInstance.getCreatedDate().getTime() != workInstance.getLastModifiedDate().getTime());
+			if(isUpdatedInstance && !SmartUtil.isBlankObject(workInstance.getLastModifier()))
+				owner = workInstance.getLastModifier();
+			
 	%>
 			<li class="sub_instance_list js_sub_instance_list js_space_sub_instance" instanceId="<%=workInstance.getId() %>" taskInstId="<%=taskInstance.getId()%>"  workType="<%=workType%>">
 				<%
@@ -147,6 +152,13 @@
 							}
 							%>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>"><span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span></a><%} %>
+							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+								<fmt:param>
+									<a class="js_content" href='<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+										<span class="t_woname"><%=workInstance.getWorkName()%></span>
+									</a>
+								</fmt:param>
+							</fmt:message><%}%>
 							<!-- 인스턴스 마지막수정일자 -->
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<!-- 인스턴스 마지막수정일자 //-->
@@ -188,6 +200,13 @@
 								<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
 								</a>
 							<%} %>
+							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+								<fmt:param>
+									<a class="js_content" href='<%=event.getController() %>?cid=<%=event.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+										<span class="t_woname"><%=workInstance.getWorkName()%></span>
+									</a>
+								</fmt:param>
+							</fmt:message><%}%>
 							<!-- 인스턴스 마지막수정일자 -->
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<!-- 인스턴스 마지막수정일자 //-->
@@ -230,13 +249,21 @@
 									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
 								</a>
 							<%} %>
+							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+								<fmt:param>
+									<a class="js_content" href='<%=file.getController() %>?cid=<%=file.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+										<span class="t_woname"><%=workInstance.getWorkName()%></span>
+									</a>
+								</fmt:param>
+							</fmt:message><%}%>
 							<!-- 인스턴스 마지막수정일자 -->
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<!-- 인스턴스 마지막수정일자 //-->
-							
-							<%if(!SmartUtil.isBlankObject(file.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(file.getFiles(), workId, null, file.getId()) %>
+							<div>
+								<a class="js_content" href='<%=file.getController() %>?cid=<%=file.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'><%=file.getSubject() %></a>
 								<%if(file.isNew()){ %><span class="icon_new"></span><%} %>
-							</div><%} %>
+							</div>							
+							<%if(!SmartUtil.isBlankObject(file.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(file.getFiles(), workId, null, file.getId()) %></div><%} %>
 							<%if(!SmartUtil.isBlankObject(file.getContent())){ %><div><%=file.getContent() %></div><%} %>
 						</div>
 					</div>
@@ -266,6 +293,13 @@
 								<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
 								</a>
 							<%} %>
+							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+								<fmt:param>
+									<a class="js_content" href='<%=image.getController() %>?cid=<%=image.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+										<span class="t_woname"><%=workInstance.getWorkName()%></span>
+									</a>
+								</fmt:param>
+							</fmt:message><%}%>
 							<!-- 인스턴스 마지막수정일자 -->
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<!-- 인스턴스 마지막수정일자 //-->
@@ -273,7 +307,7 @@
 							<div>
 								<a class="js_show_picture_detail" instanceId="<%=image.getId()%>" href="">
 								<img src="<%=image.getImgSource()%>" style="max-width:200px"></a>
-								<%if(image.isNew()){ %><span class="icon_new vt"></span><%} %>
+								<%if(image.isNew()){ %><span class="icon_new vc"></span><%} %>
 							</div>
 							<%if(!SmartUtil.isBlankObject(image.getContent())){ %><div><%=image.getContent() %></div><%} %>
 						</div>
@@ -304,6 +338,13 @@
 								<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
 							</a>
 							<%} %>
+							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+								<fmt:param>
+									<a class="js_content" href='<%=memo.getController() %>?cid=<%=memo.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+										<span class="t_woname"><%=workInstance.getWorkName()%></span>
+									</a>
+								</fmt:param>
+							</fmt:message><%}%>
 							<!-- 인스턴스 마지막수정일자 -->
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<!-- 인스턴스 마지막수정일자 //-->
@@ -414,15 +455,6 @@
 						<%
 							break;
 						case TaskInstance.TYPE_INFORMATION_TASK_CREATED:
-						%>
-							<fmt:message key="content.sentence.itask_created">
-								<fmt:param>
-									<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>'>
-										<span class="t_woname"><%=runningTaskName%></span>
-									</a>
-								</fmt:param>
-							</fmt:message>
-						<%
 							break;
 						case TaskInstance.TYPE_INFORMATION_TASK_DELETED:
 							%>
@@ -471,28 +503,40 @@
 						<%
 							break;
 						case TaskInstance.TYPE_PROCESS_TASK_ASSIGNED:
+							if(workInstance.getCreatedDate().getTime() == taskInstance.getCreatedDate().getTime()){
 						%>
-							<fmt:message key="content.sentence.ptask_assigned">
-								<fmt:param>
-									<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>'>
-										<span class="t_woname"><%=runningTaskName%></span> 
-									</a>
-								</fmt:param>
-								<fmt:param>
-									<%
-									if(cUser.getId().equals(assignee.getId())){
-									%>
-										<span class="t_name"><%=assignee.getLongName()%></span>
-									<%
-									}else{
-									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
-									<%
-									}
-									%>
-								</fmt:param>
-							</fmt:message>
+								<fmt:message key="content.sentence.ptask_started">
+									<fmt:param>
+										<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>'>
+											<span class="t_woname"><%=runningTaskName%></span> 
+										</a>
+									</fmt:param>
+								</fmt:message>
 							<%
+							}else{
+							%>
+								<fmt:message key="content.sentence.ptask_assigned">
+									<fmt:param>
+										<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>'>
+											<span class="t_woname"><%=runningTaskName%></span> 
+										</a>
+									</fmt:param>
+									<fmt:param>
+										<%
+										if(cUser.getId().equals(assignee.getId())){
+										%>
+											<span class="t_name"><%=assignee.getLongName()%></span>
+										<%
+										}else{
+										%>
+											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<%
+										}
+										%>
+									</fmt:param>
+								</fmt:message>
+							<%
+							}
 							break;
 						case TaskInstance.TYPE_PROCESS_TASK_FORWARDED:
 						%>

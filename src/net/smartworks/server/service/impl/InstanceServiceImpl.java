@@ -3707,9 +3707,9 @@ public class InstanceServiceImpl implements IInstanceService {
 						TaskWork task = tasks[i];
 //							if (instanceInfoList.size() == 10)
 //								break;
-						if (prcInstIdList.contains(task.getTskPrcInstId()))
-							continue;
-						prcInstIdList.add(task.getTskPrcInstId());
+//						if (prcInstIdList.contains(task.getTskPrcInstId()))
+//							continue;
+//						prcInstIdList.add(task.getTskPrcInstId());
 						instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(cuser, task));
 					}
 				}
@@ -3749,10 +3749,10 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 			}
-			
 			if(instanceInfoList.size() > 0) {
+				int moreInstances = ((tasksSize + opinionsSize) > length && instanceInfoList.size()==length) ? 1 : 0;
 				Collections.sort(instanceInfoList);
-				subInstancesInInstances = new InstanceInfo[instanceInfoList.size()];
+				subInstancesInInstances = new InstanceInfo[instanceInfoList.size()+moreInstances];
 				instanceInfoList.toArray(subInstancesInInstances);
 			}
 
@@ -7739,83 +7739,95 @@ public class InstanceServiceImpl implements IInstanceService {
 	
 	@Override
 	public InstanceInfo[] getSpaceInstancesByDate(String spaceId, LocalDate fromDate, int maxSize) throws Exception {
-		try{
-			User cuser = SmartUtil.getCurrentUser();
-			String userId = null;
-			if (cuser != null)
-				userId = cuser.getId();
-			
-			TaskWorkCond cond = new TaskWorkCond();
-			cond.setTskWorkSpaceId(spaceId);
-			cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
-			cond.setOrders(new Order[]{new Order("taskLastModifyDate", false)});
-			cond.setPageSize(maxSize);
-			cond.setTskExecuteDateTo(new LocalDate(fromDate.getGMTDate()));
-			TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, cond);
-			List<InstanceInfo> instanceInfoList = new ArrayList<InstanceInfo>();
-			List<String> prcInstIdList = new ArrayList<String>();
-			if(!CommonUtil.isEmpty(tasks)) {
-				for (int i = 0; i < tasks.length; i++) {
-					TaskWork task = tasks[i];
-					if (instanceInfoList.size() == 10)
-						break;
-					if (prcInstIdList.contains(task.getTskPrcInstId()))
-						continue;
-					prcInstIdList.add(task.getTskPrcInstId());
-					instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(cuser, task));
-				}
+		
+		InstanceInfo[] instances = 	getSubInstancesInInstance(spaceId, maxSize, fromDate);
+		if(instances!=null){
+			int length = (instances.length<maxSize) ? instances.length : maxSize;
+			InstanceInfo[] resultInstances = new InstanceInfo[instances.length];
+			for(int i=0; i<length; i++){
+				resultInstances[i] = instances[length-i-1];
 			}
-
-			InstanceInfo[] spaceInstances = null;
-
-			OpinionCond opinionCond = new OpinionCond();
-			opinionCond.setRefId(spaceId);
-			opinionCond.setPageSize(maxSize);
-			Opinion[] opinions = getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
-			if(!CommonUtil.isEmpty(opinions)) {
-				int opinionLength = opinions.length;
-				for(int i=0; i<opinionLength; i++) {
-					Opinion opinion = opinions[i];
-					CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
-					String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
-					Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
-					commentInstanceInfo.setId(opinion.getObjId());
-					commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
-					commentInstanceInfo.setComment(opinion.getOpinion());
-					commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
-					commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
-					commentInstanceInfo.setType(Instance.TYPE_COMMENT);
-					commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
-					commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
-					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));
-					instanceInfoList.add(commentInstanceInfo);
-				}
-			}
-			if(instanceInfoList.size() > 0) {
-				Collections.sort(instanceInfoList, Collections.reverseOrder());
-				spaceInstances = new InstanceInfo[instanceInfoList.size()];
-				instanceInfoList.toArray(spaceInstances);
-			}
-
-			if(!CommonUtil.isEmpty(spaceInstances)) {
-				if(spaceInstances.length > maxSize) {
-					List<InstanceInfo> resultInstanceInfoList = new ArrayList<InstanceInfo>();
-					for(int i=0; i<maxSize; i++) {
-						InstanceInfo instanceInfo = spaceInstances[i];
-						resultInstanceInfoList.add(instanceInfo);
-					}
-					spaceInstances = new InstanceInfo[resultInstanceInfoList.size()];
-					resultInstanceInfoList.toArray(spaceInstances);
-				}
-			}
-
-			return spaceInstances;
-		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			throw e;			
-			// Exception Handling Required			
+			return resultInstances;
 		}
+		return null;
+//		try{
+//			User cuser = SmartUtil.getCurrentUser();
+//			String userId = null;
+//			if (cuser != null)
+//				userId = cuser.getId();
+//			
+//			TaskWorkCond cond = new TaskWorkCond();
+//			cond.setTskWorkSpaceId(spaceId);
+//			cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
+//			cond.setOrders(new Order[]{new Order("taskLastModifyDate", false)});
+//			cond.setPageSize(maxSize);
+//			cond.setTskExecuteDateTo(new LocalDate(fromDate.getGMTDate()));
+//			TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, cond);
+//			List<InstanceInfo> instanceInfoList = new ArrayList<InstanceInfo>();
+//			List<String> prcInstIdList = new ArrayList<String>();
+//			if(!CommonUtil.isEmpty(tasks)) {
+//				for (int i = 0; i < tasks.length; i++) {
+//					TaskWork task = tasks[i];
+//					if (instanceInfoList.size() == 10)
+//						break;
+//					if (prcInstIdList.contains(task.getTskPrcInstId()))
+//						continue;
+//					prcInstIdList.add(task.getTskPrcInstId());
+//					instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(cuser, task));
+//				}
+//			}
+//
+//			InstanceInfo[] spaceInstances = null;
+//
+//			OpinionCond opinionCond = new OpinionCond();
+//			opinionCond.setRefId(spaceId);
+//			opinionCond.setPageSize(maxSize);
+//			Opinion[] opinions = getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
+//			if(!CommonUtil.isEmpty(opinions)) {
+//				int opinionLength = opinions.length;
+//				for(int i=0; i<opinionLength; i++) {
+//					Opinion opinion = opinions[i];
+//					CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+//					String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
+//					Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
+//					commentInstanceInfo.setId(opinion.getObjId());
+//					commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
+//					commentInstanceInfo.setComment(opinion.getOpinion());
+//					commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+//					commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
+//					commentInstanceInfo.setType(Instance.TYPE_COMMENT);
+//					commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+//					commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
+//					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));
+//					instanceInfoList.add(commentInstanceInfo);
+//				}
+//			}
+//			if(instanceInfoList.size() > 0) {
+//				Collections.sort(instanceInfoList, Collections.reverseOrder());
+//				spaceInstances = new InstanceInfo[instanceInfoList.size()];
+//				instanceInfoList.toArray(spaceInstances);
+//			}
+//
+//			if(!CommonUtil.isEmpty(spaceInstances)) {
+//				if(spaceInstances.length > maxSize) {
+//					List<InstanceInfo> resultInstanceInfoList = new ArrayList<InstanceInfo>();
+//					for(int i=0; i<maxSize; i++) {
+//						InstanceInfo instanceInfo = spaceInstances[i];
+//						resultInstanceInfoList.add(instanceInfo);
+//					}
+//					resultInstanceInfoList.add(null);
+//					spaceInstances = new InstanceInfo[resultInstanceInfoList.size()];
+//					resultInstanceInfoList.toArray(spaceInstances);
+//				}
+//			}
+//
+//			return spaceInstances;
+//		}catch (Exception e){
+//			// Exception Handling Required
+//			e.printStackTrace();
+//			throw e;			
+//			// Exception Handling Required			
+//		}
 	}
 	
 	private void addSubDepartmentUsers(String user, String parentDeptId, List<String> userList) throws Exception {

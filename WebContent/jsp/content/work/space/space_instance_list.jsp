@@ -29,7 +29,7 @@
 	String wid = (String)session.getAttribute("wid");
 	WorkInstance workInstance = (WorkInstance)session.getAttribute("workInstance");
 	
-	InstanceInfo[] subInstances = smartWorks.getSpaceInstancesByDate(workInstance.getId(), new LocalDate(), 20);
+	InstanceInfo[] subInstances = smartWorks.getSpaceInstancesByDate(workInstance.getId(), new LocalDate(), WorkInstance.MAX_INSTANCE_SUB_INSTANCE);
 	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -55,6 +55,7 @@
 				    <ul>
 				    	<%
 						if(!SmartUtil.isBlankObject(subInstances)){
+							session.setAttribute("instanceId", workInstance.getId());
 							session.setAttribute("subInstances", subInstances);
 						%>
 							<jsp:include page="/jsp/content/work/space/space_sub_instances.jsp"></jsp:include>
