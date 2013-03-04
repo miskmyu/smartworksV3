@@ -94,7 +94,7 @@
 				<li>
 				<div class="info_ms_section">
 					<div class="info_img">
-						<div class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"><%=workName%></div>
+						<div class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"><%=workName%></div>
 					</div>
 					<div class="info_list ml15">
 						<a href="<%=targetContent %>" ><%=instance.getSubject()%></a>		

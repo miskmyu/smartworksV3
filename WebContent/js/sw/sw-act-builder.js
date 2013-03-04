@@ -3,11 +3,15 @@ $(function() {
 	$('a.js_start_work_service').live('click', function(e) {
 		var input = $(targetElement(e));
 		var target = $('#content');
-		var workId = input.parents('.js_tab_workbench_page').attr('workId');
+		var tabWorkbench = input.parents('.js_tab_workbench_page');
+		var workId = tabWorkbench.attr('workId');
+		var categoryId = tabWorkbench.attr('categoryId');
+		var groupId = tabWorkbench.attr('groupId');
 		$.ajax({
 			url : "start_work_service.sw?workId=" + workId,
 			success : function(data, status, jqXHR) {
-				window.location.reload(true);
+				target.html(data);
+				openWorkCategoryTree(categoryId, groupId);
 			}			
 		});
 		return false;
@@ -16,11 +20,15 @@ $(function() {
 	$('a.js_stop_work_service').live('click', function(e) {
 		var input = $(targetElement(e));
 		var target = $('#content');
-		var workId = input.parents('.js_tab_workbench_page').attr('workId');
+		var tabWorkbench = input.parents('.js_tab_workbench_page');
+		var workId = tabWorkbench.attr('workId');
+		var categoryId = tabWorkbench.attr('categoryId');
+		var groupId = tabWorkbench.attr('groupId');
 		$.ajax({
 			url : "stop_work_service.sw?workId=" + workId,
 			success : function(data, status, jqXHR) {
-				window.location.reload(true);
+				target.html(data);
+				openWorkCategoryTree(categoryId, groupId);
 			}			
 		});
 		return false;
@@ -29,11 +37,15 @@ $(function() {
 	$('a.js_start_work_editing').live('click', function(e) {
 		var input = $(targetElement(e));
 		var target = $('#content');
-		var workId = input.parents('.js_tab_workbench_page').attr('workId');
+		var tabWorkbench = input.parents('.js_tab_workbench_page');
+		var workId = tabWorkbench.attr('workId');
+		var categoryId = tabWorkbench.attr('categoryId');
+		var groupId = tabWorkbench.attr('groupId');
 		$.ajax({
 			url : "start_work_editing.sw?workId=" + workId,
 			success : function(data, status, jqXHR) {
 				target.html(data);
+				openWorkCategoryTree(categoryId, groupId);
 			}			
 		});
 		return false;
@@ -42,11 +54,15 @@ $(function() {
 	$('a.js_stop_work_editing').live('click', function(e) {
 		var input = $(targetElement(e));
 		var target = $('#content');
-		var workId = input.parents('.js_tab_workbench_page').attr('workId');
+		var tabWorkbench = input.parents('.js_tab_workbench_page');
+		var workId = tabWorkbench.attr('workId');
+		var categoryId = tabWorkbench.attr('categoryId');
+		var groupId = tabWorkbench.attr('groupId');
 		$.ajax({
 			url : "stop_work_editing.sw?workId=" + workId,
 			success : function(data, status, jqXHR) {
 				target.html(data);
+				openWorkCategoryTree(categoryId, groupId);
 			}			
 		});
 		return false;
@@ -93,7 +109,7 @@ $(function() {
 					type : 'POST',
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
-						document.location.href = "builder_home.sw";
+						input.parents('li:first').remove();
 					},
 					error : function() {
 	 					smartPop.showInfo(smartPop.ERROR, smartMessage.get('removeCategoryError'), function(){
@@ -111,7 +127,8 @@ $(function() {
 		var input = $(targetElement(e));
 		var parentId = input.attr('parentId');
 		var parentName = input.attr('parentName');
-		smartPop.createWorkDefinition(parentId, parentName, "", "", "", "", "", "");
+		var groupOption = !input.parent().hasClass('group_action');
+		smartPop.createWorkDefinition(parentId, parentName, "", "", "", "", "", "", groupOption);
 		return false;
 	});
 	
@@ -123,7 +140,7 @@ $(function() {
 		var workDesc = input.attr('workDesc');
 		var categoryId = input.attr('categoryId');
 		var groupId = input.attr('groupId');
-		smartPop.createWorkDefinition("", "", workId, workName, workTypeName, workDesc, categoryId, groupId);
+		smartPop.createWorkDefinition("", "", workId, workName, workTypeName, workDesc, categoryId, groupId, false);
 		return false;
 	});
 	
@@ -142,7 +159,7 @@ $(function() {
 					type : 'POST',
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
-						document.location.href = "builder_home.sw";
+						input.parents('li:first').remove();
 					},
 					error : function() {
 	 					smartPop.showInfo(smartPop.ERROR, smartMessage.get('removeWorkDefinitionError'), function(){
@@ -194,6 +211,41 @@ $(function() {
 		return false;
 	});
 
+	$('.js_download_from_appstore').live('click', function(e) {
+		smartPop.downloadFromAppstore();
+		return false;
+	});
+		
+	$('.js_download_app_work_btn').live('click', function(e) {
+		var input = $(targetElement(e));
+		var appWorkId = input.parents('tr:first').attr('workId');
+		var appWorkName = input.parents('tr:first').attr('workName');
+		var paramsJson = {};
+		paramsJson['appWorkId'] = appWorkId;
+		smartPop.confirm("[" + appWorkName + "]" + smartMessage.get("downloadAppConfirmation"), 
+			function(){
+				$.ajax({
+					url : "download_app_work.sw",
+					contentType : 'application/json',
+					type : 'POST',
+					data : JSON.stringify(paramsJson),
+					success : function(data, status, jqXHR) {
+	 					smartPop.showInfo(smartPop.INFO, smartMessage.get('downloadAppSucceed'), function(){
+	  					});
+						
+					},
+					error : function() {
+	 					smartPop.showInfo(smartPop.ERROR, smartMessage.get('downloadAppError'), function(){
+	  					});
+					}					
+				});
+			},
+			function(){
+			});
+
+		return false;
+	});
+	
 	$('.js_up_field_item').live('click', function(e) {
 		var input = $(targetElement(e));
 		var selectedItem = input.parents('tr:first');
@@ -372,3 +424,37 @@ $(function() {
 	});
 
 });
+
+var refreshAllWorksTree = function(){
+	$.ajax({
+		url : "all_works.sw",
+		success : function(data, status, jqXHR) {
+			$('#all_works').html(data);	
+		},
+		error : function() {}
+	});
+ };
+
+var openWorkCategoryTree = function(categoryId, groupId){
+	if(isEmpty(categoryId)) return;
+	var target;
+	if(isEmpty(groupId)){
+		target = $('#all_works').find('.js_builder[categoryId="' + categoryId + '"]');
+		target.nextAll('.js_drill_down_target').html('').hide();
+		target.click();
+	}else{
+		target = $('#all_works').find('.js_builder[categoryId="' + categoryId + '"]');
+		target.nextAll('.js_drill_down_target').html('').hide();
+		target.click();
+		setTimeout(function(){
+			var groupTarget = target.nextAll('.js_drill_down_target').find('.js_builder[categoryId="' + groupId + '"]');
+			if(isEmpty(groupTarget)){
+				setTimeout(function(){
+					target.nextAll('.js_drill_down_target').find('.js_builder[categoryId="' + groupId + '"]').click();
+				}, 2000);				
+			}else{
+				groupTarget.click();
+			}
+		}, 1000);
+	}
+};

@@ -38,6 +38,13 @@ public class FormField extends BaseObject{
 	public static final String ID_SEND_DATE = "date";
 	public static final String ID_MAIL_SIZE = "size";
 	public static final String ID_MULTIPART = "multipart";
+	
+	public static final String ID_APP_WORK_NAME = "appWorkName";
+	public static final String ID_APP_WORK_TYPE = "appWorkType";
+	public static final String ID_APP_WORK_INDUSTRY = "appWorkIndustry";
+	public static final String ID_APP_WORK_JOB = "appWorkJob";
+	public static final String ID_APP_PUBLISHED_COMPANY = "appPublishedCompany";
+	public static final String ID_APP_PUBLISHED_DATE = "appPublishedDate";
 
 	public static final String TYPE_OBJECT_ID = "objectId"; // work
 	public static final String TYPE_TEXT = "textInput"; //string

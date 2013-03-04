@@ -2,6 +2,9 @@ package net.smartworks.model.work;
 
 import net.smartworks.model.BaseObject;
 import net.smartworks.model.KeyMap;
+import net.smartworks.model.work.info.SmartWorkInfo;
+import net.smartworks.model.work.info.WorkCategoryInfo;
+import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartMessage;
@@ -63,34 +66,6 @@ public class Work extends BaseObject{
 	
 	public static final String ID_EMPTY_WORK = "EmptyWorkId";
 
-	public static final KeyMap[] CATEGORIES_BY_INDUSTRY = new KeyMap[]{
-		new KeyMap("CBI01", SmartMessage.getString("category.industry.1")),
-		new KeyMap("CBI02", SmartMessage.getString("category.industry.2")),
-		new KeyMap("CBI03", SmartMessage.getString("category.industry.3")),
-		new KeyMap("CBI04", SmartMessage.getString("category.industry.4")),
-		new KeyMap("CBI05", SmartMessage.getString("category.industry.5")),
-		new KeyMap("CBI06", SmartMessage.getString("category.industry.6")),
-		new KeyMap("CBI07", SmartMessage.getString("category.industry.7")),
-		new KeyMap("CBI08", SmartMessage.getString("category.industry.8")),
-		new KeyMap("CBI09", SmartMessage.getString("category.industry.9")),
-		new KeyMap("CBI10", SmartMessage.getString("category.industry.10")),
-		new KeyMap("CBI11", SmartMessage.getString("category.industry.11")),
-		new KeyMap("CBI99", SmartMessage.getString("category.industry.99"))
-	};
-	public static final KeyMap[] CATEGORIES_BY_JOB = new KeyMap[]{
-		new KeyMap("CBJ01", SmartMessage.getString("category.job.1")),
-		new KeyMap("CBJ02", SmartMessage.getString("category.job.2")),
-		new KeyMap("CBJ03", SmartMessage.getString("category.job.3")),
-		new KeyMap("CBJ04", SmartMessage.getString("category.job.4")),
-		new KeyMap("CBJ05", SmartMessage.getString("category.job.5")),
-		new KeyMap("CBJ06", SmartMessage.getString("category.job.6")),
-		new KeyMap("CBJ07", SmartMessage.getString("category.job.7")),
-		new KeyMap("CBJ08", SmartMessage.getString("category.job.8")),
-		new KeyMap("CBJ09", SmartMessage.getString("category.job.9")),
-		new KeyMap("CBJ10", SmartMessage.getString("category.job.10")),
-		new KeyMap("CBJ99", SmartMessage.getString("category.job.99"))
-	};
-
 	private int 	type=-1; 
 	private int 	providedBy;
 	private String 	desc;
@@ -114,38 +89,53 @@ public class Work extends BaseObject{
 		this.desc = desc;
 	}
 	public String getIconClass(){
-		switch(getType()){
+		if(this.getClass().equals(WorkCategory.class))
+			return Work.getIconClass(getId(), getType(), ((WorkCategory)this).isRunning());
+		else if(this.getClass().equals(SmartWorkInfo.class))
+			return Work.getIconClass(getId(), getType(), ((SmartWork)this).isRunning());
+		return Work.getIconClass(getId(), getType(), false);
+	}
+
+	public static String getIconClass(String workId, int workType, boolean isWorkRunning){
+		if(SmartUtil.isBlankObject(workId)) return "";
+		switch(workType){
 		case SmartWork.TYPE_INFORMATION:
-			if(getId().equals(SmartWork.ID_FILE_MANAGEMENT))
+		case SocialWork.TYPE_BOARD:
+		case SocialWork.TYPE_EVENT:
+		case SocialWork.TYPE_FILE:
+		case SocialWork.TYPE_IMAGE:
+		case SocialWork.TYPE_MEMO:
+		case SocialWork.TYPE_YTVIDEO:
+			if(workId.equals(SmartWork.ID_FILE_MANAGEMENT))
 				return Work.ICON_CLASS_FILE_WORKS;
-			else if(getId().equals(SmartWork.ID_EVENT_MANAGEMENT))
+			else if(workId.equals(SmartWork.ID_EVENT_MANAGEMENT))
 				return Work.ICON_CLASS_EVENT_WORKS;
-			else if(getId().equals(SmartWork.ID_BOARD_MANAGEMENT))
+			else if(workId.equals(SmartWork.ID_BOARD_MANAGEMENT))
 				return Work.ICON_CLASS_BOARD_WORKS;
-			else if(getId().equals(SmartWork.ID_MEMO_MANAGEMENT))
+			else if(workId.equals(SmartWork.ID_MEMO_MANAGEMENT))
 				return Work.ICON_CLASS_MEMO_WORKS;
-			else if(getId().equals(SmartWork.ID_FORUM_MANAGEMENT))
+			else if(workId.equals(SmartWork.ID_FORUM_MANAGEMENT))
 				return Work.ICON_CLASS_FORUM_WORKS;
-			else if(getId().equals(SmartWork.ID_CONTACTS_MANAGEMENT))
+			else if(workId.equals(SmartWork.ID_CONTACTS_MANAGEMENT))
 				return Work.ICON_CLASS_CONTACTS_WORKS;
-			else if(getId().equals(SmartWork.ID_USER_MANAGEMENT))
+			else if(workId.equals(SmartWork.ID_USER_MANAGEMENT))
 				return Work.ICON_CLASS_USER_WORKS;
-			else if(getId().equals(SmartWork.ID_DEPARTMENT_MANAGEMENT))
+			else if(workId.equals(SmartWork.ID_DEPARTMENT_MANAGEMENT))
 				return Work.ICON_CLASS_DEPARTMENT_WORKS;
-			else if(getId().equals(SmartWork.ID_GROUP_MANAGEMENT))
+			else if(workId.equals(SmartWork.ID_GROUP_MANAGEMENT))
 				return Work.ICON_CLASS_GROUP_WORKS;
 			else
-				return ((SmartWork)this).isRunning() ? Work.ICON_CLASS_IWORKS_ON : Work.ICON_CLASS_IWORKS_OFF;
+				return isWorkRunning ? Work.ICON_CLASS_IWORKS_ON : Work.ICON_CLASS_IWORKS_OFF;
 		case SmartWork.TYPE_PROCESS:
-			return ((SmartWork)this).isRunning() ? Work.ICON_CLASS_PWORKS_ON : Work.ICON_CLASS_PWORKS_OFF;
+			return isWorkRunning ? Work.ICON_CLASS_PWORKS_ON : Work.ICON_CLASS_PWORKS_OFF;
 		case SmartWork.TYPE_SCHEDULE:
-			return ((SmartWork)this).isRunning() ? Work.ICON_CLASS_SWORKS_ON : Work.ICON_CLASS_SWORKS_OFF;
+			return isWorkRunning ? Work.ICON_CLASS_SWORKS_ON : Work.ICON_CLASS_SWORKS_OFF;
 		case WorkCategory.TYPE_CATEGORY:
-			if(getId().equals(WorkCategory.ID_DEFAULT_CATEGORY))
+			if(workId.equals(WorkCategory.ID_DEFAULT_CATEGORY))
 				return Work.ICON_CLASS_DEFAULT_CATEGORY;
-			else if(getId().equals(WorkCategory.ID_DOWNLOADED_CATEGORY))
+			else if(workId.equals(WorkCategory.ID_DOWNLOADED_CATEGORY))
 				return Work.ICON_CLASS_DOWNLOADED_CATEGORY;
-			return ((WorkCategory)this).isRunning() ? Work.ICON_CLASS_CWORKS_ON : Work.ICON_CLASS_CWORKS_OFF;
+			return isWorkRunning ? Work.ICON_CLASS_CWORKS_ON : Work.ICON_CLASS_CWORKS_OFF;
 		case FileCategory.TYPE_FILE_CATEGORY:
 			return "";
 		case ImageCategory.TYPE_IMAGE_CATEGORY:
@@ -153,7 +143,7 @@ public class Work extends BaseObject{
 		}
 		return "";
 	}
-
+	
 	public String getController(){
 		switch(getType()){
 		case SmartWork.TYPE_INFORMATION:

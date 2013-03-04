@@ -802,9 +802,9 @@ smartPop = {
 		});
 	},
 
-	createWorkDefinition : function(parentId, parentName, workId, workName, workTypeName, workDesc, categoryId, groupId){
+	createWorkDefinition : function(parentId, parentName, workId, workName, workTypeName, workDesc, categoryId, groupId, groupOption){
 		var url = "pop_new_work_definition.sw?parentId="+parentId+"&parentName="+parentName + "&workId=" + workId 
-						+ "&workName=" + workName + "&workTypeName=" + workTypeName + "&workDesc=" + workDesc + "&categoryId=" + categoryId + "&groupId=" + groupId;
+						+ "&workName=" + workName + "&workTypeName=" + workTypeName + "&workDesc=" + workDesc + "&categoryId=" + categoryId + "&groupId=" + groupId + "&groupOption=" + groupOption;
 		$.get( url, { contentType : "charset=utf-8"}, function(data){
 			$(data).modal({
 				opacity: 10,
@@ -869,9 +869,8 @@ smartPop = {
 		});
 	},
 
-	downloadFromAppstore : function(formId, target){
-		if(isEmpty(formId) || isEmpty(target)) return;
-		$.get("pop_download_from_appstore.sw", {formId: formId}, function(data){
+	downloadFromAppstore : function(){
+		$.get("pop_download_from_appstore.sw", {}, function(data){
 			$(data).modal({
 				opacity: 10,
 				overlayCss: {backgroundColor:"#000"},

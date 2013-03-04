@@ -108,12 +108,13 @@ function submitForms(tempSave) {
 						data : JSON.stringify(paramsJson),
 						success : function(data, status, jqXHR) {
 							// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+							smartPop.closeProgress();
 							if(tempSave){
 								newEvent.attr('instanceId', data.instanceId);
 							}else{
-								window.location.reload(true);
+								refreshCurrentContent(newEvent);
+								//window.location.reload(true);
 							}
-							smartPop.closeProgress();
 						},
 						error : function(e) {
 							// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -136,12 +137,16 @@ function submitForms(tempSave) {
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
+
+	String currentLocation = (String)session.getAttribute("lastLocation");
+	String currentHref = SmartUtil.getLastHref(request);
+
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="up_wrap js_new_event_page" workId="<%=SmartWork.ID_EVENT_MANAGEMENT%>">
+<div class="up_wrap js_new_event_page" workId="<%=SmartWork.ID_EVENT_MANAGEMENT%>" currentHref="<%=currentHref%>" currentLocation="<%=currentLocation%>">
 	<div class="up_point pos_works js_up_pointer"></div>
 	<div class="form_wrap up">
 		<!-- 폼- 확장 -->

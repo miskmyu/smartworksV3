@@ -137,6 +137,10 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 		Date creationDate = null;
 		String modificationUser = null;
 		Date modificationDate = null;
+		// Start - Added by ysjung at 2013-3-2
+		Date modificationDateFrom = null;
+		Date modificationDateTo = null;
+		// End - Added by ysjung at 2013-3-2		
 		Date writtenDateFrom = null;
 		Date writtenDateTo = null;
 
@@ -155,6 +159,10 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 			creationDate = cond.getCreationDate();
 			modificationUser = cond.getModificationUser();
 			modificationDate = cond.getModificationDate();
+			// Start - Added by ysjung at 2013-3-2
+			modificationDateFrom = cond.getModificationDateFrom();
+			modificationDateTo = cond.getModificationDateTo();
+			// End - Added by ysjung at 2013-3-2
 			writtenDateFrom = cond.getWrittenDateFrom();
 			writtenDateTo = cond.getWrittenDateTo();
 		}
@@ -204,6 +212,12 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 				buf.append(" and obj.modificationUser = :modificationUser");
 			if (modificationDate != null)
 				buf.append(" and obj.modificationDate = :modificationDate");
+			// Start - Added by ysjung at 2013-3-2
+			if (modificationDateFrom != null)
+				buf.append(" and obj.modificationDate > :modificationDateFrom ");
+			if (modificationDateTo != null)
+				buf.append(" and obj.modificationDate < :modificationDateTo ");
+			// Start - Added by ysjung at 2013-3-2
 			if (writtenDateFrom != null)
 				buf.append(" and obj.creationDate > :writtenDateFrom ");
 			if (writtenDateTo != null)
@@ -247,6 +261,12 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 				query.setString("modificationUser", modificationUser);
 			if (modificationDate != null)
 				query.setTimestamp("modificationDate", modificationDate);
+			// Start - Added by ysjung at 2013-3-2
+			if (modificationDateFrom != null)
+				query.setTimestamp("modificationDateFrom", modificationDateFrom);
+			if (modificationDateTo != null)
+				query.setTimestamp("modificationDateTo", modificationDateTo);
+			// End - Added by ysjung at 2013-3-2
 			if (writtenDateFrom != null)
 				query.setTimestamp("writtenDateFrom", writtenDateFrom);
 			if (writtenDateTo != null)

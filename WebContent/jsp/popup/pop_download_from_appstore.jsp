@@ -20,41 +20,42 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  전체 레이아웃 -->
-<div class="pop_corner_all">
+<div class="pop_corner_all js_download_from_appstore_page">
 
 	<!-- 팝업 타이틀 -->
 	<div class="pop_title_space w_margin"> 
 		<div class="txt_btn">
-			<div class="title_work">업무항목</div>
+			<div class="title_work"><fmt:message key="builder.button.download_from_appstore"/></div>
 			
 			<!-- 검색 -->
 			<form class="po_left" name="frmSearchInstance">
-				<span class="js_progress_span"></span>
 				<div class="srch_wh srch_wsize">
-					<input class="nav_input" type="text" placeholder="항목 찾기" name="txtSearchInstance">
-					<button onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;" title="항목 찾기"></button>
+					<input class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance'/>" name="txtSearchInstance">
+					<button onclick="popSelectListParam($(this).parents('form').next(), false);return false;" title="<fmt:message key='search.search_instance'/>"></button>
 				</div>
 			</form>
-			
-			<div class="txt_btn">
-					<a onclick="$.modal.close();return false;" href=""><div class="pop_btn_x"></div></a>
+			<span class="js_progress_span"></span>			
+			<div class="txt_btn">			
+				<a href="" onclick="smartPop.close();return false;"><div class="btn_x"></div></a>
 			</div>
 		
 		</div>
 	</div>
 	<!-- 팝업 타이틀 //-->
 
-	<div id="iwork_list_page">
-		<jsp:include page="/jsp/popup/pop_iwork_instance_list.jsp"></jsp:include>
+	<div id="app_work_list_page">
+		<jsp:include page="/jsp/popup/pop_app_work_list.jsp"></jsp:include>
 	</div>
 
 	<!-- 하단버튼영역 -->
 	<div class="glo_btn_space">
 
 		<div class="fr">
-			<span class="btn_gray"> <a onclick="$.modal.close();return false;" href=""> <span
-					class="txt_btn_start"></span> <span class="txt_btn_center">닫기</span> <span
-					class="txt_btn_end"></span> </a> </span>
+			<span class="btn_gray"> 
+				<a onclick="$.modal.close();return false;" href=""> 
+					<span class="txt_btn_start"></span> 
+					<span class="txt_btn_center"><fmt:message key="common.button.close"/></span> 
+					<span class="txt_btn_end"></span> </a> </span>
 		</div>
 
 	</div>

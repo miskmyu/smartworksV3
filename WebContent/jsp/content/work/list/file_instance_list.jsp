@@ -235,7 +235,7 @@
 					%>
 						<td>
 							<a class="js_content_work_space" href="<%=target %>">				
-								<span class="<%=WorkInfo.getIconClass(fileInstance.getWorkId(), fileInstance.getWorkType(), fileInstance.isWorkRunning())%>"><%=fileInstance.getWorkFullPathName()%></span>
+								<span class="<%=Work.getIconClass(fileInstance.getWorkId(), fileInstance.getWorkType(), fileInstance.isWorkRunning())%>"><%=fileInstance.getWorkFullPathName()%></span>
 							</a>
 						</td>
 					<%

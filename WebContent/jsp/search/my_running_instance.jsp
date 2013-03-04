@@ -46,7 +46,7 @@
 	%>
 			<li>
 				<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>" class="js_content">
-					<img class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>" border="0"><%=workFullPathName%><%=workInstance.getSubject()%>
+					<img class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>" border="0"><%=workFullPathName%><%=workInstance.getSubject()%>
 				</a>
 			</li>
 	<%

@@ -68,6 +68,12 @@ public class BuilderController {
 		return SmartUtil.returnMnv(request, "jsp/nav/worklist_by_category.jsp", "");
 	}
 
+	@RequestMapping("/all_works")
+	public ModelAndView allWorks(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/nav/all_works.jsp", "");
+	}
+
 	@RequestMapping("/start_work_service")
 	public ModelAndView startWorkService(HttpServletRequest request, HttpServletResponse response) {
 		String workId = request.getParameter("workId");
@@ -170,6 +176,12 @@ public class BuilderController {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void removeWorkDefinition(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.removeWorkDefinition(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/download_app_work", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void downloadAppWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.downloadAppWork(requestBody, request);
 	}
 	
 	@RequestMapping(value = "/copy_work_definition", method = RequestMethod.POST)

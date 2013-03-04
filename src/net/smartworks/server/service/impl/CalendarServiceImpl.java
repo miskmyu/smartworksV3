@@ -48,6 +48,7 @@ import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.service.ICalendarService;
 import net.smartworks.server.service.ICommunityService;
+import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
@@ -404,11 +405,9 @@ public class CalendarServiceImpl implements ICalendarService {
 					String workSpaceType = swdRecord.getWorkSpaceType();
 					if(workSpaceType == null)
 						workSpaceType = String.valueOf(ISmartWorks.SPACE_TYPE_USER);
-//Start InstanceInfo Model Changed by ysjung
-					//eventInstanceInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
 					eventInstanceInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
-					//eventInstanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
+					
+					eventInstanceInfo.setSubInstanceCount(SwServiceFactory.getInstance().getInstanceService().getSubInstancesInInstanceCount(eventInstanceInfo.getId()));
 					
 					/*WorkCategoryInfo workGroupInfo = null;
 					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
@@ -418,11 +417,7 @@ public class CalendarServiceImpl implements ICalendarService {
 
 					WorkInfo workInfo = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), type, workGroupInfo, workCategoryInfo);
 */	
-//Start InstanceInfo Model Changed by ysjung
-					//eventInstanceInfo.setWork(ModelConverter.getWorkInfoByPackageId(workId));
 					eventInstanceInfo.setWorkInfo(ModelConverter.getWorkInfoByPackageId(workId));
-					//eventInstanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
-//End InstanceInfo Model Changed by ysjung
 
 					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					eventInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));

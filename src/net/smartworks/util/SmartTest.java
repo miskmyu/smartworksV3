@@ -30,6 +30,7 @@ import net.smartworks.model.instance.FieldData;
 import net.smartworks.model.instance.ImageInstance;
 import net.smartworks.model.instance.InformationWorkInstance;
 import net.smartworks.model.instance.Instance;
+import net.smartworks.model.instance.SortingField;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
@@ -57,6 +58,7 @@ import net.smartworks.model.service.Variable;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WSDLOperation;
 import net.smartworks.model.service.WSDLPort;
+import net.smartworks.model.work.AppWork;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.ImageCategory;
@@ -68,6 +70,7 @@ import net.smartworks.model.work.SmartTask;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.WorkCategory;
+import net.smartworks.model.work.info.AppWorkInfo;
 import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.model.work.info.SmartFormInfo;
@@ -76,6 +79,7 @@ import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.SocialWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.model.work.info.WorkInfoList;
 
 public class SmartTest {
 	// ************************** 테스트용 데이터
@@ -1550,5 +1554,39 @@ public class SmartTest {
 	public static String[][] getJunkIds() throws Exception{
 		String[][] ids = {{"ysjung@maninsoft.co.kr", "kmyu@maninsoft.co.kr"}, {"maninsoft.co.kr", "miracom.co.kr"}};
 		return ids;
+	}
+	
+	public static WorkInfoList getAppWorkList(RequestParams params) throws Exception{
+		WorkInfoList workInfoList = new WorkInfoList();
+		workInfoList.setCurrentPage(1);
+		workInfoList.setPageSize(10);
+		workInfoList.setSortedField(new SortingField());
+		workInfoList.setTotalPages(5);
+		workInfoList.setTotalSize(46);
+		workInfoList.setType(WorkInfoList.TYPE_APP_WORK_LIST);
+		AppWorkInfo appWork1 = new AppWorkInfo("appWork1", "영업관리", AppWork.TYPE_APP_WORK);
+		appWork1.setCategoryIdByIndustry(AppWork.CATEGORIES_BY_INDUSTRY[0].getId());
+		appWork1.setCategoryIdByJob(AppWork.CATEGORIES_BY_JOB[0].getId());
+		appWork1.setProvidedBy(Work.PROVIDED_BY_APPSTORE);
+		appWork1.setPublishedCompany("Maninsoft, Inc.");
+		appWork1.setPublishedDate(new LocalDate());
+		appWork1.setWorkType(SmartWork.TYPE_PROCESS);
+		AppWorkInfo appWork2 = new AppWorkInfo("appWork2", "구매관리", AppWork.TYPE_APP_WORK);
+		appWork2.setCategoryIdByIndustry(AppWork.CATEGORIES_BY_INDUSTRY[0].getId());
+		appWork2.setCategoryIdByJob(AppWork.CATEGORIES_BY_JOB[0].getId());
+		appWork2.setProvidedBy(Work.PROVIDED_BY_APPSTORE);
+		appWork2.setPublishedCompany("Maninsoft, Inc.");
+		appWork2.setPublishedDate(new LocalDate());
+		appWork2.setWorkType(SmartWork.TYPE_PROCESS);
+		AppWorkInfo appWork3 = new AppWorkInfo("appWork3", "회의록", AppWork.TYPE_APP_WORK);
+		appWork3.setCategoryIdByIndustry(AppWork.CATEGORIES_BY_INDUSTRY[0].getId());
+		appWork3.setCategoryIdByJob(AppWork.CATEGORIES_BY_JOB[0].getId());
+		appWork3.setProvidedBy(Work.PROVIDED_BY_APPSTORE);
+		appWork3.setPublishedCompany("Maninsoft, Inc.");
+		appWork3.setPublishedDate(new LocalDate());
+		appWork3.setWorkType(SmartWork.TYPE_INFORMATION);
+		AppWorkInfo[] workDatas = {appWork1, appWork2, appWork3 };
+		workInfoList.setWorkDatas(workDatas);
+		return workInfoList;
 	}
 }

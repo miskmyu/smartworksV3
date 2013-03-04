@@ -36,8 +36,3 @@
 
 <!-- 현재사용자의 진행중인 업무들 목록으로 보여주는 화면 -->
 <jsp:include page="/jsp/content/today/my_running_instance_list.jsp" />
-<!-- 현재사용자의 진행중인 업무들 목록으로 보여주는 화면 -->
-<%-- 
-<%
-	}
-%> --%>

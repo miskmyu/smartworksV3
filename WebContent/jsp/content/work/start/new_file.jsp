@@ -109,12 +109,13 @@ function submitForms(tempSave) {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
+				smartPop.closeProgress();
 				if(tempSave){
 					newFile.attr('instanceId', data.instanceId);
 				}else{
-					window.location.reload(true);
+					refreshCurrentContent(newFile);
+					//window.location.reload(true);
 				}
-				smartPop.closeProgress();
 			},
 			error : function(e) {
 				smartPop.closeProgress();
@@ -132,12 +133,16 @@ function submitForms(tempSave) {
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
+
+	String currentLocation = (String)session.getAttribute("lastLocation");
+	String currentHref = SmartUtil.getLastHref(request);
+
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="up_wrap js_new_file_page" workId="<%=SmartWork.ID_FILE_MANAGEMENT%>">
+<div class="up_wrap js_new_file_page" workId="<%=SmartWork.ID_FILE_MANAGEMENT%>" currentHref="<%=currentHref%>" currentLocation="<%=currentLocation%>">
 	<div class="up_point pos_works js_up_pointer"></div>
 	<div class="up up_padding">
 		<form name="frmNewFile" class="form_wrap js_validation_required js_click_start_form">

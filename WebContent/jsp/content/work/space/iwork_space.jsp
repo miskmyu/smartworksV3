@@ -181,15 +181,19 @@ function submitForms(tempSave) {
 
  	session.setAttribute("workInstance", instance);
 	session.setAttribute("workSpaceId", instance.getId());
+	session.removeAttribute("workSpace");
 	session.setAttribute("tasks", tasks);
 		
 	// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
 	CommunityInfo[] communities = smartWorks.getMyCommunitiesForUpload(workId);
+	
+	String currentHref = SmartUtil.getCurrentHref(request, "iwork_space.sw");
+	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-     <div class="section_portlet js_iwork_space_page" lastHref="<%=lastHref%>" workId="<%=workId%>" instId="<%=instId%>" isTempSaved="<%=instance.isTempSaved() %>">
+     <div class="section_portlet js_iwork_space_page" currentHref="<%=currentHref %>" lastHref="<%=lastHref%>" workId="<%=workId%>" instId="<%=instId%>" isTempSaved="<%=instance.isTempSaved() %>">
 
  		<div class="portlet_t">
       		<div class="portlet_tl"></div>

@@ -311,19 +311,12 @@ public class InstanceServiceImpl implements IInstanceService {
 					String workSpaceType = swdRecord.getWorkSpaceType();
 					if(workSpaceType == null)
 						workSpaceType = String.valueOf(ISmartWorks.SPACE_TYPE_USER);
-//Start InstanceInfo Model Changed by ysjung
-					//boardInstanceInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
 					boardInstanceInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
-					//boardInstanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 
 					WorkInfo workInfo = new WorkInfo(workId, null, SocialWork.TYPE_BOARD);
-
-//Start InstanceInfo Model Changed by ysjung
-					//boardInstanceInfo.setWork(workInfo);
 					boardInstanceInfo.setWorkInfo(workInfo);
-					//boardInstanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
-//End InstanceInfo Model Changed by ysjung
+					
+					boardInstanceInfo.setSubInstanceCount(getSubInstancesInInstanceCount(boardInstanceInfo.getId()));
 
 					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
@@ -3680,7 +3673,7 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	@Override
-	public InstanceInfo[] getRecentSubInstancesInInstance(String instanceId, int length) throws Exception {
+	public InstanceInfo[] getSubInstancesInInstance(String instanceId, int length, LocalDate to) throws Exception {
 		try{
 			if (CommonUtil.isEmpty(instanceId)) 
 				return null;
@@ -3689,17 +3682,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			String userId = null;
 			if (cuser != null)
 				userId = cuser.getId();
-			
-			if (length == 0 || length == -1)
-				length = WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT;
-			
+						
 			InstanceInfo[] subInstancesInInstances = null;
 			List<InstanceInfo> instanceInfoList = new ArrayList<InstanceInfo>();
-			
-			//TaskWorkCond cond = new TaskWorkCond();
-			//cond.setTskWorkSpaceId(instanceId);
-			//cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
-			//long tasksSize = getWorkListManager().getTaskWorkListSize(userId, cond);
 			
 			TskTaskCond cond = new TskTaskCond();
 			cond.setWorkSpaceId(instanceId);
@@ -3707,20 +3692,21 @@ public class InstanceServiceImpl implements IInstanceService {
 			long tasksSize = getTskManager().getTaskSize(userId, cond);
 			if (tasksSize != 0) {
 				
-				cond.setOrders(new Order[]{new Order("taskLastModifyDate", true)});
-				cond.setPageSize(length);
-
 				TaskWorkCond workCond = new TaskWorkCond();
+				workCond.setOrders(new Order[]{new Order("taskLastModifyDate", false)});
+				workCond.setPageSize(length);
 				workCond.setTskWorkSpaceId(instanceId);
 				workCond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
+				workCond.setTskModifyDateTo(to);
 				TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, workCond);
 				
 				List<String> prcInstIdList = new ArrayList<String>();
 				if(!CommonUtil.isEmpty(tasks)) {
-					for (int i = 0; i < tasks.length; i++) {
+					int i = (tasks.length>length) ? tasks.length-length : 0;
+					for (; i < tasks.length; i++) {
 						TaskWork task = tasks[i];
-						if (instanceInfoList.size() == 10)
-							break;
+//							if (instanceInfoList.size() == 10)
+//								break;
 						if (prcInstIdList.contains(task.getTskPrcInstId()))
 							continue;
 						prcInstIdList.add(task.getTskPrcInstId());
@@ -3730,7 +3716,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 
 			OpinionCond opinionCond = new OpinionCond();
+			opinionCond.setOrders(new Order[]{new Order("", true)});
 			opinionCond.setRefId(instanceId);
+			opinionCond.setModificationDateTo(to);
 
 			long opinionsSize = getOpinionManager().getOpinionSize(userId, opinionCond);
 			
@@ -3742,7 +3730,8 @@ public class InstanceServiceImpl implements IInstanceService {
 				Opinion[] opinions = getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
 				if(!CommonUtil.isEmpty(opinions)) {
 					int opinionLength = opinions.length;
-					for(int i=0; i<opinionLength; i++) {
+					int i = (opinionLength>length) ? opinionLength-length : 0;
+					for(; i<opinionLength; i++) {
 						Opinion opinion = opinions[i];
 						CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
 						String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
@@ -3767,17 +3756,16 @@ public class InstanceServiceImpl implements IInstanceService {
 				instanceInfoList.toArray(subInstancesInInstances);
 			}
 
-			if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT) {
-				if(!CommonUtil.isEmpty(subInstancesInInstances)) {
-					if(subInstancesInInstances.length > length) {
-						List<InstanceInfo> resultInstanceInfoList = new ArrayList<InstanceInfo>();
-						for(int i=0; i<length; i++) {
-							InstanceInfo instanceInfo = subInstancesInInstances[i];
-							resultInstanceInfoList.add(instanceInfo);
-						}
-						subInstancesInInstances = new InstanceInfo[resultInstanceInfoList.size()];
-						resultInstanceInfoList.toArray(subInstancesInInstances);
+			if(!CommonUtil.isEmpty(subInstancesInInstances)) {
+				if(length != -1 && subInstancesInInstances.length > length) {
+					List<InstanceInfo> resultInstanceInfoList = new ArrayList<InstanceInfo>();
+					for(int i=subInstancesInInstances.length-length; i<subInstancesInInstances.length; i++) {
+						InstanceInfo instanceInfo = subInstancesInInstances[i];
+						resultInstanceInfoList.add(instanceInfo);
 					}
+					resultInstanceInfoList.add(null);
+					subInstancesInInstances = new InstanceInfo[resultInstanceInfoList.size()];
+					resultInstanceInfoList.toArray(subInstancesInInstances);
 				}
 			}
 
@@ -3787,6 +3775,45 @@ public class InstanceServiceImpl implements IInstanceService {
 			// Exception Handling Required
 			e.printStackTrace();
 			return null;			
+			// Exception Handling Required			
+		}
+	}
+
+	@Override
+	public InstanceInfo[] getRecentSubInstancesInInstance(String instanceId, int length) throws Exception {
+		return getSubInstancesInInstance(instanceId, length, null);
+	}
+
+	@Override
+	public int getSubInstancesInInstanceCount(String instanceId) throws Exception {
+		try{
+			if (CommonUtil.isEmpty(instanceId)) 
+				return 0;
+			
+			User cuser = SmartUtil.getCurrentUser();
+			String userId = null;
+			if (cuser != null)
+				userId = cuser.getId();
+			
+			InstanceInfo[] subInstancesInInstances = null;
+			List<InstanceInfo> instanceInfoList = new ArrayList<InstanceInfo>();
+			
+			TskTaskCond cond = new TskTaskCond();
+			cond.setWorkSpaceId(instanceId);
+			cond.setStatus(TskTask.TASKSTATUS_COMPLETE);
+			long tasksSize = getTskManager().getTaskSize(userId, cond);
+
+			OpinionCond opinionCond = new OpinionCond();
+			opinionCond.setRefId(instanceId);
+
+			long opinionsSize = getOpinionManager().getOpinionSize(userId, opinionCond);
+			
+
+			return (int)(tasksSize + opinionsSize);
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return 0;			
 			// Exception Handling Required			
 		}
 	}

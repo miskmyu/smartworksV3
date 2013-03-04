@@ -36,6 +36,7 @@ public class TaskWorkCond extends Cond {
 	private Date tskExecuteDateTo;
 	private Date tskExecuteDateBefore;
 	private Date tskModifyDateFrom;
+	private Date tskModifyDateTo;
 	private String tskName;     
 	private String tskPrcInstId;
 	private String tskForm;    
@@ -176,6 +177,12 @@ public class TaskWorkCond extends Cond {
 	}
 	public void setTskModifyDateFrom(Date tskModifyDateFrom) {
 		this.tskModifyDateFrom = tskModifyDateFrom;
+	}
+	public Date getTskModifyDateTo() {
+		return tskModifyDateTo;
+	}
+	public void setTskModifyDateTo(Date tskModifyDateTo) {
+		this.tskModifyDateTo = tskModifyDateTo;
 	}
 	public Date getTskExecuteDateBefore() {
 		return tskExecuteDateBefore;

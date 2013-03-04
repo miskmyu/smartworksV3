@@ -57,7 +57,17 @@
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
 					smartPop.close();
-					window.location.reload(true);
+					if(!isEmpty(categoryId)){
+						var target = $('#all_works').find('.js_builder[categoryId="' + categoryId + '"]');
+						var parentCategory = target.parents('.js_drill_down_target:first');
+						if(!isEmpty(parentCategory)){
+							parentCategory.html('').hide().prev().click();
+						}else{
+							refreshAllWorksTree();
+						}
+					}else{
+						refreshAllWorksTree();
+					}
 				},
 				error : function(e) {
 					smartPop.closeProgress();

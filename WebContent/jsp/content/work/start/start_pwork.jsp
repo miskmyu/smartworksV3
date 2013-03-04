@@ -67,12 +67,13 @@ function submitForms(tempSave) {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+				smartPop.closeProgress();
 				if(tempSave){
 					startPwork.attr('instanceId', data.instanceId);
 				}else{
-					window.location.reload(true);
+					refreshCurrentContent(startPwork);
+					//window.location.reload(true);
 				}
-				smartPop.closeProgress();
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -106,12 +107,14 @@ function submitForms(tempSave) {
 	
 	SmartTaskInfo startTask = work.getDiagram().getStartTask();
 	
+	String currentLocation = (String)session.getAttribute("lastLocation");
+	String currentHref = SmartUtil.getLastHref(request);
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="form_wrap up mb2 js_form_wrap js_start_pwork_page" workId="<%=workId%>" approvalLineId="<%=CommonUtil.toNotNull(startTask.getApprovalLineId())%>">
+<div class="form_wrap up mb2 js_form_wrap js_start_pwork_page" workId="<%=workId%>" approvalLineId="<%=CommonUtil.toNotNull(startTask.getApprovalLineId())%>" currentHref="<%=currentHref%>" currentLocation="<%=currentLocation%>">
 	<div class="form_title js_form_header">
 		<!-- 해당 업무이름을 표시하는 곳 -->
 		<div class="icon_pworks title"><%=work.getFullpathName() %></div>

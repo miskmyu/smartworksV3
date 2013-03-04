@@ -63,7 +63,7 @@
 	%>			
 				<li>
 					<a href="<%=socialInstance.getController()%>?cid=<%=socialInstance.getContextId()%>&workId=<%=workId%>" class="js_content" title="<%=workFullPathName%>">
-						<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning) %>"></span>
+						<span class="<%=Work.getIconClass(workId, workType, isWorkRunning) %>"></span>
 						<span class="nav_sub_area"><%=socialInstance.getSubject()%>
 							<%if(socialInstance.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=socialInstance.getSubInstanceCount() %></b>]</font><%} %>
 						</span>

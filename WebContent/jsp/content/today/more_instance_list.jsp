@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.												 -->
 <!-- Created Date	: 2011.9.														 -->
 
+<%@page import="net.smartworks.model.work.Work"%>
 <%@page import="java.util.Date"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
@@ -505,7 +506,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 					<!-- 인스턴스 마지막수정일자 //-->
 					<br/>
 					<a href="<%=WorkInfo.getController(workId, workType)%>?cid=<%=WorkInfo.getContextId(workId, workType)%>" class="js_content">
-						<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"></span>
+						<span class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"></span>
 						<span class="t_date"><%=workFullPathName%></span>
 					</a>
 					<%

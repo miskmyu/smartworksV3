@@ -35,6 +35,7 @@ import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.model.work.info.WorkInfoList;
 import net.smartworks.server.engine.category.manager.ICtgManager;
 import net.smartworks.server.engine.category.model.CtgCategory;
 import net.smartworks.server.engine.category.model.CtgCategoryCond;
@@ -2009,5 +2010,10 @@ public class WorkServiceImpl implements IWorkService {
 		SwdRecord record = SwManagerFactory.getInstance().getSwdManager().getRecord(userId, recordCond, IManager.LEVEL_ALL);
 		
 		return record;
+	}
+	@Override
+	public WorkInfoList getAppWorkList(RequestParams params) throws Exception {
+		//return SmartTest.getAppWorkList(params);
+		return null;
 	}
 }

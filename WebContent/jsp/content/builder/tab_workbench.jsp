@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.work.WorkCategory"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.model.work.Work"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
@@ -31,6 +32,11 @@
 		break;
 	}
 	
+	String categoryId = work.getMyCategory().getId();
+	String groupId = (SmartUtil.isBlankObject(work.getMyGroup())) ? "" : work.getMyGroup().getId();
+	
+	String categoryIconClass = (SmartUtil.isBlankObject(work.getMyGroup())) ? work.getMyCategory().getIconClass() : work.getMyGroup().getIconClass();
+	
 	session.setAttribute("cid", cid);
 	session.removeAttribute("wid");
 	session.setAttribute("smartWork", work);
@@ -39,14 +45,16 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_tab_workbench_page" workId="<%=workId%>" isEditable="<%=isEditable%>">
+<div class="section_portlet js_tab_workbench_page" workId="<%=workId%>" isEditable="<%=isEditable%>" categoryId="<%=categoryId%>" groupId="<%=groupId%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
 			<!-- 타이틀 -->
 			<div class="body_titl">
 				<div class="<%=iconClass %> title"><%=work.getName() %></div>
-				<span class="t_location"><%=work.getPathName() %></span>
+				<span class="t_location <%=categoryIconClass%>" style="padding-top:5px;">
+					<span><%=work.getPathName() %></span>
+				</span>
 				<!-- tab -->
 				<div id="" class="tab_adm fr">
 					<ul class="cb">

@@ -803,7 +803,7 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				if(isEmpty(newComment)){
 					var target = subInstanceList.find('.js_comment_list');
-					var showAllComments = target.find('.js_show_all_comments');
+					var showAllComments = target.find('.js_show_more_comments');
 					if(!isEmpty(showAllComments)){
 						showAllComments.find('span').click();
 						input.attr('value', '');
@@ -815,7 +815,8 @@ $(function() {
 					}
 				}else{
 					input.attr('value', '');
-					window.location.reload(true);
+					refreshCurrentContent(subInstanceList);
+					//window.location.reload(true);
 				}
 				smartPop.closeProgress();				
 			},
@@ -870,12 +871,13 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
 					var lastHref = workSpacePage.attr('lastHref');
 					if(isEmpty(lastHref))
 						window.location.reload(true); 
 					else
-						document.location.href = lastHref; 
-					smartPop.closeProgress();
+						refreshCurrentContent(workSpacePage);
+						//document.location.href = lastHref; 
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -940,12 +942,13 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
 					var lastHref =  workSpacePage.attr('lastHref');
 					if(isEmpty(lastHref))
 						window.location.reload(true);
 					else
-						document.location.href = lastHref;
-					smartPop.closeProgress();
+						refreshCurrentContent(workSpacePage);
+						//document.location.href = lastHref;
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -959,8 +962,8 @@ $(function() {
 		return false;
 	});
 	
-	$('.js_show_all_comments').live('click', function(e) {
-		var input = $(targetElement(e)).parents('.js_show_all_comments');
+	$('.js_show_more_comments').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_show_more_comments');
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var href = input.attr('href');
 		$.ajax({
@@ -968,9 +971,7 @@ $(function() {
 			data : {},
 			success : function(data, status, jqXHR) {
 				var target = subInstanceList.find('.js_comment_list');
-				target.find(':visible').remove();
-				target.append(data);
-				input.remove();
+				target.children('li:first:visible').replaceWith(data);
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -1409,7 +1410,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					var showAllComments = spaceSubInstance.find('.js_show_all_comments');
+					var showAllComments = spaceSubInstance.find('.js_show_more_comments');
 					if(!isEmpty(showAllComments)){
 						showAllComments.find('span').click();
 					}else{

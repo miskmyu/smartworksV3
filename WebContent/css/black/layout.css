@@ -70,7 +70,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 
 /*Top Menu*/
 .top_menu {width:71px; margin:0 auto; z-index:40} /* 검색 추가 시 width:345px으로 변경, 대시보드 추가 시 width:138px */
-.top_menu ul {width:71px; height:34px; background:url("../../images/top_menu.png") no-repeat left top}
+/*.top_menu ul {width:71px; height:34px; background:url("../../images/top_menu.png") no-repeat left top}*/
 .top_menu ul li {float:left; height:34px; background:url("../../images/top_menu.png") no-repeat; text-align:center; vertical-align:middle; font-weight:bold}
 .top_menu ul li a:hover,
 .top_menu ul li .current {background:url("../../images/top_menu.png") no-repeat; height:34px}
@@ -346,6 +346,8 @@ li.fvrt_item:hover .check_option {display:block}
 /* CommentsBox added by ysjung */
 tr.instance_list {}
 tr.instance_list:hover {background-color:#fff7eb; cursor:pointer}
+tr.app_work_list {}
+tr.app_work_list:hover {background-color:#fff7eb}
 .det_title {padding:5px 0}
 li.sub_instance_list > .det_title {}
 li.sub_instance_list > .det_title:hover, li.instance_list > .det_title:hover {background-color:#fff7eb; cursor:pointer}

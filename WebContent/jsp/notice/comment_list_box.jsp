@@ -66,7 +66,7 @@
 					<li>
 						<div class="info_ms_section">
 							<a href="<%=WorkInfo.getController(workId, workType)%>?cid=<%=WorkInfo.getContextId(workId, workType)%>&workId=<%=workId %>">
-								<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"></span>
+								<span class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"></span>
 								<span><%=workName%></span>
 							</a>
 							<div class="reply">
@@ -98,7 +98,7 @@
 					<li>
 					<div class="info_ms_section">
 						<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=workId %>">
-							<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"></span>
+							<span class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"></span>
 							<span class="tb"><%=workInstance.getSubject()%></span> 
 						</a>
 						<div class="reply">

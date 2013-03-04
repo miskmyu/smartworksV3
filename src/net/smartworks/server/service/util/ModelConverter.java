@@ -1082,14 +1082,11 @@ public class ModelConverter {
 			SwdRecord record = (SwdRecord)SwdRecord.toObject(task.getTskDoc());
 			tskWorkSpaceId = record.getRecordId();
 		}
-		InstanceInfo[] subInstancesInInstances = null;
-		subInstancesInInstances = instanceService.getRecentSubInstancesInInstance(tskWorkSpaceId, -1);
-		int subInstanceCount = 0;
-		if(!CommonUtil.isEmpty(subInstancesInInstances))
-			subInstanceCount = subInstancesInInstances.length;
-
-		workInstanceInfo.setSubInstanceCount(subInstanceCount);
-		workInstanceInfo.setSubInstances(subInstancesInInstances);
+		// Start - modified by ysjung at 2013-3-3
+		workInstanceInfo.setSubInstanceCount(instanceService.getSubInstancesInInstanceCount(tskWorkSpaceId));
+		workInstanceInfo.setSubInstances(instanceService.getRecentSubInstancesInInstance(tskWorkSpaceId, WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT));
+		// End - modified by ysjung at 2013-3-3
+		
 		workInstanceInfo.setSubject(task.getPrcTitle());
 		if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE) || task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL))
 			workInstanceInfo.setSubject(task.getTskTitle());
@@ -2098,6 +2095,8 @@ public class ModelConverter {
 		String ctgName = ctg.getName();
 		WorkCategoryInfo workCtg = new WorkCategoryInfo(ctgId, ctgName);
 		workCtg.setRunning(isExistRunningPackageByCategoryId(ctgId));
+		// Added by ysjung at 2013-3-2
+		workCtg.setDesc(ctg.getDescription());
 		return workCtg;
 	}
 
@@ -3454,11 +3453,15 @@ public class ModelConverter {
 		String ctgId = ctg.getObjId();
 		String ctgName = ctg.getName();
 		String ctgDesc = ctg.getDescription();
-		int ctgType = -1;
 		work.setId(ctgId);
 		work.setName(ctgName);
 		work.setDesc(ctgDesc);
-		work.setType(-1);
+		//Start - Modified by ysjung at 2013.3.2 
+		work.setType(WorkCategory.TYPE_CATEGORY);
+		if(work.getClass().equals(WorkCategory.class)){
+			((WorkCategory)work).setRunning(isExistRunningPackageByCategoryId(ctgId));
+		}
+		//End - Modified by ysjung at 2013.3.2 
 		
 		return work;
 	}
@@ -4599,12 +4602,8 @@ public class ModelConverter {
 		tempWorkInstance.setImgSource(imgSrc);
 		tempWorkInstance.setContent(content);
 		//start : sjlee
-		InstanceInfo[] subInstancesInInstances = instanceService.getRecentSubInstancesInInstance(swdRecord.getRecordId(), -1);
-		int subInstanceCount = 0;
-		if(!CommonUtil.isEmpty(subInstancesInInstances))
-			subInstanceCount = subInstancesInInstances.length;
-		tempWorkInstance.setSubInstanceCount(subInstanceCount);
-		tempWorkInstance.setSubInstances(subInstancesInInstances);
+		tempWorkInstance.setSubInstanceCount(instanceService.getSubInstancesInInstanceCount(swdRecord.getRecordId()));
+		tempWorkInstance.setSubInstances(instanceService.getRecentSubInstancesInInstance(swdRecord.getRecordId(), WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT));
 		//end : sjlee		
 		imageInstance = tempWorkInstance;
 		return imageInstance;

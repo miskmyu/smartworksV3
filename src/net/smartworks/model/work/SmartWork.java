@@ -9,6 +9,7 @@ import net.smartworks.model.security.BuilderPolicy;
 import net.smartworks.model.security.EditPolicy;
 import net.smartworks.model.security.WritePolicy;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
 public class SmartWork extends Work {
@@ -206,5 +207,17 @@ public class SmartWork extends Work {
 			if(user.getId().equals(currentUserId))
 				return true;
 		return false;
+	}
+
+	public static String getWorkTypeName(int workType){
+		switch(workType){
+		case SmartWork.TYPE_INFORMATION:
+			return SmartMessage.getString("common.title.information_work");
+		case SmartWork.TYPE_PROCESS:
+			return SmartMessage.getString("common.title.process_work");
+		case SmartWork.TYPE_SCHEDULE:
+			return SmartMessage.getString("common.title.schedule_work");
+		}
+		return "";
 	}
 }

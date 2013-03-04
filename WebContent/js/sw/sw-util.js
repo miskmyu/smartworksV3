@@ -358,3 +358,38 @@ var smartDecode = function(value){
 	value = value.replace(/&gt;/g,">");
 	return value;
 };
+
+var refreshCurrentContent = function(js_page){
+	if(isEmpty(js_page)) return null;
+	if(!js_page.jquery) return null;
+	
+	var url = js_page.attr('currentHref');
+	var currentLocation = js_page.attr('currentLocation');
+	var target = $('#content');
+
+	if(!isEmpty(currentLocation) && currentLocation === "home.sw"){
+		url = "smartcaster.sw";
+	}	
+	var workSpace = $('#content .js_iwork_space_page');
+	if(isEmpty(workSpace))
+		workSpace = $('#content .js_pwork_space_page');
+	if(!isEmpty(workSpace)){
+		url = workSpace.attr('currentHref');
+		url = url + '&workId=' + workSpace.attr('workId');
+	}
+	if(isEmpty(url)){
+		window.location.reload(true);
+		return;
+	}
+	
+	smartPop.progressCenter();
+	$.ajax({
+		url : url,
+		success : function(data, status, jqXHR) {
+			target.html(data);
+			smartPop.closeProgress();
+		}
+	});
+
+	
+};

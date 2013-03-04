@@ -83,60 +83,14 @@ public class WorkInfo extends BaseObject {
 //	}
 	
 	public String getIconClass(){
-		if(this.getClass().equals(WorkCategoryInfo.class))
-			return WorkInfo.getIconClass(getId(), getType(), ((WorkCategoryInfo)this).isRunning());
+		if(this.getClass().equals(AppWorkInfo.class))
+			return Work.getIconClass(getId(), ((AppWorkInfo)this).getWorkType(), true);
+		else if(this.getClass().equals(WorkCategoryInfo.class))
+			return Work.getIconClass(getId(), getType(), ((WorkCategoryInfo)this).isRunning());
 		else if(this.getClass().equals(SmartWorkInfo.class))
-			return WorkInfo.getIconClass(getId(), getType(), ((SmartWorkInfo)this).isRunning());
-		return WorkInfo.getIconClass(getId(), getType(), false);
+			return Work.getIconClass(getId(), getType(), ((SmartWorkInfo)this).isRunning());
+		return Work.getIconClass(getId(), getType(), false);
 	}
-	public static String getIconClass(String workId, int workType, boolean isWorkRunning){
-		if(SmartUtil.isBlankObject(workId)) return "";
-		switch(workType){
-		case SmartWork.TYPE_INFORMATION:
-		case SocialWork.TYPE_BOARD:
-		case SocialWork.TYPE_EVENT:
-		case SocialWork.TYPE_FILE:
-		case SocialWork.TYPE_IMAGE:
-		case SocialWork.TYPE_MEMO:
-		case SocialWork.TYPE_YTVIDEO:
-			if(workId.equals(SmartWork.ID_FILE_MANAGEMENT))
-				return Work.ICON_CLASS_FILE_WORKS;
-			else if(workId.equals(SmartWork.ID_EVENT_MANAGEMENT))
-				return Work.ICON_CLASS_EVENT_WORKS;
-			else if(workId.equals(SmartWork.ID_BOARD_MANAGEMENT))
-				return Work.ICON_CLASS_BOARD_WORKS;
-			else if(workId.equals(SmartWork.ID_MEMO_MANAGEMENT))
-				return Work.ICON_CLASS_MEMO_WORKS;
-			else if(workId.equals(SmartWork.ID_FORUM_MANAGEMENT))
-				return Work.ICON_CLASS_FORUM_WORKS;
-			else if(workId.equals(SmartWork.ID_CONTACTS_MANAGEMENT))
-				return Work.ICON_CLASS_CONTACTS_WORKS;
-			else if(workId.equals(SmartWork.ID_USER_MANAGEMENT))
-				return Work.ICON_CLASS_USER_WORKS;
-			else if(workId.equals(SmartWork.ID_DEPARTMENT_MANAGEMENT))
-				return Work.ICON_CLASS_DEPARTMENT_WORKS;
-			else if(workId.equals(SmartWork.ID_GROUP_MANAGEMENT))
-				return Work.ICON_CLASS_GROUP_WORKS;
-			else
-				return isWorkRunning ? Work.ICON_CLASS_IWORKS_ON : Work.ICON_CLASS_IWORKS_OFF;
-		case SmartWork.TYPE_PROCESS:
-			return isWorkRunning ? Work.ICON_CLASS_PWORKS_ON : Work.ICON_CLASS_PWORKS_OFF;
-		case SmartWork.TYPE_SCHEDULE:
-			return isWorkRunning ? Work.ICON_CLASS_SWORKS_ON : Work.ICON_CLASS_SWORKS_OFF;
-		case WorkCategory.TYPE_CATEGORY:
-			if(workId.equals(WorkCategory.ID_DEFAULT_CATEGORY))
-				return Work.ICON_CLASS_DEFAULT_CATEGORY;
-			else if(workId.equals(WorkCategory.ID_DOWNLOADED_CATEGORY))
-				return Work.ICON_CLASS_DOWNLOADED_CATEGORY;
-			return isWorkRunning ? Work.ICON_CLASS_CWORKS_ON : Work.ICON_CLASS_CWORKS_OFF;
-		case FileCategory.TYPE_FILE_CATEGORY:
-			return "";
-		case ImageCategory.TYPE_IMAGE_CATEGORY:
-			return "";
-		}
-		return "";
-	}
-
 //	public String getController(){
 //		switch(getType()){
 //		case SmartWork.TYPE_INFORMATION:

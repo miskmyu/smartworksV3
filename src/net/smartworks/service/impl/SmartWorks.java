@@ -77,6 +77,7 @@ import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.model.work.info.WorkInfoList;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.model.IFileModel;
@@ -410,6 +411,16 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public InstanceInfo[] getRecentSubInstancesInInstance(String workId, int length) throws Exception {
 		return instanceService.getRecentSubInstancesInInstance(workId, length);
+	}
+
+	@Override
+	public int getSubInstancesInInstanceCount(String workId) throws Exception {
+		return instanceService.getSubInstancesInInstanceCount(workId);
+	}
+
+	@Override
+	public InstanceInfo[] getSubInstancesInInstance(String workId, int length, LocalDate to) throws Exception {
+		return instanceService.getSubInstancesInInstance(workId, length, to);
 	}
 
 	@Override
@@ -1763,5 +1774,15 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public String[][] getJunkIds() throws Exception {
 		return mailService.getJunkIds();
+	}
+
+	@Override
+	public WorkInfoList getAppWorkList(RequestParams params) throws Exception {
+		return workService.getAppWorkList(params);
+	}
+
+	@Override
+	public void downloadAppWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		builderService.downloadAppWork(requestBody, request);
 	}
 }

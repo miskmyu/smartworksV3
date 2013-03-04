@@ -96,6 +96,7 @@ function submitForms(action) {
 						if(isEmpty(lastHref))
 							window.location.reload(true);
 						else
+							//refreshCurrentContent(newMail);
 							document.location.href = lastHref; 
 						smartPop.closeProgress();				
 					});
@@ -103,6 +104,7 @@ function submitForms(action) {
 					if(isEmpty(lastHref))
 						window.location.reload(true);
 					else
+						//refreshCurrentContent(newMail);
 						document.location.href = lastHref; 
 					smartPop.closeProgress();								
 				}
@@ -170,6 +172,7 @@ function submitForms(action) {
 						if(isEmpty(lastHref))
 							window.location.reload(true);
 						else
+							//refreshCurrentContent(newMail);
 							document.location.href = lastHref; 
 						smartPop.closeProgress();				
 					});
@@ -177,6 +180,7 @@ function submitForms(action) {
 					if(isEmpty(lastHref))
 						window.location.reload(true);
 					else
+						//refreshCurrentContent(newMail);
 						document.location.href = lastHref; 
 					smartPop.closeProgress();								
 				}
@@ -235,7 +239,7 @@ function submitForms(action) {
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_new_mail_page js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>" isDraftFolder="<%=isDraftFolder %>" senderId="<%=cUser.getMailId()%>" senderUserTitle="<%=myMailAccount.getSenderUserTitle()%>">
+<div class="section_portlet js_new_mail_page js_mail_space_page" lastHref="<%=lastHref %>" currentHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>" isDraftFolder="<%=isDraftFolder %>" senderId="<%=cUser.getMailId()%>" senderUserTitle="<%=myMailAccount.getSenderUserTitle()%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">

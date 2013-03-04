@@ -1,5 +1,5 @@
 
-<!-- Name 			: pop_new_work_definition.jsp							 -->
+<!-- Name 			: pop_move_work_definition.jsp							 -->
 <!-- Description	: 새로운 업무w정의를 생성하는 팝업화면 						 -->
 <!-- Author			: Maninsoft, Inc.										 -->
 <!-- Created Date	: 2011.9.												 -->
@@ -70,8 +70,17 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
-					document.location.href = data.href;
 					smartPop.close();
+					var categoryId = form.find('select[name="selWorkCategoryId"]').attr('value');
+					var groupId = form.find('select[name="selWorkGroupId"]').attr('value');
+					openWorkCategoryTree(categoryId, groupId);
+					var target = $('#content');
+					$.ajax({
+						url : "start_work_service.sw?workId=" + workId,
+						success : function(data, status, jqXHR) {
+							target.html(data);
+						}			
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();

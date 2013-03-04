@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.work.AppWork"%>
 <%@page import="net.smartworks.model.KeyMap"%>
 <%@page import="net.smartworks.model.work.Work"%>
 <%@page import="net.smartworks.model.work.info.SmartTaskInfo"%>
@@ -29,12 +30,12 @@
 	String workManual = "";
 	String workHelpUrl = "";
 	if(work.getClass().equals(InformationWork.class)){
-		workPicture = ((InformationWork)work).getForm().getMinImage();
+		workPicture = (SmartUtil.isBlankObject(((InformationWork)work).getForm())) ? "" : ((InformationWork)work).getForm().getMinImage();
 		workType = SmartMessage.getString("common.title.information_work");
 		workManual = ((InformationWork)work).getManualFileId();
 		workHelpUrl = ((InformationWork)work).getHelpUrl();
 	}else if(work.getClass().equals(ProcessWork.class)){
-		workPicture = ((ProcessWork)work).getDiagram().getMinImage();
+		workPicture = (SmartUtil.isBlankObject(((ProcessWork)work).getDiagram())) ? "" : ((ProcessWork)work).getDiagram().getMinImage();
 		workType = SmartMessage.getString("common.title.process_work");
 		workManual = ((ProcessWork)work).getManualFileId();
 		workHelpUrl = ((ProcessWork)work).getHelpUrl();
@@ -42,6 +43,8 @@
 		//TO DO
 		workType = SmartMessage.getString("common.title.schedule_work");
 	}
+
+	String categoryIconClass = (SmartUtil.isBlankObject(work.getMyGroup())) ? work.getMyCategory().getIconClass() : work.getMyGroup().getIconClass();
 	
 	session.setAttribute("cid", cid);
 	session.removeAttribute("wid");
@@ -114,7 +117,7 @@
 			<!-- 타이틀 -->
 			<div class="body_titl">
 				<div class="body_titl_iworks title"><%=work.getName() %></div>
-				<span class="t_location"><%=work.getPathName() %></span>
+				<span class="t_location <%=categoryIconClass%>" style="padding-top:5px;"><%=work.getPathName() %></span>
 				<!-- tab -->
 				<div id="" class="tab_adm fr">
 					<ul class="cb">
@@ -157,8 +160,8 @@
 										<select name="selSharingByIndustry" class="required">
 											<option></option>
 											<%
-											for(int i=0; i<Work.CATEGORIES_BY_INDUSTRY.length; i++){
-												KeyMap keyMap = Work.CATEGORIES_BY_INDUSTRY[i];
+											for(int i=0; i<AppWork.CATEGORIES_BY_INDUSTRY.length; i++){
+												KeyMap keyMap = AppWork.CATEGORIES_BY_INDUSTRY[i];
 											%>
 												<option value="<%=keyMap.getId()%>"><%=keyMap.getKey() %></option>
 											<%
@@ -171,8 +174,8 @@
 										<select name="selSharingByJob" class="required">
 											<option></option>
 											<%
-											for(int i=0; i<Work.CATEGORIES_BY_JOB.length; i++){
-												KeyMap keyMap = Work.CATEGORIES_BY_JOB[i];
+											for(int i=0; i<AppWork.CATEGORIES_BY_JOB.length; i++){
+												KeyMap keyMap = AppWork.CATEGORIES_BY_JOB[i];
 											%>
 												<option value="<%=keyMap.getId()%>"><%=keyMap.getKey() %></option>
 											<%
@@ -207,9 +210,11 @@
 				<!-- 타이틀 영역// -->
 				<%
 				String desc = "";
+				String orgImage = "";
 				if(work.getClass().equals(InformationWork.class)){
 					InformationWork informationWork = (InformationWork)work;
-					desc = informationWork.getForm().getDescription();
+					desc = (SmartUtil.isBlankObject(informationWork.getForm())) ? "" : informationWork.getForm().getDescription();
+					orgImage = (SmartUtil.isBlankObject(informationWork.getForm())) ? "" : informationWork.getForm().getOrgImage();
 				%>
 					<!-- 사용자 가이드 -->
 					<div class="form_wrap up form_layout pt10 pb10" style="height:215px">
@@ -220,7 +225,7 @@
 						</div>
 						<!-- 타이틀 //-->
 						<div class="left_im2">
-							<img src="<%=informationWork.getForm().getOrgImage() %>" style="width:315px; max-height:162px">
+							<img src="<%=orgImage%>" style="width:315px; max-height:162px">
 						</div>
 						<div class="right_auto2">
 							<table>
@@ -279,7 +284,8 @@
 					<%
 					if(!SmartUtil.isBlankObject(diagram.getTasks()) && diagram.getTasks().length>0){
 						for(SmartTaskInfo task : diagram.getTasks()){
-							desc = task.getForm().getDescription();
+							desc = (SmartUtil.isBlankObject(task.getForm())) ? "" : task.getForm().getDescription();
+							orgImage = (SmartUtil.isBlankObject(task.getForm())) ? "" : task.getForm().getOrgImage();
 					%>
 							<!-- 사용자 가이드 -->
 							<div class="form_wrap up form_layout pt10 pb10" style="height:215px">
@@ -290,7 +296,7 @@
 								</div>
 								<!-- 타이틀 //-->
 								<div class="left_im2">
-									<img src="<%=task.getForm().getOrgImage() %>"  style="width:315px; max-height:162px">
+									<img src="<%=orgImage%>"  style="width:315px; max-height:162px">
 								</div>
 								<div class="right_auto2">
 									<table>

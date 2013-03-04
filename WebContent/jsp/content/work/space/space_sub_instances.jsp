@@ -111,7 +111,7 @@
 								<!-- 인스턴스 마지막수정일자 //-->
 							<a href="<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>">
 								<div>
-									<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"></span>
+									<span class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"></span>
 									<div>
 										<%=board.getSubject() %>
 										<%if(board.isNew()){ %><span class="icon_new"></span><%} %>

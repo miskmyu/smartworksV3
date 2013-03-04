@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.work.WorkCategory"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.model.community.info.CommunityInfo"%>
 <%@page import="net.smartworks.model.work.SmartForm"%>
@@ -22,6 +23,8 @@
 	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
 	
 	SmartWork work = (SmartWork) smartWorks.getWorkById(workId);
+
+	String categoryIconClass = (SmartUtil.isBlankObject(work.getMyGroup())) ? work.getMyCategory().getIconClass() : work.getMyGroup().getIconClass();
 	
 	session.setAttribute("cid", cid);
 	session.removeAttribute("wid");
@@ -89,7 +92,7 @@
 			<!-- 타이틀 -->
 			<div class="body_titl">
 				<div class="body_titl_iworks title"><%=work.getName() %></div>
-				<span class="t_location"><%=work.getPathName() %></span>
+				<span class="t_location <%=categoryIconClass%>" style="padding-top:5px;"><%=work.getPathName() %></span>
 				<!-- tab -->
 				<div id="" class="tab_adm fr">
 					<ul class="cb">

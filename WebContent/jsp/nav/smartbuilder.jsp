@@ -39,7 +39,7 @@
 	<div class="nav_list">
 		<div class="nav_sub_list">		
 			<div class="tab_buttons">
-				<a class="js_download_form_appstore" title="<fmt:message key='builder.button.download_from_appstore'/>" href=""><span class="btn_apps"></span></a>
+				<a class="js_download_from_appstore" title="<fmt:message key='builder.button.download_from_appstore'/>" href=""><span class="btn_apps"></span></a>
 				<a class="js_add_work_category" title="<fmt:message key='builder.button.add_category'/>" href=""><span class="btn_add_category"></span></a>
 			</div>
 

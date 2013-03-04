@@ -31,6 +31,7 @@
 	String workDesc = request.getParameter("workDesc");
 	String categoryId = request.getParameter("categoryId");
 	String groupId = request.getParameter("groupId");
+	String groupOption = request.getParameter("groupOption");
 	
 %>
 <script type="text/javascript">
@@ -42,10 +43,11 @@
 		if (SmartWorks.GridLayout.validate(newWorkDefinition.find('form.js_validation_required'), $('.js_pop_error_message'))) {
 			var forms = newWorkDefinition.find('form');
 			var workId = newWorkDefinition.attr('workId');
+			var parentId = newWorkDefinition.attr('parentId');
 			var paramsJson = {};
 			var url = "create_new_work_definition.sw";
 			if(isEmpty(workId)){
-				paramsJson['parentId'] = newWorkDefinition.attr('parentId');
+				paramsJson['parentId'] = parentId;
 			}else{
 				paramsJson['workId'] = workId;
 				url = "set_work_definition.sw";
@@ -70,7 +72,13 @@
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
 					smartPop.close();
-					window.location.reload(true);
+					if(!isEmpty(workId)){
+						var categoryId = form.find('select[name="selWorkCategoryId"]').attr('value');
+						var groupId = form.find('select[name="selWorkGroupId"]').attr('value');
+						openWorkCategoryTree(categoryId, groupId);
+					}else{
+						openWorkCategoryTree(parentId, "");
+					}
 				},
 				error : function(e) {
 					smartPop.closeProgress();
@@ -137,8 +145,10 @@
 						<td>
 							<input name="chkWorkType" class="required" type="radio" value="<%=SmartWork.TYPE_INFORMATION%>"><fmt:message key="common.title.information_work"/>	
 							<input name="chkWorkType" class="required" type="radio" value="<%=SmartWork.TYPE_PROCESS%>"><fmt:message key="common.title.process_work"/>	
-<%-- 							<input name="chkWorkType" class="required" type="radio" value="<%=SmartWork.TYPE_SCHEDULE%>"><fmt:message key="common.title.schedule_work"/>	
- --%>							<input name="chkWorkType" class="required" type="radio" value="<%=WorkCategory.TYPE_CATEGORY%>"><fmt:message key="common.title.work_group"/>	
+<%--
+ 							<input name="chkWorkType" class="required" type="radio" value="<%=SmartWork.TYPE_SCHEDULE%>"><fmt:message key="common.title.schedule_work"/>	
+--%>							
+ 							<%if(groupOption.equals("true")){ %><input name="chkWorkType" class="required" type="radio" value="<%=WorkCategory.TYPE_CATEGORY%>"><fmt:message key="common.title.work_group"/><%} %>	
 						</td>
 					</tr>
 				<%
@@ -166,7 +176,7 @@
 						<td><fmt:message key="builder.title.group_name"/></td>
 						<td>
 							<select name="selWorkGroupId" class="js_work_group_target">
-								<option><fmt:message key="common.title.none"/></option>
+								<option value=""><fmt:message key="common.title.none"/></option>
 								<%
 								if(!SmartUtil.isBlankObject(categoryId)){
 									WorkInfo[] groups = smartWorks.getAllWorksByCategoryId(categoryId);

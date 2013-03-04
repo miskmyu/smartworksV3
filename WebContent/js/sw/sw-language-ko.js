@@ -223,6 +223,8 @@ smartMessage.bundle['ko'] = {
 	importFromExcelError : "엑셀로 등록하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	changeMailPasswordSucceed : "메일 비밀번호가 정상적으로 수정되었습니다.",
 	changeMailPasswordError : "메일 비밀번호 수정 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	downloadAppSucceed : "업무를 앱스토어에서 [받은업무]함으로 정상적으로 내려받았습니다.",
+	downloadAppError : "앱스토어에서 업무를 내려받는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	replyMailError : "메일에 답장하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	forwardMailError : "메일을 전달하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	fetchMailsError : "메일을 가져오는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
@@ -275,6 +277,7 @@ smartMessage.bundle['ko'] = {
 	removeMailFolderConfirmation : "메일폴더를 삭제하려고 합니다. 폴더를 삭제하면 안에 있는 모든 메일들도 같이 삭제됩니다. 정말로 삭제하시겠습니까?",
 	addAdjunctConfirmation : "겸직원을 추가하려고 합니다. 정말로 추가하시겠습니까?",
 	removeCommentConfirmation : "댓글을 삭제하려고 합니다. 정말로 삭제하시겠습니까?",
+	downloadAppConfirmation : "업무를 내려받기하려고 합니다. 정말로 내려받으시겠습니까? ",
 	
 	spaceOverDateSeleted : "미래의 날짜를 선택하였습니다. 오늘이나 과거의 날짜를 선택하십시요!",
 	

@@ -217,6 +217,8 @@ smartMessage.bundle['en'] = {
 	importFromExcelError : "Error has been occured while importing from Excel File. Please contact the Administrator!",
 	changeMailPasswordSucceed : "Mail password has been changed successfully.",
 	changeMailPasswordError : "Error has been occured while changing Mail password. Please contact the Administrator!",
+	downloadAppSucceed : "The Work App has been downloaded from the App Store successfully.",
+	downloadAppError : "Error has been occured while downloading from the App Store. Please contact the Administrator!",
 	replyMailError : "Error has been occured while repling Mail Instance. Please contact the Administrator!",
 	forwardMailError : "Error has been occured while forwarding Mail Instance. Please contact the Administrator!",
 	fetchMailsError : "Error has been occured while fetching Mail Instances. Please contact the Administrator!",
@@ -267,6 +269,7 @@ smartMessage.bundle['en'] = {
 	removeMailFolderConfirmation : "All the mails in the Folder would be deleted if you remove this Folder. Do you really want to remove Mail Folder? ",
 	addAdjunctConfirmation : "Do you really want to add Adjunct Member? ",
 	removeCommentConfirmation : "Do you really want to remove the Comment?",
+	downloadAppConfirmation : "Do you really want to download the Work App?",
 	
 	spaceOverDateSeleted : "Future date has been selected. Please select today or before!",
 			

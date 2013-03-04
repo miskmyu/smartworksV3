@@ -824,7 +824,8 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					smartPop.closeProgress();
-					window.location.reload(true);
+					refreshCurrentContent(workSpacePage);
+					//window.location.reload(true);
 					return false;
 				},
 				error : function(e) {
@@ -897,7 +898,8 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					smartPop.closeProgress();
-					window.location.reload(true);
+					refreshCurrentContent(workSpacePage);
+					//window.location.reload(true);
 					return false;
 				},
 				error : function(e) {

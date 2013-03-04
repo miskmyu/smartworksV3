@@ -81,6 +81,7 @@ import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.model.work.info.WorkInfoList;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.model.IFileModel;
@@ -265,6 +266,10 @@ public interface ISmartWorks {
 	public abstract CommentInstanceInfo[] getRecentCommentsInWorkManual(String workId, int length) throws Exception;
 	
 	public abstract InstanceInfo[] getRecentSubInstancesInInstance(String workId, int length) throws Exception;
+	
+	public abstract int getSubInstancesInInstanceCount(String workId) throws Exception;
+	
+	public abstract InstanceInfo[] getSubInstancesInInstance(String workId, int length, LocalDate to) throws Exception;
 	
 	public abstract InstanceInfoList getIWorkInstanceList(String workId, RequestParams params) throws Exception;
 	
@@ -786,4 +791,8 @@ public interface ISmartWorks {
 	public abstract Property[] getUcityExtendedPropertyByTaskInstId(String taskInstId) throws Exception;
 	
 	public abstract void changeMailPasswordRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract WorkInfoList getAppWorkList(RequestParams params) throws Exception;
+
+	public abstract void downloadAppWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 }

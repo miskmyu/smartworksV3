@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
@@ -16,6 +17,7 @@ import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.model.work.info.WorkInfoList;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.server.engine.infowork.form.exception.SwfException;
 import net.smartworks.server.engine.infowork.form.model.SwfFormFieldDef;
@@ -73,5 +75,7 @@ public interface IWorkService {
 	public void setIWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public void setPWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public WorkInfoList getAppWorkList(RequestParams params) throws Exception;
 	
 }

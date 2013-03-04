@@ -141,7 +141,7 @@
 					<td>
 						<a class="js_content_work_space" href="<%=target %>">					
 							<div class="noti_pic">
-								<span class="<%=WorkInfo.getIconClass(workId, workType, isWorkRunning)%>"><%=workFullPathName %></span>
+								<span class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"><%=workFullPathName %></span>
 							</div>
 						</a>
 					</td>

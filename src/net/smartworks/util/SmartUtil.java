@@ -313,6 +313,14 @@ public class SmartUtil {
 		return "home.sw";
 	}
 	
+	public static String getCurrentHref(HttpServletRequest request, String spaceId) throws Exception{
+		if(isBlankObject(spaceId)) return "home.sw";
+		
+		String cid = (String)request.getSession().getAttribute("cid");
+		String wid = (String)request.getSession().getAttribute("wid");
+		return spaceId + "?cid=" + cid + "&wid=" + wid;
+	}
+	
 	public static String combineStrings(String first, String second){
 		if(SmartUtil.isBlankObject(first)) return second;
 		if(SmartUtil.isBlankObject(second)) return first;
