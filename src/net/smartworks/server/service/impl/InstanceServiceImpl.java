@@ -3725,7 +3725,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 				//if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
 				opinionCond.setPageSize(length);
-				opinionCond.setOrders(new Order[]{new Order(Opinion.A_CREATIONDATE, true)});
+				opinionCond.setOrders(new Order[]{new Order(Opinion.A_CREATIONDATE, false)});
 				
 				Opinion[] opinions = getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
 				if(!CommonUtil.isEmpty(opinions)) {

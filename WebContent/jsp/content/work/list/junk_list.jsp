@@ -99,7 +99,7 @@
 			<span class="btn_gray">
 				<a href="" class="js_junk_list_close"> 
 					<span class="txt_btn_start"></span> 
-					<span class="txt_btn_center"><fmt:message key="common.button.cancel"/></span> 
+					<span class="txt_btn_center"><fmt:message key="common.button.close"/></span> 
 					<span class="txt_btn_end"></span> 
 				</a> 
 			</span>
