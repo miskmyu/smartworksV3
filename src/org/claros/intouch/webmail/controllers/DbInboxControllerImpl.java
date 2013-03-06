@@ -139,7 +139,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					ArrayList toBeDeleted = new ArrayList();
 					if (msgs != null) {
 						EmailHeader header = null;
-						String[][] junkIds = SwServiceFactory.getInstance().getMailService().getJunkIds();
+						String[][] junkIds = SwServiceFactory.getInstance().getMailService().getJunkIds(thisModel.getUserId());
 
 						for (int i=0;i<msgs.length && toBeDeleted.size()<MailAccount.MAX_MESSAGES_PER_FETCH;i++) {
 							Message msg = msgs[i];

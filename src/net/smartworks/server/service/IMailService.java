@@ -33,6 +33,8 @@ public interface IMailService {
 	
 	public void removeJunk(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public String[][] getJunkIds(String userId) throws Exception;
+	
 	public String[][] getJunkIds() throws Exception;
 	
 	public void deleteMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;

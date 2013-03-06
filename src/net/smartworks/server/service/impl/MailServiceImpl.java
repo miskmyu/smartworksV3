@@ -2245,10 +2245,12 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	}
 
 	@Override
-	public String[][] getJunkIds() throws Exception {
-
-	    User currentUser = SmartUtil.getCurrentUser();
-	    String userId = currentUser.getId();
+	public String[][] getJunkIds(String userId) throws Exception {
+		if (CommonUtil.isEmpty(userId)) {
+			User currentUser = SmartUtil.getCurrentUser();
+			userId = currentUser.getId();
+		}
+			
 		//로그인 사용자의 mailAccount 를 가져온다
 	    MailAccountCond mailAccountCond = new MailAccountCond();
 	    mailAccountCond.setUserId(userId);
@@ -2277,8 +2279,13 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    String[] resultDomainIdArray = new String[junkDomainIdList.size()];
 	    junkDomainIdList.toArray(resultDomainIdArray);
 	    
-	    //return new String[][]{resultMailIdArray, resultDomainIdArray};
+	    return new String[][]{resultMailIdArray, resultDomainIdArray};
 		
-		return SmartTest.getJunkIds();
+		//return SmartTest.getJunkIds();
+	}
+	
+	@Override
+	public String[][] getJunkIds() throws Exception {
+	   return getJunkIds(null);
 	}
 }
