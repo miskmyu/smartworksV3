@@ -2413,6 +2413,7 @@ CREATE TABLE SwMailAccount (
 	useMailSign bit,
 	senderUserTitle varchar(50),
 	mailDeleteFetched varchar(10),
+	junks text,
 	creator	varchar(50),
 	createdtime datetime,
 	modifier varchar(50),
@@ -2525,5 +2526,18 @@ CREATE TABLE SWScheduleDef (
     primary key (objId)
 );
 
-
+CREATE TABLE SWSpaceNotice (
+	id varchar(50) NOT NULL,
+	workId varchar(50),
+	workSpaceType varchar(50),
+	workSpaceId varchar(50),
+	refType varchar(50),
+	refId varchar(100),
+	assignee varchar(50),
+	creator varchar (50),
+	createdTime datetime,
+	modifier varchar (50),
+	modifiedTime datetime,
+	primary key (id)
+);
 

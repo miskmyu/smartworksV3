@@ -37,6 +37,7 @@ public class MailAccount extends MisObject {
 	public static final String A_MAILSIGNATURE = "mailSignature";
 	public static final String A_USEMAILSIGN = "useMailSign";
 	public static final String A_SENDERUSERTITLE = "senderUserTitle";
+	public static final String A_JUNKS = "junks";
 
 	private String userId;
 	private String mailServerId;
@@ -48,6 +49,7 @@ public class MailAccount extends MisObject {
 	private String mailSignature;
 	private boolean useMailSign;
 	private String senderUserTitle;
+	private String junks;
 
 	public MailAccount() {
 		super();
@@ -285,5 +287,11 @@ public class MailAccount extends MisObject {
 	}
 	public void setSenderUserTitle(String senderUserTitle) {
 		this.senderUserTitle = senderUserTitle;
+	}
+	public String getJunks() {
+		return junks;
+	}
+	public void setJunks(String junks) {
+		this.junks = junks;
 	}
 }

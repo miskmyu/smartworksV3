@@ -14,4 +14,19 @@
 		<property name="modificationUser" column="modifier" type="string" length="50"/>
 		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
 	</class>
+	<class name="SpaceNotice" table="SWSpaceNotice">
+		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="workId" type="string" length="50"/>
+		<property name="workSpaceType" type="string" length="50"/>
+		<property name="workSpaceId" type="string" length="50"/>
+		<property name="refType" type="string" length="50"/>
+		<property name="refId" type="string" length="100"/>
+		<property name="assignee" type="string" length="50"/>
+		<property name="creationUser" column="creator" type="string" length="50"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="50"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+	</class>
 </hibernate-mapping>

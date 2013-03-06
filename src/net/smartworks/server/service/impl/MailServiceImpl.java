@@ -2135,14 +2135,150 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 	@Override
 	public void addJunk(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+		if (requestBody.get("senderDomains") == null && requestBody.get("senderIds") == null)
+			return;
+		
+		List junkList = null;
+		boolean isJunkMailAddress = true;
+		StringBuffer junkAddressBuff = new StringBuffer();
+		
+		if (requestBody.get("senderDomains") != null) {
+			isJunkMailAddress = false;
+			junkList = (ArrayList)requestBody.get("senderDomains");
+			if (junkList == null || junkList.size() == 0)
+				return;
+		} else {
+			junkList = (ArrayList)requestBody.get("senderIds");
+			if (junkList == null || junkList.size() == 0)
+				return;
+		}
+		
+	    User currentUser = SmartUtil.getCurrentUser();
+	    String userId = currentUser.getId();
+	    
+		//로그인 사용자의 mailAccount 를 가져온다
+	    MailAccountCond mailAccountCond = new MailAccountCond();
+	    mailAccountCond.setUserId(userId);
+	    
+	    net.smartworks.server.engine.mail.model.MailAccount mailAccount = SwManagerFactory.getInstance().getMailManager().getMailAccount(userId, mailAccountCond, IManager.LEVEL_ALL);
+	    
+	    String junks = mailAccount.getJunks();
+	    //가져온 mailAccount 에서 junkMailIds를 가져와 새로 추가된 junk가 이미 등록되어 있는것이지를 검사한다
+	    if (!CommonUtil.isEmpty(junks)) {
+	    	//mailId 는 preFix 로 M_, domain은 D_ 로시작하도록 등록하여 이후 조회시 아이디와 도메인을 구별한다
+	    	for (int i = 0; i < junkList.size(); i++) {
+	    		if (isJunkMailAddress) {
+	    			if (junks.indexOf(";M_" + junkList.get(i)) == -1) {
+	    				junkAddressBuff.append(";M_").append(junkList.get(i));
+	    			}
+	    		} else {
+	    			if (junks.indexOf(";D_" + junkList.get(i)) == -1) {
+	    				junkAddressBuff.append(";D_").append(junkList.get(i));
+	    			}
+	    		}
+			}
+	    	mailAccount.setJunks(junks + junkAddressBuff.toString());
+	    } else {
+	    	//없다면 새로 등록한다
+	    	for (int i = 0; i < junkList.size(); i++) {
+	    		if (isJunkMailAddress) {
+	    			junkAddressBuff.append(";M_").append(junkList.get(i));
+	    		} else {
+	    			junkAddressBuff.append(";D_").append(junkList.get(i));
+	    		}
+			}
+	    	mailAccount.setJunks(junkAddressBuff.toString());
+	    }
+		//저장
+	    SwManagerFactory.getInstance().getMailManager().setMailAccount(userId, mailAccount, IManager.LEVEL_ALL);
+		
 	}
 
 	@Override
 	public void removeJunk(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+
+		if (requestBody.get("senderDomains") == null && requestBody.get("senderIds") == null)
+			return;
+		
+		List junkList = null;
+		boolean isJunkMailAddress = true;
+		
+		if (requestBody.get("senderDomains") != null) {
+			isJunkMailAddress = false;
+			junkList = (ArrayList)requestBody.get("senderDomains");
+			if (junkList == null || junkList.size() == 0)
+				return;
+		} else {
+			junkList = (ArrayList)requestBody.get("senderIds");
+			if (junkList == null || junkList.size() == 0)
+				return;
+		}
+		User currentUser = SmartUtil.getCurrentUser();
+	    String userId = currentUser.getId();
+	    
+		//로그인 사용자의 mailAccount 를 가져온다
+	    MailAccountCond mailAccountCond = new MailAccountCond();
+	    mailAccountCond.setUserId(userId);
+	    
+	    net.smartworks.server.engine.mail.model.MailAccount mailAccount = SwManagerFactory.getInstance().getMailManager().getMailAccount(userId, mailAccountCond, IManager.LEVEL_ALL);
+	    
+	    String junks = mailAccount.getJunks();
+	
+	    if (!CommonUtil.isEmpty(junks)) {
+	    	//mailId 는 preFix 로 M_, domain은 D_ 로시작하도록 등록하여 이후 조회시 아이디와 도메인을 구별한다
+	    	for (int i = 0; i < junkList.size(); i++) {
+	    		if (isJunkMailAddress) {
+	    			if (junks.indexOf(";M_" + junkList.get(i)) != -1) {
+	    				junks = StringUtils.replace(junks, ";M_" + junkList.get(i), "");
+	    			}
+	    		} else {
+	    			if (junks.indexOf(";D_" + junkList.get(i)) != -1) {
+	    				junks = StringUtils.replace(junks, ";D_" + junkList.get(i), "");
+	    			}
+	    		}
+			}
+	    	mailAccount.setJunks(junks);
+	    }
+		//저장
+	    SwManagerFactory.getInstance().getMailManager().setMailAccount(userId, mailAccount, IManager.LEVEL_ALL);
 	}
 
 	@Override
 	public String[][] getJunkIds() throws Exception {
+
+	    User currentUser = SmartUtil.getCurrentUser();
+	    String userId = currentUser.getId();
+		//로그인 사용자의 mailAccount 를 가져온다
+	    MailAccountCond mailAccountCond = new MailAccountCond();
+	    mailAccountCond.setUserId(userId);
+	    
+	    net.smartworks.server.engine.mail.model.MailAccount mailAccount = SwManagerFactory.getInstance().getMailManager().getMailAccount(userId, mailAccountCond, IManager.LEVEL_ALL);
+	    
+	    String junks = mailAccount.getJunks();
+	    if (CommonUtil.isEmpty(junks))
+	    	return null;
+		
+	    String[] junksArray = StringUtils.tokenizeToStringArray(junks, ";");
+	    
+	    List junkMailIdList = new ArrayList();
+	    List junkDomainIdList = new ArrayList();
+	    for (int i = 0; i < junksArray.length; i++) {
+	    	String junkTempIds = junksArray[i];
+	    	if (junkTempIds.indexOf("M_") == 0) {
+	    		junkMailIdList.add(junkTempIds.substring(2, junkTempIds.length()));
+	    	} else {
+	    		junkDomainIdList.add(junkTempIds.substring(2, junkTempIds.length()));
+	    	}
+		}
+	    
+	    String[] resultMailIdArray = new String[junkMailIdList.size()];
+	    junkMailIdList.toArray(resultMailIdArray);
+	    String[] resultDomainIdArray = new String[junkDomainIdList.size()];
+	    junkDomainIdList.toArray(resultDomainIdArray);
+	    
+	    //return new String[][]{resultMailIdArray, resultDomainIdArray};
+		
 		return SmartTest.getJunkIds();
 	}
 }

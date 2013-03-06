@@ -144,6 +144,7 @@ import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoGroup;
+import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
@@ -171,6 +172,8 @@ import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
 import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
+import net.smartworks.server.engine.publishnotice.model.SpaceNotice;
+import net.smartworks.server.engine.publishnotice.model.SpaceNoticeCond;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
@@ -178,6 +181,7 @@ import net.smartworks.server.service.ICalendarService;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.ISeraService;
+import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
@@ -1916,8 +1920,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			String formId = (String)requestBody.get("formId");
 			String formName = (String)requestBody.get("formName");
 			String instanceId = (String)requestBody.get("instanceId");
-			if(CommonUtil.isEmpty(instanceId))
+			boolean isCreateRecord = false;
+			if(CommonUtil.isEmpty(instanceId)) {
 				instanceId = "dr_" + CommonUtil.newId();
+				isCreateRecord = true;
+			}
 			int formVersion = 1;
 			User cuser = SmartUtil.getCurrentUser();
 			String userId = null;
@@ -2261,7 +2268,9 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 			}*/
-
+			//if (isCreateRecord)
+			//	populateSpaceNotice(obj);
+			
 			return instanceId;
 
 		} catch (DuplicateKeyException dke) {
@@ -2271,6 +2280,129 @@ public class InstanceServiceImpl implements IInstanceService {
 			return null;			
 		}
 	}
+	private void removeSpaceNotice(String workId, String referenceId) throws Exception {
+		if (CommonUtil.isEmpty(referenceId))
+			return;
+		SpaceNoticeCond cond = new SpaceNoticeCond();
+		cond.setRefId(referenceId);
+		cond.setWorkId(workId);
+		SwManagerFactory.getInstance().getPublishNoticeManager().removeSpaceNotice("", cond);
+	}
+	
+	private void populateSpaceNotice(SwdRecord record) throws Exception {
+		if (record == null)
+			return;
+		
+		//비공개라면 자신밖에 볼수 없기 때문에 알림이 필요 없
+		if (record.getAccessLevel().equalsIgnoreCase(AccessPolicy.LEVEL_PRIVATE + ""))
+			return;
+			
+		SwfFormCond cond = new SwfFormCond();
+		cond.setId(record.getFormId());
+		SwfForm[] form = SwManagerFactory.getInstance().getSwfManager().getForms("", cond, IManager.LEVEL_LITE);
+		if (form == null || form.length == 0)
+			return;
+		
+		String workId = form[0].getPackageId();
+		String workSpaceType = record.getWorkSpaceType();
+		String workSpaceId = record.getWorkSpaceId();
+		String recordId = record.getRecordId();
+		String refType = "RECORD";
+		String accessLevel = record.getAccessLevel();
+		String accessValue = record.getAccessValue();
+		
+		populateSpaceNotice(workId, workSpaceType, workSpaceId, refType, recordId, accessLevel, accessValue);
+		
+	}
+	private void populateSpaceNotice(TskTask task) throws Exception {
+		if (task == null)
+			return;
+
+		//비공개라면 자신밖에 볼수 없기 때문에 알림이 필요 없
+		if (task.getAccessLevel().equalsIgnoreCase(AccessPolicy.LEVEL_PRIVATE + ""))
+			return;
+		
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		
+		PrcProcessInst prcInst = SwManagerFactory.getInstance().getPrcManager().getProcessInst(userId, task.getProcessInstId(), IManager.LEVEL_LITE);
+		if (prcInst == null)
+			return;
+		
+		String workId = prcInst.getPackageId();
+		String workSpaceType = task.getWorkSpaceType();
+		String workSpaceId = task.getWorkSpaceId();
+		String taskId = task.getObjId();
+		String refType = "TASK";
+		String accessLevel = task.getAccessLevel();
+		String accessValue = task.getAccessValue();
+		
+		populateSpaceNotice(workId, workSpaceType, workSpaceId, refType, taskId, accessLevel, accessValue);
+			
+	}
+	private void populateSpaceNotice(String workId, String workSpaceType, String workSpaceId, String refType, String refId, String accessLevel, String accessValue) throws Exception {
+		
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+
+		//workSpaceId 에 속한 사용자를 가져온다
+		List targetUserId = new ArrayList();
+		if (accessLevel.equalsIgnoreCase(AccessPolicy.LEVEL_CUSTOM + "")) {
+			if (CommonUtil.isEmpty(accessValue))
+				return;
+			String[] accessUsers = StringUtils.tokenizeToStringArray(accessValue, ";");
+			for (int i = 0; i < accessUsers.length; i++) {
+				if (!userId.equalsIgnoreCase(accessUsers[i]))
+					targetUserId.add(accessUsers[i]);
+			}
+			
+		} else {
+			if (workSpaceType.equalsIgnoreCase(ISmartWorks.SPACE_TYPE_DEPARTMENT + "")) {
+				//부서공간
+				UserInfo[] userInfos = SwServiceFactory.getInstance().getCommunityService().getAllUsersByDepartmentId(workSpaceId);
+				if (userInfos == null || userInfos.length == 0)
+					return;
+				for (int i = 0; i < userInfos.length; i++) {
+					if (!userId.equalsIgnoreCase(userInfos[i].getId()))
+						targetUserId.add(userInfos[i].getId());
+				}
+			} else if (workSpaceType.equalsIgnoreCase(ISmartWorks.SPACE_TYPE_GROUP + "")) {
+				//그룹공간
+				SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup(userId, workSpaceId, null);
+				if (group == null)
+					return;
+				
+				SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
+				for (int i = 0; i < groupMembers.length; i++) {
+					SwoGroupMember groupMember = groupMembers[i];
+					String joinType = groupMember.getJoinType();
+					String joinStatus = groupMember.getJoinStatus();
+					if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
+						if (!userId.equalsIgnoreCase(groupMember.getUserId()))
+							targetUserId.add(groupMember.getUserId());
+					}
+				}
+			} else if (workSpaceType.equalsIgnoreCase(ISmartWorks.SPACE_TYPE_USER + "")) {
+				if (!userId.equalsIgnoreCase(workSpaceId))
+					targetUserId.add(workSpaceId);
+			}
+		}
+		
+		//notice를 생성한다
+		if (targetUserId.size() == 0)
+			 return;
+		for (int i = 0; i < targetUserId.size(); i++) {
+			SpaceNotice sn = new SpaceNotice();
+			sn.setWorkId(workId);
+			sn.setWorkSpaceType(workSpaceType);
+			sn.setWorkSpaceId(workSpaceId);
+			sn.setAssignee((String)targetUserId.get(i));
+			sn.setRefType(refType);
+			sn.setRefId(refId);
+			SwManagerFactory.getInstance().getPublishNoticeManager().setSpaceNotice(userId, sn, IManager.LEVEL_ALL);
+		}
+	}
+	
 	private void populatePrivateGroupAuth(String userId, TskTask obj) throws Exception {
 		if (obj == null)
 			return;
@@ -2406,6 +2538,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					SwManagerFactory.getInstance().getAutoIndexManager().removeAutoIndexInst(user.getId(), autoIndex[i].getObjId());
 				}
 			}
+			//removeSpaceNotice(workId, instanceId);
 			
 		}catch (Exception e){
 			// Exception Handling Required

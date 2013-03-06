@@ -69,6 +69,7 @@
 		<property name="useMailSign" column="useMailSign" type="boolean"/>
 		<property name="mailSignature" column="mailSignature" type="string" length="4000"/>
 		<property name="senderUserTitle" column="senderUserTitle" type="string" length="50"/>
+		<property name="junks" column="junks" type="text"/>
 		<property name="creationUser" column="creator" type="string" length="30"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>
 		<property name="modificationUser" column="modifier" type="string" length="30"/>
