@@ -325,6 +325,7 @@ public class TskManagerSubFlowAdvisorImpl extends AbstractTskManagerAdvisor {
 		
 		TskTask task = new TskTask();
 
+		task.setIsStartActivity("true");
 		task.setProcessInstId(prcInstId);
 		task.setType(startTaskDef.getType());
 		task.setTitle(title);

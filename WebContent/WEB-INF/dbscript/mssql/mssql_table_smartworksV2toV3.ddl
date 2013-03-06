@@ -851,3 +851,22 @@ update sworgconfig set userReturnFunction='0'
 
 ALTER TABLE sworgconfig add useChattingService bit;
 update sworgconfig set useChattingService='0'
+
+
+ALTER TABLE swmailaccount add junks text;
+
+
+CREATE TABLE SWSpaceNotice (
+	id varchar(50) NOT NULL,
+	workId varchar(50),
+	workSpaceType varchar(50),
+	workSpaceId varchar(50),
+	refType varchar(50),
+	refId varchar(100),
+	assignee varchar(50),
+	creator varchar (50),
+	createdTime datetime,
+	modifier varchar (50),
+	modifiedTime datetime,
+	primary key (id)
+);

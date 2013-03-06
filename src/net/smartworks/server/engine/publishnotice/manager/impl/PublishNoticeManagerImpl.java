@@ -17,6 +17,8 @@ import net.smartworks.server.engine.publishnotice.exception.PublishNoticeExcepti
 import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
+import net.smartworks.server.engine.publishnotice.model.SpaceNotice;
+import net.smartworks.server.engine.publishnotice.model.SpaceNoticeCond;
 
 import org.hibernate.Query;
 
@@ -192,4 +194,185 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 		}
 	}
 
+	@Override
+	public SpaceNotice getSpaceNotice(String userId, String id, String level) throws PublishNoticeException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			if (level.equals(LEVEL_ALL)) {
+				SpaceNotice obj = (SpaceNotice)this.get(SpaceNotice.class, id);
+				return obj;
+			} else {
+				SpaceNoticeCond cond = new SpaceNoticeCond();
+				cond.setObjId(id);
+				return getSpaceNotice(userId, cond, level);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new PublishNoticeException(e);
+		}
+	}
+	@Override
+	public SpaceNotice getSpaceNotice(String userId, SpaceNoticeCond cond, String level) throws PublishNoticeException {
+		if (cond == null)
+			return null;
+		if (level == null)
+			level = LEVEL_ALL;
+		cond.setPageSize(2);
+		SpaceNotice[] objs = getSpaceNotices(userId, cond, level);
+		if (CommonUtil.isEmpty(objs))
+			return null;
+		if (objs.length > 1)
+			throw new PublishNoticeException("More than 1 Process Instance.");
+		return objs[0];
+	}
+
+	@Override
+	public void setSpaceNotice(String userId, SpaceNotice obj, String level) throws PublishNoticeException {
+		try {
+			fill(userId, obj);
+			set(obj);
+		} catch (Exception e) {
+			throw new PublishNoticeException(e);
+		}
+	}
+
+	@Override
+	public void removeSpaceNotice(String userId, String id) throws PublishNoticeException {
+		try {
+			remove(SpaceNotice.class, id);
+		} catch (Exception e) {
+			throw new PublishNoticeException(e);
+		}
+	}
+
+	@Override
+	public void removeSpaceNotice(String userId, SpaceNoticeCond cond) throws PublishNoticeException {
+		SpaceNotice[] objs = getSpaceNotices(userId, cond, null);
+		if (objs == null || objs.length == 0)
+			return;
+		for (int i = 0; i < objs.length; i++) {
+			SpaceNotice obj = objs[i];
+			removeSpaceNotice(userId, obj.getObjId());
+		}
+	}
+
+	private Query appendQuery(StringBuffer buf, SpaceNoticeCond cond) throws Exception {
+		String objId = null;
+		String refType = null;
+		String refId = null;
+		String assignee = null;
+		String workId = null;
+		String workSpaceType = null;
+		String workSpaceId = null;
+		
+		String creationUser = null;
+		Date creationDate = null;
+		Date creationDateFrom = null;
+		Date creationDateTo = null;
+
+		if (cond != null) {
+			objId = cond.getObjId();
+			refType = cond.getRefType();
+			refId = cond.getRefId();
+			assignee = cond.getAssignee();
+			workId = cond.getWorkId();
+			workSpaceType = cond.getWorkSpaceType();
+			workSpaceId = cond.getWorkSpaceId();
+			
+			creationUser = cond.getCreationUser();
+			creationDate = cond.getCreationDate();
+			creationDateFrom = cond.getCreationDateFrom();
+			creationDateTo = cond.getCreationDateTo();
+		}
+		buf.append(" from SpaceNotice obj");
+		buf.append(" where obj.objId is not null");
+		if (cond != null) {
+			if (objId != null) 
+				buf.append(" and obj.objId = :objId");
+			if (workId != null)
+				buf.append(" and obj.workId = :workId");
+			if (workSpaceType != null)
+				buf.append(" and obj.workSpaceType = :workSpaceType");
+			if (workSpaceId != null)
+				buf.append(" and obj.workSpaceId = :workSpaceId");
+			if (refType != null) 
+				buf.append(" and obj.refType = :refType");
+			if (refId != null) 
+				buf.append(" and obj.refId = :refId");
+			if (assignee != null) 
+				buf.append(" and obj.assignee = :assignee");
+			if (creationUser != null)
+				buf.append(" and obj.creationUser = :creationUser");
+			if (creationDate != null)
+				buf.append(" and obj.creationDate = :creationDate");
+			if (creationDateFrom != null)
+				buf.append(" and obj.creationDate > :creationDateFrom");
+			if (creationDateTo != null)
+				buf.append(" and obj.creationDate < :creationDateTo");
+		}
+		this.appendOrderQuery(buf, "obj", cond);
+		
+		Query query = this.createQuery(buf.toString(), cond);
+		if (cond != null) {
+			if (objId != null)
+				query.setString("objId", objId);
+			if (workId != null)
+				query.setString("workId", workId);
+			if (workSpaceType != null)
+				query.setString("workSpaceType", workSpaceType);
+			if (workSpaceId != null)
+				query.setString("workSpaceId", workSpaceId);
+			if (refType != null)
+				query.setString("refType", refType);
+			if (refId != null)
+				query.setString("refId", refId);
+			if (assignee != null)
+				query.setString("assignee", assignee);
+			if (creationUser != null)
+				query.setString("creationUser", creationUser);
+			if (creationDate != null)
+				query.setTimestamp("creationDate", creationDate);
+			if (creationDateFrom != null)
+				query.setTimestamp("creationDateFrom", creationDateFrom);
+			if (creationDateTo != null)
+				query.setTimestamp("creationDateTo", creationDateTo);
+		}
+
+		return query;
+
+	}
+	@Override
+	public long getSpaceNoticeSize(String userId, SpaceNoticeCond cond) throws PublishNoticeException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select count(obj)");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			long count = ((Long)list.get(0)).longValue();
+			return count;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new PublishNoticeException(e);
+		}
+	}
+
+	@Override
+	public SpaceNotice[] getSpaceNotices(String userId, SpaceNoticeCond cond, String level) throws PublishNoticeException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select obj ");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			SpaceNotice[] objs = new SpaceNotice[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new PublishNoticeException(e);
+		}
+	}
+	
 }
