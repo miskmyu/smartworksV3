@@ -38,6 +38,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	InstanceInfo[] subInstances = (InstanceInfo[])session.getAttribute("subInstances");
+	String instanceId = (String)session.getAttribute("instanceId");
 	String wsId = (String)session.getAttribute("workSpaceId");
 	
 %>
@@ -49,11 +50,11 @@
 	if(!SmartUtil.isBlankObject(subInstances) && subInstances.length > 0){
 		for(int i=0; i<subInstances.length; i++){
 			InstanceInfo workInstance = subInstances[i];
-			if(workInstance.getType()<0){
+			if(SmartUtil.isBlankObject(workInstance)){
 				String lastDateStr = (i>0) ? (new LocalDate(subInstances[i-1].getLastModifiedDate().getTime())).toLocalDateString2() : ""; 
 	%>
 				<li class="t_nowork">
-					<a href="" class="js_space_more_instance" lastDate="<%=lastDateStr%>"><fmt:message key="common.message.more_work_task"></fmt:message></a>
+					<a href="" class="js_space_more_instance" lastDate="<%=lastDateStr%>" maxSize="<%=WorkInstance.MAX_INSTANCE_SUB_INSTANCE%>"><fmt:message key="common.message.more_work_task"></fmt:message></a>
 					<span class="js_progress_span"></span>
 				</li>
 	<%
@@ -85,6 +86,11 @@
 			ImageInstanceInfo image=null;
 			MemoInstanceInfo memo=null;
 			CommentInstanceInfo comment=null;
+			
+			boolean isUpdatedInstance = (workInstance.getCreatedDate().getTime() != workInstance.getLastModifiedDate().getTime());
+			if(isUpdatedInstance && !SmartUtil.isBlankObject(workInstance.getLastModifier()))
+				owner = workInstance.getLastModifier();
+			
 	%>
 			<li class="sub_instance_list js_sub_instance_list js_space_sub_instance" instanceId="<%=workInstance.getId() %>"  workType="<%=workType%>">
 				<%
@@ -97,31 +103,37 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+							<%
+							if(cUser.getId().equals(owner.getId())){
+							%>
 								<span class="t_name"><%=owner.getLongName()%></span>
-							</a>
-							<%if(onWorkSpace){ %>
-								<span class="arr">▶</span>
-								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
-									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
-								</a>
-							<%} %>
-								<!-- 인스턴스 마지막수정일자 -->
-								<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
-								<!-- 인스턴스 마지막수정일자 //-->
+							<%
+							}else{
+							%>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+							<%
+							}
+							%>
+							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+								<fmt:param>
+									<a class="js_content" href='<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+										<span class="t_woname"><%=workInstance.getWorkName()%></span>
+									</a>
+								</fmt:param>
+							</fmt:message><%}%>
+							<!-- 인스턴스 마지막수정일자 -->
+							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+							<!-- 인스턴스 마지막수정일자 //-->
 							<a href="<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>">
 								<div>
 									<span class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"></span>
-									<div>
-										<%=board.getSubject() %>
-										<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
+									<div><%=board.getSubject() %>
+									<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
 									</div>
 								</div>
 								<div><%=board.getBriefContent()%></div>
 							</a>
-
 							<%if(!SmartUtil.isBlankObject(board.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(board.getFiles(), workId, null, board.getId()) %></div><%} %>
-							
 						</div>
 					</div>
 				<%
@@ -133,24 +145,38 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-							<span class="t_name"><%=owner.getLongName()%></span>
+							<%
+							if(cUser.getId().equals(owner.getId())){
+							%>
+								<span class="t_name"><%=owner.getLongName()%></span>
+							<%
+							}else{
+							%>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+							<%
+							}
+							%>
+							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+								<fmt:param>
+									<a class="js_content" href='<%=event.getController() %>?cid=<%=event.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+										<span class="t_woname"><%=workInstance.getWorkName()%></span>
+									</a>
+								</fmt:param>
+							</fmt:message><%}%>
+							<!-- 인스턴스 마지막수정일자 -->
+							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+							<!-- 인스턴스 마지막수정일자 //-->
+							
+							<a href="<%=event.getController() %>?cid=<%=event.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>">
+								<div>
+									<span class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"></span>
+									<div><%=event.getSubject() %>
+										<%if(event.isNew()){ %><span class="icon_new"></span><%} %>
+									</div>
+								</div>
+								<div><fmt:message key="common.upload.event.start_date"/> : <%=event.getStart().toLocalString() %> 
+									<%if(!SmartUtil.isBlankObject(event.getEnd())) {%><fmt:message key="common.upload.event.end_date"/> : <%=event.getEnd().toLocalString() %> <%} %></div>
 							</a>
-							<%if(onWorkSpace){ %>
-								<span class="arr">▶</span>
-								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
-									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
-								</a>
-							<%} %>
-								<!-- 인스턴스 마지막수정일자 -->
-								<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
-								<!-- 인스턴스 마지막수정일자 //-->
-							<div>
-								<%=event.getSubject() %>
-								<%if(event.isNew()){ %><span class="icon_new"></span><%} %>
-							</div>
-							<div><fmt:message key="common.upload.event.start_date"/> : <%=event.getStart().toLocalString() %> 
-								<%if(!SmartUtil.isBlankObject(event.getEnd())) {%><fmt:message key="common.upload.event.end_date"/> : <%=event.getEnd().toLocalString() %> <%} %></div>
 						</div>
 					</div>
 				<%
@@ -162,30 +188,34 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-							<span class="t_name"><%=owner.getLongName()%></span>
-							</a>
-							<%if(onWorkSpace){ %>
-								<span class="arr">▶</span>
-								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
-									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
-								</a>
-							<%} %>
-								<!-- 인스턴스 마지막수정일자 -->
-								<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
-								<!-- 인스턴스 마지막수정일자 //-->
+							<%
+							if(cUser.getId().equals(owner.getId())){
+							%>
+								<span class="t_name"><%=owner.getLongName()%></span>
+							<%
+							}else{
+							%>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+							<%
+							}
+							%>
+							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+								<fmt:param>
+									<a class="js_content" href='<%=file.getController() %>?cid=<%=file.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+										<span class="t_woname"><%=workInstance.getWorkName()%></span>
+									</a>
+								</fmt:param>
+							</fmt:message><%}%>
+							<!-- 인스턴스 마지막수정일자 -->
+							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+							<!-- 인스턴스 마지막수정일자 //-->
 							
-							<%if(!SmartUtil.isBlankObject(file.getFiles())){ %>
-								<div>
-								<%=SmartUtil.getFilesDetailInfo(file.getFiles(), workId, null, file.getId()) %>
-								</div>
-							<%} %>
-							<%if(!SmartUtil.isBlankObject(file.getContent())){ %>
-								<div>
-									<%=file.getContent() %>
-									<%if(file.isNew()){ %><span class="icon_new"></span><%} %>
-								</div>
-							<%} %>
+							<div>
+								<a class="js_content" href='<%=file.getController() %>?cid=<%=file.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'><%=file.getSubject() %></a>
+								<%if(file.isNew()){ %><span class="icon_new"></span><%} %>
+							</div>
+							<%if(!SmartUtil.isBlankObject(file.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(file.getFiles(), workId, null, file.getId()) %></div><%} %>
+							<%if(!SmartUtil.isBlankObject(file.getContent())){ %><div><%=file.getContent() %></div><%} %>
 						</div>
 					</div>
 				<%
@@ -197,21 +227,32 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+							<%
+							if(cUser.getId().equals(owner.getId())){
+							%>
 								<span class="t_name"><%=owner.getLongName()%></span>
-							</a>
-							<%if(onWorkSpace){ %>
-								<span class="arr">▶</span>
-								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
-									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
-								</a>
-							<%} %>
+							<%
+							}else{
+							%>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+							<%
+							}
+							%>
+							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+								<fmt:param>
+									<a class="js_content" href='<%=image.getController() %>?cid=<%=image.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+										<span class="t_woname"><%=workInstance.getWorkName()%></span>
+									</a>
+								</fmt:param>
+							</fmt:message><%}%>
 							<!-- 인스턴스 마지막수정일자 -->
-							<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<!-- 인스턴스 마지막수정일자 //-->
+							
 							<div>
-								<a href="" class="js_show_picture_detail" instanceId="<%=image.getId()%>"><img src="<%=image.getImgSource()%>" style="max-width:200px"></a>
-								<%if(image.isNew()){ %><span class="icon_new vt"></span><%} %>
+								<a class="js_show_picture_detail" instanceId="<%=image.getId()%>" href="">
+								<img src="<%=image.getImgSource()%>" style="max-width:200px"></a>
+								<%if(image.isNew()){ %><span class="icon_new vc"></span><%} %>
 							</div>
 							<%if(!SmartUtil.isBlankObject(image.getContent())){ %><div><%=image.getContent() %></div><%} %>
 						</div>
@@ -225,22 +266,35 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-							<span class="t_name"><%=owner.getLongName()%></span>
-							</a>
-							<%if(onWorkSpace){ %>
-								<span class="arr">▶</span>
-								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
-									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
-								</a>
-							<%} %>
+							<%
+							if(cUser.getId().equals(owner.getId())){
+							%>
+								<span class="t_name"><%=owner.getLongName()%></span>
+							<%
+							}else{
+							%>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+							<%
+							}
+							%>
+							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+								<fmt:param>
+									<a class="js_content" href='<%=memo.getController() %>?cid=<%=memo.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+										<span class="t_woname"><%=workInstance.getWorkName()%></span>
+									</a>
+								</fmt:param>
+							</fmt:message><%}%>
 							<!-- 인스턴스 마지막수정일자 -->
-							<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<!-- 인스턴스 마지막수정일자 //-->
-							<div>
-								<%=memo.getContent() %>
-								<%if(memo.isNew()){ %><span class="icon_new"></span><%} %>
-							</div>
+							<a href="<%=memo.getController() %>?cid=<%=memo.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>">
+								<div>
+									<span class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"></span>
+									<div><%=memo.getContent() %>
+										<%if(memo.isNew()){ %><span class="icon_new"></span><%} %>
+									</div>
+								</div>
+							</a>
 						</div>
 					</div>
 				<%
@@ -286,22 +340,38 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<div><%=workFullPathName%></div>
-							
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+							<%
+							if(cUser.getId().equals(owner.getId())){
+							%>
 								<span class="t_name"><%=owner.getLongName()%></span>
-							</a>
-							<%if(onWorkSpace){ %>
-								<span class="arr">▶</span>
-								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
-								<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName%></span>
-								</a>
-							<%} %>
+							<%
+							}else{
+							%>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+							<%
+							}
+							%>
+							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
+								<fmt:param>
+									<a class="js_content" href='<%=((WorkInstanceInfo)workInstance).getController() %>?cid=<%=((WorkInstanceInfo)workInstance).getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
+										<span class="t_woname"><%=workInstance.getWorkName()%></span>
+									</a>
+								</fmt:param>
+							</fmt:message><%}%>
 							<!-- 인스턴스 마지막 수정일자 -->
 							<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<!-- 인스턴스 마지막 수정일자 // -->
-							<div><%=workInstance.getSubject() %>
-								<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
+							<div>
+								<a class="js_content" href='<%=((WorkInstanceInfo)workInstance).getController()%>?cid=<%=((WorkInstanceInfo)workInstance).getContextId()%>&wid=<%=workSpaceId%>&workId=<%=workId%>'>
+									<span class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"></span>
+									<span class="t_date"><%=workFullPathName%></span>
+								</a>
+								<a href="<%=((WorkInstanceInfo)workInstance).getController()%>?cid=<%=((WorkInstanceInfo)workInstance).getContextId()%>&wid=<%=workSpaceId%>&workId=<%=workId%>">
+									<!-- 전자결재 아이콘: <span class="icon_txt blue">전자결재</span> -->
+									<span class="tb"><%=workInstance.getSubject()%>
+									<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
+									</span> 
+								</a>
 							</div>
 						</div>
 					</div>
@@ -310,68 +380,51 @@
 	        	if(workInstance.getType() != Instance.TYPE_COMMENT) {
 		        	WorkInstanceInfo instance = (WorkInstanceInfo)workInstance;
 				%>
-					<div class="js_comments_box" <%if(instance.getSubInstanceCount()==0){%>style="display:none"<%} %>>
-						<!-- 대댓글 -->
-					   <div class="reply_point pos_reply_point"></div>
-					   <div class="reply_section pos_reply">  
-					        <div class="list_reply">
-					            <ul class="js_comment_list">
-					            	<div class="det_title">
-						            	<li class="js_comment_instance" style="display:none">
-											<div class="noti_pic">
-												<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>&wid=<%=cUser.getId() %>" userId="<%=cUser.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" 
-														userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
-													<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
-												</a>
-											</div>
-											<div class="noti_in">
-												<a href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>">
-													<span class="t_name"><%=cUser.getLongName()%></span>
-												</a>
-												<span class="t_date"><%=(new LocalDate()).toLocalString()%></span>
-												<div class="js_comment_content"></div>
-											</div>
-						            	</li>
-					            	</div>
-					            	<%
-					            	if(instance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
-					            		session.setAttribute("subComments", null);
-					            	%>
-						            	<li>
-					            			<a href="sub_instances_in_instance.sw?instanceId=<%=instance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_comments">
-					            				<span><strong><fmt:message key="common.title.show_all_comments"><fmt:param><%=instance.getSubInstanceCount() %></fmt:param><</fmt:message></strong></span>
-					            			</a>
-						            	</li>
-										<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
-											<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
-											<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
-										</jsp:include>
-									<%
-									} else {
-										session.setAttribute("subComments", instance.getSubInstances());
-									%>
-										<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
-											<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
-											<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
-										</jsp:include>
-									<%
-									}
-					            	%>
-								</ul>
-					        </div>
-					        
-					        <div class="reply_input comment_box js_return_on_comment" style="display:none">
-								<div class="noti_pic">
-									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
-								</div>
-								<div class="noti_in">
-									<textarea style="width:98%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
-								</div>
-					        </div>
-					    
-					    </div>
-					    <!-- 댓글 //-->
+				<div class="js_comments_box" <%if(instance.getSubInstanceCount()==0){%>style="display:none"<%} %>>
+					<!-- 댓글 -->
+				   <div class="reply_point pos_reply_point"></div>
+				   <div class="reply_section pos_reply">  
+				        <div class="list_reply">
+				            <ul class="js_comment_list">
+				            	<div>
+					            	<li class="comment_list js_comment_instance" style="display:none">
+										<div class="noti_pic">
+											<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>&wid=<%=cUser.getId() %>" userId="<%=cUser.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
+												<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
+											</a>
+										</div>
+										<div class="noti_in">
+											<span class="t_name"><%=cUser.getLongName()%></span>
+											<span	class="t_date pl10"><%=(new LocalDate()).toLocalString()%></span>
+											<div class="js_comment_content"></div>
+										</div>
+					            	</li>
+				            	</div>
+				            	<%
+								if(instance.getSubInstanceCount() > 0) {
+									session.setAttribute("subComments", instance.getSubInstances());
+								%>
+	 								<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
+										<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
+										<jsp:param value="<%=instance.getSubInstanceCount() %>" name="instanceCount"/>
+										<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
+									</jsp:include>
+	 							<%
+								}
+								%>
+							</ul>
+				        </div>				        
+				        <div class="reply_input js_return_on_comment" style="display:none">
+							<div class="noti_pic">
+								<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+							</div>
+							<div class="noti_in">
+								<textarea style="width:560px" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
+							</div>
+				        </div>				    
 				    </div>
+				    <!-- 댓글 //-->
+				</div>
 				    <div class="btns_action js_action_btns">
 				    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a> 
 				    	<a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a>
@@ -384,3 +437,4 @@
 		}
 	}
 	%>
+			

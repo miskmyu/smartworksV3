@@ -140,6 +140,7 @@ $(function() {
 			return false;
 		smartPop.progressCont(input.siblings('.js_progress_span'));
 		var fromDate = input.attr('lastDate');
+		var maxSize = input.attr('maxSize');
 		var target = input.parents('ul:first');
 		var spacePage = input.parents('.js_space_instance_list_page');
 		var spaceId = spacePage.attr('spaceId');		
@@ -148,7 +149,7 @@ $(function() {
 			data : {
 				spaceId : spaceId,
 				fromDate : fromDate,
-				maxSize : 20
+				maxSize : maxSize
 			},
 			success : function(data, status, jqXHR) {
 				input.parents('li:first').remove();

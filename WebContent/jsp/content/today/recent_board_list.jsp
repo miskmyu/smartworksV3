@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.										 -->
 <!-- Created Date	: 2011.9.												 -->
 
+<%@page import="net.smartworks.model.work.SocialWork"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
@@ -36,6 +37,34 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <div class="notice">
+	<!-- 공지사항 타이틀 -->
+	<div class="left_title">
+		<a href="<%=WorkInfo.getController(SocialWork.ID_BOARD_MANAGEMENT, SocialWork.TYPE_BOARD) %>?cid=<%=WorkInfo.getContextId(SocialWork.ID_BOARD_MANAGEMENT, SocialWork.TYPE_BOARD)%>" class="more"><fmt:message key="common.button.view_all"/></a>
+		<!-- 처음게시판(헤드라인 공지사항)을 표시한다 -->
+		<%-- <div class="js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>&wid=<%=board.getWorkSpace().getId()%>">
+			<span class="title"><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">&nbsp;<%=board.getSubject() %>
+				<%if(board.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=board.getSubInstanceCount() %></b>]</font><%} %>
+				<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
+			</span>
+			<span class="index">
+				<%
+				if(!workSpace.equals("")){
+				%>
+					<span class="arr">▶</span>
+					<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
+				<%
+				}
+				%>
+				<span class="date t_date"><%=board.getLastModifiedDate().toLocalString() %></span>
+			</span>
+			<span class="info"></span>
+			<span class="content"><%=board.getBriefContent() %></span>
+		</div> --%>
+		<!-- 처음게시판(헤드라인 공지사항)을 표시한다 //-->
+	</div>
+	<!-- 공지사항 타이틀 //-->
+		
+
 	<%
 	// 공지사항이 있으면 화면을 그린다...
 	if(boards != null && boards.length>0){
@@ -54,34 +83,6 @@
 		UserInfo owner = board.getOwner();
  	
 	%>
-		<!-- 공지사항 타이틀 -->
-		<div class="left_title">
-			<a href="<%=WorkInfo.getController(workId, workType) %>?cid=<%=WorkInfo.getContextId(workId, workType)%>" class="more"><fmt:message key="common.button.view_all"/></a>
-			<!-- 처음게시판(헤드라인 공지사항)을 표시한다 -->
-			<%-- <div class="js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>&wid=<%=board.getWorkSpace().getId()%>">
-				<span class="title"><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">&nbsp;<%=board.getSubject() %>
-					<%if(board.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=board.getSubInstanceCount() %></b>]</font><%} %>
-					<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
-				</span>
-				<span class="index">
-					<%
-					if(!workSpace.equals("")){
-					%>
-						<span class="arr">▶</span>
-						<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
-					<%
-					}
-					%>
-					<span class="date t_date"><%=board.getLastModifiedDate().toLocalString() %></span>
-				</span>
-				<span class="info"></span>
-				<span class="content"><%=board.getBriefContent() %></span>
-			</div> --%>
-			<!-- 처음게시판(헤드라인 공지사항)을 표시한다 //-->
-		</div>
-		<!-- 공지사항 타이틀 //-->
-		
-
 		<!-- 나머지 4개를 리스트로 표시한다 -->
 		<div class="recent_notice">
 			<table>
