@@ -129,10 +129,11 @@
 					String workSpaceName = commentInstance.getWorkSpaceName();
 					int workSpaceType = commentInstance.getWorkSpaceType();
 					String workSpaceMinPicture = commentInstance.getWorkSpaceMinPicture();
+					WorkInfo workSpaceInstanceWork = commentInstance.getWorkSpaceInstanceWork();
 				%>
 					<li>
 					<div class="info_ms_section">
-						<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>&workId=<%=workId %>">
+						<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType, workSpaceInstanceWork)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId, workSpaceInstanceWork)%>&workId=<%=workId %>">
 							<span class="profile_size_m"><%=workSpaceMinPicture%></span>
 							<span><%=workSpaceName%></span>
 						</a>	

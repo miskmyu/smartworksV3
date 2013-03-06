@@ -161,6 +161,7 @@ import net.smartworks.server.engine.process.xpdl.xpdl2.ProcessType1;
 import net.smartworks.server.engine.process.xpdl.xpdl2.Task;
 import net.smartworks.server.engine.process.xpdl.xpdl2.TaskApplication;
 import net.smartworks.server.engine.process.xpdl.xpdl2.WorkflowProcesses;
+import net.smartworks.server.engine.resource.model.IFormModel;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
@@ -346,10 +347,12 @@ public class ModelConverter {
 	}
 	
 	public static WorkSpace getWorkSpace(String workSpaceType, String workSpaceId) throws Exception {
-		//TODO 정의 필요
 		if (workSpaceType == null || workSpaceId == null)
 			return null;
-		return new WorkSpace(workSpaceId, null);
+		
+		String userId = SmartUtil.getCurrentUser().getId();
+		WorkSpaceInfo workSpaceInfo = getWorkSpaceInfo(CommonUtil.toDefault(workSpaceType, String.valueOf(ISmartWorks.SPACE_TYPE_USER)), CommonUtil.toDefault(workSpaceId, userId));
+		return (workSpaceInfo==null) ? null : workSpaceInfo.getWorkSpace();
 	}
 	// #########################################  INFO  ########################################################################
 
@@ -395,6 +398,7 @@ public class ModelConverter {
 			String domainId = null;
 			String workId = null;
 			String workName = null;
+			boolean workIsRunning = false;
 			String owner = null;
 			LocalDate createDate = null;
 			String lastModifier = null;
@@ -433,6 +437,7 @@ public class ModelConverter {
 						SwfForm swfForm = swfForms[0];
 						workId = swfForm.getPackageId();
 						workName = swfForm.getName();
+						workIsRunning = (swfForm.getStatus().equalsIgnoreCase(IFormModel.STATUS_DEPLOYED));
 					}
 					owner = swdRecord.getCreationUser();
 					createDate = new LocalDate(swdRecord.getCreationDate() != null ? swdRecord.getCreationDate().getTime() : new Date().getTime());
@@ -442,26 +447,25 @@ public class ModelConverter {
 				workInfo.setType(SmartWork.TYPE_INFORMATION);
 			} else {
 				instanceInfo = new PWInstanceInfo();
-				PrcProcessInst prcProcessInst = getPrcManager().getProcessInst(userId, workSpaceId, IManager.LEVEL_LITE);
+				PrcProcessInst prcProcessInst = getPrcManager().getProcessInst(userId, workSpaceId, IManager.LEVEL_LITE);								
 				if(!CommonUtil.isEmpty(prcProcessInst)) {
 					subject = prcProcessInst.getTitle();
 					workId = prcProcessInst.getDiagramId();
 					workName = prcProcessInst.getName();
+					PkgPackageCond pkgCond = new PkgPackageCond();
+					pkgCond.setPackageId(prcProcessInst.getPackageId());				
+					PkgPackage pkg = SwManagerFactory.getInstance().getPkgManager().getPackage(userId, pkgCond, IManager.LEVEL_LITE);									
+					workIsRunning = !CommonUtil.isEmpty(pkg) && (pkg.getStatus().equalsIgnoreCase(IFormModel.STATUS_DEPLOYED));
 				}
 				workInfo.setType(SmartWork.TYPE_PROCESS);
 			}
 			workInfo.setId(workId);
 			workInfo.setName(workName);
+			workInfo.setRunning(workIsRunning);
 			instanceInfo.setId(instanceId);
 			instanceInfo.setSubject(subject);
-//Start InstanceInfo Model Changed by ysjung
-			//instanceInfo.setWork(workInfo);
-			//instanceInfo.setWorkSpace(wsInfo);
 			instanceInfo.setWorkInfo(workInfo);
-			//eventInstanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 			instanceInfo.setWorkSpaceInfo(wsInfo);
-			//eventInstanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 			instanceInfo.setOwner(getUserInfoByUserId(owner));
 			instanceInfo.setCreatedDate(createDate);
 			instanceInfo.setLastModifier(getUserInfoByUserId(lastModifier));
@@ -469,21 +473,29 @@ public class ModelConverter {
 			instanceSpaceInfo.setId(instanceId);
 			instanceSpaceInfo.setName(subject);
 			instanceSpaceInfo.setInstance(instanceInfo);
+			instanceSpaceInfo.setInstanceWork(workInfo);
+			instanceSpaceInfo.setInstanceWorkSpaceId(instanceInfo.getWorkSpaceId());
 			workSpaceInfo = instanceSpaceInfo;
+			workSpaceInfo.setSpaceType(ISmartWorks.SPACE_TYPE_WORK_INSTANCE);
 			break;
 		case ISmartWorks.SPACE_TYPE_DEPARTMENT :
 			DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(workSpaceId);
 			workSpaceInfo = departmentInfo;
+			workSpaceInfo.setSpaceType(ISmartWorks.SPACE_TYPE_DEPARTMENT);
 			break;
 		case ISmartWorks.SPACE_TYPE_GROUP :
 			GroupInfo groupInfo = getGroupInfoByGroupId(workSpaceId);
 			workSpaceInfo = groupInfo;
+			workSpaceInfo.setSpaceType(ISmartWorks.SPACE_TYPE_GROUP);
 			break;
 		case ISmartWorks.SPACE_TYPE_USER : 
 			UserInfo userInfo = getUserInfoByUserId(workSpaceId);
 			workSpaceInfo = userInfo;
+			workSpaceInfo.setName(userInfo.getLongName());
+			workSpaceInfo.setSpaceType(ISmartWorks.SPACE_TYPE_USER);
 			break;
 		}
+		
 		return workSpaceInfo;
 	}
 	public static TaskInstanceInfo getTaskInstanceInfo(User currentUser, TaskWork task) throws Exception {
@@ -550,15 +562,8 @@ public class ModelConverter {
 		workInfo.setRunning(isRunningPackage);
 		workInfo.setEditing(isEditingPackage);
 		
-//Start InstanceInfo Model Changed by ysjung
-		//taskInfo.setWork(workInfo); //workInfo
-		//taskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 		taskInfo.setWorkInfo(workInfo);
-		//taskInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 		taskInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
-		//taskInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
-
 		
 		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
 			taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
@@ -582,6 +587,7 @@ public class ModelConverter {
 		taskInfo.setAssignee(getUserInfoByUserId(task.getTskAssignee()));
 		taskInfo.setPerformer(getUserInfoByUserId(task.getTskAssignee()));
 		taskInfo.setFormId(task.getTskForm());
+		taskInfo.setStartTask(task.getIsStartActivity()!=null && task.getIsStartActivity().equalsIgnoreCase("true"));
 
 		return taskInfo;
 	}
@@ -715,6 +721,7 @@ public class ModelConverter {
 			taskInfo.setAssignee(getUserInfoByUserId(task.getTskAssignee()));
 			taskInfo.setPerformer(getUserInfoByUserId(task.getTskAssignee()));
 			taskInfo.setFormId(task.getTskForm());
+			taskInfo.setStartTask((task.getIsStartActivity()!=null) && task.getIsStartActivity().equalsIgnoreCase("true"));
 
 			if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE) && taskInfo.getWorkInstance().getCreatedDate().getTime() != taskInfo.getLastModifiedDate().getTime()) {
 				taskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_UPDATED);
@@ -1004,14 +1011,8 @@ public class ModelConverter {
 		lastTask.setAssignee(getUserInfoByUserId(task.getLastTskAssignee()));
 		lastTask.setPerformer(getUserInfoByUserId(task.getLastTskAssignee()));
 		lastTask.setSubject(task.getPrcTitle());
-//Start InstanceInfo Model Changed by ysjung
-		//lastTask.setWork(workInfo);
-		//lastTask.setWorkSpace(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 		lastTask.setWorkInfo(workInfo);
-		//lastTask.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 		lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
-		//lastTask.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 		
 		if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
 			lastTask.setStatus(TaskInstance.STATUS_RUNNING);
@@ -1176,14 +1177,8 @@ public class ModelConverter {
 						workInfo.setMyCategory(new WorkCategoryInfo(task.getChildCtgId(), task.getChildCtgName()));
 					}
 					
-//Start InstanceInfo Model Changed by ysjung
-					//instInfo.setWork(workInfo);
-					//instInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 					instInfo.setWorkInfo(workInfo);
-					//instInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 					instInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
-					//instInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 					
 					if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
 						instInfo.setStatus(Instance.STATUS_RUNNING);
@@ -1220,14 +1215,8 @@ public class ModelConverter {
 					lastTask.setAssignee(getUserInfoByUserId(task.getLastTskAssignee()));
 					lastTask.setPerformer(getUserInfoByUserId(task.getLastTskAssignee()));
 					lastTask.setSubject(task.getPrcTitle());
-//Start InstanceInfo Model Changed by ysjung
-					//lastTask.setWork(workInfo);
-					//lastTask.setWorkSpace(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 					lastTask.setWorkInfo(workInfo);
-					//lastTask.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 					lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
-					//lastTask.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 					
 					if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
 						lastTask.setStatus(TaskInstance.STATUS_RUNNING);
@@ -1288,14 +1277,8 @@ public class ModelConverter {
 					}
 					workInfo.setRunning(isRunningPackage);
 					workInfo.setEditing(isEditingPackage);
-//Start InstanceInfo Model Changed by ysjung
-					//instInfo.setWork(workInfo);
-					//instInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 					instInfo.setWorkInfo(workInfo);
-					//instInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 					instInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
-					//instInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 					
 					if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
 						instInfo.setStatus(Instance.STATUS_RUNNING);
@@ -1331,14 +1314,8 @@ public class ModelConverter {
 					lastTask.setAssignee(getUserInfoByUserId(task.getLastTskAssignee()));
 					lastTask.setPerformer(getUserInfoByUserId(task.getLastTskAssignee()));
 					lastTask.setSubject(task.getPrcTitle());
-//Start InstanceInfo Model Changed by ysjung
-					//lastTask.setWork(workInfo);
-					//lastTask.setWorkSpace(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 					lastTask.setWorkInfo(workInfo);
-					//lastTask.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 					lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
-					//lastTask.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 					
 					if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
 						lastTask.setStatus(TaskInstance.STATUS_RUNNING);
@@ -1383,14 +1360,8 @@ public class ModelConverter {
 					tskInfo.setAssignee(getUserInfoByUserId(task.getTskAssignee()));
 					tskInfo.setPerformer(getUserInfoByUserId(task.getTskAssignee()));
 					tskInfo.setSubject(task.getPrcTitle());
-//Start InstanceInfo Model Changed by ysjung
-					//tskInfo.setWork(workInfo);
-					//tskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 					tskInfo.setWorkInfo(workInfo);
-					//tskInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 					tskInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
-					//tskInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 					
 					if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
 						tskInfo.setStatus(Instance.STATUS_RUNNING);
@@ -1484,14 +1455,8 @@ public class ModelConverter {
 				}
 				workInfo.setRunning(isRunningPackage);
 				workInfo.setEditing(isEditingPackage);
-//Start InstanceInfo Model Changed by ysjung
-				//instInfo.setWork(workInfo);
-				//instInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 				instInfo.setWorkInfo(workInfo);
-				//instInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 				instInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
-				//instInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 				
 				if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
 					instInfo.setStatus(Instance.STATUS_RUNNING);
@@ -1529,14 +1494,8 @@ public class ModelConverter {
 				lastTask.setAssignee(getUserInfoByUserId(task.getLastTskAssignee()));
 				lastTask.setPerformer(getUserInfoByUserId(task.getLastTskAssignee()));
 				lastTask.setSubject(task.getPrcTitle());
-//Start InstanceInfo Model Changed by ysjung
-				//lastTask.setWork(workInfo);
-				//lastTask.setWorkSpace(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 				lastTask.setWorkInfo(workInfo);
-				//lastTask.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 				lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
-				//lastTask.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 				
 				if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
 					lastTask.setStatus(TaskInstance.STATUS_RUNNING);
@@ -1604,14 +1563,8 @@ public class ModelConverter {
 				tskInfo.setWorkInstance(instInfo);
 				tskInfo.setAssignee(getUserInfoByUserId(task.getTskAssignee()));
 				tskInfo.setPerformer(getUserInfoByUserId(task.getTskAssignee()));
-//Start InstanceInfo Model Changed by ysjung
-				//tskInfo.setWork(workInfo);
-				//tskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 				tskInfo.setWorkInfo(workInfo);
-				//tskInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 				tskInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
-				//tskInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 				
 				if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
 					tskInfo.setStatus(TaskInstance.STATUS_RUNNING);
@@ -1905,15 +1858,8 @@ public class ModelConverter {
 			
 		}
 			
-//Start InstanceInfo Model Changed by ysjung
-		//instInfo.setWork(getSmartWorkInfoByPackageId(packageId));
-		//TODO workspaceid > ??
-		//instInfo.setWorkSpace(getWorkSpaceInfo(prcInst.getWorkSpaceType(), prcInst.getWorkSpaceId()));
 		instInfo.setWorkInfo(getSmartWorkInfoByPackageId(packageId));
-		//instInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 		instInfo.setWorkSpaceInfo(getWorkSpaceInfo(prcInst.getWorkSpaceType(), prcInst.getWorkSpaceId()));
-		//instInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 		
 		return instInfo;
 	}
@@ -2526,14 +2472,8 @@ public class ModelConverter {
 		instanceInfo.setStatus(status);
 		instanceInfo.setSubject(subject);
 		instanceInfo.setType(type);
-//Start InstanceInfo Model Changed by ysjung
-		//instanceInfo.setWork(work);
-		//instanceInfo.setWorkSpace(getWorkSpaceInfo(prcInst.getWorkSpaceType(), prcInst.getWorkSpaceId()));
 		instanceInfo.setWorkInfo(work);
-		//instanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 		instanceInfo.setWorkSpaceInfo(getWorkSpaceInfo(prcInst.getWorkSpaceType(), prcInst.getWorkSpaceId()));
-		//instanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 		
 		return instanceInfo;
 	}
@@ -2644,24 +2584,12 @@ public class ModelConverter {
 		instanceInfo.setStatus(status);
 		instanceInfo.setSubject(subject);
 		instanceInfo.setType(type);
-//Start InstanceInfo Model Changed by ysjung
-		//instanceInfo.setWork(work);
 		instanceInfo.setWorkInfo(work);
-		//instanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
-//End InstanceInfo Model Changed by ysjung
 		if (task.getWorkSpaceId() != null) {
-//Start InstanceInfo Model Changed by ysjung
-			//instanceInfo.setWorkSpace(getWorkSpaceInfo(task.getWorkSpaceType(), task.getWorkSpaceId()));
 			instanceInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getWorkSpaceType(), task.getWorkSpaceId()));
-			//instanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 		} else {
 			User user = SmartUtil.getCurrentUser();
-//Start InstanceInfo Model Changed by ysjung
-			//instanceInfo.setWorkSpace(new WorkSpaceInfo(user.getId(), null));
 			instanceInfo.setWorkSpaceInfo(new WorkSpaceInfo(user.getId(), null));
-			//instanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 		}
 		return instanceInfo;
 	}
@@ -4137,8 +4065,8 @@ public class ModelConverter {
 		
 		instance.setWork(getProcessWorkByPkgPackageId(userId, packageId));
 		//TODO workspaceid > ??
-		//instance.setWorkSpace(getWorkSpaceInfo(prcInst.getWorkSpaceType(), prcInst.getWorkSpaceId()));
-		instance.setWorkSpace(getWorkSpace(prcInst.getWorkSpaceType(), prcInst.getWorkSpaceId()));
+		WorkSpaceInfo workSpaceInfo = getWorkSpaceInfo(CommonUtil.toDefault(prcInst.getWorkSpaceType(), String.valueOf(ISmartWorks.SPACE_TYPE_USER)), CommonUtil.toDefault(prcInst.getWorkSpaceId(), userId));		
+		instance.setWorkSpace((workSpaceInfo==null) ? null : workSpaceInfo.getWorkSpace());
 		
 		return instance;
 	}
@@ -4296,12 +4224,7 @@ public class ModelConverter {
 		instance.setWork(getInformationWorkByPkgPackageId(userId, packageId));
 
 		WorkSpaceInfo workSpaceInfo = getWorkSpaceInfo(CommonUtil.toDefault(swdRecord.getWorkSpaceType(), String.valueOf(ISmartWorks.SPACE_TYPE_USER)), CommonUtil.toDefault(swdRecord.getWorkSpaceId(), userId));
-		WorkSpace workSpace = new WorkSpace();
-		workSpace.setId(CommonUtil.toDefault(swdRecord.getWorkSpaceId(), userId));
-		workSpace.setName(workSpaceInfo.getName());
-		workSpace.setSpaceType(CommonUtil.toInt(swdRecord.getWorkSpaceType(), ISmartWorks.SPACE_TYPE_USER));
-
-		instance.setWorkSpace(workSpace);
+		instance.setWorkSpace((workSpaceInfo==null) ? null : workSpaceInfo.getWorkSpace());
 
 		instance.setAccessPolicy(new AccessPolicy(CommonUtil.toInt(swdRecord.getAccessLevel(), 0)));
 		return instance;
@@ -5311,14 +5234,8 @@ public class ModelConverter {
 		lastTask.setAssignee(getUserInfoByUserId(task.getLastTskAssignee()));
 		lastTask.setPerformer(getUserInfoByUserId(task.getLastTskAssignee()));
 		lastTask.setSubject(StringUtil.subString(task.getPrcTitle(), 0, 30, "..."));
-//Start InstanceInfo Model Changed by ysjung
-		//lastTask.setWork(workInfo);
-		//lastTask.setWorkSpace(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 		lastTask.setWorkInfo(workInfo);
-		//lastTask.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 		lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
-		//lastTask.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 		
 		if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
 			lastTask.setStatus(TaskInstance.STATUS_RUNNING);
@@ -5352,15 +5269,8 @@ public class ModelConverter {
 			workInstanceInfo.setId(swdRecordId);
 		}
 		workInstanceInfo.setSubject(StringUtil.subString(task.getPrcTitle(), 0, 30, "..."));
-		//workInstanceInfo.setType(Instance.TYPE_WORK);
-//Start InstanceInfo Model Changed by ysjung
-		//workInstanceInfo.setWork(workInfo);
-		//workInstanceInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 		workInstanceInfo.setWorkInfo(workInfo);
-		//workInstanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
 		workInstanceInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
-		//workInstanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 		
 		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
 			workInstanceInfo.setStatus(TaskInstance.STATUS_RUNNING);

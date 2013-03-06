@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.												 -->
 <!-- Created Date	: 2011.9.														 -->
 
+<%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="java.util.TimeZone"%>
 <%@page import="java.util.Date"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
@@ -184,6 +185,7 @@
 														String workSpaceId = event.getWorkSpaceId();
 														String workSpaceName = event.getWorkSpaceName();
 														int workSpaceType = event.getWorkSpaceType();
+														WorkInfo workSpaceInstanceWork = event.getWorkSpaceInstanceWork();
 														if (cnt < 2) {
 															if(cnt==0) hasTodayEvent = true;
 															else hasTomorrowEvent = true;
@@ -210,7 +212,7 @@
 				 										<%
 				 										if (!workSpaceId.equals(owner.getId())) {
 				 										%> 
-															<span class="arr">▶</span><span class="space_name"><a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>"><%=workSpaceName%></a></span> 
+															<span class="arr">▶</span><span class="space_name"><a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType, workSpaceInstanceWork)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId, workSpaceInstanceWork)%>"><%=workSpaceName%></a></span> 
 				 										<%
 				 										}
 				 										%>

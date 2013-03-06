@@ -24,6 +24,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 	private String formId;
 	private String content;
 	private String comments;
+	private boolean isStartTask;
 	private String approvalId="";
 	private String approvalTaskId="";
 	private String forwardId="";
@@ -73,6 +74,12 @@ public class TaskInstanceInfo extends InstanceInfo {
 	}
 	public void setPerformer(UserInfo performer) {
 		this.performer = performer;
+	}
+	public boolean isStartTask() {
+		return isStartTask;
+	}
+	public void setStartTask(boolean isStartTask) {
+		this.isStartTask = isStartTask;
 	}
 	public boolean isApprovalWork() {
 		return isApprovalWork;

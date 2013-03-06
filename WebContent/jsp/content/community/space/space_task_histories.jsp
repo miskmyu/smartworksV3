@@ -107,15 +107,17 @@
 			String workSpaceId = workInstance.getWorkSpaceId();
 			String workSpaceName = workInstance.getWorkSpaceName();
 			int workSpaceType = workInstance.getWorkSpaceType();
+			WorkInfo instanceWork = workInstance.getWorkSpaceInstanceWork();
 			if(SmartUtil.isBlankObject(workSpaceId)){
 				workSpaceId = workInstance.getOwner().getId();
 				workSpaceName = workInstance.getOwner().getName();
 				workSpaceType = workInstance.getOwner().getSpaceType();
 			}
 			boolean onWorkSpace = false;
-			if(workSpaceType == ISmartWorks.SPACE_TYPE_DEPARTMENT && !workSpaceId.equals(wsId)){
-				onWorkSpace = true;
-			}else if(workSpaceType == ISmartWorks.SPACE_TYPE_GROUP && !workSpaceId.equals(wsId)){
+			if(	   (workSpaceType == ISmartWorks.SPACE_TYPE_DEPARTMENT && !workSpaceId.equals(wsId))
+				|| (workSpaceType == ISmartWorks.SPACE_TYPE_GROUP && !workSpaceId.equals(wsId))
+				|| (workSpaceType == ISmartWorks.SPACE_TYPE_USER && !workSpaceId.equals(workInstance.getOwner().getId()))
+				|| (workSpaceType == ISmartWorks.SPACE_TYPE_WORK_INSTANCE && !workSpaceId.equals(wsId))){
 				onWorkSpace = true;
 			}
 			BoardInstanceInfo board=null;
@@ -151,7 +153,12 @@
 							<%
 							}
 							%>
-							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>"><span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span></a><%} %>
+							<%if(onWorkSpace){ %>
+								<span class="arr">▶</span>
+								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType, instanceWork)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId, instanceWork)%>">
+									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType, instanceWork)%> fix_pos" ><%=workSpaceName %></span>
+								</a>
+							<%} %>
 							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
 								<fmt:param>
 									<a class="js_content" href='<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpaceId %>&workId=<%=workId %>'>
@@ -196,8 +203,8 @@
 							%>
 							<%if(onWorkSpace){ %>
 								<span class="arr">▶</span>
-								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
-								<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
+								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType, instanceWork)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId, instanceWork)%>">
+									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType, instanceWork)%>"><%=workSpaceName %></span>
 								</a>
 							<%} %>
 							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
@@ -245,8 +252,8 @@
 							%>
 							<%if(onWorkSpace){ %>
 								<span class="arr">▶</span>
-								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
-									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
+								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType, instanceWork)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId, instanceWork)%>">
+									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType, instanceWork)%> fix_pos"><%=workSpaceName %></span>
 								</a>
 							<%} %>
 							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
@@ -289,8 +296,8 @@
 							%>
 							<%if(onWorkSpace){ %>
 								<span class="arr">▶</span>
-								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
-								<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
+								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType, instanceWork)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId, instanceWork)%>">
+									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType, instanceWork)%> fix_pos"><%=workSpaceName %></span>
 								</a>
 							<%} %>
 							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
@@ -334,9 +341,9 @@
 							%>
 							<%if(onWorkSpace){ %>
 								<span class="arr">▶</span>
-								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>">
-								<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span>
-							</a>
+								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType, instanceWork)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId, instanceWork)%>">
+									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType, instanceWork)%> fix_pos"><%=workSpaceName %></span>
+								</a>
 							<%} %>
 							<%if(isUpdatedInstance){%><fmt:message key="content.sentence.itask_updated">
 								<fmt:param>
@@ -377,7 +384,12 @@
 							<%
 							}
 							%>
-							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>"><span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName %></span></a><%} %>
+							<%if(onWorkSpace){ %>
+								<span class="arr">▶</span>
+								<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType, instanceWork)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId, instanceWork)%>">
+									<span class="<%=WorkSpaceInfo.getIconClass(workSpaceType, instanceWork)%> fix_pos"><%=workSpaceName %></span>
+								</a>
+							<%} %>
 						<%
 						String runningTaskName = taskInstance.getName();
 						UserInfo assignee = taskInstance.getAssignee();
@@ -503,7 +515,7 @@
 						<%
 							break;
 						case TaskInstance.TYPE_PROCESS_TASK_ASSIGNED:
-							if(workInstance.getCreatedDate().getTime() == taskInstance.getCreatedDate().getTime()){
+							if(taskInstance.isStartTask()){
 						%>
 								<fmt:message key="content.sentence.ptask_started">
 									<fmt:param>

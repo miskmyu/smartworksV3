@@ -24,6 +24,7 @@ public class InstanceInfo implements Comparable<InstanceInfo> {
 	private String workSpaceId;
 	private String workSpaceName;
 	private int workSpaceType;
+	private WorkInfo workSpaceInstanceWork;
 	private String workSpaceMinPicture;
 	private int status=-1;
 	private int numberOfAssociatedWorks=0;
@@ -160,6 +161,12 @@ public class InstanceInfo implements Comparable<InstanceInfo> {
 	public void setWorkSpaceMinPicture(String workSpaceMinPicture) {
 		this.workSpaceMinPicture = workSpaceMinPicture;
 	}
+	public WorkInfo getWorkSpaceInstanceWork() {
+		return workSpaceInstanceWork;
+	}
+	public void setWorkSpaceInstanceWork(WorkInfo workSpaceInstanceWork) {
+		this.workSpaceInstanceWork = workSpaceInstanceWork;
+	}
 	public InstanceInfo(){
 		super();
 	}	
@@ -196,6 +203,8 @@ public class InstanceInfo implements Comparable<InstanceInfo> {
 			isWorkRunning = ((SmartWorkInfo)work).isRunning();
 		}else if(work.getClass().equals(WorkCategoryInfo.class))
 			isWorkRunning = ((WorkCategoryInfo)work).isRunning();
+		else
+			isWorkRunning = work.isRunning();
 		
 		this.setWorkInfo(work.getId(), work.getName(), work.getType(), isWorkRunning, workFullPathName);
 	}
@@ -210,14 +219,16 @@ public class InstanceInfo implements Comparable<InstanceInfo> {
 	
 	public void setWorkSpaceInfo(WorkSpaceInfo workSpace){
 		if(SmartUtil.isBlankObject(workSpace))
-			this.setWorkSpaceInfo(null, null, -1, null);
+			this.setWorkSpaceInfo(null, null, -1, null, null);
 		else 
-			this.setWorkSpaceInfo(workSpace.getId(), workSpace.getName(), workSpace.getSpaceType(), workSpace.getMinPicture());
+			this.setWorkSpaceInfo(workSpace.getId(), workSpace.getName(), workSpace.getSpaceType(), workSpace.getMinPicture(), workSpace.getInstanceWork());
 	}
-	public void setWorkSpaceInfo(String workSpaceId, String workSpaceName, int workSpaceType, String workSpaceMinPicture){
+	public void setWorkSpaceInfo(String workSpaceId, String workSpaceName, int workSpaceType, String workSpaceMinPicture, WorkInfo workSpaceInstanceWork){
 		this.setWorkSpaceId(workSpaceId);						
 		this.setWorkSpaceName(workSpaceName);						
 		this.setWorkSpaceType(workSpaceType);						
-		this.setWorkSpaceMinPicture(workSpaceMinPicture);		
+		this.setWorkSpaceMinPicture(workSpaceMinPicture);
+		this.setWorkSpaceInstanceWork(workSpaceInstanceWork);
+
 	}
 }

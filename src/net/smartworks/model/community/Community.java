@@ -36,6 +36,9 @@ public class Community extends BaseObject {
 	public static final String CONTROLLER_USER_SPACE = "user_space.sw";
 	public static final String CONTROLLER_DEPARTMENT_SPACE = "department_space.sw";
 	public static final String CONTROLLER_GROUP_SPACE = "group_space.sw";
+	public static final String CONTROLLER_IWORK_SPACE = "iwork_space.sw";
+	public static final String CONTROLLER_PWORK_SPACE = "pwork_space.sw";
+	public static final String CONTROLLER_SWORK_SPACE = "swork_space.sw";
 
 	public static final String IMAGE_TYPE_ORIGINAL = "_origin";
 	public static final String IMAGE_TYPE_THUMB = "_thumb";

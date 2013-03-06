@@ -91,7 +91,7 @@ public class Work extends BaseObject{
 	public String getIconClass(){
 		if(this.getClass().equals(WorkCategory.class))
 			return Work.getIconClass(getId(), getType(), ((WorkCategory)this).isRunning());
-		else if(this.getClass().equals(SmartWorkInfo.class))
+		else if(this.getClass().equals(InformationWork.class) || this.getClass().equals(ProcessWork.class) || this.getClass().equals(ScheduleWork.class))
 			return Work.getIconClass(getId(), getType(), ((SmartWork)this).isRunning());
 		return Work.getIconClass(getId(), getType(), false);
 	}

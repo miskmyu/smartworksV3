@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.company.CompanyGeneral"%>
 <%@page import="net.smartworks.model.approval.ApprovalLine"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -185,6 +186,18 @@ function submitForms(tempSave) {
 	                <div class="noti_in_bodytitle case_2line">
 	                    <div>
 		                    <span class="t_name"><%=instance.getOwner().getLongName()%></span>
+                            <%if(workSpace != null && !workSpace.getId().equals(owner.getId())){ %><span class="arr">▶</span>
+                            	<span class="<%=workSpace.getIconClass()%> fix_pos">
+                            		<%if(workSpace.getSpaceType() != ISmartWorks.SPACE_TYPE_WORK_INSTANCE || SmartUtil.isBlankObject(workSpace.getInstanceWork())){ %>
+                            			<a href='<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>'><%=workSpace.getName() %></a>
+                            		<%}else{
+                            			WorkInfo instanceWork = (WorkInfo)workSpace.getInstanceWork();
+                            		%>
+										<a href='<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>&workId=<%=instanceWork.getId()%>&wId=<%=workSpace.getInstanceWorkSpaceId()%>'>
+											<span class='tb'><%=workSpace.getName()%></span> 
+										</a>
+                            		<%} %>
+                            	</span><%} %>
 		                    <span class="t_date"><%=instance.getCreatedDate().toLocalString()%></span>
 						</div>
 						<div>

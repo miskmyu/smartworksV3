@@ -709,6 +709,7 @@ button.space {height: 18px; padding: 1px 3px}
 a.js_show_all_users_shown, .js_show_all_users_shown {color:#3377ca !important}	
 /* Icon */
 .icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; color:#999879; font-size:11px; padding:1px 0 1px 20px}
+.icon_group_s {background: url("../../images/icon_group_s.gif") no-repeat scroll 0 0 transparent; color:#999879; font-size:11px; padding:1px 0 1px 20px}
 .icon_attach {background: url("../../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}
 .icon_in_down {background: url("../../images/nav_img.png") no-repeat -115px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
 .icon_in_up {background: url("../../images/nav_img.png") no-repeat -139px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
@@ -723,6 +724,7 @@ a.js_show_all_users_shown, .js_show_all_users_shown {color:#3377ca !important}
 .icon_txt.orange {background: -moz-linear-gradient(center top , #e8a96a, #dd832d) repeat scroll 0 0 transparent; background: -webkit-gradient(linear,0% 20%,0% 80%,from(#e8a96a),to(#dd832d)); background: -o-linear-gradient(top,#e8a96a,#dd832d); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#e8a96a,endColorStr=#dd832d); border: 1px solid #d97c27}
 .download_section .icon_txt {min-width:30px}
 
+.fix_pos {float:none!important;padding-top:3px;}
 /* 사람지정  */
 .user_select {background: none repeat scroll 0 0 #E5F3FF; border: 1px solid #97bee2; color: #333333; padding: 1px 6px 0 5px; margin: 0 2px 0 3px;
 -webkit-border-radius:10px; -moz-border-radius:10px; border-radius:10px; font-size:11px}

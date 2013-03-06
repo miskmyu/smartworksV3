@@ -71,9 +71,10 @@ public class WorkInstance extends Instance {
 	public void setTempSaved(boolean isTempSaved) {
 		this.isTempSaved = isTempSaved;
 	}
-	public String getController(){
-		if(getWork()==null) return "";
-		switch(getWork().getType()){
+	
+	public static String getController(int workType, String workId){
+		if(SmartUtil.isBlankObject(workId)) return "";
+		switch(workType){
 		case SmartWork.TYPE_INFORMATION:
 		case SocialWork.TYPE_BOARD:
 		case SocialWork.TYPE_EVENT:
@@ -81,7 +82,7 @@ public class WorkInstance extends Instance {
 		case SocialWork.TYPE_IMAGE:
 		case SocialWork.TYPE_MEMO:
 		case SocialWork.TYPE_YTVIDEO:
-			if(getWork().getId().equals(SmartWork.ID_FILE_MANAGEMENT))
+			if(workId.equals(SmartWork.ID_FILE_MANAGEMENT))
 				return WorkInstance.CONTROLLER_IWORK_SPACE;
 			else
 				return WorkInstance.CONTROLLER_IWORK_SPACE;
@@ -93,11 +94,16 @@ public class WorkInstance extends Instance {
 			return "";
 		}
 		return "";
+		
+	}
+	public String getController(){
+		if(getWork()==null) return "";
+		return WorkInstance.getController(getWork().getType(), getWork().getId());
 	}
 	
-	public String getContextId(){
-		if(getWork()==null) return "";
-		switch(getWork().getType()){
+	public static String getContextId(int workType, String workId, String instanceId){
+		if(SmartUtil.isBlankObject(workId) || SmartUtil.isBlankObject(instanceId)) return "";
+		switch(workType){
 		case SmartWork.TYPE_INFORMATION:
 		case SocialWork.TYPE_BOARD:
 		case SocialWork.TYPE_EVENT:
@@ -105,22 +111,28 @@ public class WorkInstance extends Instance {
 		case SocialWork.TYPE_IMAGE:
 		case SocialWork.TYPE_MEMO:
 		case SocialWork.TYPE_YTVIDEO:
-			if(SmartWork.ID_FILE_MANAGEMENT.equals(getWork().getId()))
-				return ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + getId();
-			else if(SmartWork.ID_DEPARTMENT_MANAGEMENT.equals(getWork().getId()))
-				return ISmartWorks.CONTEXT_PREFIX_DEPARTMENT_SPACE + getId();
-			else if(SmartWork.ID_GROUP_MANAGEMENT.equals(getWork().getId()))
-				return ISmartWorks.CONTEXT_PREFIX_GROUP_SPACE + getId();
+			if(SmartWork.ID_FILE_MANAGEMENT.equals(workId))
+				return ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + instanceId;
+			else if(SmartWork.ID_DEPARTMENT_MANAGEMENT.equals(workId))
+				return ISmartWorks.CONTEXT_PREFIX_DEPARTMENT_SPACE + instanceId;
+			else if(SmartWork.ID_GROUP_MANAGEMENT.equals(workId))
+				return ISmartWorks.CONTEXT_PREFIX_GROUP_SPACE + instanceId;
 			else
-				return ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + getId();
+				return ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + instanceId;
 		case SmartWork.TYPE_PROCESS:
-			return ISmartWorks.CONTEXT_PREFIX_PWORK_SPACE + getId();
+			return ISmartWorks.CONTEXT_PREFIX_PWORK_SPACE + instanceId;
 		case SmartWork.TYPE_SCHEDULE:
-			return ISmartWorks.CONTEXT_PREFIX_SWORK_SPACE + getId();
+			return ISmartWorks.CONTEXT_PREFIX_SWORK_SPACE + instanceId;
 		case WorkCategory.TYPE_CATEGORY:
 			return "";
 		}
 		return "";
+		
+	}
+	
+	public String getContextId(){
+		if(getWork()==null) return "";
+		return WorkInstance.getContextId(getWork().getType(), getWork().getId(), this.getId());
 	}
 	
 	public WorkInstance() {

@@ -180,9 +180,10 @@ if(!SmartUtil.isBlankObject(instances)) {
 						String workSpaceId = workInstance.getWorkSpaceId();
 						String workSpaceName = workInstance.getWorkSpaceName();
 						int workSpaceType = workInstance.getWorkSpaceType();
+						WorkInfo workSpaceInstanceWork = workInstance.getWorkSpaceInstanceWork();
 					%>
 						<span class="arr">▶</span>
-						<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId)%>"><span class="<%=WorkSpaceInfo.getIconClass(workSpaceType)%>"><%=workSpaceName%></span> </a>
+						<a href="<%=WorkSpaceInfo.getSpaceController(workSpaceType, workSpaceInstanceWork)%>?cid=<%=WorkSpaceInfo.getSpaceContextId(workSpaceType, workSpaceId, workSpaceInstanceWork)%>"><span class="<%=WorkSpaceInfo.getIconClass(workSpaceType, workSpaceInstanceWork)%> fix_pos"><%=workSpaceName%></span> </a>
 					<%
 					}
 					// 인스턴스 타입에 할당태스크인 경우들 중에서....

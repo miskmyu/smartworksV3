@@ -759,7 +759,7 @@ $(function() {
 			return;
 		}
 		var input = $(targetElement(e));
-		var subInstanceList = input.parents('.js_sub_instance_list');
+		var subInstanceList = input.parents('.js_sub_instance_list:first');
 		var comment = input.attr('value');
 		if(isEmpty(comment)) return false;
 		var iworkManual = input.parents('.js_iwork_manual_page');
@@ -816,7 +816,7 @@ $(function() {
 					}
 				}else{
 					input.attr('value', '');
-					refreshCurrentContent(subInstanceList);
+					refreshCurrentContent(input.parents('.js_space_instance_list_page'));
 					//window.location.reload(true);
 				}
 				smartPop.closeProgress();				
