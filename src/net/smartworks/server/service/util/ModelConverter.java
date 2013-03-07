@@ -730,7 +730,7 @@ public class ModelConverter {
 			resultInfoList.add(taskInfo);
 		}
 
-		if( maxSize > taskLenth) {
+		if( maxSize < taskLenth) {
 			TaskInstanceInfo taskInstanceInfo = new TaskInstanceInfo();
 			taskInstanceInfo.setType(-21);
 			resultInfoList.add(taskInstanceInfo);

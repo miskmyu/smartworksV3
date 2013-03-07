@@ -87,7 +87,7 @@
 			if(SmartUtil.isBlankObject(taskInstance) || taskInstance.getType()<=0){
 				String lastDateStr = (i>0) ? (new LocalDate(tasksHistories[i-1].getLastModifiedDate().getTime())).toLocalDateString2() : ""; 
 	%>
-				<li class="t_nowork">
+				<li class="t_nowork js_space_sub_instance">
 					<a href="" class="js_space_more_history" lastDate="<%=lastDateStr%>"><fmt:message key="common.message.more_work_task"></fmt:message></a>
 					<span class="js_progress_span"></span>
 				</li>

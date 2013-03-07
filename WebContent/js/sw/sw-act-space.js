@@ -124,7 +124,7 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				input.parents('li:first').remove();
-				target.append($(data).find('li'));
+				target.append($(data).find('li.js_space_sub_instance'));
 				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
