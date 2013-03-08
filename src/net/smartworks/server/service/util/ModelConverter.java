@@ -591,7 +591,7 @@ public class ModelConverter {
 
 		return taskInfo;
 	}
-	public static TaskInstanceInfo[] getTaskInstanceInfoArrayByTaskWorkArray_THREAD(String userId, TaskWork[] tasks, int totalCount) throws Exception {
+	public static TaskInstanceInfo[] getTaskInstanceInfoArrayByTaskWorkArray_THREAD(String userId, TaskWork[] tasks, int maxSize) throws Exception {
 
 		User currentUser = SmartUtil.getCurrentUser();
 		if (tasks == null || tasks.length == 0)
@@ -615,7 +615,7 @@ public class ModelConverter {
 			resultInfoList.add((TaskInstanceInfo)taskPP[i].getResult());
 		}
 
-		if(totalCount > taskLenth) {
+		if(maxSize < taskLenth) {
 			TaskInstanceInfo taskInstanceInfo = new TaskInstanceInfo();
 			taskInstanceInfo.setType(-21);
 			resultInfoList.add(taskInstanceInfo);

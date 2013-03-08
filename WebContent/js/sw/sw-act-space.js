@@ -27,13 +27,16 @@ $(function() {
 		if(isEmpty(input)) input = $(targetElement(e));
 		var target = input.parents('.js_space_instance_list');
 		var url = input.attr('href');
+		smartPop.progressCont(input.parents('.js_space_tab_page').children('.js_progress_span:first'));
 		$.ajax({
 			url : url,
 			data : {},
 			success : function(data, status, jqXHR) {
 				target.html(data);
+				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
 			}
 		});
 		return false;
@@ -49,13 +52,16 @@ $(function() {
 		var input = $(targetElement(e));
 		var target = input.parents('.js_space_instance_list');
 		var url = input.find(':selected').attr('value');
+		smartPop.progressCont(input.parents('.js_space_date_scope').children('.js_progress_span:first'));
 		$.ajax({
 			url : url,
 			data : {},
 			success : function(data, status, jqXHR) {
 				target.html(data);
+				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
 			}
 		});
 		return false;

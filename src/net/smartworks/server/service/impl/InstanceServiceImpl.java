@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.smartworks.model.approval.Approval;
 import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.approval.ApprovalLineInst;
+import net.smartworks.model.calendar.WorkHourPolicy;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
@@ -7416,9 +7417,6 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 			
 			return new TaskInstanceInfo[][] { (TaskInstanceInfo[])taskInfoPP[0].getResult(), (TaskInstanceInfo[])taskInfoPP[1].getResult(), (TaskInstanceInfo[])taskInfoPP[2].getResult() }; 
-//			return new TaskInstanceInfo[][] { 	ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, getTaskWorkByFromToDate(contextId, spaceId, cuser, fromDate, workStartDate, maxSize), maxSize),
-//												ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, getTaskWorkByFromToDate(contextId, spaceId, cuser, workStartDate, workEndDate, maxSize), maxSize),
-//												ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, getTaskWorkByFromToDate(contextId, spaceId, cuser, workEndDate, toDate, maxSize), maxSize)}; 
 			
 		}catch (Exception e){
 			// Exception Handling Required
@@ -7491,67 +7489,65 @@ public class InstanceServiceImpl implements IInstanceService {
 				return null;
 			
 
-			Date tempFromDate = null;
-			Date tempToDate = null;
+			Date fromDate = null;
+			Date toDate = null;
 			if (month != null) {
-				tempFromDate = new Date();
-				tempToDate = new Date();
+				fromDate = new Date();
+				toDate = new Date();
 
-				tempFromDate.setTime(month.getLocalTime());
-				tempToDate.setTime(month.getLocalTime());
+				fromDate.setTime(month.getLocalTime());
+				toDate.setTime(month.getLocalTime());
 				
-				tempFromDate = DateUtil.toFromDate(tempFromDate, DateUtil.CYCLE_MONTH);
-				tempFromDate.setTime(tempFromDate.getTime() - TimeZone.getDefault().getRawOffset());
+				fromDate = DateUtil.toFromDate(fromDate, DateUtil.CYCLE_MONTH);
+				fromDate.setTime(fromDate.getTime() - TimeZone.getDefault().getRawOffset());
 				
-				tempToDate = DateUtil.toToDate(tempToDate, DateUtil.CYCLE_MONTH);
-				tempToDate.setTime(tempToDate.getTime() - TimeZone.getDefault().getRawOffset());
+				toDate = DateUtil.toToDate(toDate, DateUtil.CYCLE_MONTH);
+				toDate.setTime(toDate.getTime() - TimeZone.getDefault().getRawOffset());
 				
 			}
 			
-			TaskWork[] tasks = getTaskWorkByFromToDate(contextId, spaceId, cuser, tempFromDate, tempToDate, maxSize);	
-			
+			WorkHourPolicy whp = SwServiceFactory.getInstance().getCalendarService().getCompanyWorkHourPolicy();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(fromDate);
+			cal.setFirstDayOfWeek(whp.getFirstDayOfWeek());
+			cal.setMinimalDaysInFirstWeek(1);
+			int firstDayOfFromWeek = cal.get(Calendar.DAY_OF_WEEK);		
+
 			Date temp = new Date(month.getLocalTime());
 			temp = DateUtil.toToDate(temp, DateUtil.CYCLE_MONTH);
 			LocalDate endOfLocalDate = new LocalDate(temp.getTime() - TimeZone.getDefault().getRawOffset());
-			int endOfWeek = endOfLocalDate.getWeekOfMonth(1);
+			int weeksOfMonth = endOfLocalDate.getWeekOfMonth(1);
+
+			Semaphore semaphore = new Semaphore(weeksOfMonth);
+			Thread currentThread = Thread.currentThread();
+			TaskInfoParallelProcessing[] taskInfoPP = new TaskInfoParallelProcessing[weeksOfMonth];
+
+			int firstDaysOfNextWeek = 0;
+			for(int i=0; i<weeksOfMonth; i++){
+				if(i==0){
+					taskInfoPP[i] = new TaskInfoParallelProcessing(semaphore, currentThread, contextId, spaceId, cuser, fromDate, new Date(fromDate.getTime()+LocalDate.ONE_DAY*(7-firstDayOfFromWeek+1)), maxSize);
+					taskInfoPP[i].start();
+					firstDaysOfNextWeek = 7-firstDayOfFromWeek+1;
+				}else if(i==weeksOfMonth-1){
+					taskInfoPP[i] = new TaskInfoParallelProcessing(semaphore, currentThread, contextId, spaceId, cuser, new Date(fromDate.getTime()+LocalDate.ONE_DAY*(firstDaysOfNextWeek)), toDate, maxSize);
+					taskInfoPP[i].start();					
+				}else{
+					taskInfoPP[i] = new TaskInfoParallelProcessing(semaphore, currentThread, contextId, spaceId, cuser, new Date(fromDate.getTime()+LocalDate.ONE_DAY*firstDaysOfNextWeek), new Date(fromDate.getTime()+LocalDate.ONE_DAY*(firstDaysOfNextWeek+7)), maxSize);
+					taskInfoPP[i].start();
+					firstDaysOfNextWeek = firstDaysOfNextWeek+7;
+					
+				}
+			}
 			
-			Map<Integer, List<TaskWork>> weekMappingMap = new HashMap<Integer, List<TaskWork>>();
-
-			for (int i = 0; i < endOfWeek; i++) {
-				List<TaskWork> tempList = new ArrayList<TaskWork>();
-				weekMappingMap.put(i, tempList);
+			synchronized (currentThread) {
+				currentThread.wait();
 			}
-			if(!CommonUtil.isEmpty(tasks)) {
-				for (int i = 0; i < tasks.length; i++) {
-					TaskWork task = tasks[i];
-					Date executeDate = tasks[i].getTaskLastModifyDate();
-					LocalDate tempExecuteDate = new LocalDate(executeDate.getTime());
-					int weekOfMonth = tempExecuteDate.getWeekOfMonth(1);
-					weekMappingMap.get(weekOfMonth-1).add(task);
-				}
-			}
-
-			TaskInstanceInfo[][] result = new TaskInstanceInfo[endOfWeek][];
-			if(!CommonUtil.isEmpty(weekMappingMap)) {
-				for (int i : weekMappingMap.keySet()) {
-					List taskWorksList = weekMappingMap.get(i);
-					TaskWork[] taskWorks = new TaskWork[taskWorksList.size()];
-					taskWorksList.toArray(taskWorks);
-					result[i] = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskWorks, maxSize);
-	
-					if (result[i] != null && result[i].length > maxSize) {
-						TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
-						for (int j = 0; j < maxSize; j++) {
-							tempTaskInstanceInfo[j] = result[i][j];
-						}
-						TaskInstanceInfo moreInstance = new TaskInstanceInfo();
-						moreInstance.setType(-21);
-						tempTaskInstanceInfo[maxSize] = moreInstance;
-						result[i] = tempTaskInstanceInfo;
-					}
-				}
-			}
+			
+			TaskInstanceInfo[][] result = new TaskInstanceInfo[weeksOfMonth][];
+			for(int i=0; i<weeksOfMonth; i++)
+				result[i] = (TaskInstanceInfo[])taskInfoPP[i].getResult();			
 			return result;
+			
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -7619,13 +7615,14 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 
 			taskWorkCond.setPageNo(0);
-			taskWorkCond.setPageSize(maxSize);
+			taskWorkCond.setPageSize(maxSize+1);
 
 			TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, taskWorkCond);
-
-			//TaskWork[] tasks = getTaskWorkByFromToDate(contextId, spaceId, tempFromDate, tempToDate, maxSize);
-
-			return (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks, (int)totalCount);
+			if(tasks!=null && tasks.length>maxSize){
+				tasks[maxSize] = new TaskWork();
+			}
+			
+			return (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks, maxSize);
 
 		}catch (Exception e){
 			// Exception Handling Required
@@ -7834,33 +7831,18 @@ public class InstanceServiceImpl implements IInstanceService {
 			long totalSize = getWorkListManager().getCastWorkListSize(userId, cond);
 
 			cond.setPageNo(0);
-			cond.setPageSize(maxSize);
+			cond.setPageSize(maxSize+1);
 
 			cond.setOrders(new Order[]{new Order("tskcreatedate", false)});
 
 			TaskWork[] tasks = getWorkListManager().getCastWorkList(userId, cond);
+			if(tasks!=null && tasks.length>maxSize){
+				tasks[maxSize] = new TaskWork();
+			}
 			TaskInstanceInfo[] taskInfos = null;
 			if(!CommonUtil.isEmpty(tasks))
-				taskInfos = ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks, (int)totalSize);
-			/*if(!CommonUtil.isEmpty(taskInfos)) {
-				if (totalSize > maxSize) {
-					TaskInstanceInfo[] tempTaskInfos = new TaskInstanceInfo[taskInfos.length + 1];
-					for (int i = 0; i < taskInfos.length + 1; i++) {
-						if (i == taskInfos.length) {
-							TaskInstanceInfo moreInstance = new TaskInstanceInfo();
-							moreInstance.setType(-21);
-							tempTaskInfos[i] = moreInstance;
-						} else {
-							tempTaskInfos[i] = taskInfos[i];
-						}
-					}
-					taskInfos = tempTaskInfos;
-				}
-			}*/
-
+				taskInfos = ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks, maxSize);
 			return taskInfos;
-			//return ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks);
-			//return SmartTest.getTaskInstancesByDate(null, null, null, null, maxSize);
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();

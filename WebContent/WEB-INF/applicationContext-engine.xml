@@ -56,7 +56,8 @@
 	<beans:bean id="workService" class="net.smartworks.server.service.impl.WorkServiceImpl"/>
 	<beans:bean id="settingsService" class="net.smartworks.server.service.impl.SettingsServiceImpl"/>
 	<beans:bean id="mailService" class="net.smartworks.server.service.impl.MailServiceImpl"/>
-		<beans:bean id="swServiceFactory" class="net.smartworks.server.service.factory.SwServiceFactory" factory-method="createInstance">
+	<beans:bean id="calendarService" class="net.smartworks.server.service.impl.CalendarServiceImpl"/>
+			<beans:bean id="swServiceFactory" class="net.smartworks.server.service.factory.SwServiceFactory" factory-method="createInstance">
 		<beans:property name="instanceService" ref="instanceService"/>
 		<beans:property name="communityService" ref="communityService"/>
 		<beans:property name="noticeService" ref="noticeService"/>
@@ -64,7 +65,8 @@
 		<beans:property name="workService" ref="workService"/>
 		<beans:property name="settingsService" ref="settingsService"/>
 		<beans:property name="mailService" ref="mailService"/>
-			</beans:bean>
+		<beans:property name="calendarService" ref="calendarService"/>
+					</beans:bean>
 	
 	<beans:bean id="swManagerFactory" class="net.smartworks.server.engine.factory.SwManagerFactory" factory-method="createInstance">
 		<!--property name="mdlManager" ref="mdlManager"/-->

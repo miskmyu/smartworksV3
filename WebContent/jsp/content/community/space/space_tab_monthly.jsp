@@ -52,7 +52,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--탭-->
-<div class="tab js_space_tab_monthly_page"  workSpaceId="<%=workSpace.getId() %>" startDate="<%=startDateStr%>">
+<div class="tab js_space_tab_monthly_page js_space_tab_page" workSpaceId="<%=workSpace.getId() %>" startDate="<%=startDateStr%>">
 
 	<%
 	String prevYearHref = "space_tab_monthly.sw?startDate=" 
@@ -103,8 +103,10 @@
 	<%
 	} 
 	%>
+	<span class="js_progress_span" style="margin-top:10px;display:inline-block"></span>
 
-	<div class="option_section">
+	<div class="option_section js_space_date_scope">
+		<span class="js_progress_span"></span>
   		<span class="sel_date_section"><%=selectedMonthStr %><input type="hidden" class="js_space_datepicker" value="<%=selectedMonthStr%>.01"><a href="space_tab_monthly.sw" class="btn_calendar js_space_datepicker_button"></a></span> 
 		<select class="js_space_select_scope">
 			<option value="space_tab_timeline.sw"><fmt:message key="space.title.tab_timeline"/></option>
@@ -217,6 +219,7 @@
 					var url = input.next().attr('href');
 					var startMonth = new Date(selectedMonth.toString());
 					startMonth.setMonth(selectedMonth.getMonth() - 11, 1);
+					smartPop.progressCont(input.parents('.js_space_date_scope').children('.js_progress_span:first'));
 					$.ajax({
 						url : url,
 						data : {
@@ -225,8 +228,10 @@
 						},
 						success : function(data, status, jqXHR) {
 							target.html(data);
+							smartPop.closeProgress();
 						},
 						error : function(xhr, ajaxOptions, thrownError) {
+							smartPop.closeProgress();
 						}
 					});
 				}

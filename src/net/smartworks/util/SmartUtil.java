@@ -477,10 +477,11 @@ public class SmartUtil {
 				}
 				return user;
 			} else {
-				return SmartUtil.getAnonymousUser();
+				Login login = (Login)(principal instanceof Login ? principal : null);
+				return SmartUtil.getAnonymousUser(login.getCompanyId(), login.getCompany());
 			}
 		}
-		return SmartUtil.getAnonymousUser();
+		return SmartUtil.getAnonymousUser("", "");
 	}
 	
 	public static User getSystemUser(){
@@ -495,14 +496,15 @@ public class SmartUtil {
 		return user;
 	}
 	
-	public static User getAnonymousUser(){
+	public static User getAnonymousUser(String companyId, String company){
 
 		User user = new User();
 		user.setId(User.USER_ID_ANONYMOUS);
 		user.setName("Anonymous User");
 		user.setPosition("");
 		user.setDepartment("");
-		user.setCompany("");
+		user.setCompanyId(companyId);
+		user.setCompany(company);
 		user.setUserLevel(User.USER_LEVEL_EXTERNAL_USER);
 		return user;
 	}

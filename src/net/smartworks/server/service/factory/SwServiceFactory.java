@@ -8,6 +8,7 @@
 
 package net.smartworks.server.service.factory;
 
+import net.smartworks.server.service.ICalendarService;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IMailService;
@@ -45,6 +46,7 @@ public class SwServiceFactory {
 	private INoticeService noticeService;
 	private ISettingsService settingsService;
 	private IMailService mailService;
+	private ICalendarService calendarService;
 	private ISeraService seraService;
 
 	public ICommunityService getCommunityService() {
@@ -82,6 +84,12 @@ public class SwServiceFactory {
 	}
 	public void setMailService(IMailService mailService) {
 		this.mailService = mailService;
+	}
+	public ICalendarService getCalendarService() {
+		return calendarService;
+	}
+	public void setCalendarService(ICalendarService calendarService) {
+		this.calendarService = calendarService;
 	}
 	public ISeraService getSeraService() {
 		return seraService;

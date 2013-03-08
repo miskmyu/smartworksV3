@@ -56,7 +56,8 @@
 
 <!--탭-->
 <div class="tab js_space_tab_timeline_page" workSpaceId="<%=workSpace.getId() %>" startDate="<%=startDateStr%>">
-	<div class="option_section">
+	<div class="option_section js_space_date_scope">
+		<span class="js_progress_span"></span>
 		<select class="js_space_select_scope">
 			<option selected value="space_tab_timeline.sw"><fmt:message key="space.title.tab_timeline"/></option>
 			<option value="space_tab_dayly.sw"><fmt:message key="space.title.tab_dayly"/></option>

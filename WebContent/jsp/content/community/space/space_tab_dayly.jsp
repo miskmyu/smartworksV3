@@ -68,7 +68,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--탭-->
-<div class="tab js_space_tab_dayly_page" workSpaceId="<%=workSpace.getId() %>" startDate="<%=startDateStr%>">
+<div class="tab js_space_tab_dayly_page js_space_tab_page" workSpaceId="<%=workSpace.getId() %>" startDate="<%=startDateStr%>">
 
 	<%
 	String prevWeekHref = "space_tab_dayly.sw?startDate=" 
@@ -114,8 +114,10 @@
 	<%
 	} 
 	%>
+	<span class="js_progress_span" style="margin-top:10px;display:inline-block"></span>
 
-	<div class="option_section">
+	<div class="option_section js_space_date_scope">
+		<span class="js_progress_span"></span>
   		<span class="sel_date_section"><%=selectedDateStr%><input type="hidden" class="js_space_datepicker" value="<%=selectedDateStr%>"><a href="space_tab_dayly.sw" class="btn_calendar js_space_datepicker_button"></a></span> 
 		<select class="js_space_select_scope">
 			<option value="space_tab_timeline.sw"><fmt:message key="space.title.tab_timeline"/></option>
@@ -256,6 +258,7 @@ $('.js_space_datepicker').datepicker({
 		var url = input.next().attr('href');
 		var startDate = new Date(selectedDate.toString());
 		startDate.setDate(selectedDate.getDate() - 6);
+		smartPop.progressCont(input.parents('.js_space_date_scope').children('.js_progress_span:first'));
 		$.ajax({
 			url : url,
 			data : {
@@ -264,8 +267,10 @@ $('.js_space_datepicker').datepicker({
 			},
 			success : function(data, status, jqXHR) {
 				target.html(data);
+				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
 			}
 		});
 	}
