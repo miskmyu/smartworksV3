@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.smartworks.model.approval.Approval;
 import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.approval.ApprovalLineInst;
+import net.smartworks.model.calendar.RepeatEvent;
 import net.smartworks.model.calendar.WorkHourPolicy;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
@@ -34,6 +35,7 @@ import net.smartworks.model.filter.Condition;
 import net.smartworks.model.filter.SearchFilter;
 import net.smartworks.model.instance.AsyncMessageInstance;
 import net.smartworks.model.instance.CommentInstance;
+import net.smartworks.model.instance.EventInstance;
 import net.smartworks.model.instance.FieldData;
 import net.smartworks.model.instance.ImageInstance;
 import net.smartworks.model.instance.InformationWorkInstance;
@@ -2274,6 +2276,101 @@ public class InstanceServiceImpl implements IInstanceService {
 			}*/
 			//if (isCreateRecord)
 			//	populateSpaceNotice(obj);
+			
+			if(servletPath.equals("/create_new_event.sw")){
+				Map<String, Object> eventRepeatPolicyMap = (Map<String, Object>)requestBody.get("repeatPolicy");
+				if(!SmartUtil.isBlankObject(eventRepeatPolicyMap)){
+					RepeatEvent repeatEvent = new RepeatEvent( 	(String)eventRepeatPolicyMap.get("repeatBy"), 
+																(String)eventRepeatPolicyMap.get("repeatWeek"),
+																(String)eventRepeatPolicyMap.get("repeatDay"),
+																(String)eventRepeatPolicyMap.get("repeatDate"),
+																(String)eventRepeatPolicyMap.get("repeatEnd"),
+																(String)eventRepeatPolicyMap.get("repeatEndDate"),
+																(String)eventRepeatPolicyMap.get("repeatEndCount"));
+					SwdRecord eventRecord = obj;
+					
+					String FIELD_START_TIME = "1";
+					String FIELD_END_TIME = "2";
+
+					repeatEvent.setStartTime(LocalDate.convertGMTStringToLocalDate2(eventRecord.getDataField(FIELD_START_TIME).getValue()));
+					if(eventRecord.getDataField(FIELD_END_TIME) != null)
+						repeatEvent.setEndTime(LocalDate.convertGMTStringToLocalDate2(eventRecord.getDataField(FIELD_END_TIME).getValue()));
+
+					if(repeatEvent!=null && eventRecord!=null && (repeatEvent.getRepeatCount()>0 || repeatEvent.getRepeatEndDate()!=null) && repeatEvent.getStartTime()!=null
+							&& (repeatEvent.getRepeatCount()>0 || repeatEvent.getRepeatEndDate().getTime()>repeatEvent.getStartTime().getTime())){
+						int repeatCount=0; long increment=0; boolean isMonthIncrement=false; int diffMonths;
+						long thisYear=0, thisMonth=0, thisDate=0, thisTime=0; 
+						switch(repeatEvent.getRepeatInterval()){
+						case RepeatEvent.REPEAT_INTERVAL_EVERY_DAY:
+							increment = LocalDate.ONE_DAY;
+							repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : (int)(repeatEvent.getRepeatEndDate().getTime() - repeatEvent.getStartTime().getTime())/(int)increment+1;
+							break;
+						case RepeatEvent.REPEAT_INTERVAL_EVERY_WEEK:
+							increment = LocalDate.ONE_WEEK;
+							repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : (int)(repeatEvent.getRepeatEndDate().getTime() - repeatEvent.getStartTime().getTime()+LocalDate.ONE_DAY)/(int)increment+1;
+							break;
+						case RepeatEvent.REPEAT_INTERVAL_BI_WEEK:
+							increment = LocalDate.ONE_WEEK*2;
+							repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : (int)(repeatEvent.getRepeatEndDate().getTime() - repeatEvent.getStartTime().getTime()+LocalDate.ONE_DAY)/(int)increment+1;
+							break;
+						case RepeatEvent.REPEAT_INTERVAL_EVERY_MONTH_DATE:
+						case RepeatEvent.REPEAT_INTERVAL_EVERY_MONTH_CUSTOM:
+							increment = 1;
+							isMonthIncrement=true;
+							diffMonths = (repeatEvent.getRepeatEndDate()!=null) ? (repeatEvent.getRepeatEndDate().getYear()*12 + repeatEvent.getRepeatEndDate().getMonth() - repeatEvent.getStartTime().getYear()*12 - repeatEvent.getStartTime().getMonth()) : 0 ;
+							repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : diffMonths +1;
+							
+							break;
+						case RepeatEvent.REPEAT_INTERVAL_BI_MONTH_DATE:
+						case RepeatEvent.REPEAT_INTERVAL_BI_MONTH_CUSTOM:
+							increment = 2;
+							isMonthIncrement=true;
+							diffMonths = (repeatEvent.getRepeatEndDate()!=null) ? (repeatEvent.getRepeatEndDate().getYear()*12 + repeatEvent.getRepeatEndDate().getMonth() - repeatEvent.getStartTime().getYear()*12 - repeatEvent.getStartTime().getMonth()) : 0 ;
+							repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : diffMonths/2 +1;
+							break;
+						}
+						
+						for(int i=1; i<repeatCount; i++){
+							LocalDate startTime=null, endTime=null;
+							if(isMonthIncrement){
+								if(repeatEvent.getWeekOfMonth()>=0 && repeatEvent.getDayOfWeek()>=0){
+									startTime = LocalDate.convertLocalDateWithDiffMonth(repeatEvent.getStartTime(), (int)(i*increment), repeatEvent.getWeekOfMonth(), repeatEvent.getDayOfWeek());
+								}else{
+									startTime = LocalDate.convertLocalDateWithDiffMonth(repeatEvent.getStartTime(), (int)(i*increment));
+								}
+							}else{
+								startTime = new LocalDate(repeatEvent.getStartTime().getTime()+i*increment);
+							}
+							SwdDataField startTimeField = eventRecord.getDataField(FIELD_START_TIME);
+							startTimeField.setValue(startTime.toGMTDateString());
+							eventRecord.setDataField(FIELD_START_TIME, startTimeField);
+							if(repeatEvent.getEndTime()!=null){
+								if(isMonthIncrement){
+									if(repeatEvent.getWeekOfMonth()>=0 && repeatEvent.getDayOfWeek()>=0){
+										startTime = LocalDate.convertLocalDateWithDiffMonth(repeatEvent.getStartTime(), (int)(i*increment), repeatEvent.getWeekOfMonth(), repeatEvent.getDayOfWeek());										
+									}else{
+										startTime = LocalDate.convertLocalDateWithDiffMonth(repeatEvent.getStartTime(), (int)(i*increment));
+									}
+								}else{
+									endTime = new LocalDate(repeatEvent.getEndTime().getTime()+i*increment);									
+								}
+								SwdDataField endTimeField = eventRecord.getDataField(FIELD_END_TIME);
+								endTimeField.setValue(endTime.toGMTDateString());
+								eventRecord.setDataField(FIELD_END_TIME, endTimeField);
+							}
+							try{
+								if(startTime!=null && !(repeatEvent.getEndTime()!=null && endTime==null)){
+									eventRecord.setRecordId("dr_" + CommonUtil.newId());
+									String repeatInstanceId = getSwdManager().setRecord(userId, eventRecord, IManager.LEVEL_ALL);
+								}
+							}catch (Exception e){
+								e.printStackTrace();
+								break;
+							}
+						}
+					}
+				}
+			}
 			
 			return instanceId;
 

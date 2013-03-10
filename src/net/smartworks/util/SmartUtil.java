@@ -23,8 +23,11 @@ import javax.servlet.http.HttpServletResponse;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.company.CompanyGeneral;
+import net.smartworks.model.instance.info.EventInstanceInfo;
+import net.smartworks.model.instance.info.WorkInstanceInfo;
 import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.notice.Notice;
+import net.smartworks.model.notice.NoticeMessage;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
 import net.smartworks.server.engine.common.loginuser.model.LoginUser;
@@ -649,6 +652,7 @@ public class SmartUtil {
 	private static final String MSG_TYPE_BROADCASTING = "BCAST";
 	private static final String MSG_TYPE_NOTICE_COUNT = "NCOUNT";
 	private static final String MSG_TYPE_AVAILABLE_CHATTERS = "ACHATTERS";
+	private static final String MSG_TYPE_EVENT_ALARM = "EVENTALARM";
 	
 	private static String getMessageChannel(String channel){
 		return SUBJECT_SMARTWORKS + "/" + SmartUtil.getCurrentUser().getCompanyId() + "/" + channel; 
@@ -746,6 +750,32 @@ public class SmartUtil {
 		data.put("type", message.getType());
 		data.put("count", message.getLength());
 		publishMessage( getMessageChannel(companyId, SmartUtil.getSubjectString(userId)), MSG_TYPE_NOTICE_COUNT, data);
+	}
+	
+	public static void pushEventAlarm(String userId, String companyId, NoticeMessage message){
+		Map<String, Object> data = new HashMap<String, Object>();
+		if(SmartUtil.isBlankObject(message) || message.getType() != NoticeMessage.TYPE_EVENT_ALARM || SmartUtil.isBlankObject(message.getEvent())) return;
+		data.put("type", message.getType());
+		data.put("id", message.getId());
+		data.put("issuedDate", message.getIssuedDate());
+		
+		EventInstanceInfo event = message.getEvent();
+				
+		Map<String, Object> ownerInfo = new HashMap<String, Object>();
+		ownerInfo.put("midPicture", event.getOwner().getMidPicture());
+		ownerInfo.put("longName", event.getOwner().getLongName());
+		
+		Map<String, Object> eventInfo = new HashMap<String, Object>();
+		eventInfo.put("owner", ownerInfo);
+		eventInfo.put("startTitle", SmartMessage.getString("common.upload.event.start_date"));
+		eventInfo.put("start", event.getStart());
+		eventInfo.put("subject", event.getSubject());
+		eventInfo.put("controller", WorkInstanceInfo.getController(SmartWork.ID_EVENT_MANAGEMENT, SmartWork.TYPE_INFORMATION));
+		eventInfo.put("contextId", WorkInstanceInfo.getContextId(SmartWork.ID_EVENT_MANAGEMENT, SmartWork.TYPE_INFORMATION, event.getId()));
+		eventInfo.put("workSpaceId", event.getWorkSpaceId());
+		data.put("event", eventInfo);
+		
+		publishMessage( getMessageChannel(companyId, SmartUtil.getSubjectString(userId)), MSG_TYPE_EVENT_ALARM, data);
 	}
 	
 	public static void updateChatterStatus(boolean isOnline, String userId, String companyId){

@@ -1015,7 +1015,7 @@ public class NoticeServiceImpl implements INoticeService {
 						
 						UserInfo memberInfo = ModelConverter.getUserInfoByUserId(requester);
 						NoticeMessage joinRequestNotice = new NoticeMessage(groupId + "_" + requester, 0, memberInfo, new LocalDate(reqJoinGroupNotice.getCreationDate().getTime()));
-						joinRequestNotice.setGroup(ModelConverter.getGroupInfoBySwoGroup(null, getSwoManager().getGroup(user.getId(), groupId, IManager.LEVEL_ALL)));
+						joinRequestNotice.setWorkSpace(ModelConverter.getGroupInfoBySwoGroup(null, getSwoManager().getGroup(user.getId(), groupId, IManager.LEVEL_ALL)));
 						joinRequestNotice.setType(NoticeMessage.TYPE_JOIN_REQUEST);
 						joinRequestNotice.setMessage(memberInfo.getLongName());
 						//NoticeMessageList.add(joinRequestNotice);
@@ -1413,7 +1413,7 @@ public class NoticeServiceImpl implements INoticeService {
 								
 								UserInfo memberInfo = ModelConverter.getUserInfoByUserId(member.getUserId());
 								NoticeMessage joinRequestNotice = new NoticeMessage(group.getId() + "_" + member.getUserId(), 0, memberInfo, new LocalDate(member.getCreationDate().getTime()));
-								joinRequestNotice.setGroup(ModelConverter.getGroupInfoBySwoGroup(null, group));
+								joinRequestNotice.setWorkSpace(ModelConverter.getGroupInfoBySwoGroup(null, group));
 								joinRequestNotice.setType(NoticeMessage.TYPE_JOIN_REQUEST);
 								joinRequestNotice.setMessage(memberInfo.getLongName());
 								//NoticeMessageList.add(joinRequestNotice);

@@ -1121,6 +1121,76 @@ smartPop = {
 				}
 			});
 		});
-	}
+	},
+	
+	eventAlarmIsRunning : false,
+	
+	eventAlarm : function(notice){
+		if(isEmpty(notice) || isEmpty(notice.event)) return;
+		if(smartPop.eventAlarmIsRunning){
+			setTimeout(function(){
+				smartPop.eventAlarm(notice);
+			},500, [notice]);
+			return;
+		}
+		var event = notice.event;
+		var noticeData =  '<li class="sub_instance_list">' +
+							'<div class="det_title">' +
+								'<div class="noti_pic"><img src="' + event.owner.midPicture + '" class="profile_size_m"></div>' +
+								'<div class="noti_in_m"><span class="t_name">' + event.owner.longName +  '</span>' +
+								'<span class="t_date vb pl10 fr">' + notice.issuedDate + '</span>' +
+								'<span>' + 
+									'<a href="' + event.controller + '?cid=' + event.contextId + '&wid=' + event.workSpaceId + '&workId=' + event.workId + '">' +
+										'<div>' + 
+											'<span class="icon_event_works"></span>' +
+											'<div>' + event.subject + '</div>' +
+										'</div>' +
+										'<div>' + event.startTitle + ' : ' + event.start +
+											'<a href="" noticeId="' + notice.id + '" noticeType="' + notice.type + '"><span class="btn_x js_remove_notice" ></span></a>' +								
+										'</div>' +
+									'</a>' +
+								'</span>' +
+							'</div>' +
+						'</li>';
+		
+		var popEventAlarm = $('.js_pop_event_alarm_page');
+		if(isEmpty(popEventAlarm)){
+			smartPop.eventAlarmIsRunning = true;
+			$.get("pop_event_alarm.sw", function(data){
+				$(data).modal({
+					opacity: 10,
+					overlayCss: {backgroundColor:"#000"},
+					containerCss:{
+						height:200,
+						width:460
+					},
+					overlayClose: false,
+					onShow: function(dialog){
 
+						popEventAlarm = $('.js_pop_event_alarm_page');
+						popEventAlarm.find('ul').append(noticeData);
+						smartPop.eventAlarmIsRunning = false;
+						$('.js_close_event_alarm').die('click');
+						$('.js_close_event_alarm').live( 'click', function(e){
+							smartPop.close();
+							return false;
+						});
+						$('.js_close_event_alarm').focus();
+						$('.js_close_event_alarm').keypress(function (e) {
+							var e = window.event || e;
+							var keyCode = e.which || e.keyCode;
+					        if (keyCode == $.ui.keyCode.ENTER) {
+					            $('.js_close_event_alarm').click();
+					            return false;
+					        } else {
+					            return true;
+					        }
+					    });
+					}
+				});
+			});
+		}else{
+			popEventAlarm.find('ul').append(noticeData);
+		}
+	}
 };

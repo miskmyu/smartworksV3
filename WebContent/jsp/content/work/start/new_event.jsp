@@ -22,112 +22,132 @@ function submitForms(tempSave) {
 	var newEvent = $('.js_new_event_page');
 
 	// new_event 에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
-	if(!SmartWorks.GridLayout.validate(newEvent.find('form.js_validation_required'), $('.js_upload_error_message'))) return;
+	if(!SmartWorks.GridLayout.validate(newEvent.find('form.js_validation_required:visible'), $('.js_upload_error_message'))) return;
 
 	var form = newEvent.find('form[name="frmNewEvent"]');
 	var name = form.find('input[name="txtEventName"]').attr("value");
 	var startDate = form.find('input[name="txtEventStartDate"]').attr("value");
 	var endDate = form.find('input[name="txtEventEndDate"]').attr("value");
-	var oldEndDate = false;
 	if(!isEmpty(startDate) && !isEmpty(endDate)){
 		if((new Date(startDate))>(new Date(endDate))){
-			oldEndDate = true;
 			smartPop.showInfo(smartPop.ERROR, smartMessage.get("eventOldEndDateError"));
+			return;
 		}
 	}
-	if(!oldEndDate){
-		var alarmPolicy = form.find('select[name="selEventAlarmPolicy"]').attr("value");
-		var place = form.find('input[name="txtEventPlace"]').attr("value");
-		var relatedUserField = form.find('.js_type_userField .js_community_item');
-		var relatedUsers = new Array();
-		for(var i=0; i<relatedUserField.length; i++){
-			relatedUsers.push({
-				userId : $(relatedUserField[i]).attr('comId'),
-				longName : $(relatedUserField[i]).attr('comName')
-			});
+	var alarmPolicy = form.find('select[name="selEventAlarmPolicy"]').attr("value");
+	var repeatBy = form.find('select[name="selEventRepeatBy"] option:selected').attr('repeatBy');
+	var repeatWeek = form.find('select[name="selEventRepeatWeek"] option:selected').attr('repeatWeek');
+	var repeatDay = form.find('select[name="selEventRepeatDay"] option:selected').attr('repeatDay');
+	var repeatDate = form.find('select[name="selEventRepeatDate"]').attr('value');
+	var repeatEnd = form.find('select[name="selEventRepeatEnd"] option:selected').attr('repeatEnd');
+	var repeatEndDate = form.find('input[name="txtEventRepeatEndDate"]').attr("value");
+	var repeatEndCount = form.find('div[name="txtEventRepeatEndCount"] input').attr("value");
+	var place = form.find('input[name="txtEventPlace"]').attr("value");
+	var relatedUserField = form.find('.js_type_userField .js_community_item');
+	var relatedUsers = new Array();
+	for(var i=0; i<relatedUserField.length; i++){
+		relatedUsers.push({
+			userId : $(relatedUserField[i]).attr('comId'),
+			longName : $(relatedUserField[i]).attr('comName')
+		});
+	}
+	var content = form.find('textarea[name="txtEventContent"]').attr("value");
+	var formContent = newEvent.find('.js_hidden_form_content');
+	if(!isEmpty(startDate) && !isEmpty(repeatEndDate)){
+		if((new Date(startDate))>(new Date(repeatEndDate))){
+			smartPop.showInfo(smartPop.ERROR, smartMessage.get("eventOldRepeatEndDateError"));
 		}
-		var content = form.find('textarea[name="txtEventContent"]').attr("value");
-		var formContent = newEvent.find('.js_hidden_form_content');
-		
-		if(!isEmpty(formContent)) {
-	
-			var workId = newEvent.attr('workId');
-			var instanceId = newEvent.attr('instanceId');
-			$.ajax({
-				url : "get_form_xml.sw",
-				data : {
-					workId : workId
-				},
-				success : function(formXml, status, jqXHR) {
-	
-					// 화면 xml을 가져오면 가져온 값과 입력된 설명값들을 가지고 스마트폼을 이용해 화면을 그린다...
-					new SmartWorks.GridLayout({
-						target : formContent,
+	}
+
+	if(!isEmpty(formContent)) {
+
+		var workId = newEvent.attr('workId');
+		var instanceId = newEvent.attr('instanceId');
+		$.ajax({
+			url : "get_form_xml.sw",
+			data : {
+				workId : workId
+			},
+			success : function(formXml, status, jqXHR) {
+
+				// 화면 xml을 가져오면 가져온 값과 입력된 설명값들을 가지고 스마트폼을 이용해 화면을 그린다...
+				new SmartWorks.GridLayout({
+					target : formContent,
+					formXml : formXml,
+					formValues : createEventDataFields({
 						formXml : formXml,
-						formValues : createEventDataFields({
-							formXml : formXml,
-							name : name,
-							startDate : startDate,
-							endDate : endDate,
-							alarmPolicy : alarmPolicy,
-							place : place,
-							relatedUsers : relatedUsers,
-							content : content
-						}),
-						mode : "edit"
-					});
-					// 그려진 화면에 있는 입력화면들을 JSON형식으로 Serialize한다...
-					var forms = newEvent.find('form');
-					var paramsJson = {};
-					for(var i=0; i<forms.length; i++){
-						var form = $(forms[i]);
-						// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
-						if(form.attr('name') === 'frmSmartForm'){
-							paramsJson['formId'] = form.attr('formId');
-							paramsJson['formName'] = form.attr('formName');
-						}else if(form.attr('name') === 'frmNewEvent'){
-							continue;
-						}
-						// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
-						paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+						name : name,
+						startDate : startDate,
+						endDate : endDate,
+						alarmPolicy : alarmPolicy,
+						place : place,
+						relatedUsers : relatedUsers,
+						content : content
+					}),
+					mode : "edit"
+				});
+				// 그려진 화면에 있는 입력화면들을 JSON형식으로 Serialize한다...
+				var forms = newEvent.find('form');
+				var paramsJson = {};
+				for(var i=0; i<forms.length; i++){
+					var form = $(forms[i]);
+					// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
+					if(form.attr('name') === 'frmSmartForm'){
+						paramsJson['formId'] = form.attr('formId');
+						paramsJson['formName'] = form.attr('formName');
+					}else if(form.attr('name') === 'frmNewEvent'){
+						continue;
 					}
-					if(tempSave){
-						paramsJson['isTempSave'] = true;
-						paramsJson['instanceId'] = instanceId;
-					}
-					console.log(JSON.stringify(paramsJson));
-					// 서비스요청 프로그래스바를 나타나게 한다....
-					var progressSpan = newEvent.find('.js_progress_span');
-					smartPop.progressCont(progressSpan);
-					var url = "create_new_event.sw";
-					// create_new_event.sw서비스를 요청한다..
-					$.ajax({
-						url : url,
-						contentType : 'application/json',
-						type : 'POST',
-						data : JSON.stringify(paramsJson),
-						success : function(data, status, jqXHR) {
-							// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-							smartPop.closeProgress();
-							if(tempSave){
-								newEvent.attr('instanceId', data.instanceId);
-							}else{
-								refreshCurrentContent(newEvent);
-								//window.location.reload(true);
-							}
-						},
-						error : function(e) {
-							// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-							smartPop.closeProgress();
-							if(e.responseText === "duplicateKeyException")
-								smartPop.showInfo(smartPop.ERROR, smartMessage.get("duplicateKeyException"));
-							else
-								smartPop.showInfo(smartPop.ERROR, smartMessage.get("createEventError"));
-						}
-					});
+					// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
+					paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 				}
-			});
-		}
+				if(tempSave){
+					paramsJson['isTempSave'] = true;
+					paramsJson['instanceId'] = instanceId;
+				}
+				if(repeatBy !== "none"){
+					var repeatPolicy = {};
+					repeatPolicy['repeatBy'] = repeatBy;
+					repeatPolicy['repeatWeek'] = repeatWeek;
+					repeatPolicy['repeatDay'] = repeatDay;
+					repeatPolicy['repeatDate'] = repeatDate;
+					repeatPolicy['repeatEnd'] = repeatEnd;
+					repeatPolicy['repeatEndDate'] = repeatEndDate;
+					repeatPolicy['repeatEndCount'] = repeatEndCount;
+					paramsJson['repeatPolicy'] = repeatPolicy;
+				}
+				console.log(JSON.stringify(paramsJson));
+				// 서비스요청 프로그래스바를 나타나게 한다....
+				var progressSpan = newEvent.find('.js_progress_span');
+				smartPop.progressCont(progressSpan);
+				var url = "create_new_event.sw";
+				// create_new_event.sw서비스를 요청한다..
+				$.ajax({
+					url : url,
+					contentType : 'application/json',
+					type : 'POST',
+					data : JSON.stringify(paramsJson),
+					success : function(data, status, jqXHR) {
+						// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+						smartPop.closeProgress();
+						if(tempSave){
+							newEvent.attr('instanceId', data.instanceId);
+						}else{
+							refreshCurrentContent(newEvent);
+							//window.location.reload(true);
+						}
+					},
+					error : function(e) {
+						// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+						smartPop.closeProgress();
+						if(e.responseText === "duplicateKeyException")
+							smartPop.showInfo(smartPop.ERROR, smartMessage.get("duplicateKeyException"));
+						else
+							smartPop.showInfo(smartPop.ERROR, smartMessage.get("createEventError"));
+					}
+				});
+			}
+		});
 	}
 }
 
@@ -155,6 +175,7 @@ function submitForms(tempSave) {
 			<!-- js_new_event_fields :  js/sw/sw-formFields.js 에서 loadNewEventFields()가 찾아서 이벤트입력화면을 이곳에 그려준다.. -->
 			<div class="js_new_event_fields" eventNameTitle="<fmt:message key='common.upload.event.name'/>" placeHolderTitle="<fmt:message key='common.upload.message.event'/>"
 				startDateTitle="<fmt:message key='common.upload.event.start_date'/>" endDateTitle="<fmt:message key='common.upload.event.end_date'/>"  alarmPolicyTitle="<fmt:message key='common.upload.button.set_alarm'/>"
+				eventRepeatByTitle="<fmt:message key='common.upload.event.repeat_by'/>" eventRepeatEndTitle="<fmt:message key='common.upload.event.repeat_end'/>"
 				placeTitle="<fmt:message key='common.upload.event.place'/>" relatedUsersTitle="<fmt:message key='common.upload.event.related_users'/>" 
 				contentTitle="<fmt:message key='common.upload.event.content' />">
 			</div>
