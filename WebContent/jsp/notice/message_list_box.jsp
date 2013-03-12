@@ -50,12 +50,14 @@
 					<div class="info_img">
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>"> <img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 					</div>
-					<div class="info_list"><%=messageInstance.getMessage()%>
-						<div class="t_date"><%=messageInstance.getSendDate().toLocalString()%>
-							<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
-								<div class="btn_x js_remove_notice" ></div></a>
+					<a href="" class="js_start_chat_with_user" chatId="<%=messageInstance.getChatId() %>" userId="<%=owner.getId() %>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>">
+						<div class="info_list"><%=messageInstance.getMessage()%>
+							<div class="t_date"><%=messageInstance.getSendDate().toLocalString()%>
+								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
+									<div class="btn_x js_remove_notice" ></div></a>
+							</div>
 						</div>
-					</div>
+					</a>
 					</div>
 				</li>
 				</ul>

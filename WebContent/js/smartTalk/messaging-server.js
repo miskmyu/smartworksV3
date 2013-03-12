@@ -126,7 +126,7 @@ var chatRequestCallback = function(message) {
 	if (message.msgType === msgType.CHAT_REQUEST) {
 		var companyId = message.companyId;
 		var chatterInfos = message.chatterInfos;
-		var chatId = "chatId" + uniqid();
+		var chatId = (message.chatId == null || message.chatId == "") ? "chatId" + uniqid() : message.chatId;
 		if (chatterInfos != null && chatterInfos.length > 0) {
 			for ( var i = 0; i < chatterInfos.length; i++) {
 				if((chatterInfos[i] == null) || (chatterInfos[i].userId == null)) continue;

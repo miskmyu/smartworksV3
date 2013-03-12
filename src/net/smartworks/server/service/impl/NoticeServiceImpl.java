@@ -898,6 +898,7 @@ public class NoticeServiceImpl implements INoticeService {
 					asyncMessage.setId(message.getObjId());
 					asyncMessage.setSender(ModelConverter.getUserInfoByUserId(message.getSendUser()));
 					asyncMessage.setReceiver(ModelConverter.getUserInfoByUserId(message.getTargetUser()));
+					asyncMessage.setChatId(message.getChatId());
 					asyncMessage.setChatters(null);
 					asyncMessage.setSendDate(new LocalDate(message.getCreationDate().getTime()));
 					asyncMessage.setMsgStatus(message.getStatus() == null || message.getStatus() == "" ? -1 : Integer.parseInt(message.getStatus()));

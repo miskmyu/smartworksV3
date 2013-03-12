@@ -373,13 +373,14 @@ var smartTalk = {
 		});
 	},
 
-	chattingRequest : function(chatterInfos) {
+	chattingRequest : function(chatterInfos, chatId) {
 		if(chatManager.isSameChat(chatterInfos)) return;
 		if((chatterInfos.length == 2) && (chatterInfos[0].userId === chatterInfos[1].userId)) return;
 		smartTalk.publish(swSubject.SMARTWORKS + swSubject.CHATREQUEST + swSubject.FAYESERVER, {
 			msgType : msgType.CHAT_REQUEST,
 			sender : currentUserId,
 			companyId : currentUser.companyId,
+			chatId : chatId,
 			chatterInfos : chatterInfos
 		});
 	},

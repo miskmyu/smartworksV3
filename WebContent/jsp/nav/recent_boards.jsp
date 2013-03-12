@@ -49,7 +49,7 @@
  	%>
       <li>
        <a href="<%=target %>" class="js_content">
-       		<span class="js_pop_user_info" userId="<%=board.getOwner().getId()%>" longName="<%=board.getOwner().getLongName() %>" minPicture="<%=board.getOwner().getMinPicture() %>" profile="<%=board.getOwner().getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(board.getOwner().getUser().getUserInfo())%>">
+       		<span class="js_pop_user_info" userId="<%=board.getOwner().getId()%>" longName="<%=board.getOwner().getLongName() %>" minPicture="<%=board.getOwner().getMinPicture() %>" profile="<%=board.getOwner().getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(board.getOwner().getUserModel().getUserInfo())%>">
 	       		<img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">
 	       	</span>
 	       	<div><%=board.getSubject() %><span class="t_date fr"><%=board.getLastModifiedDate().toLocalString() %></span></div>

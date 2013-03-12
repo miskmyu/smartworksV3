@@ -105,7 +105,7 @@
 						break;
 					}else{
 					%>
-						<a title="<%=member.getLongName() %>" href="<%=member.getSpaceController()%>?cid=<%=member.getSpaceContextId()%>&wid=<%=member.getId()%>" class="js_pop_user_info" userId="<%=member.getId()%>" longName="<%=member.getLongName() %>" minPicture="<%=member.getMinPicture() %>" profile="<%=member.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(member.getUser().getUserInfo())%>">
+						<a title="<%=member.getLongName() %>" href="<%=member.getSpaceController()%>?cid=<%=member.getSpaceContextId()%>&wid=<%=member.getId()%>" class="js_pop_user_info" userId="<%=member.getId()%>" longName="<%=member.getLongName() %>" minPicture="<%=member.getMinPicture() %>" profile="<%=member.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(member.getUserModel().getUserInfo())%>">
 							<span class="icon_pe">
 						    	<img class="profile_size_s" src="<%=member.getMinPicture()%>">
 						    </span>
@@ -151,7 +151,7 @@
 					%>
 								<li>
 									<span class="dep">
-										<a href="<%=user.getSpaceController()%>?cid=<%=user.getSpaceContextId()%>&wid=<%=user.getId()%>" class="js_pop_user_info" userId="<%=user.getId()%>" longName="<%=user.getLongName() %>" minPicture="<%=user.getMinPicture() %>" profile="<%=user.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(user.getUser().getUserInfo())%>">
+										<a href="<%=user.getSpaceController()%>?cid=<%=user.getSpaceContextId()%>&wid=<%=user.getId()%>" class="js_pop_user_info" userId="<%=user.getId()%>" longName="<%=user.getLongName() %>" minPicture="<%=user.getMinPicture() %>" profile="<%=user.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(user.getUserModel().getUserInfo())%>">
 											<span class="<%=iconType%>"></span><img src="<%=user.getMinPicture() %>" class="profile_size_s"><%=user.getLongName()%>
 										</a>
 									</span>

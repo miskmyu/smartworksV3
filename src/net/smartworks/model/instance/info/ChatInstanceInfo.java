@@ -7,7 +7,9 @@ public class ChatInstanceInfo extends InstanceInfo {
 
 	private String chatId;
 	private String senderId;
-	private UserInfo senderInfo;
+	private String senderLongName;
+	private String senderNickName;
+	private String senderMinPicture;
 	private String chatMessage;
 
 	public String getChatId() {
@@ -26,12 +28,28 @@ public class ChatInstanceInfo extends InstanceInfo {
 		this.senderId = senderId;
 	}
 
-	public UserInfo getSenderInfo() {
-		return senderInfo;
+	public String getSenderLongName() {
+		return senderLongName;
 	}
 
-	public void setSenderInfo(UserInfo senderInfo) {
-		this.senderInfo = senderInfo;
+	public void setSenderLongName(String senderLongName) {
+		this.senderLongName = senderLongName;
+	}
+
+	public String getSenderNickName() {
+		return senderNickName;
+	}
+
+	public void setSenderNickName(String senderNickName) {
+		this.senderNickName = senderNickName;
+	}
+
+	public String getSenderMinPicture() {
+		return senderMinPicture;
+	}
+
+	public void setSenderMinPicture(String senderMinPicture) {
+		this.senderMinPicture = senderMinPicture;
 	}
 
 	public String getChatMessage() {

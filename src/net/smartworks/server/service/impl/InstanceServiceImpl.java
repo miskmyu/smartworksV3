@@ -8984,7 +8984,10 @@ public class InstanceServiceImpl implements IInstanceService {
 			ChatInstanceInfo chatInstInfo = new ChatInstanceInfo();
 			chatInstInfo.setChatId(chatId);
 			chatInstInfo.setSenderId(message.getSendUser());
-			chatInstInfo.setSenderInfo(ModelConverter.getUserInfoByUserId(message.getSendUser()));
+			UserInfo senderInfo = ModelConverter.getUserInfoByUserId(message.getSendUser());
+			chatInstInfo.setSenderLongName(senderInfo.getLongName());
+			chatInstInfo.setSenderNickName(senderInfo.getNickName());
+			chatInstInfo.setSenderMinPicture(senderInfo.getMinPicture());
 			chatInstInfo.setChatMessage(message.getContent());
 			
 			chatInstInfo.setLastModifiedDate(new LocalDate(message.getCreationDate().getTime()));

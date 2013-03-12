@@ -110,7 +110,7 @@ public class UserInfo extends WorkSpaceInfo {
 		return fullDepartment;
 	}	
 	
-	public User getUser(){
+	public User getUserModel(){
 		User user = new User();
 		user.setBigPictureName(this.getBigPictureName());
 		user.setCellPhoneNo(this.getCellPhoneNo());

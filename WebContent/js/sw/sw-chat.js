@@ -39,10 +39,10 @@ function fetchAllasyncMessages(chatId){
 					message['chatMessage'] = data.messages[i].chatMessage;
 					message['msgType'] = msgType.CHAT_MESSAGE;
 					var senderInfo = {};
-					senderInfo['userId'] = data.messages[i].senderInfo.userId;
-					senderInfo['longName'] = data.messages[i].senderInfo.longName;
-					senderInfo['nickName'] = data.messages[i].senderInfo.nickName;
-					senderInfo['minPicture'] = data.messages[i].senderInfo.minPicture;
+					senderInfo['userId'] = data.messages[i].senderId;
+					senderInfo['longName'] = data.messages[i].senderLongName;
+					senderInfo['nickName'] = data.messages[i].senderNickName;
+					senderInfo['minPicture'] = data.messages[i].senderMinPicture;
 					message['senderInfo'] = senderInfo;
 					message['sendDate'] = (new Date((new Date(data.messages[i].lastModifiedDate)).getTime() + currentUser.timeOffset*1000*60*60));
 					receivedMessageOnChatId(message);
@@ -496,6 +496,29 @@ $(function() {
 		var selected_users = input.parents('div.js_selected_chatters');
 		input.parents('span.js_chatter_item').remove();
 		selected_users.next().focus();
+		return false;
+	});
+
+	$('a.js_start_chat_with_user').live('click', function(e){
+		var input = $(targetElement(e));
+		var chatId = input.attr('chatId');
+		var chatterId = input.attr('userId');
+		var chatterName = input.attr('longName');
+		var chatterPicture = input.attr('minPicture');
+		smartTalk.chattingRequest(new Array({
+			userId : currentUserId,
+			longName : currentUser.longName,
+			minPicture : currentUser.minPicture
+		}, {
+			userId : chatterId,
+			longName : chatterName,
+			minPicture : chatterPicture
+		}), chatId);
+		setTimeout(function(){
+			setRightPosition("resize", null);
+		}, 600);
+		input.parents('#sw_pop_user_info').hide();
+		input.parents('#notice_message_box').find('.js_close_message a').click();
 		return false;
 	});
 });
