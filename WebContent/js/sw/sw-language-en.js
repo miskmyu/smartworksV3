@@ -298,6 +298,7 @@ smartMessage.bundle['en'] = {
 	addAdjunctConfirmation : "Do you really want to add Adjunct Member? ",
 	removeCommentConfirmation : "Do you really want to remove the Comment?",
 	downloadAppConfirmation : "Do you really want to download the Work App?",
+	removeAllRepeatConfirmation : "It is repeating event. Do you want to remove all repeating events?",
 	
 	spaceOverDateSeleted : "Future date has been selected. Please select today or before!",
 			

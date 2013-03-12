@@ -306,6 +306,7 @@ smartMessage.bundle['ko'] = {
 	addAdjunctConfirmation : "겸직원을 추가하려고 합니다. 정말로 추가하시겠습니까?",
 	removeCommentConfirmation : "댓글을 삭제하려고 합니다. 정말로 삭제하시겠습니까?",
 	downloadAppConfirmation : "업무를 내려받기하려고 합니다. 정말로 내려받으시겠습니까? ",
+	removeAllRepeatConfirmation : "삭제하는 일정이 반복일정입니다. 반복일정 모두를 삭제하시겠습니까?",
 	
 	spaceOverDateSeleted : "미래의 날짜를 선택하였습니다. 오늘이나 과거의 날짜를 선택하십시요!",
 	
