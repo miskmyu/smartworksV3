@@ -20,6 +20,7 @@ public class SpaceNotice extends MisObject {
 	private String assignee;
 	private String refType;
 	private String refId;
+	private String taskId;
 	
 	public String getWorkSpaceType() {
 		return workSpaceType;
@@ -56,6 +57,12 @@ public class SpaceNotice extends MisObject {
 	}
 	public void setWorkId(String workId) {
 		this.workId = workId;
+	}
+	public String getTaskId() {
+		return taskId;
+	}
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
 	}
 
 }

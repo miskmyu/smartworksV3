@@ -2274,8 +2274,8 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 			}*/
-			//if (isCreateRecord)
-			//	populateSpaceNotice(obj);
+			if (isCreateRecord)
+				populateSpaceNotice(obj, taskInstId);
 			
 			if(servletPath.equals("/create_new_event.sw")){
 				Map<String, Object> eventRepeatPolicyMap = (Map<String, Object>)requestBody.get("repeatPolicy");
@@ -2390,7 +2390,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		SwManagerFactory.getInstance().getPublishNoticeManager().removeSpaceNotice("", cond);
 	}
 	
-	private void populateSpaceNotice(SwdRecord record) throws Exception {
+	private void populateSpaceNotice(SwdRecord record, String taskInstanceId) throws Exception {
 		if (record == null)
 			return;
 		
@@ -2412,7 +2412,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		String accessLevel = record.getAccessLevel();
 		String accessValue = record.getAccessValue();
 		
-		populateSpaceNotice(workId, workSpaceType, workSpaceId, refType, recordId, accessLevel, accessValue);
+		populateSpaceNotice(workId, workSpaceType, workSpaceId, refType, recordId, taskInstanceId, accessLevel, accessValue);
 		
 	}
 	private void populateSpaceNotice(TskTask task) throws Exception {
@@ -2438,10 +2438,10 @@ public class InstanceServiceImpl implements IInstanceService {
 		String accessLevel = task.getAccessLevel();
 		String accessValue = task.getAccessValue();
 		
-		populateSpaceNotice(workId, workSpaceType, workSpaceId, refType, taskId, accessLevel, accessValue);
+		populateSpaceNotice(workId, workSpaceType, workSpaceId, refType, taskId, taskId, accessLevel, accessValue);
 			
 	}
-	private void populateSpaceNotice(String workId, String workSpaceType, String workSpaceId, String refType, String refId, String accessLevel, String accessValue) throws Exception {
+	private void populateSpaceNotice(String workId, String workSpaceType, String workSpaceId, String refType, String refId, String taskId, String accessLevel, String accessValue) throws Exception {
 		
 		User user = SmartUtil.getCurrentUser();
 		String userId = user.getId();
@@ -2500,7 +2500,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			sn.setAssignee((String)targetUserId.get(i));
 			sn.setRefType(refType);
 			sn.setRefId(refId);
+			sn.setTaskId(taskId);
 			SwManagerFactory.getInstance().getPublishNoticeManager().setSpaceNotice(userId, sn, IManager.LEVEL_ALL);
+			SmartUtil.increaseNoticeCountByNoticeType((String)targetUserId.get(i), Notice.TYPE_NOTIFICATION);
 		}
 	}
 	

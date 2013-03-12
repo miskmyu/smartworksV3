@@ -27,6 +27,7 @@ import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
@@ -61,13 +62,14 @@ import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
+import net.smartworks.server.engine.publishnotice.model.SpaceNotice;
+import net.smartworks.server.engine.publishnotice.model.SpaceNoticeCond;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.INoticeService;
 import net.smartworks.server.service.ISeraService;
-import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartTest;
@@ -160,11 +162,17 @@ public class NoticeServiceImpl implements INoticeService {
 
 			notificationMessage = new Notice();
 			notificationMessage.setType(Notice.TYPE_NOTIFICATION);
+			SpaceNoticeCond cond = new SpaceNoticeCond();
+			cond.setAssignee(userId);
+			long spaceNoticeCount = getPublishNoticeManager().getSpaceNoticeSize(userId, cond);
+			//spaceNotice
+			notificationMessage.setLength((int)spaceNoticeCount);
+			
 			
 			// TOTAL DELAYED TASK
 
-			PublishNoticeCond delayedTaskCond = new PublishNoticeCond(userId, PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_DELAYED_TASK, null);
-			long totalDelayedTaskSize = getPublishNoticeManager().getPublishNoticeSize(userId, delayedTaskCond);
+//			PublishNoticeCond delayedTaskCond = new PublishNoticeCond(userId, PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_DELAYED_TASK, null);
+//			long totalDelayedTaskSize = getPublishNoticeManager().getPublishNoticeSize(userId, delayedTaskCond);
 			
 //			TaskWorkCond delayedTaskCond = new TaskWorkCond();
 //			delayedTaskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
@@ -176,10 +184,10 @@ public class NoticeServiceImpl implements INoticeService {
 			
 			// TOTAL REQUESTER
 
-			PublishNoticeCond requestCond = new PublishNoticeCond(userId, PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_GROUPJOINREQUEST, null);
-			long totalRequestSize = getPublishNoticeManager().getPublishNoticeSize(userId, requestCond);
+//			PublishNoticeCond requestCond = new PublishNoticeCond(userId, PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_GROUPJOINREQUEST, null);
+//			long totalRequestSize = getPublishNoticeManager().getPublishNoticeSize(userId, requestCond);
 			
-			notificationMessage.setLength((int)totalDelayedTaskSize + (int)totalRequestSize);
+//			notificationMessage.setLength((int)totalDelayedTaskSize + (int)totalRequestSize);
 
 		}
 		//---------------------------------------------------------------------------------------
@@ -254,222 +262,6 @@ public class NoticeServiceImpl implements INoticeService {
 		return returnNotice;
 	}
 	
-	//PublishNotice 테이블 사용으로 변경되어짐 삭제 예정
-	public Notice[] getNotices_old(String userId, int noticeType) throws Exception {
-
-		Notice message = null;
-		Notice comment = null;
-		Notice assigned = null;
-		Notice notificationMessage = null;
-		Notice mailBox = null;
-		Notice savedBox = null;
-		Notice friend = null;
-
-		//---------------------------------------------------------------------------------------
-		if (noticeType == Notice.TYPE_MESSAGE || noticeType == Notice.TYPE_INVALID) {
-			message = new Notice();
-			message.setType(Notice.TYPE_MESSAGE);
-
-			MessageCond messageCond = new MessageCond();
-			messageCond.setTargetUser(userId);
-			messageCond.setReadStatus(MessageCond.TYPE_STATUS_UNREAD);
-			long totalMessageSize = getMessageManager().getMessageSize(userId, messageCond);
-			message.setLength((int)totalMessageSize);
-		}
-		//---------------------------------------------------------------------------------------
-
-		if (noticeType == Notice.TYPE_COMMENT || noticeType == Notice.TYPE_INVALID) {
-			
-			comment = new Notice();
-			comment.setType(Notice.TYPE_COMMENT);
-			//내가 작성한 정보관리 업무 + 내가 수행한 태스크가 속해있는 프로세스 인스턴스업무
-			TskTaskCond myTaskCond = new TskTaskCond();
-			myTaskCond.setStatus(TskTask.TASKSTATUS_COMPLETE);
-			myTaskCond.setAssignee(userId);
-			
-			TskTask[] myTask = getTskManager().getTasks(userId, myTaskCond, IManager.LEVEL_LITE);
-			if (myTask != null) {
-				List instanceIdList = new ArrayList();
-				
-				Map recordIdPrcInstIdMap = new HashMap();
-				for (int i = 0; i < myTask.length; i++) {
-					TskTask task = myTask[i];
-					String tskType = task.getType();
-					if (tskType.equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
-						String prcObjId = task.getProcessInstId();
-						if (!instanceIdList.contains(prcObjId)) {
-							instanceIdList.add(prcObjId);
-						}
-					} else if (tskType.equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
-						String tskDef = task.getDef();
-						String tskForm = task.getForm();
-						if (CommonUtil.isEmpty(tskDef))
-							continue;
-						String[] temp = StringUtils.tokenizeToStringArray(tskDef, "|");
-						if (CommonUtil.isEmpty(temp) || temp.length != 2)
-							continue;
-						String formId = temp[0];
-						String recordId = temp[1];
-						if (!instanceIdList.contains(recordId)) {
-							instanceIdList.add(recordId);
-							recordIdPrcInstIdMap.put(recordId, task.getProcessInstId());
-						}
-					}
-				}
-				if (instanceIdList.size() != 0) {
-					String[] opinionRefIds = new String[instanceIdList.size()];
-					instanceIdList.toArray(opinionRefIds);
-					
-					OpinionCond opinionCond = new OpinionCond();
-					opinionCond.setRefIdIns(opinionRefIds);
-					
-					long totalCommentSize = getOpinionManager().getOpinionSize(userId, opinionCond);
-					comment.setLength((int)totalCommentSize);
-					
-				} else {
-					comment.setLength(0);
-				}
-				
-			} else {
-				comment.setLength(0);
-			}
-		}
-		
-		//---------------------------------------------------------------------------------------
-
-		if (noticeType == Notice.TYPE_ASSIGNED || noticeType == Notice.TYPE_INVALID) {
-			assigned = new Notice();
-			assigned.setType(Notice.TYPE_ASSIGNED);
-			
-			TaskWorkCond taskCond = new TaskWorkCond();
-			taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
-			
-			Date lastTaskCreationDate = null;
-			taskCond.setTskAssignee(userId);
-			taskCond.setPageNo(0);
-			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
-			
-			long totalSize = getWorkListManager().getTaskWorkListSize(userId, taskCond);
-			
-			assigned.setLength((int)totalSize);
-		}
-		
-		
-		//---------------------------------------------------------------------------------------
-
-		if (noticeType == Notice.TYPE_NOTIFICATION || noticeType == Notice.TYPE_INVALID) {
-
-			notificationMessage = new Notice();
-			notificationMessage.setType(Notice.TYPE_NOTIFICATION);
-			
-			// TOTAL DELAYED TASK
-			TaskWorkCond delayedTaskCond = new TaskWorkCond();
-			delayedTaskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
-			
-			Date lastDelayedTaskCreationDate = null;
-			delayedTaskCond.setTskAssignee(userId);
-			delayedTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
-			delayedTaskCond.setExpectEndDateTo(new LocalDate());
-			
-			long totalDelayedTaskSize = getWorkListManager().getTaskWorkListSize(userId, delayedTaskCond);
-			
-			// TOTAL REQUESTER
-			SwoGroupCond groupCond = new SwoGroupCond();
-			groupCond.setGroupLeader(userId);
-			SwoGroup[] groups = getSwoManager().getGroups(userId, groupCond, IManager.LEVEL_ALL);
-			
-			long totalRequestSize = 0;
-			if (groups != null) {
-				Map<Long, Map<SwoGroupMember, SwoGroup>> joinRequestDateMap = new HashMap<Long, Map<SwoGroupMember, SwoGroup>>();
-				for (int i = 0; i < groups.length; i++) {
-					SwoGroup group = groups[i];
-					SwoGroupMember[] groupMember = group.getSwoGroupMembers();
-					if (groupMember == null || groupMember.length == 0)
-						continue;
-					for (int j = 0; j < groupMember.length; j++) {
-						SwoGroupMember member = groupMember[j];
-						String joinType = member.getJoinType();
-						String joinStatus = member.getJoinStatus();
-						if (joinType.equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST) && joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY)) {
-							totalRequestSize += 1;
-						}
-					}
-				}
-			}
-			notificationMessage.setLength((int)totalDelayedTaskSize + (int)totalRequestSize);
-
-		}
-		//---------------------------------------------------------------------------------------
-
-		if (noticeType == Notice.TYPE_MAILBOX || noticeType == Notice.TYPE_INVALID) {
-			mailBox = new Notice();
-			mailBox.setType(Notice.TYPE_MAILBOX);
-			mailBox.setLength(mailService.getUnreadEmails());
-		}
-		//---------------------------------------------------------------------------------------
-
-		if (noticeType == Notice.TYPE_SAVEDBOX || noticeType == Notice.TYPE_INVALID) {
-			savedBox = new Notice();
-			savedBox.setType(Notice.TYPE_SAVEDBOX);
-			savedBox.setLength(0);
-		}
-
-		//---------------------------------------------------------------------------------------
-
-		if (noticeType == SeraNotice.TYPE_FRIEND) {
-			friend = new Notice();
-			friend.setType(SeraNotice.TYPE_FRIEND);
-			SeraUserInfo[] seraUserInfos = SwServiceFactory.getInstance().getSeraService().getFriendRequestsByUserId(userId, null, FriendInformList.MAX_ALL_FRIEND_LIST);
-			int length = 0;
-			if(!CommonUtil.isEmpty(seraUserInfos))
-				length = seraUserInfos.length;
-			friend.setLength(length);
-		}
-
-		//---------------------------------------------------------------------------------------
-
-		Notice[] returnNotice = null;
-		switch (noticeType) {
-		case Notice.TYPE_MESSAGE:
-			returnNotice = new Notice[1];
-			returnNotice[0] = message;
-			break;
-		case Notice.TYPE_COMMENT:
-			returnNotice = new Notice[1];
-			returnNotice[0] = comment;
-			break;
-		case Notice.TYPE_ASSIGNED:
-			returnNotice = new Notice[1];
-			returnNotice[0] = assigned;
-			break;
-		case Notice.TYPE_NOTIFICATION:
-			returnNotice = new Notice[1];
-			returnNotice[0] = notificationMessage;
-			break;
-		case Notice.TYPE_MAILBOX:
-			returnNotice = new Notice[1];
-			returnNotice[0] = mailBox;
-			break;
-		case Notice.TYPE_SAVEDBOX:
-			returnNotice = new Notice[1];
-			returnNotice[0] = savedBox;
-			break;
-		case SeraNotice.TYPE_FRIEND:
-			returnNotice = new Notice[1];
-			returnNotice[0] = friend;
-			break;
-		case Notice.TYPE_INVALID:
-			returnNotice = new Notice[6];
-			returnNotice[0] = notificationMessage;
-			returnNotice[1] = message;
-			returnNotice[2] = comment;
-			returnNotice[3] = assigned;
-			returnNotice[4] = mailBox;
-			returnNotice[5] = savedBox;
-			break;
-		}
-		return returnNotice;
-	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -515,8 +307,17 @@ public class NoticeServiceImpl implements INoticeService {
 			pubNotiCond.setAssignee(user.getId());
 
 			PublishNotice notice = getPublishNoticeManager().getPublishNotice(user.getId(), pubNotiCond, null);
-			if (CommonUtil.isEmpty(notice))
-				return;
+			if (CommonUtil.isEmpty(notice)) {
+				SpaceNotice spaceNotice = getPublishNoticeManager().getSpaceNotice(user.getId(), noticeId, null);
+				if (CommonUtil.isEmpty(spaceNotice)) {
+					return;
+				} else {
+					getPublishNoticeManager().removeSpaceNotice(user.getId(), noticeId);
+					SmartUtil.increaseNoticeCountByNoticeType(spaceNotice.getAssignee(), Notice.TYPE_NOTIFICATION);
+					return;
+				}
+				
+			}
 			
 			int noticeType = notice.getType();
 			String objId = notice.getObjId();
@@ -924,6 +725,68 @@ public class NoticeServiceImpl implements INoticeService {
 
 				NoticeBox notificationNoticeBox = new NoticeBox();
 				
+				SpaceNoticeCond cond = new SpaceNoticeCond();
+				cond.setAssignee(user.getId());
+
+				long totalSpaceNoticeCount = getPublishNoticeManager().getSpaceNoticeSize(user.getId(), cond);
+				
+				int remainingLength = (totalSpaceNoticeCount - 10) > 0 ? (int)(totalSpaceNoticeCount - 10) : 0;
+				
+				if (!CommonUtil.isEmpty(lastNoticeId)) {
+					SpaceNotice lastSpaceNotice = getPublishNoticeManager().getSpaceNotice(user.getId(), lastNoticeId, IManager.LEVEL_ALL);
+					if (lastSpaceNotice != null) {
+						Date lastSpaceNoticeDate = lastSpaceNotice.getCreationDate();
+						cond.setCreationDateTo(lastSpaceNoticeDate);
+					}
+					int tempRemainingLength = (int)getPublishNoticeManager().getSpaceNoticeSize(user.getId(), cond);
+					if (tempRemainingLength > 10) {
+						remainingLength = tempRemainingLength - 10;
+					} else {
+						remainingLength = 0;
+					}
+				}
+				
+				cond.setOrders(new Order[]{new Order(SpaceNotice.A_CREATIONDATE, false)});
+				cond.setPageNo(0);
+				cond.setPageSize(10);
+				SpaceNotice[] spaceNotices = getPublishNoticeManager().getSpaceNotices(user.getId(), cond, IManager.LEVEL_ALL);
+				
+				if (spaceNotices == null || spaceNotices.length == 0) {
+					return notificationNoticeBox;
+				}
+				
+				Map spaceNoticeTaskIdMap = new HashMap();
+				String[] tskObjIdIns = new String[spaceNotices.length];
+				for (int i = 0; i < spaceNotices.length; i++) {
+					SpaceNotice spaceNotice = spaceNotices[i];
+					String taskId = spaceNotice.getTaskId();
+					tskObjIdIns[i] = taskId;
+					spaceNoticeTaskIdMap.put(taskId, spaceNotice.getObjId());
+				}
+
+				TaskWorkCond taskWorkCond = new TaskWorkCond();
+				taskWorkCond.setTskObjIdIns(tskObjIdIns);
+				taskWorkCond.setOrders(new Order[]{new Order("taskInfo.tskCreatedate", false)});
+				TaskWork[] taskWorks = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(user.getId(), taskWorkCond);
+				
+				if (taskWorks != null && taskWorks.length != 0) {
+					TaskInstanceInfo[] taskInfos = ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(user.getId(), taskWorks, 10);
+					NoticeMessage[] notificationNotice = new NoticeMessage[taskInfos.length];
+					for(int i=0; i<taskInfos.length; i++){
+						notificationNotice[i] = new NoticeMessage((String)spaceNoticeTaskIdMap.get(taskInfos[i].getId()), NoticeMessage.TYPE_INSTANCE_CREATED, taskInfos[i].getOwner(), taskInfos[i].getCreatedDate());
+						notificationNotice[i].setInstance(taskInfos[i]);
+					}
+					notificationNoticeBox.setDateOfLastNotice(new LocalDate(taskWorks[0].getTskCreateDate().getTime()));
+					notificationNoticeBox.setNoticeMessages(notificationNotice);
+					notificationNoticeBox.setNoticeType(Notice.TYPE_NOTIFICATION);
+					notificationNoticeBox.setRemainingLength(remainingLength);
+				}
+
+				return notificationNoticeBox;
+				
+				
+				
+				/*
 				//NoticeMessage noticeMessate = new NoticeMessage();
 				//TYPE_SYSTEM_NOTICE 	= 1;  //기능없음
 				//TYPE_EVENT_ALARM 		= 2;	//알람?
@@ -1059,7 +922,7 @@ public class NoticeServiceImpl implements INoticeService {
 				notificationNoticeBox.setNoticeMessages(resultNoticeMessage);
 				notificationNoticeBox.setNoticeType(Notice.TYPE_NOTIFICATION);
 				
-				return notificationNoticeBox;
+				return notificationNoticeBox;*/
 				
 			case Notice.TYPE_SAVEDBOX:
 				return SmartTest.getNoticeBoxForMe10(noticeType);

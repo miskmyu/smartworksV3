@@ -2533,6 +2533,7 @@ CREATE TABLE SWSpaceNotice (
 	workSpaceId varchar(50),
 	refType varchar(50),
 	refId varchar(100),
+	taskId varchar(100),
 	assignee varchar(50),
 	creator varchar (50),
 	createdTime datetime,

@@ -23,6 +23,7 @@
 		<property name="workSpaceId" type="string" length="50"/>
 		<property name="refType" type="string" length="50"/>
 		<property name="refId" type="string" length="100"/>
+		<property name="taskId" type="string" length="100"/>
 		<property name="assignee" type="string" length="50"/>
 		<property name="creationUser" column="creator" type="string" length="50"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>

@@ -261,6 +261,7 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 		String objId = null;
 		String refType = null;
 		String refId = null;
+		String taskId = null;
 		String assignee = null;
 		String workId = null;
 		String workSpaceType = null;
@@ -275,6 +276,7 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 			objId = cond.getObjId();
 			refType = cond.getRefType();
 			refId = cond.getRefId();
+			taskId = cond.getTaskId();
 			assignee = cond.getAssignee();
 			workId = cond.getWorkId();
 			workSpaceType = cond.getWorkSpaceType();
@@ -300,6 +302,8 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 				buf.append(" and obj.refType = :refType");
 			if (refId != null) 
 				buf.append(" and obj.refId = :refId");
+			if (taskId != null) 
+				buf.append(" and obj.taskId = :taskId");
 			if (assignee != null) 
 				buf.append(" and obj.assignee = :assignee");
 			if (creationUser != null)
@@ -327,6 +331,8 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 				query.setString("refType", refType);
 			if (refId != null)
 				query.setString("refId", refId);
+			if (taskId != null)
+				query.setString("taskId", taskId);
 			if (assignee != null)
 				query.setString("assignee", assignee);
 			if (creationUser != null)
