@@ -200,4 +200,10 @@ public class PopupController {
 		return SmartUtil.returnMnv(request, "jsp/popup/pop_change_mail_password.jsp", "");
 	}
 
+	@RequestMapping("/pop_event_alarm")
+	public ModelAndView popEventAlarm(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_event_alarm.jsp", "");
+	}
+
 }

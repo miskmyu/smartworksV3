@@ -4,6 +4,8 @@
 <!-- Author			: Maninsoft, Inc.											 -->
 <!-- Created Date	: 2011.9.													 -->
 
+<%@page import="net.smartworks.util.SmartTest"%>
+<%@page import="net.smartworks.model.notice.NoticeMessage"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
@@ -16,6 +18,7 @@
 
 	// 서버에 카테고리아이디(루트를 의미하는 "")를 가지고 하위의 모든 업무카테고리들을 가져온다... 
 	WorkInfo[] workCategories = smartWorks.getMyAllWorksByCategoryId("");
+	
 %>
 
 <ul>

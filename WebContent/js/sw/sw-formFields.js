@@ -322,6 +322,8 @@ function loadNewEventFields(startDate, endDate) {
 			var startDateTitle = newEventField.attr("startDateTitle");
 			var endDateTitle = newEventField.attr("endDateTitle");
 			var alarmPolicyTitle = newEventField.attr("alarmPolicyTitle");
+			var eventRepeatByTitle = newEventField.attr("eventRepeatByTitle");
+			var eventRepeatEndTitle = newEventField.attr("eventRepeatEndTitle");
 			var placeTitle = newEventField.attr("placeTitle");
 			var relatedUsersTitle = newEventField.attr("relatedUsersTitle");
 			var contentTitle = newEventField.attr("contentTitle");
@@ -368,13 +370,13 @@ function loadNewEventFields(startDate, endDate) {
 			
 			var staticItems = new Array();
 			staticItems.push(smartMessage.get("alarmPolicyNone"));
-//			staticItems.push(smartMessage.get("alarmPolicyOnTime"));
-//			staticItems.push(smartMessage.get("alarmPolicy5m"));
-//			staticItems.push(smartMessage.get("alarmPolicy10m"));
-//			staticItems.push(smartMessage.get("alarmPolicy15m"));
-//			staticItems.push(smartMessage.get("alarmPolicy30m"));
-//			staticItems.push(smartMessage.get("alarmPolicy1h"));
-//			staticItems.push(smartMessage.get("alarmPolicy1d"));
+			staticItems.push(smartMessage.get("alarmPolicyOnTime"));
+			staticItems.push(smartMessage.get("alarmPolicy5m"));
+			staticItems.push(smartMessage.get("alarmPolicy10m"));
+			staticItems.push(smartMessage.get("alarmPolicy15m"));
+			staticItems.push(smartMessage.get("alarmPolicy30m"));
+			staticItems.push(smartMessage.get("alarmPolicy1h"));
+			staticItems.push(smartMessage.get("alarmPolicy1d"));
 			SmartWorks.FormRuntime.ComboBoxBuilder.buildEx({
 				container: gridRow,
 				fieldId: "selEventAlarmPolicy",
@@ -385,6 +387,151 @@ function loadNewEventFields(startDate, endDate) {
 				required: false
 			});
 		  	
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			gridRow.hide();
+			var repeatItems = new Array();
+			repeatItems.push(smartMessage.get("eventRepeatNone"));
+			repeatItems.push(smartMessage.get("eventRepeatEveryDay"));
+			repeatItems.push(smartMessage.get("eventRepeatEveryWeek"));
+			repeatItems.push(smartMessage.get("eventRepeatBiWeek"));
+			repeatItems.push(smartMessage.get("eventRepeatEveryMonthD"));
+			repeatItems.push(smartMessage.get("eventRepeatEveryMonthC"));
+			repeatItems.push(smartMessage.get("eventRepeatBiMonthD"));
+			repeatItems.push(smartMessage.get("eventRepeatBiMonthC"));
+			SmartWorks.FormRuntime.ComboBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "selEventRepeatBy",
+				fieldName: eventRepeatByTitle,
+				columns: 3,
+				colSpan: 1,
+				staticItems : repeatItems,
+				required: false
+			});
+			var repeatBys = gridRow.find('td[fieldId="selEventRepeatBy"] option');
+			$(repeatBys[0]).attr('repeatBy', "none");
+			$(repeatBys[1]).attr('repeatBy', "everyDay");
+			$(repeatBys[2]).attr('repeatBy', "everyWeek");
+			$(repeatBys[3]).attr('repeatBy', "biWeek");
+			$(repeatBys[4]).attr('repeatBy', "everyMonthDate");
+			$(repeatBys[5]).attr('repeatBy', "everyMonthCustom");
+			$(repeatBys[6]).attr('repeatBy', "biMonthDate");
+			$(repeatBys[7]).attr('repeatBy', "biMonthCustom");
+			
+			var weekItems = new Array();
+			weekItems.push(smartMessage.get("eventRepeatFirst"));
+			weekItems.push(smartMessage.get("eventRepeatSecond"));
+			weekItems.push(smartMessage.get("eventRepeatThird"));
+			weekItems.push(smartMessage.get("eventRepeatFourth"));
+			weekItems.push(smartMessage.get("eventRepeatLast"));
+			weekItems.push(smartMessage.get("eventRepeatFirstWeek"));
+			weekItems.push(smartMessage.get("eventRepeatSecondWeek"));
+			weekItems.push(smartMessage.get("eventRepeatThirdWeek"));
+			weekItems.push(smartMessage.get("eventRepeatFourthWeek"));
+			weekItems.push(smartMessage.get("eventRepeatLastWeek"));
+			SmartWorks.FormRuntime.ComboBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "selEventRepeatWeek",
+				fieldName: "",
+				columns: 3,
+				colSpan: 1,
+				staticItems : weekItems,
+				required: false
+			});
+			gridRow.find('td[fieldId="selEventRepeatWeek"]').hide().find('.form_label').hide();
+			var repeatBys = gridRow.find('td[fieldId="selEventRepeatWeek"] option');
+			$(repeatBys[0]).attr('repeatWeek', "first");
+			$(repeatBys[1]).attr('repeatWeek', "second");
+			$(repeatBys[2]).attr('repeatWeek', "third");
+			$(repeatBys[3]).attr('repeatWeek', "fourth");
+			$(repeatBys[4]).attr('repeatWeek', "last");
+			$(repeatBys[5]).attr('repeatWeek', "firstWeek");
+			$(repeatBys[6]).attr('repeatWeek', "secondWeek");
+			$(repeatBys[7]).attr('repeatWeek', "thirdWeek");
+			$(repeatBys[8]).attr('repeatWeek', "fourthWeek");
+			$(repeatBys[9]).attr('repeatWeek', "lastWeek");
+			
+			var dayItems = new Array();
+			dayItems.push(smartMessage.get("eventRepeatMon"));
+			dayItems.push(smartMessage.get("eventRepeatTue"));
+			dayItems.push(smartMessage.get("eventRepeatWed"));
+			dayItems.push(smartMessage.get("eventRepeatThu"));
+			dayItems.push(smartMessage.get("eventRepeatFri"));
+			dayItems.push(smartMessage.get("eventRepeatSat"));
+			dayItems.push(smartMessage.get("eventRepeatSun"));
+			SmartWorks.FormRuntime.ComboBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "selEventRepeatDay",
+				fieldName: "",
+				columns: 3,
+				colSpan: 1,
+				staticItems : dayItems,
+				required: false
+			});
+			gridRow.find('td[fieldId="selEventRepeatDay"]').hide().find('.form_label').hide();
+			var repeatBys = gridRow.find('td[fieldId="selEventRepeatDay"] option');
+			$(repeatBys[0]).attr('repeatDay', "mon");
+			$(repeatBys[1]).attr('repeatDay', "tue");
+			$(repeatBys[2]).attr('repeatDay', "wed");
+			$(repeatBys[3]).attr('repeatDay', "thu");
+			$(repeatBys[4]).attr('repeatDay', "fri");
+			$(repeatBys[5]).attr('repeatDay', "sat");
+			$(repeatBys[6]).attr('repeatDay', "sun");
+
+			var dateItems = new Array();
+			for(var i=0; i<31; i++)
+				dateItems.push("" + (i+1));
+			SmartWorks.FormRuntime.ComboBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "selEventRepeatDate",
+				fieldName: "",
+				columns: 3,
+				colSpan: 1,
+				staticItems : dateItems,
+				required: false
+			});
+			gridRow.find('td[fieldId="selEventRepeatDate"]').hide().find('.form_label').hide();
+
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			gridRow.hide();
+			var repeatEndItems = new Array();
+			repeatEndItems.push(smartMessage.get("eventRepeatEndCount"));
+			repeatEndItems.push(smartMessage.get("eventRepeatEndDate"));
+			SmartWorks.FormRuntime.ComboBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "selEventRepeatEnd",
+				fieldName: eventRepeatEndTitle,
+				columns: 3,
+				colSpan: 1,
+				staticItems : repeatEndItems,
+				required: false
+			});
+			gridRow.find('td[fieldId="selEventRepeatEnd"]').hide();
+			var repeatEnds = gridRow.find('td[fieldId="selEventRepeatEnd"] option');
+			$(repeatEnds[0]).attr('repeatEnd', "repeatCount");
+			$(repeatEnds[1]).attr('repeatEnd', "endDate");
+			SmartWorks.FormRuntime.NumberInputBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtEventRepeatEndCount",
+				fieldName: "",
+				columns: 3,
+				colSpan: 1,
+				required: true
+			});
+			gridRow.find('td[fieldId="txtEventRepeatEndCount"]').hide().find('.form_label').hide();
+			var today = new Date();
+			eventEndDate = new Date(today.getTime() + 365*24*60*60*1000/2);
+			eventEndDateStr = eventEndDate.format('yyyy.mm.dd');
+			SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtEventRepeatEndDate",
+				fieldName: "",
+				value: eventEndDateStr,
+				columns: 3,
+				colSpan: 1,
+				required: true
+			});
+			gridRow.find('td[fieldId="txtEventRepeatEndDate"]').hide().find('.form_label').hide();
+
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			gridRow.hide();
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({

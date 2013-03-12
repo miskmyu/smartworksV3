@@ -157,7 +157,7 @@
 				}
 			}
 		}
-		if(noticeBox.getRemainingLength() > 0){
+		if(noticeBox.getRemainingLength() > 0 && !SmartUtil.isBlankObject(lastTaskId)){
 %>
 			<ul>
 				<li class="tc pt2">

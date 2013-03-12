@@ -921,11 +921,20 @@ $(function() {
 		smartPop.confirm(smartMessage.get('removeConfirmation'), function(){
 			var input = $(targetElement(e));
 			var iworkSpace = input.parents('.js_iwork_space_page');
+			var isRepeatEvent = iworkSpace.attr('isRepeatEvent');
+			var removeAllRepeatEvent = false;
+			if(isRepeatEvent === 'true'){
+				smartPop.confirm(smartMessage.get('removeAllRepeatConfirmation'), function(){
+					removeAllRepeatEvent = true;
+				});
+			}
 			var workId = iworkSpace.attr("workId");
 			var instId = iworkSpace.attr("instId");
 			var paramsJson = {};
 			paramsJson['workId'] = workId;
 			paramsJson['instanceId'] = instId;
+			if(removeAllRepeatEvent)
+				paramsJson['removeAllRepeatEvent'] = true;
 			console.log(JSON.stringify(paramsJson));
 			var url = "remove_iwork_instance.sw";
 			

@@ -53,7 +53,7 @@
 						<div class="info_ms_section">
 							<div class="info_img"><div class="icon_pop_info profile_size_s"></div></div>
 							<div class="info_list"><%=nMessage.getMessage()%><div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
-								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
+								<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
 									<div class="btn_x js_remove_notice" ></div></a></div>
 							</div>
 						</div>
@@ -70,7 +70,7 @@
 							<div class="info_list">
 								<b><%=event.getStart().toLocalString()%> </b><a href="<%=event.getController()%> %>?cid=<%=event.getContextId()%>&wid=<%=event.getWorkSpaceId()%>"><%=event.getSubject()%></a>
 								<div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
-									<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
+									<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
 										<div class="btn_x js_remove_notice" ></div></a></div>
 							</div>
 						</div>
@@ -91,7 +91,7 @@
 								<a href="<%=task.getController() %>?cid=<%=task.getContextId()%>&wid=<%=task.getWorkSpaceId()%>"><%=work.getSubject()%>▶<%=task.getName()%></a>
 								<fmt:message key="notice.message.task.delayed" />
 								<div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
-									<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
+									<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
 										<div class="btn_x js_remove_notice" ></div></a></div>
 							</div>
 						</div>
@@ -107,10 +107,10 @@
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>"><img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 							</div>
 							<div class="info_list">
-								<a href="<%=nMessage.getGroup().getSpaceController() %>?cid=<%=nMessage.getGroup().getSpaceContextId()%>"><%=nMessage.getGroup().getName()%></a>
+								<a href="<%=nMessage.getWorkSpace().getSpaceController() %>?cid=<%=nMessage.getWorkSpace().getSpaceContextId()%>"><%=nMessage.getWorkSpace().getName()%></a>
 								<fmt:message key="notice.message.join.request" />
 								<div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
-									<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
+									<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
 										<div class="btn_x js_remove_notice" ></div></a></div>
 							</div>
 						</div>
@@ -130,7 +130,7 @@
 								<a href="<%=instance.getController()%>?cid=<%=instance.getContextId()%>&wid=<%=instance.getWorkSpaceId()%>"><%=instance.getSubject()%></a>
 								<fmt:message key="notice.message.instance.created" />
 								<div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
-									<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
+									<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
 										<div class="btn_x js_remove_notice" ></div></a></div>
 							</div>
 						</div>
@@ -140,7 +140,7 @@
 				}
 			}
 		}
-		if(noticeBox.getRemainingLength() > 0){
+		if(noticeBox.getRemainingLength() > 0 && !SmartUtil.isBlankObject(lastTaskId)){
 %>
 			<ul>
 				<li class="tc pt2">

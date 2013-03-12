@@ -2,6 +2,7 @@ package net.smartworks.model.notice;
 
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.util.LocalDate;
@@ -20,7 +21,7 @@ public class NoticeMessage{
 	private LocalDate		issuedDate;
 	private InstanceInfo 	instance;
 	private EventInstanceInfo	event;
-	private GroupInfo			group;	
+	private WorkSpaceInfo	workSpace;	
 	private String			message;
 	
 	public String getId() {
@@ -59,11 +60,11 @@ public class NoticeMessage{
 	public void setEvent(EventInstanceInfo event) {
 		this.event = event;
 	}
-	public GroupInfo getGroup() {
-		return group;
+	public WorkSpaceInfo getWorkSpace() {
+		return workSpace;
 	}
-	public void setGroup(GroupInfo group) {
-		this.group = group;
+	public void setWorkSpace(WorkSpaceInfo workSpace) {
+		this.workSpace = workSpace;
 	}
 	public String getMessage() {
 		return message;

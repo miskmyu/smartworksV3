@@ -96,6 +96,57 @@ $(function() {
 		refreshRecord(input, paramsJson);
 	});
 	
+	$('form[name="frmNewEvent"] .form_value select[name="selEventRepeatBy"]').live('change', function(e) {
+		var input = $(targetElement(e));
+		var inputTr = input.parents('tr:first');
+		var repeatBy = input.attr('value');
+		var repeatWeek = inputTr.find('td[fieldId="selEventRepeatWeek"]');
+		var repeatDay = inputTr.find('td[fieldId="selEventRepeatDay"]');
+		var repeatDate = inputTr.find('td[fieldId="selEventRepeatDate"]');
+		var repeatEndTr = inputTr.next('tr');
+		if(repeatBy === smartMessage.get("eventRepeatNone")){
+			repeatWeek.hide();
+			repeatDay.hide();
+			repeatDate.hide();
+			repeatEndTr.children().hide();
+		}else if(repeatBy === smartMessage.get("eventRepeatEveryDay")){
+			repeatWeek.hide();
+			repeatDay.hide();
+			repeatDate.hide();			
+			repeatEndTr.children(':first').show().next().show().next().hide();
+		}else if(repeatBy === smartMessage.get("eventRepeatEveryWeek") || repeatBy === smartMessage.get("eventRepeatBiWeek")){
+			repeatWeek.hide();
+			repeatDay.hide();
+			repeatDate.hide();			
+			repeatEndTr.children(':first').show().next().show().next().hide();
+		}else if(repeatBy === smartMessage.get("eventRepeatEveryMonthD") || repeatBy === smartMessage.get("eventRepeatBiMonthD")){
+			repeatWeek.hide();
+			repeatDay.hide();
+			repeatDate.hide();			
+			repeatEndTr.children(':first').show().next().show().next().hide();
+		}else if(repeatBy === smartMessage.get("eventRepeatEveryMonthC") || repeatBy === smartMessage.get("eventRepeatBiMonthC")){
+			repeatWeek.show();
+			repeatDay.show();
+			repeatDate.hide();			
+			repeatEndTr.children(':first').show().next().show().next().hide();
+		}
+	});
+	
+	$('form[name="frmNewEvent"] .form_value select[name="selEventRepeatEnd"]').live('change', function(e) {
+		var input = $(targetElement(e));
+		var inputTr = input.parents('tr:first');
+		var repeatEnd = input.attr('value');
+		var repeatEndCount = inputTr.find('td[fieldId="txtEventRepeatEndCount"]');
+		var repeatEndDate = inputTr.find('td[fieldId="txtEventRepeatEndDate"]');
+		if(repeatEnd === smartMessage.get("eventRepeatEndDate")){
+			repeatEndCount.hide();
+			repeatEndDate.show();
+		}else if(repeatEnd === smartMessage.get("eventRepeatEndCount")){
+			repeatEndCount.show();
+			repeatEndDate.hide();
+		}
+	});
+	
 	$('form[name="frmSmartForm"] .form_value input.js_number_input').live('blur', function(e) {
 		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');

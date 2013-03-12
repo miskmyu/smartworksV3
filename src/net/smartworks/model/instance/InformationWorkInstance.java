@@ -16,6 +16,7 @@ public class InformationWorkInstance extends WorkInstance {
 	private int numberOfDownloadHistories = 0;
 	private boolean isApprovalWork;
 	private ApprovalLine approvalLine;
+	private boolean isRepeatEvent;
 	
 	public int getViews() {
 		return views;
@@ -59,7 +60,12 @@ public class InformationWorkInstance extends WorkInstance {
 	public void setApprovalLine(ApprovalLine approvalLine) {
 		this.approvalLine = approvalLine;
 	}
-
+	public boolean isRepeatEvent() {
+		return isRepeatEvent;
+	}
+	public void setRepeatEvent(boolean isRepeatEvent) {
+		this.isRepeatEvent = isRepeatEvent;
+	}
 	public InformationWorkInstance() {
 		super();
 		super.setType(WorkInstance.TYPE_INFORMATION);

@@ -195,7 +195,7 @@ function submitForms(tempSave) {
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-     <div class="section_portlet js_iwork_space_page" currentHref="<%=currentHref %>" lastHref="<%=lastHref%>" workId="<%=workId%>" instId="<%=instId%>" isTempSaved="<%=instance.isTempSaved() %>">
+     <div class="section_portlet js_iwork_space_page" currentHref="<%=currentHref %>" lastHref="<%=lastHref%>" workId="<%=workId%>" instId="<%=instId%>" isTempSaved="<%=instance.isTempSaved() %>" isRepeatEvent="<%=instance.isRepeatEvent()%>">
 
  		<div class="portlet_t">
       		<div class="portlet_tl"></div>

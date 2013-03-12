@@ -141,6 +141,56 @@ public class LocalDate extends Date{
 		return cal.get(Calendar.DAY_OF_WEEK);		
 	}
 	
+	public int getWeeksOfMonth(int minimalDaysInFirstWeek){
+	    Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date(this.getLocalDate()));
+		cal.setFirstDayOfWeek(this.firstDayOfWeek);
+		cal.setMinimalDaysInFirstWeek(minimalDaysInFirstWeek);
+
+	    int ndays = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	    int weeks[] = new int[ndays];
+	    for (int i = 0; i < ndays; i++)
+	    {
+	        weeks[i] = cal.get(Calendar.WEEK_OF_MONTH);
+	        cal.add(Calendar.DATE, 1);
+	    }
+	    return weeks[ndays-1];
+	}
+	
+	public int getWeeksOfMonth(){
+	    Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date(this.getLocalDate()));
+		cal.setFirstDayOfWeek(this.firstDayOfWeek);
+		cal.setMinimalDaysInFirstWeek(7);
+
+	    int ndays = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	    int weeks[] = new int[ndays];
+	    for (int i = 0; i < ndays; i++)
+	    {
+	        weeks[i] = cal.get(Calendar.WEEK_OF_MONTH);
+	        cal.add(Calendar.DATE, 1);
+	    }
+	    return weeks[ndays-1];
+	}
+	
+	public int getDaysOfMonth(int minimalDaysInFirstWeek){
+	    Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date(this.getLocalDate()));
+		cal.setFirstDayOfWeek(this.firstDayOfWeek);
+		cal.setMinimalDaysInFirstWeek(minimalDaysInFirstWeek);
+
+	    return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	}
+	
+	public int getDaysOfMonth(){
+	    Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date(this.getLocalDate()));
+		cal.setFirstDayOfWeek(this.firstDayOfWeek);
+		cal.setMinimalDaysInFirstWeek(7);
+
+	    return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	}
+	
 	public String toLocalString(){
 		if(isToday()){
 			return (new SimpleDateFormat("HH:mm")).format(getLocalTime());
@@ -395,6 +445,12 @@ public class LocalDate extends Date{
 		return new LocalDate((df.parse(yyyyMMddHHmmssSSS)).getTime() + TimeZone.getTimeZone(SmartUtil.getCurrentUser().getTimeZone()).getRawOffset());
 	}
 
+	public static LocalDate convertGMTStringToLocalDate2(String yyyyMMddHHmmssSSS) throws Exception{
+		if(SmartUtil.isBlankObject(yyyyMMddHHmmssSSS) || yyyyMMddHHmmssSSS.length() < 21) return null;
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		return new LocalDate((df.parse(yyyyMMddHHmmssSSS)).getTime());
+	}
+
 	public static LocalDate convertGMTSimpleStringToLocalDate(String yyyyMMdd) throws Exception{
 		if(SmartUtil.isBlankObject(yyyyMMdd) || yyyyMMdd.length()!=10) return null;
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -449,6 +505,74 @@ public class LocalDate extends Date{
 			}
 		}
 		return convertLocalMonthStringToLocalDate(String.format("%04d", toYear) + "." + String.format("%02d", toMonth+1));
+	}
+	
+	public static LocalDate convertLocalDateWithDiffMonth(LocalDate localDate, int diffMonth) throws Exception{
+		if(localDate==null) return null;
+		String ddhhmm = localDate.toLocalDateTimeSimpleString().substring(8, 16);
+		int toMonth = localDate.getMonth() + diffMonth;
+		int toYear = localDate.getYear();
+		while(toMonth < 0 || toMonth > 11){
+			if(toMonth < 0){
+				toYear--;
+				toMonth = toMonth+12;
+			}else{
+				toYear++;
+				toMonth = toMonth-12;
+			}
+		}
+		try{
+			LocalDate toLocalDate = convertLocalDateTimeStringToLocalDate(String.format("%04d", toYear) + "." + String.format("%02d", toMonth+1) + "." + ddhhmm);
+			return toLocalDate;
+		}catch (Exception e){
+		}
+		return null;
+	}
+
+	public static LocalDate convertLocalDateWithDiffMonth(LocalDate localDate, int diffMonth, int weekOfMonth, int dayOfWeek) throws Exception{
+		if(localDate==null) return null;
+		String hhmm = localDate.toLocalDateTimeSimpleString().substring(11, 16);
+		int toMonth = localDate.getMonth() + diffMonth;
+		int toYear = localDate.getYear();
+		while(toMonth < 0 || toMonth > 11){
+			if(toMonth < 0){
+				toYear--;
+				toMonth = toMonth+12;
+			}else{
+				toYear++;
+				toMonth = toMonth-12;
+			}
+		}
+		
+		LocalDate toLocalMonth = convertLocalMonthStringToLocalDate(String.format("%04d", toYear) + "." + String.format("%02d", toMonth+1));
+		
+		int toDate = 0;
+		boolean isLastWeek = false;
+		int dayDiff =  (dayOfWeek+1) - toLocalMonth.getDayOfWeek();
+		if(weekOfMonth<=10){
+			if(weekOfMonth==6){
+				weekOfMonth = toLocalMonth.getWeeksOfMonth(1);
+				isLastWeek = true;
+			}
+			if(dayOfWeek+1<toLocalMonth.firstDayOfWeek && toLocalMonth.firstDayOfWeek <= toLocalMonth.getDayOfWeek()){
+				dayDiff = dayDiff+7;
+			}
+			toDate = (weekOfMonth - toLocalMonth.getWeekOfMonth(1))*7 + dayDiff;
+		}else{
+			weekOfMonth = weekOfMonth-10;
+			if(weekOfMonth==6){
+				weekOfMonth = toLocalMonth.getWeeksOfMonth(1);
+				isLastWeek = true;
+			}
+			toDate = (weekOfMonth - toLocalMonth.getWeekOfMonth(1))*7 + (dayDiff<0 ? 7+dayDiff : dayDiff);
+			if(isLastWeek && toDate+1>toLocalMonth.getDaysOfMonth()) toDate = toDate-7;
+		}
+		try{
+			LocalDate toLocalDate = convertLocalDateTimeStringToLocalDate(String.format("%04d", toYear) + "." + String.format("%02d", toMonth+1) + "." +  String.format("%02d", toDate+1) + " " + hhmm);
+			return toLocalDate;
+		}catch (Exception e){
+		}
+		return null;
 	}
 
 	public static long convertStringToTime(String yyyyMMddHHmm) throws Exception{

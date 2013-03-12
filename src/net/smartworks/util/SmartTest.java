@@ -645,7 +645,7 @@ public class SmartTest {
 
 		if (noticeType == NoticeMessage.TYPE_JOIN_REQUEST) {
 			notice4 = new NoticeMessage("notice4", NoticeMessage.TYPE_JOIN_REQUEST, getUserInfo1(), new LocalDate(LocalDate.convertStringToTime("201110251600")));
-			notice4.setGroup(getGroupInfo1());
+			notice4.setWorkSpace(getGroupInfo1());
 			notice4.setMessage("님이 커뮤너티에 가입을 신청하셨습니다.");
 			return notice4;
 		}
@@ -735,7 +735,7 @@ public class SmartTest {
 		notice3 = new NoticeMessage("notice3", NoticeMessage.TYPE_TASK_DELAYED, getUserInfo3(), SmartTest.getTaskInstancePA().getLastModifiedDate());
 		notice3.setInstance(SmartTest.getTaskInstanceInfoPA());
 		notice4 = new NoticeMessage("notice4", NoticeMessage.TYPE_JOIN_REQUEST, getUserInfo1(), new LocalDate());
-		notice4.setGroup(SmartTest.getGroupInfo1());
+		notice4.setWorkSpace(SmartTest.getGroupInfo1());
 		notice4.setMessage("님이 커뮤너티에 가입을 신청하셨습니다.");
 		notice5 = new NoticeMessage("notice5", NoticeMessage.TYPE_INSTANCE_CREATED, SmartTest.getUserInfo1(), SmartTest.getWorkInstance1().getLastModifiedDate());
 		notice5.setInstance(SmartTest.getWorkInstanceInfo1());

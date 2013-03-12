@@ -36,7 +36,8 @@ var msgType = {
 	CHAT_MESSAGE : "CHATTING",		// 채팅 메시지..
 	WRITING_CHAT_MESSAGE : "WRITING",// 채팅 메시지를 쓰고 있다는 메시지...
 	CHATTERS_INVITED : "CHTSINVITED",// 채팅 참여자들을 초청했다는 메시지..
-	AVAILABLE_CHATTERS : "ACHATTERS"// 채팅 가능한 사용자들을 알려주는 메시지 
+	AVAILABLE_CHATTERS : "ACHATTERS",// 채팅 가능한 사용자들을 알려주는 메시지 
+	EVENT_ALARM : "EVENTALARM"// 일정 미리알림 메시지 
 };
 
 var smartMsgClient = null;
@@ -44,13 +45,6 @@ var smartMsgClient = null;
 var chatHistory = {
 
 	chatInfos : new Array(),
-	
-	chatInfoById : function(chatId){
-		for(var i=0; i<chatListStatus.length; i++)
-			if(chatHistory.chatInfos.chatId === chatId)
-				return chatHistory.chatInfos[i];
-		return null;
-	},
 	
 	restore : function(){
 		var chatInfos = $.jStorage.get(currentUserId);
@@ -288,7 +282,7 @@ var smartTalk = {
 			for(var i=0; i<chatInfos.length; i++){
 				smartTalk.restoreChatting(chatInfos[i], $.jStorage.get(currentUserId + chatInfos[i].chatId));
 			}
-		}
+		}		
 	},
 
 	init : function() {
@@ -356,6 +350,8 @@ var smartTalk = {
 			} else if (message.msgType === msgType.JOIN_CHAT){
 				smartTalk.startSubOnChatId(message);
 				startChattingWindow(message);
+			} else if (message.msgType === msgType.EVENT_ALARM){
+				smartPop.eventAlarm(message.body);
 			}
 		});
 	},
@@ -681,8 +677,8 @@ var smartTalk = {
 		
 		updateChattingBoxTitle(chatId, users);		
 	}
-};
 
+};
 //모든 화면이 브라우저에 로드되면, smartTalk를 초기화하여 채팅, 알림, 전체알림기능들을 사용할 수 있게 한다.
 $(document).ready(function(){
 	$.ajax({

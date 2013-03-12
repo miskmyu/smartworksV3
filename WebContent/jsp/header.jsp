@@ -66,7 +66,6 @@ function logout() {
 	String companyLogo = (SmartUtil.isBlankObject(companyGeneral) || SmartUtil.isBlankObject(companyGeneral.getCompanyLogo())) ? "images/logo_compay.gif" : companyGeneral.getCompanyLogo();
 
 	String mailInboxId = smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_INBOX);
-	
 %>
 
 <!-- 회사 로고 및 연결 링크 -->
