@@ -6,8 +6,8 @@ import net.smartworks.server.engine.publishnotice.model.AlarmNotice;
 import net.smartworks.server.engine.publishnotice.model.AlarmNoticeCond;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
-import net.smartworks.server.engine.publishnotice.model.SpaceNotice;
-import net.smartworks.server.engine.publishnotice.model.SpaceNoticeCond;
+import net.smartworks.server.engine.publishnotice.model.MessageNotice;
+import net.smartworks.server.engine.publishnotice.model.MessageNoticeCond;
 
 public interface IPublishNoticeManager extends IManager {
 	
@@ -19,13 +19,13 @@ public interface IPublishNoticeManager extends IManager {
 	public long getPublishNoticeSize(String userId, PublishNoticeCond cond) throws PublishNoticeException;
 	public PublishNotice[] getPublishNotices(String userId, PublishNoticeCond cond, String level) throws PublishNoticeException;
 	
-	public SpaceNotice getSpaceNotice(String userId, String id, String level) throws PublishNoticeException;
-	public SpaceNotice getSpaceNotice(String userId, SpaceNoticeCond cond, String level) throws PublishNoticeException;
-	public void setSpaceNotice(String userId, SpaceNotice obj, String level) throws PublishNoticeException;
-	public void removeSpaceNotice(String userId, String id) throws PublishNoticeException;
-	public void removeSpaceNotice(String userId, SpaceNoticeCond cond) throws PublishNoticeException;
-	public long getSpaceNoticeSize(String userId, SpaceNoticeCond cond) throws PublishNoticeException;
-	public SpaceNotice[] getSpaceNotices(String userId, SpaceNoticeCond cond, String level) throws PublishNoticeException;
+	public MessageNotice getMessageNotice(String userId, String id, String level) throws PublishNoticeException;
+	public MessageNotice getMessageNotice(String userId, MessageNoticeCond cond, String level) throws PublishNoticeException;
+	public void setMessageNotice(String userId, MessageNotice obj, String level) throws PublishNoticeException;
+	public void removeMessageNotice(String userId, String id) throws PublishNoticeException;
+	public void removeMessageNotice(String userId, MessageNoticeCond cond) throws PublishNoticeException;
+	public long getMessageNoticeSize(String userId, MessageNoticeCond cond) throws PublishNoticeException;
+	public MessageNotice[] getMessageNotices(String userId, MessageNoticeCond cond, String level) throws PublishNoticeException;
 
 	public AlarmNotice getAlarmNotice(String userId, String id, String level) throws PublishNoticeException;
 	public AlarmNotice getAlarmNotice(String userId, AlarmNoticeCond cond, String level) throws PublishNoticeException;

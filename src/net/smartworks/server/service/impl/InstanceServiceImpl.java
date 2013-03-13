@@ -61,6 +61,7 @@ import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
 import net.smartworks.model.notice.Notice;
+import net.smartworks.model.notice.NoticeMessage;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.FormField;
@@ -175,8 +176,8 @@ import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
 import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
-import net.smartworks.server.engine.publishnotice.model.SpaceNotice;
-import net.smartworks.server.engine.publishnotice.model.SpaceNoticeCond;
+import net.smartworks.server.engine.publishnotice.model.MessageNotice;
+import net.smartworks.server.engine.publishnotice.model.MessageNoticeCond;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
@@ -1904,6 +1905,41 @@ public class InstanceServiceImpl implements IInstanceService {
 			// Exception Handling Required			
 		}
 	}
+	private String saveTempWorkInstance(String userId, Map<String, Object> requestBody, HttpServletRequest request, boolean isIwork) throws Exception {
+		if (requestBody == null)
+			return null;
+		
+		String workId = (String)requestBody.get("workId");
+		String formId = (String)requestBody.get("formId");
+		String formName = (String)requestBody.get("formName");
+		String title = "";
+		
+		if (isIwork) {
+			SwdDomainCond domainCond = new SwdDomainCond();
+			domainCond.setFormId(formId);
+			SwdDomain domain = getSwdManager().getDomain(userId, domainCond, null);
+			SwdRecord record = getSwdRecordByRequestBody(userId, domain.getFields(), requestBody, request);
+			String titleFieldId = domain.getTitleFieldId();
+			if (!CommonUtil.isEmpty(titleFieldId))
+				title = record.getDataFieldValue(titleFieldId);
+		} else {
+			//프로세스 업무의 타이틀을 가져온
+			
+		}
+		
+		TskTask tempSaveTask = new TskTask();
+		tempSaveTask.setName(formName);
+		tempSaveTask.setDocument(requestBody.toString());
+		tempSaveTask.setAssignee(userId);
+		tempSaveTask.setAssigner(userId);
+		tempSaveTask.setDef(workId + "|" + formId);
+		tempSaveTask.setForm(formId);
+		tempSaveTask.setTitle(title);
+		
+		tempSaveTask = SwManagerFactory.getInstance().getTskManager().setTempTask(userId, tempSaveTask);
+		
+		return tempSaveTask.getObjId();
+	}
 	@Override
 	public String setInformationWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
@@ -1918,6 +1954,18 @@ public class InstanceServiceImpl implements IInstanceService {
 			key Set : frmApprovalLine
 			key Set : frmTaskApproval
 			*/
+			User cuser = SmartUtil.getCurrentUser();
+			String userId = null;
+			String companyId = null;
+			if (cuser != null) {
+				userId = cuser.getId();
+				companyId = cuser.getCompanyId();
+			}
+			//임시저장이라면 임시저장타입의 태스크를 생성한후 taskDoc 에 reqeustBody.toString() 자체를 저장하고 이후 조회시 파싱하여 보낸다
+			boolean isTempSave = CommonUtil.toBoolean((Boolean)requestBody.get("isTempSave"));
+			if (isTempSave) {
+				return this.saveTempWorkInstance(userId, requestBody, request, true);
+			}
 			Map<String, Object> frmSmartFormMap = (Map<String, Object>)requestBody.get("frmSmartForm");
 			Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
 			Map<String, Object> frmTaskForwardMap = (Map<String, Object>)requestBody.get("frmTaskForward");
@@ -1926,19 +1974,14 @@ public class InstanceServiceImpl implements IInstanceService {
 			String formId = (String)requestBody.get("formId");
 			String formName = (String)requestBody.get("formName");
 			String instanceId = (String)requestBody.get("instanceId");
+			
+			
 			boolean isCreateRecord = false;
 			if(CommonUtil.isEmpty(instanceId)) {
 				instanceId = "dr_" + CommonUtil.newId();
 				isCreateRecord = true;
 			}
 			int formVersion = 1;
-			User cuser = SmartUtil.getCurrentUser();
-			String userId = null;
-			String companyId = null;
-			if (cuser != null) {
-				userId = cuser.getId();
-				companyId = cuser.getCompanyId();
-			}
 
 			String servletPath = request.getServletPath();
 			RepeatEvent repeatEvent = null;
@@ -2283,22 +2326,6 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 			}
-			/*if(groupId != null) {
-				List<IFileModel> iFileModelList = getDocManager().findFileGroup(groupId);
-				if(iFileModelList.size() > 0) {
-					for(int i=0; i<iFileModelList.size(); i++) {
-						IFileModel fileModel = iFileModelList.get(i);
-						String fileId = fileModel.getId();
-						String filePath = fileModel.getFilePath();
-						if(fileModel.isDeleteAction()) {
-							getDocManager().deleteFile(fileId);
-							File f = new File(filePath);
-							if(f.exists())
-								f.delete();
-						}
-					}
-				}
-			}*/
 			if (isCreateRecord)
 				populateSpaceNotice(obj, taskInstId);
 						
@@ -2393,13 +2420,13 @@ public class InstanceServiceImpl implements IInstanceService {
 			return null;			
 		}
 	}
-	private void removeSpaceNotice(String workId, String referenceId) throws Exception {
+	private void removeMessageNotice(String workId, String referenceId) throws Exception {
 		if (CommonUtil.isEmpty(referenceId))
 			return;
-		SpaceNoticeCond cond = new SpaceNoticeCond();
+		MessageNoticeCond cond = new MessageNoticeCond();
 		cond.setRefId(referenceId);
 		cond.setWorkId(workId);
-		SwManagerFactory.getInstance().getPublishNoticeManager().removeSpaceNotice("", cond);
+		SwManagerFactory.getInstance().getPublishNoticeManager().removeMessageNotice("", cond);
 	}
 	
 	private void populateSpaceNotice(SwdRecord record, String taskInstanceId) throws Exception {
@@ -2424,7 +2451,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		String accessLevel = record.getAccessLevel();
 		String accessValue = record.getAccessValue();
 		
-		populateSpaceNotice(workId, workSpaceType, workSpaceId, refType, recordId, taskInstanceId, accessLevel, accessValue);
+		populateMessageNotice(workId, workSpaceType, workSpaceId, refType, recordId, taskInstanceId, accessLevel, accessValue);
 		
 	}
 	private void populateSpaceNotice(TskTask task) throws Exception {
@@ -2450,10 +2477,10 @@ public class InstanceServiceImpl implements IInstanceService {
 		String accessLevel = task.getAccessLevel();
 		String accessValue = task.getAccessValue();
 		
-		populateSpaceNotice(workId, workSpaceType, workSpaceId, refType, taskId, taskId, accessLevel, accessValue);
+		populateMessageNotice(workId, workSpaceType, workSpaceId, refType, taskId, taskId, accessLevel, accessValue);
 			
 	}
-	private void populateSpaceNotice(String workId, String workSpaceType, String workSpaceId, String refType, String refId, String taskId, String accessLevel, String accessValue) throws Exception {
+	private void populateMessageNotice(String workId, String workSpaceType, String workSpaceId, String refType, String refId, String taskId, String accessLevel, String accessValue) throws Exception {
 		
 		User user = SmartUtil.getCurrentUser();
 		String userId = user.getId();
@@ -2505,7 +2532,8 @@ public class InstanceServiceImpl implements IInstanceService {
 		if (targetUserId.size() == 0)
 			 return;
 		for (int i = 0; i < targetUserId.size(); i++) {
-			SpaceNotice sn = new SpaceNotice();
+			MessageNotice sn = new MessageNotice();
+			sn.setType(NoticeMessage.TYPE_INSTANCE_CREATED +"");
 			sn.setWorkId(workId);
 			sn.setWorkSpaceType(workSpaceType);
 			sn.setWorkSpaceId(workSpaceId);
@@ -2513,7 +2541,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			sn.setRefType(refType);
 			sn.setRefId(refId);
 			sn.setTaskId(taskId);
-			SwManagerFactory.getInstance().getPublishNoticeManager().setSpaceNotice(userId, sn, IManager.LEVEL_ALL);
+			SwManagerFactory.getInstance().getPublishNoticeManager().setMessageNotice(userId, sn, IManager.LEVEL_ALL);
 			SmartUtil.increaseNoticeCountByNoticeType((String)targetUserId.get(i), Notice.TYPE_NOTIFICATION);
 		}
 	}
@@ -2674,7 +2702,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						SwManagerFactory.getInstance().getAutoIndexManager().removeAutoIndexInst(user.getId(), autoIndex[j].getObjId());
 					}
 				}
-				//removeSpaceNotice(workId, instanceId);
+				removeMessageNotice(workId, instanceId);
 			}			
 		}catch (Exception e){
 			// Exception Handling Required
@@ -3643,6 +3671,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			String userId = null;
 			if (cuser != null)
 				userId = cuser.getId();
+			
+			boolean isTempSave = CommonUtil.toBoolean((Boolean)requestBody.get("isTempSave"));
+			if (isTempSave) {
+				return this.saveTempWorkInstance(userId, requestBody, request, false);
+			}
 			
 			//패키지 정보로 프로세스 정보를 얻는다.
 			String packageId = (String)requestBody.get("workId");

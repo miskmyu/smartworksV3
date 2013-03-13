@@ -19,6 +19,7 @@ public interface ITskManager extends IManager {
 	public TskTask executeTask(String user, TskTask obj, String action) throws TskException;
 	public long getTskTaskExtendsSize(String userId, TskTaskCond cond) throws TskException;
 	public TskTaskExtend[] getTaskExtend(String userId, TskTaskCond cond) throws Exception;
+	public TskTask setTempTask(String userId, TskTask obj) throws Exception;	
 	
 	public long getFirstForwardTasksOnGroupByForwardIdSize(String userId, TskTaskCond cond) throws Exception;
 	public TskTask[] getFirstForwardTasksOnGroupByForwardId(String userId, TskTaskCond cond, String level) throws Exception;
