@@ -14,6 +14,7 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.instance.InformationWorkInstance;
 import net.smartworks.model.instance.info.EventInstanceInfo;
+import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeMessage;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartForm;
@@ -27,6 +28,7 @@ import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.publishnotice.model.AlarmNotice;
 import net.smartworks.server.engine.publishnotice.model.AlarmNoticeCond;
+import net.smartworks.server.engine.publishnotice.model.MessageNotice;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
@@ -90,6 +92,7 @@ public class EventNoticeJob  extends QuartzJobBean   {
 									endTime = new LocalDate(LocalDate.convertGMTStringToLocalDate(endTimeStr).getTime(), targetUser.getTimeZone(), targetUser.getLocale());
 								}catch (Exception e){}
 							}
+							String noticeId = CommonUtil.newId();
 							eventInstance.setStart(startTime);
 							eventInstance.setEnd(endTime);
 							eventInstance.setOwner(user);
@@ -97,7 +100,21 @@ public class EventNoticeJob  extends QuartzJobBean   {
 							WorkSpaceInfo workSpace = ModelConverter.getWorkSpaceInfo(CommonUtil.toDefault(record.getWorkSpaceType(), String.valueOf(ISmartWorks.SPACE_TYPE_USER)), CommonUtil.toDefault(record.getWorkSpaceId(), alarmNotice.getTargetUser()));
 							eventInstance.setWorkSpaceInfo(workSpace);
 							noticeMessage.setEvent(eventInstance);
+							noticeMessage.setId(noticeId);
 							SmartUtil.pushEventAlarm(alarmNotice.getTargetUser(), alarmNotice.getCompanyId(),noticeMessage);
+
+							MessageNotice messageNotice = new MessageNotice();
+							messageNotice.setObjId(noticeId);
+							messageNotice.setType("" + NoticeMessage.TYPE_EVENT_ALARM);
+							messageNotice.setAssignee(alarmNotice.getTargetUser());
+							messageNotice.setCompanyId(alarmNotice.getCompanyId());
+							messageNotice.setRefId(alarmNotice.getRecordId());
+							messageNotice.setRefType("RECORD");
+							messageNotice.setWorkId(alarmNotice.getWorkId());
+							messageNotice.setWorkSpaceId(record.getWorkSpaceId());
+							messageNotice.setWorkSpaceType(record.getWorkSpaceType());
+							SwManagerFactory.getInstance().getPublishNoticeManager().setMessageNotice(alarmNotice.getTargetUser(), messageNotice, IManager.LEVEL_ALL);
+							SmartUtil.increaseNoticeCountByNoticeType(record.getWorkSpaceId(), Notice.TYPE_NOTIFICATION);
 							
 						}
 											
