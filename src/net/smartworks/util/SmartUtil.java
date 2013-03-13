@@ -36,6 +36,7 @@ import net.smartworks.server.engine.common.loginuser.model.LoginUserCond;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
 import net.smartworks.server.engine.security.model.Login;
@@ -734,6 +735,7 @@ public class SmartUtil {
 		String objId = notice.getObjId();
 		int noticeType = notice.getType();
 		
+		SwoUser targetUser = SwManagerFactory.getInstance().getSwoManager().getUser("", assignee, IManager.LEVEL_ALL);
 		SwManagerFactory.getInstance().getPublishNoticeManager().removePublishNotice(user.getId(), objId);
 		SmartUtil.increaseNoticeCountByNoticeType(assignee, noticeType);
 	}
@@ -749,7 +751,10 @@ public class SmartUtil {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("type", message.getType());
 		data.put("count", message.getLength());
-		publishMessage( getMessageChannel(SmartUtil.getSubjectString(userId)), MSG_TYPE_NOTICE_COUNT, data);
+		try{
+			SwoUser targetUser = SwManagerFactory.getInstance().getSwoManager().getUser("", userId, IManager.LEVEL_ALL);
+			publishMessage( getMessageChannel(targetUser.getCompanyId(), SmartUtil.getSubjectString(userId)), MSG_TYPE_NOTICE_COUNT, data);
+		}catch (Exception e){}
 	}
 	
 	public static void publishNoticeCount(String userId, String companyId, Notice message){
@@ -771,6 +776,7 @@ public class SmartUtil {
 		Map<String, Object> ownerInfo = new HashMap<String, Object>();
 		ownerInfo.put("midPicture", event.getOwner().getMidPicture());
 		ownerInfo.put("longName", event.getOwner().getLongName());
+		ownerInfo.put("id", event.getOwner().getId());
 		
 		Map<String, Object> eventInfo = new HashMap<String, Object>();
 		eventInfo.put("owner", ownerInfo);
@@ -780,6 +786,8 @@ public class SmartUtil {
 		eventInfo.put("controller", WorkInstanceInfo.getController(SmartWork.ID_EVENT_MANAGEMENT, SmartWork.TYPE_INFORMATION));
 		eventInfo.put("contextId", WorkInstanceInfo.getContextId(SmartWork.ID_EVENT_MANAGEMENT, SmartWork.TYPE_INFORMATION, event.getId()));
 		eventInfo.put("workSpaceId", event.getWorkSpaceId());
+		eventInfo.put("workSpaceName", event.getWorkSpaceName());
+		eventInfo.put("workId", event.getWorkId());
 		data.put("event", eventInfo);
 		
 		publishMessage( getMessageChannel(companyId, SmartUtil.getSubjectString(userId)), MSG_TYPE_EVENT_ALARM, data);

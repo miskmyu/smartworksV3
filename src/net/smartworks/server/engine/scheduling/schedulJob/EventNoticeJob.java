@@ -12,7 +12,6 @@ import java.util.Date;
 
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
-import net.smartworks.model.instance.InformationWorkInstance;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeMessage;
@@ -20,12 +19,15 @@ import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartForm;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filter;
+import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
 import net.smartworks.server.engine.infowork.domain.model.SwdDomainCond;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.server.engine.organization.model.SwoUser;
+import net.smartworks.server.engine.process.task.model.TskTask;
+import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.publishnotice.model.AlarmNotice;
 import net.smartworks.server.engine.publishnotice.model.AlarmNoticeCond;
 import net.smartworks.server.engine.publishnotice.model.MessageNotice;
@@ -55,6 +57,7 @@ public class EventNoticeJob  extends QuartzJobBean   {
 			filter.setOperator("<=");
 			filter.setRightOperandType(Filter.OPERANDTYPE_STRING);
 			filter.setRightOperandValue(currentTime.toGMTDateString());
+			cond.setFilter(new Filter[]{filter});
 			long alarmNoticeSize = SwManagerFactory.getInstance().getPublishNoticeManager().getAlarmNoticeSize("", cond);
 			if(alarmNoticeSize>0){
 				AlarmNotice[] alarmNotices = SwManagerFactory.getInstance().getPublishNoticeManager().getAlarmNotices("", cond, IManager.LEVEL_LITE);
@@ -113,8 +116,9 @@ public class EventNoticeJob  extends QuartzJobBean   {
 							messageNotice.setWorkId(alarmNotice.getWorkId());
 							messageNotice.setWorkSpaceId(record.getWorkSpaceId());
 							messageNotice.setWorkSpaceType(record.getWorkSpaceType());
+							
 							SwManagerFactory.getInstance().getPublishNoticeManager().setMessageNotice(alarmNotice.getTargetUser(), messageNotice, IManager.LEVEL_ALL);
-							SmartUtil.increaseNoticeCountByNoticeType(record.getWorkSpaceId(), Notice.TYPE_NOTIFICATION);
+							SmartUtil.increaseNoticeCountByNoticeType(alarmNotice.getTargetUser(), Notice.TYPE_NOTIFICATION);
 							
 						}
 											

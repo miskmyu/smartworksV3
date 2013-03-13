@@ -69,14 +69,14 @@
 								<span class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"></span>
 								<span><%=workName%></span>
 							</a>
+							<span class="t_date vb pl10 fr"><%=commentInstance.getLastModifiedDate().toLocalString() %></span>
 							<div class="reply">
 								<div class="info_img">
 									<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=workId %>" title="<%=owner.getLongName()%>">
 										<img src="<%=owner.getMinPicture()%>" class="profile_size_s"> </a>
 								</div>
 								<div class="info_list">
-									<div><%=commentInstance.getComment()%></div>
-									<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
+									<div><%=commentInstance.getComment()%>
 										<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
 											<div class="btn_x js_remove_notice" ></div></a>
 									</div>
@@ -97,18 +97,29 @@
 				%>
 					<li>
 					<div class="info_ms_section">
-						<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=workId %>">
 							<span class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"></span>
+							<%
+							if(workInstance.getWorkId().equals(SmartWork.ID_BOARD_MANAGEMENT)){
+							}else if(workInstance.getWorkId().equals(SmartWork.ID_EVENT_MANAGEMENT)){
+							}else if(workInstance.getWorkId().equals(SmartWork.ID_FILE_MANAGEMENT)){
+							}else if(workInstance.getWorkId().equals(SmartWork.ID_MEMO_MANAGEMENT)){
+							}else{									
+							%>
+								<span><%=workInstance.getWorkName() %></span>
+							<%
+							}
+							%>
+						<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=workId %>">
 							<span class="tb"><%=workInstance.getSubject()%></span> 
 						</a>
+						<span class="t_date vb pl10 fr"><%=commentInstance.getLastModifiedDate().toLocalString() %></span>
 						<div class="reply">
 							<div class="info_img">
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=workId %>"title="<%=owner.getLongName()%>">
 									<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 							</div>
 							<div class="info_list">
-								<div><%=commentInstance.getComment()%></div>
-								<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
+								<div><%=commentInstance.getComment()%>
 									<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
 										<div class="btn_x js_remove_notice" ></div></a>
 								</div>
@@ -137,14 +148,14 @@
 							<span class="profile_size_m"><%=workSpaceMinPicture%></span>
 							<span><%=workSpaceName%></span>
 						</a>	
+						<span class="t_date vb pl10 fr"><%=commentInstance.getLastModifiedDate().toLocalString() %></span>
 						<div class="reply">				
 							<div class="info_img">
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=workId %>" title="<%=owner.getLongName()%>">
 									<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 							</div>
 							<div class="info_list">
-								<div><%=commentInstance.getComment()%></div>
-								<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
+								<div><%=commentInstance.getComment()%>
 									<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
 										<div class="btn_x js_remove_notice" ></div></a>
 								</div>

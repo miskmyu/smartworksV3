@@ -68,9 +68,23 @@
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>">
 								<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"></a>
 						</div>
+						<span class="t_date vb pl10 fr"><%=taskInstance.getLastModifiedDate().toLocalString() %></span>
 						<div class="info_list">
-							<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>"><%=workInstance.getSubject()%>▶<%=taskInstance.getName()%></a>
-							<div class="t_date"><%=taskInstance.getLastModifiedDate().toLocalString()%></div>
+							<span class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"></span>
+							<%
+							if(workInstance.getWorkId().equals(SmartWork.ID_BOARD_MANAGEMENT)){
+							}else if(workInstance.getWorkId().equals(SmartWork.ID_EVENT_MANAGEMENT)){
+							}else if(workInstance.getWorkId().equals(SmartWork.ID_FILE_MANAGEMENT)){
+							}else if(workInstance.getWorkId().equals(SmartWork.ID_MEMO_MANAGEMENT)){
+							}else{									
+							%>
+								<span><%=workInstance.getWorkName() %></span>
+							<%
+							}
+							%>
+						
+							<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>"><%=workInstance.getSubject()%></a>
+							<div><a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>"><%=taskInstance.getName()%></a> 업무를 할당하였습니다.</div>
 						</div>
 						</div>
 					</li>

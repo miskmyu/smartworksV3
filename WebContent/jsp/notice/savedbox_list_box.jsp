@@ -96,9 +96,9 @@
 					<div class="info_img">
 						<div class="<%=Work.getIconClass(workId, workType, isWorkRunning)%>"><%=workName%></div>
 					</div>
+					<span class="t_date vb pl10 fr"><%=instance.getLastModifiedDate().toLocalString() %></span>
 					<div class="info_list ml15">
 						<a href="<%=targetContent %>" ><%=instance.getSubject()%></a>		
-						<div class="t_date"><%=instance.getCreatedDate().toLocalString()%></div>
 					</div>
 					</div>
 				</li>

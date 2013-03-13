@@ -68,11 +68,9 @@ public class NoticeController {
 	public ModelAndView remove_notice_instance(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		String removeNoticeId = request.getParameter("removeNoticeId");
-		String noticeType = request.getParameter("noticeType");
-		String lastNoticeId = request.getParameter("lastNoticeId");
 		
 		smartworks.removeNoticeInstance(removeNoticeId);
 		
-		return SmartUtil.returnMnv(request, "jsp/notice/notice_message_box.jsp?noticeType="+noticeType+"&lastNoticeId="+lastNoticeId, "");
+		return null;
 	}
 }

@@ -19,11 +19,13 @@ import java.util.TreeMap;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.instance.CommentInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.SortingField;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
+import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
@@ -36,11 +38,17 @@ import net.smartworks.model.notice.NoticeMessage;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.SeraNotice;
 import net.smartworks.model.sera.info.SeraUserInfo;
+import net.smartworks.model.work.FormField;
+import net.smartworks.model.work.SmartForm;
+import net.smartworks.model.work.SocialWork;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomainCond;
+import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecordCond;
 import net.smartworks.server.engine.mail.model.MailContent;
 import net.smartworks.server.engine.message.manager.IMessageManager;
@@ -53,6 +61,7 @@ import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
+import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstCond;
@@ -71,6 +80,7 @@ import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.INoticeService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.util.ModelConverter;
+import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
@@ -771,18 +781,66 @@ public class NoticeServiceImpl implements INoticeService {
 				taskWorkCond.setOrders(new Order[]{new Order("taskInfo.tskCreatedate", false)});
 				TaskWork[] taskWorks = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(user.getId(), taskWorkCond);
 				
-				if (taskWorks != null && taskWorks.length != 0) {
-					TaskInstanceInfo[] taskInfos = ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(user.getId(), taskWorks, 10);
-					NoticeMessage[] notificationNotice = new NoticeMessage[taskInfos.length];
-					for(int i=0; i<taskInfos.length; i++){
-						notificationNotice[i] = new NoticeMessage((String)spaceNoticeTaskIdMap.get(taskInfos[i].getId()), NoticeMessage.TYPE_INSTANCE_CREATED, taskInfos[i].getOwner(), taskInfos[i].getCreatedDate());
-						notificationNotice[i].setInstance(taskInfos[i]);
-					}
-					notificationNoticeBox.setDateOfLastNotice(new LocalDate(taskWorks[0].getTskCreateDate().getTime()));
-					notificationNoticeBox.setNoticeMessages(notificationNotice);
-					notificationNoticeBox.setNoticeType(Notice.TYPE_NOTIFICATION);
-					notificationNoticeBox.setRemainingLength(remainingLength);
+				NoticeMessage[] notificationNotice = new NoticeMessage[spaceNotices.length];
+				for(int i=0; i<spaceNotices.length; i++){
+					MessageNotice spaceNotice = spaceNotices[i];
+					if(spaceNotice.getType().equals("" + NoticeMessage.TYPE_EVENT_ALARM)){
+						SwdDomainCond domainCond = new SwdDomainCond();
+						domainCond.setFormId(SmartForm.ID_EVENT_MANAGEMENT);
+						SwdDomain domain = SwManagerFactory.getInstance().getSwdManager().getDomain(spaceNotice.getAssignee(), domainCond, IManager.LEVEL_LITE);
+						SwdRecord record = SwManagerFactory.getInstance().getSwdManager().getRecord(spaceNotice.getAssignee(), domain.getObjId(), spaceNotice.getRefId(), IManager.LEVEL_ALL);
+						EventInstanceInfo eventInstance = new EventInstanceInfo();
+						eventInstance.setId(record.getRecordId());
+						eventInstance.setSubject(record.getDataField(domain.getTitleFieldId()).getValue());
+						String startTimeStr = record.getDataField(FormField.ID_NUM_EVENT_START_TIME).getValue();
+						String endTimeStr = record.getDataField(FormField.ID_NUM_EVENT_END_TIME).getValue();
+						LocalDate startTime = null;
+						LocalDate endTime = null;
+						UserInfo targetUserInfo =ModelConverter.getUserInfoByUserId(spaceNotice.getAssignee());
+						if(startTimeStr != null){
+							try{
+								startTime = LocalDate.convertGMTStringToLocalDate2(startTimeStr);
+							}catch (Exception e){}
+						}
+						if(endTimeStr != null){
+							try{
+								endTime = LocalDate.convertGMTStringToLocalDate2(endTimeStr);
+							}catch (Exception e){}
+						}
+						eventInstance.setStart(startTime);
+						eventInstance.setEnd(endTime);
+						eventInstance.setOwner(ModelConverter.getUserInfoByUserId(spaceNotice.getAssignee()));
+						eventInstance.setWorkId(spaceNotice.getWorkId());
+						eventInstance.setWorkType(SocialWork.TYPE_EVENT);
+						WorkSpaceInfo workSpace = ModelConverter.getWorkSpaceInfo(CommonUtil.toDefault(record.getWorkSpaceType(), String.valueOf(ISmartWorks.SPACE_TYPE_USER)), CommonUtil.toDefault(record.getWorkSpaceId(), spaceNotice.getAssignee()));
+						eventInstance.setWorkSpaceInfo(workSpace);
+						LocalDate createdDate = new LocalDate(spaceNotice.getCreationDate().getTime());
+						notificationNotice[i] = new NoticeMessage(spaceNotice.getObjId(),  NoticeMessage.TYPE_EVENT_ALARM, targetUserInfo, createdDate);
+						notificationNotice[i].setEvent(eventInstance);
+					}else if(spaceNotice.getType().equals("" + NoticeMessage.TYPE_INSTANCE_CREATED)){
+						if (taskWorks != null && taskWorks.length != 0) {
+							TaskInstanceInfo[] taskInfos = ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(user.getId(), taskWorks, 10);
+							int j=0;
+							for(; j<taskInfos.length; j++){ 
+								if(taskInfos[j].getId().equals(spaceNotice.getTaskId())){
+									notificationNotice[i] = new NoticeMessage(spaceNotice.getObjId(), NoticeMessage.TYPE_INSTANCE_CREATED, taskInfos[j].getOwner(), taskInfos[j].getCreatedDate());
+									notificationNotice[i].setInstance(taskInfos[j]);
+									break;
+								}
+							}
+							if(j==taskInfos.length){
+								UserInfo userInfo = ModelConverter.getUserInfoByUserId(spaceNotice.getAssignee());
+								notificationNotice[i] = new NoticeMessage(spaceNotice.getObjId(), NoticeMessage.TYPE_INSTANCE_CREATED, userInfo, new LocalDate(spaceNotice.getCreationDate().getTime()));								
+							}
+						}
+						
+					}					
 				}
+				if(notificationNotice[notificationNotice.length-1]!=null)
+					notificationNoticeBox.setDateOfLastNotice(notificationNotice[notificationNotice.length-1].getIssuedDate());
+				notificationNoticeBox.setNoticeMessages(notificationNotice);
+				notificationNoticeBox.setNoticeType(Notice.TYPE_NOTIFICATION);
+				notificationNoticeBox.setRemainingLength(remainingLength);
 
 				return notificationNoticeBox;
 				

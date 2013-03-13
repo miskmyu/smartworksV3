@@ -364,7 +364,18 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 							alarmObj.setTargetUser(user);
 							alarmObj.setWorkId(SmartWork.ID_EVENT_MANAGEMENT);
 							alarmObj.setRecordId(record.getRecordId());
+							String relatedUsers = record.getDataField(FormField.ID_NUM_RELATED_USERS).getRefRecordId();
+							String[] relatedUserIds = (relatedUsers==null) ? null : relatedUsers.split(";");
 							SwManagerFactory.getInstance().getPublishNoticeManager().setAlarmNotice(user, alarmObj, IManager.LEVEL_LITE);
+							if(relatedUserIds!=null){
+								for(int i=0; i<relatedUserIds.length; i++){
+									String relatedUserId = relatedUserIds[i].trim();
+									if(relatedUserId.equals(user)) continue;
+									alarmObj.setTargetUser(relatedUserId);
+									alarmObj.setObjId(null);
+									SwManagerFactory.getInstance().getPublishNoticeManager().setAlarmNotice(relatedUserId, alarmObj, IManager.LEVEL_LITE);									
+								}
+							}
 						}
 					}catch (Exception e){
 						e.printStackTrace();

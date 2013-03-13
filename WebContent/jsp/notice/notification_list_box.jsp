@@ -66,12 +66,20 @@
 				%>
 					<li>
 						<div class="info_ms_section">
-							<div class="info_img"><div class="icon_pop_event profile_size_s"></div></div>
+							<div class="info_img"><div class="icon_event_works"></div></div>
+							<span class="t_date vb pl10 fr"><%=nMessage.getIssuedDate().toLocalString() %></span>
 							<div class="info_list">
-								<b><%=event.getStart().toLocalString()%> </b><a href="<%=event.getController()%> %>?cid=<%=event.getContextId()%>&wid=<%=event.getWorkSpaceId()%>"><%=event.getSubject()%></a>
-								<div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
-									<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
-										<div class="btn_x js_remove_notice" ></div></a></div>
+								<b><%=event.getStart().toLocalString()%> </b><a href="<%=event.getController()%>?cid=<%=event.getContextId()%>&workId=<%=event.getWorkId() %>&wid=<%=event.getWorkSpaceId()%>"><%=event.getSubject()%></a>
+								<%
+								if (event.getWorkSpaceId()!=null && !event.getWorkSpaceId().equals(owner.getId())) {
+								%> 
+									<span>▶<%=event.getWorkSpaceName()%></span> 
+								<%
+								}
+								%>
+								<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
+									<div class="btn_x js_remove_notice" ></div>
+								</a>
 							</div>
 						</div>
 					</li>
@@ -87,12 +95,12 @@
 							<div class="info_img">
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"title="<%=owner.getLongName()%>"><img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 							</div>
+							<span class="t_date vb pl10 fr"><%=nMessage.getIssuedDate().toLocalString() %></span>
 							<div class="info_list">
 								<a href="<%=task.getController() %>?cid=<%=task.getContextId()%>&wid=<%=task.getWorkSpaceId()%>"><%=work.getSubject()%>▶<%=task.getName()%></a>
 								<fmt:message key="notice.message.task.delayed" />
-								<div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
-									<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
-										<div class="btn_x js_remove_notice" ></div></a></div>
+								<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
+									<div class="btn_x js_remove_notice" ></div></a>
 							</div>
 						</div>
 					</li>
@@ -106,12 +114,12 @@
 							<div class="info_img">
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>"><img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 							</div>
+							<span class="t_date vb pl10 fr"><%=nMessage.getIssuedDate().toLocalString() %></span>
 							<div class="info_list">
 								<a href="<%=nMessage.getWorkSpace().getSpaceController() %>?cid=<%=nMessage.getWorkSpace().getSpaceContextId()%>"><%=nMessage.getWorkSpace().getName()%></a>
 								<fmt:message key="notice.message.join.request" />
-								<div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
-									<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
-										<div class="btn_x js_remove_notice" ></div></a></div>
+								<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
+									<div class="btn_x js_remove_notice" ></div></a>
 							</div>
 						</div>
 					</li>
@@ -126,12 +134,32 @@
 							<div class="info_img">
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>"><img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 							</div>
+							<span><%=owner.getLongName()%></span>
+							<%
+							if (instance.getWorkSpaceId()!=null && !instance.getWorkSpaceId().equals(owner.getId())) {
+							%> 
+								<span>▶<%=instance.getWorkSpaceName()%></span> 
+							<%
+							}
+							%>								
+							<span class="t_date vb pl10 fr"><%=instance.getLastModifiedDate().toLocalString() %></span>
 							<div class="info_list">
+								<span class="<%=Work.getIconClass(instance.getWorkId(), instance.getWorkType(), true)%>"></span>
+								<%
+								if(instance.getWorkId().equals(SmartWork.ID_BOARD_MANAGEMENT)){
+								}else if(instance.getWorkId().equals(SmartWork.ID_EVENT_MANAGEMENT)){
+								}else if(instance.getWorkId().equals(SmartWork.ID_FILE_MANAGEMENT)){
+								}else if(instance.getWorkId().equals(SmartWork.ID_MEMO_MANAGEMENT)){
+								}else{									
+								%>
+									<span><%=instance.getWorkName() %></span>
+								<%
+								}
+								%>
 								<a href="<%=instance.getController()%>?cid=<%=instance.getContextId()%>&wid=<%=instance.getWorkSpaceId()%>&workId=<%=instance.getWorkId()%>"><%=instance.getSubject()%></a>
-								<fmt:message key="notice.message.instance.created" />
-								<div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
-									<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
-										<div class="btn_x js_remove_notice" ></div></a></div>
+								<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
+									<div class="btn_x js_remove_notice" ></div>
+								</a>
 							</div>
 						</div>
 					</li>

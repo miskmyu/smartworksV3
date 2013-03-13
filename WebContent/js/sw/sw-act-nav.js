@@ -192,17 +192,13 @@ $(function() {
 	$('.js_remove_notice').live('click', function(e) {
 		var input = $(targetElement(e)).parent('a');
 		var noticeId = input.attr('noticeId');
-		var noticeType = input.attr('noticeType');
-		var lastNoticeId = input.attr('lastNoticeId');
 		$.ajax({
 			url : "remove_notice_instance.sw",
 			data : {
-				removeNoticeId : noticeId,
-				noticeType : noticeType,
-				lastNoticeId : lastNoticeId
+				removeNoticeId : noticeId
 			},
 			success : function(data, status, jqXHR) {
-				$('#notice_message_box').html(data);
+				input.parents('li:first').remove();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 				

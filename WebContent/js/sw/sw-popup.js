@@ -1113,7 +1113,7 @@ smartPop = {
 			return;
 		}
 		var event = notice.event;
-		var workSpaceStr = (isEmpty(event.workSpaceId) || event.workSpaceId===event.owner.id) ? "" : '<span class="arr">▶</span><span class="space_name">' + event.workSpaceName+ '</span>';
+		var workSpaceStr = (isEmpty(event.workSpaceId) || event.workSpaceId===currentUser.userId) ? "" : '<span class="arr">▶</span><span class="space_name">' + event.workSpaceName+ '</span>';
 		var noticeData =  '<li class="sub_instance_list">' +
 							'<div class="det_title">' +
 								'<div class="noti_pic"><img src="' + event.owner.midPicture + '" class="profile_size_m"></div>' +
