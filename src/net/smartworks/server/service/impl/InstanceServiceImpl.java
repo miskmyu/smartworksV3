@@ -61,6 +61,7 @@ import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
 import net.smartworks.model.notice.Notice;
+import net.smartworks.model.notice.NoticeMessage;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.FormField;
@@ -175,8 +176,8 @@ import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
 import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
-import net.smartworks.server.engine.publishnotice.model.SpaceNotice;
-import net.smartworks.server.engine.publishnotice.model.SpaceNoticeCond;
+import net.smartworks.server.engine.publishnotice.model.MessageNotice;
+import net.smartworks.server.engine.publishnotice.model.MessageNoticeCond;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
@@ -2422,13 +2423,13 @@ public class InstanceServiceImpl implements IInstanceService {
 			return null;			
 		}
 	}
-	private void removeSpaceNotice(String workId, String referenceId) throws Exception {
+	private void removeMessageNotice(String workId, String referenceId) throws Exception {
 		if (CommonUtil.isEmpty(referenceId))
 			return;
-		SpaceNoticeCond cond = new SpaceNoticeCond();
+		MessageNoticeCond cond = new MessageNoticeCond();
 		cond.setRefId(referenceId);
 		cond.setWorkId(workId);
-		SwManagerFactory.getInstance().getPublishNoticeManager().removeSpaceNotice("", cond);
+		SwManagerFactory.getInstance().getPublishNoticeManager().removeMessageNotice("", cond);
 	}
 	
 	private void populateSpaceNotice(SwdRecord record, String taskInstanceId) throws Exception {
@@ -2453,7 +2454,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		String accessLevel = record.getAccessLevel();
 		String accessValue = record.getAccessValue();
 		
-		populateSpaceNotice(workId, workSpaceType, workSpaceId, refType, recordId, taskInstanceId, accessLevel, accessValue);
+		populateMessageNotice(workId, workSpaceType, workSpaceId, refType, recordId, taskInstanceId, accessLevel, accessValue);
 		
 	}
 	private void populateSpaceNotice(TskTask task) throws Exception {
@@ -2479,10 +2480,10 @@ public class InstanceServiceImpl implements IInstanceService {
 		String accessLevel = task.getAccessLevel();
 		String accessValue = task.getAccessValue();
 		
-		populateSpaceNotice(workId, workSpaceType, workSpaceId, refType, taskId, taskId, accessLevel, accessValue);
+		populateMessageNotice(workId, workSpaceType, workSpaceId, refType, taskId, taskId, accessLevel, accessValue);
 			
 	}
-	private void populateSpaceNotice(String workId, String workSpaceType, String workSpaceId, String refType, String refId, String taskId, String accessLevel, String accessValue) throws Exception {
+	private void populateMessageNotice(String workId, String workSpaceType, String workSpaceId, String refType, String refId, String taskId, String accessLevel, String accessValue) throws Exception {
 		
 		User user = SmartUtil.getCurrentUser();
 		String userId = user.getId();
@@ -2534,7 +2535,8 @@ public class InstanceServiceImpl implements IInstanceService {
 		if (targetUserId.size() == 0)
 			 return;
 		for (int i = 0; i < targetUserId.size(); i++) {
-			SpaceNotice sn = new SpaceNotice();
+			MessageNotice sn = new MessageNotice();
+			sn.setType(NoticeMessage.TYPE_INSTANCE_CREATED +"");
 			sn.setWorkId(workId);
 			sn.setWorkSpaceType(workSpaceType);
 			sn.setWorkSpaceId(workSpaceId);
@@ -2542,7 +2544,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			sn.setRefType(refType);
 			sn.setRefId(refId);
 			sn.setTaskId(taskId);
-			SwManagerFactory.getInstance().getPublishNoticeManager().setSpaceNotice(userId, sn, IManager.LEVEL_ALL);
+			SwManagerFactory.getInstance().getPublishNoticeManager().setMessageNotice(userId, sn, IManager.LEVEL_ALL);
 			SmartUtil.increaseNoticeCountByNoticeType((String)targetUserId.get(i), Notice.TYPE_NOTIFICATION);
 		}
 	}
@@ -2703,7 +2705,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						SwManagerFactory.getInstance().getAutoIndexManager().removeAutoIndexInst(user.getId(), autoIndex[j].getObjId());
 					}
 				}
-				//removeSpaceNotice(workId, instanceId);
+				removeMessageNotice(workId, instanceId);
 			}			
 		}catch (Exception e){
 			// Exception Handling Required

@@ -62,8 +62,8 @@ import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
-import net.smartworks.server.engine.publishnotice.model.SpaceNotice;
-import net.smartworks.server.engine.publishnotice.model.SpaceNoticeCond;
+import net.smartworks.server.engine.publishnotice.model.MessageNotice;
+import net.smartworks.server.engine.publishnotice.model.MessageNoticeCond;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
@@ -162,9 +162,9 @@ public class NoticeServiceImpl implements INoticeService {
 
 			notificationMessage = new Notice();
 			notificationMessage.setType(Notice.TYPE_NOTIFICATION);
-			SpaceNoticeCond cond = new SpaceNoticeCond();
+			MessageNoticeCond cond = new MessageNoticeCond();
 			cond.setAssignee(userId);
-			long spaceNoticeCount = getPublishNoticeManager().getSpaceNoticeSize(userId, cond);
+			long spaceNoticeCount = getPublishNoticeManager().getMessageNoticeSize(userId, cond);
 			//spaceNotice
 			notificationMessage.setLength((int)spaceNoticeCount);
 			
@@ -308,11 +308,11 @@ public class NoticeServiceImpl implements INoticeService {
 
 			PublishNotice notice = getPublishNoticeManager().getPublishNotice(user.getId(), pubNotiCond, null);
 			if (CommonUtil.isEmpty(notice)) {
-				SpaceNotice spaceNotice = getPublishNoticeManager().getSpaceNotice(user.getId(), noticeId, null);
+				MessageNotice spaceNotice = getPublishNoticeManager().getMessageNotice(user.getId(), noticeId, null);
 				if (CommonUtil.isEmpty(spaceNotice)) {
 					return;
 				} else {
-					getPublishNoticeManager().removeSpaceNotice(user.getId(), noticeId);
+					getPublishNoticeManager().removeMessageNotice(user.getId(), noticeId);
 					SmartUtil.increaseNoticeCountByNoticeType(spaceNotice.getAssignee(), Notice.TYPE_NOTIFICATION);
 					return;
 				}
@@ -725,20 +725,20 @@ public class NoticeServiceImpl implements INoticeService {
 
 				NoticeBox notificationNoticeBox = new NoticeBox();
 				
-				SpaceNoticeCond cond = new SpaceNoticeCond();
+				MessageNoticeCond cond = new MessageNoticeCond();
 				cond.setAssignee(user.getId());
 
-				long totalSpaceNoticeCount = getPublishNoticeManager().getSpaceNoticeSize(user.getId(), cond);
+				long totalSpaceNoticeCount = getPublishNoticeManager().getMessageNoticeSize(user.getId(), cond);
 				
 				int remainingLength = (totalSpaceNoticeCount - 10) > 0 ? (int)(totalSpaceNoticeCount - 10) : 0;
 				
 				if (!CommonUtil.isEmpty(lastNoticeId)) {
-					SpaceNotice lastSpaceNotice = getPublishNoticeManager().getSpaceNotice(user.getId(), lastNoticeId, IManager.LEVEL_ALL);
+					MessageNotice lastSpaceNotice = getPublishNoticeManager().getMessageNotice(user.getId(), lastNoticeId, IManager.LEVEL_ALL);
 					if (lastSpaceNotice != null) {
 						Date lastSpaceNoticeDate = lastSpaceNotice.getCreationDate();
 						cond.setCreationDateTo(lastSpaceNoticeDate);
 					}
-					int tempRemainingLength = (int)getPublishNoticeManager().getSpaceNoticeSize(user.getId(), cond);
+					int tempRemainingLength = (int)getPublishNoticeManager().getMessageNoticeSize(user.getId(), cond);
 					if (tempRemainingLength > 10) {
 						remainingLength = tempRemainingLength - 10;
 					} else {
@@ -746,10 +746,10 @@ public class NoticeServiceImpl implements INoticeService {
 					}
 				}
 				
-				cond.setOrders(new Order[]{new Order(SpaceNotice.A_CREATIONDATE, false)});
+				cond.setOrders(new Order[]{new Order(MessageNotice.A_CREATIONDATE, false)});
 				cond.setPageNo(0);
 				cond.setPageSize(10);
-				SpaceNotice[] spaceNotices = getPublishNoticeManager().getSpaceNotices(user.getId(), cond, IManager.LEVEL_ALL);
+				MessageNotice[] spaceNotices = getPublishNoticeManager().getMessageNotices(user.getId(), cond, IManager.LEVEL_ALL);
 				
 				if (spaceNotices == null || spaceNotices.length == 0) {
 					return notificationNoticeBox;
@@ -758,7 +758,7 @@ public class NoticeServiceImpl implements INoticeService {
 				Map spaceNoticeTaskIdMap = new HashMap();
 				String[] tskObjIdIns = new String[spaceNotices.length];
 				for (int i = 0; i < spaceNotices.length; i++) {
-					SpaceNotice spaceNotice = spaceNotices[i];
+					MessageNotice spaceNotice = spaceNotices[i];
 					String taskId = spaceNotice.getTaskId();
 					tskObjIdIns[i] = taskId;
 					spaceNoticeTaskIdMap.put(taskId, spaceNotice.getObjId());

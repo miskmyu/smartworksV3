@@ -1,19 +1,20 @@
 package net.smartworks.server.engine.publishnotice.model;
 
-import net.smartworks.server.engine.common.model.MisObject;
+import net.smartworks.server.engine.common.model.MisObjectCond;
 import net.smartworks.server.engine.common.util.CommonUtil;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class SpaceNotice extends MisObject {
+public class MessageNoticeCond extends MisObjectCond {
 
 	private static final long serialVersionUID = 1L;
-	private static Log logger = LogFactory.getLog(SpaceNotice.class);
+	private static Log logger = LogFactory.getLog(MessageNoticeCond.class);
 
 	protected static final String PREFIX = "";
-	private static final String NAME = CommonUtil.toName(SpaceNotice.class, PREFIX);
+	private static final String NAME = CommonUtil.toName(MessageNoticeCond.class, PREFIX);
 	
+	private String type;
 	private String workId;
 	private String workSpaceType;
 	private String workSpaceId;
@@ -63,6 +64,12 @@ public class SpaceNotice extends MisObject {
 	}
 	public void setTaskId(String taskId) {
 		this.taskId = taskId;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

@@ -14,10 +14,11 @@
 		<property name="modificationUser" column="modifier" type="string" length="50"/>
 		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
 	</class>
-	<class name="SpaceNotice" table="SWSpaceNotice">
+	<class name="MessageNotice" table="SWMessageNotice">
 		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
 			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
 		</id>
+		<property name="type" type="string" length="50"/>
 		<property name="workId" type="string" length="50"/>
 		<property name="workSpaceType" type="string" length="50"/>
 		<property name="workSpaceId" type="string" length="50"/>

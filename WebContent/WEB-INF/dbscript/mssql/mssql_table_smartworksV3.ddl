@@ -2526,8 +2526,9 @@ CREATE TABLE SWScheduleDef (
     primary key (objId)
 );
 
-CREATE TABLE SWSpaceNotice (
+CREATE TABLE SWMessageNotice (
 	id varchar(50) NOT NULL,
+	type varchar(50),
 	workId varchar(50),
 	workSpaceType varchar(50),
 	workSpaceId varchar(50),

@@ -19,8 +19,8 @@ import net.smartworks.server.engine.publishnotice.model.AlarmNotice;
 import net.smartworks.server.engine.publishnotice.model.AlarmNoticeCond;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
-import net.smartworks.server.engine.publishnotice.model.SpaceNotice;
-import net.smartworks.server.engine.publishnotice.model.SpaceNoticeCond;
+import net.smartworks.server.engine.publishnotice.model.MessageNotice;
+import net.smartworks.server.engine.publishnotice.model.MessageNoticeCond;
 
 import org.hibernate.Query;
 
@@ -197,17 +197,17 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 	}
 
 	@Override
-	public SpaceNotice getSpaceNotice(String userId, String id, String level) throws PublishNoticeException {
+	public MessageNotice getMessageNotice(String userId, String id, String level) throws PublishNoticeException {
 		try {
 			if (level == null)
 				level = LEVEL_ALL;
 			if (level.equals(LEVEL_ALL)) {
-				SpaceNotice obj = (SpaceNotice)this.get(SpaceNotice.class, id);
+				MessageNotice obj = (MessageNotice)this.get(MessageNotice.class, id);
 				return obj;
 			} else {
-				SpaceNoticeCond cond = new SpaceNoticeCond();
+				MessageNoticeCond cond = new MessageNoticeCond();
 				cond.setObjId(id);
-				return getSpaceNotice(userId, cond, level);
+				return getMessageNotice(userId, cond, level);
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -215,13 +215,13 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 		}
 	}
 	@Override
-	public SpaceNotice getSpaceNotice(String userId, SpaceNoticeCond cond, String level) throws PublishNoticeException {
+	public MessageNotice getMessageNotice(String userId, MessageNoticeCond cond, String level) throws PublishNoticeException {
 		if (cond == null)
 			return null;
 		if (level == null)
 			level = LEVEL_ALL;
 		cond.setPageSize(2);
-		SpaceNotice[] objs = getSpaceNotices(userId, cond, level);
+		MessageNotice[] objs = getMessageNotices(userId, cond, level);
 		if (CommonUtil.isEmpty(objs))
 			return null;
 		if (objs.length > 1)
@@ -230,7 +230,7 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 	}
 
 	@Override
-	public void setSpaceNotice(String userId, SpaceNotice obj, String level) throws PublishNoticeException {
+	public void setMessageNotice(String userId, MessageNotice obj, String level) throws PublishNoticeException {
 		try {
 			fill(userId, obj);
 			set(obj);
@@ -240,26 +240,26 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 	}
 
 	@Override
-	public void removeSpaceNotice(String userId, String id) throws PublishNoticeException {
+	public void removeMessageNotice(String userId, String id) throws PublishNoticeException {
 		try {
-			remove(SpaceNotice.class, id);
+			remove(MessageNotice.class, id);
 		} catch (Exception e) {
 			throw new PublishNoticeException(e);
 		}
 	}
 
 	@Override
-	public void removeSpaceNotice(String userId, SpaceNoticeCond cond) throws PublishNoticeException {
-		SpaceNotice[] objs = getSpaceNotices(userId, cond, null);
+	public void removeMessageNotice(String userId, MessageNoticeCond cond) throws PublishNoticeException {
+		MessageNotice[] objs = getMessageNotices(userId, cond, null);
 		if (objs == null || objs.length == 0)
 			return;
 		for (int i = 0; i < objs.length; i++) {
-			SpaceNotice obj = objs[i];
-			removeSpaceNotice(userId, obj.getObjId());
+			MessageNotice obj = objs[i];
+			removeMessageNotice(userId, obj.getObjId());
 		}
 	}
 
-	private Query appendQuery(StringBuffer buf, SpaceNoticeCond cond) throws Exception {
+	private Query appendQuery(StringBuffer buf, MessageNoticeCond cond) throws Exception {
 		String objId = null;
 		String refType = null;
 		String refId = null;
@@ -289,7 +289,7 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 			creationDateFrom = cond.getCreationDateFrom();
 			creationDateTo = cond.getCreationDateTo();
 		}
-		buf.append(" from SpaceNotice obj");
+		buf.append(" from MessageNotice obj");
 		buf.append(" where obj.objId is not null");
 		if (cond != null) {
 			if (objId != null) 
@@ -351,7 +351,7 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 
 	}
 	@Override
-	public long getSpaceNoticeSize(String userId, SpaceNoticeCond cond) throws PublishNoticeException {
+	public long getMessageNoticeSize(String userId, MessageNoticeCond cond) throws PublishNoticeException {
 		try {
 			StringBuffer buf = new StringBuffer();
 			buf.append("select count(obj)");
@@ -366,7 +366,7 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 	}
 
 	@Override
-	public SpaceNotice[] getSpaceNotices(String userId, SpaceNoticeCond cond, String level) throws PublishNoticeException {
+	public MessageNotice[] getMessageNotices(String userId, MessageNoticeCond cond, String level) throws PublishNoticeException {
 		try {
 			StringBuffer buf = new StringBuffer();
 			buf.append("select obj ");
@@ -374,7 +374,7 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 			List list = query.list();
 			if (list == null || list.isEmpty())
 				return null;
-			SpaceNotice[] objs = new SpaceNotice[list.size()];
+			MessageNotice[] objs = new MessageNotice[list.size()];
 			list.toArray(objs);
 			return objs;
 		} catch (Exception e) {
