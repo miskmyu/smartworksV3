@@ -1904,6 +1904,41 @@ public class InstanceServiceImpl implements IInstanceService {
 			// Exception Handling Required			
 		}
 	}
+	private String saveTempWorkInstance(String userId, Map<String, Object> requestBody, HttpServletRequest request, boolean isIwork) throws Exception {
+		if (requestBody == null)
+			return null;
+		
+		String workId = (String)requestBody.get("workId");
+		String formId = (String)requestBody.get("formId");
+		String formName = (String)requestBody.get("formName");
+		String title = "";
+		
+		if (isIwork) {
+			SwdDomainCond domainCond = new SwdDomainCond();
+			domainCond.setFormId(formId);
+			SwdDomain domain = getSwdManager().getDomain(userId, domainCond, null);
+			SwdRecord record = getSwdRecordByRequestBody(userId, domain.getFields(), requestBody, request);
+			String titleFieldId = domain.getTitleFieldId();
+			if (!CommonUtil.isEmpty(titleFieldId))
+				title = record.getDataFieldValue(titleFieldId);
+		} else {
+			//프로세스 업무의 타이틀을 가져온
+			
+		}
+		
+		TskTask tempSaveTask = new TskTask();
+		tempSaveTask.setName(formName);
+		tempSaveTask.setDocument(requestBody.toString());
+		tempSaveTask.setAssignee(userId);
+		tempSaveTask.setAssigner(userId);
+		tempSaveTask.setDef(workId + "|" + formId);
+		tempSaveTask.setForm(formId);
+		tempSaveTask.setTitle(title);
+		
+		tempSaveTask = SwManagerFactory.getInstance().getTskManager().setTempTask(userId, tempSaveTask);
+		
+		return tempSaveTask.getObjId();
+	}
 	@Override
 	public String setInformationWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
@@ -1918,6 +1953,18 @@ public class InstanceServiceImpl implements IInstanceService {
 			key Set : frmApprovalLine
 			key Set : frmTaskApproval
 			*/
+			User cuser = SmartUtil.getCurrentUser();
+			String userId = null;
+			String companyId = null;
+			if (cuser != null) {
+				userId = cuser.getId();
+				companyId = cuser.getCompanyId();
+			}
+			//임시저장이라면 임시저장타입의 태스크를 생성한후 taskDoc 에 reqeustBody.toString() 자체를 저장하고 이후 조회시 파싱하여 보낸다
+			boolean isTempSave = CommonUtil.toBoolean((Boolean)requestBody.get("isTempSave"));
+			if (isTempSave) {
+				return this.saveTempWorkInstance(userId, requestBody, request, true);
+			}
 			Map<String, Object> frmSmartFormMap = (Map<String, Object>)requestBody.get("frmSmartForm");
 			Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
 			Map<String, Object> frmTaskForwardMap = (Map<String, Object>)requestBody.get("frmTaskForward");
@@ -1926,19 +1973,14 @@ public class InstanceServiceImpl implements IInstanceService {
 			String formId = (String)requestBody.get("formId");
 			String formName = (String)requestBody.get("formName");
 			String instanceId = (String)requestBody.get("instanceId");
+			
+			
 			boolean isCreateRecord = false;
 			if(CommonUtil.isEmpty(instanceId)) {
 				instanceId = "dr_" + CommonUtil.newId();
 				isCreateRecord = true;
 			}
 			int formVersion = 1;
-			User cuser = SmartUtil.getCurrentUser();
-			String userId = null;
-			String companyId = null;
-			if (cuser != null) {
-				userId = cuser.getId();
-				companyId = cuser.getCompanyId();
-			}
 
 			String servletPath = request.getServletPath();
 			RepeatEvent repeatEvent = null;
@@ -2283,22 +2325,6 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 			}
-			/*if(groupId != null) {
-				List<IFileModel> iFileModelList = getDocManager().findFileGroup(groupId);
-				if(iFileModelList.size() > 0) {
-					for(int i=0; i<iFileModelList.size(); i++) {
-						IFileModel fileModel = iFileModelList.get(i);
-						String fileId = fileModel.getId();
-						String filePath = fileModel.getFilePath();
-						if(fileModel.isDeleteAction()) {
-							getDocManager().deleteFile(fileId);
-							File f = new File(filePath);
-							if(f.exists())
-								f.delete();
-						}
-					}
-				}
-			}*/
 			if (isCreateRecord)
 				populateSpaceNotice(obj, taskInstId);
 						
@@ -3646,6 +3672,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			String userId = null;
 			if (cuser != null)
 				userId = cuser.getId();
+			
+			boolean isTempSave = CommonUtil.toBoolean((Boolean)requestBody.get("isTempSave"));
+			if (isTempSave) {
+				return this.saveTempWorkInstance(userId, requestBody, request, false);
+			}
 			
 			//패키지 정보로 프로세스 정보를 얻는다.
 			String packageId = (String)requestBody.get("workId");
