@@ -8,6 +8,7 @@ public class AsyncMessageInstanceInfo extends InstanceInfo {
 
 	private UserInfo sender;
 	private UserInfo receiver;
+	private String chatId;
 	private UserInfo[] chatters;
 	private LocalDate sendDate;
 	private int msgStatus;
@@ -47,6 +48,12 @@ public class AsyncMessageInstanceInfo extends InstanceInfo {
 	}
 	public UserInfo[] getChatters() {
 		return chatters;
+	}
+	public String getChatId() {
+		return chatId;
+	}
+	public void setChatId(String chatId) {
+		this.chatId = chatId;
 	}
 	public void setChatters(UserInfo[] chatters) {
 		this.chatters = chatters;

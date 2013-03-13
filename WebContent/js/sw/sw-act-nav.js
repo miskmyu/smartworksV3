@@ -111,6 +111,8 @@ $(function() {
 	 */
 	$('.js_notice_count a').live('click', function(event){
 		var input = $(targetElement(event)).parents('.js_notice_count:first').find('a');
+		var noticeCount = $(targetElement(event)).parents('.js_notice_count:first');
+		noticeCount.siblings('.js_notice_count').removeClass('mt4');
 		smartPop.progressNav($('div.js_notice_icons_area li:last'));
 		$('#notice_message_box').hide();
 		$('.js_notice_count').find('a').removeClass('current');
@@ -147,6 +149,7 @@ $(function() {
 				url : href,
 				data : {},
 				success : function(data, status, jqXHR) {
+					noticeCount.addClass('mt4');
 					input.addClass('current');
 					$('#notice_message_box').html(data).show();
 					smartPop.closeProgress();
@@ -216,8 +219,8 @@ $(function() {
 	$('.js_close_message').live('click', function(e) {
 		$('#notice_message_box').hide();
 		setTimeout(function() {
-			$('.js_notice_count').find('a').removeClass('current');
-		}, 500);
+			$('.js_notice_count').removeClass('mt4').find('a').removeClass('current');
+		}, 100);
 		return false;
 	});
 

@@ -200,8 +200,8 @@ public class WorkInstanceInfo extends InstanceInfo {
 		workInstance.setCreatedDate(this.getCreatedDate());
 		workInstance.setId(this.getId());
 		workInstance.setLastModifiedDate(this.getLastModifiedDate());
-		workInstance.setLastModifier((this.getLastModifier()!=null) ? this.getLastModifier().getUser():null);
-		workInstance.setOwner((this.getOwner()!=null) ? this.getOwner().getUser() : null);
+		workInstance.setLastModifier((this.getLastModifier()!=null) ? this.getLastModifier().getUserModel():null);
+		workInstance.setOwner((this.getOwner()!=null) ? this.getOwner().getUserModel() : null);
 		workInstance.setStatus(this.getStatus());
 		workInstance.setSubject(this.getSubject());
 		workInstance.setType(this.getType());

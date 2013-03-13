@@ -99,27 +99,6 @@ smartPop = {
 				popUserInfo.hide();
 				return false;
 			});
-			$('#sw_pop_user_info .js_start_chat_with_user').die('click');
-			$('#sw_pop_user_info .js_start_chat_with_user').live('click', function(e){
-				var input = $(targetElement(e));
-				var chatterId = input.attr('userId');
-				var chatterName = input.attr('longName');
-				var chatterPicture = input.attr('minPicture');
-				smartTalk.chattingRequest(new Array({
-					userId : currentUserId,
-					longName : currentUser.longName,
-					minPicture : currentUser.minPicture
-				}, {
-					userId : chatterId,
-					longName : chatterName,
-					minPicture : chatterPicture
-				}));
-				setTimeout(function(){
-					setRightPosition("resize", null);
-				}, 600);
-				popUserInfo.hide();
-				return false;
-			});
 		}
 		popUserInfo.find('img').attr('src', profile);
 		popUserInfo.find('.js_user_information').html(userDetail);
