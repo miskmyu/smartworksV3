@@ -30,4 +30,18 @@
 		<property name="modificationUser" column="modifier" type="string" length="50"/>
 		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
 	</class>
+	<class name="AlarmNotice" table="SWAlarmNotice">
+		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="noticeTime" type="timestamp"/>
+		<property name="workId" type="string" length="50"/>
+		<property name="recordId" type="string" length="100"/>
+		<property name="targetUser" type="string" length="50"/>
+		<property name="companyId" type="string" length="50"/>
+		<property name="creationUser" column="creator" type="string" length="50"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="50"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+	</class>
 </hibernate-mapping>
