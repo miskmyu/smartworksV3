@@ -29,6 +29,7 @@ public class TskTask extends MisObject {
 	public static final String TASKSTATUS_CANCEL = "24";
 	public static final String TASKSTATUS_ABORTED = "25";
 	public static final String TASKSTATUS_CREATE = "1";
+	public static final String TASKSTATUS_TEMPSAVE = "0";
 	
 	public static final String TASKTYPE_COMMON = "COMMON";
 	public static final String TASKTYPE_REFERENCE = "REFERENCE";
@@ -36,6 +37,7 @@ public class TskTask extends MisObject {
 	public static final String TASKTYPE_SINGLE = "SINGLE";
 	public static final String TASKTYPE_SUBFLOW = "SUBFLOW";
 	public static final String TASKTYPE_SERVICE = "SERVICE";
+	public static final String TASKTYPE_TEMPSAVE = "TEMPSAVE";
 	
 	public static final String TASKREFTYPE_MEMO = "MEMO";
 	public static final String TASKREFTYPE_IMAGE ="IMAGE";

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.smartworks.server.engine.common.manager.AbstractManager;
+import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.ClassObject;
 import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.MisObject;
@@ -782,6 +783,13 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 		obj.setExecutionDate(date);
 		this.setTask(user, obj, LEVEL_ALL);
 		return obj;
+	}
+	public TskTask setTempTask(String userId, TskTask obj) throws Exception {
+		if (obj == null)
+			return null;
+		obj.setType(TskTask.TASKTYPE_TEMPSAVE);
+		obj.setStatus(TskTask.TASKSTATUS_TEMPSAVE);
+		return this.setTask(userId, obj, IManager.LEVEL_ALL);
 	}
 	private Query appendExtendQuery (StringBuffer queryBuffer, TskTaskCond cond) throws TskException {
 		
