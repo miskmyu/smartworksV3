@@ -451,6 +451,12 @@ public class LocalDate extends Date{
 		return new LocalDate((df.parse(yyyyMMddHHmmssSSS)).getTime());
 	}
 
+	public static Date convertGMTStringToDate(String yyyyMMddHHmmssSSS) throws Exception{
+		if(SmartUtil.isBlankObject(yyyyMMddHHmmssSSS) || yyyyMMddHHmmssSSS.length() < 21) return null;
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		return new Date((df.parse(yyyyMMddHHmmssSSS)).getTime());
+	}
+
 	public static LocalDate convertGMTSimpleStringToLocalDate(String yyyyMMdd) throws Exception{
 		if(SmartUtil.isBlankObject(yyyyMMdd) || yyyyMMdd.length()!=10) return null;
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");

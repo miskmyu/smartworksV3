@@ -37,7 +37,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <%
-	NoticeMessage[] noticeMessages = (NoticeMessage[]) noticeBox.getNoticeMessages();
+	NoticeMessage[] noticeMessages = (noticeBox==null) ? null : (NoticeMessage[]) noticeBox.getNoticeMessages();
 	if (noticeMessages != null) {
 		String lastTaskId = null;
 		int count = 0;

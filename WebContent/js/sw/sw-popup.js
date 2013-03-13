@@ -1113,10 +1113,11 @@ smartPop = {
 			return;
 		}
 		var event = notice.event;
+		var workSpaceStr = (isEmpty(event.workSpaceId) || event.workSpaceId===event.owner.id) ? "" : '<span class="arr">▶</span><span class="space_name">' + event.workSpaceName+ '</span>';
 		var noticeData =  '<li class="sub_instance_list">' +
 							'<div class="det_title">' +
 								'<div class="noti_pic"><img src="' + event.owner.midPicture + '" class="profile_size_m"></div>' +
-								'<div class="noti_in_m"><span class="t_name">' + event.owner.longName +  '</span>' +
+								'<div class="noti_in_m"><span class="t_name">' + event.owner.longName +  '</span>' + workSpaceStr + '</div>' +
 								'<span class="t_date vb pl10 fr">' + notice.issuedDate + '</span>' +
 								'<span>' + 
 									'<a href="' + event.controller + '?cid=' + event.contextId + '&wid=' + event.workSpaceId + '&workId=' + event.workId + '">' +

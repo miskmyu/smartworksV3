@@ -44,9 +44,9 @@ public class NoticeController {
 		return SmartUtil.returnMnv(request, "jsp/notice/message_list_box.jsp", "message_list_box.tiles");
 	}
 
-	@RequestMapping("/comments_list_box")
+	@RequestMapping("/comment_list_box")
 	public ModelAndView commentsListBox(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		return SmartUtil.returnMnv(request, "jsp/notice/comments_list_box.jsp", "comments_list_box.tiles");
+		return SmartUtil.returnMnv(request, "jsp/notice/comment_list_box.jsp", "comments_list_box.tiles");
 	}
 
 	@RequestMapping("/assigned_list_box")

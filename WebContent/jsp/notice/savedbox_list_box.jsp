@@ -41,7 +41,7 @@
 <%
 
 	String draftBoxId = smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_DRAFTS);
-	NoticeMessage[] noticeMessages = noticeBox.getNoticeMessages();
+	NoticeMessage[] noticeMessages = (noticeBox==null) ? null : noticeBox.getNoticeMessages();
 	if (noticeMessages != null) {
 		String lastTaskId = null;
 		int count = 0;

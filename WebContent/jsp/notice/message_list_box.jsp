@@ -33,7 +33,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <%
 
-	NoticeMessage[] noticeMessages = noticeBox.getNoticeMessages();
+	NoticeMessage[] noticeMessages = (noticeBox==null) ? null : noticeBox.getNoticeMessages();
 	if (noticeMessages != null) {
 		String lastTaskId = null;
 		int count = 0;

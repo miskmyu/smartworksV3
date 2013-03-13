@@ -368,8 +368,7 @@ public class NoticeServiceImpl implements INoticeService {
 	 */
 	public NoticeBox getNoticeBoxForMe10(int noticeType, String lastNoticeId) throws Exception {
 
-		try{
-			User user = SmartUtil.getCurrentUser();
+		try{			User user = SmartUtil.getCurrentUser();
 			
 			switch(noticeType){
 			case Notice.TYPE_MAILBOX:
@@ -553,8 +552,11 @@ public class NoticeServiceImpl implements INoticeService {
 								SwdRecordCond recCond = new SwdRecordCond();
 								recCond.setFormId(formId);
 								recCond.setRecordId(recordId);
-								long size = SwManagerFactory.getInstance().getSwdManager().getRecordSize(user.getId(), recCond);
-								
+								long size = 0;
+								try{
+									size = SwManagerFactory.getInstance().getSwdManager().getRecordSize(user.getId(), recCond);
+								}catch (Exception e){}
+							
 								if (size != 0)
 									continue;
 								

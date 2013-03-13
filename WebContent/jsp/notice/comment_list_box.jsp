@@ -40,7 +40,7 @@
 <%
 
 	// 서버에게 lastNoticeId를 기준으로 최근 10개의 Notice항목을 가져오는 기능.
-	NoticeMessage[] noticeMessages = noticeBox.getNoticeMessages();
+	NoticeMessage[] noticeMessages = (noticeBox==null) ? null : noticeBox.getNoticeMessages();
 	if (noticeMessages != null) {
 		String lastTaskId = null;
 		int count = 0;

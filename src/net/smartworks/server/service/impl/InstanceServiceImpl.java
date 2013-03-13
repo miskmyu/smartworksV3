@@ -2305,12 +2305,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(!SmartUtil.isBlankObject(repeatEvent)){
 				SwdRecord eventRecord = obj;
 				
-				String FIELD_START_TIME = "1";
-				String FIELD_END_TIME = "2";
-
-				repeatEvent.setStartTime(LocalDate.convertGMTStringToLocalDate2(eventRecord.getDataField(FIELD_START_TIME).getValue()));
-				if(eventRecord.getDataField(FIELD_END_TIME) != null)
-					repeatEvent.setEndTime(LocalDate.convertGMTStringToLocalDate2(eventRecord.getDataField(FIELD_END_TIME).getValue()));
+				repeatEvent.setStartTime(LocalDate.convertGMTStringToLocalDate2(eventRecord.getDataField(FormField.ID_NUM_EVENT_START_TIME).getValue()));
+				if(eventRecord.getDataField(FormField.ID_NUM_EVENT_END_TIME) != null)
+					repeatEvent.setEndTime(LocalDate.convertGMTStringToLocalDate2(eventRecord.getDataField(FormField.ID_NUM_EVENT_END_TIME).getValue()));
 
 				if(repeatEvent!=null && eventRecord!=null && (repeatEvent.getRepeatCount()>0 || repeatEvent.getRepeatEndDate()!=null) && repeatEvent.getStartTime()!=null
 						&& (repeatEvent.getRepeatCount()>0 || repeatEvent.getRepeatEndDate().getTime()>repeatEvent.getStartTime().getTime())){
@@ -2357,9 +2354,9 @@ public class InstanceServiceImpl implements IInstanceService {
 						}else{
 							startTime = new LocalDate(repeatEvent.getStartTime().getTime()+i*increment);
 						}
-						SwdDataField startTimeField = eventRecord.getDataField(FIELD_START_TIME);
+						SwdDataField startTimeField = eventRecord.getDataField(FormField.ID_NUM_EVENT_START_TIME);
 						startTimeField.setValue(startTime.toGMTDateString());
-						eventRecord.setDataField(FIELD_START_TIME, startTimeField);
+						eventRecord.setDataField(FormField.ID_NUM_EVENT_START_TIME, startTimeField);
 						if(repeatEvent.getEndTime()!=null){
 							if(isMonthIncrement){
 								if(repeatEvent.getWeekOfMonth()>=0 && repeatEvent.getDayOfWeek()>=0){
@@ -2370,9 +2367,9 @@ public class InstanceServiceImpl implements IInstanceService {
 							}else{
 								endTime = new LocalDate(repeatEvent.getEndTime().getTime()+i*increment);									
 							}
-							SwdDataField endTimeField = eventRecord.getDataField(FIELD_END_TIME);
+							SwdDataField endTimeField = eventRecord.getDataField(FormField.ID_NUM_EVENT_END_TIME);
 							endTimeField.setValue(endTime.toGMTDateString());
-							eventRecord.setDataField(FIELD_END_TIME, endTimeField);
+							eventRecord.setDataField(FormField.ID_NUM_EVENT_END_TIME, endTimeField);
 						}
 						try{
 							if(startTime!=null && !(repeatEvent.getEndTime()!=null && endTime==null)){
