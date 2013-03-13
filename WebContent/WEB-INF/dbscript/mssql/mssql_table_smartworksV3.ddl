@@ -2542,3 +2542,16 @@ CREATE TABLE SWSpaceNotice (
 	primary key (id)
 );
 
+CREATE TABLE SWAlarmNotice (
+	id varchar(50) NOT NULL,
+	noticeTime datetime,
+	workId varchar(50),
+	recordId varchar(100),
+	targetUser varchar(50),
+	companyId varchar(50),
+	creator varchar (50),
+	createdTime datetime,
+	modifier varchar (50),
+	modifiedTime datetime,
+	primary key (id)
+);

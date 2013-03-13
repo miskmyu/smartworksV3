@@ -2,6 +2,8 @@ package net.smartworks.server.engine.publishnotice.manager;
 
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.publishnotice.exception.PublishNoticeException;
+import net.smartworks.server.engine.publishnotice.model.AlarmNotice;
+import net.smartworks.server.engine.publishnotice.model.AlarmNoticeCond;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
 import net.smartworks.server.engine.publishnotice.model.SpaceNotice;
@@ -24,5 +26,12 @@ public interface IPublishNoticeManager extends IManager {
 	public void removeSpaceNotice(String userId, SpaceNoticeCond cond) throws PublishNoticeException;
 	public long getSpaceNoticeSize(String userId, SpaceNoticeCond cond) throws PublishNoticeException;
 	public SpaceNotice[] getSpaceNotices(String userId, SpaceNoticeCond cond, String level) throws PublishNoticeException;
-	
+
+	public AlarmNotice getAlarmNotice(String userId, String id, String level) throws PublishNoticeException;
+	public AlarmNotice getAlarmNotice(String userId, AlarmNoticeCond cond, String level) throws PublishNoticeException;
+	public void setAlarmNotice(String userId, AlarmNotice obj, String level) throws PublishNoticeException;
+	public void removeAlarmNotice(String userId, String id) throws PublishNoticeException;
+	public void removeAlarmNotice(String userId, AlarmNoticeCond cond) throws PublishNoticeException;
+	public long getAlarmNoticeSize(String userId, AlarmNoticeCond cond) throws PublishNoticeException;
+	public AlarmNotice[] getAlarmNotices(String userId, AlarmNoticeCond cond, String level) throws PublishNoticeException;
 }

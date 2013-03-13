@@ -127,7 +127,7 @@
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>"><img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 							</div>
 							<div class="info_list">
-								<a href="<%=instance.getController()%>?cid=<%=instance.getContextId()%>&wid=<%=instance.getWorkSpaceId()%>"><%=instance.getSubject()%></a>
+								<a href="<%=instance.getController()%>?cid=<%=instance.getContextId()%>&wid=<%=instance.getWorkSpaceId()%>&workId=<%=instance.getWorkId()%>"><%=instance.getSubject()%></a>
 								<fmt:message key="notice.message.instance.created" />
 								<div class="t_date"><%=nMessage.getIssuedDate().toLocalString()%>
 									<a href="" noticeId="<%=nMessage.getId() %>" noticeType="<%=noticeType%>" lastNoticeId="<%=lastNoticeId %>">
