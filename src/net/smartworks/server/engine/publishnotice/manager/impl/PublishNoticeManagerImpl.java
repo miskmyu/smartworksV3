@@ -9,10 +9,15 @@
 package net.smartworks.server.engine.publishnotice.manager.impl;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.smartworks.server.engine.common.manager.AbstractManager;
+import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.DateUtil;
 import net.smartworks.server.engine.publishnotice.exception.PublishNoticeException;
 import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.publishnotice.model.AlarmNotice;
@@ -459,6 +464,9 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 		Date creationDateFrom = null;
 		Date creationDateTo = null;
 
+		Filter[] filters = null;
+		String logicalOperator = null;
+
 		if (cond != null) {
 			objId = cond.getObjId();
 			noticeTime = cond.getNoticeTime();
@@ -471,9 +479,13 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 			creationDate = cond.getCreationDate();
 			creationDateFrom = cond.getCreationDateFrom();
 			creationDateTo = cond.getCreationDateTo();
+			
+			filters = cond.getFilter();
+			logicalOperator = cond.getOperator();
 		}
 		buf.append(" from AlarmNotice obj");
 		buf.append(" where obj.objId is not null");
+		Map filterMap = new HashMap();
 		if (cond != null) {
 			if (objId != null) 
 				buf.append(" and obj.objId = :objId");
@@ -495,6 +507,51 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 				buf.append(" and obj.creationDate > :creationDateFrom");
 			if (creationDateTo != null)
 				buf.append(" and obj.creationDate < :creationDateTo");
+			if (filters != null) {
+				if (!CommonUtil.isEmpty(filters)) {
+					if (CommonUtil.isEmpty(logicalOperator))
+						logicalOperator = "and";
+					String operator;
+					String left;
+					String right;
+					String rightType;
+					int i = 0;
+					
+					for (int j = 0; j < filters.length; j++) {
+						Filter f = filters[j];
+						operator = f.getOperator();
+						left = f.getLeftOperandValue();
+						right = f.getRightOperandValue();
+						rightType = f.getRightOperandType();
+						if (left == null)
+							throw new Exception("left operand of filter condition is null.");
+						if (operator == null) {
+							operator = "=";
+						} else {
+							operator = operator.trim();
+						}
+						//left = CommonUtil.toDefault(fieldColumnMap.get(left), left);
+						buf.append(CommonUtil.SPACE).append(logicalOperator);
+						
+						buf.append(CommonUtil.SPACE).append(left);
+						if (right == null) {
+							if (operator.equals("!=") || 
+									(operator.indexOf("=") == -1 && !operator.equalsIgnoreCase("is"))) {
+								buf.append(" is not null");
+							} else {
+								buf.append(" is null");
+							}
+						} else {
+							if (rightType == null || !rightType.equalsIgnoreCase(Filter.OPERANDTYPE_FIELD)) {
+								right = "a" + i++;
+								filterMap.put(right, f);
+							}
+							buf.append(CommonUtil.SPACE).append(operator);
+							buf.append(CommonUtil.SPACE).append(CommonUtil.COLON).append(right);
+						}
+					}
+				}
+			}
 		}
 		this.appendOrderQuery(buf, "obj", cond);
 		
@@ -520,6 +577,43 @@ public class PublishNoticeManagerImpl extends AbstractManager implements IPublis
 				query.setTimestamp("creationDateFrom", creationDateFrom);
 			if (creationDateTo != null)
 				query.setTimestamp("creationDateTo", creationDateTo);
+			if (filters != null) {
+				if (!CommonUtil.isEmpty(filterMap)) {
+					Filter f;
+					String operType;
+					String operValue;
+					String operator;
+					
+					Iterator keyItr = filterMap.keySet().iterator();
+					String param = null;
+					while (keyItr.hasNext()) {
+						param = (String)keyItr.next();
+						f = (Filter)filterMap.get(param);
+						operType = f.getRightOperandType();
+						operator = f.getOperator();
+						if (operator.equalsIgnoreCase("like")) {
+							operValue = CommonUtil.toLikeString(f.getRightOperandValue());
+						} else {
+							operValue = f.getRightOperandValue();
+						}	
+						if (operType == null || operType.equalsIgnoreCase(Filter.OPERANDTYPE_STRING)) {
+							query.setString(param, operValue);
+						} else if (operType.equalsIgnoreCase(Filter.OPERANDTYPE_INT)) {
+							query.setInteger(param, CommonUtil.toInt(operValue));
+						} else if (operType.equalsIgnoreCase(Filter.OPERANDTYPE_FLOAT)) {
+							query.setFloat(param, CommonUtil.toFloat(operValue));
+						} else if (operType.equalsIgnoreCase(Filter.OPERANDTYPE_DATE)) {
+							query.setTimestamp(param, DateUtil.toDate(operValue));
+						} else if (operType.equalsIgnoreCase("number")) {
+							query.setDouble(param, Double.parseDouble(operValue));
+						} else if (operType.equalsIgnoreCase("boolean")) {
+							query.setBoolean(param, CommonUtil.toBoolean(operValue));
+						} else {
+							query.setParameter(param, operValue);
+						}
+					}
+				}
+			}
 		}
 		return query;
 	}
