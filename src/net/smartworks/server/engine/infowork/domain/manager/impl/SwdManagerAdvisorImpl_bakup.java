@@ -510,7 +510,7 @@ public class SwdManagerAdvisorImpl_bakup extends AbstractSwdManagerAdvisor {
 							AlarmNotice alarmObj = new AlarmNotice();						
 							AlarmNoticeCond cond = new AlarmNoticeCond();
 							cond.setRecordId(superRecordId);
-							AlarmNotice oldAlarmObj = SwManagerFactory.getInstance().getPublishNoticeManager().getAlarmNotice(user, cond, IManager.LEVEL_ALL);
+							AlarmNotice oldAlarmObj = SwManagerFactory.getInstance().getPublishNoticeManager().getAlarmNotice(user, cond, IManager.LEVEL_LITE);
 							if(!SmartUtil.isBlankObject(oldAlarmObj)){
 								alarmObj = oldAlarmObj;
 							}
