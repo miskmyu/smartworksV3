@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.company.CompanyGeneral;
+import net.smartworks.model.company.CompanyOption;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
 import net.smartworks.model.mail.MailAccount;
@@ -315,7 +316,13 @@ public class SmartUtil {
 			
 		return "home.sw";
 	}
+
 	
+	public static CompanyOption getCompanyOption() throws Exception{
+		CompanyOption companyOption = new CompanyOption();
+		// TO DO : Call the web service to get the company options registered in the Work App-Store
+		return companyOption;
+	}
 	public static String getCurrentHref(HttpServletRequest request, String spaceId) throws Exception{
 		if(isBlankObject(spaceId)) return "home.sw";
 		

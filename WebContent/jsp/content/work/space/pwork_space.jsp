@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.model.company.CompanyOption"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.company.CompanyGeneral"%>
 <%@page import="net.smartworks.model.approval.ApprovalLine"%>
@@ -161,6 +162,8 @@ function submitForms(tempSave) {
 
 	int numberOfDownloadHistories = (SmartUtil.isBlankObject(taskInstance)) ? 0 : taskInstance.getNumberOfDownloadHistories();
 
+	CompanyOption companyOption = SmartUtil.getCompanyOption();
+	
  	session.setAttribute("cid", cid);
 	if(SmartUtil.isBlankObject(wid))
 		session.removeAttribute("wid");
@@ -216,6 +219,7 @@ function submitForms(tempSave) {
 	            
 					<!-- 전자결재, 업무전달 버튼들 -->
 					<div class="fr cb">
+						<span class="js_progress_span"></span>
 						<%
 						if(forwardedTask == null){
 						%>
@@ -227,11 +231,18 @@ function submitForms(tempSave) {
 						<%
 						if(cUser.isUseMail()){
 						%>
-	                		<a href="" class="js_email_content_btn" title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
+	                		<a href="" class="<%if(companyOption.isHtmlWriterPlugined()){%>js_doc_writer_plugin<%}else{ %>js_email_content_btn<%} %>" docTarget="email" title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
 	                	<%
 	                	}
 	                	%>
-	                	<a href="" class="js_print_content_btn" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
+	                	<a href="" class="<%if(companyOption.isHtmlWriterPlugined()){%>js_doc_writer_plugin<%}else{ %>js_print_content_btn<%} %>" docTarget="print" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
+						<%
+	                	if(companyOption.isPdfWriterPlugined()){
+	                	%>
+	                		<a class="js_doc_writer_plugin" href="" docTarget="pdf" title="<fmt:message key='common.button.pdf'/>"><span class="icon_pdf_w"></span></a>
+	                	<%
+	                	}
+	                	%>
 	            	</div>
 	            	
 	            <!-- 다이어그램 보기 -->

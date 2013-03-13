@@ -46,6 +46,11 @@ public class FormField extends BaseObject{
 	public static final String ID_APP_PUBLISHED_COMPANY = "appPublishedCompany";
 	public static final String ID_APP_PUBLISHED_DATE = "appPublishedDate";
 
+	public static final String ID_NUM_EVENT_START_TIME = "1";
+	public static final String ID_NUM_EVENT_END_TIME = "2";
+	public static final String ID_NUM_EVENT_ALARM = "3";
+	public static final String ID_NUM_REPEAT_EVENT_ID = "8";
+	
 	public static final String TYPE_OBJECT_ID = "objectId"; // work
 	public static final String TYPE_TEXT = "textInput"; //string
 	public static final String TYPE_USER = "userField"; //user

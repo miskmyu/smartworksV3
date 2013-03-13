@@ -95,6 +95,17 @@ public class DocFileController {
 		}
 	}
 
+	@RequestMapping(value = "/get_content_from_doc_writer", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void getContentFromDocWriter(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		try {
+			//smartworks.downloadFile(request, response);
+		} catch (Exception e) {
+			e.getMessage();
+		}
+	}
+
+	
 	@RequestMapping(value = "/upload_yt_video", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws Exception {
