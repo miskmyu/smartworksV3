@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import net.smartworks.model.work.FormField;
+import net.smartworks.model.work.SmartForm;
+import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
@@ -33,7 +36,11 @@ import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
+import net.smartworks.server.engine.publishnotice.model.AlarmNotice;
+import net.smartworks.server.engine.publishnotice.model.AlarmNoticeCond;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
+import net.smartworks.util.SmartUtil;
 
 public class SwdManagerAdvisorImpl_bakup extends AbstractSwdManagerAdvisor {
 	public SwdManagerAdvisorImpl_bakup() {
@@ -474,7 +481,52 @@ public class SwdManagerAdvisorImpl_bakup extends AbstractSwdManagerAdvisor {
 			this.getTskManager().executeTask(user, task, null);
 		}
 
-		
+		if(domainId.equals(SmartForm.ID_EVENT_MANAGEMENT)){
+			SwdRecord record = obj;
+			SwdDataField eventAlarmField = record.getDataField(FormField.ID_NUM_EVENT_ALARM);
+			if(!SmartUtil.isBlankObject(eventAlarmField) && !SmartUtil.isBlankObject(eventAlarmField.getValue()) && !eventAlarmField.getValue().equals(SmartMessage.getString("event.alarm.none"))){
+				String alarmTimeStr = eventAlarmField.getValue();
+				long alarmTime = -1;
+				if(alarmTimeStr.equals(SmartMessage.getString("event.alarm.on_time"))){
+					alarmTime = 0;
+				}else if(alarmTimeStr.equals(SmartMessage.getString("event.alarm.before_5m"))){
+					alarmTime = LocalDate.ONE_MINUTE*5;
+				}else if(alarmTimeStr.equals(SmartMessage.getString("event.alarm.before_10m"))){
+					alarmTime = LocalDate.ONE_MINUTE*10;					
+				}else if(alarmTimeStr.equals(SmartMessage.getString("event.alarm.before_15m"))){
+					alarmTime = LocalDate.ONE_MINUTE*15;					
+				}else if(alarmTimeStr.equals(SmartMessage.getString("event.alarm.before_30m"))){
+					alarmTime = LocalDate.ONE_MINUTE*30;
+				}else if(alarmTimeStr.equals(SmartMessage.getString("event.alarm.before_1h"))){
+					alarmTime = LocalDate.ONE_HOUR*1;
+				}else if(alarmTimeStr.equals(SmartMessage.getString("event.alarm.before_1d"))){
+					alarmTime = LocalDate.ONE_DAY*1;					
+				}
+				SwdDataField startTimeField = record.getDataField(FormField.ID_NUM_EVENT_END_TIME);
+				if(alarmTime>=0 && !SmartUtil.isBlankObject(startTimeField) && !SmartUtil.isBlankObject(startTimeField.getValue())){
+					try{
+						Date startTime = new Date(LocalDate.convertGMTStringToLocalDate2(startTimeField.getValue()).getTime());
+						if(!SmartUtil.isBlankObject(startTime)){
+							AlarmNotice alarmObj = new AlarmNotice();						
+							AlarmNoticeCond cond = new AlarmNoticeCond();
+							cond.setRecordId(superRecordId);
+							AlarmNotice oldAlarmObj = SwManagerFactory.getInstance().getPublishNoticeManager().getAlarmNotice(user, cond, IManager.LEVEL_ALL);
+							if(!SmartUtil.isBlankObject(oldAlarmObj)){
+								alarmObj = oldAlarmObj;
+							}
+							
+							alarmObj.setCompanyId(SmartUtil.getCurrentUser().getCompanyId());
+							alarmObj.setNoticeTime(new Date(startTime.getTime()-alarmTime));
+							alarmObj.setTargetUser(user);
+							alarmObj.setWorkId(SmartWork.ID_EVENT_MANAGEMENT);
+						}
+					}catch (Exception e){
+						e.printStackTrace();
+					}
+				}
+			}
+			
+		}
 		
 	}
 	private SwdDataRef newDataRef(String myRecordId, String myFormId, String myFormFieldId, String refRecordId, String refFormId, String refFormFieldId) {
@@ -506,6 +558,15 @@ public class SwdManagerAdvisorImpl_bakup extends AbstractSwdManagerAdvisor {
 		
 		// 전달업무 삭제
 		this.removeProcessInstsByRecordId(user, domain.getFormId(), recordId);
+		
+		if(domainId.equals(SmartForm.ID_EVENT_MANAGEMENT)){
+			AlarmNoticeCond cond = new AlarmNoticeCond();
+			cond.setRecordId(recordId);
+			AlarmNotice alarmObj = SwManagerFactory.getInstance().getPublishNoticeManager().getAlarmNotice(user, cond, IManager.LEVEL_ALL);
+			if(!SmartUtil.isBlankObject(alarmObj)){
+				SwManagerFactory.getInstance().getPublishNoticeManager().removeAlarmNotice(user, alarmObj.getObjId());
+			}
+		}
 	}
 	
 	private void removeDataRefsByRecordId(String user, String formId, String recordId) throws Exception {
