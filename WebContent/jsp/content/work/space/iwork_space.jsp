@@ -3,6 +3,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.model.company.CompanyOption"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.work.info.SmartWorkInfo"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -189,13 +190,15 @@ function submitForms(tempSave) {
 	// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
 	CommunityInfo[] communities = smartWorks.getMyCommunitiesForUpload(workId);
 	
+	CompanyOption companyOption = SmartUtil.getCompanyOption();
+	
 	String currentHref = SmartUtil.getCurrentHref(request, "iwork_space.sw");
 	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-     <div class="section_portlet js_iwork_space_page" currentHref="<%=currentHref %>" lastHref="<%=lastHref%>" workId="<%=workId%>" instId="<%=instId%>" isTempSaved="<%=instance.isTempSaved() %>" isRepeatEvent="<%=instance.isRepeatEvent()%>">
+     <div class="section_portlet js_iwork_space_page" currentHref="<%=currentHref %>" lastHref="<%=lastHref%>" workId="<%=workId%>" instId="<%=instId%>" isTempSaved="<%=instance.isTempSaved() %>" repeatEventId="<%=instance.getRepeatEventId()%>">
 
  		<div class="portlet_t">
       		<div class="portlet_tl"></div>
@@ -240,6 +243,7 @@ function submitForms(tempSave) {
 		            
 						<!-- 전자결재, 업무전달 버튼들 -->
 						<div class="fr cb" style="height:22px">
+							<span class="js_progress_span"></span>
 							<%
 							if(forwardedTask == null){
 							%>
@@ -261,11 +265,18 @@ function submitForms(tempSave) {
 							<%
 							if(cUser.isUseMail()){
 							%>
-		                		<a href="" class="js_email_content_btn" title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
+		                		<a href="" class="<%if(companyOption.isHtmlWriterPlugined()){%>js_doc_writer_plugin<%}else{ %>js_email_content_btn<%} %>" docTarget="email" title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
 		                	<%
 		                	}
 		                	%>
-		                	<a class="js_print_content_btn" href="" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
+		                	<a class="<%if(companyOption.isHtmlWriterPlugined()){%>js_doc_writer_plugin<%}else{ %>js_print_content_btn <%} %>" href="" docTarget="print" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
+		                	<%
+		                	if(companyOption.isPdfWriterPlugined()){
+		                	%>
+		                		<a class="js_doc_writer_plugin" href="" docTarget="pdf" title="<fmt:message key='common.button.pdf'/>"><span class="icon_pdf_w"></span></a>
+		                	<%
+		                	}
+		                	%>
 						</div>
 						<!-- 전자결재, 업무전달 버튼들 //-->
 					</div>

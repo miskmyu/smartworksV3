@@ -16,7 +16,7 @@ public class InformationWorkInstance extends WorkInstance {
 	private int numberOfDownloadHistories = 0;
 	private boolean isApprovalWork;
 	private ApprovalLine approvalLine;
-	private boolean isRepeatEvent;
+	private String repeatEventId;
 	
 	public int getViews() {
 		return views;
@@ -60,11 +60,11 @@ public class InformationWorkInstance extends WorkInstance {
 	public void setApprovalLine(ApprovalLine approvalLine) {
 		this.approvalLine = approvalLine;
 	}
-	public boolean isRepeatEvent() {
-		return isRepeatEvent;
+	public String getRepeatEventId() {
+		return repeatEventId;
 	}
-	public void setRepeatEvent(boolean isRepeatEvent) {
-		this.isRepeatEvent = isRepeatEvent;
+	public void setRepeatEventId(String repeatEventId) {
+		this.repeatEventId = repeatEventId;
 	}
 	public InformationWorkInstance() {
 		super();

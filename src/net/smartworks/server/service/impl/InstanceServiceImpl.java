@@ -1940,6 +1940,25 @@ public class InstanceServiceImpl implements IInstanceService {
 				companyId = cuser.getCompanyId();
 			}
 
+			String servletPath = request.getServletPath();
+			RepeatEvent repeatEvent = null;
+			String repeatId = null;
+			if(servletPath.equals("/create_new_event.sw")){
+				Map<String, Object> eventRepeatPolicyMap = (Map<String, Object>)requestBody.get("repeatPolicy");
+				if(!SmartUtil.isBlankObject(eventRepeatPolicyMap)){
+					repeatEvent = new RepeatEvent( 	(String)eventRepeatPolicyMap.get("repeatBy"), 
+													(String)eventRepeatPolicyMap.get("repeatWeek"),
+													(String)eventRepeatPolicyMap.get("repeatDay"),
+													(String)eventRepeatPolicyMap.get("repeatDate"),
+													(String)eventRepeatPolicyMap.get("repeatEnd"),
+													(String)eventRepeatPolicyMap.get("repeatEndDate"),
+													(String)eventRepeatPolicyMap.get("repeatEndCount"));
+					if(!SmartUtil.isBlankObject(repeatEvent)){
+						repeatId = "repeat_" + CommonUtil.newId();
+					}
+				}
+			}
+			
 			SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setFormId(formId);
 			SwdDomain swdDomain = getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE);
@@ -2115,6 +2134,13 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			}
 	
+			if(!SmartUtil.isBlankObject(repeatId)){
+				SwdDataField fieldData = new SwdDataField();
+				fieldData.setId(FormField.ID_NUM_REPEAT_EVENT_ID);
+				fieldData.setName(fieldInfoMap.get(FormField.ID_NUM_REPEAT_EVENT_ID).getFormFieldName());
+				fieldData.setValue(repeatId);
+				fieldDataList.add(fieldData);
+			}
 			SwdDataField[] fieldDatas = new SwdDataField[fieldDataList.size()];
 			fieldDataList.toArray(fieldDatas);
 			SwdRecord obj = new SwdRecord();
@@ -2186,7 +2212,6 @@ public class InstanceServiceImpl implements IInstanceService {
 			setReferenceApprovalToRecord(userId, obj, requestBody);
 			
 			//TODO 좋은방법이 멀까?
-			String servletPath = request.getServletPath();
 			if(servletPath.equals("/upload_new_picture.sw")) {
 				obj.setExtendedAttributeValue("tskRefType", TskTask.TASKREFTYPE_IMAGE);
 			} else if (servletPath.equals("/upload_new_file.sw")) {
@@ -2276,97 +2301,87 @@ public class InstanceServiceImpl implements IInstanceService {
 			}*/
 			if (isCreateRecord)
 				populateSpaceNotice(obj, taskInstId);
-			
-			if(servletPath.equals("/create_new_event.sw")){
-				Map<String, Object> eventRepeatPolicyMap = (Map<String, Object>)requestBody.get("repeatPolicy");
-				if(!SmartUtil.isBlankObject(eventRepeatPolicyMap)){
-					RepeatEvent repeatEvent = new RepeatEvent( 	(String)eventRepeatPolicyMap.get("repeatBy"), 
-																(String)eventRepeatPolicyMap.get("repeatWeek"),
-																(String)eventRepeatPolicyMap.get("repeatDay"),
-																(String)eventRepeatPolicyMap.get("repeatDate"),
-																(String)eventRepeatPolicyMap.get("repeatEnd"),
-																(String)eventRepeatPolicyMap.get("repeatEndDate"),
-																(String)eventRepeatPolicyMap.get("repeatEndCount"));
-					SwdRecord eventRecord = obj;
-					
-					String FIELD_START_TIME = "1";
-					String FIELD_END_TIME = "2";
-
-					repeatEvent.setStartTime(LocalDate.convertGMTStringToLocalDate2(eventRecord.getDataField(FIELD_START_TIME).getValue()));
-					if(eventRecord.getDataField(FIELD_END_TIME) != null)
-						repeatEvent.setEndTime(LocalDate.convertGMTStringToLocalDate2(eventRecord.getDataField(FIELD_END_TIME).getValue()));
-
-					if(repeatEvent!=null && eventRecord!=null && (repeatEvent.getRepeatCount()>0 || repeatEvent.getRepeatEndDate()!=null) && repeatEvent.getStartTime()!=null
-							&& (repeatEvent.getRepeatCount()>0 || repeatEvent.getRepeatEndDate().getTime()>repeatEvent.getStartTime().getTime())){
-						int repeatCount=0; long increment=0; boolean isMonthIncrement=false; int diffMonths;
-						long thisYear=0, thisMonth=0, thisDate=0, thisTime=0; 
-						switch(repeatEvent.getRepeatInterval()){
-						case RepeatEvent.REPEAT_INTERVAL_EVERY_DAY:
-							increment = LocalDate.ONE_DAY;
-							repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : (int)(repeatEvent.getRepeatEndDate().getTime() - repeatEvent.getStartTime().getTime())/(int)increment+1;
-							break;
-						case RepeatEvent.REPEAT_INTERVAL_EVERY_WEEK:
-							increment = LocalDate.ONE_WEEK;
-							repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : (int)(repeatEvent.getRepeatEndDate().getTime() - repeatEvent.getStartTime().getTime()+LocalDate.ONE_DAY)/(int)increment+1;
-							break;
-						case RepeatEvent.REPEAT_INTERVAL_BI_WEEK:
-							increment = LocalDate.ONE_WEEK*2;
-							repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : (int)(repeatEvent.getRepeatEndDate().getTime() - repeatEvent.getStartTime().getTime()+LocalDate.ONE_DAY)/(int)increment+1;
-							break;
-						case RepeatEvent.REPEAT_INTERVAL_EVERY_MONTH_DATE:
-						case RepeatEvent.REPEAT_INTERVAL_EVERY_MONTH_CUSTOM:
-							increment = 1;
-							isMonthIncrement=true;
-							diffMonths = (repeatEvent.getRepeatEndDate()!=null) ? (repeatEvent.getRepeatEndDate().getYear()*12 + repeatEvent.getRepeatEndDate().getMonth() - repeatEvent.getStartTime().getYear()*12 - repeatEvent.getStartTime().getMonth()) : 0 ;
-							repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : diffMonths +1;
-							
-							break;
-						case RepeatEvent.REPEAT_INTERVAL_BI_MONTH_DATE:
-						case RepeatEvent.REPEAT_INTERVAL_BI_MONTH_CUSTOM:
-							increment = 2;
-							isMonthIncrement=true;
-							diffMonths = (repeatEvent.getRepeatEndDate()!=null) ? (repeatEvent.getRepeatEndDate().getYear()*12 + repeatEvent.getRepeatEndDate().getMonth() - repeatEvent.getStartTime().getYear()*12 - repeatEvent.getStartTime().getMonth()) : 0 ;
-							repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : diffMonths/2 +1;
-							break;
-						}
 						
-						for(int i=1; i<repeatCount; i++){
-							LocalDate startTime=null, endTime=null;
+			if(!SmartUtil.isBlankObject(repeatEvent)){
+				SwdRecord eventRecord = obj;
+				
+				String FIELD_START_TIME = "1";
+				String FIELD_END_TIME = "2";
+
+				repeatEvent.setStartTime(LocalDate.convertGMTStringToLocalDate2(eventRecord.getDataField(FIELD_START_TIME).getValue()));
+				if(eventRecord.getDataField(FIELD_END_TIME) != null)
+					repeatEvent.setEndTime(LocalDate.convertGMTStringToLocalDate2(eventRecord.getDataField(FIELD_END_TIME).getValue()));
+
+				if(repeatEvent!=null && eventRecord!=null && (repeatEvent.getRepeatCount()>0 || repeatEvent.getRepeatEndDate()!=null) && repeatEvent.getStartTime()!=null
+						&& (repeatEvent.getRepeatCount()>0 || repeatEvent.getRepeatEndDate().getTime()>repeatEvent.getStartTime().getTime())){
+					int repeatCount=0; long increment=0; boolean isMonthIncrement=false; int diffMonths;
+					long thisYear=0, thisMonth=0, thisDate=0, thisTime=0; 
+					switch(repeatEvent.getRepeatInterval()){
+					case RepeatEvent.REPEAT_INTERVAL_EVERY_DAY:
+						increment = LocalDate.ONE_DAY;
+						repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : (int)(repeatEvent.getRepeatEndDate().getTime() - repeatEvent.getStartTime().getTime())/(int)increment+1;
+						break;
+					case RepeatEvent.REPEAT_INTERVAL_EVERY_WEEK:
+						increment = LocalDate.ONE_WEEK;
+						repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : (int)(repeatEvent.getRepeatEndDate().getTime() - repeatEvent.getStartTime().getTime()+LocalDate.ONE_DAY)/(int)increment+1;
+						break;
+					case RepeatEvent.REPEAT_INTERVAL_BI_WEEK:
+						increment = LocalDate.ONE_WEEK*2;
+						repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : (int)(repeatEvent.getRepeatEndDate().getTime() - repeatEvent.getStartTime().getTime()+LocalDate.ONE_DAY)/(int)increment+1;
+						break;
+					case RepeatEvent.REPEAT_INTERVAL_EVERY_MONTH_DATE:
+					case RepeatEvent.REPEAT_INTERVAL_EVERY_MONTH_CUSTOM:
+						increment = 1;
+						isMonthIncrement=true;
+						diffMonths = (repeatEvent.getRepeatEndDate()!=null) ? (repeatEvent.getRepeatEndDate().getYear()*12 + repeatEvent.getRepeatEndDate().getMonth() - repeatEvent.getStartTime().getYear()*12 - repeatEvent.getStartTime().getMonth()) : 0 ;
+						repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : diffMonths +1;
+						
+						break;
+					case RepeatEvent.REPEAT_INTERVAL_BI_MONTH_DATE:
+					case RepeatEvent.REPEAT_INTERVAL_BI_MONTH_CUSTOM:
+						increment = 2;
+						isMonthIncrement=true;
+						diffMonths = (repeatEvent.getRepeatEndDate()!=null) ? (repeatEvent.getRepeatEndDate().getYear()*12 + repeatEvent.getRepeatEndDate().getMonth() - repeatEvent.getStartTime().getYear()*12 - repeatEvent.getStartTime().getMonth()) : 0 ;
+						repeatCount = (repeatEvent.getRepeatCount()>0) ? repeatEvent.getRepeatCount() : diffMonths/2 +1;
+						break;
+					}
+					
+					for(int i=1; i<repeatCount; i++){
+						LocalDate startTime=null, endTime=null;
+						if(isMonthIncrement){
+							if(repeatEvent.getWeekOfMonth()>=0 && repeatEvent.getDayOfWeek()>=0){
+								startTime = LocalDate.convertLocalDateWithDiffMonth(repeatEvent.getStartTime(), (int)(i*increment), repeatEvent.getWeekOfMonth(), repeatEvent.getDayOfWeek());
+							}else{
+								startTime = LocalDate.convertLocalDateWithDiffMonth(repeatEvent.getStartTime(), (int)(i*increment));
+							}
+						}else{
+							startTime = new LocalDate(repeatEvent.getStartTime().getTime()+i*increment);
+						}
+						SwdDataField startTimeField = eventRecord.getDataField(FIELD_START_TIME);
+						startTimeField.setValue(startTime.toGMTDateString());
+						eventRecord.setDataField(FIELD_START_TIME, startTimeField);
+						if(repeatEvent.getEndTime()!=null){
 							if(isMonthIncrement){
 								if(repeatEvent.getWeekOfMonth()>=0 && repeatEvent.getDayOfWeek()>=0){
-									startTime = LocalDate.convertLocalDateWithDiffMonth(repeatEvent.getStartTime(), (int)(i*increment), repeatEvent.getWeekOfMonth(), repeatEvent.getDayOfWeek());
+									startTime = LocalDate.convertLocalDateWithDiffMonth(repeatEvent.getStartTime(), (int)(i*increment), repeatEvent.getWeekOfMonth(), repeatEvent.getDayOfWeek());										
 								}else{
 									startTime = LocalDate.convertLocalDateWithDiffMonth(repeatEvent.getStartTime(), (int)(i*increment));
 								}
 							}else{
-								startTime = new LocalDate(repeatEvent.getStartTime().getTime()+i*increment);
+								endTime = new LocalDate(repeatEvent.getEndTime().getTime()+i*increment);									
 							}
-							SwdDataField startTimeField = eventRecord.getDataField(FIELD_START_TIME);
-							startTimeField.setValue(startTime.toGMTDateString());
-							eventRecord.setDataField(FIELD_START_TIME, startTimeField);
-							if(repeatEvent.getEndTime()!=null){
-								if(isMonthIncrement){
-									if(repeatEvent.getWeekOfMonth()>=0 && repeatEvent.getDayOfWeek()>=0){
-										startTime = LocalDate.convertLocalDateWithDiffMonth(repeatEvent.getStartTime(), (int)(i*increment), repeatEvent.getWeekOfMonth(), repeatEvent.getDayOfWeek());										
-									}else{
-										startTime = LocalDate.convertLocalDateWithDiffMonth(repeatEvent.getStartTime(), (int)(i*increment));
-									}
-								}else{
-									endTime = new LocalDate(repeatEvent.getEndTime().getTime()+i*increment);									
-								}
-								SwdDataField endTimeField = eventRecord.getDataField(FIELD_END_TIME);
-								endTimeField.setValue(endTime.toGMTDateString());
-								eventRecord.setDataField(FIELD_END_TIME, endTimeField);
+							SwdDataField endTimeField = eventRecord.getDataField(FIELD_END_TIME);
+							endTimeField.setValue(endTime.toGMTDateString());
+							eventRecord.setDataField(FIELD_END_TIME, endTimeField);
+						}
+						try{
+							if(startTime!=null && !(repeatEvent.getEndTime()!=null && endTime==null)){
+								eventRecord.setRecordId("dr_" + CommonUtil.newId());
+								String repeatInstanceId = getSwdManager().setRecord(userId, eventRecord, IManager.LEVEL_ALL);
 							}
-							try{
-								if(startTime!=null && !(repeatEvent.getEndTime()!=null && endTime==null)){
-									eventRecord.setRecordId("dr_" + CommonUtil.newId());
-									String repeatInstanceId = getSwdManager().setRecord(userId, eventRecord, IManager.LEVEL_ALL);
-								}
-							}catch (Exception e){
-								e.printStackTrace();
-								break;
-							}
+						}catch (Exception e){
+							e.printStackTrace();
+							break;
 						}
 					}
 				}
@@ -2602,6 +2617,8 @@ public class InstanceServiceImpl implements IInstanceService {
 		try{
 			String workId = (String)requestBody.get("workId");
 			String instanceId = (String)requestBody.get("instanceId");
+			String repeatEventId = (String)requestBody.get("repeatEventId");
+			
 
 			User user = SmartUtil.getCurrentUser();
 			SwfFormCond swfFormCond = new SwfFormCond();
@@ -2613,36 +2630,55 @@ public class InstanceServiceImpl implements IInstanceService {
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
 			swdRecordCond.setPackageId(workId);
 			swdRecordCond.setFormId(swfForms[0].getId());
-			swdRecordCond.setRecordId(instanceId);
+			if(SmartUtil.isBlankObject(repeatEventId)){
+				swdRecordCond.setRecordId(instanceId);				
+			}else{				
+				String tableColName = getSwdManager().getTableColName(swfForms[0].getId(), FormField.ID_NUM_REPEAT_EVENT_ID);
+				if(tableColName != null){
+					Filter filter = new Filter();
+					filter.setLeftOperandType(Filter.OPERANDTYPE_STRING);
+					filter.setLeftOperandValue(tableColName);
+					filter.setOperator("=");
+					filter.setRightOperandType(Filter.OPERANDTYPE_STRING);
+					filter.setRightOperandValue(repeatEventId);
+					swdRecordCond.setFilter(new Filter[]{filter});
+				}else{
+					swdRecordCond.setRecordId(instanceId);									
+				}				
+			}
+
 	
 			//getSwdManager().removeRecord(user.getId(), swdRecordCond);
 			
 			// 삭제할 레코드 조회
-			SwdRecord record = getSwdManager().getRecord(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
-			if (record == null)
+			SwdRecord[] records = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
+			if (records == null || records.length == 0)
 				return;
 			
-			// 삭제할 도메인 아이디 조회
-			String domainId = record.getDomainId();
-			if (domainId == null) {
-				SwdDomainCond domainCond = new SwdDomainCond();
-				domainCond.setFormId(record.getFormId());
-				SwdDomain domain = getSwdManager().getDomain(user.getId(), domainCond, IManager.LEVEL_LITE);
-				domainId = domain.getObjId();
-			}
-
-			getSwdManager().removeRecord(user.getId(), record.getDomainId(), record.getRecordId());
-			
-			AutoIndexInstCond cond = new AutoIndexInstCond();
-			cond.setInstanceId(record.getRecordId());
-			AutoIndexInst[] autoIndex = SwManagerFactory.getInstance().getAutoIndexManager().getAutoIndexInsts(user.getId(), cond, null);
-			if (autoIndex != null) {
-				for (int i = 0; i < autoIndex.length; i++) {
-					SwManagerFactory.getInstance().getAutoIndexManager().removeAutoIndexInst(user.getId(), autoIndex[i].getObjId());
+			int recordSize = (SmartUtil.isBlankObject(repeatEventId)) ? 1 : records.length;
+			for(int i=0; i<recordSize; i++){
+				// 삭제할 도메인 아이디 조회
+				SwdRecord record = records[i];
+				String domainId = record.getDomainId();
+				if (domainId == null) {
+					SwdDomainCond domainCond = new SwdDomainCond();
+					domainCond.setFormId(record.getFormId());
+					SwdDomain domain = getSwdManager().getDomain(user.getId(), domainCond, IManager.LEVEL_LITE);
+					domainId = domain.getObjId();
 				}
-			}
-			//removeSpaceNotice(workId, instanceId);
-			
+	
+				getSwdManager().removeRecord(user.getId(), record.getDomainId(), record.getRecordId());
+				
+				AutoIndexInstCond cond = new AutoIndexInstCond();
+				cond.setInstanceId(record.getRecordId());
+				AutoIndexInst[] autoIndex = SwManagerFactory.getInstance().getAutoIndexManager().getAutoIndexInsts(user.getId(), cond, null);
+				if (autoIndex != null) {
+					for (int j = 0; j < autoIndex.length; j++) {
+						SwManagerFactory.getInstance().getAutoIndexManager().removeAutoIndexInst(user.getId(), autoIndex[j].getObjId());
+					}
+				}
+				//removeSpaceNotice(workId, instanceId);
+			}			
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();

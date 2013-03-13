@@ -4458,6 +4458,12 @@ public class ModelConverter {
 		}
 		getApprovalWorkInformationByInstanceId(informationWorkInstance, swdRecord.getRecordId());
 
+		if(swdRecord.getDomainId().equals(SmartForm.ID_EVENT_MANAGEMENT)){
+			SwdDataField repeatIdField = swdRecord.getDataField(FormField.ID_NUM_REPEAT_EVENT_ID);
+			if(repeatIdField!=null && !SmartUtil.isBlankObject(repeatIdField.getValue()))
+				informationWorkInstance.setRepeatEventId(repeatIdField.getValue());
+			
+		}
 		return informationWorkInstance;
 	}
 

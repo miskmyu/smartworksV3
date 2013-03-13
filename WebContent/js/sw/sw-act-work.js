@@ -921,47 +921,101 @@ $(function() {
 		smartPop.confirm(smartMessage.get('removeConfirmation'), function(){
 			var input = $(targetElement(e));
 			var iworkSpace = input.parents('.js_iwork_space_page');
-			var isRepeatEvent = iworkSpace.attr('isRepeatEvent');
+			var repeatEventId = iworkSpace.attr('repeatEventId');
 			var removeAllRepeatEvent = false;
-			if(isRepeatEvent === 'true'){
-				smartPop.confirm(smartMessage.get('removeAllRepeatConfirmation'), function(){
-					removeAllRepeatEvent = true;
-				});
-			}
 			var workId = iworkSpace.attr("workId");
 			var instId = iworkSpace.attr("instId");
 			var paramsJson = {};
 			paramsJson['workId'] = workId;
 			paramsJson['instanceId'] = instId;
-			if(removeAllRepeatEvent)
-				paramsJson['removeAllRepeatEvent'] = true;
-			console.log(JSON.stringify(paramsJson));
-			var url = "remove_iwork_instance.sw";
-			
-			// 서비스요청 프로그래스바를 나타나게 한다....
-			var progressSpan = iworkSpace.find('.js_progress_span');
-			smartPop.progressCont(progressSpan);
-			
-			// set_iwork_instance.sw서비스를 요청한다..
-			$.ajax({
-				url : url,
-				contentType : 'application/json',
-				type : 'POST',
-				data : JSON.stringify(paramsJson),
-				success : function(data, status, jqXHR) {
+			if(!isEmpty(repeatEventId)){
+				smartPop.confirm(smartMessage.get('removeAllRepeatConfirmation'), function(){
+					paramsJson['repeatEventId'] = repeatEventId;
+					console.log(JSON.stringify(paramsJson));
+					var url = "remove_iwork_instance.sw";
 					
-					// 정보관리업무 목록 페이지로 이동한다.....
-					smartPop.closeProgress();
-					document.location.href = "iwork_list.sw?cid=iw.li." + workId;					
-				},
-				error : function(e) {
-					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeIWorkInstanceError"), function(){
-						return false;
+					// 서비스요청 프로그래스바를 나타나게 한다....
+					var progressSpan = iworkSpace.find('.js_progress_span');
+					smartPop.progressCont(progressSpan);
+					
+					// set_iwork_instance.sw서비스를 요청한다..
+					$.ajax({
+						url : url,
+						contentType : 'application/json',
+						type : 'POST',
+						data : JSON.stringify(paramsJson),
+						success : function(data, status, jqXHR) {
+							
+							// 정보관리업무 목록 페이지로 이동한다.....
+							smartPop.closeProgress();
+							document.location.href = "iwork_list.sw?cid=iw.li." + workId;					
+						},
+						error : function(e) {
+							// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+							smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeIWorkInstanceError"), function(){
+								return false;
+							});
+							smartPop.closeProgress();					
+						}
 					});
-					smartPop.closeProgress();					
-				}
-			});
+				}, function(){
+					console.log(JSON.stringify(paramsJson));
+					var url = "remove_iwork_instance.sw";
+					
+					// 서비스요청 프로그래스바를 나타나게 한다....
+					var progressSpan = iworkSpace.find('.js_progress_span');
+					smartPop.progressCont(progressSpan);
+					
+					// set_iwork_instance.sw서비스를 요청한다..
+					$.ajax({
+						url : url,
+						contentType : 'application/json',
+						type : 'POST',
+						data : JSON.stringify(paramsJson),
+						success : function(data, status, jqXHR) {
+							
+							// 정보관리업무 목록 페이지로 이동한다.....
+							smartPop.closeProgress();
+							document.location.href = "iwork_list.sw?cid=iw.li." + workId;					
+						},
+						error : function(e) {
+							// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+							smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeIWorkInstanceError"), function(){
+								return false;
+							});
+							smartPop.closeProgress();					
+						}
+					});					
+				});
+			}else{
+				console.log(JSON.stringify(paramsJson));
+				var url = "remove_iwork_instance.sw";
+				
+				// 서비스요청 프로그래스바를 나타나게 한다....
+				var progressSpan = iworkSpace.find('.js_progress_span');
+				smartPop.progressCont(progressSpan);
+				
+				// set_iwork_instance.sw서비스를 요청한다..
+				$.ajax({
+					url : url,
+					contentType : 'application/json',
+					type : 'POST',
+					data : JSON.stringify(paramsJson),
+					success : function(data, status, jqXHR) {
+						
+						// 정보관리업무 목록 페이지로 이동한다.....
+						smartPop.closeProgress();
+						document.location.href = "iwork_list.sw?cid=iw.li." + workId;					
+					},
+					error : function(e) {
+						// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+						smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeIWorkInstanceError"), function(){
+							return false;
+						});
+						smartPop.closeProgress();					
+					}
+				});
+			}
 			
 		},
 		function(){
@@ -1592,6 +1646,105 @@ $(function() {
 		body.html(body.html().replace(/textarea/g,  "div"));
 		var contents = '<div id="' + ((isMailSpace) ? 'wrap_noborder' : 'wrap') + '" style="overflow:auto;"><div>' + body.html() + '</div><div class="info tr">' + smartMessage.get("printUserText") + ' : ' +  currentUser.longName + ' / ' +  smartMessage.get("printTimeText") + ' : ' + printCurrentTime() + '</div></div>';
 		smartPop.printContent(header, contents);
+		return false;
+	});
+
+	$('.js_doc_writer_plugin').live("click", function(e){
+
+		var input = $(targetElement(e));
+		var docWriterTarget = input.attr('docTarget');
+		var workSpacePage = input.parents('.js_iwork_space_page');
+		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
+		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_mail_space_page');
+		if(isEmpty(workSpacePage)) return false;
+		var isMailSpace = workSpacePage.hasClass('js_mail_space_page');
+		var hostNPort = getHostNPort();
+		var header = 	'<link href="' + hostNPort + '/smartworksV3/css/default.css" type="text/css" media="all" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/layout_2.css" type="text/css" media="all" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/detail.css" type="text/css" media="all" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/form.css" type="text/css" media="all" rel="stylesheet" />' +
+		'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
+//		var header = 	'<link href="css/default.css" type="text/css" media="all" rel="stylesheet" />' +
+//		'<link href="css/black/layout_2.css" type="text/css" media="all" rel="stylesheet" />' +
+//		'<link href="css/black/detail.css" type="text/css" media="all" rel="stylesheet" />' +
+//		'<link href="css/black/form.css" type="text/css" media="all" rel="stylesheet" />';
+		var companyLogoSrc = $('.js_company_logo_src').attr('src');
+		var topLogo = $('<div class="company_logo"><img src="' + companyLogoSrc + '" /><div>' + currentUser.company + '</div></div>');
+		var bottomLogo = $('<div class="footer"><img src="' + hostNPort + '/smartworksV3/images/footer_sw_logo.jpg"></div>');
+		var body = $('ul.portlet_r').clone();
+		if(isMailSpace){
+			body = $('ul.portlet_r .mail_list_section').clone();
+			body.find('.move_btn_space').remove();
+		}else{
+			body.find('#js_copy_address').parents('.txt_btn').remove();
+			body.find('.js_toggle_forward_btn').remove();
+			body.find('.js_toggle_approval_btn').remove();
+			body.find('.js_email_content_btn').remove();
+			body.find('.js_print_content_btn').remove();
+			body.find('.js_view_instance_diagram').remove();
+			body.find('.body_titl_pic .solid_line').before(topLogo);
+			body.find('input[type="hidden"]').remove();
+	//		body.find('.js_instance_tasks_left').remove();
+	//		body.find('.js_instance_tasks_right').remove();
+	//		body.find('.js_task_start').remove();
+	//		body.find('.js_task_stop').remove();
+	//		body.find('.js_instance_task_arrow').remove();
+	//		body.find('.js_instance_tasks li.selected').siblings().remove();
+			if(workSpacePage.hasClass('js_iwork_space_page'))
+				body.find('.js_form_content').removeClass('up');
+			body.find('.glo_btn_space span.btn_gray').remove();
+			body.find('.glo_btn_space').append(bottomLogo);
+			body.find('a').attr('userDetail', '');
+			body.find('textarea').css({height:"56px"});
+		}
+		body.html(body.html().replace(/\"images\//g, "\"" + hostNPort + "/smartworksV3/images/"));
+		body.html(body.html().replace(/textarea/g,  "div"));
+		var contents = '<div id="' + ((isMailSpace) ? 'wrap_noborder' : 'wrap') + '" style="overflow:auto;"><div>' + body.html() + '</div><div class="info tr">' + smartMessage.get("printUserText") + ' : ' +  currentUser.longName + ' / ' +  smartMessage.get("printTimeText") + ' : ' + printCurrentTime() + '</div></div>';
+
+		var progressSpan = input.siblings('.js_progress_span');
+		smartPop.progressCont(progressSpan);
+		$.ajax({
+			url : "get_content_from_doc_writer.sw",
+			data : {
+				header : header,
+				content : contents,
+				docTarget : docTarget
+			},
+			success : function(data, status, jqXHR) {
+				var resultHead = "";
+				var resultBody = "";
+				if(!isEmpty(data)){
+					resultHead = $(data).find('head:first');
+					resultHead = $(data).find('body:first');
+				}
+				if(docTarget === "print"){
+					smartPop.printContent(resultHead, resultBody);
+					smartPop.closeProgress();
+				}else if(docTarget === "email"){
+					var paramsJson = {};
+					paramsJson['contents'] = data;
+					$.ajax({
+						url : "new_mail_post.sw",
+						contentType : 'application/json',
+						type : 'POST',
+						data : JSON.stringify(paramsJson),
+						success : function(data, status, jqXHR) {
+							target.html(data).show();
+							smartPop.closeProgress();
+						},
+						error : function(xhr, ajaxOptions, thrownError){
+							smartPop.closeProgress();							
+						}
+					});
+				}
+				else if(docTarget === "pdf"){
+					smartPop.closeProgress();					
+				}
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
+		});		
 		return false;
 	});
 

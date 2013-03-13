@@ -311,6 +311,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .icon_approval_w {background: url("../../images/body_icon.png") no-repeat scroll -199px -364px transparent; height:18px; width:17px; display:inline-block}
 .icon_print_w {background: url("../../images/body_icon.png") no-repeat scroll -80px -364px transparent; height:18px; width:16px; display:inline-block}
 .icon_mail_w {background: url("../../images/body_icon.png") no-repeat scroll -124px -364px transparent; height:18px; width:17px; display:inline-block}
+.icon_pdf_w {background: url("../../images/file/icon_pdf.gif") no-repeat; height:18px; width:17px; display:inline-block}
 .icon_report_edit a {background: url("../../images/body_icon.png") no-repeat scroll -74px -814px transparent; height:18px; width:17px; display:inline-block}
 .icon_filter_edit a {background: url("../../images/body_icon.png") no-repeat scroll -36px -814px transparent; height:18px; width:17px; display:inline-block; margin:0 5px 0 0}
 .icon_work_create a {background: url("../../images/body_icon.png") no-repeat scroll 0 -814px transparent; height:18px; width:17px; display:inline-block; margin:0 5px 0 0}
