@@ -587,6 +587,7 @@ public class NoticeServiceImpl implements INoticeService {
 				if (!CommonUtil.isEmpty(lastNoticeId)) {
 					commentCond.setRefId(lastNoticeId);//opinionId
 					PublishNotice[] lastNotice = getPublishNoticeManager().getPublishNotices(user.getId(), commentCond, null);
+					commentCond = new PublishNoticeCond();
 					if (lastNotice != null && lastNotice.length != 0) {
 						Date lastNoticeCreationDate = lastNotice[0].getCreationDate();
 						commentCond.setCreationDateTo(lastNoticeCreationDate);

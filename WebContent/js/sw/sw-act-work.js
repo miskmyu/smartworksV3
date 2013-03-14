@@ -948,7 +948,7 @@ $(function() {
 							
 							// 정보관리업무 목록 페이지로 이동한다.....
 							smartPop.closeProgress();
-							document.location.href = "iwork_list.sw?cid=iw.li." + workId;					
+							$('.js_goto_work_list_btn:first').click();
 						},
 						error : function(e) {
 							// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -976,7 +976,7 @@ $(function() {
 							
 							// 정보관리업무 목록 페이지로 이동한다.....
 							smartPop.closeProgress();
-							document.location.href = "iwork_list.sw?cid=iw.li." + workId;					
+							$('.js_goto_work_list_btn:first').click();
 						},
 						error : function(e) {
 							// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -1005,7 +1005,7 @@ $(function() {
 						
 						// 정보관리업무 목록 페이지로 이동한다.....
 						smartPop.closeProgress();
-						document.location.href = "iwork_list.sw?cid=iw.li." + workId;					
+						$('.js_goto_work_list_btn:first').click();
 					},
 					error : function(e) {
 						// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...

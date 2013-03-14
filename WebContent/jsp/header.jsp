@@ -99,22 +99,24 @@ function logout() {
 				</a>
 			</li> 
 			<!--  Notification 알림 영역 --%>
-	
-			<!-- 쪽지 알림 영역 -->
-			<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
-			<li class="icon_note js_notice_count">
-				<a id="message_count" href="notice_message_box.sw?noticeType=<%=Notice.TYPE_MESSAGE%>"
-					title="<fmt:message key='header.notice.icon.message'/>"> 
-					<%
-		 			if (notices.length > Notice.TYPE_MESSAGE && notices[Notice.TYPE_MESSAGE].getLength() > 0) {
-		 			%> 
-		 				<em class="icon_number"><%=notices[Notice.TYPE_MESSAGE].getLength()%><span></span></em> 
-					<%
-					}
-					%>
-				</a>
-			</li>
-			<!-- 쪽지 알림 영역 //-->
+
+ 			<%if(companyGeneral.isUseChattingService()){ %>
+				<!-- 쪽지 알림 영역 -->
+				<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
+				<li class="icon_note js_notice_count">
+					<a id="message_count" href="notice_message_box.sw?noticeType=<%=Notice.TYPE_MESSAGE%>"
+						title="<fmt:message key='header.notice.icon.message'/>"> 
+						<%
+			 			if (notices.length > Notice.TYPE_MESSAGE && notices[Notice.TYPE_MESSAGE].getLength() > 0) {
+			 			%> 
+			 				<em class="icon_number"><%=notices[Notice.TYPE_MESSAGE].getLength()%><span></span></em> 
+						<%
+						}
+						%>
+					</a>
+				</li>
+				<!-- 쪽지 알림 영역 //-->
+			<%} %>
 			
 			<!-- 메모 알림 영역 
 			<li class="icon_memo">

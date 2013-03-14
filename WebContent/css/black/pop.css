@@ -41,7 +41,7 @@
 .pop_list_area.file_fd {min-height:500px; padding-top:2px}
 
 /*popup information*/
-.pop_i_info {border:1px solid #acacac; background-color:#242324; width:273px; position:absolute; top:32px; left:106px; padding-bottom:8px; z-index:39; color:#ececec}
+.pop_i_info {border:1px solid #acacac; background-color:#242324; width:273px; position:absolute; top:32px; left:106px; padding-bottom:8px; z-index:39; color:#CCC}
 .pop_i_info li {position:relative; clear:both; overflow:hidden}
 .pop_i_info li:hover {background-color:#484848}
 .pop_i_info li:hover .btn_x {display:block; overflow: hidden; vertical-align:middle}

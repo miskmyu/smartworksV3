@@ -644,7 +644,7 @@ function submitForms(tempSave) {
 <!-- 목록 버튼 -->
 <div class="tc">
 	<div class="btn_gray" >
-    	<a href="<%=instance.getWork().getController(lastWid) %>?cid=<%=instance.getWork().getContextId() %>&wid=<%=CommonUtil.toNotNull(lastWid) %>" class="js_content"> 
+    	<a href="<%=instance.getWork().getController(lastWid) %>?cid=<%=instance.getWork().getContextId() %>&wid=<%=CommonUtil.toNotNull(lastWid) %>" class="js_content js_goto_work_list_btn"> 
     		<span class="txt_btn_start"></span> 
     		<span class="txt_btn_center"><fmt:message key="common.button.list"/></span> 
     		<span class="txt_btn_end"></span>

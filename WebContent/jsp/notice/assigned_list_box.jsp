@@ -84,7 +84,27 @@
 							%>
 						
 							<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>"><%=workInstance.getSubject()%></a>
-							<div><a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>"><%=taskInstance.getName()%></a> 업무를 할당하였습니다.</div>
+							<%
+							switch(taskInstance.getTaskType()){
+							case TaskInstance.TYPE_APPROVAL_TASK_FORWARDED:
+							case TaskInstance.TYPE_INFORMATION_TASK_FORWARDED:
+							case TaskInstance.TYPE_PROCESS_TASK_FORWARDED:
+							case TaskInstance.TYPE_SCHEDULE_TASK_FORWARDED:
+							%>
+								<div><fmt:message key="content.sentence.task_forwarded"/></div>
+							<%
+								break;
+							case TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED:
+							case TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED:
+							case TaskInstance.TYPE_PROCESS_TASK_ASSIGNED:
+							case TaskInstance.TYPE_SCHEDULE_TASK_ASSIGNED:
+							default:
+							%>
+								<div><a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>"><%=taskInstance.getName()%></a><fmt:message key="content.sentence.task_assigned"/></div>
+							<%
+								break;
+							}
+							%>
 						</div>
 						</div>
 					</li>
