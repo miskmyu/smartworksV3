@@ -66,6 +66,7 @@ smartPop = {
 		var profile = input.attr("profile");
 		var userDetail = input.attr("userDetail");		
 		var popUserInfo = $('#sw_pop_user_info');
+		var startChatStr = (companyGeneral.useChattingService==='true') ? '<span class="pop_icon_chat"><a href="" class="js_start_chat_with_user" userId="' + userId + '" longName="' + longName + '" minPicture="' + minPicture + '" title="' + smartMessage.get("startChatText") + '"></a></span>' : "";
 		if(!isEmpty(popUserInfo)){
 			popUserInfo.show();
 		}else{
@@ -79,7 +80,7 @@ smartPop = {
 						'<div class="smartp_btn_space">' +
 							'<div class="fr">' +
 								'<span class="pop_icon_mail"><a href="" class="js_send_mail_to_user" userId="' + userId + '" title="' + smartMessage.get("sendMailText") + '"></a></span>' +
-								'<span class="pop_icon_chat"><a href="" class="js_start_chat_with_user" userId="' + userId + '" longName="' + longName + '" minPicture="' + minPicture + '" title="' + smartMessage.get("startChatText") + '"></a></span>' +
+								startChatStr + 
 							'</div>' +
 						'</div>' +
 					'</div>' +

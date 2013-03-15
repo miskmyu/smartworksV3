@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.company.CompanyOption"%>
 <%@page import="net.smartworks.model.company.CompanyGeneral"%>
 <%@page import="net.smartworks.server.engine.common.manager.IManager"%>
 <%@page import="net.smartworks.server.service.factory.SwServiceFactory"%>
@@ -68,6 +69,7 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User currentUser = SmartUtil.getCurrentUser();
 	CompanyGeneral companyGeneral = smartWorks.getCompanyGeneral();
+	CompanyOption companyOption = SmartUtil.getCompanyOption();
 	
 %>
 <fmt:setLocale value="<%=currentUser.getLocale() %>" scope="request" />
@@ -91,6 +93,16 @@ currentUser = {
 	timeZone : "<%=currentUser.getTimeZone()%>",
 	timeOffset : "<%=currentUser.getTimeOffsetInHour()%>",
 	signPicture : "<%=currentUser.getSignPicture()%>"
+};
+
+companyGeneral = {
+	useMessagingService : "<%=companyGeneral.isUseMessagingService()%>",
+	useChattingService : "<%=companyGeneral.isUseChattingService()%>"
+};
+
+companyOption = {
+	htmlWriterPlugined : "<%=companyOption.isHtmlWriterPlugined()%>",
+	pdfWriterPlugined : "<%=companyOption.isPdfWriterPlugined()%>"
 };
 
 function logout() {
