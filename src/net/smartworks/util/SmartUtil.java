@@ -489,7 +489,11 @@ public class SmartUtil {
 				return user;
 			} else {
 				Login login = (Login)(principal instanceof Login ? principal : null);
-				return SmartUtil.getAnonymousUser(login.getCompanyId(), login.getCompany());
+				if (login != null) {
+					return SmartUtil.getAnonymousUser(login.getCompanyId(), login.getCompany());
+				} else {
+					return SmartUtil.getAnonymousUser("", "");
+				}
 			}
 		}
 		return SmartUtil.getAnonymousUser("", "");
@@ -888,13 +892,12 @@ public class SmartUtil {
 										}
 									}
 									
-									Map<String, Object> data = new HashMap<String, Object>();
+ 									Map<String, Object> data = new HashMap<String, Object>();
 									data.put("msgType", message.msgType);
 									data.put("sender", "smartServer");
 									data.put("body", message.message);
 									fayeClient.getChannel(message.channel).publish(data);
 								} catch(Exception e){
-									
 									//e.printStackTrace();
 								}
 							}
