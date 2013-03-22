@@ -189,7 +189,7 @@ $(document).ready(function(){
 	    	//if(eventTime === '0') $(element).find('.fc-event-time').html('');
 	    	$(element).find('.fc-event-time').html('');
 	    },
-		firstDay: 1,
+		firstDay: 0,
 		weekMode: 'liquid',
 		columnFormat: columnFormat,
 		titleFormat: titleFormat,

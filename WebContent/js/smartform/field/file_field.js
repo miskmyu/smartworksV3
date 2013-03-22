@@ -10,7 +10,8 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 		dataField : '',
 		refreshData : false,
 		layoutInstance : null,
-		isMultiple : true
+		isMultiple : true,
+		isDataGrid : false
 	};
 	SmartWorks.extend(options, config);
 
@@ -29,7 +30,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 	var name = $entity.attr('name');
 	
 	var labelWidth = (isEmpty(options.layoutInstance)) ? parseInt($graphic.attr('labelWidth')) : options.layoutInstance.getLabelWidth(id);
-	var valueWidth = 100 - labelWidth;
+	var valueWidth = 100 - (options.isDataGrid ? 0 : labelWidth);
 	var $label = $('<div class="form_label" style="width:' + labelWidth + '%"><span>' + name + '</span></div>');
 	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
@@ -38,7 +39,8 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 	}else{
 		required = '';		
 	}
-	$label.appendTo(options.container);
+	if(!options.isDataGrid)
+		$label.appendTo(options.container);
 	
 	var $file = null;
 		

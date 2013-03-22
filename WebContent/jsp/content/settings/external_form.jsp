@@ -101,7 +101,7 @@
 								if(!SmartUtil.isBlankObject(externalForms)){
 									for(ExternalForm externalForm : externalForms){	
 								%>								
-										<tr class="js_edit_external_form list_action_item" formId=<%=CommonUtil.toNotNull(externalForm.getId()) %>>
+										<tr class="js_edit_external_form list_action_item border_bottom" formId=<%=CommonUtil.toNotNull(externalForm.getId()) %>>
 											<td><a href=""><%=externalForm.getName() %></a></td>
 											<td><a href=""><%=externalForm.getDesc() %></a></td>
 											<td><a href=""><%=externalForm.getUrl() %></a></td>

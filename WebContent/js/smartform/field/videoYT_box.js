@@ -9,7 +9,8 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.build = function(config) {
 		entity : null,
 		dataField : '',
 		refreshData : false,
-		layoutInstance : null
+		layoutInstance : null,
+		isDataGrid : false
 	};
 
 	SmartWorks.extend(options, config);
@@ -29,7 +30,7 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.build = function(config) {
 	var name = $entity.attr('name');
 
 	var labelWidth = (isEmpty(options.layoutInstance)) ? parseInt($graphic.attr('labelWidth')) : options.layoutInstance.getLabelWidth(id);
-	var valueWidth = 100 - labelWidth;
+	var valueWidth = 100 - (options.isDataGrid ? 0 : labelWidth);
 
 	var spanRequired = "";
 	var required = $entity.attr('required');
@@ -52,7 +53,8 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.build = function(config) {
 	var $label = null;
 		
 	$label = $('<div class="form_label" style="width:' + labelWidth + '%"><span id="' + id + '"></span></div>').append(spanRequired);
-	$label.appendTo(options.container);
+	if(!options.isDataGrid)
+		$label.appendTo(options.container);
 	$video.appendTo(options.container);	
 	if ($graphic.attr('hidden') == 'true'){
 		$label.hide();

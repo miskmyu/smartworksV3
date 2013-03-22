@@ -115,7 +115,7 @@
 									for(WorkHourPolicy whp : workHourPolicies){	
 										WorkHour[] workHours = whp.getWorkHours();
 								%>
-											<tr class="js_edit_work_hour list_action_item" policyId=<%=CommonUtil.toNotNull(whp.getId()) %>>
+											<tr class="js_edit_work_hour list_action_item border_bottom" policyId=<%=CommonUtil.toNotNull(whp.getId()) %>>
 												<td><a href=""><%=whp.getValidFrom().toLocalDateSimpleString() %></a></td>
 												<td><a href=""><%=LocalDate.getDayLocalString(whp.getFirstDayOfWeek()) %></a></td>
 												<td><a href=""><%=whp.getWorkingDays() %> <fmt:message key="calendar.title.days"/></a></td>

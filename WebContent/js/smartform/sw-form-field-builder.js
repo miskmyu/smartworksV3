@@ -1,6 +1,6 @@
 SmartWorks.FormFieldBuilder = {};
-SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, layoutInstance, refreshData) {
-	var type = $entity.find('format').attr('type');
+SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, layoutInstance, refreshData, isDataGrid) {
+	var type = $entity.children('format').attr('type');
 	$target.addClass('js_type_'+ type);
 	switch(type) {
 	case 'checkBox' :
@@ -10,7 +10,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;		
 	case 'comboBox' :
@@ -20,7 +21,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;		
 	case 'autoIndex' :
@@ -30,7 +32,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;		
 	case 'currencyInput' :
@@ -40,7 +43,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;		
 	case 'dateChooser' :
@@ -50,7 +54,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;
 	case 'emailIDInput' :
@@ -60,7 +65,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;
 	case 'fileField' :
@@ -70,7 +76,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;
 	case 'numberInput' :
@@ -80,7 +87,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;
 	case 'percentInput' :
@@ -90,7 +98,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;
 	case 'radioButton' :
@@ -100,7 +109,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;
 	case 'richEditor' :
@@ -120,7 +130,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;
 	case 'timeField' :
@@ -130,7 +141,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;
 	case 'userField' :
@@ -140,7 +152,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;	
 	case 'departmentField' :
@@ -150,7 +163,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;	
 	case 'dateTimeChooser' :
@@ -160,7 +174,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;	
 	case 'refFormField' :
@@ -170,7 +185,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;	
 	case "imageBox":
@@ -180,10 +196,20 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;	
 	case "dataGrid":
+		SmartWorks.FormRuntime.DataGridBuilder.build({
+			mode : mode, // view or edit
+			container : $target,
+			entity : $entity,
+			dataField : dataField,
+			refreshData : refreshData,
+			layoutInstance : layoutInstance
+		});
+		return;
 	case "numericStepper":
 	case "textArea":
 	default :
@@ -193,7 +219,8 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			entity : $entity,
 			dataField : dataField,
 			refreshData : refreshData,
-			layoutInstance : layoutInstance
+			layoutInstance : layoutInstance,
+			isDataGrid : isDataGrid
 		});
 		return;
 	};

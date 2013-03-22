@@ -5,6 +5,7 @@
 .form_layout .form_label, .form_layout .form_value {padding:4px 0 0 0 !important}
 .form_label, .form_value {float:left; margin:1px 0}
 .form_label {color:#23579e; font-weight: bold; text-align: right}
+.grid_label {color:#23579e; font-weight: bold; text-align: right}
 .form_label > span {display: inline-block; margin: 0 17px 0 0; word-wrap: break-word;x}
 .form_layout td, .form_layout th {border-bottom: 1px dotted #c7c7c7}
 

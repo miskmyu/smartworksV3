@@ -479,11 +479,11 @@ SmartWorks.GridLayout.serializeObject = function(form, valueChanged){
 	var percentInputs = SmartWorks.FormRuntime.PercentInputBuilder.serializeObject(form.find('.js_type_percentInput'));
 	var currencyInputs = SmartWorks.FormRuntime.CurrencyInputBuilder.serializeObject(form.find('.js_type_currencyInput'));
 	var autoIndexs = SmartWorks.FormRuntime.AutoIndexBuilder.serializeObject(form.find('.js_type_autoIndex'));
-	var dataGrids = {};
+	var dataGrids = SmartWorks.FormRuntime.DataGridBuilder.serializeObject(form.find('.js_type_dataGrid'));
 	return merge3Objects(
 			merge3Objects(fileFields, mergeObjects(userFields, departmentFields), richEditors), 
 			merge3Objects(refFormFields, imageBoxs, videoYTBoxs), 
-			merge3Objects(numberInputs, percentInputs, mergeObjects(currencyInputs, autoIndexs))
+			merge3Objects(numberInputs, percentInputs, merge3Objects(currencyInputs, autoIndexs, dataGrids))
 			);
 };
 
@@ -499,7 +499,7 @@ SmartWorks.GridLayout.validate = function(form, messageTarget){
 	var numberInputs = SmartWorks.FormRuntime.NumberInputBuilder.validate(form.find('.js_type_numberInput:visible'));
 	var percentInputs = SmartWorks.FormRuntime.PercentInputBuilder.validate(form.find('.js_type_percentInput:visible'));
 	var currencyInputs = SmartWorks.FormRuntime.CurrencyInputBuilder.validate(form.find('.js_type_currencyInput:visible'));
-	var dataGrids = true;
+	var dataGrids = SmartWorks.FormRuntime.DataGridBuilder.validate(form.find('.js_type_dataGrid:visible'));
 	var jq_validate = true;
 	
 	if(messageTarget instanceof jQuery){
@@ -510,7 +510,7 @@ SmartWorks.GridLayout.validate = function(form, messageTarget){
 		jq_validate = $(this).validate({ showErrors: showErrors, ignore:":not(:visible)" }).form() && jq_validate;
 	});
 
-	var sw_validate = (fileFields && userFields && departmentFields && richEditors && refFormFields && imageBoxs && videoYTBoxs && dataGrids && radioButtons && numberInputs && percentInputs && currencyInputs && jq_validate);
+	var sw_validate = (fileFields && userFields && departmentFields && richEditors && refFormFields && imageBoxs && videoYTBoxs && dataGrids && radioButtons && numberInputs && percentInputs && currencyInputs && dataGrids && jq_validate);
 	if(!sw_validate || !jq_validate){
 		showErrors();
 	}
