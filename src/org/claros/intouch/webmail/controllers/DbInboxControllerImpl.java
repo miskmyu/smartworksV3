@@ -257,8 +257,8 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
 				FolderController foldCont = fFactory.getFolderController();
 				try{
-					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
 					CheckingModel checkingEmail = getChecking(Thread.currentThread());
+					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
 					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
 					System.out.println(auth.getEmailId() + " Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
 				}catch(Exception e){

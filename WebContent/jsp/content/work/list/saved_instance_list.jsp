@@ -125,9 +125,10 @@
 				boolean isWorkRunning = instanceInfo.isWorkRunning();
 				String workFullPathName = instanceInfo.getWorkFullPathName();
 				TaskInstanceInfo lastTask = ((WorkInstanceInfo)instanceInfo).getLastTask();
-				String target = ((WorkInstanceInfo)instanceInfo).getController() + "?cid=" 
-								+ ((WorkInstanceInfo)instanceInfo).getContextId() + "&wid=" + wid
-								+ "&workId=" + workId;
+
+				String target = ((WorkInstanceInfo)instanceInfo).getController() + "?isTempSaveWork=true&tempSaveTaskId=" + instanceInfo.getId();
+				
+				//String target = ((WorkInstanceInfo)instanceInfo).getController() + "?cid=" + ((WorkInstanceInfo)instanceInfo).getContextId() + "&wid=" + wid 	+ "&workId=" + workId;
 				%>
 				<tr class="instance_list js_content_work_space" href="<%=target%>">
 					<td class="tc"><%=currentCount%></td>
