@@ -43,7 +43,7 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 	var $content = $('<div class="form_value list_contents" fieldId="' + id + '" style="width:100%;' + contentHeightCss + '"><table><thead><tr class="tit_bg no_line grid_label"><th class="r_line" style="width:40px;"><span>' + smartMessage.get('rowNoText') + '</span></th></tr></thead></table></div>');
 	var $table = $content.find('table');
 	if(!isEmpty($subEntities)){
-		var totalWidth = 60;
+		var totalWidth = 70;
 		if(fitWidth){
 			for(var i=0; i<$subEntities.length; i++){
 				if($($subEntities[i]).children('graphic').attr('hidden') === 'true') continue;
@@ -99,7 +99,7 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 	}else{
 		$oldGridRows = options.container.find('tbody tr.js_grid_row');
 		if(isEmpty(value) || $oldGridRows.length != value.length){
-			options.container.children().remove();
+			options.container.children('div.form_value').remove();
 			$content.appendTo(options.container);			
 		}else{
 			for(var k=0; k<oldGridRows.length; k++){
@@ -116,6 +116,9 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 			
 		}
 	}
+	smartCommon.liveTimePicker();
+	smartCommon.liveTodayPicker();
+	smartCommon.liveTodayTimePicker();
 	return options.container;
 };
 
