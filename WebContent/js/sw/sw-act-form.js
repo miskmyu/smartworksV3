@@ -318,5 +318,27 @@ $(function() {
 		smartPop.showInstance(instanceId, taskInstId, null, formId, forwardId);
 		return false;
 	});
+	
+	$('.js_delete_grid_row').live('click', function(e) {
+		var input = $(targetElement(e)).parents('tr:first');
+		var nextRowNos = input.nextAll('tr').find('.js_grid_no');
+		var thisNo = parseInt(input.find('.js_grid_no').text());
+		input.remove();
+		if(!isEmpty(nextRowNos)){
+			for(var i=0; i<nextRowNos.length; i++){
+				$(nextRowNos[i]).text(thisNo+i);
+			}
+		}
+		return false;
+	});
+	
+	$('.js_add_grid_row').live('click', function(e) {
+		var input = $(targetElement(e)).parents('tr:first');
+		var newGridRow = input.parents('table:first').find('thead tr.js_hidden_grid_row').clone().removeClass('js_hidden_grid_row');
+		newGridRow.find('.js_grid_no').text(input.prevAll('tr').length+1);
+		newGridRow.show().insertBefore(input);
+		return false;
+	});
+	
 
 });

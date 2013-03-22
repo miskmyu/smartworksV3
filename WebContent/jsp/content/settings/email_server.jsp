@@ -108,7 +108,7 @@
 								if(!SmartUtil.isBlankObject(emailServers)){
 									for(EmailServer emailServer : emailServers){	
 								%>
-										<tr class="js_edit_email_server list_action_item" emailServerId=<%=CommonUtil.toNotNull(emailServer.getId()) %>>
+										<tr class="js_edit_email_server list_action_item border_bottom" emailServerId=<%=CommonUtil.toNotNull(emailServer.getId()) %>>
 											<td><a href=""><%=emailServer.getName() %></a></td>
 											<td><a href=""><%=emailServer.getFetchServer() %></a></td>
 											<td><a href=""><%=emailServer.getFetchServerPort() %></a></td>

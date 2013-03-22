@@ -76,6 +76,10 @@ smartMessage.bundle['en'] = {
 	printTimeText : "Print Time",
 	sendMailText : "Send Mail",
 	startChatText : "Start Chatting",
+	rowNoText : "No",
+	rowDeleteText : "Remove this row",
+	rowAddText : "Add a row",
+	
 	setMyProfileSucceed : "My Profile has been updated successfully.",
 	setMyProfileError : "Error has been occured while updating this Profile Information. Please contact the Administrator!",
 	setCompanyGeneralSucceed : "Company General information has been updated successfully.",

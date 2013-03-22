@@ -100,7 +100,7 @@
 								if(!SmartUtil.isBlankObject(webServices)){
 									for(WebService webService : webServices){	
 								%>								
-										<tr class="js_edit_web_service list_action_item" serviceId=<%=CommonUtil.toNotNull(webService.getId()) %>>
+										<tr class="js_edit_web_service list_action_item border_bottom" serviceId=<%=CommonUtil.toNotNull(webService.getId()) %>>
 											<td><a href=""><%=webService.getName() %></a></td>
 											<td><a href=""><%=webService.getDesc() %></a></td>
 											<td><a href=""><%=webService.getWsdlUri() %></a></td>

@@ -10,7 +10,8 @@ SmartWorks.FormRuntime.RadioButtonBuilder.build = function(config) {
 		value : '',
 		dataField : '',
 		refreshData : false,
-		layoutInstance : null
+		layoutInstance : null,
+		isDataGrid : false
 	};
 
 	SmartWorks.extend(options, config);
@@ -27,7 +28,7 @@ SmartWorks.FormRuntime.RadioButtonBuilder.build = function(config) {
 	var name = $entity.attr('name');
 	
 	var labelWidth = (isEmpty(options.layoutInstance)) ? parseInt($graphic.attr('labelWidth')) : options.layoutInstance.getLabelWidth(id);
-	var valueWidth = 100 - labelWidth;
+	var valueWidth = 100 - (options.isDataGrid ? 0 : labelWidth);
 	var $label = $('<div class="form_label" style="width:' + labelWidth + '%"><span>' + name + '</span></div>');
 	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
@@ -36,7 +37,7 @@ SmartWorks.FormRuntime.RadioButtonBuilder.build = function(config) {
 	}else{
 		required = "";
 	}
-	if(!options.refreshData)
+	if(!options.refreshData && !options.isDataGrid)
 		$label.appendTo(options.container);
 	
 	var $staticItems = $format.find('list staticItems staticItem');

@@ -337,6 +337,7 @@ li.fvrt_item:hover .check_option {display:block}
 
 /* KeyOption Setting */
 .list_contents .list_action_item td, .list_contents .list_action_item th {border-bottom:none}
+.list_contents .list_action_item.border_bottom td, .list_contents .list_action_item.border_bottom th {border-bottom:1px dotted #C7C7C7}
 .list_action_item .key_option {display:none}
 .list_action_item:hover .key_option {display:block}
 .list_action_item .key_option.checked {display:block}

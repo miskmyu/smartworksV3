@@ -124,6 +124,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_contents table tr .end, .list_contents table td .end {border-bottom: 0 none}
 .list_contents table .tit_bg {background: url("../../images/bg_thGradient.gif") 0 100% repeat-x}
 .list_contents table .tit_bg th{border-bottom:1px solid #ccc;border-top:2px solid #7f7f7f; font-size: 12px}
+.list_contents table .tit_bg.no_line th{border-bottom:1px solid #ccc;border-top:1px solid #ccc; font-size: 12px}
 .list_contents table .tit_bg .check {width:37px}
 .list_contents table .tit_bg .important {width:17px}
 .list_contents table .tit_bg .read {width:27px}

@@ -17,6 +17,8 @@
 	GroupInfo[] groups = smartWorks.getMyGroups();
 %>
 <ul>
+<!-- 	<li><a href="" class="tr">모든그룹목록</a></li>
+ -->
 	<%
 	if (groups != null) {
 		for (GroupInfo group : groups) {

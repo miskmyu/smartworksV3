@@ -103,7 +103,7 @@
 								if(!SmartUtil.isBlankObject(companyEvents)){
 									for(CompanyEvent event : companyEvents){	
 								%>
-										<tr class="js_edit_company_event list_action_item" eventId=<%=CommonUtil.toNotNull(event.getId()) %>>
+										<tr class="js_edit_company_event list_action_item border_bottom" eventId=<%=CommonUtil.toNotNull(event.getId()) %>>
 											<td><a href=""><%=event.getName() %></a></td>
 											<td><a href=""><%=event.getPlannedStart().toLocalDateSimpleString() %></a></td>
 											<td><a href=""><%=event.getPlannedEnd().toLocalDateSimpleString() %></a></td>
