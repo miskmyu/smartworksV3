@@ -174,10 +174,7 @@ public class PkgPackages extends BaseObject {
 			return null;
 		}
 	}
-	/*
-	 * 사용여부를 판단하기 위하여 언더바(__)사용함 , 해당 메소드를 사용하지 않는다면 삭제 필요
-	 */
-	public Object cloneNew__() throws CloneNotSupportedException {
+	public Object cloneNew() throws CloneNotSupportedException {
 		try {
 			PkgPackages obj = (PkgPackages)clone();
 			PkgPackage[] pkgs = obj.getPackage();

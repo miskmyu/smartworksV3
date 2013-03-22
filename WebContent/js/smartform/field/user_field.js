@@ -182,11 +182,15 @@ SmartWorks.FormRuntime.UserFieldBuilder.serializeObject = function(userFields){
 		var fieldId = userField.attr('fieldId');
 		var userList = userField.find('.form_value .js_community_item');
 		var users = new Array();
+		if (userList.length === 0) {
+			userList = userField.find('.js_community_item');
+		}
 		for(var j=0; j<userList.length; j++)
 			users.push({
 				id : $(userList[j]).attr('comId'),
 				name : $.trim($(userList[j]).attr('comName'))
 			});
+		
 		usersJson[fieldId] =  {users: users};
 	}
 	return usersJson;

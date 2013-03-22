@@ -52,6 +52,7 @@ import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.JsonUtil;
 import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
 import net.smartworks.server.engine.docfile.model.IFileModel;
@@ -1169,15 +1170,43 @@ public class WorkServiceImpl implements IWorkService {
 			return null;
 		}		
 	}
+	public SwdRecord getTempRecord(String taskInstId) throws Exception {
+		
+		//taskInstId : tempTaskId
+		if (CommonUtil.isEmpty(taskInstId))
+			return null;
+		
+		TskTask tempTask = SwManagerFactory.getInstance().getTskManager().getTask("", taskInstId, IManager.LEVEL_LITE);
+		
+		if (CommonUtil.isEmpty(tempTask))
+			return null;
+		
+		String requestBodyStr = tempTask.getDocument();
+		if (CommonUtil.isEmpty(requestBodyStr))
+			return null;
+		
+		Map<String, Object> requestBody = JsonUtil.getMapByJsonString(requestBodyStr);
 
+		String formId = (String)requestBody.get("formId");
+		SwdDomainCond domainCond = new SwdDomainCond();
+		domainCond.setFormId(formId);
+		SwdDomain domain = getSwdManager().getDomain("", domainCond, null);
+		SwdRecord record = ModelConverter.getSwdRecordByRequestBody("", domain.getFields(), requestBody, null);
+		
+		return record;
+	}
 	@Override
 	public SwdRecord getRecord(HttpServletRequest request) throws Exception {
 
 		String workId = request.getParameter("workId");
 		String recordId = request.getParameter("recordId");
 		String taskInstId = request.getParameter("taskInstId");
-		
-		return getRecord(workId, recordId, taskInstId);
+		boolean isTempRecord = CommonUtil.toBoolean(request.getParameter("isTempRecord"));
+		if (isTempRecord) {
+			return getTempRecord(taskInstId);
+		} else {
+			return getRecord(workId, recordId, taskInstId);
+		}
 	}
 
 	@Override

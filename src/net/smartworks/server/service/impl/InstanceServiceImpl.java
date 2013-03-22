@@ -89,6 +89,7 @@ import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.DateUtil;
+import net.smartworks.server.engine.common.util.JsonUtil;
 import net.smartworks.server.engine.common.util.MisUtil;
 import net.smartworks.server.engine.common.util.StringUtil;
 import net.smartworks.server.engine.common.util.WebServiceUtil;
@@ -198,6 +199,7 @@ import net.smartworks.util.SmartUtil;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -1920,8 +1922,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			SwdDomain domain = getSwdManager().getDomain(userId, domainCond, null);
 			SwdRecord record = getSwdRecordByRequestBody(userId, domain.getFields(), requestBody, request);
 			String titleFieldId = domain.getTitleFieldId();
-			if (!CommonUtil.isEmpty(titleFieldId))
+			if (!CommonUtil.isEmpty(titleFieldId)) {
 				title = record.getDataFieldValue(titleFieldId);
+			}
 		} else {
 			//프로세스 업무의 타이틀을 가져온
 			
@@ -1929,12 +1932,13 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 		TskTask tempSaveTask = new TskTask();
 		tempSaveTask.setName(formName);
-		tempSaveTask.setDocument(requestBody.toString());
+		//tempSaveTask.setDocument(requestBody.toString());
+		tempSaveTask.setDocument(JsonUtil.getJsonStringByMap(requestBody));
 		tempSaveTask.setAssignee(userId);
 		tempSaveTask.setAssigner(userId);
 		tempSaveTask.setDef(workId + "|" + formId);
 		tempSaveTask.setForm(formId);
-		tempSaveTask.setTitle(title);
+		tempSaveTask.setTitle(CommonUtil.toDefault(title, "(No Title) - " + new LocalDate()));
 		
 		tempSaveTask = SwManagerFactory.getInstance().getTskManager().setTempTask(userId, tempSaveTask);
 		
@@ -2484,6 +2488,9 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 		User user = SmartUtil.getCurrentUser();
 		String userId = user.getId();
+		
+		if (workSpaceId.equalsIgnoreCase(userId))
+			return;
 
 		//workSpaceId 에 속한 사용자를 가져온다
 		List targetUserId = new ArrayList();
@@ -6516,7 +6523,83 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	
 	public InstanceInfoList getSavedInstanceList(String workSpaceId, RequestParams params) throws Exception {
-		return null;
+		
+		int currentPage = params.getCurrentPage();
+		int pageSize = params.getPageSize();
+		SortingField sortingField = params.getSortingField();
+
+		User cUser = SmartUtil.getCurrentUser();
+		String userId = cUser.getId();
+		
+		TskTaskCond taskCond = new TskTaskCond();
+		taskCond.setStatus(TskTask.TASKSTATUS_TEMPSAVE);
+		taskCond.setType(TskTask.TASKTYPE_TEMPSAVE);
+		taskCond.setAssignee(userId);
+		
+		long totalSize = SwManagerFactory.getInstance().getTskManager().getTaskSize(userId, taskCond);
+		
+		if (totalSize == 0)
+			return null;
+		
+		taskCond.setPageNo(currentPage - 1);
+		taskCond.setPageSize(pageSize);
+		if (sortingField != null)
+			taskCond.setOrders(new Order[]{new Order(sortingField.getFieldId(), sortingField.isAscending())});
+		
+		TskTask[] tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, taskCond, IManager.LEVEL_LITE);
+		
+		InstanceInfoList list = new InstanceInfoList();
+		list.setCurrentPage(currentPage);
+		list.setPageSize(pageSize);
+		list.setSortedField(sortingField);
+		list.setTotalSize((int)totalSize);
+		
+		int totalPages = (int)totalSize % pageSize;
+		if(totalPages == 0) {
+			totalPages = (int)totalSize / pageSize;
+		} else {
+			totalPages = (int)totalSize / pageSize + 1;
+		}
+		list.setTotalPages(totalPages);
+		
+		//list.setType(type);
+		
+		InstanceInfo[] instanceDatas = new InstanceInfo[tasks.length];
+		for (int i = 0; i < tasks.length; i++) {
+			TskTask task = tasks[i];
+			//InstanceInfo instanceData = ModelConverter.getInstanceInfoByTskTask(null, task);
+			WorkInstanceInfo instanceData = new WorkInstanceInfo();
+			
+			UserInfo owner = ModelConverter.getUserInfoByUserId(userId);
+			instanceData.setId(task.getObjId());
+			instanceData.setOwner(owner);
+			instanceData.setLastModifiedDate(new LocalDate(task.getModificationDate().getTime()));
+			instanceData.setLastModifier(owner);
+			
+			String taskDef = task.getDef();
+			String[] taskDefInfos = StringUtils.tokenizeToStringArray(taskDef, "|");
+			
+			boolean isIwork = true;
+			
+			if (isIwork) {
+				instanceData.setSubject(task.getTitle());
+				instanceData.setWorkId(taskDefInfos[0]);
+				instanceData.setWorkName(task.getName());
+				instanceData.setWorkType(SmartWork.TYPE_INFORMATION);
+				instanceData.setWorkRunning(true);
+				instanceData.setWorkFullPathName(task.getName());
+				TaskInstanceInfo lastTask = new TaskInstanceInfo();
+				lastTask.setName(task.getName());
+				instanceData.setLastTask(lastTask);
+			} else {
+				
+			}
+			
+			instanceDatas[i] = instanceData;
+		}
+		list.setInstanceDatas(instanceDatas);
+		
+		return list;
 	}
 
 	
