@@ -170,8 +170,7 @@ SmartWorks.FormRuntime.DataGridBuilder.serializeObject = function(dataGrids){
 		var gridRows = dataGrid.find('.form_value tbody .js_grid_row');
 		var gridDatas = new Array();
 		for(var j=0; j<gridRows.length; j++){
-			var gridRow = $('<form></form>').append($(gridRows[i]).clone());
-//			var gridRow = $(gridRows[i]);
+			var gridRow = $('<form></form>').append($(gridRows[j]).clone());
 			gridDatas.push(mergeObjects(gridRow.serializeObject(), SmartWorks.GridLayout.serializeObject(gridRow)));
 		}
 		gridsJson[fieldId] =  {gridDatas: gridDatas};
