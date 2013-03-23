@@ -597,7 +597,9 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			String type  = dataField.getType();
 			String value = null;
 			if (type != null && type.equalsIgnoreCase("complex")) {
-				value = dataField.toString();
+				//TODO COMPLEX
+				//value = dataField.toString();
+				value = dataField.getValue();
 			} else {
 				value = dataField.getValue();
 			}
@@ -849,8 +851,10 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 							int clobLength = (int)clob.length();
 							fieldValue = clob.getSubString(1, clobLength);
 							if (dataType.equalsIgnoreCase("complex")) {
-								SwdDataField tmpField = (SwdDataField) SwdDataField.toObject(fieldValue.toString());
-								dataField.setDataFields(tmpField.getDataFields());
+								//TODO COMPLEX
+								//SwdDataField tmpField = (SwdDataField) SwdDataField.toObject(fieldValue.toString());
+								//dataField.setDataFields(tmpField.getDataFields());
+								dataField.setValue((String)fieldValue);
 							} else {
 								dataField.setValue((String)fieldValue);
 							}
@@ -861,8 +865,10 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 						dataField.setValue(fieldValue.toString());
 					} else if (fieldValue instanceof String) {
 						if (dataType.equalsIgnoreCase("complex")) {
-							SwdDataField tmpField = (SwdDataField) SwdDataField.toObject(fieldValue.toString());
-							dataField.setDataFields(tmpField.getDataFields());
+							//TODO COMPLEX
+							//SwdDataField tmpField = (SwdDataField) SwdDataField.toObject(fieldValue.toString());
+							//dataField.setDataFields(tmpField.getDataFields());
+							dataField.setValue((String)fieldValue);
 						} else {
 							dataField.setValue((String)fieldValue);
 						}
