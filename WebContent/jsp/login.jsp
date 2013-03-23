@@ -81,7 +81,7 @@
 	
 			<!-- Footer -->
 			<div id="footer">
-					<span class="bottom_text">Copyright <span onclick="clickBlank()">ⓒ</span> 2009-2012 <b>Maninsoft,</b> Inc. All Rights Reserved.</span>
+					<span class="bottom_text">Copyright <span onclick="clickBlank()">ⓒ</span> 2009-2013 <b>Maninsoft,</b> Inc. All Rights Reserved.</span>
 			</div>
 			<!-- End of Footer -->
 		</div>

@@ -16,10 +16,13 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 	if(!options.refreshData)
 		options.container.html('');
 
-	var value = (options.dataField && options.dataField.value) || '';
+	var value = "";
+	if(options.dataField && options.dataField.value){
+		value = JSON.parse(options.dataField.value);
+	}
+	value = isEmpty(value) ? "" : value.gridDatas;
 	var $entity = options.entity;
 	var $graphic = $entity.children('graphic');
-	var multiLines = parseInt($graphic.attr('multipleLines'));
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
 	var fitWidth = $graphic.attr('fitWidth') === 'true';
 	var verticalScroll = $graphic.attr('verticalScroll') === 'true';
@@ -71,7 +74,9 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 				}
 				var fieldId = $subEntity.attr('id');
 				var $cell = $('<td fieldId="' + fieldId + '"></td>');
-				var dataField = isEmpty(dataFields) ? null : dataFields[fieldId];
+				var dataField = {};
+				dataField['value'] = isEmpty(dataFields) ? null : dataFields[fieldId];
+				
 				if(index==0){
 					var $cellHidden = $cell.clone();
 					SmartWorks.FormFieldBuilder.build(options.mode, $cellHidden, $subEntity, null, options.layoutInstance, false, true);
@@ -97,19 +102,20 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 	if(!options.refreshData){
 		$content.appendTo(options.container);
 	}else{
-		$oldGridRows = options.container.find('tbody tr.js_grid_row');
+		var $oldGridRows = options.container.find('tbody tr.js_grid_row');
 		if(isEmpty(value) || $oldGridRows.length != value.length){
 			options.container.children('div.form_value').remove();
 			$content.appendTo(options.container);			
 		}else{
-			for(var k=0; k<oldGridRows.length; k++){
-				$oldGridRows = $(oldGridRows[k]);
+			for(var k=0; k<$oldGridRows.length; k++){
+				$oldGridRow = $($oldGridRows[k]);
 				var dataFields = value[k];
 				for(var i=0; i<$subEntities.length; i++){
 					var $subEntity = $($subEntities[i]);
 					var fieldId = $subEntity.attr('id');
-					var dataField = isEmpty(dataFields) ? null : dataFields[fieldId];
-					var $oldCell = $oldGridRows.find('td[fieldId="' + fieldId + '"]');
+					var dataField = {};
+					dataField['value'] = isEmpty(dataFields) ? null : dataFields[fieldId];
+					var $oldCell = $oldGridRow.find('td[fieldId="' + fieldId + '"]');
 					SmartWorks.FormFieldBuilder.build(options.mode, $oldCell, $subEntity, dataField, options.layoutInstance, options.refreshData, true);
 				}
 			}

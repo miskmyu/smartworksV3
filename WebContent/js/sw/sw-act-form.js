@@ -337,6 +337,9 @@ $(function() {
 		var newGridRow = input.parents('table:first').find('thead tr.js_hidden_grid_row').clone().removeClass('js_hidden_grid_row');
 		newGridRow.find('.js_grid_no').text(input.prevAll('tr').length+1);
 		newGridRow.show().insertBefore(input);
+		smartCommon.liveTimePicker();
+		smartCommon.liveTodayPicker();
+		smartCommon.liveTodayTimePicker();
 		return false;
 	});
 	
