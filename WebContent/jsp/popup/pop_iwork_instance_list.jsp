@@ -150,11 +150,8 @@
 											class="tr pr10"
 										<%}else if(data.getFieldType().equals(FormField.TYPE_FILE)){%>
 											class="tc"
-										<%}%>>
-										<%if(data.getFieldType().equals(FormField.TYPE_FILE) && !SmartUtil.isBlankObject(data.getValue())){%>
-										<%	if(!SmartUtil.isBlankObject(data.getFiles())){%>
-												<img src="images/icon_file.gif" class="js_pop_files_detail" filesDetail="<%=data.getFilesHtml(work.getId(), null, instanceInfo.getId())%>">
-										<%	} %>
+										<%}%>><%if(data.getFieldType().equals(FormField.TYPE_FILE) && !SmartUtil.isBlankObject(data.getValue())){%>
+										<%if(!SmartUtil.isBlankObject(data.getFiles())){%><img src="images/icon_file.gif" class="js_pop_files_detail" filesDetail="<%=data.getFilesHtml(work.getId(), null, instanceInfo.getId())%>"><%	} %>
 										<%}else if(data.getFieldType().equals(FormField.TYPE_NUMBER)){%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) : CommonUtil.toNotNull(data.getValue())%>
 										<%}else if(data.getFieldType().equals(FormField.TYPE_PERCENT)){%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) + "%" : CommonUtil.toNotNull(data.getValue())%>
 										<%}else if(data.getFieldType().equals(FormField.TYPE_CURRENCY)){%><%=data.getSymbol()%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) : CommonUtil.toNotNull(data.getValue())%>
@@ -162,15 +159,9 @@
 													data.getFieldType().equals(FormField.TYPE_RICHTEXT_EDITOR) ||
 													data.getFieldType().equals(FormField.TYPE_DATA_GRID)){%>
 										<%}else{%><%=CommonUtil.toNotNull(data.getValue())%><%} %>
-										<%
-										if(displayFields[count++].getId().equals(work.getKeyField())){
-										%>
+										<%if(displayFields[count++].getId().equals(work.getKeyField())){%>
 											<%if(instanceInfo.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=instanceInfo.getSubInstanceCount() %></b>]</font><%} %>
-											<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
-										<%
-										}
-										%>
-								</td>
+											<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %><%}%></td>
 						<%
 							}
 						}

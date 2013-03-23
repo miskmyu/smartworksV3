@@ -336,6 +336,7 @@ $(function() {
 		var input = $(targetElement(e)).parents('tr:first');
 		var newGridRow = input.parents('table:first').find('thead tr.js_hidden_grid_row').clone();
 		newGridRow.removeClass('js_hidden_grid_row');
+		newGridRow.find('input.hasDatepicker').removeClass('hasDatepicker').attr('id', '');
 		newGridRow.find('.js_grid_no').text(input.prevAll('tr').length+1);
 		newGridRow.show().insertBefore(input);
 		smartCommon.liveTimePicker();

@@ -63,19 +63,19 @@ SmartWorks.FormRuntime.ComboBoxBuilder.build = function(config) {
 	}
 	
 	if ($staticItems.length == 0) {
-		$option = $('<option value="' + value + '" selected>'+value+'</option>');
+		$option = $('<option value="' + value + '">'+value+'</option>');
 		$option.appendTo($input.find('select'));
 	} else {
 		for ( var i = 0; i < $staticItems.length; i++) {
 			var $staticItem = $staticItems.eq(i);
 			var text = $staticItem.text();
-			var selected = (value === text ) ? 'selected' : '' ;
 
-			$option = $('<option value="' + text + '" ' + selected + '>'+text+'</option>');
+			$option = $('<option value="' + text + '">'+text+'</option>');
 			
 			$option.appendTo($input.find('select'));
 		}
 	}
+	$input.find('select').attr('value', value);
 	
 	
 	if(!options.refreshData)

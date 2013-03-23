@@ -68,14 +68,24 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 				if(index==0){
 					var labelWidth = parseInt($subGraphic.attr('contentWidth'));
 					var widthStr = (fitWidth && totalWidth>labelWidth) ? labelWidth/totalWidth*100 + '%' : labelWidth + 'px';
-					var requiredStr = ($subEntity.attr('required') === 'true') ? '<span class="required_label" style="width:17px;height:17px"></span>' : '';
+					var requiredStr = ($subEntity.attr('required') === 'true') ? '<span class="required_label" style="padding-top:5px;padding-left:2px;">&nbsp;&nbsp;</span>' : '';
 					var displayStr = isHidden ? 'display:none' : '';
-					$table.find('tr').append('<th class="r_line" style="width:' + widthStr + ';' + displayStr + '"><span>' + $subEntity.attr('name') + '</span>' + requiredStr + '</th>');
+					$table.find('tr').append('<th class="r_line" style="width:' + widthStr + ';' + displayStr + '"><span>' + $subEntity.attr('name') + requiredStr + '</span></th>');
 				}
 				var fieldId = $subEntity.attr('id');
 				var $cell = $('<td fieldId="' + fieldId + '"></td>');
 				var dataField = {};
-				dataField['value'] = isEmpty(dataFields) ? null : dataFields[fieldId];
+				if(!isEmpty(dataFields)){
+					var fieldType = $subEntity.children('format').attr('type');
+					if(fieldType === 'userField'){
+						dataField['users'] = (dataFields[fieldId])['users'];
+					}else if(fieldType === 'refFormField'){
+						dataField['refRecordId'] = (dataFields[fieldId])['refRecordId'];
+						dataField['value'] = (dataFields[fieldId])['value'];
+					}else{
+						dataField['value'] = dataFields[fieldId];
+					}
+				}
 				
 				if(index==0){
 					var $cellHidden = $cell.clone();
@@ -114,7 +124,17 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 					var $subEntity = $($subEntities[i]);
 					var fieldId = $subEntity.attr('id');
 					var dataField = {};
-					dataField['value'] = isEmpty(dataFields) ? null : dataFields[fieldId];
+					if(!isEmpty(dataFields)){
+						var fieldType = $subEntity.children('format').attr('type');
+						if(fieldType === 'userField'){
+							dataField['users'] = (dataFields[fieldId])['users'];
+						}else if(fieldType === 'refFormField'){
+							dataField['refRecordId'] = (dataFields[fieldId])['refRecordId'];
+							dataField['value'] = (dataFields[fieldId])['value'];
+						}else{
+							dataField['value'] = dataFields[fieldId];
+						}
+					}
 					var $oldCell = $oldGridRow.find('td[fieldId="' + fieldId + '"]');
 					SmartWorks.FormFieldBuilder.build(options.mode, $oldCell, $subEntity, dataField, options.layoutInstance, options.refreshData, true);
 				}
@@ -171,6 +191,13 @@ SmartWorks.FormRuntime.DataGridBuilder.serializeObject = function(dataGrids){
 		var gridDatas = new Array();
 		for(var j=0; j<gridRows.length; j++){
 			var gridRow = $('<form></form>').append($(gridRows[j]).clone());
+			var rowSelects = $(gridRows[j]).find('select');
+			var clonedSelects = gridRow.find('select');
+			if(!isEmpty(rowSelects) && !isEmpty(clonedSelects) && rowSelects.length == clonedSelects.length ){
+				for(var index=0; index<rowSelects.length; index++){
+					$(clonedSelects[index]).attr('value', $(rowSelects[index]).attr('value'));
+				}
+			}
 			gridDatas.push(mergeObjects(gridRow.serializeObject(), SmartWorks.GridLayout.serializeObject(gridRow)));
 		}
 		gridsJson[fieldId] =  {gridDatas: gridDatas};
