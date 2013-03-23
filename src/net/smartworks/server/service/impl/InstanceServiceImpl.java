@@ -2051,6 +2051,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			Map<String, List<Map<String, String>>> fileGroupMap = new HashMap<String, List<Map<String, String>>>();
 			while (itr.hasNext()) {
 				String fieldId = (String)itr.next();
+				SwdField field = fieldInfoMap.get(fieldId);
+				String fieldType = field.getFormFieldType();
 				String value = null;
 				String type = null;
 				String refForm = null;
@@ -2058,6 +2060,8 @@ public class InstanceServiceImpl implements IInstanceService {
 				String refRecordId = null;
 				Object fieldValue = frmSmartFormMap.get(fieldId);
 				String autoIndexSelectedValue = null;
+				
+				
 				if(!keyDuplicable) {
 					if(fieldId.equals(keyColumn)) {
 						long objectCount = getSwdManager().getObjectsCountByFormFieldId(domainId, fieldId, tableName, instanceId, String.valueOf(fieldValue));
@@ -2065,120 +2069,138 @@ public class InstanceServiceImpl implements IInstanceService {
 							throw new DuplicateKeyException("duplicateKeyException");
 					}
 				}
-				if (fieldValue instanceof LinkedHashMap) {
-					Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
-					groupId = (String)valueMap.get("groupId");
-					refForm = (String)valueMap.get("refForm");
-					String autoIndexValue = (String)valueMap.get("value");
-					autoIndexSelectedValue = (String)valueMap.get("selectedValue");
-					users = (ArrayList<Map<String,String>>)valueMap.get("users");
 
-					if(!CommonUtil.isEmpty(groupId)) {
-						files = (ArrayList<Map<String,String>>)valueMap.get("files");
-						if(!CommonUtil.isEmpty(files)) {
-							fileGroupMap.put(groupId, files);
-							value = groupId;
-							groupIdList.add(groupId);
-						}
-					} else if(!CommonUtil.isEmpty(refForm)) {
-						refFormField = (String)valueMap.get("refFormField");
-						refRecordId = (String)valueMap.get("refRecordId");
-						
-						SwdRecordCond cond = new SwdRecordCond();
-						cond.setFormId(refForm);
-						//cond.setReferencedFormId(refFormField);
-						cond.setRecordId(refRecordId);
-						
-						SwdRecord refRecord = getSwdManager().getRecord(userId, cond, IManager.LEVEL_LITE);
-						
-						if (refRecord != null) {
-							value = refRecord.getDataFieldValue(refFormField);
-						}
-						
-//						SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
-//						swoDepartmentCond.setId(refRecordId);
-//						String deptName = getSwoManager().getDepartment(userId, swoDepartmentCond, IManager.LEVEL_LITE).getName();
-//						value = deptName;
+				if (fieldType.equalsIgnoreCase("complex")) {
 					
-					} else if(!CommonUtil.isEmpty(users)) {
-						refForm = "frm_user_SYSTEM";
-						refFormField = "4";
-						String resultRefRecordId = "";
-						String resultValue = "";
-						String symbol = ";";
-						if(users.size() == 1) {
-							resultRefRecordId = users.get(0).get("id");
-							resultValue = users.get(0).get("name");
-						} else {
-							for(int i=0; i < users.subList(0, users.size()).size(); i++) {
-								Map<String, String> user = users.get(i);
-								resultRefRecordId += user.get("id") + symbol;
-								resultValue += user.get("name") + symbol;
-							}
-						}
-						refRecordId = resultRefRecordId;
-						value = resultValue;
-					} else if(!CommonUtil.isEmpty(autoIndexValue)) {
-						value = autoIndexValue;
-					}
-				} else if(fieldValue instanceof String) {
-					value = (String)frmSmartFormMap.get(fieldId);
-					type = fieldInfoMap.get(fieldId).getFormFieldType();
-					if(!value.equals("")) {
-						if(formId.equals(SmartForm.ID_MEMO_MANAGEMENT)) {
-							if(fieldId.equals("12"))
-								value = StringUtil.subString(value, 0, 20, "...");
-						} else if(formId.equals(SmartForm.ID_EVENT_MANAGEMENT)) {
-							if(fieldId.equals("1") || fieldId.equals("2")) {
-								if(!value.isEmpty())
-									value = LocalDate.convertStringToLocalDate(value).toGMTDateString();
-							}
-						} else {
-							if(type.equals("datetime")) {
-								if(value.length() == FieldData.SIZE_DATETIME) {
-									value = LocalDate.convertLocalDateTimeStringToLocalDate(value).toGMTDateString();								
-								} else if(value.length() == FieldData.SIZE_DATE) {
-									value = LocalDate.convertLocalDateStringToLocalDate(value).toGMTDateString();
-								}
-							} else if(type.equals("time")) {
-								value = LocalDate.convertLocalTimeStringToLocalDate(value).toGMTTimeString2();
-							}
-						}
-					}
-				} else if(fieldValue instanceof Integer) {
-					value = (Integer)frmSmartFormMap.get(fieldId) + "";
-				}
-				if (CommonUtil.isEmpty(value)) {
-					if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("boolean")) {
-						value = "false";
-					} else {
-						continue;
-					}
+					SwdDataField fieldData = new SwdDataField();
+					fieldData.setId(fieldId);
+					fieldData.setName(fieldInfoMap.get(fieldId).getFormFieldName());
+					fieldData.setRefForm(refForm);
+					fieldData.setRefFormField(refFormField);
+					fieldData.setRefRecordId(refRecordId);
+					
+					value = JsonUtil.getJsonStringByMap((LinkedHashMap)frmSmartFormMap.get(fieldId));
+					
+					value = StringUtils.replace(value, "﻿", "");// 에디터로 작성된 내용중 자판에 없는 특수문자가 하나 숨어 들어온다 그문자를 제거하는 소스
+					fieldData.setValue(value);
+					
+					fieldDataList.add(fieldData);
 				} else {
-					if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("boolean"))
-						value = "true";
-				}
-				SwdDataField fieldData = new SwdDataField();
-				fieldData.setId(fieldId);
-				fieldData.setName(fieldInfoMap.get(fieldId).getFormFieldName());
-				fieldData.setRefForm(refForm);
-				fieldData.setRefFormField(refFormField);
-				fieldData.setRefRecordId(refRecordId);
-				
-				//unescape
-				if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("text")) {
-					//value = StringUtil.unescape(value);
-					value = SmartUtil.smartDecode(value);
-					value = StringUtils.replace(value, "&nbsp;", "<span class=\"Apple-tab-span\" style=\"white-space:pre\"> </span>");
-				}
-				value = StringUtils.replace(value, "﻿", ""); // 에디터로 작성된 내용중 자판에 없는 특수문자가 하나 숨어 들어온다 그문자를 제거하는 소스
+					if (fieldValue instanceof LinkedHashMap) {
+						Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
+						groupId = (String)valueMap.get("groupId");
+						refForm = (String)valueMap.get("refForm");
+						String autoIndexValue = (String)valueMap.get("value");
+						autoIndexSelectedValue = (String)valueMap.get("selectedValue");
+						users = (ArrayList<Map<String,String>>)valueMap.get("users");
 
-				fieldData.setValue(value);
-				if (!CommonUtil.isEmpty(autoIndexSelectedValue))
-					fieldData.setSelectedValue(autoIndexSelectedValue);
-	
-				fieldDataList.add(fieldData);
+						if(!CommonUtil.isEmpty(groupId)) {
+							files = (ArrayList<Map<String,String>>)valueMap.get("files");
+							if(!CommonUtil.isEmpty(files)) {
+								fileGroupMap.put(groupId, files);
+								value = groupId;
+								groupIdList.add(groupId);
+							}
+						} else if(!CommonUtil.isEmpty(refForm)) {
+							refFormField = (String)valueMap.get("refFormField");
+							refRecordId = (String)valueMap.get("refRecordId");
+							
+							SwdRecordCond cond = new SwdRecordCond();
+							cond.setFormId(refForm);
+							//cond.setReferencedFormId(refFormField);
+							cond.setRecordId(refRecordId);
+							
+							SwdRecord refRecord = getSwdManager().getRecord(userId, cond, IManager.LEVEL_LITE);
+							
+							if (refRecord != null) {
+								value = refRecord.getDataFieldValue(refFormField);
+							}
+							
+//							SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
+//							swoDepartmentCond.setId(refRecordId);
+//							String deptName = getSwoManager().getDepartment(userId, swoDepartmentCond, IManager.LEVEL_LITE).getName();
+//							value = deptName;
+						
+						} else if(!CommonUtil.isEmpty(users)) {
+							refForm = "frm_user_SYSTEM";
+							refFormField = "4";
+							String resultRefRecordId = "";
+							String resultValue = "";
+							String symbol = ";";
+							if(users.size() == 1) {
+								resultRefRecordId = users.get(0).get("id");
+								resultValue = users.get(0).get("name");
+							} else {
+								for(int i=0; i < users.subList(0, users.size()).size(); i++) {
+									Map<String, String> user = users.get(i);
+									resultRefRecordId += user.get("id") + symbol;
+									resultValue += user.get("name") + symbol;
+								}
+							}
+							refRecordId = resultRefRecordId;
+							value = resultValue;
+						} else if(!CommonUtil.isEmpty(autoIndexValue)) {
+							value = autoIndexValue;
+						}
+					} else if(fieldValue instanceof String) {
+						value = (String)frmSmartFormMap.get(fieldId);
+						type = fieldInfoMap.get(fieldId).getFormFieldType();
+						if(!value.equals("")) {
+							if(formId.equals(SmartForm.ID_MEMO_MANAGEMENT)) {
+								if(fieldId.equals("12"))
+									value = StringUtil.subString(value, 0, 20, "...");
+							} else if(formId.equals(SmartForm.ID_EVENT_MANAGEMENT)) {
+								if(fieldId.equals("1") || fieldId.equals("2")) {
+									if(!value.isEmpty())
+										value = LocalDate.convertStringToLocalDate(value).toGMTDateString();
+								}
+							} else {
+								if(type.equals("datetime")) {
+									if(value.length() == FieldData.SIZE_DATETIME) {
+										value = LocalDate.convertLocalDateTimeStringToLocalDate(value).toGMTDateString();								
+									} else if(value.length() == FieldData.SIZE_DATE) {
+										value = LocalDate.convertLocalDateStringToLocalDate(value).toGMTDateString();
+									}
+								} else if(type.equals("time")) {
+									value = LocalDate.convertLocalTimeStringToLocalDate(value).toGMTTimeString2();
+								}
+							}
+						}
+					} else if(fieldValue instanceof Integer) {
+						value = (Integer)frmSmartFormMap.get(fieldId) + "";
+					}
+					if (CommonUtil.isEmpty(value)) {
+						if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("boolean")) {
+							value = "false";
+						} else {
+							continue;
+						}
+					} else {
+						if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("boolean"))
+							value = "true";
+					}
+					SwdDataField fieldData = new SwdDataField();
+					fieldData.setId(fieldId);
+					fieldData.setName(fieldInfoMap.get(fieldId).getFormFieldName());
+					fieldData.setRefForm(refForm);
+					fieldData.setRefFormField(refFormField);
+					fieldData.setRefRecordId(refRecordId);
+					
+					//unescape
+					if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("text")) {
+						//value = StringUtil.unescape(value);
+						value = SmartUtil.smartDecode(value);
+						value = StringUtils.replace(value, "&nbsp;", "<span class=\"Apple-tab-span\" style=\"white-space:pre\"> </span>");
+					}
+					value = StringUtils.replace(value, "﻿", ""); // 에디터로 작성된 내용중 자판에 없는 특수문자가 하나 숨어 들어온다 그문자를 제거하는 소스
 
+					fieldData.setValue(value);
+					if (!CommonUtil.isEmpty(autoIndexSelectedValue))
+						fieldData.setSelectedValue(autoIndexSelectedValue);
+		
+					fieldDataList.add(fieldData);
+					
+				}
 			}
 	
 			if(!SmartUtil.isBlankObject(repeatId)){
