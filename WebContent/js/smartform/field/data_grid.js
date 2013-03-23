@@ -43,7 +43,7 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 		$label.appendTo(options.container);
 	
 	var overflowPolicy = 'overflow-x:' + (fitWidth ? 'visible' : 'scroll') + ';overflow-y:' + (verticalScroll ? 'scroll' : 'visible') + ';';
-	var $content = $('<div class="form_value list_contents" fieldId="' + id + '" style="width:100%;' + contentHeightCss + '"><table><thead><tr class="tit_bg no_line grid_label"><th class="r_line" style="width:40px;"><span>' + smartMessage.get('rowNoText') + '</span></th></tr></thead></table></div>');
+	var $content = $('<div class="form_value list_contents ' + (required ? 'sw_required' : '') +'" fieldId="' + id + '" style="width:100%;' + contentHeightCss + '"><table><thead><tr class="tit_bg no_line grid_label"><th class="r_line" style="width:40px;"><span>' + smartMessage.get('rowNoText') + '</span></th></tr></thead></table></div>');
 	var $table = $content.find('table');
 	if(!isEmpty($subEntities)){
 		var totalWidth = 70;
@@ -53,7 +53,7 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 				totalWidth = totalWidth + parseInt($($subEntities[i]).children('graphic').attr('contentWidth'));
 			}
 		}
-		var length = isEmpty(value) ? 1 : value.length;
+		var length = isEmpty(value) ? ( readOnly ? 0 : 1) : value.length;
 		$table.append('<tbody style="' + overflowPolicy + '"></tbody>');
 		var $gridRowTemp = $('<tr class="list_action_item border_bottom js_grid_row"><td class="tc js_grid_no"></td></tr>');
 		var $gridRowHidden = $gridRowTemp.clone();
@@ -87,7 +87,7 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 					}
 				}
 				
-				if(index==0){
+				if(index==0 && !readOnly){
 					var $cellHidden = $cell.clone();
 					SmartWorks.FormFieldBuilder.build(options.mode, $cellHidden, $subEntity, null, options.layoutInstance, false, true);
 					$gridRowHidden.append($cellHidden);
@@ -95,15 +95,20 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 				SmartWorks.FormFieldBuilder.build(options.mode, $cell, $subEntity, dataField, options.layoutInstance, isEmpty(value) ? false : options.refreshData, true);
 				$gridRow.append($cell);
 			}
-			$gridRow.append('<td><div class="list_action"><div title="' + smartMessage.get('rowDeleteText') + '" class="js_delete_grid_row"> X </div></div></td>');
+			if(!readOnly){
+				$gridRow.append('<td><div class="list_action"><div title="' + smartMessage.get('rowDeleteText') + '" class="js_delete_grid_row"> X </div></div></td>');
+			}
 			$table.append($gridRow);
 		}
-		$gridRowHidden.append('<td><div class="list_action"><div title="' + smartMessage.get('rowDeleteText') + '" class="js_delete_grid_row"> X </div></div></td>');
-		$table.find('thead').append($gridRowHidden.hide().addClass('js_hidden_grid_row'));
-		$table.find('tbody').append('<tr class="list_action_item"><td class="tc"><div class="list_action"><div title="' + smartMessage.get('rowAddText') + '" class="js_add_grid_row">+</div></div></td></tr>');
+		if(!readOnly){
+			$gridRowHidden.append('<td><div class="list_action"><div title="' + smartMessage.get('rowDeleteText') + '" class="js_delete_grid_row"> X </div></div></td>');
+			$table.find('thead').append($gridRowHidden.hide().addClass('js_hidden_grid_row'));
+			$table.find('tbody').append('<tr class="list_action_item"><td class="tc"><div class="list_action"><div title="' + smartMessage.get('rowAddText') + '" class="js_add_grid_row">+</div></div></td></tr>');
+		}
 	}
-
-	$table.find('tr:first').append('<th style="width:20px;"><span></span></th>');
+	if(!readOnly){
+		$table.find('tr:first').append('<th style="width:20px;"><span></span></th>');
+	}
 	
 	if ($graphic.attr('hidden') == 'true'){
 		$label.hide();
@@ -142,9 +147,11 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 			
 		}
 	}
-	smartCommon.liveTimePicker();
-	smartCommon.liveTodayPicker();
-	smartCommon.liveTodayTimePicker();
+	if(!readOnly){
+		smartCommon.liveTimePicker();
+		smartCommon.liveTodayPicker();
+		smartCommon.liveTodayTimePicker();
+	}
 	return options.container;
 };
 
@@ -209,12 +216,14 @@ SmartWorks.FormRuntime.DataGridBuilder.validate = function(dataGrids){
 	var gridsValid = true;
 	for(var i=0; i<dataGrids.length; i++){
 		var dataGrid = $(dataGrids[i]);
-		var gridRow = dataGrid.find('.js_grid_row');
-//		var required = userField.find('div.sw_required');
-//		if(!isEmpty(required) && isBlank(userId)){
-//			userField.find('div.sw_required').addClass("sw_error");
-//			usersValid = false;
-//		}
+		var gridRows = dataGrid.find('.form_value tbody .js_grid_row');
+		var required = dataGrid.find('div.sw_required');
+		if(!isEmpty(required) && isEmpty(gridRows)){
+			dataGrid.find('div.sw_required').addClass("sw_error");
+			gridsValid = false;
+		}else{
+			dataGrid.find('div.sw_required').removeClass("sw_error");
+		}
 	}
 	return gridsValid;
 };
