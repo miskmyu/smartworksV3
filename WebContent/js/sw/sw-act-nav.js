@@ -292,8 +292,10 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					target.show();
 					target.html(data).prev().find('.btn_tree_plus').removeClass('btn_tree_plus').addClass('btn_tree_minus');
-					target.siblings('li.js_drill_down').find('.js_drill_down_target').html('').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
-					target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.js_drill_down_target').html('').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+//					target.siblings('li.js_drill_down').find('.js_drill_down_target').html('').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+//					target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.js_drill_down_target').html('').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+					target.siblings('li.js_drill_down').find('.js_drill_down_target').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+					target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.js_drill_down_target').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
 					smartPop.closeProgress();											
 				},
 				error : function(xhr, ajaxOptions, thrownError){
@@ -302,8 +304,10 @@ $(function() {
 			});
 		}else if(!target.is(':visible')){
 			target.show().prev().find('.btn_tree_plus').removeClass('btn_tree_plus').addClass('btn_tree_minus');
-			target.siblings('li.js_drill_down').find('.js_drill_down_target').html('').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
-			target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.js_drill_down_target').html('').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+//			target.siblings('li.js_drill_down').find('.js_drill_down_target').html('').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+//			target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.js_drill_down_target').html('').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+			target.siblings('li.js_drill_down').find('.js_drill_down_target').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+			target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.js_drill_down_target').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
 //		}else if(target.is(':visible') && !isEmpty($(target).children()) &&  $(targetElement(e)).parents('a:first').hasClass('js_expandable')){
 		}else if(target.is(':visible') && !isEmpty($(target).children())){
 			target.html('').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');

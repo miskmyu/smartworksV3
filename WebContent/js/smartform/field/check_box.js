@@ -34,7 +34,7 @@ SmartWorks.FormRuntime.CheckBoxBuilder.build = function(config) {
 	}else{
 		required = "";
 	}
-	if(!options.refreshData && !optoins.isDataGrid)
+	if(!options.refreshData && !options.isDataGrid)
 		$label.appendTo(options.container);
 
 	var checked = (value) ? 'checked' : '' ;
