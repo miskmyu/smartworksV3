@@ -49,7 +49,8 @@ SmartWorks.FormRuntime.AutoIndexBuilder.build = function(config) {
 		var subDataFields = options.dataField.dataFields;
 		for (var i = 0; i < subDataFields.length; i++) {
 			var subDataField = subDataFields[i];
-			listItemsStr = listItemsStr + '<listItem>' + subDataField.value + '</listItem>';
+			if(!isEmpty(subDataField.value))
+				listItemsStr = listItemsStr + '<listItem>' + subDataField.value + '</listItem>';
 		}
 		$listItems = $(listItemsStr);
 	}
@@ -66,7 +67,7 @@ SmartWorks.FormRuntime.AutoIndexBuilder.build = function(config) {
 		required = "";
 	}
 	
-	if ($listItems.length == 0) {
+	if ($listItems.length == 0 && !isEmpty(selectedValue)) {
 		$option = $('<option value="' + selectedValue + '" selected>'+selectedValue+'</option>');
 		$option.appendTo($input.find('select'));
 	} else {

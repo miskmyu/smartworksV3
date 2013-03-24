@@ -206,7 +206,7 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .proc_task.not_yet {background-color: #cfe2f3} /* 미처리 */
 .proc_task.returned {background-color: #dac8e2}	/* 반려 */	
 .proc_task.running {background-color: #daf3cc} /* 진행중 */
-.proc_task.delayed {background-color: #f8dede} /* 지연 */
+.proc_task.delayed {background-color: #fc9c9c} /* 지연 */
 .proc_task.entrust {background-color: #ceeeee} /* 위임 */
 .proc_task .title {margin-bottom:3px; height:30px; overflow: hidden}
 .proc_task .name {color: #999897 !important; font-size: 11px; font-weight: normal; word-wrap: break-word; max-height: 27px; overflow: hidden;}

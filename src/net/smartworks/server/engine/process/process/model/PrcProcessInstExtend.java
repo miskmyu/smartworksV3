@@ -44,6 +44,7 @@ public class PrcProcessInstExtend {
 	private String lastTask_tskAssigneeName;
 	private Date lastTask_tskExecuteDate;
 	private Date lastTask_tskDueDate;
+	private Date lastTask_tskExpectEndDate;
 	private String lastTask_tskForm;
 	private String lastTask_tskWorkSpaceId;
 	private String lastTask_tskWorkSpaceType;
@@ -225,6 +226,12 @@ public class PrcProcessInstExtend {
 	}
 	public void setLastTask_tskDueDate(Date lastTask_tskDueDate) {
 		this.lastTask_tskDueDate = lastTask_tskDueDate;
+	}
+	public Date getLastTask_tskExpectEndDate() {
+		return lastTask_tskExpectEndDate;
+	}
+	public void setLastTask_tskExpectEndDate(Date lastTask_tskExpectEndDate) {
+		this.lastTask_tskExpectEndDate = lastTask_tskExpectEndDate;
 	}
 	public String getLastTask_tskForm() {
 		return lastTask_tskForm;

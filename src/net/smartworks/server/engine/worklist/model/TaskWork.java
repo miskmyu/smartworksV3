@@ -23,6 +23,7 @@ public class TaskWork {
 	private String tskCreateUser;
 	private Date tskCreateDate;
 	private Date tskExecuteDate;
+	private Date tskExpectEndDate;
 	private String tskName;     
 	private String tskPrcInstId;
 	private String tskForm;
@@ -134,6 +135,12 @@ public class TaskWork {
 	}
 	public void setTskExecuteDate(Date tskExecuteDate) {
 		this.tskExecuteDate = tskExecuteDate;
+	}
+	public Date getTskExpectEndDate() {
+		return tskExpectEndDate;
+	}
+	public void setTskExpectEndDate(Date tskExpectEndDate) {
+		this.tskExpectEndDate = tskExpectEndDate;
 	}
 	public String getTskName() {
 		return tskName;

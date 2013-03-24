@@ -73,7 +73,7 @@
 				<div>
 					<table cellspacing="0" cellpadding="0" border="0">
 					<colgroup>
-						<col width="110px">
+						<col width="150px">
 						<col width="">
 					</colgroup>
 						<tbody>
@@ -134,12 +134,13 @@
 					String myGroupId = (SmartUtil.isBlankObject(work.getMyGroup())) ? "" : work.getMyGroup().getId();
 					%>
 					<tr>
-						<td class="state" width="70%">
+						<td class="state">
 							<fmt:message key="builder.title.service_status"/> : <span style="color: #40991b; font-weight: bold"><%=serviceStatus %></span> &nbsp;&nbsp;
 							<fmt:message key="builder.title.editing_status"/> : <span style="color: #666666; font-weight: bold"><%=editingStatus %></span>
 						</td>
-						<td class=" tr" width="30%">
-							<span class="btn_gray" <%if(work.isRunning() || work.isEditing()){%>style="display:none"<%} %>>
+						<span class="js_progress_span"></span>
+						<td class="tr">
+							<span class="btn_gray" <%if(work.isRunning() || work.isEditing()){%>style="visibility:hidden"<%} %>>
 								<a href="" class="js_start_work_service">
 									<span class="txt_btn_start"></span>
 										<span class="txt_btn_center"><fmt:message key="builder.button.start_service"/></span>

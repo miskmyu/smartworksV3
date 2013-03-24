@@ -7,12 +7,18 @@ $(function() {
 		var workId = tabWorkbench.attr('workId');
 		var categoryId = tabWorkbench.attr('categoryId');
 		var groupId = tabWorkbench.attr('groupId');
+		var progressSpan = input.parents('td').prev();
+		smartPop.progressCont(progressSpan);
 		$.ajax({
 			url : "start_work_service.sw?workId=" + workId,
 			success : function(data, status, jqXHR) {
 				target.html(data);
 				openWorkCategoryTree(categoryId, groupId);
-			}			
+				smartPop.closeProgress();
+			},
+			error : function() {
+				smartPop.closeProgress();
+			}
 		});
 		return false;
 	});
@@ -24,11 +30,17 @@ $(function() {
 		var workId = tabWorkbench.attr('workId');
 		var categoryId = tabWorkbench.attr('categoryId');
 		var groupId = tabWorkbench.attr('groupId');
+		var progressSpan = input.parents('td').prev();
+		smartPop.progressCont(progressSpan);
 		$.ajax({
 			url : "stop_work_service.sw?workId=" + workId,
 			success : function(data, status, jqXHR) {
 				target.html(data);
 				openWorkCategoryTree(categoryId, groupId);
+				smartPop.closeProgress();
+			},
+			error : function() {
+				smartPop.closeProgress();
 			}			
 		});
 		return false;
@@ -41,11 +53,17 @@ $(function() {
 		var workId = tabWorkbench.attr('workId');
 		var categoryId = tabWorkbench.attr('categoryId');
 		var groupId = tabWorkbench.attr('groupId');
+		var progressSpan = input.parents('td').prev();
+		smartPop.progressCont(progressSpan);
 		$.ajax({
 			url : "start_work_editing.sw?workId=" + workId,
 			success : function(data, status, jqXHR) {
 				target.html(data);
 				openWorkCategoryTree(categoryId, groupId);
+				smartPop.closeProgress();
+			},
+			error : function() {
+				smartPop.closeProgress();
 			}			
 		});
 		return false;
@@ -58,11 +76,17 @@ $(function() {
 		var workId = tabWorkbench.attr('workId');
 		var categoryId = tabWorkbench.attr('categoryId');
 		var groupId = tabWorkbench.attr('groupId');
+		var progressSpan = input.parents('td').prev();
+		smartPop.progressCont(progressSpan);
 		$.ajax({
 			url : "stop_work_editing.sw?workId=" + workId,
 			success : function(data, status, jqXHR) {
 				target.html(data);
 				openWorkCategoryTree(categoryId, groupId);
+				smartPop.closeProgress();
+			},
+			error : function() {
+				smartPop.closeProgress();
 			}			
 		});
 		return false;

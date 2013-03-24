@@ -263,7 +263,7 @@ function submitForms(tempSave) {
 			<div class="define_space js_process_instance_viewer" style="display:none; height:512px;"></div>
 			
 			<!-- 프로세스 영역 -->
-			<div class="define_space" style="padding: 0 45px; height:88px">
+			<div class="define_space" style="padding: 10px 45px 0px 45px; height:88px">
 			
 				<!-- 방향 Prev -->
         		<a href="" class="js_instance_tasks_left"><div class="proc_btn_prev" style="display:block"></div></a>
@@ -310,6 +310,9 @@ function submitForms(tempSave) {
 				        				statusClass = "proc_task not_yet";
 				        			}
 				        			
+				        			String performerMinPicture = SmartUtil.isBlankObject(task.getPerformer()) ? "" : task.getPerformer().getMinPicture();
+				        			String performerLongName = SmartUtil.isBlankObject(task.getPerformer()) ? "" : task.getPerformer().getLongName();
+				        			
 				        			if(!task.isSubTask()){
 				        	%>
 				            			<!-- 태스크 --> 
@@ -318,9 +321,9 @@ function submitForms(tempSave) {
 						                    <!-- task 정보 -->
 						                    <%if(isSelectable){%><a class="js_select_task_instance" href=""><%} %>
 							                    <div class="title"><%=count%>) <%=task.getName() %></div>
-							                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
+							                    <img src="<%=performerMinPicture%>" class="noti_pic profile_size_s">
 							                    <div class="noti_in_s">
-								                    <div class="name"><%=task.getPerformer().getLongName()%></div>
+								                    <div class="name"><%=performerLongName%></div>
 								                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
 							                    </div>
 							                <%if(isSelectable){%></a><%} %>

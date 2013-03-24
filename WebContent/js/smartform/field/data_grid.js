@@ -68,7 +68,7 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 				if(index==0){
 					var labelWidth = parseInt($subGraphic.attr('contentWidth'));
 					var widthStr = (fitWidth && totalWidth>labelWidth) ? labelWidth/totalWidth*100 + '%' : labelWidth + 'px';
-					var requiredStr = ($subEntity.attr('required') === 'true') ? '<span class="required_label" style="padding-top:5px;padding-left:2px;">&nbsp;&nbsp;</span>' : '';
+					var requiredStr = (!readOnly && $subEntity.attr('required') === 'true') ? '<span class="required_label" style="padding-top:5px;padding-left:2px;">&nbsp;&nbsp;</span>' : '';
 					var displayStr = isHidden ? 'display:none' : '';
 					$table.find('tr').append('<th class="r_line" style="width:' + widthStr + ';' + displayStr + '"><span>' + $subEntity.attr('name') + requiredStr + '</span></th>');
 				}
@@ -78,7 +78,17 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 				if(!isEmpty(dataFields)){
 					var fieldType = $subEntity.children('format').attr('type');
 					if(fieldType === 'userField'){
-						dataField['users'] = (dataFields[fieldId])['users'];
+						var tempUsers = (dataFields[fieldId])['users'];
+						var users = new Array();
+						if(!isEmpty(tempUsers)){
+							for(var k=0; k<tempUsers.length; k++){
+								var user = {};
+								user['userId'] = tempUsers[k].id;
+								user['longName'] = tempUsers[k].name;
+								users.push(user);
+							}
+						}
+						dataField['users'] = users;
 					}else if(fieldType === 'refFormField'){
 						dataField['refRecordId'] = (dataFields[fieldId])['refRecordId'];
 						dataField['value'] = (dataFields[fieldId])['value'];
@@ -132,7 +142,17 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 					if(!isEmpty(dataFields)){
 						var fieldType = $subEntity.children('format').attr('type');
 						if(fieldType === 'userField'){
-							dataField['users'] = (dataFields[fieldId])['users'];
+							var tempUsers = (dataFields[fieldId])['users'];
+							var users = new Array();
+							if(!isEmpty(tempUsers)){
+								for(var k=0; k<tempUsers.length; k++){
+									var user = {};
+									user['userId'] = tempUsers[k].id;
+									user['longName'] = tempUsers[k].name;
+									users.push(user);
+								}
+							}
+							dataField['users'] = users;
 						}else if(fieldType === 'refFormField'){
 							dataField['refRecordId'] = (dataFields[fieldId])['refRecordId'];
 							dataField['value'] = (dataFields[fieldId])['value'];
@@ -169,23 +189,23 @@ SmartWorks.FormRuntime.DataGridBuilder.buildEx = function(config){
 	};
 	SmartWorks.extend(options, config);
 
-	var labelWidth = 12;
-	if(options.columns >= 1 && options.columns <= 4 && options.colSpan <= options.columns) labelWidth = 12 * options.columns/options.colSpan;
-	$formEntity =  $($.parseXML('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
-						'<format type="dataGrid" viewingType="dataGrid"/>' +
-					    '<graphic hidden="false" readOnly="'+ options.readOnly +'" labelWidth="'+ labelWidth + '" multipleLines="' + options.multiLines + '"/>' +
-					'</formEntity>')).find('formEntity');
-	var $formCol = $('<td class="form_col js_type_dataGrid" fieldid="' + options.fieldId+ '" colspan="' + options.colSpan + '" width="' + options.colSpan/options.columns*100 + '%" rowspan="1">');
-	$formCol.appendTo(options.container);
-	SmartWorks.FormRuntime.DataGridBuilder.build({
-			mode : options.readOnly, // view or edit
-			container : $formCol,
-			entity : $formEntity,
-			dataField : SmartWorks.FormRuntime.DataGridBuilder.dataField({
-				fieldId: options.fieldId,
-				value: options.value			
-			})
-	});
+//	var labelWidth = 12;
+//	if(options.columns >= 1 && options.columns <= 4 && options.colSpan <= options.columns) labelWidth = 12 * options.columns/options.colSpan;
+//	$formEntity =  $($.parseXML('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
+//						'<format type="dataGrid" viewingType="dataGrid"/>' +
+//					    '<graphic hidden="false" readOnly="'+ options.readOnly +'" labelWidth="'+ labelWidth + '" multipleLines="' + options.multiLines + '"/>' +
+//					'</formEntity>')).find('formEntity');
+//	var $formCol = $('<td class="form_col js_type_dataGrid" fieldid="' + options.fieldId+ '" colspan="' + options.colSpan + '" width="' + options.colSpan/options.columns*100 + '%" rowspan="1">');
+//	$formCol.appendTo(options.container);
+//	SmartWorks.FormRuntime.DataGridBuilder.build({
+//			mode : options.readOnly, // view or edit
+//			container : $formCol,
+//			entity : $formEntity,
+//			dataField : SmartWorks.FormRuntime.DataGridBuilder.dataField({
+//				fieldId: options.fieldId,
+//				value: options.value			
+//			})
+//	});
 	
 };
 
@@ -236,16 +256,16 @@ SmartWorks.FormRuntime.DataGridBuilder.dataField = function(config){
 			value: ''
 	};
 
-	SmartWorks.extend(options, config);
-	$formXml = isEmpty(options.formXml) ? [] : $($.parseXML(options.formXml)).find('form');
-	var dataField = {};
-	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
-	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
-	if(isEmpty(fieldId)) return dataField;
-	
-	dataField = {
-			id: fieldId,
-			value: options.value
-	};
-	return dataField;
+//	SmartWorks.extend(options, config);
+//	$formXml = isEmpty(options.formXml) ? [] : $($.parseXML(options.formXml)).find('form');
+//	var dataField = {};
+//	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
+//	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
+//	if(isEmpty(fieldId)) return dataField;
+//	
+//	dataField = {
+//			id: fieldId,
+//			value: options.value
+//	};
+//	return dataField;
 };

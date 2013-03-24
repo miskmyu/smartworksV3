@@ -621,6 +621,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		queryBuffer.append(" 			, (select name from sworguser where id = prcInstInfo.lastTask_tskassignee) as lastTask_tskassigneeName");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskexecuteDate ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskduedate ");
+		queryBuffer.append(" 			, prcInstInfo.lastTask_tskExpectEndDate ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskform ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskWorkSpaceId ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskWorkSpaceType ");
@@ -641,6 +642,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		queryBuffer.append(" 						, task.tskassignee as lastTask_tskassignee ");
 		queryBuffer.append(" 						, task.tskexecuteDate as lastTask_tskexecuteDate ");
 		queryBuffer.append(" 						, task.tskduedate as lastTask_tskduedate ");
+		queryBuffer.append(" 						, task.tskExpectEndDate as lastTask_tskExpectEndDate ");
 		queryBuffer.append(" 						, task.tskform as lastTask_tskform ");
 		queryBuffer.append(" 						, task.tskWorkSpaceId as lastTask_tskWorkSpaceId ");
 		queryBuffer.append(" 						, task.tskWorkSpaceType as lastTask_tskWorkSpaceType ");
@@ -973,6 +975,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				obj.setLastTask_tskAssigneeName((String)fields[j++]);
 				obj.setLastTask_tskExecuteDate((Timestamp)fields[j++]);
 				obj.setLastTask_tskDueDate((Timestamp)fields[j++]);
+				obj.setLastTask_tskExpectEndDate((Timestamp)fields[j++]);
 				obj.setLastTask_tskForm((String)fields[j++]);
 				obj.setLastTask_tskWorkSpaceId((String)fields[j++]);
 				obj.setLastTask_tskWorkSpaceType((String)fields[j++]);

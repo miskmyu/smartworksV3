@@ -405,6 +405,7 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append("		, task.tskassignee ");
 		queryBuffer.append("		, case when task.tskstatus='11' then task.tskassigndate else task.tskexecuteDate end as taskLastModifyDate ");
 		queryBuffer.append("		, task.tskcreatedate ");
+		queryBuffer.append("		, task.tskExpectEndDate ");
 		queryBuffer.append("		, task.tskname ");
 		queryBuffer.append("		, task.tskprcinstid ");
 		queryBuffer.append("		, task.tskform ");
@@ -704,6 +705,7 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 				obj.setTskAssignee((String)fields[j++]);
 				obj.setTaskLastModifyDate((Timestamp)fields[j++]);
 				obj.setTskCreateDate((Timestamp)fields[j++]);
+				obj.setTskExpectEndDate((Timestamp)fields[j++]);
 				obj.setTskName((String)fields[j++]);
 				obj.setTskPrcInstId((String)fields[j++]);
 				obj.setTskForm((String)fields[j++]);

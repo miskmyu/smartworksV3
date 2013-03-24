@@ -5954,7 +5954,11 @@ public class InstanceServiceImpl implements IInstanceService {
 					pwInstInfo.setCreatedDate(new LocalDate(prcInst.getPrcCreateDate().getTime()));
 					int status = -1;
 					if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-						status = Instance.STATUS_RUNNING;
+						if(prcInst.getLastTask_tskExpectEndDate().getTime() < (new LocalDate()).getTime()){
+							status = Instance.STATUS_DELAYED_RUNNING;
+						}else{
+							status = Instance.STATUS_RUNNING;
+						}
 					} else if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 						status = Instance.STATUS_COMPLETED;
 					} else if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
@@ -5972,11 +5976,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(prcInst.getParentCtgId(), prcInst.getParentCtg());
 					
 					WorkInfo workInfo = new SmartWorkInfo(prcInst.getPrcDid(), prcInst.getPrcName(), SmartWork.TYPE_PROCESS, groupInfo, categoryInfo);
-//Start InstanceInfo Model Changed by ysjung
-					//pwInstInfo.setWork(workInfo);
 					pwInstInfo.setWorkInfo(workInfo);
-					//pwInstInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
-//End InstanceInfo Model Changed by ysjung
 		
 					TaskInstanceInfo lastTaskInfo = null;
 					
@@ -5999,7 +5999,11 @@ public class InstanceServiceImpl implements IInstanceService {
 						
 						int tskStatus = -1;
 						if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-							tskStatus = Instance.STATUS_COMPLETED;
+							if(status == Instance.STATUS_RUNNING && prcInst.getLastTask_tskExpectEndDate().getTime() < (new LocalDate()).getTime()){
+								tskStatus = Instance.STATUS_DELAYED_RUNNING;
+							}else{
+								tskStatus = Instance.STATUS_RUNNING;
+							}
 						} else if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 							tskStatus = Instance.STATUS_COMPLETED;
 						} else if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
@@ -6016,30 +6020,17 @@ public class InstanceServiceImpl implements IInstanceService {
 						lastTaskInfo.setStatus(tskStatus);
 						lastTaskInfo.setSubject(subject);
 						lastTaskInfo.setType(tskType);
-//Start InstanceInfo Model Changed by ysjung
-						//lastTaskInfo.setWork(workInfo);
 						lastTaskInfo.setWorkInfo(workInfo);
-						//lastTaskInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
-//End InstanceInfo Model Changed by ysjung
 						lastTaskInfo.setWorkInstance(pwInstInfo);
-//Start InstanceInfo Model Changed by ysjung
-						//lastTaskInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getLastTask_tskWorkSpaceType(), prcInst.getLastTask_tskWorkSpaceId()));
 						lastTaskInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(prcInst.getLastTask_tskWorkSpaceType(), prcInst.getLastTask_tskWorkSpaceId()));
-						//lastTaskInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 						lastTaskInfo.setName(name);
 						lastTaskInfo.setTaskType(tskType);
 						lastTaskInfo.setAssignee(ModelConverter.getUserInfoByUserId(assignee));
 						lastTaskInfo.setPerformer(ModelConverter.getUserInfoByUserId(performer));
-						//WorkInstanceInfo workInstanceInfo = paretProcessInstObj;
 						pwInstInfo.setLastTask(lastTaskInfo);//마지막 태스크
 					}
 					pwInstInfo.setLastTaskCount(prcInst.getLastTask_tskCount());
-//Start InstanceInfo Model Changed by ysjung
-					//pwInstInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getPrcWorkSpaceType(), prcInst.getPrcWorkSpaceId()));
 					pwInstInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(prcInst.getPrcWorkSpaceType(), prcInst.getPrcWorkSpaceId()));
-					//pwInstInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 					pwInstanceInfoList.add(pwInstInfo);
 				}
 			}
