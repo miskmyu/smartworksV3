@@ -24,6 +24,7 @@ SmartWorks.FormRuntime.DataGridBuilder.build = function(config) {
 	var $entity = options.entity;
 	var $graphic = $entity.children('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
+	if(readOnly) options.mode = 'view';
 	var fitWidth = $graphic.attr('fitWidth') === 'true';
 	var verticalScroll = $graphic.attr('verticalScroll') === 'true';
 	var id = $entity.attr('id');
