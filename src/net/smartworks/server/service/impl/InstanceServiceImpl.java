@@ -3201,6 +3201,13 @@ public class InstanceServiceImpl implements IInstanceService {
 							
 							if (refRecord != null) {
 								value = refRecord.getDataFieldValue(refFormField);
+							} else {
+								//TODO 데모를 위한 코딩 변경 필요!!!!!!
+								if (CommonUtil.isEmpty(value)) {
+									if (!CommonUtil.isEmpty(autoIndexValue)) {
+										value = autoIndexValue;
+									}
+								}
 							}
 //							SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
 //							swoDepartmentCond.setId(refRecordId);
