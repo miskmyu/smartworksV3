@@ -627,7 +627,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskWorkSpaceType ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskAccessLevel ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskAccessValue ");
-		queryBuffer.append(" 			, (select count(*) from tsktask where tskstatus='11' and tsktype='common' and tskprcInstId = prcInst.prcObjid) as lastTaskCount ");
+		queryBuffer.append(" 			, (select count(*) from tsktask where tskstatus='11' and (tsktype='common' or tsktype='subflow') and tskprcInstId = prcInst.prcObjid) as lastTaskCount ");
 		queryBuffer.append(" 		from  ");
 		queryBuffer.append(" 			prcprcinst prcInst,  ");
 		queryBuffer.append(" 			( ");
@@ -651,7 +651,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		queryBuffer.append(" 				from ( ");
 		queryBuffer.append(" 						select tskprcinstId , max(tskCreatedate) as createDate  ");
 		queryBuffer.append(" 						from tsktask  ");
-		queryBuffer.append(" 						where tsktype = 'COMMON'  ");
+		queryBuffer.append(" 						where (tsktype = 'COMMON' or tsktype = 'SUBFLOW')  ");
 		queryBuffer.append(" 						group by tskprcinstid ");
 		queryBuffer.append(" 					  ) a,	 ");
 		queryBuffer.append(" 					  TskTask task		 ");
