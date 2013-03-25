@@ -221,7 +221,9 @@ public class TskManagerSubFlowAdvisorImpl extends AbstractTskManagerAdvisor {
 						} else {
 							value = dField.getValue();
 						}
-					}	
+					} else {
+						value = dField.getValue();
+					}
 					
 					instVariable = new InstanceVariable();
 					instVariable.setInstType("process");
