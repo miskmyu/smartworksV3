@@ -283,6 +283,7 @@ public class BuilderServiceImpl implements IBuilderService {
 			String rdoKeyField = null;
 			String hdnDisplayField = null;
 			List<String> hdnDisplayFields = null;
+			String firstField = null;
 			String radKeyDuplicable = null;
 			String rdoAccessLevel = null;
 			String rdoWriteLevel = null;
@@ -292,11 +293,16 @@ public class BuilderServiceImpl implements IBuilderService {
 			List<Map<String, String>> txtWritableUsers = null;
 			List<Map<String, String>> txtEditableUsers = null;
 
+			boolean isFirst = true;
 			while (itr.hasNext()) {
 				String fieldId = (String)itr.next();
 				Object fieldValue = frmWorkSettings.get(fieldId);
 				if(fieldValue instanceof String) {
 					String stringValue = (String)fieldValue;
+					if(isFirst){
+						firstField = stringValue;
+						isFirst = false;
+					}
 					if(fieldId.equals("rdoKeyField"))
 						rdoKeyField = stringValue;
 					else if(fieldId.equals("hdnDisplayFields"))
@@ -324,6 +330,9 @@ public class BuilderServiceImpl implements IBuilderService {
 				}
 			}
 
+			if(rdoKeyField == null && (hdnDisplayField != null || hdnDisplayFields != null)){
+				rdoKeyField = firstField;
+			}
 			String resourceId = null;
 			if(rdoKeyField != null) { //정보관리업무
 				SwfFormCond swfFormCond = new SwfFormCond();
