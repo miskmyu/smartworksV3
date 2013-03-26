@@ -219,8 +219,8 @@ function submitForms(tempSave) {
 	            
 					<!-- 전자결재, 업무전달 버튼들 -->
 					<div class="fr cb">
-						<span class="js_progress_span"></span>
-						<%
+<!-- 						<span class="js_progress_span"></span>
+ -->						<%
 						if(forwardedTask == null){
 						%>
 							<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
