@@ -160,7 +160,7 @@ public class WorkInstance extends Instance {
 			if(task.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED 
 				&& !SmartUtil.isBlankObject(task.getAssignee()) 
 				&& task.getAssignee().getId().equals(SmartUtil.getCurrentUser().getId())
-				&& task.getStatus() == TaskInstance.STATUS_RUNNING){
+				&& (task.getStatus() == TaskInstance.STATUS_RUNNING || task.getStatus() == TaskInstance.STATUS_DELAYED_RUNNING)){
 					return task;
 				}
 		}
@@ -185,8 +185,7 @@ public class WorkInstance extends Instance {
 			if(	(task.getTaskType() == TaskInstance.TYPE_PROCESS_TASK_FORWARDED || task.getTaskType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED || task.getType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) 
 				&& !SmartUtil.isBlankObject(task.getAssignee()) 
 				&& task.getAssignee().getId().equals(SmartUtil.getCurrentUser().getId())
-				&& task.getStatus() == TaskInstance.STATUS_RUNNING){
-
+				&& (task.getStatus() == TaskInstance.STATUS_RUNNING || task.getStatus() == TaskInstance.STATUS_DELAYED_RUNNING)){
 					return task;
 				}
 		}

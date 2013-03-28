@@ -186,6 +186,12 @@ function submitForms(tempSave) {
 	session.setAttribute("workSpaceId", instance.getId());
 	session.removeAttribute("workSpace");
 	session.setAttribute("tasks", tasks);
+	if(SmartUtil.isBlankObject(forwardedTask)){
+		session.removeAttribute("forwardTask");
+	}else{
+		session.setAttribute("forwardTask", forwardedTask);		
+		numberOfForwardHistories--;
+	}
 		
 	// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
 	CommunityInfo[] communities = smartWorks.getMyCommunitiesForUpload(workId);
@@ -630,9 +636,11 @@ function submitForms(tempSave) {
 		iworkSpace.find('.js_btn_approve_approval').hide().siblings().hide();			
 	<%
 	}
-	
-	
-	
+	if(numberOfForwardHistories>0){
+	%>
+		iworkSpace.find('.js_toggle_forward_histories').click();
+	<%
+	}	
 	%>
 </script>
 

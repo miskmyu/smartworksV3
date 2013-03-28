@@ -391,7 +391,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		Date executionDateBefore = cond.getTskExecuteDateBefore();
 		Date modifyDateFrom = cond.getTskModifyDateFrom();
 		Date modifyDateTo = cond.getTskModifyDateTo();
-
+		String tskForwardId = cond.getTskForwardId();
+		
 		String[] taskObjIdIns = cond.getTskObjIdIns();
 		
 		queryBuffer.append("from ");
@@ -488,6 +489,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			queryBuffer.append("	and task.tskModifyDate > :modifyDateFrom ");
 		if (modifyDateTo != null)
 			queryBuffer.append("	and task.tskModifyDate < :modifyDateTo ");
+		if (tskForwardId != null)
+			queryBuffer.append("	and task.tskForwardId = :tskForwardId ");
 		if (taskObjIdIns != null && taskObjIdIns.length != 0) {
 			queryBuffer.append(" 	and task.tskObjId in (");
 			for (int i=0; i<taskObjIdIns.length; i++) {
@@ -626,6 +629,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			query.setTimestamp("modifyDateFrom", modifyDateFrom);
 		if (modifyDateTo != null)
 			query.setTimestamp("modifyDateTo", modifyDateTo);
+		if (tskForwardId != null)
+			query.setString("tskForwardId", tskForwardId);
 		if (!CommonUtil.isEmpty(prcStatus)) 
 			query.setString("prcStatus", prcStatus);
 		if (!CommonUtil.isEmpty(tskRefType) && !tskRefType.equals(TskTask.TASKREFTYPE_NOTHING)) 

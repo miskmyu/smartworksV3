@@ -271,6 +271,10 @@ public interface ISmartWorks {
 	
 	public abstract InstanceInfo[] getSubInstancesInInstance(String workId, int length, LocalDate to) throws Exception;
 	
+	public abstract int getSubInstancesInForwardCount(String forwardId) throws Exception;
+
+	public abstract TaskInstanceInfo[] getSubInstancesInForward(String forwardId, int length, LocalDate to) throws Exception;
+
 	public abstract InstanceInfoList getIWorkInstanceList(String workId, RequestParams params) throws Exception;
 	
 	public InstanceInfoList getAllPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception;

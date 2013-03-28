@@ -173,6 +173,12 @@ function submitForms(tempSave) {
  	session.setAttribute("workInstance", instance);
 	session.setAttribute("workSpaceId", instance.getId());
 	session.removeAttribute("workSpace");
+	if(SmartUtil.isBlankObject(forwardedTask)){
+		session.removeAttribute("forwardTask");
+	}else{
+		session.setAttribute("forwardTask", forwardedTask);		
+		numberOfForwardHistories--;
+	}
 
 	String currentHref = SmartUtil.getCurrentHref(request, "pwork_space.sw");
 %>
@@ -766,7 +772,14 @@ function submitForms(tempSave) {
  	}
 	
 	if(!isEmpty(selectedTask)) clickOnTask(selectedTask);
-		
+
+	<%	
+	if(numberOfForwardHistories>0){
+	%>
+		pworkSpace.find('.js_toggle_forward_histories').click();
+	<%
+	}
+	%>
 </script>
 
 <jsp:include page="/jsp/content/work/space/space_instance_list.jsp">

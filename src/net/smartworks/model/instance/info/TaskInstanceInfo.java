@@ -222,7 +222,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 			&& (this.getTaskType() == TaskInstance.TYPE_PROCESS_TASK_FORWARDED || this.getTaskType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED) 
 			&& !SmartUtil.isBlankObject(this.getAssignee()) 
 			&& this.getAssignee().getId().equals(userId)
-			&& this.getStatus() == TaskInstance.STATUS_RUNNING){
+			&& (this.getStatus() == TaskInstance.STATUS_RUNNING || this.getStatus() == TaskInstance.STATUS_DELAYED_RUNNING)){
 			return true;
 		}
 		return false;
@@ -236,7 +236,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 			&& (this.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED || this.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED)
 			&& !SmartUtil.isBlankObject(this.getAssignee()) 
 			&& this.getAssignee().getId().equals(userId)
-			&& this.getStatus() == TaskInstance.STATUS_RUNNING){
+			&& (this.getStatus() == TaskInstance.STATUS_RUNNING || this.getStatus() == TaskInstance.STATUS_DELAYED_RUNNING)){
 			return true;
 		}
 		return false;

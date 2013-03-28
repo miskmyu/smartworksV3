@@ -26,9 +26,7 @@
 	String forwardId = request.getParameter("forwardId");
 	String taskInstId = request.getParameter("taskInstId");
 	
-	WorkInstance workInstance = null;
-	TaskInstanceInfo[] tasks = null;
-	TaskInstanceInfo forwardedTask = null;
+	TaskInstanceInfo forwardTask = null;
 	String workInstId = "";
 	String subject = "";
 	String content = "";
@@ -36,26 +34,14 @@
 	String forwarderName = "";
 	String forwardDate = "";
 	if(!SmartUtil.isBlankObject(forwardId)){
-		workInstance = (WorkInstance)session.getAttribute("workInstance");
-		RequestParams params = (RequestParams)request.getAttribute("requestParams");
-
-		if(SmartUtil.isBlankObject(params)){
-			params = new RequestParams();
-			params.setPageSize(100);
-			params.setCurrentPage(1);
-		}
-		InstanceInfoList instanceList = smartWorks.getForwardTasksById(forwardId, params);
-		if(!SmartUtil.isBlankObject(instanceList)){
-			tasks = (TaskInstanceInfo[])instanceList.getInstanceDatas();
-		}
-		if(!SmartUtil.isBlankObject(tasks)){
-			TaskInstanceInfo forwardTask = tasks[0];
+		forwardTask = (TaskInstanceInfo)session.getAttribute("forwardTask");
+		if(!SmartUtil.isBlankObject(forwardTask) && forwardId.equals(forwardTask.getForwardId())){
 			subject = forwardTask.getSubject();
 			content = forwardTask.getContent();
 			forwarderId = forwardTask.getAssigner().getId();
 			forwarderName = forwardTask.getAssigner().getLongName();
 			forwardDate = forwardTask.getCreatedDate().toLocalDateTimeSimpleString();
-		}		
+		}
 	}
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
@@ -63,7 +49,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 업무계획하기 -->
-<div class="js_append_task_forward_page" workInstId="<%=workInstId%>" forwardId="<%=forwardId%>" taskInstId="<%=taskInstId%>">
+<div class="js_append_task_forward_page" forwardId="<%=forwardId%>" taskInstId="<%=taskInstId%>">
 	<div class="forward_section">
 		<div class="tit m0"><span><fmt:message key="common.button.forward"/></span></div>
 	</div>
@@ -83,78 +69,31 @@
 				forwardDateTitle="<fmt:message key='forward.title.forward_date' />" forwardDate="<%=CommonUtil.toNotNull(forwardDate)%>">
 			</div>
 			<%
-			if(!SmartUtil.isBlankObject(forwardId) && !SmartUtil.isBlankObject(tasks)){
+			if(!SmartUtil.isBlankObject(forwardId)){
 			%>
-				<div class="list_reply">
+				<div class="list_reply js_sub_instance_list"  style="width:600px;margin-left:50px;margin-bottom:7px">
 				
 					<div class="up_point_sgr pos_works"></div>
-					<ul class="bg p10">
+					<ul class="bg p10 js_comment_list">
+						<jsp:include page="/jsp/content/upload/sub_instances_in_forward.jsp" >
+							<jsp:param value="<%=forwardId %>" name="forwardId"/>
+							<jsp:param value="<%=taskInstId %>" name="taskInstId"/>							
+							<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
+						</jsp:include>
 						<%
-						for(TaskInstanceInfo task : tasks){
-							UserInfo owner = task.getAssignee();
-							String statusImage = "";
-							String statusTitle = "";
-							switch (task.getStatus()) {
-							// 인스턴스가 현재 진행중인 경우..
-							case Instance.STATUS_RUNNING:
-								statusImage = "icon_status_running";
-								statusTitle = "content.status.running";
-								break;
-							// 인스턴스가 지연진행중인 경우....
-							case Instance.STATUS_DELAYED_RUNNING:
-								statusImage = "icon_status_d_running";
-								statusTitle = "content.status.delayed_running";
-								break;
-							// 인스턴스가 반려된 경우...
-							case Instance.STATUS_RETURNED:
-								statusImage = "icon_status_returned";
-								statusTitle = "content.status.returned";
-								break;
-								// 인스턴스가 반려된 경우...
-							case Instance.STATUS_COMPLETED:
-								statusImage = "icon_status_completed";
-								statusTitle = "content.status.completed";
-								break;
-								// 기타 잘못되어 상태가 없는 경우..
-							default:
-								statusImage = "icon_status_not_yet";
-								statusTitle = "content.status.not_yet";
-							}
-							if(task.getId().equals(taskInstId)){
-								forwardedTask = task;
-								continue;
-							}
-					%>
-							<li class="sub_instance_list">
-								<div class="det_title">	
-									<span class="<%=statusImage%> vm" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
-									<a class="js_pop_user_info vm" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId() %>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
-										<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
-									</a>
-									<span class="txt_info">
-										<div>
-											<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-												<span class="t_name"><%=owner.getLongName()%></span>
-											</a>
-											<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
-										</div>
-										<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="ml5 icon_new"></span><%} %><%} %></div>
-									</span>
-								</div>
-							</li>					
-						<%
-						}
-						if(!SmartUtil.isBlankObject(forwardedTask)){
+						if(!SmartUtil.isBlankObject(taskInstId)){
 						%>
-							<div class="sub_instance_list">
-								<div class="det_title">	
-									<span class="icon_status_running vm" title="<fmt:message key='content.status.running'/>" ></span>
-									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
-						        	<span class="comment_box">
-										<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
-						        	</span>		
-						        </div>						
-							</div>
+							<li>
+								<div class="sub_instance_list">
+									<div class="det_title">	
+										<span class="icon_status_running vm" title="<fmt:message key='content.status.running'/>" ></span>
+										<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+							        	<span class="comment_box">
+											<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
+							        	</span>		
+							        </div>						
+								</div>
+							</li>
 						<%
 						}
 						%>

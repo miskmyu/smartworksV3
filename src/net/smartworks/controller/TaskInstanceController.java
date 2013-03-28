@@ -120,4 +120,9 @@ public class TaskInstanceController {
 		smartworks.commentOnTaskApproval(requestBody, request);
 	}
 
+	@RequestMapping("/sub_instances_in_forward")
+	public ModelAndView subInstancesInForward(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnv(request, "jsp/content/upload/sub_instances_in_forward.jsp", "");
+	}
+
 }
