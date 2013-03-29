@@ -339,6 +339,7 @@ public class DbMailControllerImpl implements MailController {
 	}
 
 	public void appendMailReader(String userId, String messageId) throws Exception {
+		System.out.println("###### APPEND MAIL READER ####### messageId = " + messageId);
 		if(SmartUtil.isBlankObject(userId) || SmartUtil.isBlankObject(messageId)) return;
 		IGenericDao dao = null;
 		FolderControllerFactory fact = new FolderControllerFactory(auth, profile, handler);
@@ -363,6 +364,7 @@ public class DbMailControllerImpl implements MailController {
 				else
 					reader = reader + ", " + org.claros.commons.mail.utility.Utility.userToString(SmartUtil.getCurrentUser());
 				
+				System.out.println("###### APPEND MAIL READER ####### reader(userId) = " + reader + "(" + userId + ")");
 				sql = "UPDATE MSG_DB_OBJECTS SET READER = ? WHERE USERNAME=? AND MESSAGE_ID=?";
 				run.update(sql, new Object[] {reader, userId, messageId});
 			} catch (SQLException e) {

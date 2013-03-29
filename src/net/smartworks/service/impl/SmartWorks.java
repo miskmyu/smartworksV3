@@ -531,6 +531,11 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public WorkInstance getSavedWorkInstanceById(int workType, String workId, String instanceId) throws Exception {
+		return instanceService.getSavedWorkInstanceById(workType, workId, instanceId);
+	}
+	
+	@Override
 	public TaskInstanceInfo[][] getTaskInstancesByWorkHours(String contextId, String spaceId, LocalDate date, int maxSize) throws Exception {
 		// TODO Auto-generated method stub
 		return instanceService.getTaskInstancesByWorkHours(contextId, spaceId, date, maxSize);

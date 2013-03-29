@@ -1201,8 +1201,8 @@ public class WorkServiceImpl implements IWorkService {
 		String workId = request.getParameter("workId");
 		String recordId = request.getParameter("recordId");
 		String taskInstId = request.getParameter("taskInstId");
-		boolean isTempRecord = CommonUtil.toBoolean(request.getParameter("isTempRecord"));
-		if (isTempRecord) {
+		boolean isTempSaved = CommonUtil.toBoolean(request.getParameter("isTempSaved"));
+		if (isTempSaved) {
 			return getTempRecord(taskInstId);
 		} else {
 			return getRecord(workId, recordId, taskInstId);

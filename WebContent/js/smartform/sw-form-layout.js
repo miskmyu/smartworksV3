@@ -12,6 +12,7 @@ SmartWorks.GridLayout = function(config) {
 		taskInstId : null,
 		refreshData : null,
 		onSuccess : null,
+		isTempSaved : null,
 		onError : null
 	};
 	
@@ -163,6 +164,7 @@ SmartWorks.GridLayout = function(config) {
 	var getLayout = this.getLayout;
 	var refreshData = this.options.refreshData;
 	var firstFlag = this.options.first;
+	var isTempSaved = this.options.isTempSaved;
 	var this_ = this;
 
 	if(!isEmpty(refreshData)){
@@ -269,7 +271,8 @@ SmartWorks.GridLayout = function(config) {
 							url : "get_record.sw",
 							data : {
 								workId : workId,
-								taskInstId : taskInstId
+								taskInstId : taskInstId,
+								isTempSaved : isTempSaved
 							},
 							success : function(formData, status, jqXHR) {
 //								var refreshTarget = this_.options.target.hide();

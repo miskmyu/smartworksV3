@@ -20,6 +20,7 @@ import java.util.Stack;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
+import javax.persistence.criteria.CriteriaBuilder.Case;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -2521,9 +2522,77 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (CommonUtil.isEmpty(accessValue))
 				return;
 			String[] accessUsers = StringUtils.tokenizeToStringArray(accessValue, ";");
+			
+			List workSpaceUserList = new ArrayList();
+			if (workSpaceType.equalsIgnoreCase(ISmartWorks.SPACE_TYPE_DEPARTMENT + "")) {
+				UserInfo[] userInfos = SwServiceFactory.getInstance().getCommunityService().getAllUsersByDepartmentId(workSpaceId);
+				if (userInfos == null || userInfos.length == 0)
+					return;
+				for (int j = 0; j < userInfos.length; j++) {
+					if (!userId.equalsIgnoreCase(userInfos[j].getId()))
+						workSpaceUserList.add(userInfos[j].getId());
+				}
+			} else if (workSpaceType.equalsIgnoreCase(ISmartWorks.SPACE_TYPE_GROUP + "")) {
+				SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup(userId, workSpaceId, null);
+				if (group == null)
+					return;
+				
+				SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
+				for (int j = 0; j < groupMembers.length; j++) {
+					SwoGroupMember groupMember = groupMembers[j];
+					String joinType = groupMember.getJoinType();
+					String joinStatus = groupMember.getJoinStatus();
+					if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
+						if (!userId.equalsIgnoreCase(groupMember.getUserId()))
+							workSpaceUserList.add(groupMember.getUserId());
+					}
+				}
+			} else if (workSpaceType.equalsIgnoreCase(ISmartWorks.SPACE_TYPE_USER + "")) {
+				workSpaceUserList.add(workSpaceId);
+			}
+			
 			for (int i = 0; i < accessUsers.length; i++) {
-				if (!userId.equalsIgnoreCase(accessUsers[i]))
-					targetUserId.add(accessUsers[i]);
+				if (!userId.equalsIgnoreCase(accessUsers[i])) {
+					
+					if (accessUsers[i].indexOf("dept_") != -1) {
+						
+						UserInfo[] userInfos = SwServiceFactory.getInstance().getCommunityService().getAllUsersByDepartmentId(accessUsers[i]);
+						if (userInfos == null || userInfos.length == 0)
+							return;
+						for (int j = 0; j < userInfos.length; j++) {
+							if (!userId.equalsIgnoreCase(userInfos[j].getId())) {
+								if (workSpaceUserList.contains(userInfos[j].getId())) {
+									targetUserId.add(userInfos[j].getId());
+								}
+							}
+						}
+						
+					} else if (accessUsers[i].indexOf("group_") != -1) {
+						
+						SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup(userId, accessUsers[i], null);
+						if (group == null)
+							return;
+						
+						SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
+						for (int j = 0; j < groupMembers.length; j++) {
+							SwoGroupMember groupMember = groupMembers[j];
+							String joinType = groupMember.getJoinType();
+							String joinStatus = groupMember.getJoinStatus();
+							if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
+								if (!userId.equalsIgnoreCase(groupMember.getUserId())) {
+									if (workSpaceUserList.contains(groupMember.getUserId())) {
+										targetUserId.add(groupMember.getUserId());
+									}
+								}
+							}
+						}
+						
+					} else {
+						if (workSpaceUserList.contains(accessUsers[i]))
+							targetUserId.add(accessUsers[i]);
+					}
+					
+				}
 			}
 			
 		} else {
@@ -7522,6 +7591,75 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 	}
 
+	@Override
+	public WorkInstance getSavedWorkInstanceById(int workType, String workId, String instanceId) throws Exception {
+	
+		if (CommonUtil.isEmpty(instanceId))
+			return null;
+		TskTask savedTask = getTskManager().getTask("", instanceId, IManager.LEVEL_LITE);
+		if (CommonUtil.isEmpty(savedTask))
+			return null;
+
+		if (workType == SmartWork.TYPE_INFORMATION) {
+			
+			String requestBodyStr = savedTask.getDocument();
+			Map requestBody = JsonUtil.getMapByJsonString(requestBodyStr);
+			String formId = (String)requestBody.get("formId");
+
+			if (CommonUtil.isEmpty(workId))
+				workId = (String)requestBody.get("workId");
+			
+			PkgPackageCond pkgCond = new PkgPackageCond();
+			pkgCond.setPackageId(workId);
+			PkgPackage pkg = getPkgManager().getPackage("", pkgCond, IManager.LEVEL_LITE);
+			
+			SwdDomainCond swdDomainCond = new SwdDomainCond();
+			swdDomainCond.setFormId(formId);
+			SwdDomain swdDomain = getSwdManager().getDomain("", swdDomainCond, IManager.LEVEL_ALL);
+			
+			SwdField[] swdFields = swdDomain.getFields();
+			
+			SwdRecord record = ModelConverter.getSwdRecordByRequestBody("", swdFields, requestBody, null);
+			
+			//InformationWorkInstance workInstance = ModelConverter.getInformationWorkInstanceBySwdRecord("", null, record);
+			
+			InformationWorkInstance workInstance = new InformationWorkInstance();
+			
+			//workInstance.setApprovalLine(approvalLine);
+			//workInstance.setApprovalWork(isApprovalWork);
+			workInstance.setId(instanceId);
+			workInstance.setTempSaved(true);
+			workInstance.setSubject(savedTask.getTitle());
+			workInstance.setType(WorkInstance.TYPE_INFORMATION);
+			//workInstance.setStatus();
+			User owner = ModelConverter.getUserByUserId(savedTask.getAssignee());
+			workInstance.setOwner(owner);
+			workInstance.setCreatedDate(new LocalDate(savedTask.getCreationDate().getTime()));
+			workInstance.setLastModifier(owner);
+			workInstance.setLastModifiedDate(new LocalDate(savedTask.getModificationDate().getTime()));
+			//workInstance.setTasks(tasks);
+			workInstance.setWork(ModelConverter.getInformationWorkByPkgPackage("", null, pkg));
+			workInstance.setWorkSpace(ModelConverter.getWorkSpace(record.getWorkSpaceType(), record.getWorkSpaceId()));
+			workInstance.setAccessPolicy(new AccessPolicy(2));
+			//workInstance.setForwardees(forwardees);
+			//workInstance.setLazyreferenceTask(isLazyreferenceTask);
+			//workInstance.setRepeatEventId(repeatEventId);
+			
+			return workInstance;
+			
+		} else if (workType == SmartWork.TYPE_PROCESS) {
+		
+			
+			
+			
+			
+		} else {
+
+		}
+		
+		return null;
+	}
+	
 	public ProcessWorkInstance getProcessWorkInstanceById(String companyId, String userId, PrcProcessInst prcInst) throws Exception {
 		
 		try{
