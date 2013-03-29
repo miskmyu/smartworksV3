@@ -569,7 +569,7 @@ public class ModelConverter {
 		taskInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 		
 		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())				
+			if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())				
 				taskInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
 			else
 				taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
@@ -709,7 +709,7 @@ public class ModelConverter {
 			taskInfo.setWorkSpaceInfo((getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId())));
 			
 			if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-				if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+				if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
 					taskInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
 				else
 					taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
@@ -1025,7 +1025,7 @@ public class ModelConverter {
 		lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 		
 		if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+			if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
 				lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
 			else
 				lastTask.setStatus(TaskInstance.STATUS_RUNNING);
@@ -1106,7 +1106,7 @@ public class ModelConverter {
 		workInstanceInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 		
 		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+			if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
 				workInstanceInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
 			else
 				workInstanceInfo.setStatus(TaskInstance.STATUS_RUNNING);
@@ -1197,7 +1197,7 @@ public class ModelConverter {
 					instInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 					
 					if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-						if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()){
+						if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()){
 							instInfo.setStatus(Instance.STATUS_DELAYED_RUNNING);							
 						}else{
 							instInfo.setStatus(Instance.STATUS_RUNNING);
@@ -1239,7 +1239,7 @@ public class ModelConverter {
 					lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 					
 					if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-						if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()){
+						if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()){
 							lastTask.setStatus(Instance.STATUS_DELAYED_RUNNING);							
 						}else{
 							lastTask.setStatus(Instance.STATUS_RUNNING);
@@ -1305,7 +1305,7 @@ public class ModelConverter {
 					instInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 					
 					if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-						if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()){
+						if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()){
 							instInfo.setStatus(Instance.STATUS_DELAYED_RUNNING);							
 						}else{
 							instInfo.setStatus(Instance.STATUS_RUNNING);
@@ -1346,7 +1346,7 @@ public class ModelConverter {
 					lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 					
 					if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-						if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+						if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
 							lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
 						else
 							lastTask.setStatus(TaskInstance.STATUS_RUNNING);
@@ -1395,7 +1395,7 @@ public class ModelConverter {
 					tskInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 					
 					if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-						if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()){
+						if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()){
 							tskInfo.setStatus(Instance.STATUS_DELAYED_RUNNING);							
 						}else{
 							tskInfo.setStatus(Instance.STATUS_RUNNING);
@@ -1494,7 +1494,7 @@ public class ModelConverter {
 				instInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 				
 				if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-					if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+					if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
 						instInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
 					else
 						instInfo.setStatus(Instance.STATUS_RUNNING);
@@ -1536,7 +1536,7 @@ public class ModelConverter {
 				lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 				
 				if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-					if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+					if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
 						lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
 					else
 						lastTask.setStatus(TaskInstance.STATUS_RUNNING);
@@ -1608,7 +1608,7 @@ public class ModelConverter {
 				tskInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 				
 				if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-					if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+					if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
 						tskInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
 					else
 						tskInfo.setStatus(TaskInstance.STATUS_RUNNING);
@@ -2513,7 +2513,7 @@ public class ModelConverter {
 		} else {
 			instanceInfo.setLastModifier(getUserInfoByUserId(lastTask.getAssignee()));
 			instanceInfo.setLastModifiedDate(new LocalDate(lastTask.getExecutionDate().getTime())); //TODO LastModifiedDate now
-			if(status == Instance.STATUS_RUNNING && lastTask.getExpectEndDate().getTime()<(new LocalDate()).getTime()){
+			if(status == Instance.STATUS_RUNNING && lastTask.getExpectEndDate()!=null && lastTask.getExpectEndDate().getTime()<(new LocalDate()).getTime()){
 				status = Instance.STATUS_DELAYED_RUNNING;
 			}
 		}
@@ -2677,7 +2677,7 @@ public class ModelConverter {
 		String tskStatus = swTask.getStatus();
 		if (tskStatus.equalsIgnoreCase("11")) {
 			LocalDate now = new LocalDate();
-			if(swTask.getExpectEndDate().getTime()<now.getTime())
+			if(swTask.getExpectEndDate()!=null && swTask.getExpectEndDate().getTime()<now.getTime())
 				taskInstInfo.setStatus(Instance.STATUS_DELAYED_RUNNING);
 			else
 				taskInstInfo.setStatus(Instance.STATUS_RUNNING);
@@ -5310,7 +5310,7 @@ public class ModelConverter {
 		lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 		
 		if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+			if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
 				lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
 			else
 				lastTask.setStatus(TaskInstance.STATUS_RUNNING);
@@ -5348,7 +5348,7 @@ public class ModelConverter {
 		workInstanceInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 		
 		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+			if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
 				workInstanceInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
 			else
 				workInstanceInfo.setStatus(TaskInstance.STATUS_RUNNING);

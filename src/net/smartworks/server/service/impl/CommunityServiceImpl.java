@@ -2960,6 +2960,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			return false;
 		}
 	}
+	
 	@Override
 	public UserInfo[] getAllUsersByDepartmentId(String departmentId) throws Exception {
 		

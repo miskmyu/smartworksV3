@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.company.CompanyGeneral;
@@ -318,7 +319,39 @@ public class SmartUtil {
 		return "home.sw";
 	}
 
-	
+	public static String[] getAllUserIdsFromUserArray(ArrayList<Map<String,String>> userArray) throws Exception{
+		ArrayList<String> userIdList = new ArrayList<String>();
+		for (int i = 0; i < userArray.size(); i++) {
+			Map<String, String> userInfoMap = userArray.get(i);
+			String comId = userInfoMap.get("id");
+			if(SmartUtil.isEmailAddress(comId)){
+				userIdList.add(comId);
+			}else if(comId.startsWith(Group.GROUP_ID_PREFIX)){
+				UserInfo[] groupUsers = SwServiceFactory.getInstance().getCommunityService().getGroupMembersById(comId, null, -1);
+				if(!SmartUtil.isBlankObject(groupUsers)){
+					for(UserInfo user : groupUsers){
+						userIdList.add(user.getId());
+					}
+				}				
+			}else{
+				UserInfo[] departUsers = SwServiceFactory.getInstance().getCommunityService().getAllUsersByDepartmentId(comId);
+				if(!SmartUtil.isBlankObject(departUsers)){
+					for(UserInfo user : departUsers){
+						userIdList.add(user.getId());
+					}
+				}
+			}
+		}
+		if(SmartUtil.isBlankObject(userIdList))
+			return null;
+		
+		String[] userIds = new String[userIdList.size()];
+		for(int i=0; i<userIdList.size(); i++){
+			userIds[i] = userIdList.get(i);
+		}
+		return userIds;
+	}
+		
 	public static CompanyOption getCompanyOption() throws Exception{
 		CompanyOption companyOption = new CompanyOption();
 		// TO DO : Call the web service to get the company options registered in the Work App-Store

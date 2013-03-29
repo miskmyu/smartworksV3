@@ -108,12 +108,7 @@ function submitForms(tempSave) {
 	String workId = request.getParameter("workId");
 	String taskInstId = request.getParameter("taskInstId");
 	
-	ProcessWorkInstance instance = null;
-	WorkInstance workInstance = (WorkInstance)session.getAttribute("workInstance");
-	if(SmartUtil.isBlankObject(workInstance) || !workInstance.getId().equals(instId)) 
-		instance = (ProcessWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instId);
-	else
-		instance = (ProcessWorkInstance)workInstance;
+	ProcessWorkInstance instance = (ProcessWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instId);
 
 	int numberOfForwardHistories = instance.getNumberOfForwardHistories();
 	

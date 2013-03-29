@@ -28,6 +28,7 @@ import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.approval.ApprovalLineInst;
 import net.smartworks.model.calendar.RepeatEvent;
 import net.smartworks.model.calendar.WorkHourPolicy;
+import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
@@ -9580,14 +9581,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)txtForwardForwardeeMap.get("users");
 			
-			String[] refUsers = null;
-			if(!CommonUtil.isEmpty(userArray)) {
-				refUsers = new String[userArray.size()];
-				for (int i = 0; i < userArray.size(); i++) {
-					Map<String, String> userInfoMap = userArray.get(i);
-					refUsers[i] = userInfoMap.get("id");
-				}
-			} else {
+			String[] refUsers = SmartUtil.getAllUserIdsFromUserArray(userArray);
+			if(CommonUtil.isEmpty(refUsers)) {
 				return;
 			}
 			
@@ -9820,14 +9815,8 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 		ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)txtForwardForwardeeMap.get("users");
 		
-		String[] refUsers = null;
-		if(!CommonUtil.isEmpty(userArray)) {
-			refUsers = new String[userArray.size()];
-			for (int i = 0; i < userArray.size(); i++) {
-				Map<String, String> userInfoMap = userArray.get(i);
-				refUsers[i] = userInfoMap.get("id");
-			}
-		} else {
+		String[] refUsers = SmartUtil.getAllUserIdsFromUserArray(userArray);
+		if(CommonUtil.isEmpty(refUsers)) {
 			return;
 		}
 		
