@@ -1323,7 +1323,7 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 		}
 		buf.append(" where obj.objId is not null");
 		buf.append(" and tskmodifydate in (");
-		buf.append("	select max(modificationDate)");
+		buf.append("	select min(modificationDate)");
 		buf.append("	from TskTask ");
 		buf.append("	where 1=1 ");
 		if (!CommonUtil.isEmpty(processInstId))

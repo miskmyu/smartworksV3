@@ -502,8 +502,8 @@ public class ModelConverter {
 		return workSpaceInfo;
 	}
 	public static TaskInstanceInfo getTaskInstanceInfo(User currentUser, TaskWork task) throws Exception {
-
 		TaskInstanceInfo taskInfo = new TaskInstanceInfo();
+
 		taskInfo.setId(task.getTskObjId());
 		taskInfo.setSubject(task.getPrcTitle());
 		if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
@@ -569,7 +569,10 @@ public class ModelConverter {
 		taskInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 		
 		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
+			if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())				
+				taskInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+			else
+				taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 			taskInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -591,6 +594,7 @@ public class ModelConverter {
 		taskInfo.setPerformer(getUserInfoByUserId(task.getTskAssignee()));
 		taskInfo.setFormId(task.getTskForm());
 		taskInfo.setStartTask(task.getIsStartActivity()!=null && task.getIsStartActivity().equalsIgnoreCase("true"));
+		taskInfo.setComments(task.getTskDoc());
 
 		return taskInfo;
 	}
@@ -705,7 +709,10 @@ public class ModelConverter {
 			taskInfo.setWorkSpaceInfo((getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId())));
 			
 			if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-				taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
+				if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+					taskInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+				else
+					taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
 			} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 				taskInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 			} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -1018,7 +1025,10 @@ public class ModelConverter {
 		lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 		
 		if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+			if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+				lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+			else
+				lastTask.setStatus(TaskInstance.STATUS_RUNNING);
 		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 			lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -1096,7 +1106,10 @@ public class ModelConverter {
 		workInstanceInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 		
 		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			workInstanceInfo.setStatus(TaskInstance.STATUS_RUNNING);
+			if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+				workInstanceInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+			else
+				workInstanceInfo.setStatus(TaskInstance.STATUS_RUNNING);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 			workInstanceInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -1333,7 +1346,10 @@ public class ModelConverter {
 					lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 					
 					if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-						lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+						if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+							lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+						else
+							lastTask.setStatus(TaskInstance.STATUS_RUNNING);
 					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 						lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -1478,7 +1494,10 @@ public class ModelConverter {
 				instInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 				
 				if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-					instInfo.setStatus(Instance.STATUS_RUNNING);
+					if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+						instInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+					else
+						instInfo.setStatus(Instance.STATUS_RUNNING);
 				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 					instInfo.setStatus(Instance.STATUS_COMPLETED);
 				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
@@ -1517,7 +1536,10 @@ public class ModelConverter {
 				lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 				
 				if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-					lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+					if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+						lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+					else
+						lastTask.setStatus(TaskInstance.STATUS_RUNNING);
 				} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 					lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 				} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -1586,7 +1608,10 @@ public class ModelConverter {
 				tskInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 				
 				if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-					tskInfo.setStatus(TaskInstance.STATUS_RUNNING);
+					if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+						tskInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+					else
+						tskInfo.setStatus(TaskInstance.STATUS_RUNNING);
 				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 					tskInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
@@ -1850,7 +1875,10 @@ public class ModelConverter {
 		if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 			instInfo.setStatus(Instance.STATUS_COMPLETED);
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-			instInfo.setStatus(Instance.STATUS_RUNNING);
+			if(prcInst.getExpectEndDate()!=null && prcInst.getExpectEndDate().getTime()<(new LocalDate()).getTime())
+				instInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+			else
+				instInfo.setStatus(Instance.STATUS_RUNNING);
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
 			instInfo.setStatus(Instance.STATUS_RETURNED);
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
@@ -2577,7 +2605,10 @@ public class ModelConverter {
 		
 		int status = 0;
 		if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			status = Instance.STATUS_RUNNING;
+			if(task.getExpectEndDate()!=null && task.getExpectEndDate().getTime()<(new LocalDate()).getTime())
+				status = Instance.STATUS_DELAYED_RUNNING;
+			else
+				status = Instance.STATUS_RUNNING;
 		} else if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 			status = Instance.STATUS_COMPLETED;
 			if (task.getIsApprovalSourceTask() != null && task.getIsApprovalSourceTask().equalsIgnoreCase("true")) {
@@ -2676,14 +2707,16 @@ public class ModelConverter {
 			taskInstInfo.setForwardId(swTask.getForwardId());
 			if (!CommonUtil.isEmpty(swTask.getApprovalId()))
 				taskInstInfo.setApprovalId(swTask.getApprovalId());
-			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
+//			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
+			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getAssigner()));
 		} else if(tskType.equals(TskTask.TASKTYPE_APPROVAL)) {
 			taskType = TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED;
 			taskInstInfo.setComments(swTask.getDocument());
 			taskInstInfo.setContent(swTask.getExtendedPropertyValue("txtApprovalComments"));
 			taskInstInfo.setApprovalId(swTask.getApprovalId());
 			taskInstInfo.setApprovalTaskId(swTask.getFromRefId());
-			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
+//			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
+			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getAssigner()));
 		} else if(tskType.equalsIgnoreCase(TskTask.TASKTYPE_SUBFLOW)) {
 			taskType = TaskInstance.TYPE_PROCESS_SUB_TASK_CREATED;
 			taskInstInfo.setSubTask(true);
@@ -4072,7 +4105,10 @@ public class ModelConverter {
 		if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 			instance.setStatus(Instance.STATUS_COMPLETED);
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-			instance.setStatus(Instance.STATUS_RUNNING);
+			if(prcInst.getExpectEndDate()!=null && prcInst.getExpectEndDate().getTime()<(new LocalDate()).getTime())
+				instance.setStatus(Instance.STATUS_DELAYED_RUNNING);
+			else
+				instance.setStatus(Instance.STATUS_RUNNING);
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
 			instance.setStatus(Instance.STATUS_RETURNED);
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
@@ -4279,7 +4315,10 @@ public class ModelConverter {
 		
 		if (prcInst != null) {
 			if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-				workInstance.setStatus(Instance.STATUS_RUNNING);
+				if(prcInst.getExpectEndDate()!=null && prcInst.getExpectEndDate().getTime()<(new LocalDate()).getTime())
+					workInstance.setStatus(Instance.STATUS_DELAYED_RUNNING);
+				else
+					workInstance.setStatus(Instance.STATUS_RUNNING);
 			} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 				workInstance.setStatus(Instance.STATUS_COMPLETED);
 			} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
@@ -5271,7 +5310,10 @@ public class ModelConverter {
 		lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 		
 		if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+			if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+				lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+			else
+				lastTask.setStatus(TaskInstance.STATUS_RUNNING);
 		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 			lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -5306,7 +5348,10 @@ public class ModelConverter {
 		workInstanceInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 		
 		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			workInstanceInfo.setStatus(TaskInstance.STATUS_RUNNING);
+			if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+				workInstanceInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+			else
+				workInstanceInfo.setStatus(TaskInstance.STATUS_RUNNING);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 			workInstanceInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -5542,7 +5587,10 @@ public class ModelConverter {
 		
 		String tskStatus = swTask.getStatus();
 		if (tskStatus.equalsIgnoreCase("11")) {
-			taskInstance.setStatus(Instance.STATUS_RUNNING);
+			if(swTask.getExpectEndDate()!=null && swTask.getExpectEndDate().getTime()<(new LocalDate()).getTime())
+				taskInstance.setStatus(Instance.STATUS_DELAYED_RUNNING);
+			else
+				taskInstance.setStatus(Instance.STATUS_RUNNING);
 		} else if (tskStatus.equals("21")) {
 			taskInstance.setStatus(Instance.STATUS_COMPLETED);
 			taskInstance.setPerformer(getUserByUserId(swTask.getPerformer()));

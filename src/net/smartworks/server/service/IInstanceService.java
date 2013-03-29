@@ -53,6 +53,10 @@ public interface IInstanceService {
 
 	public InstanceInfo[] getSubInstancesInInstance(String workId, int length, LocalDate to) throws Exception;
 
+	public int getSubInstancesInForwardCount(String forwardId) throws Exception;
+
+	public TaskInstanceInfo[] getSubInstancesInForward(String forwardId, int length, LocalDate to) throws Exception;
+
 	public InstanceInfoList getIWorkInstanceList(String workId, RequestParams params) throws Exception;
 
 	public InstanceInfoList getIWorkInstanceListByFormId(String formId, RequestParams params) throws Exception;

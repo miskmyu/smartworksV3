@@ -20,6 +20,11 @@
 	User cUser = SmartUtil.getCurrentUser();
 		
 	String instanceId = request.getParameter("instanceId");
+	TaskInstanceInfo forwardTask = (TaskInstanceInfo)session.getAttribute("forwardTask");
+	String forwardId = "";
+	if(!SmartUtil.isBlankObject(forwardTask)){
+		forwardId = forwardTask.getForwardId();
+	}
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
 
 	if(SmartUtil.isBlankObject(params)){
@@ -81,6 +86,15 @@
 		int currentCount = forwardList.getTotalSize()-(currentPage-1)*pageSize;
 		if(forwardList.getInstanceDatas() != null) {
 			TaskInstanceInfo[] histories = (TaskInstanceInfo[]) forwardList.getInstanceDatas();
+			session.setAttribute("forwardHistories", histories);
+			if(!SmartUtil.isBlankObject(forwardId)){
+				for(TaskInstanceInfo task : histories){
+					if(forwardId.equals(task.getForwardId())){
+						currentCount--;
+						break;
+					}
+				}
+			}
 	%>
 			<div class="up_point pos_works"></div> 
 	            
@@ -90,7 +104,7 @@
 				<ul class="p10">
 					<%
 					for (TaskInstanceInfo task : histories) {
-						if(SmartUtil.isBlankObject(task)) continue;
+						if(SmartUtil.isBlankObject(task) || (!SmartUtil.isBlankObject(forwardId) && forwardId.equals(task.getForwardId()))) continue;
 						UserInfo owner = null;
 						WorkInstanceInfo workInstance = task.getWorkInstance();
 						String statusImage = "";
@@ -147,6 +161,16 @@
 						                <div class="tb"><%=task.getSubject()%><%if(task.isNew()){ %><span class="ml5 icon_new"></span><%} %></div>
 						            </span>
 					            </div>
+								<div class="list_reply js_sub_instance_list"  style="width:600px;margin-left:50px;margin-bottom:7px">
+								
+									<div class="up_point_sgr pos_works"></div>
+									<ul class="bg p10 js_comment_list">
+										<jsp:include page="/jsp/content/upload/sub_instances_in_forward.jsp" >
+											<jsp:param value="<%=task.getForwardId() %>" name="forwardId"/>
+											<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
+										</jsp:include>
+									</ul>
+								</div>
 							</li>					
 					<%
 						}

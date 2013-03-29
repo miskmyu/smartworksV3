@@ -127,10 +127,8 @@
 			MemoInstanceInfo memo=null;
 
 			boolean isUpdatedInstance = (workInstance.getCreatedDate().getTime() != workInstance.getLastModifiedDate().getTime());
-			if(isUpdatedInstance && !SmartUtil.isBlankObject(workInstance.getLastModifier()))
-				owner = workInstance.getLastModifier();
-			
-	%>
+
+%>
 			<li class="sub_instance_list js_sub_instance_list js_space_sub_instance" instanceId="<%=workInstance.getId() %>" taskInstId="<%=taskInstance.getId()%>"  workType="<%=workType%>">
 				<%
 				switch(workInstance.getType()){

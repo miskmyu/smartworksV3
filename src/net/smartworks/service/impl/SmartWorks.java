@@ -1790,4 +1790,14 @@ public class SmartWorks implements ISmartWorks {
 	public void downloadAppWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		builderService.downloadAppWork(requestBody, request);
 	}
+
+	@Override
+	public int getSubInstancesInForwardCount(String forwardId) throws Exception {
+		return instanceService.getSubInstancesInForwardCount(forwardId);
+	}
+
+	@Override
+	public TaskInstanceInfo[] getSubInstancesInForward(String forwardId, int length, LocalDate to) throws Exception {
+		return instanceService.getSubInstancesInForward(forwardId, length, to);
+	}
 }

@@ -4127,6 +4127,83 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	@Override
+	public TaskInstanceInfo[] getSubInstancesInForward(String forwardId, int length, LocalDate to) throws Exception {
+		try{
+			if (CommonUtil.isEmpty(forwardId)) 
+				return null;
+			
+			User cuser = SmartUtil.getCurrentUser();
+			String userId = null;
+			if (cuser != null)
+				userId = cuser.getId();
+						
+			TaskInstanceInfo[] subInstancesInInstances = null;
+			List<TaskInstanceInfo> instanceInfoList = new ArrayList<TaskInstanceInfo>();
+			
+			TskTaskCond cond = new TskTaskCond();
+			cond.setForwardId(forwardId);
+			cond.setModificationDateTo(to);
+			long tasksSize = getTskManager().getTaskSize(userId, cond);
+			if (tasksSize != 0) {
+				
+				TaskWorkCond workCond = new TaskWorkCond();
+				workCond.setTskForwardId(forwardId);
+				workCond.setOrders(new Order[]{new Order("taskLastModifyDate", false)});
+				workCond.setPageSize(length);
+				workCond.setTskModifyDateTo(to);
+				TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, workCond);
+				
+				List<String> prcInstIdList = new ArrayList<String>();
+				if(!CommonUtil.isEmpty(tasks)) {
+					int i = (tasks.length>length) ? tasks.length-length : 0;
+					for (; i < tasks.length; i++) {
+						TaskWork task = tasks[i];
+						instanceInfoList.add(ModelConverter.getTaskInstanceInfo(cuser, task));
+					}
+				}
+			}
+
+			if(instanceInfoList.size() > 0) {
+				Collections.sort(instanceInfoList);
+				if(tasksSize>length) instanceInfoList.add(null);
+				subInstancesInInstances = new TaskInstanceInfo[instanceInfoList.size()];
+				instanceInfoList.toArray(subInstancesInInstances);
+			}
+			return subInstancesInInstances;
+
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
+
+	@Override
+	public int getSubInstancesInForwardCount(String forwardId) throws Exception {
+		try{
+			if (CommonUtil.isEmpty(forwardId)) 
+				return 0;
+			
+			User cuser = SmartUtil.getCurrentUser();
+			String userId = null;
+			if (cuser != null)
+				userId = cuser.getId();
+			
+			TskTaskCond cond = new TskTaskCond();
+			cond.setForwardId(forwardId);
+			long tasksSize = getTskManager().getTaskSize(userId, cond);
+
+			return (int)(tasksSize);
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return 0;			
+			// Exception Handling Required			
+		}
+	}
+
+	@Override
 	public InstanceInfo[] getSubInstancesInInstance(String instanceId, int length, LocalDate to) throws Exception {
 		try{
 			if (CommonUtil.isEmpty(instanceId)) 
@@ -4248,9 +4325,6 @@ public class InstanceServiceImpl implements IInstanceService {
 			String userId = null;
 			if (cuser != null)
 				userId = cuser.getId();
-			
-			InstanceInfo[] subInstancesInInstances = null;
-			List<InstanceInfo> instanceInfoList = new ArrayList<InstanceInfo>();
 			
 			TskTaskCond cond = new TskTaskCond();
 			cond.setWorkSpaceId(instanceId);
@@ -7618,7 +7692,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						UserInfo userInfo = task.getAssignee();
 						if (userInfo != null) {
 							String assigneeId = userInfo.getId();
-							if (userId.equalsIgnoreCase(assigneeId) && task.getStatus() == Instance.STATUS_RUNNING ) {
+							if (userId.equalsIgnoreCase(assigneeId) && (task.getStatus() == Instance.STATUS_RUNNING || task.getStatus() == Instance.STATUS_DELAYED_RUNNING) ) {
 								taskResult.add(task);
 							}
 						}
@@ -10473,7 +10547,8 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 		taskCond.setPageSize(pageCount);
 		taskCond.setPageNo(currentPage);
-		taskCond.setOrders(new Order[]{new Order("creationDate", false)});
+		taskCond.setOrders(new Order[]{new Order(TskTask.A_MODIFICATIONDATE, false)});
+//		taskCond.setOrders(new Order[]{new Order("creationDate", false)});
 		
 		TskTask[] allTasks = SwManagerFactory.getInstance().getTskManager().getFirstForwardTasksOnGroupByForwardId(userId, taskCond, IManager.LEVEL_ALL);
 		

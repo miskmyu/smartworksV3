@@ -50,7 +50,7 @@
 		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
 	}else if(!SmartUtil.isBlankObject(taskInstId)){
 		instance = (Instance)session.getAttribute("workInstance");
-		taskInstance = ((TaskInstanceInfo)smartWorks.getTaskInstanceById(taskInstId)).getTaskInstance();
+		taskInstance = smartWorks.getTaskInstanceById(taskInstId).getTaskInstance();
 	}else{
 		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instId);
 	}		
@@ -125,9 +125,22 @@
 		<!-- 업무전달화면이 나타나는 곳 -->
 		<%
 		if(!SmartUtil.isBlankObject(taskInstance) && !SmartUtil.isBlankObject(forwardId)){
+			TaskInstanceInfo[] forwardHistories = (TaskInstanceInfo[])session.getAttribute("forwardHistories");
+			String forwardTaskId = "";
+			if(!SmartUtil.isBlankObject(forwardHistories)){
+				for(TaskInstanceInfo task : forwardHistories){
+					if(forwardId.equals(task.getForwardId())){
+						session.setAttribute("forwardTask", task);
+						forwardedTask = task;
+						forwardTaskId = task.getId();
+						break;
+					}
+				}
+			}
 		%>
 			<div class="js_form_task_forward  js_form_task mb10">
 				<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
+					<jsp:param value="<%=forwardId %>" name="forwardId"/>
 					<jsp:param value="<%=instId %>" name="taskInstId"/>
 				</jsp:include>
 			</div>
