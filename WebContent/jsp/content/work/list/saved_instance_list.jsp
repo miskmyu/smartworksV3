@@ -126,7 +126,7 @@
 				String workFullPathName = instanceInfo.getWorkFullPathName();
 				TaskInstanceInfo lastTask = ((WorkInstanceInfo)instanceInfo).getLastTask();
 
-				String target = ((WorkInstanceInfo)instanceInfo).getController() + "?isTempSaveWork=true&tempSaveTaskId=" + instanceInfo.getId();
+				String target = ((WorkInstanceInfo)instanceInfo).getController() + "?isTempSaveWork=true&tempSaveTaskId=" + instanceInfo.getId()+ "&workId=" + workId;
 				
 				//String target = ((WorkInstanceInfo)instanceInfo).getController() + "?cid=" + ((WorkInstanceInfo)instanceInfo).getContextId() + "&wid=" + wid 	+ "&workId=" + workId;
 				%>

@@ -125,7 +125,15 @@ function submitForms(tempSave) {
 	String taskInstId = request.getParameter("taskInstId");
 	if(SmartUtil.isBlankObject(workId) && !SmartUtil.isBlankObject(formId)) workId = smartWorks.getWorkIdByFormId(formId);
 	
-	InformationWorkInstance instance = (InformationWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
+	InformationWorkInstance instance  = null;
+	boolean isTempSaveWork = CommonUtil.toBoolean(request.getParameter("isTempSaveWork"));
+	if (isTempSaveWork) {
+		String tempSavedTaskId = (String)request.getParameter("tempSaveTaskId");
+		instance = (InformationWorkInstance)smartWorks.getSavedWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, tempSavedTaskId);
+	} else {
+		instance = (InformationWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
+	}
+	
 	User owner = instance.getOwner();
 	WorkSpace workSpace = instance.getWorkSpace();
 	InformationWork work = (InformationWork)instance.getWork();
@@ -614,12 +622,24 @@ function submitForms(tempSave) {
 	var iworkSpace = $('.js_iwork_space_page');
 	var workId = iworkSpace.attr("workId");
 	var instId = iworkSpace.attr("instId");
+	var isTempSaved = "false";
+	var taskInstId = "";
+	<%
+	if (isTempSaveWork) {
+	%>
+		isTempSaved = "true";
+		taskInstId = "<%=instance.getId()%>";
+	<%
+	}
+	%>
 	var formContent = iworkSpace.find('div.js_form_content');
 	new SmartWorks.GridLayout({
 		target : formContent,
 		mode : mode,
 		workId : workId,
 		recordId : instId,
+		isTempSaved : isTempSaved,
+		taskInstId : taskInstId,
 		onSuccess : function(){
 		}
 	});

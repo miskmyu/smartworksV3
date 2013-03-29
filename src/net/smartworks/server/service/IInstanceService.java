@@ -83,6 +83,8 @@ public interface IInstanceService {
 
 	public WorkInstance getWorkInstanceById(int workType, String workId, String instanceId) throws Exception;
 
+	public WorkInstance getSavedWorkInstanceById(int workType, String workId, String instanceId) throws Exception;
+
 	public TaskInstanceInfo[][] getTaskInstancesByWorkHours(String contextId, String spaceId, LocalDate date, int maxSize) throws Exception;
 
 	public TaskInstanceInfo[][] getTaskInstancesByDates(String contextId, String spaceId, LocalDate fromDate, LocalDate toDate, int maxSize) throws Exception;
