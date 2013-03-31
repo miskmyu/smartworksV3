@@ -24,6 +24,7 @@
 	// 사용가능한 타임존들을 가져와서, 타임존 선택박스에 리스트로 보여준다.
 	KeyMap[] timeZoneNames = LocalDate.getAvailableTimeZoneNames(cUser.getLocale());
 
+	
 %>
 <script type="text/javascript">
 
@@ -167,6 +168,22 @@
 						<td><input name="txtMemberEmployeeId" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(user.getEmployeeId()) %>" /></td>
 					</tr>
 					<tr>
+						<th><fmt:message key="profile.title.dateadmitted"/></th>
+						<td>
+							<%
+							String hireYear = "", hireMonth = "", hireDay = "";
+							if(!SmartUtil.isBlankObject(user.getHireDate())){
+								hireYear = "" + user.getHireDate().getYear();
+								hireMonth = "" + (user.getHireDate().getMonth()+1);
+								hireDay = "" + user.getHireDate().getDaysOfMonth();
+							}
+							%>
+							<input style="width:40px" maxlength="4" name="txtMemberHireYear" class="fieldline tc" type="text" value="<%=hireYear %>" /><fmt:message key="common.title.year"/>
+							<input style="width:20px" maxlength="2" name="txtMemberHireMonth" class="fieldline tc" type="text" value="<%=hireMonth %>" /><fmt:message key="common.title.month"/>
+							<input style="width:20px" maxlength="2" name="txtMemberHireDay" class="fieldline tc" type="text" value="<%=hireDay %>" /><fmt:message key="common.title.day"/>
+						</td>
+					</tr>
+					<tr>
 						<th><fmt:message key="profile.title.position"/></th>
 						<td><input name="txtMemberPosition" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(user.getPosition()) %>" /></td>
 					</tr>
@@ -187,6 +204,26 @@
 							<option <%if(user.getUserLevel()==User.USER_LEVEL_AMINISTRATOR){ %>selected<%} %> value="<%=User.USER_LEVEL_AMINISTRATOR%>"><fmt:message key="organization.user_level.administrator"/></option>
 							<option <%if(user.getUserLevel()==User.USER_LEVEL_EXTERNAL_USER){ %>selected<%} %> value="<%=User.USER_LEVEL_EXTERNAL_USER%>"><fmt:message key="organization.user_level.external_user"/></option>
 						</select></td>
+					</tr>
+					<tr>
+						<th><fmt:message key="profile.title.birthday"/></th>
+						<td>
+							<%
+							String birthYear = "", birthMonth = "", birthDay = "";
+							if(!SmartUtil.isBlankObject(user.getBirthday())){
+								birthYear = "" + user.getBirthday().getYear();
+								birthMonth = "" + (user.getBirthday().getMonth()+1);
+								birthDay = "" + user.getBirthday().getDaysOfMonth();
+							}
+							%>
+							<input style="width:40px" maxlength="4" name="txtMemberBirthYear" class="fieldline tc" type="text" value="<%=birthYear %>" /><fmt:message key="common.title.year"/>
+							<input style="width:20px" maxlength="2" name="txtMemberBirthMonth" class="fieldline tc" type="text" value="<%=birthMonth %>" /><fmt:message key="common.title.month"/>
+							<input style="width:20px" maxlength="2" name="txtMemberBirthDay" class="fieldline tc" type="text" value="<%=birthDay %>" /><fmt:message key="common.title.day"/>
+							<select name="selMemberLunarBirthday">
+								<option <%if(!user.isLunarBirthday()){ %>selected<%} %> value="false"><fmt:message key="common.title.solar_date"/></option>
+								<option <%if(user.isLunarBirthday()){ %>selected<%} %> value="true"><fmt:message key="common.title.lunar_date"/></option>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<th class="required_label"><fmt:message key="profile.title.locale" /></th>
@@ -221,9 +258,17 @@
 						<th><fmt:message key="profile.title.phone_no"/></th>
 						<td><input name="txtMemberPhoneNo" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(user.getPhoneNo()) %>" /></td>
 					</tr>
-					<tr class="end">
+					<tr>
 						<th><fmt:message key="profile.title.cell_phone_no"/></th>
 						<td><input name="txtMemberCellPhoneNo" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(user.getCellPhoneNo()) %>" /></td>
+					</tr>
+					<tr>
+						<th><fmt:message key="profile.title.home_phone_no"/></th>
+						<td><input name="txtMemberHomePhoneNo" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(user.getHomePhoneNo()) %>" /></td>
+					</tr>
+					<tr class="end">
+						<th><fmt:message key="profile.title.home_address"/></th>
+						<td><textarea name="txtMemberHomeAddress" class="fieldline" rows="2"><%=CommonUtil.toNotNull(user.getHomeAddress()) %></textarea></td>
 					</tr>
 				</tbody>
 			</table>

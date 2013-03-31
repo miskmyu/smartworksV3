@@ -4,6 +4,7 @@ import net.smartworks.model.BaseObject;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.organization.model.SwoCompany;
+import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartUtil;
 
@@ -20,6 +21,7 @@ public class CompanyGeneral extends BaseObject {
 	public static final String IMAGE_TYPE_TITLELOGO = "_titlelogo";
 	public static final String IMAGE_TYPE_LOGINIMAGE = "_loginimage";
 
+	private LocalDate startDate;
 	private String logoName;
 	private String titleLogoName;
 	private String loginImageName;
@@ -32,6 +34,12 @@ public class CompanyGeneral extends BaseObject {
 	private boolean useChattingService=true;
 	private boolean useReturnFunction=true;
 	
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
 	public boolean isUseMessagingService() {
 		return useMessagingService;
 	}

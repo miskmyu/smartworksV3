@@ -17,6 +17,7 @@ public class UserInfo extends WorkSpaceInfo {
 	private String phoneNo = "";
 	private String cellPhoneNo = "";
 	private LocalDate birthday;
+	private boolean lunarBirthday;
 	private boolean online;
 	private boolean useSignPicture;
 	private String signPicture;
@@ -90,6 +91,12 @@ public class UserInfo extends WorkSpaceInfo {
 	}
 	public void setBirthday(LocalDate birthday) {
 		this.birthday = birthday;
+	}
+	public boolean isLunarBirthday() {
+		return lunarBirthday;
+	}
+	public void setLunarBirthday(boolean lunarBirthday) {
+		this.lunarBirthday = lunarBirthday;
 	}
 	public String getEmployeeId() {
 		return employeeId;

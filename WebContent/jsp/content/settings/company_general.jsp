@@ -90,9 +90,33 @@
 					</table>
 				</div>
 				<!-- 목록영역 -->
-				<div class="default_title_space pt20"><div class="title"><fmt:message key="settings.title.company.logo_setting"/></div></div>
+				<div class="default_title_space pt20"><div class="title"><fmt:message key="settings.title.company.general"/></div></div>
 				
 				<div class="boTb">
+					<table>
+						<colgroup>
+							<col width="25%" />
+							<col width="75%" />
+						</colgroup>
+						<tbody>
+							<tr class="end">
+								<th rowspan="2"><fmt:message key="settings.title.company.start_date"/></th>
+								<td>
+									<%
+									String hireYear = "", hireMonth = "", hireDay = "";
+									if(!SmartUtil.isBlankObject(companyGeneral.getStartDate())){
+										hireYear = "" + companyGeneral.getStartDate().getYear();
+										hireMonth = "" + (companyGeneral.getStartDate().getMonth()+1);
+										hireDay = "" + companyGeneral.getStartDate().getDaysOfMonth();
+									}
+									%>
+									<input style="width:40px" maxlength="4" name="txtCompanyStartYear" class="fieldline tc" type="text" value="<%=hireYear %>" /><fmt:message key="common.title.year"/>
+									<input style="width:20px" maxlength="2" name="txtCompanyStartMonth" class="fieldline tc" type="text" value="<%=hireMonth %>" /><fmt:message key="common.title.month"/>
+									<input style="width:20px" maxlength="2" name="txtCompanyStartDay" class="fieldline tc" type="text" value="<%=hireDay %>" /><fmt:message key="common.title.day"/>
+ 								</td>
+							</tr>
+						</tbody>
+					</table>
 					<table>
 						<colgroup>
 							<col width="25%" />
@@ -109,12 +133,6 @@
 							</tr>
 						</tbody>
 					</table>
-				</div>
-				<!-- 목록영역 -->
-				<!-- 목록영역 -->
-				<div class="default_title_space pt20"><div class="title"><fmt:message key="settings.title.company.titlelogo_setting"/></div></div>
-				
-				<div class="boTb">
 					<table>
 						<colgroup>
 							<col width="25%" />
@@ -131,12 +149,6 @@
 							</tr>
 						</tbody>
 					</table>
-				</div>
-				<!-- 목록영역 -->
-				<!-- 로그인화면 이미지 설정 -->
-				<div class="default_title_space pt20"><div class="title"><fmt:message key="settings.title.company.loginimage_setting"/></div></div>
-				
-				<div class="boTb">
 					<table>
 						<colgroup>
 							<col width="25%" />

@@ -27,6 +27,7 @@
 	//MailAccount[] mailAccounts = cUser.getMailAccounts();
 	MailAccount mailAccount = (SmartUtil.isBlankObject(mailAccounts) || mailAccounts.length<1) ? new MailAccount() : mailAccounts[0];
 	EmailServer[] emailServers = smartWorks.getEmailServers();
+	cUser.setHireDate(new LocalDate());
 %>
 <script type="text/javascript">
 
@@ -163,11 +164,29 @@
 								</td>
 							</tr>
 							<tr>
-								<th><fmt:message key="profile.title.employee_id" /></thd>
+								<th><fmt:message key="profile.title.employee_id" /></th>
 								<td>
 									<input name="txtUserProfileEmpId" readonly="readonly" type="text" value="<%=CommonUtil.toNotNull(cUser.getEmployeeId())%>">		
 								</td>
 							</tr>		
+							<tr>
+								<th><fmt:message key="profile.title.dateadmitted"/></th>
+								<td>
+									<%
+									String hireYear = "", hireMonth = "", hireDay = "";
+									if(!SmartUtil.isBlankObject(cUser.getHireDate())){
+										hireYear = "" + cUser.getHireDate().getYear();
+										hireMonth = "" + (cUser.getHireDate().getMonth()+1);
+										hireDay = "" + cUser.getHireDate().getDaysOfMonth();
+									%>
+										<span style="width:40px"><%=hireYear %></span><fmt:message key="common.title.year"/>
+										<span style="width:20px"><%=hireMonth %></span><fmt:message key="common.title.month"/>
+										<span style="width:20px"><%=hireDay %></span><fmt:message key="common.title.day"/>
+									<%
+									}
+									%>
+								</td>
+							</tr>
 							<tr>
 								<th class="required_label"><fmt:message key="profile.title.password" /></th>
 								<td>
@@ -190,6 +209,26 @@
 								<th><fmt:message key="profile.title.position" /></th>
 								<td>
 									<input name="txtUserProfilePosition" readonly="readonly" type="text" value="<%=CommonUtil.toNotNull(cUser.getPosition())%>">		
+								</td>
+							</tr>
+							<tr>
+								<th><fmt:message key="profile.title.birthday"/></th>
+								<td>
+									<%
+									String birthYear = "", birthMonth = "", birthDay = "";
+									if(!SmartUtil.isBlankObject(cUser.getBirthday())){
+										birthYear = "" + cUser.getBirthday().getYear();
+										birthMonth = "" + (cUser.getBirthday().getMonth()+1);
+										birthDay = "" + cUser.getBirthday().getDaysOfMonth();
+									}
+									%>
+									<input style="width:40px" maxlength="4" name="txtUserBirthYear" class="fieldline tc" type="text" value="<%=birthYear %>" /><fmt:message key="common.title.year"/>
+									<input style="width:20px" maxlength="2" name="txtUserBirthMonth" class="fieldline tc" type="text" value="<%=birthMonth %>" /><fmt:message key="common.title.month"/>
+									<input style="width:20px" maxlength="2" name="txtUserBirthDay" class="fieldline tc" type="text" value="<%=birthDay %>" /><fmt:message key="common.title.day"/>
+									<select name="selUserLunarBirthday">
+										<option <%if(!cUser.isLunarBirthday()){ %>selected<%} %> value="false"><fmt:message key="common.title.solar_date"/></option>
+										<option <%if(cUser.isLunarBirthday()){ %>selected<%} %> value="true"><fmt:message key="common.title.lunar_date"/></option>
+									</select>
 								</td>
 							</tr>
 							<tr>
@@ -231,6 +270,18 @@
 								<th><fmt:message key="profile.title.cell_phone_no" /></th>
 								<td>
 									<input name="txtUserProfileCellNo" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(cUser.getCellPhoneNo())%>" title="">
+								</td>
+							</tr>
+							<tr>
+								<th><fmt:message key="profile.title.home_phone_no"/></th>
+								<td>
+									<input name="txtUserHomePhoneNo" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(cUser.getHomePhoneNo()) %>" />
+								</td>
+							</tr>
+							<tr>
+								<th><fmt:message key="profile.title.home_address"/></th>
+								<td>
+									<textarea name="txtUserHomeAddress" class="fieldline" rows="2"><%=CommonUtil.toNotNull(cUser.getHomeAddress()) %></textarea>
 								</td>
 							</tr>
 							<tr>
