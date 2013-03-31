@@ -53,6 +53,12 @@ public class SwoUserCond extends SwoObjectCond {
 	public static final String A_SIGN = "sign";
 	public static final String A_USESIGN = "useSign";
 
+	
+	public static final String A_JOINCOMPANYDATE = "joinCompanyDate";
+	public static final String A_BIRTHDAY = "birthDay";
+	public static final String A_TELEPHONENUMBER = "telephoneNumber";
+	public static final String A_ADDRESS = "address";
+	
 	private String nickName;
 	private String companyId;
 	private String deptId;
@@ -79,6 +85,11 @@ public class SwoUserCond extends SwoObjectCond {
 	private String sign;
 	private boolean useSign;
 
+	private Date joinCompanyDate;
+	private Date birthDay;
+	private String telephoneNumber;
+	private String address;
+	
 	private String[] typeNotIns;
 	private String[] idIns;
 	private String[] idNotIns;
@@ -117,6 +128,10 @@ public class SwoUserCond extends SwoObjectCond {
 		appendAttributeString(A_RETIREE, retiree, true, buf);
 		appendAttributeString(A_MOBILENO, mobileNo, true, buf);
 		appendAttributeString(A_EXTENSIONNO, extensionNo, true, buf);
+		
+		appendAttributeString(A_TELEPHONENUMBER, telephoneNumber, true, buf);
+		appendAttributeString(A_ADDRESS, address, true, buf);
+		
 		return buf.toString();
 	}
 	public String toElementsString(String tab, boolean lite) {

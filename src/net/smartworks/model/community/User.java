@@ -47,8 +47,9 @@ public class User extends WorkSpace {
 	private String phoneNo;
 	private String cellPhoneNo;
 	private LocalDate birthday;
+	private boolean lunarBirthday;
 	private String homeAddress;
-	private String homePhonNo;
+	private String homePhoneNo;
 	private String company;
 	private String companyId;
 	private boolean useSignPicture;
@@ -197,17 +198,23 @@ public class User extends WorkSpace {
 	public void setBirthday(LocalDate birthday) {
 		this.birthday = birthday;
 	}
+	public boolean isLunarBirthday() {
+		return lunarBirthday;
+	}
+	public void setLunarBirthday(boolean lunarBirthday) {
+		this.lunarBirthday = lunarBirthday;
+	}
 	public String getHomeAddress() {
 		return homeAddress;
 	}
 	public void setHomeAddress(String homeAddress) {
 		this.homeAddress = homeAddress;
 	}
-	public String getHomePhonNo() {
-		return homePhonNo;
+	public String getHomePhoneNo() {
+		return homePhoneNo;
 	}
-	public void setHomePhonNo(String homePhonNo) {
-		this.homePhonNo = homePhonNo;
+	public void setHomePhoneNo(String homePhoneNo) {
+		this.homePhoneNo = homePhoneNo;
 	}
 	public int getSpaceType(){
 		return ISmartWorks.SPACE_TYPE_USER;

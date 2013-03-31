@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import com.ibm.icu.util.ChineseCalendar;
 
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.community.User;
@@ -297,6 +298,10 @@ public class LocalDate extends Date{
 
 	public String toGMTSimpleDateString2(){
 		return (new SimpleDateFormat("yyyy.MM.dd")).format(getGMTDate());
+	}
+
+	public String toGMTSimpleDateString3(){
+		return (new SimpleDateFormat("yyyyMMdd")).format(getGMTDate());
 	}
 
 	public String toGMTTimeString(){
@@ -635,5 +640,89 @@ public class LocalDate extends Date{
 		}
 		return lDate;
 
+	}
+
+	public static LocalDate getThisYearDate(LocalDate pastDate){
+		if(SmartUtil.isBlankObject(pastDate)) return null;
+		
+		LocalDate today = new LocalDate();
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, today.getYear());
+		cal.set(Calendar.MONTH, pastDate.getMonth()+1);
+		cal.set(Calendar.DAY_OF_MONTH, pastDate.getDaysOfMonth());
+		
+		return new LocalDate(cal.getTimeInMillis());
+	}
+	
+	public static LocalDate getThisBirthday(LocalDate birthday){
+		return getThisYearDate(birthday);
+	}
+	
+	public static LocalDate getThisLunarBirthday(LocalDate lunarBirthday){
+		if(SmartUtil.isBlankObject(lunarBirthday)) return null;
+		return convertFromLunar(getThisBirthday(lunarBirthday));
+	}
+	
+	public static LocalDate convertFromLunar(LocalDate localDate){
+		if(SmartUtil.isBlankObject(localDate)) return null;
+		return convertFromLunarGMTString(localDate.toGMTSimpleDateString3());
+	}
+	
+	public static LocalDate convertToLunar(LocalDate localDate){
+		if(SmartUtil.isBlankObject(localDate)) return null;
+		return convertGMTStringToLunar(localDate.toGMTSimpleDateString3());
+	}
+	
+	private static LocalDate convertFromLunarGMTString(String yyyymmdd){
+		if(SmartUtil.isBlankObject(yyyymmdd)) return null;
+		String date = yyyymmdd.trim();
+		
+		if(date.length() != 8){
+			if(date.length() == 4)
+				date = date + "0101";
+			else if(date.length() == 6)
+				date = date + "01";
+			else if(date.length()>8)
+				date = date.substring(0, 8);
+			else
+				return null;
+		}
+		
+		Calendar cal = Calendar.getInstance();
+		ChineseCalendar cc = new ChineseCalendar();
+		cc.set(ChineseCalendar.EXTENDED_YEAR, Integer.parseInt(date.substring(0,4)) +2637);
+		cc.set(ChineseCalendar.MONTH, Integer.parseInt(date.substring(4,6))-1);
+		cc.set(ChineseCalendar.DAY_OF_MONTH, Integer.parseInt(date.substring(6)));
+		
+		cal.setTimeInMillis(cc.getTimeInMillis());
+		
+		return new LocalDate(cal.getTimeInMillis());
+	}
+
+	private static LocalDate convertGMTStringToLunar(String yyyymmdd){
+		if(SmartUtil.isBlankObject(yyyymmdd)) return null;
+		String date = yyyymmdd.trim();
+		
+		if(date.length() != 8){
+			if(date.length() == 4)
+				date = date + "0101";
+			else if(date.length() == 6)
+				date = date + "01";
+			else if(date.length()>8)
+				date = date.substring(0, 8);
+			else
+				return null;
+		}
+		
+		Calendar cal = Calendar.getInstance();
+		ChineseCalendar cc = new ChineseCalendar();
+		cal.set(Calendar.YEAR, Integer.parseInt(date.substring(0,4)));
+		cal.set(Calendar.MONTH, Integer.parseInt(date.substring(4,6))-1);
+		cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date.substring(6)));
+		
+		cc.setTimeInMillis(cal.getTimeInMillis());
+		
+		return new LocalDate(cc.getTimeInMillis());
 	}
 }

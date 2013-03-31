@@ -886,3 +886,12 @@ CREATE TABLE SWAlarmNotice (
 	modifiedTime datetime,
 	primary key (id)
 );
+
+// 회사정보 일반 회사설립일(Date)
+
+alter Table sworgconfig add setupcompanydate DateTime 
+
+alter Table sworguser add joinCompanyDate Datetime;
+alter Table sworguser add birthDay Datetime;
+alter Table sworguser add telephoneNumber varchar(20);
+alter Table sworguser add address varchar(20);
