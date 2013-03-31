@@ -888,11 +888,13 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 	private Query appendQuery(StringBuffer buf, SwoDepartmentCond cond) throws Exception {
 		String id = null;
 		String[] idIns = null;
+		String[] idNotIns = null;
 		String companyId = null;
 		String parentId = null;
 		boolean isParentNull = false;
 		String type = null;
 		String name = null;
+		String nameLike = null;
 		String description = null;
 		String domainId = null;
 		String creationUser = null;
@@ -903,11 +905,13 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		if (cond != null) {
 			id = cond.getId();
 			idIns = cond.getIdIns();
+			idNotIns = cond.getIdNotIns();
 			companyId = cond.getCompanyId();
 			parentId = cond.getParentId();
 			isParentNull = cond.isParentNull();
 			type = cond.getType();
 			name = cond.getName();
+			nameLike = cond.getNameLike();
 			description = cond.getDescription();
 			domainId = cond.getDomainId();
 			creationUser = cond.getCreationUser();
@@ -930,6 +934,15 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				}
 				buf.append(")");
 			}
+			if (idNotIns != null && idNotIns.length != 0) {
+				buf.append(" and obj.id not in (");
+				for (int i=0; i<idNotIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":idNotIn").append(i);
+				}
+				buf.append(")");
+			}
 			if (companyId != null)
 				buf.append(" and obj.companyId = :companyId");
 			if (parentId != null)
@@ -940,6 +953,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" and obj.type = :type");
 			if (name != null)
 				buf.append(" and obj.name = :name");
+			if (nameLike != null)
+				buf.append(" and obj.name like :nameLike");
 			if (description != null)
 				buf.append(" and obj.description = :description");
 			if (domainId != null)
@@ -964,6 +979,11 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					query.setString("idIn"+i, idIns[i]);
 				}
 			}
+			if (idNotIns != null && idNotIns.length != 0) {
+				for (int i=0; i<idNotIns.length; i++) {
+					query.setString("idNotIn"+i, idNotIns[i]);
+				}
+			}
 			if (companyId != null)
 				query.setString("companyId", companyId);
 			if (parentId != null)
@@ -972,6 +992,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString("type", type);
 			if (name != null)
 				query.setString("name", name);
+			if (nameLike != null)
+				query.setString("nameLike", CommonUtil.toLikeString(nameLike));
 			if (description != null)
 				query.setString("description", description);
 			if (domainId != null)
@@ -2261,41 +2283,42 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			userExtend = (SwoUserExtend)query.uniqueResult();
 		}
 
-		String picture = CommonUtil.toNotNull(userExtend.getPictureName());
+		if(!SmartUtil.isBlankObject(userExtend)){
+			String picture = CommonUtil.toNotNull(userExtend.getPictureName());
+	
+			if(!picture.equals("")) {
+				String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
+				String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
+				userExtend.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+				userExtend.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+			} else {
+				userExtend.setBigPictureName(picture);
+				userExtend.setSmallPictureName(picture);
+			}
+	
+			String sign = CommonUtil.toNotNull(userExtend.getSign());
+	
+			if(!sign.equals("")) {
+				String extension = sign.lastIndexOf(".") > 0 ? sign.substring(sign.lastIndexOf(".") + 1) : null;
+				String signId = sign.substring(0, (sign.length() - extension.length())-1);
+				userExtend.setSign(signId + Community.IMAGE_TYPE_THUMB + "." + extension);
+			} else {
+				userExtend.setSign(sign);
+			}
+	
+			String locale = CommonUtil.toNotNull(userExtend.getLocale());
+			if(locale.equals(""))
+				locale = LocaleInfo.LOCALE_DEFAULT;
+			userExtend.setLocale(locale);
+	
+			String timeZone = CommonUtil.toNotNull(userExtend.getTimeZone());
+			if(timeZone.equals(""))
+				timeZone = LocalDate.TIMEZONE_SEOUL;
+			userExtend.setTimeZone(timeZone);
 
-		if(!picture.equals("")) {
-			String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
-			String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-			userExtend.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
-			userExtend.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
-		} else {
-			userExtend.setBigPictureName(picture);
-			userExtend.setSmallPictureName(picture);
-		}
-
-		String sign = CommonUtil.toNotNull(userExtend.getSign());
-
-		if(!sign.equals("")) {
-			String extension = sign.lastIndexOf(".") > 0 ? sign.substring(sign.lastIndexOf(".") + 1) : null;
-			String signId = sign.substring(0, (sign.length() - extension.length())-1);
-			userExtend.setSign(signId + Community.IMAGE_TYPE_THUMB + "." + extension);
-		} else {
-			userExtend.setSign(sign);
-		}
-
-		String locale = CommonUtil.toNotNull(userExtend.getLocale());
-		if(locale.equals(""))
-			locale = LocaleInfo.LOCALE_DEFAULT;
-		userExtend.setLocale(locale);
-
-		String timeZone = CommonUtil.toNotNull(userExtend.getTimeZone());
-		if(timeZone.equals(""))
-			timeZone = LocalDate.TIMEZONE_SEOUL;
-		userExtend.setTimeZone(timeZone);
-
-		if (userExtend != null)
 			userExtendMap.put(id, userExtend);
-
+		}
+		
 		return userExtend;
 	}
 	public SwoUserExtend[] getUsersExtendNotIn(String userId, String[] ids, String lastName) throws SwoException {
@@ -2810,6 +2833,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		
 		String id = null;
 		String[] idIns = null;
+		String[] idNotIns = null;
 		String companyId = null;
 		String name = null;
 		String groupLeader = null;
@@ -2830,6 +2854,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		if (cond != null) {
 			id = cond.getId();
 			idIns = cond.getGroupIdIns();
+			idNotIns = cond.getGroupIdNotIns();
 			companyId = cond.getCompanyId();
 			name = cond.getName();
 			groupLeader = cond.getGroupLeader();
@@ -2865,6 +2890,15 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					if (i != 0)
 						buf.append(", ");
 					buf.append(":idIn").append(i);
+				}
+				buf.append(")");
+			}
+			if (idNotIns != null && idNotIns.length != 0) {
+				buf.append(" and obj.id not in (");
+				for (int i=0; i<idNotIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":idNotIn").append(i);
 				}
 				buf.append(")");
 			}
@@ -2932,6 +2966,11 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			if (idIns != null && idIns.length != 0) {
 				for (int i=0; i<idIns.length; i++) {
 					query.setString("idIn"+i, idIns[i]);
+				}
+			}
+			if (idNotIns != null && idNotIns.length != 0) {
+				for (int i=0; i<idNotIns.length; i++) {
+					query.setString("idNotIn"+i, idNotIns[i]);
 				}
 			}
 			if (companyId != null)

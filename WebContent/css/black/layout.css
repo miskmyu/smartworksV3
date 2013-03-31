@@ -347,6 +347,9 @@ li.fvrt_item:hover .check_option {display:block}
 /* CommentsBox added by ysjung */
 tr.instance_list {}
 tr.instance_list:hover {background-color:#fff7eb; cursor:pointer}
+tr.instance_list .user_actions{display:none}
+tr.instance_list:hover .user_actions{display:block}
+
 tr.app_work_list {}
 tr.app_work_list:hover {background-color:#fff7eb}
 .det_title {padding:5px 0}
@@ -384,7 +387,7 @@ li.sub_instance_list > .det_title:hover .delet_action, li.instance_list > .det_t
 .members {display: inline-block; padding: 4px 10px}
 .members .icon_pe {padding: 1px}
 
-#community_department .leader, #community_group .leader, .pop_list_area .leader, .setting_section .leader { position:absolute; background: url("../../images/nav_img.png") no-repeat -115px -699px; display: inline-block; height: 7px; margin: 13px 0 0 13px; width: 7px;}
+#community_department .leader, #community_group .leader, .pop_list_area .leader, .setting_section .leader, .instance_list .leader { position:absolute; background: url("../../images/nav_img.png") no-repeat -115px -699px; display: inline-block; height: 7px; margin: 13px 0 0 13px; width: 7px;}
 .setting_section .leader.m {margin: 41px 0 0 41px; height:7px !important}
 
 #community_department .profile_size_s {margin:0 5px 0 0}

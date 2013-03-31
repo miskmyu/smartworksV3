@@ -176,6 +176,7 @@ import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
+import org.claros.intouch.webmail.services.GetAllHeadersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -2428,14 +2429,15 @@ public class ModelConverter {
 
 	public static UserInfo getUserInfoBySwoUserExtend(UserInfo userInfo, SwoUserExtend userExtend) throws Exception {
 		if (userExtend == null)
-			return null;
+			return new UserInfo();
 		if (userInfo == null) 
 			userInfo = new UserInfo();
 		
 		userInfo.setId(userExtend.getId());
 		userInfo.setName(userExtend.getName());
 		userInfo.setNickName(userExtend.getNickName());
-		userInfo.setDepartment(new DepartmentInfo(userExtend.getDepartmentId(), userExtend.getDepartmentName(), userExtend.getDepartmentDesc()));
+		DepartmentInfo departInfo = new DepartmentInfo(userExtend.getDepartmentId(), userExtend.getDepartmentName(), userExtend.getDepartmentDesc());
+		userInfo.setDepartment(departInfo);
 		userInfo.setSmallPictureName(userExtend.getSmallPictureName());
 		userInfo.setBigPictureName(userExtend.getBigPictureName());
 		userInfo.setPosition(userExtend.getPosition());
@@ -2444,6 +2446,7 @@ public class ModelConverter {
 		userInfo.setPhoneNo(userExtend.getPhoneNo());
 		userInfo.setUseSignPicture(userExtend.isUseSign());
 		userInfo.setSignPicture(userExtend.getSign());
+		userInfo.setEmployeeId(userExtend.getEmployeeId());
 		return userInfo;
 	}
 
@@ -2834,25 +2837,32 @@ public class ModelConverter {
 		departmentInfo.setSmallPictureName(departmentExtend.getSmallPictureName());
 		departmentInfo.setBigPictureName(departmentExtend.getBigPictureName());
 		departmentInfo.setFullpathName(getDepartmentInfoFullpathNameByDepartmentId(departmentExtend.getId()));
-
+		departmentInfo.setHead(getUserInfoByUserId(departmentExtend.getHeadId()));
 		return departmentInfo;
 	}
 	public static String getDepartmentInfoFullpathNameByDepartmentId(String departmentInfoId) throws Exception {
 		
 		User user = SmartUtil.getSystemUser();
-		SwoDepartmentExtend department = getSwoManager().getDepartmentExtend(user.getId(), departmentInfoId, true);
-		String fullpathName = getDepartmentInfoParentsfullpathNameByDepartmentId(department,"");
+		String fullpathName = "";
+		try{
+			SwoDepartmentExtend department = getSwoManager().getDepartmentExtend(user.getId(), departmentInfoId, true);
+			fullpathName = getDepartmentInfoParentsfullpathNameByDepartmentId(department,"");
+		}catch (Exception e){
+		}
 		return fullpathName;
 	}
 	
 	public static String getDepartmentInfoParentsfullpathNameByDepartmentId(SwoDepartmentExtend departmentInfo, String fullpathName) throws Exception {
 		
 		if(departmentInfo.getParentId()!= null){
-			fullpathName = departmentInfo.getName() + (SmartUtil.isBlankObject(fullpathName) ? "" : ">") + fullpathName;
+			fullpathName = departmentInfo.getName() + (SmartUtil.isBlankObject(fullpathName) ? "" : "▶") + fullpathName;
 			departmentInfo.getId();
 			departmentInfo.getParentId();
-			SwoDepartmentExtend departmentId = getSwoManager().getDepartmentExtend(null, departmentInfo.getParentId(), true);								
-			fullpathName = getDepartmentInfoParentsfullpathNameByDepartmentId(departmentId, fullpathName);		
+			try{
+				SwoDepartmentExtend departmentId = getSwoManager().getDepartmentExtend(null, departmentInfo.getParentId(), true);								
+				fullpathName = getDepartmentInfoParentsfullpathNameByDepartmentId(departmentId, fullpathName);
+			}catch (Exception e){
+			}
 		}
 		return fullpathName;
 	}
@@ -3101,7 +3111,7 @@ public class ModelConverter {
 	public static String getParentsfullpathNameByDepartmentId(SwoDepartmentExtend department, String fullpathName) throws Exception {
 		
 		if(department.getParentId()!= null){
-			fullpathName = department.getName() + (SmartUtil.isBlankObject(fullpathName) ? "" : ">") + fullpathName;
+			fullpathName = department.getName() + (SmartUtil.isBlankObject(fullpathName) ? "" : "▶") + fullpathName;
 			department.getId();
 			department.getParentId();
 			SwoDepartmentExtend departmentId = getSwoManager().getDepartmentExtend(null, department.getParentId(), true);								
@@ -3134,7 +3144,13 @@ public class ModelConverter {
 		groupInfo.setId(swoGroup.getId());
 		groupInfo.setName(swoGroup.getName());
 		groupInfo.setDesc(swoGroup.getDescription());
-
+		groupInfo.setLeader(getUserInfoByUserId(swoGroup.getGroupLeader()));
+		groupInfo.setOwner(getUserInfoByUserId(swoGroup.getCreationUser()));
+		groupInfo.setCreatedDate(new LocalDate(swoGroup.getCreationDate().getTime()));
+		SwoGroupMember[] groupMembers = swoGroup.getSwoGroupMembers();
+		int numberOfGroupMembers = 0;
+		if(!SmartUtil.isBlankObject(groupMembers)) numberOfGroupMembers = groupMembers.length;
+		groupInfo.setNumberOfGroupMember(numberOfGroupMembers);
 		String picture = CommonUtil.toNotNull(swoGroup.getPicture());
 		if(!picture.equals("")) {
 			String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;

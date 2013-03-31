@@ -1,6 +1,7 @@
 package net.smartworks.server.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -21,13 +22,27 @@ import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
+import net.smartworks.model.community.info.CommunityInfoList;
 import net.smartworks.model.community.info.GroupMemberList;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
+import net.smartworks.model.filter.Condition;
+import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.instance.FieldData;
+import net.smartworks.model.instance.SortingField;
+import net.smartworks.model.instance.WorkInstance;
+import net.smartworks.model.instance.info.IWInstanceInfo;
+import net.smartworks.model.instance.info.InstanceInfoList;
+import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
+import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartWork;
+import net.smartworks.model.work.Work;
+import net.smartworks.model.work.info.SmartWorkInfo;
+import net.smartworks.model.work.info.WorkCategoryInfo;
+import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.server.engine.authority.model.SwaDepartment;
 import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
 import net.smartworks.server.engine.authority.model.SwaGroup;
@@ -43,14 +58,23 @@ import net.smartworks.server.engine.common.searcher.manager.ISchManager;
 import net.smartworks.server.engine.common.searcher.model.SchUser;
 import net.smartworks.server.engine.common.searcher.model.SchWorkspace;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.StringUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
+import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomainCond;
 import net.smartworks.server.engine.infowork.domain.model.SwdDomainFieldConstants;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecordCond;
+import net.smartworks.server.engine.infowork.domain.model.SwdRecordExtend;
+import net.smartworks.server.engine.infowork.form.model.SwfField;
+import net.smartworks.server.engine.infowork.form.model.SwfForm;
+import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
+import net.smartworks.server.engine.infowork.form.model.SwfFormModel;
 import net.smartworks.server.engine.mail.manager.IMailManager;
 import net.smartworks.server.engine.mail.model.MailAccountCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
@@ -73,6 +97,7 @@ import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.server.service.util.SearchParallelProcessing;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.Semaphore;
+import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
@@ -2989,6 +3014,8 @@ public class CommunityServiceImpl implements ICommunityService {
 		
 		SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, relatedUserIdArray);
 		
+		if(SmartUtil.isBlankObject(userExtends)) return null;
+		
 		UserInfo[] userInfos = new UserInfo[userExtends.length];
 		for (int i = 0; i < userExtends.length; i++) {
 			SwoUserExtend userExtend = userExtends[i];
@@ -3021,5 +3048,405 @@ public class CommunityServiceImpl implements ICommunityService {
 			//재귀호출
 			addSubDepartmentUsers(user, subDeptObj.getId(), userList);
 		}	
+	}
+	int previousPageSize = 0;
+	@Override
+	public CommunityInfoList getCommunityInstanceList(int type, RequestParams params) throws Exception {
+		if(type == CommunityInfoList.TYPE_GROUP_INFO_LIST)
+			return getGroupInfoList(params);
+		else if(type == CommunityInfoList.TYPE_DEPARTMENT_INFO_LIST)
+			return getDepartmentInfoList(params);
+		else if(type == CommunityInfoList.TYPE_USER_INFO_LIST)
+			return getUserInfoList(params);
+		return null;
+	}
+	
+	private CommunityInfoList getGroupInfoList(RequestParams params) throws Exception{
+		try {
+			User user = SmartUtil.getCurrentUser();
+			if(user == null)
+				return null;
+			String userId = user.getId();
+
+			SwoGroupCond swoGroupCond = new SwoGroupCond();
+			
+			String filterId = params.getFilterId();
+			if(filterId != null) {
+				if(filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {
+				} else if(filterId.equals(SearchFilter.FILTER_MY_INSTANCES)) {
+					SwoGroupMember swoGroupMember = new SwoGroupMember();       
+					swoGroupMember.setUserId(user.getId());		
+					SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
+					swoGroupMembers[0] = swoGroupMember;
+					swoGroupCond.setSwoGroupMembers(swoGroupMembers);
+				}
+			}
+
+			String searchKey = params.getSearchKey();
+			if(!CommonUtil.isEmpty(searchKey))
+				swoGroupCond.setNameLike(searchKey);
+
+			String[] groupIdsByNotBelongToClosedGroup = ModelConverter.getGroupIdsByNotBelongToClosedGroup(user);
+			swoGroupCond.setGroupIdNotIns(groupIdsByNotBelongToClosedGroup);
+
+			long totalCount =  getSwoManager().getGroupSize(user.getId(), swoGroupCond);
+
+			int pageSize = params.getPageSize();
+			if(pageSize == 0) pageSize = 20;
+
+			int currentPage = params.getCurrentPage();
+			if(currentPage == 0) currentPage = 1;
+
+			int totalPages = (int)totalCount % pageSize;
+
+			if(totalPages == 0)
+				totalPages = (int)totalCount / pageSize;
+			else
+				totalPages = (int)totalCount / pageSize + 1;
+
+			int result = 0;
+
+			if(params.getPagingAction() != 0) {
+				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
+					result = (((currentPage - 1) / 10) * 10) + 11;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
+					result = totalPages;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
+					result = ((currentPage - 1) / 10) * 10;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
+					result = 1;
+				}
+				currentPage = result;
+			}
+
+			if(previousPageSize != pageSize)
+				currentPage = 1;
+
+			previousPageSize = pageSize;
+
+			if((long)((pageSize * (currentPage - 1)) + 1) > (int)totalCount)
+				currentPage = 1;
+
+			if (currentPage > 0)
+				swoGroupCond.setPageNo(currentPage-1);
+	
+			CommunityInfoList instanceInfoList = new CommunityInfoList();
+			instanceInfoList.setType(CommunityInfoList.TYPE_GROUP_INFO_LIST);
+			
+			SortingField sf = params.getSortingField();
+			String columnName = "";
+			boolean isAsc;
+
+			if (sf != null) {
+				columnName  = CommonUtil.toDefault(sf.getFieldId(), SwoGroup.A_CREATIONDATE);
+				isAsc = sf.isAscending();
+			} else {
+				columnName = SwoGroup.A_CREATIONDATE;
+				isAsc = false;
+			}
+			SortingField sortingField = new SortingField();
+			sortingField.setFieldId(columnName);
+			sortingField.setAscending(isAsc);
+
+			if(totalCount>0){
+				swoGroupCond.setPageSize(pageSize);
+	
+				swoGroupCond.setOrders(new Order[]{new Order(columnName, isAsc)});
+	
+				SwoGroup[] swoGroups = getSwoManager().getGroups(user.getId(), swoGroupCond, IManager.LEVEL_ALL);
+				
+				if(CommonUtil.isEmpty(swoGroups))
+					return null;
+		
+				int recordSize = swoGroups.length;
+	
+				List<GroupInfo> groupInfoList = new ArrayList<GroupInfo>();
+				for(int i=0; i<recordSize; i++) {
+					GroupInfo groupInfo = ModelConverter.getGroupInfoBySwoGroup(null, swoGroups[i]);
+					groupInfoList.add(groupInfo);
+				}
+				if(!CommonUtil.isEmpty(groupInfoList)) {
+					GroupInfo[] groupInfos = new GroupInfo[groupInfoList.size()];
+					groupInfoList.toArray(groupInfos);
+					instanceInfoList.setCommunityDatas(groupInfos);
+				}			
+			}
+
+			instanceInfoList.setTotalSize((int)totalCount);
+			instanceInfoList.setSortedField(sortingField);
+			instanceInfoList.setPageSize(pageSize);
+			instanceInfoList.setTotalPages(totalPages);
+			instanceInfoList.setCurrentPage(currentPage);
+
+			return instanceInfoList;
+		} catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private CommunityInfoList getDepartmentInfoList(RequestParams params) throws Exception{
+		try {
+			User user = SmartUtil.getCurrentUser();
+			if(user == null)
+				return null;
+			String userId = user.getId();
+
+			SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
+			
+			swoDepartmentCond.setIdNotIns(new String[]{Department.DEPARTMENT_ID_ROOT, user.getCompanyId()});
+			String filterId = params.getFilterId();
+			if(filterId != null) {
+				if(filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {
+				} else if(filterId.equals(SearchFilter.FILTER_MY_ASCEND_DEPARTMENTS)) {
+					DepartmentInfo[] ascendentDepartments = getMyDepartments();
+					if(!SmartUtil.isBlankObject(ascendentDepartments)){
+						String[] idIns = new String[ascendentDepartments.length];
+						for(int i=0; i<ascendentDepartments.length; i++){
+							idIns[i] = ascendentDepartments[i].getId();
+						}
+						swoDepartmentCond.setIdIns(idIns);
+					}
+				} else if(filterId.equals(SearchFilter.FILTER_MY_DESCEND_DEPARTMENTS)) {
+					DepartmentInfo[] descendentDepartments = getMyChildDepartments();
+					if(!SmartUtil.isBlankObject(descendentDepartments)){
+						String[] idIns = new String[descendentDepartments.length];
+						for(int i=0; i<descendentDepartments.length; i++){
+							idIns[i] = descendentDepartments[i].getId();
+						}
+						swoDepartmentCond.setIdIns(idIns);
+					}
+				}
+			}
+
+			String searchKey = params.getSearchKey();
+			if(!CommonUtil.isEmpty(searchKey))
+				swoDepartmentCond.setNameLike(searchKey);
+
+			long totalCount =  getSwoManager().getDepartmentSize(userId, swoDepartmentCond);
+
+			int pageSize = params.getPageSize();
+			if(pageSize == 0) pageSize = 20;
+
+			int currentPage = params.getCurrentPage();
+			if(currentPage == 0) currentPage = 1;
+
+			int totalPages = (int)totalCount % pageSize;
+
+			if(totalPages == 0)
+				totalPages = (int)totalCount / pageSize;
+			else
+				totalPages = (int)totalCount / pageSize + 1;
+
+			int result = 0;
+
+			if(params.getPagingAction() != 0) {
+				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
+					result = (((currentPage - 1) / 10) * 10) + 11;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
+					result = totalPages;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
+					result = ((currentPage - 1) / 10) * 10;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
+					result = 1;
+				}
+				currentPage = result;
+			}
+
+			if(previousPageSize != pageSize)
+				currentPage = 1;
+
+			previousPageSize = pageSize;
+
+			if((long)((pageSize * (currentPage - 1)) + 1) > (int)totalCount)
+				currentPage = 1;
+
+			if (currentPage > 0)
+				swoDepartmentCond.setPageNo(currentPage-1);
+	
+			CommunityInfoList instanceInfoList = new CommunityInfoList();
+			instanceInfoList.setType(CommunityInfoList.TYPE_DEPARTMENT_INFO_LIST);
+			
+			SortingField sf = params.getSortingField();
+			String columnName = "";
+			boolean isAsc;
+
+			if (sf != null) {
+				columnName  = CommonUtil.toDefault(sf.getFieldId(), SwoDepartment.A_MODIFICATIONDATE);
+				isAsc = sf.isAscending();
+			} else {
+				columnName = SwoDepartment.A_MODIFICATIONDATE;
+				isAsc = false;
+			}
+			SortingField sortingField = new SortingField();
+			sortingField.setFieldId(columnName);
+			sortingField.setAscending(isAsc);
+
+			if(totalCount>0){
+				swoDepartmentCond.setPageSize(pageSize);
+	
+				swoDepartmentCond.setOrders(new Order[]{new Order(columnName, isAsc)});
+	
+				SwoDepartment[] swoDepartments = getSwoManager().getDepartments(user.getId(), swoDepartmentCond, IManager.LEVEL_ALL);
+				
+				if(CommonUtil.isEmpty(swoDepartments))
+					return null;
+		
+				int recordSize = swoDepartments.length;
+	
+				List<DepartmentInfo> departmentInfoList = new ArrayList<DepartmentInfo>();
+				for(int i=0; i<recordSize; i++) {
+					DepartmentInfo departmentInfo = ModelConverter.getDepartmentInfoByDepartmentId(swoDepartments[i].getId());
+					UserInfo[] members = getAllUsersByDepartmentId(departmentInfo.getId());
+					CommunityInfo[] descendent = getAllComsByDepartmentId(departmentInfo.getId(), true);
+					if(!SmartUtil.isBlankObject(members))
+						departmentInfo.setNumberOfMembers(members.length);
+					if(!SmartUtil.isBlankObject(descendent))
+						departmentInfo.setNumberOfDescendents(descendent.length);
+					departmentInfo.setLastModificationDate(new LocalDate(swoDepartments[i].getModificationDate().getTime()));
+					departmentInfo.setLastModificationUser(ModelConverter.getUserInfoByUserId(swoDepartments[i].getModificationUser()));
+					departmentInfoList.add(departmentInfo);
+				}
+				if(!CommonUtil.isEmpty(departmentInfoList)) {
+					DepartmentInfo[] departmentInfos = new DepartmentInfo[departmentInfoList.size()];
+					departmentInfoList.toArray(departmentInfos);
+					instanceInfoList.setCommunityDatas(departmentInfos);
+				}			
+			}
+
+			instanceInfoList.setTotalSize((int)totalCount);
+			instanceInfoList.setSortedField(sortingField);
+			instanceInfoList.setPageSize(pageSize);
+			instanceInfoList.setTotalPages(totalPages);
+			instanceInfoList.setCurrentPage(currentPage);
+
+			return instanceInfoList;
+		} catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private CommunityInfoList getUserInfoList(RequestParams params) throws Exception{
+		try {
+			User user = SmartUtil.getCurrentUser();
+			if(user == null)
+				return null;
+			String userId = user.getId();
+
+			SwoUserCond swoUserCond = new SwoUserCond();
+			
+			swoUserCond.setIdNotIns(new String[]{User.USER_ID_PROCESS, User.USER_ID_ADMINISTRATOR});
+			String filterId = params.getFilterId();
+			if(filterId != null) {
+				if(filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {
+				} else if(filterId.equals(SearchFilter.FILTER_MY_ASCEND_DEPARTMENTS)) {
+				} else if(filterId.equals(SearchFilter.FILTER_MY_DESCEND_DEPARTMENTS)) {
+				}
+			}
+
+			String searchKey = params.getSearchKey();
+			if(!CommonUtil.isEmpty(searchKey))
+				swoUserCond.setNameLike(searchKey);
+
+			long totalCount =  getSwoManager().getUserSize(userId, swoUserCond);
+
+			int pageSize = params.getPageSize();
+			if(pageSize == 0) pageSize = 20;
+
+			int currentPage = params.getCurrentPage();
+			if(currentPage == 0) currentPage = 1;
+
+			int totalPages = (int)totalCount % pageSize;
+
+			if(totalPages == 0)
+				totalPages = (int)totalCount / pageSize;
+			else
+				totalPages = (int)totalCount / pageSize + 1;
+
+			int result = 0;
+
+			if(params.getPagingAction() != 0) {
+				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
+					result = (((currentPage - 1) / 10) * 10) + 11;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
+					result = totalPages;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
+					result = ((currentPage - 1) / 10) * 10;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
+					result = 1;
+				}
+				currentPage = result;
+			}
+
+			if(previousPageSize != pageSize)
+				currentPage = 1;
+
+			previousPageSize = pageSize;
+
+			if((long)((pageSize * (currentPage - 1)) + 1) > (int)totalCount)
+				currentPage = 1;
+
+			if (currentPage > 0)
+				swoUserCond.setPageNo(currentPage-1);
+	
+			CommunityInfoList instanceInfoList = new CommunityInfoList();
+			instanceInfoList.setType(CommunityInfoList.TYPE_USER_INFO_LIST);
+			
+			SortingField sf = params.getSortingField();
+			String columnName = "";
+			boolean isAsc;
+
+			if (sf != null) {
+				columnName  = CommonUtil.toDefault(sf.getFieldId(), SwoUser.A_NAME);
+				isAsc = sf.isAscending();
+			} else {
+				columnName = SwoUser.A_NAME;
+				isAsc = false;
+			}
+			SortingField sortingField = new SortingField();
+			sortingField.setFieldId(columnName);
+			sortingField.setAscending(isAsc);
+
+			if(totalCount>0){
+				swoUserCond.setPageSize(pageSize);
+	
+				swoUserCond.setOrders(new Order[]{new Order(columnName, isAsc)});
+	
+				SwoUser[] swoUsers = getSwoManager().getUsers(user.getId(), swoUserCond, IManager.LEVEL_ALL);
+				
+				if(CommonUtil.isEmpty(swoUsers))
+					return null;
+		
+				int recordSize = swoUsers.length;
+	
+				List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+				for(int i=0; i<recordSize; i++) {
+					UserInfo userInfo = ModelConverter.getUserInfoByUserId(swoUsers[i].getId());
+					DepartmentInfo departmentInfo = userInfo.getDepartment();
+					if(!SmartUtil.isBlankObject(departmentInfo)){
+						departmentInfo.setFullpathName(ModelConverter.getDepartmentInfoFullpathNameByDepartmentId(departmentInfo.getId()));
+						userInfo.setDepartment(departmentInfo);
+					}
+					userInfoList.add(userInfo);
+				}
+				if(!CommonUtil.isEmpty(userInfoList)) {
+					UserInfo[] userInfos = new UserInfo[userInfoList.size()];
+					userInfoList.toArray(userInfos);
+					instanceInfoList.setCommunityDatas(userInfos);
+				}			
+			}
+
+			instanceInfoList.setTotalSize((int)totalCount);
+			instanceInfoList.setSortedField(sortingField);
+			instanceInfoList.setPageSize(pageSize);
+			instanceInfoList.setTotalPages(totalPages);
+			instanceInfoList.setCurrentPage(currentPage);
+
+			return instanceInfoList;
+		} catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

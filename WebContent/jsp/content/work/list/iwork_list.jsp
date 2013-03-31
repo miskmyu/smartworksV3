@@ -163,7 +163,8 @@
 		if(!SmartUtil.isBlankObject(savedWorkId) && savedWorkId.equals(work.getId())){
 			params = (RequestParams)session.getAttribute("requestParams");
 		}
-	}if (params != null){
+	}
+	if (params != null){
 		selectedFilterId = params.getFilterId();
 		searchKey = params.getSearchKey();
 		params.setSearchFilter(null);
@@ -176,14 +177,14 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_iwork_list_page js_work_list_page" workId=<%=work.getId()%>>
+<div class="section_portlet js_iwork_list_page js_work_list_page" workId="<%=work.getId()%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
 
 			<!-- 타이틀 -->
 			<div class="body_titl">
-				<div class="body_titl_iworks title"><%=work.getName()%></div>
+				<div class="body_titl_iworks title"><%=work.getFullpathName()%></div>
 				<!-- 우측 버튼 -->
 				<div class="fr txt_btn icon_smartbuilder">
 					<%if(work.amIBuilderUser()){ %>

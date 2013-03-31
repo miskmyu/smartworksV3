@@ -36,6 +36,7 @@ public class SwoGroupCond extends SwoObjectCond {
 	public static final String A_GROUP_MEMBERS = "swoGroupMembers";
 
 	private String[] groupIdIns;
+	private String[] groupIdNotIns;
 	private String groupLeader;
 	private String notGroupLeader;
 	private String groupType;
@@ -108,6 +109,12 @@ public class SwoGroupCond extends SwoObjectCond {
 	}
 	public void setGroupIdIns(String[] groupIdIns) {
 		this.groupIdIns = groupIdIns;
+	}
+	public String[] getGroupIdNotIns() {
+		return groupIdNotIns;
+	}
+	public void setGroupIdNotIns(String[] groupIdNotIns) {
+		this.groupIdNotIns = groupIdNotIns;
 	}
 	public Date getCreateDateTo() {
 		return createDateTo;

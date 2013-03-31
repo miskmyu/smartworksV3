@@ -38,7 +38,9 @@ public class SwoDepartmentCond extends SwoObjectCond {
 	private boolean isParentNull;
 	private String type;
 	private String description;
+	private String nameLike;
 	private String[] idIns;
+	private String[] idNotIns;
 
 	public SwoDepartmentCond() {
 		super();
@@ -244,5 +246,17 @@ public class SwoDepartmentCond extends SwoObjectCond {
 	}
 	public void setIdIns(String[] idIns) {
 		this.idIns = idIns;
+	}
+	public String[] getIdNotIns() {
+		return idNotIns;
+	}
+	public void setIdNotIns(String[] idNotIns) {
+		this.idNotIns = idNotIns;
+	}
+	public String getNameLike() {
+		return nameLike;
+	}
+	public void setNameLike(String nameLike) {
+		this.nameLike = nameLike;
 	}
 }

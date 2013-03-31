@@ -46,6 +46,12 @@ public class FormField extends BaseObject{
 	public static final String ID_APP_PUBLISHED_COMPANY = "appPublishedCompany";
 	public static final String ID_APP_PUBLISHED_DATE = "appPublishedDate";
 
+	public static final String ID_NAME = "name";
+	public static final String ID_GROUP_IS_PUBLIC = "groupType";
+	public static final String ID_GROUP_LEADER = "groupLeader";
+	public static final String ID_CREATION_USER = "creationUser";
+	public static final String ID_CREATION_DATE = "creationDate";
+	
 	public static final String ID_NUM_EVENT_START_TIME = "1";
 	public static final String ID_NUM_EVENT_END_TIME = "2";
 	public static final String ID_NUM_RELATED_USERS = "5";
