@@ -8,6 +8,7 @@
 
 package net.smartworks.server.engine.organization.model;
 
+import java.util.Date;
 import net.smartworks.server.engine.common.model.BaseObject;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.XmlUtil;
@@ -25,6 +26,7 @@ public class SwoConfig extends SwoObject {
 	
 	private static final String NAME = CommonUtil.toName(SwoConfig.class, PREFIX);
 
+	
 	public static final String A_SMTPADDRESS = "smtpAddress";
 	public static final String A_USERID = "userId";
 	public static final String A_PASSWORD = "password";
@@ -32,7 +34,10 @@ public class SwoConfig extends SwoObject {
 	public static final String A_USEMESSAGINGSERVICE = "useMessagingService";
 	public static final String A_USECHATTINGSERVICE = "useChattingService";
 	public static final String A_USERRETURNFUNCTION = "userReturnFunction";
-
+	
+	public static final String A_SETUPCOMPANYDATE = "setupCompanyDate";
+	// 추카 컬럼
+	
 	private String smtpAddress;
 	private String userId;
 	private String password;
@@ -40,6 +45,9 @@ public class SwoConfig extends SwoObject {
 	private boolean useMessagingService = true;
 	private boolean useChattingService = true;
 	private boolean userReturnFunction = true;
+	
+	private Date setupCompanyDate;
+	// 추가 컬럼
 	
 	public SwoConfig() {
 		super();
@@ -200,8 +208,7 @@ public class SwoConfig extends SwoObject {
 			return null;
 		}
 	}
-	
-	
+		
 
 	public boolean isActivity() {
 		return isActivity;
@@ -244,5 +251,12 @@ public class SwoConfig extends SwoObject {
 	}
 	public void setUserReturnFunction(boolean userReturnFunction) {
 		this.userReturnFunction = userReturnFunction;
+	}
+	
+	public Date getSetupCompanyDate() {
+		return setupCompanyDate;
+	}
+	public void setsetupCompanyDate(Date setupCompanyDate) {
+		this.setupCompanyDate = setupCompanyDate;
 	}
 }
