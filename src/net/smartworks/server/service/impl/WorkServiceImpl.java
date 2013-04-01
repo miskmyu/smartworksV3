@@ -1100,6 +1100,7 @@ public class WorkServiceImpl implements IWorkService {
 						String value = swdDataField.getValue();
 						String refRecordId = swdDataField.getRefRecordId();
 						List<Map<String, String>> resultUsers = null;
+						List<Map<String, String>> resultDepartments = null;
 						if(formatType.equals(FormField.TYPE_USER)) {
 							if(value != null && refRecordId != null) {
 								String[] values = value.split(";");
@@ -1120,6 +1121,26 @@ public class WorkServiceImpl implements IWorkService {
 								}
 							}
 							swdDataField.setUsers(resultUsers);
+						}else if(formatType.equals(FormField.TYPE_DEPARTMENT)) {
+							if(value != null && refRecordId != null) {
+								String[] values = value.split(";");
+								String[] refRecordIds = refRecordId.split(";");
+								resultDepartments = new ArrayList<Map<String,String>>();
+								if(values.length > 0 && refRecordIds.length > 0) {
+									for(int j=0; j<values.length; j++) {
+										Map<String, String> map = new LinkedHashMap<String, String>();
+										map.put("comId", refRecordIds[j]);
+										map.put("name", values[j]);
+										resultDepartments.add(map);
+									}
+								} else {
+									Map<String, String> map = new LinkedHashMap<String, String>();
+									map.put("comId", refRecordId);
+									map.put("name", value);
+									resultDepartments.add(map);
+								}
+							}
+							swdDataField.setDepartments(resultDepartments);
 						} else if(formatType.equals(FormField.TYPE_DATE)) {
 							if(value != null) {
 								try {

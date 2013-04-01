@@ -61,6 +61,7 @@ public class FormField extends BaseObject{
 	public static final String TYPE_OBJECT_ID = "objectId"; // work
 	public static final String TYPE_TEXT = "textInput"; //string
 	public static final String TYPE_USER = "userField"; //user
+	public static final String TYPE_DEPARTMENT = "departmentField"; //user
 	public static final String TYPE_FILE = "fileField"; //file
 	public static final String TYPE_OTHER_WORK = "refFormField"; // form field of the referred work
 	public static final String TYPE_RICHTEXT_EDITOR = "richEditor"; //string
@@ -82,16 +83,16 @@ public class FormField extends BaseObject{
 	public static final String TYPE_COMBO_PROCESS_TYPE = "comboProcessType";
 	
 	public static final String[] FORM_FIELD_TYPES_ALL = new String[] {
-		TYPE_TEXT, TYPE_USER, TYPE_FILE, TYPE_OTHER_WORK, TYPE_RICHTEXT_EDITOR, TYPE_NUMBER, TYPE_CURRENCY, TYPE_PERCENT,
+		TYPE_TEXT, TYPE_USER, TYPE_DEPARTMENT, TYPE_FILE, TYPE_OTHER_WORK, TYPE_RICHTEXT_EDITOR, TYPE_NUMBER, TYPE_CURRENCY, TYPE_PERCENT,
 		TYPE_COMBO, TYPE_IMAGE, TYPE_CHECK_BOX, TYPE_RADIO_BUTTON, TYPE_EMAIL, TYPE_DATE, TYPE_TIME, TYPE_DATETIME, TYPE_DATA_GRID
 	};
 	public static final String[] FORM_FIELD_TYPES_VARIABLE = new String[] {
-		TYPE_TEXT, TYPE_USER, TYPE_FILE, TYPE_NUMBER, TYPE_CURRENCY, TYPE_PERCENT, TYPE_COMBO, TYPE_CHECK_BOX,
+		TYPE_TEXT, TYPE_USER, TYPE_DEPARTMENT, TYPE_FILE, TYPE_NUMBER, TYPE_CURRENCY, TYPE_PERCENT, TYPE_COMBO, TYPE_CHECK_BOX,
 		TYPE_CURRENCY, TYPE_PERCENT, TYPE_RADIO_BUTTON, TYPE_EMAIL, TYPE_DATE, TYPE_TIME, TYPE_DATETIME
 	};	
 	private static final String PREFIX = "field.type.";
 	public static final String[] FORM_FIELD_TYPE_NAMES_VARIABLE = new String[] {
-		SmartMessage.getString(PREFIX+TYPE_TEXT), SmartMessage.getString(PREFIX+TYPE_USER), SmartMessage.getString(PREFIX+TYPE_FILE),
+		SmartMessage.getString(PREFIX+TYPE_TEXT), SmartMessage.getString(PREFIX+TYPE_USER), SmartMessage.getString(PREFIX+TYPE_DEPARTMENT), SmartMessage.getString(PREFIX+TYPE_FILE),
 		SmartMessage.getString(PREFIX+TYPE_NUMBER), SmartMessage.getString(PREFIX+TYPE_CURRENCY), SmartMessage.getString(PREFIX+TYPE_PERCENT),
 		SmartMessage.getString(PREFIX+TYPE_COMBO), SmartMessage.getString(PREFIX+TYPE_CHECK_BOX), SmartMessage.getString(PREFIX+TYPE_CURRENCY),
 		SmartMessage.getString(PREFIX+TYPE_PERCENT), SmartMessage.getString(PREFIX+TYPE_RADIO_BUTTON), SmartMessage.getString(PREFIX+TYPE_EMAIL),
@@ -160,6 +161,8 @@ public class FormField extends BaseObject{
 			return "string_field";
 		}else if(type.equals(TYPE_USER)){
 			return "user_field";
+		}else if(type.equals(TYPE_DEPARTMENT)){
+			return "department_field";
 		}else if(type.equals(TYPE_FILE)){
 			return "file_field";
 		}else if(type.equals(TYPE_OTHER_WORK)){
@@ -189,6 +192,8 @@ public class FormField extends BaseObject{
 		if(type.equals(TYPE_TEXT) || type.equals(TYPE_RICHTEXT_EDITOR) || type.equals(TYPE_COMBO) || type.equals(TYPE_IMAGE) || type.equals(TYPE_EMAIL) || type.equals(TYPE_RADIO_BUTTON)){
 			return "";
 		}else if(type.equals(TYPE_USER)){
+			return "";
+		}else if(type.equals(TYPE_DEPARTMENT)){
 			return "";
 		}else if(type.equals(TYPE_FILE)){
 			return "";
@@ -227,6 +232,8 @@ public class FormField extends BaseObject{
 		}else if(type.equals(TYPE_RADIO_BUTTON)){
 			return "";
 		}else if(type.equals(TYPE_USER)){
+			return "";
+		}else if(type.equals(TYPE_DEPARTMENT)){
 			return "";
 		}else if(type.equals(TYPE_FILE)){
 			return "";

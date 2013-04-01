@@ -652,7 +652,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					String formatType = swfField.getFormat().getType();
 					String value = swdDataField.getValue();
 					String refRecordId = swdDataField.getRefRecordId();
-					List<Map<String, String>> resultUsers = null;
+					List<Map<String, String>> resultUsers = null, resultDepartments=null;
 					if(formatType.equals(FormField.TYPE_USER)) {
 						if(value != null && refRecordId != null) {
 							String[] values = value.split(";");
@@ -673,6 +673,26 @@ public class InstanceServiceImpl implements IInstanceService {
 							}
 						}
 						swdDataField.setUsers(resultUsers);
+					}else if(formatType.equals(FormField.TYPE_DEPARTMENT)) {
+						if(value != null && refRecordId != null) {
+							String[] values = value.split(";");
+							String[] refRecordIds = refRecordId.split(";");
+							resultDepartments = new ArrayList<Map<String,String>>();
+							if(values.length > 0 && refRecordIds.length > 0) {
+								for(int j=0; j<values.length; j++) {
+									Map<String, String> map = new LinkedHashMap<String, String>();
+									map.put("comId", refRecordIds[j]);
+									map.put("name", values[j]);
+									resultDepartments.add(map);
+								}
+							} else {
+								Map<String, String> map = new LinkedHashMap<String, String>();
+								map.put("comId", refRecordId);
+								map.put("name", value);
+								resultDepartments.add(map);
+							}
+						}
+						swdDataField.setDepartments(resultDepartments);
 					} else if(formatType.equals(FormField.TYPE_DATE)) {
 						if(value != null) {
 							try {
@@ -1445,13 +1465,13 @@ public class InstanceServiceImpl implements IInstanceService {
 							
 						} else if (functionId.equals("mis:getDeptId")){		
 							if(func != null){
-							funcDeptId = func.getDeptId();
-							SwoDepartment funcdept = getSwoManager().getDepartment(userId, funcDeptId, "all");
-								if(funcdept != null){
-									funcDeptName = funcdept.getName();
-								}
+								funcDeptId = func.getDeptId();
+//								SwoDepartment funcdept = getSwoManager().getDepartment(userId, funcDeptId, "all");
+//								if(funcdept != null){
+//									funcDeptName = funcdept.getName();
+//								}
 							}
-							SwdDataField dataField = toDataField(userId, field, funcDeptName);
+							SwdDataField dataField = toDataField(userId, field, funcDeptId);
 							dataField.setId(fieldId);
 							resultStack.push(dataField);
 							
@@ -1730,14 +1750,16 @@ public class InstanceServiceImpl implements IInstanceService {
 			return null;
 		SwfFormat fieldFormat = field.getFormat();
 		SwdDataField obj = null;
-		if (fieldFormat == null || !"userField".equals(fieldFormat.getType())) {
+		if (fieldFormat == null || (!"userField".equals(fieldFormat.getType()) && !"departmentField".equals(fieldFormat.getType()))) {
 			obj = new SwdDataField();
 			obj.setId(field.getId());
 			obj.setType(field.getSystemType());
 			obj.setName(field.getName());
 			obj.setValue(id);
-		} else {
+		} else if("userField".equals(fieldFormat.getType())){
 			obj = toUserDataField(user, id);
+		}else if("departmentField".equals(fieldFormat.getType())){
+			obj = toDepartmentDataField(user, id);
 		}
 		return obj;
 	}
@@ -1752,6 +1774,19 @@ public class InstanceServiceImpl implements IInstanceService {
 		dataField.setRefFormField("4");
 		dataField.setRefRecordId(id);
 		dataField.setValue(userModel.getPosition() == null || userModel.getPosition().equalsIgnoreCase("") ? userModel.getName() : userModel.getPosition() + " " + userModel.getName());
+		return dataField;
+	}
+	private SwdDataField toDepartmentDataField(String user, String id) throws Exception {
+		if (CommonUtil.isEmpty(id))
+			return null;
+		SwoDepartment departModel = getSwoManager().getDepartment(user, id, IManager.LEVEL_LITE);
+		if (departModel == null)
+			return null;
+		SwdDataField dataField = new SwdDataField();
+		dataField.setRefForm("frm_depart_SYSTEM");
+		dataField.setRefFormField("4");
+		dataField.setRefRecordId(id);
+		dataField.setValue(ModelConverter.getDepartmentInfoFullpathNameByDepartmentId(id));
 		return dataField;
 	}
 	public String setInformationWorkInstance_old(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -2048,6 +2083,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			List fieldDataList = new ArrayList();
 			List<Map<String, String>> files = null;
 			List<Map<String, String>> users = null;
+			List<Map<String, String>> departments = null;
 			String groupId = null;
 			List<String> groupIdList = new ArrayList();
 			Map<String, List<Map<String, String>>> fileGroupMap = new HashMap<String, List<Map<String, String>>>();
@@ -2095,6 +2131,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						String autoIndexValue = (String)valueMap.get("value");
 						autoIndexSelectedValue = (String)valueMap.get("selectedValue");
 						users = (ArrayList<Map<String,String>>)valueMap.get("users");
+						departments = (ArrayList<Map<String,String>>)valueMap.get("departments");
 
 						if(!CommonUtil.isEmpty(groupId)) {
 							files = (ArrayList<Map<String,String>>)valueMap.get("files");
@@ -2137,6 +2174,24 @@ public class InstanceServiceImpl implements IInstanceService {
 									Map<String, String> user = users.get(i);
 									resultRefRecordId += user.get("id") + symbol;
 									resultValue += user.get("name") + symbol;
+								}
+							}
+							refRecordId = resultRefRecordId;
+							value = resultValue;
+						} else if(!CommonUtil.isEmpty(departments)) {
+							refForm = "frm_depart_SYSTEM";
+							refFormField = "4";
+							String resultRefRecordId = "";
+							String resultValue = "";
+							String symbol = ";";
+							if(departments.size() == 1) {
+								resultRefRecordId = departments.get(0).get("id");
+								resultValue = departments.get(0).get("name");
+							} else {
+								for(int i=0; i < departments.subList(0, departments.size()).size(); i++) {
+									Map<String, String> department = departments.get(i);
+									resultRefRecordId += department.get("id") + symbol;
+									resultValue += department.get("name") + symbol;
 								}
 							}
 							refRecordId = resultRefRecordId;
@@ -3185,6 +3240,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			List fieldDataList = new ArrayList();
 			List<Map<String, String>> files = null;
 			List<Map<String, String>> users = null;
+			List<Map<String, String>> departments = null;
 			Map<String, List<Map<String, String>>> fileGroupMap = new HashMap<String, List<Map<String,String>>>();
 			String groupId = null;
 			while (itr.hasNext()) {
@@ -3254,6 +3310,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						String autoIndexValue = (String)valueMap.get("value");
 						autoIndexSelectedValue = (String)valueMap.get("selectedValue");
 						users = (ArrayList<Map<String,String>>)valueMap.get("users");
+						departments = (ArrayList<Map<String,String>>)valueMap.get("departments");
 		
 						if(!CommonUtil.isEmpty(groupId)) {
 							files = (ArrayList<Map<String,String>>)valueMap.get("files");
@@ -3300,6 +3357,24 @@ public class InstanceServiceImpl implements IInstanceService {
 									Map<String, String> user = users.get(i);
 									resultRefRecordId += user.get("id") + symbol;
 									resultValue += user.get("name") + symbol;
+								}
+							}
+							refRecordId = resultRefRecordId;
+							value = resultValue;
+						} else if(!CommonUtil.isEmpty(departments)) {
+							refForm = "frm_depart_SYSTEM";
+							refFormField = "4"; 
+							String resultRefRecordId = "";
+							String resultValue = "";
+							String symbol = ";";
+							if(departments.size() == 1) {
+								resultRefRecordId = departments.get(0).get("id");
+								resultValue = departments.get(0).get("name");
+							} else {
+								for(int i=0; i < departments.subList(0, departments.size()).size(); i++) {
+									Map<String, String> department = departments.get(i);
+									resultRefRecordId += department.get("id") + symbol;
+									resultValue += department.get("name") + symbol;
 								}
 							}
 							refRecordId = resultRefRecordId;
