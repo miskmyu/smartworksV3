@@ -630,8 +630,12 @@ public class DepXpdlManagerImpl implements IDepManager {
 							if (CommonUtil.isEmpty(attrName) || attrValue == null)
 								continue;
 							if (attrName.equals("UserTaskType")) {
-								if (attrValue.toString().equalsIgnoreCase("approval"))
-									userTaskType = "approval";
+//								if (attrValue.toString().equalsIgnoreCase("approval"))
+//									userTaskType = "approval";
+							} else if (attrName.equals("ApprovalLine")) {
+								if(!"EMPTYAPPROVAL".equalsIgnoreCase((String)attrValue)){
+									taskDef.setExtendedPropertyValue("ApprovalLine", (String)attrValue);
+								}
 							} else if (attrName.equals("ApprovalRequired")) {
 								approvalRequired = CommonUtil.toBoolean(attrValue);
 							} else if (attrName.equals("MeanTime")) {

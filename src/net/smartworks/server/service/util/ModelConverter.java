@@ -3690,6 +3690,7 @@ public class ModelConverter {
 				String actId = taskDef.getExtendedPropertyValue("activityId");
 				String isStartActivityStr = taskDef.getExtendedPropertyValue("startActivity");
 				boolean isStartActivity = CommonUtil.toBoolean(isStartActivityStr);
+				String approvalLineId = taskDef.getExtendedPropertyValue("ApprovalLine");
 				SmartTaskInfo smartTaskInfo = new SmartTaskInfo();
 				
 				if (taskDef != null && taskDef.getAssignee() != null && taskDef.getAssignee().indexOf("@") != -1) {
@@ -3702,6 +3703,9 @@ public class ModelConverter {
 				smartTaskInfo.setId(actId);
 				smartTaskInfo.setName(taskDef.getName());
 				smartTaskInfo.setStartTask(isStartActivity);
+				if(approvalLineId!=null){
+					smartTaskInfo.setApprovalLineId(approvalLineId);					
+				}
 				
 				SmartFormInfo formInfo = new SmartFormInfo();
 				formInfo.setDescription(taskDef.getDescription());
