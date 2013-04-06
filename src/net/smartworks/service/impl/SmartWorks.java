@@ -341,6 +341,11 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public CommunityInfo[] getMyFavoriteCommunities() throws Exception {
+		return communityService.getMyFavoriteCommunities();
+	}
+
+	@Override
 	public WorkInfo[] getAllWorkCategoryByCategoryId(String categoryId) throws Exception {
 		return workService.getAllWorkCategoryByCategoryId(categoryId);
 	}
@@ -749,6 +754,16 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void removeAFavoriteWork(HttpServletRequest request) throws Exception {
 		workService.removeAFavoriteWork(request.getParameter("workId"));		
+	}
+
+	@Override
+	public void addAFavoriteCommunity(HttpServletRequest request) throws Exception {
+		communityService.addAFavoriteCommunity(request.getParameter("comId"));
+	}
+
+	@Override
+	public void removeAFavoriteCommunity(HttpServletRequest request) throws Exception {
+		communityService.removeAFavoriteCommunity(request.getParameter("comId"));		
 	}
 
 	@Override

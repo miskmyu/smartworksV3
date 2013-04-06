@@ -196,6 +196,8 @@ public interface ISmartWorks {
 
 	public abstract SmartWorkInfo[] getMyFavoriteWorks() throws Exception;
 
+	public abstract CommunityInfo[] getMyFavoriteCommunities() throws Exception;
+
 	public abstract WorkInfo[] getAllWorkCategoryByCategoryId(String categoryId) throws Exception;
 	
 	public abstract WorkInfo[] getMyAllWorksByCategoryId(String categoryId) throws Exception;
@@ -409,6 +411,10 @@ public interface ISmartWorks {
 	public abstract void addAFavoriteWork(HttpServletRequest request) throws Exception;
 
 	public abstract void removeAFavoriteWork(HttpServletRequest request) throws Exception;
+
+	public abstract void addAFavoriteCommunity(HttpServletRequest request) throws Exception;
+
+	public abstract void removeAFavoriteCommunity(HttpServletRequest request) throws Exception;
 
 	public abstract CompanyGeneral getCompanyGeneral() throws Exception;
 

@@ -65,6 +65,8 @@
 	 		<th class="r_line" style="width:40px;">
 				<span><fmt:message key="common.title.number"/></span>
 			</th>
+	 		<th class="r_line" style="width:20px;"></th>
+			</th>
 			<th class="r_line">
 				<a href="" class="js_select_field_sorting" fieldId="<%=SwoUser.A_POSITION %>">
 					<fmt:message key='profile.title.position' /><span class="<%if(sortedField.getFieldId().equals(SwoUser.A_POSITION)){
@@ -102,6 +104,7 @@
 			%>
 				<tr class="instance_list" href="<%=target%>">
 					<td class="tc"><%=currentCount--%></td>
+					<td class="tc"><div title="<fmt:message key='nav.works.my_favorite_works'/>" class="js_check_favorite_com icon_fvrt <%if(user.isFavorite()){ %> checked <%} %>" comId="<%=user.getId() %>" ></div></td>
 					<td>
 						<a href="<%=target %>">
 							<div class="noti_pic">
@@ -171,6 +174,8 @@
 		<tr class="tit_bg">
 	 		<th class="r_line" style="width:40px;">
 				<span><fmt:message key="common.title.number"/></span>
+			</th>
+	 		<th class="r_line" style="width:20px;"></th>
 			</th>
 			<th class="r_line">
 				<a href="" class="js_select_field_sorting" fieldId="<%=SwoUser.A_POSITION %>">

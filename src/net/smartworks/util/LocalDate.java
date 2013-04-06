@@ -420,6 +420,12 @@ public class LocalDate extends Date{
 		return new LocalDate((df.parse(yyyyMMddHHmm)).getTime() - TimeZone.getTimeZone(SmartUtil.getCurrentUser().getTimeZone()).getRawOffset());					
 	}
 
+	public static LocalDate convertLocalDateStringToLocalDate1(String yyyyMMdd) throws Exception{
+		if(SmartUtil.isBlankObject(yyyyMMdd) || yyyyMMdd.length()!=8) return null;
+		DateFormat df = new SimpleDateFormat("yyyyMMdd");
+		return new LocalDate((df.parse(yyyyMMdd)).getTime() - TimeZone.getTimeZone(SmartUtil.getCurrentUser().getTimeZone()).getRawOffset());					
+	}
+
 	public static LocalDate convertLocalDateStringToLocalDate2(String yyyyMMdd) throws Exception{
 		if(SmartUtil.isBlankObject(yyyyMMdd) || yyyyMMdd.length()!=10) return null;
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");

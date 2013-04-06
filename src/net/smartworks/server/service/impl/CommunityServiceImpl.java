@@ -50,6 +50,9 @@ import net.smartworks.server.engine.authority.model.SwaGroupCond;
 import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
 import net.smartworks.server.engine.common.loginuser.model.LoginUser;
 import net.smartworks.server.engine.common.manager.IManager;
+import net.smartworks.server.engine.common.menuitem.model.ItmMenuItem;
+import net.smartworks.server.engine.common.menuitem.model.ItmMenuItemList;
+import net.smartworks.server.engine.common.menuitem.model.ItmMenuItemListCond;
 import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.Filters;
 import net.smartworks.server.engine.common.model.Order;
@@ -86,6 +89,8 @@ import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
+import net.smartworks.server.engine.pkg.model.PkgPackage;
+import net.smartworks.server.engine.pkg.model.PkgPackageCond;
 import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.security.model.Login;
@@ -3449,4 +3454,103 @@ public class CommunityServiceImpl implements ICommunityService {
 			return null;
 		}
 	}
+	@Override
+	public CommunityInfo[] getMyFavoriteCommunities() throws Exception {
+		
+		return SmartTest.getMyCommunities();
+	}
+	@Override
+	public void addAFavoriteCommunity(String comId) throws Exception {
+		
+		String communityId = comId;
+
+//		try{
+//			User cUser = SmartUtil.getCurrentUser();
+//			String companyId = cUser.getCompanyId();
+//			String userId = cUser.getId();
+//	
+//			ItmMenuItemListCond menuItemListCond = new ItmMenuItemListCond();
+//			menuItemListCond.setUserId(userId);
+//	
+//			ItmMenuItemList menuItemList = getItmManager().getMenuItemList(userId, menuItemListCond, IManager.LEVEL_LITE);
+//	
+//			PkgPackageCond packageCond = new PkgPackageCond();
+//			packageCond.setPackageId(workId);
+//			packageCond.setCompanyId(companyId);
+//			PkgPackage pkg = getPkgManager().getPackage(userId, packageCond, IManager.LEVEL_LITE);
+//			String groupId = "";
+//			String categoryId = "";
+//			String packageType = "";
+//			String packageName = "";
+//			if(pkg != null) {
+//				groupId = pkg.getObjId();
+//				categoryId = pkg.getCategoryId();
+//				packageType = pkg.getType();
+//				packageName = pkg.getName();
+//			}
+//	
+//			SwfFormCond formCond = new SwfFormCond();
+//			formCond.setCompanyId(companyId);
+//			formCond.setPackageId(workId);
+//			SwfForm[] forms = getSwfManager().getForms(userId, formCond, IManager.LEVEL_LITE);
+//			String formId = "";
+//			if(forms != null) {
+//				formId = forms[0].getId();
+//			}
+//	
+//			ItmMenuItemList newMenuItemList = new ItmMenuItemList();
+//			newMenuItemList.setCompanyId(companyId);
+//			newMenuItemList.setUserId(userId);
+//	
+//			List<ItmMenuItem> itmMenuItemList = new ArrayList<ItmMenuItem>();
+//			ItmMenuItem menuItem = new ItmMenuItem();
+//			menuItem.setCompanyId(companyId);
+//			menuItem.setPackageId(workId);
+//			menuItem.setName(packageName);
+//			menuItem.setGroupId(groupId);
+//			menuItem.setCategoryId(categoryId);
+//			menuItem.setPackageType(packageType);
+//			menuItem.setFormId(formId);
+//			String objId = "";
+//			int itmSeq = 0;
+//			if(menuItemList != null) {
+//				objId = menuItemList.getObjId();
+//				itmSeq = getItmManager().getMaxItmSeq(userId) + 1;
+//			}
+//			menuItem.setObjId(objId);
+//	
+//			itmMenuItemList.add(menuItem);
+//	
+//			ItmMenuItem[] menuItems = new ItmMenuItem[itmMenuItemList.size()];
+//			itmMenuItemList.toArray(menuItems);
+//	
+//			newMenuItemList.setMenuItems(menuItems);
+//	
+//			if(menuItemList == null) {
+//				getItmManager().createMenuItemList(userId, newMenuItemList);
+//			} else {
+//				menuItem.setObjId(objId);
+//				menuItem.setItmSeq(itmSeq);
+//				getItmManager().addMenuItem(userId, menuItem);
+//			}
+//		}catch (Exception e){
+//			// Exception Handling Required
+//			e.printStackTrace();
+//			// Exception Handling Required			
+//		}
+	}
+
+	@Override
+	public void removeAFavoriteCommunity(String comId) throws Exception {
+		String communityId = comId;
+//
+//		try{
+//			User cUser = SmartUtil.getCurrentUser();
+//			String userId = cUser.getId();
+//			getItmManager().removeMenuItem(userId, workId);
+//		}catch (Exception e){
+//			e.printStackTrace();
+//		}
+	}
+
 }

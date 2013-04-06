@@ -50,9 +50,23 @@ public class PrcProcessInstExtend {
 	private String lastTask_tskWorkSpaceType;
 	private String lastTask_tskAccessLevel;
 	private String lastTask_tskAccessValue;
+	private String lastTask_tskIsApprovalSourceTask;
+	private String lastTask_tskTargetApprovalStatus;
 	
 	private int lastTask_tskCount;
 	
+	public String getLastTask_tskIsApprovalSourceTask() {
+		return lastTask_tskIsApprovalSourceTask;
+	}
+	public void setLastTask_tskIsApprovalSourceTask(String lastTask_tskIsApprovalSourceTask) {
+		this.lastTask_tskIsApprovalSourceTask = lastTask_tskIsApprovalSourceTask;
+	}
+	public String getLastTask_tskTargetApprovalStatus() {
+		return lastTask_tskTargetApprovalStatus;
+	}
+	public void setLastTask_tskTargetApprovalStatus(String lastTask_tskTargetApprovalStatus) {
+		this.lastTask_tskTargetApprovalStatus = lastTask_tskTargetApprovalStatus;
+	}
 	public String getParentCtgId() {
 		return parentCtgId;
 	}

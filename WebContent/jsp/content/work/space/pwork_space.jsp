@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.util.SmartMessage"%>
 <%@page import="net.smartworks.model.company.CompanyOption"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.company.CompanyGeneral"%>
@@ -280,45 +281,63 @@ function submitForms(tempSave) {
 				        	<%
 				        	if(!SmartUtil.isBlankObject(taskHistories)){
 				        		int count = 0;
+				        		TaskInstanceInfo prevTask = null;
 				        		for(int i=0; i<taskHistories.length; i++){
 				        			TaskInstanceInfo task = taskHistories[i];
 				        			if(!SmartUtil.isBlankObject(task.getForwardId()) || !SmartUtil.isBlankObject(task.getApprovalId())) continue;
 				        			count++;
 				        			String statusClass = "proc_task not_yet";
+				        			String statusTitle = "content.status.not_yet";
 				        			String formMode = (!SmartUtil.isBlankObject(task.getAssignee()) && (task.getAssignee().getId().equals(cUser.getId()) 
-				        								&& ( 	task.getStatus()==TaskInstance.STATUS_RUNNING
-				        									 || task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING) 
-				        									 || (task.getStatus()==Instance.STATUS_APPROVAL_RUNNING
-				        									 		&& instance.getStatus()==Instance.STATUS_RETURNED
-				        									 		&& !SmartUtil.isBlankObject(approvalTask) 
-				        									 		&& task.getId().equals(approvalTask.getApprovalTaskId())))) ? "edit" : "view";
+				        								&& ( 	(SmartUtil.isBlankObject(task.getApprovalLineId()) && task.getStatus()==TaskInstance.STATUS_RUNNING)
+				        									 || (SmartUtil.isBlankObject(task.getApprovalLineId()) && task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING) 
+				        									 || (!SmartUtil.isBlankObject(task.getApprovalLineId()) && SmartUtil.isBlankObject(approvalTask) 
+				        											 && task.getStatus() != TaskInstance.STATUS_COMPLETED && task.getStatus() != TaskInstance.STATUS_RETURNED) 
+ 				        									 || ((instance.getStatus()==Instance.STATUS_RETURNED || instance.getStatus()==Instance.STATUS_REJECTED)
+ 				        											&& task.getStatus() != Instance.STATUS_RETURNED
+ 				        									 		&& !SmartUtil.isBlankObject(approvalTask) 
+				        									 		&& task.getId().equals(approvalTask.getApprovalTaskId()))))) ? "edit" : "view";
 				        			boolean isSelectable = ((task.getStatus()==TaskInstance.STATUS_RUNNING||task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING)
 				        										&& (!SmartUtil.isBlankObject(task.getAssignee()) && !task.getAssignee().getId().equals(cUser.getId()))) ? false : true;
+
+				        			boolean returnProhibited = false;
+				        			if(prevTask!=null && formMode.equals("edit") && !task.isApprovalWork() && prevTask.isApprovalWork()){
+				        				returnProhibited = true;
+				        			}
+					        	
 				        			String approvalLineId = "";
 				        			if(task.getStatus() == TaskInstance.STATUS_RETURNED){
 				        				statusClass = "proc_task returned";
+				        				statusTitle = "content.status.returned";
+				        			}else if(task.getStatus() == TaskInstance.STATUS_REJECTED){
+				        				approvalLineId = task.getApprovalLineId();
+				        				statusClass = "proc_task returned";
+				        				statusTitle = "content.status.rejected";
 				        			}else if(task.getStatus() == TaskInstance.STATUS_RUNNING){
 				        				approvalLineId = task.getApprovalLineId();
 				        				statusClass = "proc_task running";
+				        				statusTitle = "content.status.running";
 				        			}else if(task.getStatus() == TaskInstance.STATUS_DELAYED_RUNNING){
 				        				approvalLineId = task.getApprovalLineId();
 				        				statusClass = "proc_task delayed";
-				        			}else if(task.getStatus() == TaskInstance.STATUS_APPROVAL_RUNNING){
-				        				statusClass = "proc_task running";
+				        				statusTitle = "content.status.delayed_running";
 				        			}else if(task.getStatus() == TaskInstance.STATUS_COMPLETED){
 				        				statusClass = "proc_task completed";
+				        				statusTitle = "content.status.completed";
 				        			}else{
 				        				statusClass = "proc_task not_yet";
+				        				statusTitle = "content.status.not_yet";
 				        			}
 				        			
 				        			String performerMinPicture = SmartUtil.isBlankObject(task.getPerformer()) ? "" : task.getPerformer().getMinPicture();
 				        			String performerLongName = SmartUtil.isBlankObject(task.getPerformer()) ? "" : task.getPerformer().getLongName();
 				        			
+				        			prevTask = task;
 				        			if(!task.isSubTask()){
 				        	%>
 				            			<!-- 태스크 --> 
-							            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
-							            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId="<%=CommonUtil.toNotNull(approvalLineId) %>" downloadHistories="<%=task.getNumberOfDownloadHistories() %>">
+							            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" title="<%=SmartMessage.getString(statusTitle) %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
+							            		formMode="<%=formMode %>" returnProhibited="<%=returnProhibited %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId="<%=CommonUtil.toNotNull(approvalLineId) %>" downloadHistories="<%=task.getNumberOfDownloadHistories() %>">
 						                    <!-- task 정보 -->
 						                    <%if(isSelectable){%><a class="js_select_task_instance" href=""><%} %>
 							                    <div class="title"><%=count%>) <%=task.getName() %></div>
@@ -605,6 +624,7 @@ function submitForms(tempSave) {
 		var isApprovalWork = input.attr("isApprovalWork");
 		var approvalLineId = input.attr("approvalLineId"); 
 		var downloadCount = input.attr("downloadHistories");
+		var returnProhibited = (input.attr("returnProhibited")==="true");
 		var approvalContent = pworkSpace.find('div.js_form_task_approval').html('').hide();
 		var formContent = pworkSpace.find('div.js_form_content').html('');
 		var formContentPointer = pworkSpace.find('div.js_form_content_pointer');
@@ -665,18 +685,23 @@ function submitForms(tempSave) {
 		if(!isEmpty(pworkSpace.find('.js_form_task_forward:visible'))) 
 			return;
 		if(formMode==="edit"){
-			if(isReturned || !isEmpty(approvalLineId)){
+			if(isReturned){
 				pworkSpace.find('.js_toggle_approval_btn').hide();
-				if(!isEmpty(approvalLineId)){
-					pworkSpace.find('.js_btn_do_approval').show().siblings().hide();
-					pworkSpace.find('.js_btn_return').show();																
-				}else if(isReturned){
-					pworkSpace.find('.js_btn_submit_approval').show().siblings().hide();
-					pworkSpace.find('.js_btn_return').show();											
-				}
+				pworkSpace.find('.js_btn_submit_approval').show().siblings().hide();
+				pworkSpace.find('.js_btn_reject_approval').show();											
+			}else if(!isEmpty(approvalLineId)){
+				pworkSpace.find('.js_toggle_approval_btn').hide();
+				pworkSpace.find('.js_btn_do_approval').show().siblings().hide();
+				if(returnProhibited)
+					pworkSpace.find('.js_btn_return').hide();
+				else
+					pworkSpace.find('.js_btn_return').show();
 			}else{
 				pworkSpace.find('.js_btn_complete').show().siblings().hide();
-				pworkSpace.find('.js_btn_return').show();
+				if(returnProhibited)
+					pworkSpace.find('.js_btn_return').hide();
+				else
+					pworkSpace.find('.js_btn_return').show();
 				pworkSpace.find('.js_btn_reassign').show();
 				pworkSpace.find('.js_btn_temp_save').show();
 				pworkSpace.find('.js_toggle_approval_btn').show();				

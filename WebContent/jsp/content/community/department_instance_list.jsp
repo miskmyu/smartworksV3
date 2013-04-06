@@ -64,6 +64,7 @@
 	 		<th class="r_line" style="width:40px;">
 				<span><fmt:message key="common.title.number"/></span>
 			</th>
+	 		<th class="r_line" style="width:20px;"></th>
 			<th class="r_line">
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_NAME%>">
 					<fmt:message key='department.title.name' /><span class="<%if(sortedField.getFieldId().equals(FormField.ID_NAME)){
@@ -104,6 +105,7 @@
 			%>
 				<tr class="instance_list" href="<%=target%>">
 					<td class="tc"><%=currentCount--%></td>
+					<td class="tc"><div title="<fmt:message key='nav.works.my_favorite_works'/>" class="js_check_favorite_com icon_fvrt <%if(department.isFavorite()){ %> checked <%} %>" comId="<%=department.getId() %>" ></div></td>
 					<td>
 						<a href="<%=target %>">
 							<div class="noti_pic">
@@ -164,6 +166,8 @@
 		<tr class="tit_bg">
 	 		<th class="r_line" style="width:40px;">
 				<span><fmt:message key="common.title.number"/></span>
+			</th>
+	 		<th class="r_line" style="width:20px;"></th>
 			</th>
 			<th class="r_line">
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_NAME%>">

@@ -1080,7 +1080,7 @@ public class SmartTest {
 	}
 
 	public static CommunityInfo[] getMyCommunities() throws Exception {
-		return (CommunityInfo[])(new WorkSpaceInfo[] {SmartTest.getDepartmentInfo1(), SmartTest.getDepartmentInfo2(), SmartTest.getDepartmentInfo3(), SmartTest.getDepartmentInfo4(), SmartTest.getGroupInfo1(), SmartTest.getGroupInfo2(), SmartTest.getGroupInfo3()}); 
+		return (CommunityInfo[])(new WorkSpaceInfo[] {SmartTest.getDepartmentInfo1(), SmartTest.getDepartmentInfo2(), SmartTest.getDepartmentInfo3(), SmartTest.getDepartmentInfo4(), SmartTest.getGroupInfo1(), SmartTest.getGroupInfo2(), SmartTest.getGroupInfo3(), SmartUtil.getCurrentUser().getUserInfo()}); 
 	}
 
 	public static BoardInstanceInfo[] getBoardInstances() throws Exception {

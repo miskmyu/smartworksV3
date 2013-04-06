@@ -218,6 +218,8 @@
 			</div>
 			<%
 			if(!SmartUtil.isBlankObject(approvalInstId) && !SmartUtil.isBlankObject(tasks)){
+				String approvalTaskStatusImage = "icon_status_running";;
+				String approvalTaskStatusTitle = "content.status.running";
 			%>
 				<div class="list_reply">
 						<div class="up_point_sgr pos_works"></div>
@@ -259,8 +261,11 @@
 									statusImage = "icon_status_not_yet";
 									statusTitle = "content.status.not_yet";
 								}
-								if(!SmartUtil.isBlankObject(approvalTask) && approvalTask.getId().equals(task.getId()))
+								if(!SmartUtil.isBlankObject(approvalTask) && approvalTask.getId().equals(task.getId())){
+									approvalTaskStatusImage = statusImage;
+									approvalTaskStatusTitle = statusTitle;
 									continue;
+								}
 						%>
 									<li class="sub_instance_list">
 										<div class="det_title">	
@@ -289,7 +294,7 @@
 							%>	
 								<div class="sub_instance_list">
 									<div class="det_title">	
-										<span class="icon_status_running vm" title="<fmt:message key='content.status.running'/>" ></span>
+										<span class="<%=approvalTaskStatusImage%> vm" title="<fmt:message key='<%=approvalTaskStatusTitle%>'/>" ></span>
 										<span class="approval_stage"><%=approvalTask.getName() %></span>
 										<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 							        	<span class="comment_box">

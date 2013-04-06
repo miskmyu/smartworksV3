@@ -20,6 +20,7 @@ public class CommunityInfo extends BaseObject {
 	
 	private String smallPictureName;
 	private String bigPictureName;
+	private boolean favorite;
 
 	public String getSmallPictureName() {
 		return smallPictureName;
@@ -32,8 +33,13 @@ public class CommunityInfo extends BaseObject {
 	}
 	public void setBigPictureName(String bigPictureName) {
 		this.bigPictureName = bigPictureName;
+	}	
+	public boolean isFavorite() {
+		return favorite;
 	}
-	
+	public void setFavorite(boolean favorite) {
+		this.favorite = favorite;
+	}
 	public String getOrgPicture() {
 		if(CommonUtil.isEmpty(this.getBigPictureName())) {
 			if(this.getClass().equals(UserInfo.class) || this.getClass().equals(SeraUserInfo.class) || this.getClass().equals(MentorInfo.class))

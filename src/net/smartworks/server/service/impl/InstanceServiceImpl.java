@@ -3547,6 +3547,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						aprAprDefs[i] = new AprApprovalDef();
 						aprAprDefs[i].setName(aprs[i].getName());
 						aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+						aprAprDefs[i].setDueDate("" + (aprs[i].getMeanTimeMinutes() + aprs[i].getMeanTimeHours()*60 + aprs[i].getMeanTimeDays()*60*24));
 					}
 					apprLine.setName(aprline.getName());
 				} else if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.2level")) {
@@ -3557,6 +3558,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						aprAprDefs[i] = new AprApprovalDef();
 						aprAprDefs[i].setName(aprs[i].getName());
 						aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+						aprAprDefs[i].setDueDate("" + (aprs[i].getMeanTimeMinutes() + aprs[i].getMeanTimeHours()*60 + aprs[i].getMeanTimeDays()*60*24));
 					};
 					apprLine.setName(aprline.getName());
 				} else {
@@ -3591,6 +3593,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					apr.setModifiable(true);
 					apr.setCreationDate(new LocalDate());
 					apr.setCreationUser(id);
+					apr.setDueDate(aprAprDefs[i-1].getDueDate());
 					
 					approvals[i-1] = apr;
 				}
@@ -3752,6 +3755,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						aprAprDefs[i] = new AprApprovalDef();
 						aprAprDefs[i].setName(aprs[i].getName());
 						aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+						aprAprDefs[i].setDueDate("" + (aprs[i].getMeanTimeMinutes() + aprs[i].getMeanTimeHours()*60 + aprs[i].getMeanTimeDays()*60*24));
 					}
 					apprLine.setName(aprline.getName());
 				} else if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.2level")) {
@@ -3762,6 +3766,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						aprAprDefs[i] = new AprApprovalDef();
 						aprAprDefs[i].setName(aprs[i].getName());
 						aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+						aprAprDefs[i].setDueDate("" + (aprs[i].getMeanTimeMinutes() + aprs[i].getMeanTimeHours()*60 + aprs[i].getMeanTimeDays()*60*24));
 					};
 					apprLine.setName(aprline.getName());
 				} else {
@@ -3769,7 +3774,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					aprAprDefs = aprAprLineDef.getApprovalDefs();
 					apprLine.setName(aprAprLineDef.getName());
 				}
-				
+
 				apprLine.setStatus("created");
 
 				AprApproval[] approvals = new AprApproval[appLineSortingMap.size()];
@@ -3792,9 +3797,20 @@ public class InstanceServiceImpl implements IInstanceService {
 					apr.setModifiable(true);
 					apr.setCreationDate(new LocalDate());
 					apr.setCreationUser(id);
+					apr.setDueDate(aprAprDefs[i-1].getDueDate());
 					
 					approvals[i-1] = apr;
 				}
+
+//				LocalDate now = new LocalDate();
+//				if(approvals!=null && approvals.length>0 && !SmartUtil.isBlankObject(approvals[0].getDueDate())){
+//					int dueDate = Integer.parseInt(approvals[0].getDueDate());
+//					approvals[0].setExpectEndDate(new LocalDate(now.getTime() + dueDate*LocalDate.ONE_MINUTE));
+//					obj.setExpectEndDate(new LocalDate(approvals[0].getExpectEndDate().getTime()));
+//				}else{
+//					approvals[0].setExpectEndDate(new LocalDate(now.getTime() + 30*LocalDate.ONE_MINUTE));					
+//				}
+				
 				apprLine.setApprovals(approvals);
 				apprLine.setExtendedPropertyValue("recordId", obj.getObjId());
 				apprLine.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
@@ -3811,7 +3827,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				obj.setExtendedPropertyValue("approvalLine", apprLine.getObjId());
 				
 				obj.setIsApprovalSourceTask("true");
-				obj.setTargetApprovalStatus(Instance.STATUS_APPROVAL_RUNNING + "");
+				obj.setTargetApprovalStatus(AprApproval.APPROVAL_STATUS_RUNNING + "");
 				
 			}
 		}
@@ -6002,15 +6018,34 @@ public class InstanceServiceImpl implements IInstanceService {
 					pwInstInfo.setCreatedDate(new LocalDate(prcInst.getPrcCreateDate().getTime()));
 					int status = -1;
 					if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-						if(prcInst.getLastTask_tskExpectEndDate().getTime() < (new LocalDate()).getTime()){
+						if(TskTask.TASKSTATUS_CANCEL.equalsIgnoreCase(prcInst.getLastTask_tskTargetApprovalStatus())){
+							status = Instance.STATUS_REJECTED;
+						}else if(prcInst.getLastTask_tskExpectEndDate().getTime() < (new LocalDate()).getTime()){
 							status = Instance.STATUS_DELAYED_RUNNING;
 						}else{
 							status = Instance.STATUS_RUNNING;
 						}
 					} else if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
-						status = Instance.STATUS_COMPLETED;
+						if("true".equalsIgnoreCase(prcInst.getLastTask_tskIsApprovalSourceTask())){
+							if(AprApproval.APPROVAL_STATUS_RUNNING.equals(prcInst.getLastTask_tskTargetApprovalStatus())){
+								if(prcInst.getLastTask_tskExpectEndDate()!=null && prcInst.getLastTask_tskExpectEndDate().getTime()<(new LocalDate()).getTime()){
+									status = Instance.STATUS_DELAYED_RUNNING;
+									
+								}else{
+									status = Instance.STATUS_DELAYED_RUNNING;									
+								}
+							}else{
+								status = Instance.STATUS_COMPLETED;																	
+							}
+						}else{
+							status = Instance.STATUS_COMPLETED;
+						}
 					} else if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
 						status = Instance.STATUS_ABORTED;
+					} else if(prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)){
+						status = Instance.STATUS_RETURNED;
+					} else{
+						status = Instance.STATUS_COMPLETED;
 					}
 					pwInstInfo.setStatus(status);
 					pwInstInfo.setSubject(prcInst.getPrcTitle());

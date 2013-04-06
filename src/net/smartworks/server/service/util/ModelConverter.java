@@ -100,6 +100,7 @@ import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.MisUtil;
 import net.smartworks.server.engine.common.util.StringUtil;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
 import net.smartworks.server.engine.docfile.model.FileDownloadHistoryCond;
@@ -1107,18 +1108,21 @@ public class ModelConverter {
 		workInstanceInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 		
 		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
-				workInstanceInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
-			else
-				workInstanceInfo.setStatus(TaskInstance.STATUS_RUNNING);
+			if(CommonUtil.toDefault((String)MisUtil.processInstStatusMap().get("returned"), "returned").equalsIgnoreCase(task.getPrcStatus())){
+				workInstanceInfo.setStatus(Instance.STATUS_RETURNED);
+			}else if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()){
+				workInstanceInfo.setStatus(Instance.STATUS_DELAYED_RUNNING);
+			}else{
+				workInstanceInfo.setStatus(Instance.STATUS_RUNNING);
+			}
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
-			workInstanceInfo.setStatus(TaskInstance.STATUS_COMPLETED);
+			workInstanceInfo.setStatus(Instance.STATUS_COMPLETED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
-			workInstanceInfo.setStatus(TaskInstance.STATUS_REJECTED);
+			workInstanceInfo.setStatus(Instance.STATUS_REJECTED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
-			workInstanceInfo.setStatus(TaskInstance.STATUS_ABORTED);
+			workInstanceInfo.setStatus(Instance.STATUS_ABORTED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
-			workInstanceInfo.setStatus(TaskInstance.STATUS_RETURNED);
+			workInstanceInfo.setStatus(Instance.STATUS_RETURNED);
 		}
 		workInstanceInfo.setOwner(getUserInfoByUserId(task.getPrcCreateUser()));
 		workInstanceInfo.setCreatedDate(new LocalDate(task.getTskCreateDate().getTime()));
@@ -1140,7 +1144,8 @@ public class ModelConverter {
 				continue;
 			
 			if (TskTask.TASKTYPE_COMMON.equalsIgnoreCase(task.getTskType()) || (TskTask.TASKTYPE_SINGLE.equalsIgnoreCase(task.getTskType()) && "true".equalsIgnoreCase(task.getIsStartActivity()))) {
-				if (task.getIsStartActivity() != null && task.getIsStartActivity().equalsIgnoreCase("true")) {
+				if (task.getIsStartActivity() != null && task.getIsStartActivity().equalsIgnoreCase("true") 
+						&& !CommonUtil.toDefault((String)MisUtil.processInstStatusMap().get("returned"), "returned").equalsIgnoreCase(task.getPrcStatus())) {
 					PWInstanceInfo instInfo = new PWInstanceInfo();
 					
 					if ((task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE) && task.getIsStartActivity().equalsIgnoreCase("true"))) {
@@ -1306,7 +1311,9 @@ public class ModelConverter {
 					instInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 					
 					if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-						if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()){
+						if(TskTask.TASKSTATUS_CANCEL.equalsIgnoreCase(task.getLastTskStatus())){
+							instInfo.setStatus(Instance.STATUS_REJECTED);
+						}else if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()){
 							instInfo.setStatus(Instance.STATUS_DELAYED_RUNNING);							
 						}else{
 							instInfo.setStatus(Instance.STATUS_RUNNING);
@@ -2615,8 +2622,14 @@ public class ModelConverter {
 		} else if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 			status = Instance.STATUS_COMPLETED;
 			if (task.getIsApprovalSourceTask() != null && task.getIsApprovalSourceTask().equalsIgnoreCase("true")) {
-				if (task.getTargetApprovalStatus().equalsIgnoreCase(Instance.STATUS_APPROVAL_RUNNING + "")) {
-					status = Instance.STATUS_APPROVAL_RUNNING;
+				if (task.getTargetApprovalStatus().equalsIgnoreCase(AprApproval.APPROVAL_STATUS_RUNNING)) {
+					if(task.getExpectEndDate()!=null && task.getExpectEndDate().getTime()<(new LocalDate()).getTime()){
+						status = Instance.STATUS_DELAYED_RUNNING;
+					}else{
+						status = Instance.STATUS_RUNNING;						
+					}
+				}else{
+					status = Instance.STATUS_COMPLETED;											
 				}
 			}
 		} else if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
@@ -2679,13 +2692,29 @@ public class ModelConverter {
 		String tskType = swTask.getType();
 		String tskStatus = swTask.getStatus();
 		if (tskStatus.equalsIgnoreCase("11")) {
-			LocalDate now = new LocalDate();
-			if(swTask.getExpectEndDate()!=null && swTask.getExpectEndDate().getTime()<now.getTime())
-				taskInstInfo.setStatus(Instance.STATUS_DELAYED_RUNNING);
-			else
-				taskInstInfo.setStatus(Instance.STATUS_RUNNING);
+			if(TskTask.TASKSTATUS_CANCEL.equalsIgnoreCase(swTask.getTargetApprovalStatus())){
+				taskInstInfo.setStatus(Instance.STATUS_REJECTED);
+			}else{
+				LocalDate now = new LocalDate();
+				if(swTask.getExpectEndDate()!=null && swTask.getExpectEndDate().getTime()<now.getTime())
+					taskInstInfo.setStatus(Instance.STATUS_DELAYED_RUNNING);
+				else
+					taskInstInfo.setStatus(Instance.STATUS_RUNNING);
+				}
 		} else if (tskStatus.equals("21")) {
-			taskInstInfo.setStatus(Instance.STATUS_COMPLETED);
+			if("true".equalsIgnoreCase(swTask.getIsApprovalSourceTask()) && !"APPROVAL".equalsIgnoreCase(swTask.getType())){
+				if(AprApproval.APPROVAL_STATUS_RUNNING.equals(swTask.getTargetApprovalStatus())){
+					if(swTask.getExpectEndDate()!=null && swTask.getExpectEndDate().getTime()<(new LocalDate()).getTime()){
+						taskInstInfo.setStatus(Instance.STATUS_DELAYED_RUNNING);					
+					}else{
+						taskInstInfo.setStatus(Instance.STATUS_RUNNING);
+					}
+				}else{
+					taskInstInfo.setStatus(Instance.STATUS_COMPLETED);
+				}
+			}else{
+				taskInstInfo.setStatus(Instance.STATUS_COMPLETED);
+			}
 		}
 
 		if(tskType.equals(TskTask.TASKTYPE_SINGLE)) {
@@ -2743,6 +2772,10 @@ public class ModelConverter {
 			cond.setRefTaskId(swTask.getObjId());
 			long downloadCount = SwManagerFactory.getInstance().getDocManager().getFileDownloadHistorySize("", cond);
 			taskInstInfo.setNumberOfDownloadHistories((int)downloadCount);
+			String approvalLineId = swTask.getExtendedPropertyValue("ApprovalLine");
+			if(!SmartUtil.isBlankObject(approvalLineId)){
+				taskInstInfo.setApprovalLineId(approvalLineId);
+			}
 		}
 		
 		if (swTask.getIsApprovalSourceTask() != null && swTask.getIsApprovalSourceTask().equalsIgnoreCase("true")) {

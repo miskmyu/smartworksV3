@@ -140,6 +140,7 @@ public class SettingsServiceImpl implements ISettingsService {
 			boolean useMessagingService = true;
 			boolean useChattingService = false;
 			boolean userReturnFunction = true;
+			LocalDate startDate = null;
 			if(swoCompany != null) {
 				id = swoCompany.getId();
 				name = swoCompany.getName();
@@ -154,6 +155,9 @@ public class SettingsServiceImpl implements ISettingsService {
 				useMessagingService = swoConfig.isUseMessagingService();
 				useChattingService = swoConfig.isUseChattingService();
 				userReturnFunction = swoConfig.isUserReturnFunction();
+				if(swoConfig.getSetupCompanyDate()!=null){
+					startDate = new LocalDate(swoConfig.getSetupCompanyDate().getTime());
+				}
 			}
 
 			CompanyGeneral companyGeneral = new CompanyGeneral();
@@ -169,6 +173,7 @@ public class SettingsServiceImpl implements ISettingsService {
 			companyGeneral.setUseMessagingService(useMessagingService);
 			companyGeneral.setUseChattingService(useChattingService);
 			companyGeneral.setUseReturnFunction(userReturnFunction);
+			companyGeneral.setStartDate(startDate);
 			return companyGeneral;
 		} catch(Exception e){
 			e.printStackTrace();
@@ -202,7 +207,10 @@ public class SettingsServiceImpl implements ISettingsService {
 			String imgCompanyLoginImage = null;
 			String companyFileId = null;
 			String companyFileName = null;
-
+			String startYear = null;
+			String startMonth = null;
+			String startDay = null;
+			
 			while(itr.hasNext()) {
 				String fieldId = (String)itr.next();
 				Object fieldValue = frmCompanyGeneral.get(fieldId);
@@ -228,6 +236,12 @@ public class SettingsServiceImpl implements ISettingsService {
 						useChattingService = true;
 					} else if (fieldId.equals("chkUseReturnFunction")) {
 						chkUseReturnFunction = true;
+					} else if (fieldId.equals("txtCompanyStartYear")) {
+						startYear = (String)frmCompanyGeneral.get("txtCompanyStartYear");
+					} else if (fieldId.equals("txtCompanyStartMonth")) {
+						startMonth = (String)frmCompanyGeneral.get("txtCompanyStartMonth");
+					} else if (fieldId.equals("txtCompanyStartDay")) {
+						startDay = (String)frmCompanyGeneral.get("txtCompanyStartDay");
 					}
 				}
 			}
@@ -266,6 +280,17 @@ public class SettingsServiceImpl implements ISettingsService {
 			swoConfig.setUseMessagingService(useMessagingService);
 			swoConfig.setUseChattingService(useChattingService);
 			swoConfig.setUserReturnFunction(chkUseReturnFunction);
+			if(startYear!=null && startYear.length()==4 && startMonth!=null && startDay!=null){
+				if(startMonth.length()==1) startMonth="0"+startMonth;
+				if(startDay.length()==1) startDay="0"+startDay;
+				try{
+					swoConfig.setsetupCompanyDate(new Date(LocalDate.convertLocalDateStringToLocalDate1(startYear+startMonth+startDay).getTime()));
+				}catch (Exception e){
+					swoConfig.setsetupCompanyDate(null);
+				}				
+			}else{
+				swoConfig.setsetupCompanyDate(null);				
+			}
 			getSwoManager().setConfig(userId, swoConfig, IManager.LEVEL_ALL);
 			
 			String chkTestAfterSaving = (String)frmCompanyGeneral.get("chkTestAfterSaving");
@@ -1932,6 +1957,10 @@ public class SettingsServiceImpl implements ISettingsService {
 			String txtMemberPhoneNo = null;
 			String txtMemberCellPhoneNo = null;
 
+			String birthYear = null, birthMonth = null, birthDay = null;
+			String hireYear = null, hireMonth = null, hireDay = null;
+			boolean isLunarBirthday = false;
+			
 			SwoUser swoUser = null;
 			if(!setUserId.equals("") && !setUserId.equalsIgnoreCase("null") && setUserId != null) {
 				swoUser = getSwoManager().getUser(userId, setUserId, IManager.LEVEL_ALL);
@@ -1986,6 +2015,24 @@ public class SettingsServiceImpl implements ISettingsService {
 					} else if(fieldId.equals("txtMemberCellPhoneNo")) {
 						txtMemberCellPhoneNo = (String)frmEditMember.get("txtMemberCellPhoneNo");
 						swoUser.setMobileNo(txtMemberCellPhoneNo);
+					} else if(fieldId.equals("txtMemberHomePhoneNo")) {
+						swoUser.setTelephoneNumber((String)frmEditMember.get("txtMemberHomePhoneNo"));
+					} else if(fieldId.equals("txtMemberHomeAddress")) {
+						swoUser.setAddress((String)frmEditMember.get("txtMemberHomeAddress"));
+					} else if(fieldId.equals("txtMemberHireYear")) {
+						hireYear = (String)frmEditMember.get("txtMemberHireYear");
+					} else if(fieldId.equals("txtMemberHireMonth")) {
+						hireMonth = (String)frmEditMember.get("txtMemberHireMonth");
+					} else if(fieldId.equals("txtMemberHireDay")) {
+						hireDay = (String)frmEditMember.get("txtMemberHireDay");
+					} else if(fieldId.equals("txtMemberBirthYear")) {
+						birthYear = (String)frmEditMember.get("txtMemberBirthYear");
+					} else if(fieldId.equals("txtMemberBirthMonth")) {
+						birthMonth = (String)frmEditMember.get("txtMemberBirthMonth");
+					} else if(fieldId.equals("txtMemberBirthDay")) {
+						birthDay = (String)frmEditMember.get("txtMemberBirthDay");
+					} else if(fieldId.equals("selMemberLunarBirthday")) {
+						isLunarBirthday = ((String)frmEditMember.get("selMemberLunarBirthday")).equalsIgnoreCase("true");
 					}
 				} else {
 					if(fieldId.equals("memberDepartment")) {
@@ -2032,6 +2079,31 @@ public class SettingsServiceImpl implements ISettingsService {
 				}
 			}
 
+			if(hireYear!=null && hireYear.length()==4 && hireMonth!=null && hireDay!=null){
+				if(hireMonth.length()==1) hireMonth="0"+hireMonth;
+				if(hireDay.length()==1) hireDay="0"+hireDay;
+				try{
+					swoUser.setJoinCompanyDate(new Date(LocalDate.convertLocalDateStringToLocalDate1(hireYear+hireMonth+hireDay).getTime()));
+				}catch (Exception e){
+					swoUser.setJoinCompanyDate(null);
+				}				
+			}else{
+				swoUser.setJoinCompanyDate(null);
+			}
+			
+			if(birthYear!=null && birthYear.length()==4 && birthMonth!=null && birthDay!=null){
+				if(birthMonth.length()==1) birthMonth="0"+birthMonth;
+				if(birthDay.length()==1) birthDay="0"+birthDay;
+				try{
+					swoUser.setBirthDay(new Date(LocalDate.convertLocalDateStringToLocalDate1(birthYear+birthMonth+birthDay).getTime()));
+					
+				}catch (Exception e){
+					swoUser.setBirthDay(null);
+				}				
+			}else{
+				swoUser.setBirthDay(null);
+			}
+			
 			getSwoManager().setUser(userId, swoUser, IManager.LEVEL_ALL);
 			if(!setUserId.equals(""))
 				getSwoManager().getUserExtend(userId, swoUser.getId(), false);

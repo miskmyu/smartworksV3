@@ -115,7 +115,21 @@ if(!SmartUtil.isBlankObject(instances)) {
 			boolean isWorkRunning = workInstance.isWorkRunning();
 			String workFullPathName = workInstance.getWorkFullPathName();
 	
-			int status = (isAssignedTask) ? taskInstance.getStatus() : instance.getStatus();
+			int status;
+			if(isAssignedTask){
+				switch(workInstance.getStatus()){
+				case Instance.STATUS_RETURNED:
+					status = Instance.STATUS_RETURNED;
+					break;
+				case Instance.STATUS_REJECTED:
+					status = Instance.STATUS_REJECTED;
+					break;
+				default:
+					status = taskInstance.getStatus();
+				}
+			}else{
+				status = instance.getStatus();
+			}
 			switch (status) {
 			// 인스턴스가 현재 진행중인 경우..
 			case Instance.STATUS_RUNNING:
@@ -131,6 +145,11 @@ if(!SmartUtil.isBlankObject(instances)) {
 			case Instance.STATUS_RETURNED:
 				statusImage = "icon_status_returned";
 				statusTitle = "content.status.returned";
+				break;
+			// 인스턴스가 기각된 경우...
+			case Instance.STATUS_REJECTED:
+				statusImage = "icon_status_rejected";
+				statusTitle = "content.status.rejected";
 				break;
 			// 인스턴스가 반려된 경우...
 			case Instance.STATUS_COMPLETED:
@@ -243,28 +262,53 @@ if(!SmartUtil.isBlankObject(instances)) {
 									taskInstParam = "&taskInstId=" + lastTaskInstId;
 								}
 							}
+							if(workInstance.getStatus() == Instance.STATUS_RETURNED){
 						%>
-							<fmt:message key="content.sentence.ptask_assigned">
-								<fmt:param>
-									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%><%=taskInstParam%>">
-										<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
-									</a>
-								</fmt:param>
-								<fmt:param>
-									<%
-									if(cUser.getId().equals(assignee.getId())){
-									%>
-										<span class="t_name"><%=assignee.getLongName()%></span>
-									<%
-									}else{
-									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
-									<%
-									}
-									%>
-								</fmt:param>
-							</fmt:message>
+								<fmt:message key="content.sentence.ptask_returned">
+									<fmt:param>
+										<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%><%=taskInstParam%>">
+											<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
+										</a>
+									</fmt:param>
+									<fmt:param>
+										<%
+										if(cUser.getId().equals(assignee.getId())){
+										%>
+											<span class="t_name"><%=assignee.getLongName()%></span>
+										<%
+										}else{
+										%>
+											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<%
+										}
+										%>
+									</fmt:param>
+								</fmt:message>
+							<%
+							}else{
+							%>
+								<fmt:message key="content.sentence.ptask_assigned">
+									<fmt:param>
+										<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%><%=taskInstParam%>">
+											<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
+										</a>
+									</fmt:param>
+									<fmt:param>
+										<%
+										if(cUser.getId().equals(assignee.getId())){
+										%>
+											<span class="t_name"><%=assignee.getLongName()%></span>
+										<%
+										}else{
+										%>
+											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<%
+										}
+										%>
+									</fmt:param>
+								</fmt:message>
 						<%
+							}
 							break;
 						// 프로세스업무 업무전달인 경우...
 						case TaskInstance.TYPE_PROCESS_TASK_FORWARDED:
@@ -343,10 +387,31 @@ if(!SmartUtil.isBlankObject(instances)) {
 							break;
 						// 전자결재업무 할당태스크인 경우...
 						case TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED:
-							String approvalStatus = (workInstance.getStatus() == Instance.STATUS_RETURNED) ? "returned" : "assigned";
+							String approvalStatus = (workInstance.getStatus() == Instance.STATUS_RETURNED) ? "returned" : (workInstance.getStatus() == Instance.STATUS_REJECTED) ? "rejected" : "assigned";
 						%>
 							<%if(workInstance.getStatus() == Instance.STATUS_RETURNED){ %>
 								<fmt:message key="content.sentence.atask_returned">
+									<fmt:param>
+										<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>">
+											<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
+										</a>
+									</fmt:param>
+									<fmt:param>
+										<%
+										if(cUser.getId().equals(assignee.getId())){
+										%>
+											<span class="t_name"><%=assignee.getLongName()%></span>
+										<%
+										}else{
+										%>
+											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<%
+										}
+										%>
+									</fmt:param>
+								</fmt:message>
+							<% }else if(workInstance.getStatus() == Instance.STATUS_REJECTED){ %>
+								<fmt:message key="content.sentence.atask_rejected">
 									<fmt:param>
 										<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>">
 											<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 

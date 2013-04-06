@@ -1,5 +1,8 @@
 package net.smartworks.model.work;
 
+import net.smartworks.model.work.info.SmartTaskInfo;
+import net.smartworks.util.SmartUtil;
+
 public class ProcessWork extends SmartWork {
 
 	private SmartDiagram diagram;
@@ -59,4 +62,5 @@ public class ProcessWork extends SmartWork {
 	public ProcessWork(String id, String name, String desc, WorkCategory myCategory) {
 		super(id, name, TYPE_PROCESS, desc, myCategory);
 	}
+	
 }

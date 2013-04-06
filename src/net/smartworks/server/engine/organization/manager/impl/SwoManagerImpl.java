@@ -1646,7 +1646,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append("update SwoConfig set");
 				buf.append(" companyId=:companyId, name=:name, domainId=:domainId, smtpAddress=:smtpAddress, userId=:userId, password=:password,");
 				buf.append(" creationDate=:creationDate, creationUser=:creationUser,");
-				buf.append(" modificationUser=:modificationUser, modificationDate=:modificationDate, isActivity=:isActivity, useMessagingService=:useMessagingService, userReturnFunction=:userReturnFunction, useChattingService=:useChattingService " );
+				buf.append(" modificationUser=:modificationUser, modificationDate=:modificationDate, isActivity=:isActivity, useMessagingService=:useMessagingService, userReturnFunction=:userReturnFunction, useChattingService=:useChattingService, setupCompanyDate=:setupCompanyDate " );
 				buf.append(" where id=:id");
 				Query query = this.getSession().createQuery(buf.toString());
 				query.setString(SwoConfig.A_COMPANYID, obj.getCompanyId());
@@ -1663,6 +1663,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setBoolean(SwoConfig.A_USEMESSAGINGSERVICE, obj.isUseMessagingService());
 				query.setBoolean(SwoConfig.A_USERRETURNFUNCTION, obj.isUserReturnFunction());
 				query.setBoolean(SwoConfig.A_USECHATTINGSERVICE, obj.isUseChattingService());
+				query.setTimestamp(SwoConfig.A_SETUPCOMPANYDATE, obj.getSetupCompanyDate());
 				query.setString(SwoConfig.A_ID, obj.getId());
 				
 			}				
@@ -1806,7 +1807,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			if (level.equals(LEVEL_ALL)) {
 				buf.append(" obj");
 			} else {
-				buf.append(" obj.userId, obj.smtpAddress, obj.password, obj.isActivity, obj.useMessagingService, obj.userReturnFunction, obj.useChattingService ");
+				buf.append(" obj.userId, obj.smtpAddress, obj.password, obj.isActivity, obj.useMessagingService, obj.userReturnFunction, obj.setupCompanyDate ");
 			}
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
@@ -1825,6 +1826,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					obj.setUseMessagingService(CommonUtil.toBoolean(fields[j++]));
 					obj.setUserReturnFunction(CommonUtil.toBoolean(fields[j++]));
 					obj.setUseChattingService(CommonUtil.toBoolean(fields[j++]));
+					obj.setsetupCompanyDate((Timestamp)(fields[j++]));
 					objList.add(obj);
 				}
 				list = objList;

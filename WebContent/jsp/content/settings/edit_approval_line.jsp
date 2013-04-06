@@ -249,8 +249,8 @@
 					<%
 					}
 					%>
-				</tr <%if(approvalLine.getApprovalLevel()<6){ %>style="display:none"<%} %>>
-				<tr class="js_approval_second_5 end">
+				</tr>
+				<tr class="js_approval_second_5 end" <%if(approvalLine.getApprovalLevel()<6){ %>style="display:none"<%} %>>
 					<th class="required_label"><fmt:message key="settings.title.approval.mean_time"/></th>
 					<%
 					for(int count=5; count<10; count++){

@@ -107,7 +107,7 @@
 									if(!SmartUtil.isBlankObject(companyGeneral.getStartDate())){
 										hireYear = "" + companyGeneral.getStartDate().getYear();
 										hireMonth = "" + (companyGeneral.getStartDate().getMonth()+1);
-										hireDay = "" + companyGeneral.getStartDate().getDaysOfMonth();
+										hireDay = "" + companyGeneral.getStartDate().getDateOnly();
 									}
 									%>
 									<input style="width:40px" maxlength="4" name="txtCompanyStartYear" class="fieldline tc" type="text" value="<%=hireYear %>" /><fmt:message key="common.title.year"/>
