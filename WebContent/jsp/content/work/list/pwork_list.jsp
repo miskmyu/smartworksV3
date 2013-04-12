@@ -159,7 +159,8 @@
 		if(!SmartUtil.isBlankObject(savedWorkId) && savedWorkId.equals(work.getId())){
 			params = (RequestParams)session.getAttribute("requestParams");
 		}
-	}if (params != null){
+	}
+	if (params != null){
 		selectedFilterId = params.getFilterId();
 		searchKey = params.getSearchKey();
 		params.setSearchFilter(null);
@@ -178,7 +179,7 @@
 
 			<!-- 타이틀 -->
 			<div class="body_titl">
-				<div class="body_titl_pworks title"><%=work.getName()%></div>				
+				<div class="body_titl_pworks title"><%=work.getFullpathName()%></div>				
 				<!-- 우측 버튼 -->
 				<div class="fr txt_btn icon_smartbuilder">
 					<%if(work.amIBuilderUser()){ %>

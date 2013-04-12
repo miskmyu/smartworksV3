@@ -53,6 +53,7 @@ public class SwdDataField extends BaseObject {
 	private SwdDataField[] dataFields;
 	
 	private List<Map<String, String>> users;
+	private List<Map<String, String>> departments;
 	private List<Map<String, String>> files;
 
 	public List<Map<String, String>> getUsers() {
@@ -60,6 +61,12 @@ public class SwdDataField extends BaseObject {
 	}
 	public void setUsers(List<Map<String, String>> users) {
 		this.users = users;
+	}
+	public List<Map<String, String>> getDepartments() {
+		return departments;
+	}
+	public void setDepartments(List<Map<String, String>> departments) {
+		this.departments = departments;
 	}
 	public List<Map<String, String>> getFiles() {
 		return files;

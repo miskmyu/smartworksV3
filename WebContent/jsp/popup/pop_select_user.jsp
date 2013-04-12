@@ -17,9 +17,34 @@
 
 <!--  전체 레이아웃 -->
 	<!-- 팝업 컨텐츠 -->
-		<div class="pop_list_area">
+	<div class="pop_list_area">
+		<%if(isMultiSelectable){ %>
+			<form class="pop_list_area mail_address" name="frmUserSelections">	
+				<ul>
+					<li class="js_drill_down">
+						<div>
+							<a href="pop_userlist_by_depart.sw?multiUsers=<%=isMultiSelectable %>" departmentId="<%=cUser.getCompanyId()%>" class="js_popup js_expandable">
+								<span class="btn_tree_plus vm"></span>
+								<span><fmt:message key="organization.title.tree"/></span>
+							</a>
+						</div>
+						<div style="display: none" class="menu_2dep js_drill_down_target"></div>
+					</li>
+					<li class="js_drill_down">
+						<div>
+							<a href="pop_userlist_by_group.sw?multiUsers=<%=isMultiSelectable %>" groupId="<%=cUser.getCompanyId()%>" class="js_popup js_expandable">
+								<span class="btn_tree_plus vm"></span>
+								<span><fmt:message key="group.title.tree"/></span>
+							</a>
+						</div>
+						<div style="display: none" class="menu_2dep js_drill_down_target"></div>
+					</li>
+				</ul>
+			</form>
+		<%}else{ %>
 			<jsp:include page="/jsp/popup/pop_userlist_by_depart.jsp"></jsp:include>
-			
+		<%} %>
+
 	<!-- 하단버튼영역 -->
  	<%
  	if(isMultiSelectable){

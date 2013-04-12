@@ -65,6 +65,9 @@ public class Work extends BaseObject{
 	public static final String CONTROLLER_MEMO_LIST = "memo_list.sw";
 	
 	public static final String ID_EMPTY_WORK = "EmptyWorkId";
+	public static final String ID_GROUP_WORK = "GroupWorkId";
+	public static final String ID_DEPARTMENT_WORK = "DepartmentWorkId";
+	public static final String ID_USER_WORK = "UserWorkId";
 
 	private int 	type=-1; 
 	private int 	providedBy;

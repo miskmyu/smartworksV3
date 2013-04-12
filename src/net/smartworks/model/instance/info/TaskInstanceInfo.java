@@ -250,7 +250,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 	}
 	
 	public boolean isRunning(){
-		if(this.getStatus()==TaskInstance.STATUS_RUNNING || this.getStatus()==TaskInstance.STATUS_APPROVAL_RUNNING || this.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING)
+		if(this.getStatus()==TaskInstance.STATUS_RUNNING || this.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING)
 			return true;
 		return false;
 	}

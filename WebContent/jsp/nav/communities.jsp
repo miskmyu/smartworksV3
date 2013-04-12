@@ -9,22 +9,23 @@
 <%@ page import="net.smartworks.service.ISmartWorks"%>
 
 <!-- 나의 커뮤너티 와 검색박스가 있는 헤더  -->
-<ul class="nav_tit">
+<ul class="nav_tit_mail">
 
 	<!-- 나의 커뮤너티 라벨과 클릭시 아래의 커뮤너티선택트리화면을 접었다 폈다하는 기능 제공  -->
 	<!-- *** js_collapse_parent_siblings : sw_act_nav.js 에서 이클래스의 클릭이벤트를 받아서 -->
 	<!--            아래의 js_callapsible 클래스를 찾아 toggle 한다 -->
 	<li>
-		<a href="" class="js_collapse_parent_siblings arr_off"><fmt:message key="nav.communities.my_communities" /></a>
+		<a href="" class="js_collapse_parent_siblings arr_on"><fmt:message key="nav.communities.my_communities" /></a>
 		<span></span><!--  프로그래스아이콘이 실행되는 곳 -->
 	</li>
 	
 	<!--  검색박스를 제공하여, 초성검색 기능을 제공 -->
-	<li class="nav_srch js_srch_my_com">
-		<div class="srch srch_wsize">
+	<li class="nav_srch js_srch_my_com" style="width:0">
+		<a href="" onclick="$(this).hide().next().show().parents('ul:first').removeClass('nav_tit_mail').addClass('nav_tit');return false;"  title="<fmt:message key='search.search_people_depart_group'/>"><div class="srch_icon_only"></div></a>
+		<div class="srch srch_wsize" style="display:none">
 			<input id="" class="nav_input js_auto_complete" type="text" title="<fmt:message key='search.search_people_depart_group'/>"
 				placeholder="<fmt:message key='search.search_people_depart_group'/>" href="community.sw">
-			<div class='srch_icon js_srch_x'></div>
+			<a href="" onclick="$(this).parent().hide().prev().show().parents('ul').removeClass('nav_tit').addClass('nav_tit_mail');return false;"><div class='srch_icon js_srch_x'></div></a>
 		</div>
 		<!-- nav 검색 리스트 -->
 		<div class="nav_srch_list m0" style="display: none"></div>
@@ -36,7 +37,7 @@
 <!-- 나의 커뮤너티 와 검색박스가 있는 헤더 // -->
 
 <!--  나의부서, 나의 그룹에서 커뮤너티를 찾을수 있는 트리 화면  -->
-<div style="display:none" class='nav_sub_list js_collapsible js_nav_my_com'>
+<div class='nav_sub_list js_collapsible js_nav_my_com'>
 	<!-- 내부 메뉴 -->
 	<div class="tab_buttons js_nav_tab_com">
 	
@@ -47,13 +48,16 @@
 			</span>
 		</a>
 		<a href="my_departments.sw" class="" title="<fmt:message key='nav.communities.my_departments'/>">
-			<span class="btn_depart current"></span>
+			<span class="btn_depart"></span>
 		</a> 
+		<a href="my_favorite_communities.sw" title="<fmt:message key='nav.works.my_favorite_works' />">
+			<span class="btn_favorite current"/></span>
+		</a>
 		<span class="fr ml2 js_progress_span" ></span><!--  프로그래스아이콘이 실행되는 곳 -->
 
 	</div>
 	<div id='my_communities'>
-		<jsp:include page='/jsp/nav/my_departments.jsp' />
+		<jsp:include page='/jsp/nav/my_favorite_communities.jsp' />
 	</div>
 	<!--내부메뉴//-->
 </div>

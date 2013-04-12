@@ -114,6 +114,7 @@
 		<property name="modificationUser" column="modifier" type="string" length="50"/>
 		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
 		<property name="isActivity" column="isActivity" type="boolean" access="field"/>
+		<property name="setupCompanyDate" type="timestamp"/>
 	</class>
 	
 	<class name="SwoTeam" table="SWOrgTeam">

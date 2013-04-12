@@ -21,6 +21,7 @@ import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
+import net.smartworks.model.community.info.CommunityInfoList;
 import net.smartworks.model.community.info.GroupMemberList;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
@@ -337,6 +338,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public SmartWorkInfo[] getMyFavoriteWorks() throws Exception {
 		return workService.getMyFavoriteWorks();
+	}
+
+	@Override
+	public CommunityInfo[] getMyFavoriteCommunities() throws Exception {
+		return communityService.getMyFavoriteCommunities();
 	}
 
 	@Override
@@ -748,6 +754,16 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void removeAFavoriteWork(HttpServletRequest request) throws Exception {
 		workService.removeAFavoriteWork(request.getParameter("workId"));		
+	}
+
+	@Override
+	public void addAFavoriteCommunity(HttpServletRequest request) throws Exception {
+		communityService.addAFavoriteCommunity(request.getParameter("comId"));
+	}
+
+	@Override
+	public void removeAFavoriteCommunity(HttpServletRequest request) throws Exception {
+		communityService.removeAFavoriteCommunity(request.getParameter("comId"));		
 	}
 
 	@Override
@@ -1799,5 +1815,10 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public TaskInstanceInfo[] getSubInstancesInForward(String forwardId, int length, LocalDate to) throws Exception {
 		return instanceService.getSubInstancesInForward(forwardId, length, to);
+	}
+
+	@Override
+	public CommunityInfoList getCommunityInstanceList(int type, RequestParams params) throws Exception {
+		return communityService.getCommunityInstanceList(type, params);
 	}
 }

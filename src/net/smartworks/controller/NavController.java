@@ -62,6 +62,12 @@ public class NavController {
 		return SmartUtil.returnMnv(request, "jsp/nav/my_favorite_works.jsp", "");
 	}
 
+	@RequestMapping("/my_favorite_communities")
+	public ModelAndView myFavoriteCommunities(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/nav/my_favorite_communities.jsp", "");
+	}
+
 	@RequestMapping("/my_groups")
 	public ModelAndView myGroups(HttpServletRequest request, HttpServletResponse response) {
 
@@ -96,6 +102,18 @@ public class NavController {
 	@ResponseStatus(HttpStatus.OK)
 	public void removeAFavoriteWork(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.removeAFavoriteWork(request);
+	}
+
+	@RequestMapping(value = "/add_a_favorite_community", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public void addAFavoriteCommunity(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.addAFavoriteCommunity(request);
+	}
+
+	@RequestMapping(value = "/remove_a_favorite_community", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public void removeAFavoriteCommunity(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeAFavoriteCommunity(request);
 	}
 
 }

@@ -25,6 +25,7 @@ import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
+import net.smartworks.model.community.info.CommunityInfoList;
 import net.smartworks.model.community.info.GroupMemberList;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
@@ -94,6 +95,7 @@ public interface ISmartWorks {
 	public final static String CONTEXT_SMARTCASTER = "sf.sc";
 	public final static String CONTEXT_DASHBOARD = "sf.db";
 	public final static String CONTEXT_MYPROFILE = "sf.pf";
+	public final static String CONTEXT_COMMUNITIES = "sf.cm";
 	
 	public final static String CONTEXT_USER_SPACE = "us.sp";
 	public final static String CONTEXT_GROUP_SPACE = "gp.sp";
@@ -126,8 +128,10 @@ public interface ISmartWorks {
 	public final static int SPACE_TYPE_SAVED_LIST = 28;	
 
 	public final static int CONTEXT_PREFIX_LENGTH = 6;
+	
 	public final static String CONTEXT_PREFIX_HOME = "sf.hm.";
 	public final static String CONTEXT_PREFIX_SMARTCASTER = "sf.sc.";
+	public final static String CONTEXT_PREFIX_COMMUNITIES = "sf.cm.";
 	public final static String CONTEXT_PREFIX_DASHBOARD = "sf.db.";
 	public final static String CONTEXT_PREFIX_MYPROFILE = "sf.pf.";
 	public final static String CONTEXT_PREFIX_USER_SPACE = "us.sp.";
@@ -191,6 +195,8 @@ public interface ISmartWorks {
 	public abstract CompanyCalendar getCompanyEventBox(LocalDate date) throws Exception;
 
 	public abstract SmartWorkInfo[] getMyFavoriteWorks() throws Exception;
+
+	public abstract CommunityInfo[] getMyFavoriteCommunities() throws Exception;
 
 	public abstract WorkInfo[] getAllWorkCategoryByCategoryId(String categoryId) throws Exception;
 	
@@ -299,6 +305,8 @@ public interface ISmartWorks {
 	
 	public abstract InstanceInfoList getMailInstanceList(String folderId, RequestParams params) throws Exception;
 
+	public abstract CommunityInfoList getCommunityInstanceList(int type, RequestParams params) throws Exception;
+	
 	public abstract WorkInstance getWorkInstanceById(int workType, String workId, String instanceId) throws Exception; // hsshin
 	
 	public abstract WorkInstance getSavedWorkInstanceById(int workType, String workId, String instanceId) throws Exception;
@@ -403,6 +411,10 @@ public interface ISmartWorks {
 	public abstract void addAFavoriteWork(HttpServletRequest request) throws Exception;
 
 	public abstract void removeAFavoriteWork(HttpServletRequest request) throws Exception;
+
+	public abstract void addAFavoriteCommunity(HttpServletRequest request) throws Exception;
+
+	public abstract void removeAFavoriteCommunity(HttpServletRequest request) throws Exception;
 
 	public abstract CompanyGeneral getCompanyGeneral() throws Exception;
 

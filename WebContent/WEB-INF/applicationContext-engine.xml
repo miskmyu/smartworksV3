@@ -8,9 +8,11 @@
 	<beans:bean id="misUtil" class="net.smartworks.server.engine.common.util.MisUtil">
 		<beans:property name="processInstStatusMap">
 			<beans:map>
-				<beans:entry key="started" value="2"/>
+   				<beans:entry key="started" value="2"/>
 				<beans:entry key="completed" value="3"/>
-				<beans:entry key="terminated" value="4"/>
+				<beans:entry key="returned" value="4"/>
+				<beans:entry key="canceled" value="5"/>
+				<beans:entry key="aborted" value="6"/>
 			</beans:map>
 		</beans:property>
 		<beans:property name="processInstExecutedStatusSet">

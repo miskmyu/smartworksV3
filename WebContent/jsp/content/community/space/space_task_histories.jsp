@@ -513,8 +513,56 @@
 						<%
 							break;
 						case TaskInstance.TYPE_PROCESS_TASK_ASSIGNED:
-							if(taskInstance.isStartTask()){
+							if(workInstance.getStatus() == Instance.STATUS_RETURNED){
+								if(taskInstance.getStatus() == Instance.STATUS_RETURNED){
 						%>
+									<fmt:message key="content.sentence.ptask_returned">
+										<fmt:param>
+											<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>'>
+												<span class="t_woname"><%=runningTaskName%></span> 
+											</a>
+										</fmt:param>
+										<fmt:param>
+											<%
+											if(cUser.getId().equals(assignee.getId())){
+											%>
+												<span class="t_name"><%=assignee.getLongName()%></span>
+											<%
+											}else{
+											%>
+												<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+											<%
+											}
+											%>
+										</fmt:param>
+									</fmt:message>
+								<%
+								}else{
+								%>
+									<fmt:message key="content.sentence.ptask_assigned">
+										<fmt:param>
+											<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>'>
+												<span class="t_woname"><%=runningTaskName%></span> 
+											</a>
+										</fmt:param>
+										<fmt:param>
+											<%
+											if(cUser.getId().equals(assignee.getId())){
+											%>
+												<span class="t_name"><%=assignee.getLongName()%></span>
+											<%
+											}else{
+											%>
+												<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+											<%
+											}
+											%>
+										</fmt:param>
+									</fmt:message>
+							<%
+								}
+							}else if(taskInstance.isStartTask()){
+							%>
 								<fmt:message key="content.sentence.ptask_started">
 									<fmt:param>
 										<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=workId%>&taskInstId=<%=taskInstance.getId()%>'>

@@ -115,6 +115,11 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .srch_wsize {width:195px;height:23px;margin: 0 5px 0 0;overflow:hidden}
 .srch_wsize2{width:195px;height:23px;margin:0;margin-top:-2px;overflow:hidden}
 .srch_wsize_mail{width:195px;height:23px;margin: 28px 0 0; overflow:hidden}
+.srch_icon_only{
+	background:url("../../images/btn_srch_o.png") no-repeat;cursor:pointer;height:23px;
+	width:25px;padding:0; position:relative;top:-20px;left:169px;border:0
+}
+.srch_icon_only:hover{background:url("../../images/btn_srch_o.png") -25px 0 no-repeat}
 
 /*Search-white */
 .srch_wh {background: none repeat scroll 0 0 #FFF; border-color: #c7c7c7; border-style: solid; border-width: 1px; height:16px}
@@ -265,8 +270,8 @@ a .btn_bfolder_add {background: url("../../images/nav_img.png") no-repeat -25px 
 a .btn_bfolder_add:hover {background: url("../../images/nav_img.png") no-repeat -25px -612px}
 
 /* Nav Community Btn */ 
-.btn_depart {background: url("../../images/nav_img.png") no-repeat -115px -188px transparent; height:20px; width:43px; display: inline-block; float:right}
-a .btn_depart:hover, .btn_depart.current {background: url("../../images/nav_img.png") no-repeat -115px -217px}
+.btn_depart {background: url("../../images/nav_img.png") no-repeat -116px -188px transparent; height:20px; width:42px; display: inline-block; float:right}
+a .btn_depart:hover, .btn_depart.current {background: url("../../images/nav_img.png") no-repeat -116px -217px}
 
 .btn_my_group {background: url("../../images/nav_img.png") no-repeat -158px -188px transparent; height:20px; width:43px; display: inline-block; float:right} 
 a .btn_my_group:hover, .btn_my_group.current {background: url("../../images/nav_img.png") no-repeat -158px -217px}
@@ -347,6 +352,9 @@ li.fvrt_item:hover .check_option {display:block}
 /* CommentsBox added by ysjung */
 tr.instance_list {}
 tr.instance_list:hover {background-color:#fff7eb; cursor:pointer}
+tr.instance_list .user_actions{display:none}
+tr.instance_list:hover .user_actions{display:block}
+
 tr.app_work_list {}
 tr.app_work_list:hover {background-color:#fff7eb}
 .det_title {padding:5px 0}
@@ -384,7 +392,7 @@ li.sub_instance_list > .det_title:hover .delet_action, li.instance_list > .det_t
 .members {display: inline-block; padding: 4px 10px}
 .members .icon_pe {padding: 1px}
 
-#community_department .leader, #community_group .leader, .pop_list_area .leader, .setting_section .leader { position:absolute; background: url("../../images/nav_img.png") no-repeat -115px -699px; display: inline-block; height: 7px; margin: 13px 0 0 13px; width: 7px;}
+#community_department .leader, #community_group .leader, .pop_list_area .leader, .setting_section .leader, .instance_list .leader { position:absolute; background: url("../../images/nav_img.png") no-repeat -115px -699px; display: inline-block; height: 7px; margin: 13px 0 0 13px; width: 7px;}
 .setting_section .leader.m {margin: 41px 0 0 41px; height:7px !important}
 
 #community_department .profile_size_s {margin:0 5px 0 0}

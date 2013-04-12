@@ -159,6 +159,11 @@
 					statusImage = "icon_status_returned";
 					statusTitle = "content.status.returned";
 					break;
+				// 인스턴스가 반려된 경우...
+				case Instance.STATUS_REJECTED:
+					statusImage = "icon_status_returned";
+					statusTitle = "content.status.rejected";
+					break;
 				// 인스턴스가 완료된 경우...
 				case Instance.STATUS_COMPLETED:
 					statusImage = "icon_status_completed";

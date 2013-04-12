@@ -8,6 +8,8 @@
 
 package net.smartworks.server.engine.organization.model;
 
+import java.util.Date;
+
 import net.smartworks.server.engine.common.model.BaseObject;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.XmlUtil;
@@ -55,6 +57,13 @@ public class SwoUser extends SwoObject {
 	public static final String A_EXTENSIONNO = "extensionNo";
 	public static final String A_SIGN = "sign";
 	public static final String A_USESIGN = "useSign";
+	
+	public static final String A_JOINCOMPANYDATE = "joinCompanyDate";
+	public static final String A_BIRTHDAY = "birthDay";
+	public static final String A_TELEPHONENUMBER = "telephoneNumber";
+	public static final String A_ADDRESS = "address";
+	//추가컬럼
+
 
 	private String nickName;
 	private String password;
@@ -78,7 +87,15 @@ public class SwoUser extends SwoObject {
 	private String mobileNo;
 	private String extensionNo;
 	private String sign;
-
+	
+	private Date joinCompanyDate;
+	private Date birthDay;
+	private String telephoneNumber;
+	private String address;
+	//추가컬럼
+	
+	
+	
 	public SwoUser() {
 		super();
 	}
@@ -115,6 +132,10 @@ public class SwoUser extends SwoObject {
 		appendAttributeString(A_RETIREE, retiree, true, buf);
 		appendAttributeString(A_MOBILENO, mobileNo, true, buf);
 		appendAttributeString(A_EXTENSIONNO, extensionNo, true, buf);
+		
+		appendAttributeString(A_TELEPHONENUMBER, telephoneNumber, true, buf);
+		appendAttributeString(A_ADDRESS, address, true, buf);
+			
 		return buf.toString();
 	}
 	public String toElementsString(String tab, boolean lite) {
@@ -433,5 +454,37 @@ public class SwoUser extends SwoObject {
 	}
 	public void setUseSign(boolean useSign) {
 		this.useSign = useSign;
+	}
+	
+	public Date getJoinCompanyDate() {
+		return joinCompanyDate;
+	}
+	
+	public void setJoinCompanyDate(Date joinCompanyDate) {
+		this.joinCompanyDate = joinCompanyDate;
+	}
+	
+	public Date getBirthDay() {
+		return birthDay;
+	}
+	
+	public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
+	}
+	
+	public String getTelephoneNumber() {
+		return telephoneNumber;
+	}
+	
+	public void setTelephoneNumber(String telephoneNumber) {
+		this.telephoneNumber = telephoneNumber;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+	
+	public void setAddress(String address) {
+		this.address = address;
 	}
 }

@@ -352,6 +352,43 @@ $(function() {
 		return false;
 	});
 
+	$('.js_check_favorite_com').live('click', function(e){
+		var input = $(targetElement(e));
+		var comId = input.attr('comId');
+		var favoriteComs = input.parents('li.js_favorite_coms:first');
+		var url = 'remove_a_favorite_community.sw';
+		var isAdd = false;
+		if(!input.hasClass('checked') && isEmpty(favoriteComs)){
+			url = 'add_a_favorite_community.sw';
+			isAdd = true;
+		}
+		var progressSpan = input.parent().prev().find('span:last');
+		smartPop.progressNav(progressSpan);						
+		$.ajax({
+			url : url,
+			data : {
+				comId : comId
+			},
+			success : function(data, status, jqXHR) {
+				if(isAdd){
+					input.addClass('checked');
+				}else{
+					if(isEmpty(favoriteComs))
+						input.removeClass('checked');
+					else
+						favoriteComs.remove();
+				}
+				smartPop.closeProgress();											
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				if(isAdd) input.removeClass('checked');
+				else input.addClass('checked');
+				smartPop.closeProgress();											
+			}
+		});		
+		return false;
+	});
+
 	$('.js_add_new_group').live('click', function(e){
 		smartPop.createGroup();
 		return false;

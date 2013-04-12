@@ -17,11 +17,13 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.build = function(config) {
 	if(!options.refreshData)
 		options.container.html('');
 
-	var department = (options.dataField && options.dataField.department) || {};
-	var departmentHtml = (options.dataField && options.dataField.departmentHtml) || "";
+	var departments = (options.dataField && options.dataField.departments) || new Array();
+	var departmentsHtml = (options.dataField && options.dataField.departmentsHtml) || "";
 	var $entity = options.entity;
 	var $graphic = $entity.find('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
+	var multiUsers = $graphic.attr('multipleUsers');
+	options.container.attr('multiUsers', multiUsers);
 	var id = $entity.attr('id');
 	var name = $entity.attr('name');
 	
@@ -45,24 +47,41 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.build = function(config) {
 	var icoClass = ' class="icon_fb_depart"';
 	var departPicker = 'class="js_departpicker_button"';
 	
+	if(multiUsers === 'true'){
+		if(!isEmpty(departments) && isEmpty(departmentsHtml)){
+			for(var i=0; i<departments.length; i++)
+				departmentsHtml = departmentsHtml +  "<span class='js_community_item user_select' comId='" + departments[i].comId + "' comName='" + departments[i].name + "'>" + departments[i].name + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";		
+		}
+		href = "community_name.sw";
+//		icoClass = ' class="icon_fb_departs"';
+	}else if (!isEmpty(departments) && isEmpty(departmentsHtml)) {
+		departmentsHtml = "<span class='js_community_item user_select' comId='" + departments[0].comId + "' comName='" + departments[0].name + "'>" + departments[0].name + "<a class='js_remove_community' href=''> x</a></span>";
+	}
 
 	var $html = $('<div class="form_value" style="width:' + valueWidth + '%"> <div class="icon_fb_space">\
 					<div ' + required + '>\
-						' + departmentHtml + '\
-						<input class="m0 js_auto_complete" style="width:100px" href="' + href + '" type="text">\
+						' + departmentsHtml + '\
+						<input class="m0 js_auto_complete" style="min-width:100px !important;max-width:200px" href="' + href + '" type="text">\
 					</div>\
 					<div class="js_community_list srch_list_nowid" style="display: none"></div><span class="js_community_popup"></span><a href=""' + departPicker + '><span ' + icoClass + '></span></a></div></div>');
 
 	if(readOnly){
 		$department = $('<div class="form_value" style="width:' + valueWidth + '%"><span></span></div>');
-		var viewDepartmentHtml = '';
-		if(!isEmpty(departmentHtml)){
-			viewDepartmentHtml = departmentHtml;
+		var viewDepartmentsHtml = '';
+		if(isEmpty(departments) && !isEmpty(departmentsHtml)){
+			viewDepartmentsHtml = departmentsHtml;
 		}else{
-			var href = 'department_space.sw?cid=dp.sp.' + department.departId + '&wid=' + department.departId;
-			viewDepartmentHtml = '<a href="' + href + '"><span>' + department.departName + '</span></a>';
+			for(var i=0; i<departments.length; i++) {
+				var separator = ', ';
+				var href = '';
+				var desc = '';
+				href = 'department_space.sw?cid=dp.sp.' + departments[i].comId + '&wid=' + departments[i].comId;
+				if(i == departments.length - 1)
+					separator = '';
+				viewDepartmentsHtml = viewDepartmentsHtml + '<a href="' + href + '"><span>' + departments[i].name + desc + separator + '</span></a>';
+			}
 		}
-		$department.find('span').html(viewDepartmentHtml);
+		$department.find('span').html(viewDepartmentsHtml);
 	}else{	
 		$department = $html;
 	}
@@ -78,9 +97,9 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.build = function(config) {
 	if (readOnly) {
 		var $departmentHiddenDiv = options.container.find('#departmentHiddenDiv' + id);
 		if ($departmentHiddenDiv.length === 0) {
-			options.container.append($('<div id="departmentHiddenDiv' + id + '" style="display:none"></div>').html(departmentHtml));
+			options.container.append($('<div id="departmentHiddenDiv' + id + '" style="display:none"></div>').html(departmentsHtml));
 		} else {
-			$departmentHiddenDiv.html(departmentHtml);
+			$departmentHiddenDiv.html(departmentsHtml);
 		}
 	}	
 		
@@ -92,9 +111,11 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.buildEx = function(config){
 			container : $('<tr></tr>'),
 			fieldId: '',
 			fieldName: '',
-			department: {}, //{departId: '',departName: '}
+			departments: new Array(), //{comId: '',name: '}
 			columns: 1,
 			colSpan: 1,
+			multiUsers: false,
+			departmentsHtml: "",
 			required: false,
 			readOnly: false		
 	};
@@ -104,7 +125,7 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.buildEx = function(config){
 	if(options.columns >= 1 && options.columns <= 4 && options.colSpan <= options.columns) labelWidth = 12 * options.columns/options.colSpan;
 	$formEntity =  $($.parseXML('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
 						'<format type="departmentField" viewingType="departmentField"/>' +
-					    '<graphic hidden="false" readOnly="'+ options.readOnly +'" labelWidth="'+ labelWidth + '"/>' +
+					    '<graphic hidden="false" readOnly="'+ options.readOnly +'" labelWidth="'+ labelWidth + '" multipleUsers="' + options.multiUsers+ '"/>' +
 					'</formEntity>')).find('formEntity');
 	var $formCol = $('<td class="form_col js_type_departmentField" fieldid="' + options.fieldId+ '" colspan="' + options.colSpan + '" width="' + options.colSpan/options.columns*100 + '%" rowspan="1">');
 	$formCol.appendTo(options.container);
@@ -114,8 +135,8 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.buildEx = function(config){
 			entity : $formEntity,
 			dataField : SmartWorks.FormRuntime.DepartmentFieldBuilder.dataField({
 				fieldId: options.fieldId,
-				department : options.department,
-				departmentHtml : options.departmentHtml
+				departments : options.departments,
+				departmentsHtml : options.departmentsHtml
 			})
 	});
 	
@@ -127,14 +148,17 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.serializeObject = function(departm
 		var departmentField = $(departmentFields[i]);
 		var fieldId = departmentField.attr('fieldId');
 		var departmentList = departmentField.find('.form_value .js_community_item');
-		var department = {};
-		if(!isEmpty(departmentList)){
-			department = {
-				id : $(departmentList[0]).attr('comId'),
-				name : $.trim($(departmentList[0]).attr('comName'))
-			};
+		var departments = new Array();
+		if (departmentList.length === 0) {
+			departmentList = departmentField.find('.js_community_item');
 		}
-		departmentsJson[fieldId] =  {department: department};
+		for(var j=0; j<departmentList.length; j++)
+			departments.push({
+				id : $(departmentList[j]).attr('comId'),
+				name : $.trim($(departmentList[j]).attr('comName'))
+			});
+		
+		departmentsJson[fieldId] =  {departments: departments};
 	}
 	return departmentsJson;
 };
@@ -143,9 +167,9 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.validate = function(departmentFiel
 	var departmentsValid = true;
 	for(var i=0; i<departmentFields.length; i++){
 		var departmentField = $(departmentFields[i]);
-		var departId = departmentField.find('.js_community_item:first').attr('comId');
+		var departmentId = departmentField.find('.js_community_item:first').attr('comId');
 		var required = departmentField.find('div.sw_required');
-		if(!isEmpty(required) && isBlank(departId)){
+		if(!isEmpty(required) && isBlank(departmentId)){
 			departmentField.find('div.sw_required').addClass("sw_error");
 			departmentsValid = false;
 		}
@@ -158,8 +182,8 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.dataField = function(config){
 			fieldName: '',
 			formXml: '',
 			fieldId: '',
-			department: '', //{departId: '',departName: ''}
-			departmentHtml: ''
+			departments: new Array(), //{comId: '',name: ''}
+			departmentsHtml: ""
 	};
 
 	SmartWorks.extend(options, config);
@@ -171,8 +195,8 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.dataField = function(config){
 	if(isEmpty(fieldId)) return dataField;
 	dataField = {
 			id: fieldId,
-			department: options.deparment,
-			departmentHtml : options.departmentHtml
+			departments : options.departments,
+			departmentsHtml : options.departmentsHtml
 	};
 	return dataField;
 };

@@ -1,7 +1,7 @@
 package net.smartworks.model.community.info;
 
-import net.smartworks.model.community.Department;
 import net.smartworks.model.community.User;
+import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
@@ -12,12 +12,16 @@ public class UserInfo extends WorkSpaceInfo {
 	private DepartmentInfo department;
 	private DepartmentInfo[] departments;
 	private String position = "";
+	private String employeeId = "";
+	private LocalDate hireDate;
 	private String phoneNo = "";
 	private String cellPhoneNo = "";
+	private LocalDate birthday;
+	private boolean lunarBirthday;
 	private boolean online;
 	private boolean useSignPicture;
 	private String signPicture;
-
+	
 	public String getNickName() {
 		if(SmartUtil.isBlankObject(nickName)) return getName();
 		return nickName;
@@ -81,6 +85,30 @@ public class UserInfo extends WorkSpaceInfo {
 	}
 	public void setSignPicture(String signPicture) {
 		this.signPicture = signPicture;
+	}
+	public LocalDate getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(LocalDate birthday) {
+		this.birthday = birthday;
+	}
+	public boolean isLunarBirthday() {
+		return lunarBirthday;
+	}
+	public void setLunarBirthday(boolean lunarBirthday) {
+		this.lunarBirthday = lunarBirthday;
+	}
+	public String getEmployeeId() {
+		return employeeId;
+	}
+	public void setEmployeeId(String employeeId) {
+		this.employeeId = employeeId;
+	}
+	public LocalDate getHireDate() {
+		return hireDate;
+	}
+	public void setHireDate(LocalDate hireDate) {
+		this.hireDate = hireDate;
 	}
 	public UserInfo(){
 		super();

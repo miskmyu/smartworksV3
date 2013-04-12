@@ -27,6 +27,8 @@ public class User extends WorkSpace {
 	public static final String USER_ID_SYSTEM = "system@smartworks.net";
 	public static final String USER_ID_ANONYMOUS = "anonymous@smartworks.net";
 	public static final String USER_ID_NONE_EXISTING = "noneexisting@smartworks.net";
+	public static final String USER_ID_ADMINISTRATOR = "admin@maninsoft.co.kr";
+	public static final String USER_ID_PROCESS = "PROCESS";
 	
 	public static final String NAMING_NICKNAME_BASE = "NickNameBase";
 
@@ -40,9 +42,14 @@ public class User extends WorkSpace {
 	private String department;
 	private DepartmentInfo[] departments; 
 	private String employeeId;
+	private LocalDate hireDate;
 	private String password;
 	private String phoneNo;
 	private String cellPhoneNo;
+	private LocalDate birthday;
+	private boolean lunarBirthday;
+	private String homeAddress;
+	private String homePhoneNo;
 	private String company;
 	private String companyId;
 	private boolean useSignPicture;
@@ -178,6 +185,36 @@ public class User extends WorkSpace {
 	public String getMailId(){
 		if(!this.isUseMail() || SmartUtil.isBlankObject(this.mailAccounts)) return null;
 		return this.mailAccounts[0].getEmailId();
+	}
+	public LocalDate getHireDate() {
+		return hireDate;
+	}
+	public void setHireDate(LocalDate hireDate) {
+		this.hireDate = hireDate;
+	}
+	public LocalDate getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(LocalDate birthday) {
+		this.birthday = birthday;
+	}
+	public boolean isLunarBirthday() {
+		return lunarBirthday;
+	}
+	public void setLunarBirthday(boolean lunarBirthday) {
+		this.lunarBirthday = lunarBirthday;
+	}
+	public String getHomeAddress() {
+		return homeAddress;
+	}
+	public void setHomeAddress(String homeAddress) {
+		this.homeAddress = homeAddress;
+	}
+	public String getHomePhoneNo() {
+		return homePhoneNo;
+	}
+	public void setHomePhoneNo(String homePhoneNo) {
+		this.homePhoneNo = homePhoneNo;
 	}
 	public int getSpaceType(){
 		return ISmartWorks.SPACE_TYPE_USER;

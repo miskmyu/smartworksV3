@@ -46,6 +46,7 @@ import net.smartworks.server.engine.process.link.model.LnkCondition;
 import net.smartworks.server.engine.process.link.model.LnkLink;
 import net.smartworks.server.engine.process.link.model.LnkLinkCond;
 import net.smartworks.server.engine.process.link.model.LnkObject;
+import net.smartworks.server.engine.process.process.model.PrcProcess;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.script.util.F2SUtil;
 import net.smartworks.server.engine.process.task.exception.TskException;
@@ -92,6 +93,8 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		String type = obj.getType();
 		String apprLineId = obj.getExtendedPropertyValue("approvalLine");
 		
+		LocalDate now = new LocalDate();
+
 		//정보관리 업무에서 전자결재를 처음 시작했다면 type이 SINGLE이다
 		//type 이 null이 아니며 approval 이고 apprLineId 를 가지고 있다면...
 		if (type != null && type.equalsIgnoreCase(CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("approval"), "approval")) && !CommonUtil.isEmpty(apprLineId)) {
@@ -139,8 +142,19 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 //					newTask.setExtendedPropertyValue("txtApprovalSubject", txtApprovalSubject);
 //					newTask.setExtendedPropertyValue("approval", appr.getObjId());
 					
+					newTask.setExpectEndDate(new LocalDate(now.getTime()+30*LocalDate.ONE_MINUTE));	
+					
 					getTskManager().setTask("linkeadvisor", newTask, null);
 					
+					if(!SmartUtil.isBlankObject(newTask.getFromRefId())){
+						String sourceTaskId = newTask.getFromRefId();
+						TskTask task = getTskManager().getTask("linkeadvisor", sourceTaskId, IManager.LEVEL_ALL);
+						if (task != null) {
+							task.setExpectEndDate(new LocalDate(newTask.getExpectEndDate().getTime()));
+							getTskManager().setTask("linkeadvisor", task, IManager.LEVEL_ALL);
+						}
+					}
+
 					String prcInstId = newTask.getProcessInstId();
 					PrcProcessInst prcInst = getPrcManager().getProcessInst(user, prcInstId, IManager.LEVEL_LITE);
 					prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RETURN);
@@ -199,7 +213,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				
 				//PrcInstance 종료
 				PrcProcessInst prcInst = this.getPrcManager().getProcessInst("linkadvisor", obj.getProcessInstId(), IManager.LEVEL_LITE);
-				prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE);
+				prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 				if (!CommonUtil.isEmpty(title))
 					prcInst.setTitle(title);
 				this.getPrcManager().setProcessInst("linkadvisor", prcInst, IManager.LEVEL_LITE);
@@ -247,7 +261,13 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				
 				if (task != null) {
 					task.setIsApprovalSourceTask(null);
-					task.setTargetApprovalStatus(Instance.STATUS_REJECTED +"");
+					task.setTargetApprovalStatus(TskTask.TASKSTATUS_CANCEL +"");
+					task.setStatus(TskTask.TASKSTATUS_ASSIGN);
+					if(SmartUtil.isBlankObject(task.getDueDate())){
+						task.setExpectEndDate(new LocalDate((now).getTime() + 30*LocalDate.ONE_MINUTE));
+					}else{
+						task.setExpectEndDate(new LocalDate((now).getTime() + task.getDueDate().getTime()));
+					}
 					getTskManager().setTask(user, task, IManager.LEVEL_ALL);
 				}
 				
@@ -383,6 +403,13 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		// 프로세스 상태 갱신
 		this.updateProcessInstStatus(user, obj.getProcessInstId());
 		
+		if(action != null && action.equalsIgnoreCase("return") ){
+			PrcProcessInst prcInst = this.getPrcManager().getProcessInst("linkadvisor", obj.getProcessInstId(), IManager.LEVEL_ALL);
+			if(prcInst.getStatus().equalsIgnoreCase(CommonUtil.toDefault((String)MisUtil.processInstStatusMap().get("started"), "started"))){
+				prcInst.setStatus(CommonUtil.toDefault((String)MisUtil.processInstStatusMap().get("returned"), "returned"));
+				this.getPrcManager().setProcessInst("linkadvisor", prcInst, IManager.LEVEL_LITE);
+			}
+		}
 		String objType = obj.getType();
 		
 		if (objType == null || objType.equalsIgnoreCase("route") || objType.equalsIgnoreCase("and")
@@ -528,6 +555,23 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				} else {
 					apprTask.setFromRefType(preApprTask.getFromRefType());
 					apprTask.setFromRefId(preApprTask.getFromRefId());
+				}
+			}
+			
+			LocalDate now = new LocalDate();
+			if(appr.getDueDate()!=null && !SmartUtil.isBlankObject(appr.getDueDate())){
+				int dueDate = Integer.parseInt(appr.getDueDate());
+				apprTask.setExpectEndDate(new LocalDate(now.getTime()+dueDate*LocalDate.ONE_MINUTE));
+			}else{
+				apprTask.setExpectEndDate(new LocalDate(now.getTime()+30*LocalDate.ONE_MINUTE));			
+			}
+			
+			if(!SmartUtil.isBlankObject(apprTask.getFromRefId())){
+				String sourceTaskId = apprTask.getFromRefId();
+				TskTask task = getTskManager().getTask(approver, sourceTaskId, IManager.LEVEL_ALL);
+				if (task != null) {
+					task.setExpectEndDate(new LocalDate(apprTask.getExpectEndDate().getTime()));
+					getTskManager().setTask("linkadvisor", task, IManager.LEVEL_ALL);
 				}
 			}
 			
@@ -1398,20 +1442,21 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			obj.setExpectStartDate(now);
 			obj.setRealStartDate(now);
 			
-			String def = obj.getDef();
-			TskTaskDef taskDef = null;
-			
-			if (!CommonUtil.isEmpty(def))
-				taskDef = getTskManager().getTaskDef("tskManagerSmartLinkAdvisor", def, IManager.LEVEL_LITE);
-			expectEndDate = new LocalDate();//date to localdate - 
-			if (taskDef != null &&  !CommonUtil.isEmpty(taskDef.getDueDate())) {
-				//dueDate 는 분단위로 설정이 되어 있다
-				expectEndDate.setTime(now.getTime() + ((Long.parseLong(taskDef.getDueDate())) * 60 * 1000));
-			} else {
-				expectEndDate.setTime(now.getTime() + 1800000);
-			}
-			obj.setExpectEndDate(expectEndDate);
-			
+			if(expectEndDate == null){
+				String def = obj.getDef();
+				TskTaskDef taskDef = null;
+				
+				if (!CommonUtil.isEmpty(def))
+					taskDef = getTskManager().getTaskDef("tskManagerSmartLinkAdvisor", def, IManager.LEVEL_LITE);
+				expectEndDate = new LocalDate();//date to localdate - 
+				if (taskDef != null &&  !CommonUtil.isEmpty(taskDef.getDueDate())) {
+					//dueDate 는 분단위로 설정이 되어 있다
+					expectEndDate.setTime(now.getTime() + ((Long.parseLong(taskDef.getDueDate())) * 60 * 1000));
+				} else {
+					expectEndDate.setTime(now.getTime() + 1800000);
+				}
+				obj.setExpectEndDate(expectEndDate);
+			}	
 			
 			//postGetTasks 에 있는 내용을 옮김 - 데이터를 get()하고나서 evict(obj)를 하는데 extprop가 맞지 않아 nullpoint가 난다...
 			//세션케쉬에는 processInstCreationUser 값이 없는 상태로 올라가 있는데 postGetTasks를 하는 도중 processInstCreationUser를

@@ -627,6 +627,8 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskWorkSpaceType ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskAccessLevel ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskAccessValue ");
+		queryBuffer.append(" 			, prcInstInfo.lastTask_tskIsApprovalSourceTask ");
+		queryBuffer.append(" 			, prcInstInfo.lastTask_tskTargetApprovalStatus ");
 		queryBuffer.append(" 			, (select count(*) from tsktask where tskstatus='11' and (tsktype='common' or tsktype='subflow') and tskprcInstId = prcInst.prcObjid) as lastTaskCount ");
 		queryBuffer.append(" 		from  ");
 		queryBuffer.append(" 			prcprcinst prcInst,  ");
@@ -648,6 +650,8 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		queryBuffer.append(" 						, task.tskWorkSpaceType as lastTask_tskWorkSpaceType ");
 		queryBuffer.append(" 						, task.tskAccessLevel as lastTask_tskAccessLevel ");
 		queryBuffer.append(" 						, task.tskAccessValue as lastTask_tskAccessValue ");
+		queryBuffer.append(" 						, task.tskIsApprovalSourceTask as lastTask_tskIsApprovalSourceTask ");
+		queryBuffer.append(" 						, task.tskTargetApprovalStatus as lastTask_tskTargetApprovalStatus ");
 		queryBuffer.append(" 				from ( ");
 		queryBuffer.append(" 						select tskprcinstId , max(tskCreatedate) as createDate  ");
 		queryBuffer.append(" 						from tsktask  ");
@@ -981,6 +985,8 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				obj.setLastTask_tskWorkSpaceType((String)fields[j++]);
 				obj.setLastTask_tskAccessLevel((String)fields[j++]);
 				obj.setLastTask_tskAccessValue((String)fields[j++]);
+				obj.setLastTask_tskIsApprovalSourceTask((String)fields[j++]);
+				obj.setLastTask_tskTargetApprovalStatus((String)fields[j++]);
 				Object lastTaskCountObj = fields[j];
 				int lastTaskCount = 0;
 				if(lastTaskCountObj == null) {

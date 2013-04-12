@@ -29,6 +29,7 @@ import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.approval.ApprovalLineInst;
 import net.smartworks.model.calendar.RepeatEvent;
 import net.smartworks.model.calendar.WorkHourPolicy;
+import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
@@ -651,7 +652,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					String formatType = swfField.getFormat().getType();
 					String value = swdDataField.getValue();
 					String refRecordId = swdDataField.getRefRecordId();
-					List<Map<String, String>> resultUsers = null;
+					List<Map<String, String>> resultUsers = null, resultDepartments=null;
 					if(formatType.equals(FormField.TYPE_USER)) {
 						if(value != null && refRecordId != null) {
 							String[] values = value.split(";");
@@ -672,6 +673,26 @@ public class InstanceServiceImpl implements IInstanceService {
 							}
 						}
 						swdDataField.setUsers(resultUsers);
+					}else if(formatType.equals(FormField.TYPE_DEPARTMENT)) {
+						if(value != null && refRecordId != null) {
+							String[] values = value.split(";");
+							String[] refRecordIds = refRecordId.split(";");
+							resultDepartments = new ArrayList<Map<String,String>>();
+							if(values.length > 0 && refRecordIds.length > 0) {
+								for(int j=0; j<values.length; j++) {
+									Map<String, String> map = new LinkedHashMap<String, String>();
+									map.put("comId", refRecordIds[j]);
+									map.put("name", values[j]);
+									resultDepartments.add(map);
+								}
+							} else {
+								Map<String, String> map = new LinkedHashMap<String, String>();
+								map.put("comId", refRecordId);
+								map.put("name", value);
+								resultDepartments.add(map);
+							}
+						}
+						swdDataField.setDepartments(resultDepartments);
 					} else if(formatType.equals(FormField.TYPE_DATE)) {
 						if(value != null) {
 							try {
@@ -1444,13 +1465,13 @@ public class InstanceServiceImpl implements IInstanceService {
 							
 						} else if (functionId.equals("mis:getDeptId")){		
 							if(func != null){
-							funcDeptId = func.getDeptId();
-							SwoDepartment funcdept = getSwoManager().getDepartment(userId, funcDeptId, "all");
-								if(funcdept != null){
-									funcDeptName = funcdept.getName();
-								}
+								funcDeptId = func.getDeptId();
+//								SwoDepartment funcdept = getSwoManager().getDepartment(userId, funcDeptId, "all");
+//								if(funcdept != null){
+//									funcDeptName = funcdept.getName();
+//								}
 							}
-							SwdDataField dataField = toDataField(userId, field, funcDeptName);
+							SwdDataField dataField = toDataField(userId, field, funcDeptId);
 							dataField.setId(fieldId);
 							resultStack.push(dataField);
 							
@@ -1729,14 +1750,16 @@ public class InstanceServiceImpl implements IInstanceService {
 			return null;
 		SwfFormat fieldFormat = field.getFormat();
 		SwdDataField obj = null;
-		if (fieldFormat == null || !"userField".equals(fieldFormat.getType())) {
+		if (fieldFormat == null || (!"userField".equals(fieldFormat.getType()) && !"departmentField".equals(fieldFormat.getType()))) {
 			obj = new SwdDataField();
 			obj.setId(field.getId());
 			obj.setType(field.getSystemType());
 			obj.setName(field.getName());
 			obj.setValue(id);
-		} else {
+		} else if("userField".equals(fieldFormat.getType())){
 			obj = toUserDataField(user, id);
+		}else if("departmentField".equals(fieldFormat.getType())){
+			obj = toDepartmentDataField(user, id);
 		}
 		return obj;
 	}
@@ -1751,6 +1774,19 @@ public class InstanceServiceImpl implements IInstanceService {
 		dataField.setRefFormField("4");
 		dataField.setRefRecordId(id);
 		dataField.setValue(userModel.getPosition() == null || userModel.getPosition().equalsIgnoreCase("") ? userModel.getName() : userModel.getPosition() + " " + userModel.getName());
+		return dataField;
+	}
+	private SwdDataField toDepartmentDataField(String user, String id) throws Exception {
+		if (CommonUtil.isEmpty(id))
+			return null;
+		SwoDepartment departModel = getSwoManager().getDepartment(user, id, IManager.LEVEL_LITE);
+		if (departModel == null)
+			return null;
+		SwdDataField dataField = new SwdDataField();
+		dataField.setRefForm("frm_depart_SYSTEM");
+		dataField.setRefFormField("4");
+		dataField.setRefRecordId(id);
+		dataField.setValue(ModelConverter.getDepartmentInfoFullpathNameByDepartmentId(id));
 		return dataField;
 	}
 	public String setInformationWorkInstance_old(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -2129,6 +2165,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			List fieldDataList = new ArrayList();
 			List<Map<String, String>> files = null;
 			List<Map<String, String>> users = null;
+			List<Map<String, String>> departments = null;
 			String groupId = null;
 			List<String> groupIdList = new ArrayList();
 			Map<String, List<Map<String, String>>> fileGroupMap = new HashMap<String, List<Map<String, String>>>();
@@ -2176,6 +2213,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						String autoIndexValue = (String)valueMap.get("value");
 						autoIndexSelectedValue = (String)valueMap.get("selectedValue");
 						users = (ArrayList<Map<String,String>>)valueMap.get("users");
+						departments = (ArrayList<Map<String,String>>)valueMap.get("departments");
 
 						if(!CommonUtil.isEmpty(groupId)) {
 							files = (ArrayList<Map<String,String>>)valueMap.get("files");
@@ -2218,6 +2256,24 @@ public class InstanceServiceImpl implements IInstanceService {
 									Map<String, String> user = users.get(i);
 									resultRefRecordId += user.get("id") + symbol;
 									resultValue += user.get("name") + symbol;
+								}
+							}
+							refRecordId = resultRefRecordId;
+							value = resultValue;
+						} else if(!CommonUtil.isEmpty(departments)) {
+							refForm = "frm_depart_SYSTEM";
+							refFormField = "4";
+							String resultRefRecordId = "";
+							String resultValue = "";
+							String symbol = ";";
+							if(departments.size() == 1) {
+								resultRefRecordId = departments.get(0).get("id");
+								resultValue = departments.get(0).get("name");
+							} else {
+								for(int i=0; i < departments.subList(0, departments.size()).size(); i++) {
+									Map<String, String> department = departments.get(i);
+									resultRefRecordId += department.get("id") + symbol;
+									resultValue += department.get("name") + symbol;
 								}
 							}
 							refRecordId = resultRefRecordId;
@@ -3266,6 +3322,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			List fieldDataList = new ArrayList();
 			List<Map<String, String>> files = null;
 			List<Map<String, String>> users = null;
+			List<Map<String, String>> departments = null;
 			Map<String, List<Map<String, String>>> fileGroupMap = new HashMap<String, List<Map<String,String>>>();
 			String groupId = null;
 			while (itr.hasNext()) {
@@ -3335,6 +3392,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						String autoIndexValue = (String)valueMap.get("value");
 						autoIndexSelectedValue = (String)valueMap.get("selectedValue");
 						users = (ArrayList<Map<String,String>>)valueMap.get("users");
+						departments = (ArrayList<Map<String,String>>)valueMap.get("departments");
 		
 						if(!CommonUtil.isEmpty(groupId)) {
 							files = (ArrayList<Map<String,String>>)valueMap.get("files");
@@ -3381,6 +3439,24 @@ public class InstanceServiceImpl implements IInstanceService {
 									Map<String, String> user = users.get(i);
 									resultRefRecordId += user.get("id") + symbol;
 									resultValue += user.get("name") + symbol;
+								}
+							}
+							refRecordId = resultRefRecordId;
+							value = resultValue;
+						} else if(!CommonUtil.isEmpty(departments)) {
+							refForm = "frm_depart_SYSTEM";
+							refFormField = "4"; 
+							String resultRefRecordId = "";
+							String resultValue = "";
+							String symbol = ";";
+							if(departments.size() == 1) {
+								resultRefRecordId = departments.get(0).get("id");
+								resultValue = departments.get(0).get("name");
+							} else {
+								for(int i=0; i < departments.subList(0, departments.size()).size(); i++) {
+									Map<String, String> department = departments.get(i);
+									resultRefRecordId += department.get("id") + symbol;
+									resultValue += department.get("name") + symbol;
 								}
 							}
 							refRecordId = resultRefRecordId;
@@ -3553,6 +3629,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						aprAprDefs[i] = new AprApprovalDef();
 						aprAprDefs[i].setName(aprs[i].getName());
 						aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+						aprAprDefs[i].setDueDate("" + (aprs[i].getMeanTimeMinutes() + aprs[i].getMeanTimeHours()*60 + aprs[i].getMeanTimeDays()*60*24));
 					}
 					apprLine.setName(aprline.getName());
 				} else if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.2level")) {
@@ -3563,6 +3640,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						aprAprDefs[i] = new AprApprovalDef();
 						aprAprDefs[i].setName(aprs[i].getName());
 						aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+						aprAprDefs[i].setDueDate("" + (aprs[i].getMeanTimeMinutes() + aprs[i].getMeanTimeHours()*60 + aprs[i].getMeanTimeDays()*60*24));
 					};
 					apprLine.setName(aprline.getName());
 				} else {
@@ -3597,6 +3675,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					apr.setModifiable(true);
 					apr.setCreationDate(new LocalDate());
 					apr.setCreationUser(id);
+					apr.setDueDate(aprAprDefs[i-1].getDueDate());
 					
 					approvals[i-1] = apr;
 				}
@@ -3758,6 +3837,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						aprAprDefs[i] = new AprApprovalDef();
 						aprAprDefs[i].setName(aprs[i].getName());
 						aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+						aprAprDefs[i].setDueDate("" + (aprs[i].getMeanTimeMinutes() + aprs[i].getMeanTimeHours()*60 + aprs[i].getMeanTimeDays()*60*24));
 					}
 					apprLine.setName(aprline.getName());
 				} else if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.2level")) {
@@ -3768,6 +3848,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						aprAprDefs[i] = new AprApprovalDef();
 						aprAprDefs[i].setName(aprs[i].getName());
 						aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+						aprAprDefs[i].setDueDate("" + (aprs[i].getMeanTimeMinutes() + aprs[i].getMeanTimeHours()*60 + aprs[i].getMeanTimeDays()*60*24));
 					};
 					apprLine.setName(aprline.getName());
 				} else {
@@ -3775,7 +3856,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					aprAprDefs = aprAprLineDef.getApprovalDefs();
 					apprLine.setName(aprAprLineDef.getName());
 				}
-				
+
 				apprLine.setStatus("created");
 
 				AprApproval[] approvals = new AprApproval[appLineSortingMap.size()];
@@ -3798,9 +3879,20 @@ public class InstanceServiceImpl implements IInstanceService {
 					apr.setModifiable(true);
 					apr.setCreationDate(new LocalDate());
 					apr.setCreationUser(id);
+					apr.setDueDate(aprAprDefs[i-1].getDueDate());
 					
 					approvals[i-1] = apr;
 				}
+
+//				LocalDate now = new LocalDate();
+//				if(approvals!=null && approvals.length>0 && !SmartUtil.isBlankObject(approvals[0].getDueDate())){
+//					int dueDate = Integer.parseInt(approvals[0].getDueDate());
+//					approvals[0].setExpectEndDate(new LocalDate(now.getTime() + dueDate*LocalDate.ONE_MINUTE));
+//					obj.setExpectEndDate(new LocalDate(approvals[0].getExpectEndDate().getTime()));
+//				}else{
+//					approvals[0].setExpectEndDate(new LocalDate(now.getTime() + 30*LocalDate.ONE_MINUTE));					
+//				}
+				
 				apprLine.setApprovals(approvals);
 				apprLine.setExtendedPropertyValue("recordId", obj.getObjId());
 				apprLine.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
@@ -3817,7 +3909,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				obj.setExtendedPropertyValue("approvalLine", apprLine.getObjId());
 				
 				obj.setIsApprovalSourceTask("true");
-				obj.setTargetApprovalStatus(Instance.STATUS_APPROVAL_RUNNING + "");
+				obj.setTargetApprovalStatus(AprApproval.APPROVAL_STATUS_RUNNING + "");
 				
 			}
 		}
@@ -4692,11 +4784,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 				WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
 
-//Start InstanceInfo Model Changed by ysjung
-				//iWInstanceInfo.setWorkSpace(workSpaceInfo);
 				iWInstanceInfo.setWorkSpaceInfo(workSpaceInfo);
-				//iWInstanceInfo.setWorkSpaceInfo(workSpaceId, workSpaceName, workSpaceType, workSpaceMinPicture);
-//End InstanceInfo Model Changed by ysjung
 
 				WorkCategoryInfo groupInfo = null;
 				if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
@@ -4706,11 +4794,7 @@ public class InstanceServiceImpl implements IInstanceService {
 	
 				WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
 
-//Start InstanceInfo Model Changed by ysjung
-				//iWInstanceInfo.setWork(workInfo);
 				iWInstanceInfo.setWorkInfo(workInfo);
-				//iWInstanceInfo.setWorkInfo(workId, workName, workType, isWorkRunning, workFullPathName);
-//End InstanceInfo Model Changed by ysjung
 				iWInstanceInfo.setViews(swdRecord.getHits());
 				SwdDataField[] swdDataFields = swdRecord.getDataFields();
 				List<FieldData> fieldDataList = new ArrayList<FieldData>();
@@ -4819,176 +4903,6 @@ public class InstanceServiceImpl implements IInstanceService {
 				iWInstanceInfoList.toArray(iWInstanceInfos);
 			}
 			instanceInfoList.setInstanceDatas(iWInstanceInfos);
-
-			/*SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
-
-			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
-
-			//SwdField[] swdFields = getSwdManager().getViewFieldList(workId, swdDomain.getFormId());
-
-			SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_ALL);
-			SwfField[] swfFields = swfForms[0].getFields();
-
-			InstanceInfoList instanceInfoList = new InstanceInfoList();
-
-			List<IWInstanceInfo> iWInstanceInfoList = new ArrayList<IWInstanceInfo>();
-			IWInstanceInfo[] iWInstanceInfos = null;*/
-			/*if(!CommonUtil.isEmpty(swdRecords)) {
-				int swdRecordsLength = swdRecords.length;
-				for(int i = 0; i < swdRecordsLength; i++) {
-					IWInstanceInfo iWInstanceInfo = new IWInstanceInfo();
-					SwdRecord swdRecord = swdRecords[i];
-					boolean isAccessForMe = ModelConverter.isAccessableForMe(swdRecord);
-					if(isAccessForMe) {
-						String creationUser = swdRecord.getCreationUser();
-						Date creationDate = swdRecord.getCreationDate();
-						String modificationUser = swdRecord.getModificationUser();
-						Date modificationDate = swdRecord.getModificationDate();
-						if(creationUser == null)
-							creationUser = User.USER_ID_NONE_EXISTING;
-						if(creationDate == null)
-							creationDate = new Date();
-						UserInfo owner = ModelConverter.getUserInfoByUserId(creationUser);
-						LocalDate createdDate = new LocalDate(creationDate.getTime());
-						UserInfo lastModifier = modificationUser != null ? ModelConverter.getUserInfoByUserId(modificationUser) : owner;
-						LocalDate lastModifiedDate = modificationDate != null ? new LocalDate(modificationDate.getTime()) : createdDate;
-	
-						iWInstanceInfo.setId(swdRecord.getRecordId());
-						iWInstanceInfo.setOwner(owner);
-						iWInstanceInfo.setCreatedDate(createdDate);
-						iWInstanceInfo.setLastModifier(lastModifier);
-						iWInstanceInfo.setLastModifiedDate(lastModifiedDate);
-						int type = WorkInstance.TYPE_INFORMATION;
-						iWInstanceInfo.setType(type);
-						iWInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-						String workSpaceId = swdRecord.getWorkSpaceId();
-						if(CommonUtil.isEmpty(workSpaceId))
-							workSpaceId = userId;
-	
-						WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
-	
-						iWInstanceInfo.setWorkSpace(workSpaceInfo);
-	
-						WorkCategoryInfo groupInfo = null;
-						if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
-							groupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
-			
-						WorkCategoryInfo categoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
-			
-						WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
-		
-						iWInstanceInfo.setWork(workInfo);
-						iWInstanceInfo.setViews(swdRecord.getHits());
-						SwdDataField[] swdDataFields = swdRecord.getDataFields();
-						List<FieldData> fieldDataList = new ArrayList<FieldData>();
-	
-						if(!CommonUtil.isEmpty(swdDataFields)) {
-							int swdDataFieldsLength = swdDataFields.length;
-							for(int j=0; j<swdDataFieldsLength; j++) {
-								SwdDataField swdDataField = swdDataFields[j];
-								if(swdDataField.getId().equals(titleFieldId))
-									iWInstanceInfo.setSubject(swdDataField.getValue());
-								if(!CommonUtil.isEmpty(swfFields)) {
-									int swfFieldsLength = swfFields.length;
-									for(int k=0; k<swfFieldsLength; k++) {
-										SwfField swfField = swfFields[k];
-										String formatType = swfField.getFormat().getType();
-										if(swdDataField.getDisplayOrder() > -1 && !formatType.equals("richEditor") && !formatType.equals("imageBox") && !formatType.equals("dataGrid")) {
-											if(swdDataField.getId().equals(swfField.getId())) {
-												FieldData fieldData = new FieldData();
-												fieldData.setFieldId(swdDataField.getId());
-												fieldData.setFieldType(formatType);
-												String value = swdDataField.getValue();
-												if(formatType.equals(FormField.TYPE_USER)) {
-													if(value != null) {
-														String[] users = value.split(";");
-														String resultUser = "";
-														if(!CommonUtil.isEmpty(users) && users.length > 0) {
-															if(users.length < 4) {
-																for(int l=0; l<users.length; l++) {
-																	resultUser += users[l] + ", ";
-																}
-																resultUser = resultUser.substring(0, resultUser.length()-2);
-															} else if(users.length > 3) {
-																for(int l=0; l<3; l++) {
-																	resultUser += users[l] + ", ";
-																}
-																resultUser = resultUser.substring(0, resultUser.length()-2);
-																resultUser = resultUser + " " + SmartMessage.getString("content.sentence.with_other_users", (new Object[]{(users.length - 3)}));
-															}
-														}
-														value = resultUser;
-													}
-												} else if(formatType.equals(FormField.TYPE_CURRENCY)) {
-													String symbol = swfField.getFormat().getCurrency();
-													fieldData.setSymbol(symbol);
-												} else if(formatType.equals(FormField.TYPE_PERCENT)) {
-													// TO-DO
-												} else if(formatType.equals(FormField.TYPE_DATE)) {
-													LocalDate localDateValue = null;
-													if(value != null) {
-														localDateValue = LocalDate.convertGMTStringToLocalDate(value);
-														if(localDateValue != null)
-															value = LocalDate.convertGMTStringToLocalDate(value).toLocalDateSimpleString();
-													}
-												} else if(formatType.equals(FormField.TYPE_TIME)) {
-													LocalDate localDateValue = null;
-													if(value != null) {
-														localDateValue = LocalDate.convertGMTStringToLocalDate(value);
-														if(localDateValue != null)
-															value = LocalDate.convertGMTStringToLocalDate(value).toLocalTimeSimpleString();
-													}
-												} else if(formatType.equals(FormField.TYPE_DATETIME)) {
-													LocalDate localDateValue = null;
-													if(value != null) {
-														localDateValue = LocalDate.convertGMTStringToLocalDate(value);
-														if(localDateValue != null)
-															value = localDateValue.toLocalDateTimeSimpleString();
-													}
-												} else if(formatType.equals(FormField.TYPE_FILE)) { 
-													List<IFileModel> fileModelList = getDocManager().findFileGroup(value);
-													List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
-													int fileModelListLength = fileModelList.size();
-													for(int l=0; l<fileModelListLength; l++) {
-														Map<String, String> fileMap = new LinkedHashMap<String, String>();
-														IFileModel fileModel = fileModelList.get(l);
-														String fileId = fileModel.getId();
-														String fileName = fileModel.getFileName();
-														String fileType = fileModel.getType();
-														String fileSize = fileModel.getFileSize() + "";
-														fileMap.put("fileId", fileId);
-														fileMap.put("fileName", fileName);
-														fileMap.put("fileType", fileType);
-														fileMap.put("fileSize", fileSize);
-														fileList.add(fileMap);
-													}
-													if(fileList.size() > 0)
-														fieldData.setFiles(fileList);
-												} else if(formatType.equals(FormField.TYPE_TEXT)) {
-													value = StringUtil.subString(value, 0, 30, "...");
-												}
-												fieldData.setValue(value);
-												fieldDataList.add(fieldData);
-											}
-										}
-									}
-								}
-							}
-						}
-						FieldData[] fieldDatas = new FieldData[fieldDataList.size()];
-						fieldDataList.toArray(fieldDatas);
-						iWInstanceInfo.setDisplayDatas(fieldDatas);
-
-						iWInstanceInfoList.add(iWInstanceInfo);
-					}
-				}
-				if(!CommonUtil.isEmpty(iWInstanceInfoList)) {
-					iWInstanceInfos = new IWInstanceInfo[iWInstanceInfoList.size()];
-					iWInstanceInfoList.toArray(iWInstanceInfos);
-				}
-				instanceInfoList.setInstanceDatas(iWInstanceInfos);
-			}*/
-
 			instanceInfoList.setTotalSize((int)totalCount);
 			instanceInfoList.setSortedField(sortingField);
 			instanceInfoList.setType(InstanceInfoList.TYPE_INFORMATION_INSTANCE_LIST);
@@ -6189,15 +6103,34 @@ public class InstanceServiceImpl implements IInstanceService {
 					pwInstInfo.setCreatedDate(new LocalDate(prcInst.getPrcCreateDate().getTime()));
 					int status = -1;
 					if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-						if(prcInst.getLastTask_tskExpectEndDate().getTime() < (new LocalDate()).getTime()){
+						if(TskTask.TASKSTATUS_CANCEL.equalsIgnoreCase(prcInst.getLastTask_tskTargetApprovalStatus())){
+							status = Instance.STATUS_REJECTED;
+						}else if(prcInst.getLastTask_tskExpectEndDate().getTime() < (new LocalDate()).getTime()){
 							status = Instance.STATUS_DELAYED_RUNNING;
 						}else{
 							status = Instance.STATUS_RUNNING;
 						}
 					} else if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
-						status = Instance.STATUS_COMPLETED;
+						if("true".equalsIgnoreCase(prcInst.getLastTask_tskIsApprovalSourceTask())){
+							if(AprApproval.APPROVAL_STATUS_RUNNING.equals(prcInst.getLastTask_tskTargetApprovalStatus())){
+								if(prcInst.getLastTask_tskExpectEndDate()!=null && prcInst.getLastTask_tskExpectEndDate().getTime()<(new LocalDate()).getTime()){
+									status = Instance.STATUS_DELAYED_RUNNING;
+									
+								}else{
+									status = Instance.STATUS_DELAYED_RUNNING;									
+								}
+							}else{
+								status = Instance.STATUS_COMPLETED;																	
+							}
+						}else{
+							status = Instance.STATUS_COMPLETED;
+						}
 					} else if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
 						status = Instance.STATUS_ABORTED;
+					} else if(prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)){
+						status = Instance.STATUS_RETURNED;
+					} else{
+						status = Instance.STATUS_COMPLETED;
 					}
 					pwInstInfo.setStatus(status);
 					pwInstInfo.setSubject(prcInst.getPrcTitle());
@@ -9873,14 +9806,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)txtForwardForwardeeMap.get("users");
 			
-			String[] refUsers = null;
-			if(!CommonUtil.isEmpty(userArray)) {
-				refUsers = new String[userArray.size()];
-				for (int i = 0; i < userArray.size(); i++) {
-					Map<String, String> userInfoMap = userArray.get(i);
-					refUsers[i] = userInfoMap.get("id");
-				}
-			} else {
+			String[] refUsers = SmartUtil.getAllUserIdsFromUserArray(userArray);
+			if(CommonUtil.isEmpty(refUsers)) {
 				return;
 			}
 			
@@ -10113,14 +10040,8 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 		ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)txtForwardForwardeeMap.get("users");
 		
-		String[] refUsers = null;
-		if(!CommonUtil.isEmpty(userArray)) {
-			refUsers = new String[userArray.size()];
-			for (int i = 0; i < userArray.size(); i++) {
-				Map<String, String> userInfoMap = userArray.get(i);
-				refUsers[i] = userInfoMap.get("id");
-			}
-		} else {
+		String[] refUsers = SmartUtil.getAllUserIdsFromUserArray(userArray);
+		if(CommonUtil.isEmpty(refUsers)) {
 			return;
 		}
 		

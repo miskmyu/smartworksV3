@@ -1434,8 +1434,28 @@ $(function() {
 				
 			});
 		});
-		return false;
-		
+		return false;		
 	});
 	
+	$('.instance_list .js_send_mail_to_user').live('click', function(e) {
+		var input = $(targetElement(e));
+		var receiverId = input.attr('userId');
+		smartPop.progressCenter();
+		$.get('new_mail.sw?receiverId=' + receiverId, function(data){
+			$('#content').html(data);
+			smartPop.closeProgress();
+		});
+		return false;
+	});
+
+	$('.instance_list .js_start_chat_with_user').live('click', function(e) {
+		var input = $(targetElement(e));
+		var receiverId = input.attr('userId');
+		smartPop.progressCenter();
+		$.get('new_mail.sw?receiverId=' + receiverId, function(data){
+			$('#content').html(data);
+			smartPop.closeProgress();
+		});
+		return false;
+	});
 });

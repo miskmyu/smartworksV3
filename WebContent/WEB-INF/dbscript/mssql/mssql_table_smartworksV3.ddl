@@ -37,13 +37,17 @@ CREATE TABLE sworguser (
 	workitemid varchar(50),
 	creator	varchar(50),
 	createdtime datetime,
-	modifier	varchar(50),
+	modifier varchar(50),
 	modifiedtime datetime,
 	retiree varchar(50),
 	mobileNo varchar(50),
 	internalNo varchar(50),
 	locale varchar(20),
 	timeZone varchar(20),
+	joinCompanyDate Datetime;
+	birthDay Datetime;
+	telephoneNumber varchar(20);
+	address varchar(20);
 	primary key (id)
 );
 
@@ -1215,7 +1219,7 @@ CREATE TABLE sworgconfig(
 	useMessagingService bit,
 	useChattingService bit,
 	isactivity int NULL,
-	useMessagingService bit,
+	setupcompanydate Datetime,
 	userReturnFunction bit,
 	creator varchar(50) NULL,
 	createdtime datetime NULL,

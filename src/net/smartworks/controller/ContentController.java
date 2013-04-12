@@ -38,6 +38,30 @@ public class ContentController {
 		return SmartUtil.returnMnv(request, "jsp/content/smartcaster.jsp", "smartcaster.tiles");
 	}
 
+	@RequestMapping("/communities")
+	public ModelAndView communities(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/community/user_list.jsp", "user_list.tiles");
+	}
+
+	@RequestMapping("/group_list")
+	public ModelAndView groupList(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/community/group_list.jsp", "group_list.tiles");
+	}
+
+	@RequestMapping("/department_list")
+	public ModelAndView departmentList(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/community/department_list.jsp", "department_list.tiles");
+	}
+
+	@RequestMapping("/user_list")
+	public ModelAndView userList(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/community/user_list.jsp", "user_list.tiles");
+	}
+
 	@RequestMapping("/dashboard")
 	public ModelAndView dashboard(HttpServletRequest request, HttpServletResponse response) {
 

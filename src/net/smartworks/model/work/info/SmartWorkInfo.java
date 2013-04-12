@@ -9,11 +9,11 @@ public class SmartWorkInfo extends WorkInfo {
 	private boolean favorite = false;
 	
 	public String getFullpathName(){
-		return this.myCategory.getName() + ((this.myGroup != null && this.myGroup.getId() != null) ? " > " + this.myGroup.getName() : "") + " > "
+		return this.myCategory.getName() + ((this.myGroup != null && this.myGroup.getId() != null) ? "▶" + this.myGroup.getName() : "") + "▶"
 				+ super.getName();		
 	}
 	public String getPathName(){
-		return this.myCategory.getName() + ((this.myGroup != null && this.myGroup.getId() != null) ? " > " + this.myGroup.getName() : "");		
+		return this.myCategory.getName() + ((this.myGroup != null && this.myGroup.getId() != null) ? "▶" + this.myGroup.getName() : "");		
 	}
 	public WorkCategoryInfo getMyGroup() {
 		return myGroup;

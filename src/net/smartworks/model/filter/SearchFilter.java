@@ -22,6 +22,8 @@ public class SearchFilter extends BaseObject{
 	public static final String FILTER_BY_FILE_TYPE = SYSTEM_FILTER_PREFIX + "byFileType";
 	public static final String FILTER_BY_OWNER = SYSTEM_FILTER_PREFIX + "byOwner";
 	public static final String FILTER_BY_CREATED_DATE = SYSTEM_FILTER_PREFIX + "byCreatedDate";
+	public static final String FILTER_MY_ASCEND_DEPARTMENTS = SYSTEM_FILTER_PREFIX + "myAscendDepartments";
+	public static final String FILTER_MY_DESCEND_DEPARTMENTS = SYSTEM_FILTER_PREFIX + "myDescendDepartments";
 	
 	private Condition[] conditions;
 

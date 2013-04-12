@@ -9,7 +9,7 @@
 <%@ page import="net.smartworks.service.ISmartWorks"%>
 
 <!-- 나의 업무 와 검색박스가 있는 헤더  -->
-<ul class="nav_tit">
+<ul class="nav_tit_mail">
 
 	<!-- 나의 업무 라벨과 클릭시 아래의 업무선택트리화면을 접었다 폈다하는 기능 제공  -->
 	<!-- *** js_collapse_parent_siblings : sw_act_nav.js 에서 이클래스의 클릭이벤트를 받아서 -->
@@ -20,12 +20,13 @@
 	</li>
 	
 	<!--  검색박스를 제공하여, 초성검색 기능을 제공 -->
-	<li class="nav_srch js_srch_my_works">
-		<div class="srch srch_wsize">
+	<li class="nav_srch js_srch_my_works" style="width:0">
+		<a href="" onclick="$(this).hide().next().show().parents('ul:first').removeClass('nav_tit_mail').addClass('nav_tit');return false;"  title="<fmt:message key='search.search_work'/>"><div class="srch_icon_only"></div></a>
+		<div class="srch srch_wsize" style="display:none">
 			<!-- *** js_auto_complete : js_act_search.js에서 이 클래스의 keyup, focusout, keydown등을 받아서 처리한다. -->
 			<input id="" class="nav_input js_auto_complete" type="text" title="<fmt:message key='search.search_work'/>"
 				placeholder="<fmt:message key='search.search_work'/>" href="work.sw" />
-			<div class='srch_icon js_srch_x'></div>
+			<a href="" onclick="$(this).parent().hide().prev().show().parents('ul').removeClass('nav_tit').addClass('nav_tit_mail');return false;"><div class='srch_icon js_srch_x'></div></a>
 		</div>
 		
 		<!-- nav 검색 리스트 -->

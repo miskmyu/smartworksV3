@@ -125,7 +125,7 @@ function submitForms(tempSave) {
 			if(SmartUtil.isBlankObject(startTask.getApprovalLineId())){
 			%>
 				<div class="fr">
-					<%--프로세스전자결재 완료시까지 버튼숨김  <a href="" class="js_toggle_approval_btn"><img src="images/btn_approvep.gif" title="<fmt:message key='common.button.approval'/>" /> </a> --%>
+					<a href="" class="js_toggle_approval_btn"><img src="images/btn_approvep.gif" title="<fmt:message key='common.button.approval'/>" /> </a>
 				</div>
 				<div class="fr">
 					<a href="" class="js_toggle_forward_btn"><img src="images/btn_referw.gif" title="<fmt:message key='common.button.forward'/>" /> </a>
@@ -138,7 +138,17 @@ function submitForms(tempSave) {
 	</div>
 
 	<!--  전자결재화면이 나타나는 곳 -->
-	<div class="js_form_task_approval" style="display:none"></div>
+	<div class="js_form_task_approval" <%if(SmartUtil.isBlankObject(startTask.getApprovalLineId())){%> style="display:none" <%}%>>
+		<%
+		if(!SmartUtil.isBlankObject(startTask.getApprovalLineId())){
+		%>
+			<jsp:include page="/jsp/content/upload/append_task_approval.jsp">
+				<jsp:param value="<%=startTask.getApprovalLineId() %>" name="approvalLineId"/>
+			</jsp:include>			
+		<%
+		}
+		%>
+	</div>
 	
 	<!-- 업무전달화면이 나타나는 곳 -->
 	<div class="js_form_task_forward" style="display:none"></div>

@@ -197,6 +197,7 @@ public class Smtp {
 		String mid = mimeMsg.getMessageID();
 		System.out.println("$$$$$$" + mid);
         mimeMsg.addHeader("Sent-Message-Id", mid);		
+		System.out.println("SENT-MESSAGE-ID TO SEND = " + mimeMsg.getHeader("Sent-Message-Id")[0]);
 		
 		// we are sending the message and generating a sent report on the fly.
 		HashMap out = new HashMap();

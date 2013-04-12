@@ -228,6 +228,12 @@ function logout() {
  				<a href="smartcaster.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_SMARTCASTER + cUser.getId()%>"><fmt:message key="header.top_menu.smartcaster" /></a> 
 		</li>
 		<!--  스마트케스트 메뉴 // -->
+
+		<!--  커뮤너티 메뉴  -->
+		<li class="idx3">
+ 				<a href="communities.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_COMMUNITIES + cUser.getId()%>"><fmt:message key="header.top_menu.communities" /></a> 
+		</li>
+		<!--  스마트케스트 메뉴 // -->
 <%--
 		<!--  대시보드 메뉴  -->
 		<li class="idx3">
@@ -265,11 +271,9 @@ function logout() {
 	%>
 		<!-- 관리자 권한이 있는 사용자에게 제공되는 시스템설정, 스마트빌더, 앱스토어 버튼들  -->
 		<div class="pop_admin">
-			<a href="settings_home.sw"><span class="btn_setting" title="<fmt:message key='header.global_menu.settings'/>" ></span></a>
-<%-- 
-			<a href="http://appstore.smartworks.net" target="_blank"><span class="btn_appstore" title="<fmt:message key='header.global_menu.appstore'/>"></span></a>
- --%>
+			<a href="settings_home.sw"><span class="btn_setting" title="<fmt:message key='header.global_menu.settings'/>" ></span></a> 
 			<a href="builder_home.sw"><span class="btn_builder" title="<fmt:message key='header.global_menu.smartbuilder'/>"></span></a>
+			<a href="http://appstore.smartworks.net" target="_blank"><span class="btn_appstore" title="<fmt:message key='header.global_menu.appstore'/>"></span></a>
 		</div>
 	<%
 	}

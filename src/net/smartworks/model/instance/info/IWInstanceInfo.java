@@ -11,6 +11,7 @@ public class IWInstanceInfo extends WorkInstanceInfo {
 
 	private int views;
 	private FieldData[] displayDatas;
+	private boolean isApproval=false;
 
 	public int getViews() {
 		return views;
@@ -25,6 +26,12 @@ public class IWInstanceInfo extends WorkInstanceInfo {
 		this.displayDatas = displayDatas;
 	}
 
+	public boolean isApproval() {
+		return isApproval;
+	}
+	public void setApproval(boolean isApproval) {
+		this.isApproval = isApproval;
+	}
 	public IWInstanceInfo(){
 		super();
 		super.setType(WorkInstance.TYPE_INFORMATION);
