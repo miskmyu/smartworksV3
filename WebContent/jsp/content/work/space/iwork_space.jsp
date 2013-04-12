@@ -34,6 +34,7 @@ function submitForms(tempSave) {
 	var iworkSpace = $('.js_iwork_space_page');
 	var workId = iworkSpace.attr("workId");
 	var instanceId = iworkSpace.attr("instId");
+	var tempSavedId = iworkSpace.attr("tempSavedId");
 	var scheduleWork = iworkSpace.find('form[name="frmScheduleWork"]');
 	
 	// 계획업무로 지정하기가 선택되어 있으면, 계획업무관련 입력필드들을 validation하기위한 클래스를 추가한다.. 
@@ -75,6 +76,9 @@ function submitForms(tempSave) {
 			paramsJson['isTempSave'] = true;
 			paramsJson['instanceId'] = instanceId;
 		}
+		if(!isEmpty(tempSavedId)){
+			paramsJson['tempSavedId'] = tempSavedId;
+		}
 		console.log(JSON.stringify(paramsJson));
 		var url = "create_new_iwork.sw";
 		// 서비스요청 프로그래스바를 나타나게 한다....
@@ -91,6 +95,7 @@ function submitForms(tempSave) {
 				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 				if(tempSave){
 					iworkSpace.attr('instId', data.instanceId);
+					iworkSpace.attr('tempSavedId', data.intanceIdq);
 				}else{
 					window.location.reload(true);
 				}
@@ -127,8 +132,9 @@ function submitForms(tempSave) {
 	
 	InformationWorkInstance instance  = null;
 	boolean isTempSaveWork = CommonUtil.toBoolean(request.getParameter("isTempSaveWork"));
+	String tempSavedTaskId = null;
 	if (isTempSaveWork) {
-		String tempSavedTaskId = (String)request.getParameter("tempSaveTaskId");
+		tempSavedTaskId = (String)request.getParameter("tempSaveTaskId");
 		instance = (InformationWorkInstance)smartWorks.getSavedWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, tempSavedTaskId);
 	} else {
 		instance = (InformationWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
@@ -212,7 +218,7 @@ function submitForms(tempSave) {
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-     <div class="section_portlet js_iwork_space_page" currentHref="<%=currentHref %>" lastHref="<%=lastHref%>" workId="<%=workId%>" instId="<%=instId%>" isTempSaved="<%=instance.isTempSaved() %>" repeatEventId="<%=instance.getRepeatEventId()%>">
+     <div class="section_portlet js_iwork_space_page" currentHref="<%=currentHref %>" lastHref="<%=lastHref%>" workId="<%=workId%>" instId="<%=instId%>" isTempSaved="<%=instance.isTempSaved() %>"  <%if(!CommonUtil.isEmpty(tempSavedTaskId)){ %>tempSavedId=<%=tempSavedTaskId%><%} %> repeatEventId="<%=instance.getRepeatEventId()%>">
 
  		<div class="portlet_t">
       		<div class="portlet_tl"></div>
@@ -478,7 +484,7 @@ function submitForms(tempSave) {
 					<!-- 수정, 삭제버튼 //--> 
 					  					  
 					<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 -->
-					<form name="frmAccessSpace" class="js_validation_required" style="display:none">
+					<form name="frmAccessSpace" class="js_validation_required"  <%if(CommonUtil.isEmpty(tempSavedTaskId)){ %>style="display:none"<%} %>>
 						<div id="" class="fr form_space">						
 							<input name="selWorkSpaceType" type="hidden" value="<%=workSpace.getSpaceType()%>">
 							<select name="selWorkSpace" class="js_select_work_space">
@@ -663,12 +669,16 @@ function submitForms(tempSave) {
 	}	
 	%>
 </script>
-
-<jsp:include page="/jsp/content/work/space/space_instance_list.jsp">
-	<jsp:param value="<%=work.getId() %>" name="workId"/>
-	<jsp:param value="<%=instId %>" name="instId"/> 
-</jsp:include>
-
+	<%
+	if (!isTempSaveWork) {
+	%>
+		<jsp:include page="/jsp/content/work/space/space_instance_list.jsp">
+			<jsp:param value="<%=work.getId() %>" name="workId"/>
+			<jsp:param value="<%=instId %>" name="instId"/> 
+		</jsp:include>
+<%
+	}
+%>
 <!-- 목록 버튼 -->
 <div class="tc">
 	<div class="btn_gray" >

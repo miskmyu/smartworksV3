@@ -127,14 +127,14 @@
 			</a>
 		</span> 
 				
- 		<%--<span class="btn_gray">
+ 		<%----%><span class="btn_gray">
 			<!--  완료버튼을 클릭시 해당 업로드 화면페이지에 있는 submitForms()함수를 실행한다.. -->
 			<a href="" class="js_temp_save_action" onclick='submitForms(true);return false;'> 
 				<span class="txt_btn_start"></span>
 				<span class="txt_btn_center"><fmt:message key="common.button.temp_save"/></span> 
 				<span class="txt_btn_end"></span> 
 			</a>
-		</span>   --%>
+		</span>   
 		<span class="btn_gray">
 			<!--  취소버튼을 클릭시 sw_act_work 에서 click event 로 정의 되어있는 함수를 실행한다... -->
 			<a href="" class="js_cancel_action"> 

@@ -55,7 +55,7 @@ public class EventNoticeJob  extends QuartzJobBean   {
 			filter.setLeftOperandType(Filter.OPERANDTYPE_STRING);
 			filter.setLeftOperandValue(AlarmNotice.A_NOTICETIME);
 			filter.setOperator("<=");
-			filter.setRightOperandType(Filter.OPERANDTYPE_STRING);
+			filter.setRightOperandType(Filter.OPERANDTYPE_DATE);
 			filter.setRightOperandValue(currentTime.toGMTDateString());
 			cond.setFilter(new Filter[]{filter});
 			long alarmNoticeSize = SwManagerFactory.getInstance().getPublishNoticeManager().getAlarmNoticeSize("", cond);

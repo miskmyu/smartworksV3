@@ -195,6 +195,7 @@ public class Smtp {
 		mimeMsg.saveChanges();
 
 		String mid = mimeMsg.getMessageID();
+		System.out.println("$$$$$$" + mid);
         mimeMsg.addHeader("Sent-Message-Id", mid);		
 		
 		// we are sending the message and generating a sent report on the fly.

@@ -1188,10 +1188,32 @@ public class WorkServiceImpl implements IWorkService {
 		Map<String, Object> requestBody = JsonUtil.getMapByJsonString(requestBodyStr);
 
 		String formId = (String)requestBody.get("formId");
-		SwdDomainCond domainCond = new SwdDomainCond();
-		domainCond.setFormId(formId);
-		SwdDomain domain = getSwdManager().getDomain("", domainCond, null);
-		SwdRecord record = ModelConverter.getSwdRecordByRequestBody("", domain.getFields(), requestBody, null);
+		String refType = tempTask.getRefType();
+		SwdField[] swdFields = null;
+		if (refType.equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+			SwfForm form = getSwfManager().getForm("", formId);
+			SwfField[] formFields = form.getFields();
+			List domainFieldList = new ArrayList();
+			
+			//제목으로 사용할 필드 (필수>단문>첫번째)
+			for (SwfField field: formFields) {
+				SwdField domainField = new SwdField();
+				domainField.setFormFieldId(field.getId());
+				domainField.setFormFieldName(field.getName());
+				domainField.setFormFieldType(field.getSystemType());
+				domainField.setArray(field.isArray());
+				domainField.setSystemField(field.isSystem());
+				domainFieldList.add(domainField);
+			}
+			swdFields = new SwdField[domainFieldList.size()];
+			domainFieldList.toArray(swdFields);
+		} else {
+			SwdDomainCond domainCond = new SwdDomainCond();
+			domainCond.setFormId(formId);
+			SwdDomain domain = getSwdManager().getDomain("", domainCond, null);
+			swdFields = domain.getFields();
+		}
+		SwdRecord record = ModelConverter.getSwdRecordByRequestBody("", swdFields, requestBody, null);
 		
 		return record;
 	}

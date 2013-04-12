@@ -4,6 +4,10 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.model.security.AccessPolicy"%>
+<%@page import="net.smartworks.model.community.info.GroupInfo"%>
+<%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
+<%@page import="net.smartworks.model.community.info.CommunityInfo"%>
 <%@page import="net.smartworks.model.company.CompanyOption"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.company.CompanyGeneral"%>
@@ -35,6 +39,7 @@ function submitForms(tempSave) {
 	var pworkSpace = $('.js_pwork_space_page');
 	var workId = pworkSpace.attr('workId');
 	var instanceId = pworkSpace.attr('instId');
+	var tempSavedId = pworkSpace.attr('tempSavedId');
 
 	// 계획업무로 지정하기가 선택되어 있으면, 계획업무관련 입력필드들을 validation하기위한 클래스를 추가한다.. 
 	var scheduleWork = pworkSpace.find('form[name="frmScheduleWork"]');
@@ -62,7 +67,9 @@ function submitForms(tempSave) {
 		if(tempSave){
 			paramsJson['isTempSave'] = true;
 			paramsJson['instanceId'] = instanceId;
+		} else {
 		}
+		paramsJson['tempSavedId'] = tempSavedId;
 		console.log(JSON.stringify(paramsJson));
 		var url = "start_new_pwork.sw";
 		// 서비스요청 프로그래스바를 나타나게 한다....
@@ -110,11 +117,24 @@ function submitForms(tempSave) {
 	
 	ProcessWorkInstance instance = null;
 	WorkInstance workInstance = (WorkInstance)session.getAttribute("workInstance");
-	if(SmartUtil.isBlankObject(workInstance) || !workInstance.getId().equals(instId)) 
+
+	boolean isTempSaveWork = CommonUtil.toBoolean(request.getParameter("isTempSaveWork"));
+	String tempSavedTaskId = null;
+	if (isTempSaveWork) {
+		tempSavedTaskId = (String)request.getParameter("tempSaveTaskId");
+		instance = (ProcessWorkInstance)smartWorks.getSavedWorkInstanceById(SmartWork.TYPE_PROCESS, workId, tempSavedTaskId);
+	} else {
+		if(SmartUtil.isBlankObject(workInstance) || !workInstance.getId().equals(instId)) 
+			instance = (ProcessWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instId);
+		else
+			instance = (ProcessWorkInstance)workInstance;
+	}
+	
+	/* if(SmartUtil.isBlankObject(workInstance) || !workInstance.getId().equals(instId)) 
 		instance = (ProcessWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instId);
 	else
-		instance = (ProcessWorkInstance)workInstance;
-
+		instance = (ProcessWorkInstance)workInstance; */
+	
 	int numberOfForwardHistories = instance.getNumberOfForwardHistories();
 	
 	User owner = instance.getOwner();
@@ -185,7 +205,7 @@ function submitForms(tempSave) {
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_pwork_space_page" currentHref="<%=currentHref %>" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>" isTempSaved="<%=instance.isTempSaved() %>">
+<div class="section_portlet js_pwork_space_page" currentHref="<%=currentHref %>" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>" isTempSaved="<%=instance.isTempSaved() %>" <%if(!CommonUtil.isEmpty(tempSavedTaskId)){ %>tempSavedId="<%=tempSavedTaskId%><%} %>">
     <div class="portlet_t"><div class="portlet_tl"></div></div>
     <div class="portlet_l" style="display: block;">
 	    <ul class="portlet_r" style="display: block;">		            
@@ -250,15 +270,13 @@ function submitForms(tempSave) {
 	                	}
 	                	%>
 	            	</div>
-	            	
 	            <!-- 다이어그램 보기 -->
 					<div class="txt_btn fr cb h_auto">
-	                	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
+	                	<a href="" class="js_view_instance_diagram" <%if (!CommonUtil.isEmpty(tempSavedTaskId)) {%> style="display:none"<%}%>><fmt:message key="common.button.view_instance_diagram"/>▼</a>
 	                </div>
 	                <div class="txt_btn fr cb h_auto" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
 				<!--  다이어그램 보기// -->
 				</div>
-				
 	            <!-- 우측 버튼 -->
 		                    
                	<div class="solid_line cb"></div>
@@ -267,7 +285,6 @@ function submitForms(tempSave) {
 					 		            
 			<!-- 프로세스다이어그램 -->
 			<div class="define_space js_process_instance_viewer" style="display:none; height:512px;"></div>
-			
 			<!-- 프로세스 영역 -->
 			<div class="define_space" style="padding: 10px 45px 0px 45px; height:88px">
 			
@@ -377,6 +394,7 @@ function submitForms(tempSave) {
 	    		<a href="" class="js_instance_tasks_right"><div class="proc_btn_next"  style="display:block"></div></a>
 	    		<!-- 방향 Next //-->
 			</div>
+			
 			<!--프로세스 영역//-->
 				
 			<!-- 서브프로세스 영역 -->
@@ -558,6 +576,129 @@ function submitForms(tempSave) {
 				</div>
 				<!-- 수정, 삭제버튼 //-->    					  
 
+
+<%
+	//임시저장 작업시 추가  
+	if (!CommonUtil.isEmpty(tempSavedTaskId)) {
+		// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
+		CommunityInfo[] communities = smartWorks.getMyCommunitiesForUpload(workId);
+%>
+
+					<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 -->
+					<form name="frmAccessSpace" class="js_validation_required">
+						<div id="" class="fr form_space">						
+							<input name="selWorkSpaceType" type="hidden" value="<%=workSpace.getSpaceType()%>">
+							<select name="selWorkSpace" class="js_select_work_space">
+								<%
+								if(!workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ 
+								%>
+									<option  <%if(workSpace.getId().equals(cUser.getId())){ %>selected<%} %> value="<%=cUser.getId()%>" workSpaceType="<%=ISmartWorks.SPACE_TYPE_USER%>"><fmt:message key="common.upload.space.self" /></option>
+								<%
+								}
+								%>
+								<optgroup class="js_optgroup_department" label="<fmt:message key="common.upload.space.department"/>">
+									<%
+									// 현재사용자가 속해있는 부서들을 선택하는 옵션들을 구성한다..
+									for (CommunityInfo community : communities) {
+										if (community.getClass().equals(DepartmentInfo.class)) {
+									%>
+											<option <%if(workSpace.getId().equals(community.getId())){ %>selected<%} %> value="<%=community.getId()%>"  workSpaceType="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT%>"><%=community.getName()%></option>
+									<%
+										}
+									}
+									%>
+								</optgroup>
+								<optgroup class="js_optgroup_group" label="<fmt:message key="common.upload.space.group"/>">
+									<%
+									// 현재사용자가 속해있는 그룹들을 선택하는 옵션들을 구성한다..
+									for (CommunityInfo community : communities) {
+										if (community.getClass().equals(GroupInfo.class)) {
+									%>
+											<option <%if(workSpace.getId().equals(community.getId())){ %>selected<%} %> value="<%=community.getId()%>"  workSpaceType="<%=ISmartWorks.SPACE_TYPE_GROUP%>"><%=community.getName()%></option>
+									<%
+										}
+									}
+									%>
+								</optgroup>
+							</select>
+						</div>
+				
+						<div id="" class="fr form_space">
+							<!--  현재업무의 접근(읽기)권한 중에 선택가능한 권한들을 구성한다... -->
+							<select name="selAccessLevel" class="js_select_access_level">
+								<%
+								// 읽기권한이 공개 이면, 공개, 비공개, 사용자 지정중에 선택할 수 있다..
+								
+								int workAccessLevel = (SmartUtil.isBlankObject(work.getAccessPolicy())) ? AccessPolicy.LEVEL_PUBLIC : work.getAccessPolicy().getLevel();
+								int instanceAccessLevel = (SmartUtil.isBlankObject(instance.getAccessPolicy())) ? AccessPolicy.LEVEL_PUBLIC : instance.getAccessPolicy().getLevel();
+								if (workAccessLevel == AccessPolicy.LEVEL_PUBLIC) {
+								%>
+									<option value="<%=AccessPolicy.LEVEL_PUBLIC%>" <%if(instanceAccessLevel == AccessPolicy.LEVEL_PUBLIC){%>selected<%}%>><fmt:message key="common.security.access.public" /></option>
+									<option value="<%=AccessPolicy.LEVEL_PRIVATE%>" <%if(instanceAccessLevel == AccessPolicy.LEVEL_PRIVATE){%>selected<%}%>><fmt:message key="common.security.access.private" /></option>
+									<option class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>" <%if(instanceAccessLevel == AccessPolicy.LEVEL_CUSTOM){%>selected<%}%>><fmt:message key="common.security.access.custom" /></option>
+								<%
+								// 읽기권한이 사용자지정이면, 비공개 또는 사용자지정 중에서 선택할 수 있다..
+								} else if (workAccessLevel == AccessPolicy.LEVEL_CUSTOM) {
+								%>
+									<option value="<%=AccessPolicy.LEVEL_PRIVATE%>" <%if(instanceAccessLevel == AccessPolicy.LEVEL_PRIVATE){%>selected<%}%>><fmt:message key="common.security.access.private" /></option>
+									<option class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>" <%if(instanceAccessLevel == AccessPolicy.LEVEL_CUSTOM){%>selected<%}%>><fmt:message key="common.security.access.custom" /></option>
+								<%
+								// 읽기권한이 비공개이면, 비공개만 해당된다...
+								} else if (workAccessLevel == AccessPolicy.LEVEL_PRIVATE) {
+								%>
+									<option value="<%=AccessPolicy.LEVEL_PRIVATE%>" <%if(instanceAccessLevel == AccessPolicy.LEVEL_PRIVATE){%>selected<%}%>><fmt:message key="common.security.access.private" /></option>
+								<%
+								}
+								%>
+							</select>
+						</div>
+				
+						<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 -->
+						<%
+						if(workAccessLevel == AccessPolicy.LEVEL_PUBLIC || workAccessLevel == AccessPolicy.LEVEL_CUSTOM) {
+						%>
+							<div class="fr form_space js_access_level_custom" style="display:none">
+								<span class="js_type_userField" fieldId="txtAccessableUsers" multiUsers="true">
+									<div class="form_value">
+										<div class="icon_fb_space">
+											<div class="fieldline community_names js_community_names sw_required">
+												<%
+												if(workAccessLevel == AccessPolicy.LEVEL_CUSTOM){
+													CommunityInfo[] communitiesToOpen = instance.getAccessPolicy().getCommunitiesToOpen();
+													if(!SmartUtil.isBlankObject(communitiesToOpen)){
+														for(CommunityInfo community : communitiesToOpen){
+															String comName = (community.getClass().equals(UserInfo.class)) ? ((UserInfo)community).getLongName() : community.getName();
+												%>
+															<span class="js_community_item user_select" comId="<%=community.getId() %>" comName="<%=comName%>"><%=comName %><a class="js_remove_community" href="">&nbsp;x</a></span>		
+												
+												<%												
+														}
+													}
+												}
+												%>
+												<input class="js_auto_complete" href="community_name.sw" type="text">
+											</div>
+											<div class="js_community_list com_list" style="display: none"></div>
+											<span class="js_community_popup"></span><a href="" class="js_userpicker_button"><span class="icon_fb_users"></span></a>
+										</div>
+									</div>
+								</span>
+							</div>
+						<%
+						}
+						%>
+						<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 //-->
+						
+					</form>
+					<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 //-->
+
+<%
+	}
+
+%>
+
+
+
 				<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
 				<div class="fr form_space js_progress_span" ></div>
 
@@ -649,12 +790,23 @@ function submitForms(tempSave) {
 		pworkSpace.find('.js_instance_task').removeClass('selected');
 		selectedTask.addClass('selected');
 		formContentPointer.css({"left": selectedTask.position().left + selectedTask.outerWidth()/2 + "px"});
+		var isTempSaved = "false";
+		<%
+		if (isTempSaveWork) {
+		%>
+			isTempSaved = "true";
+			instId = "<%=instance.getId()%>";
+			formMode = "edit";
+		<%
+		}
+		%>
 		new SmartWorks.GridLayout({
 			target : formContent,
 			mode : formMode,
 			first : (formMode=='edit'),
 			workId : workId,
 			formId : formId,
+			isTempSaved : isTempSaved,
 			taskInstId : instId,
 			onSuccess : function(){
 				formContent.attr('taskInstId', instId);
@@ -781,12 +933,16 @@ function submitForms(tempSave) {
 	}
 	%>
 </script>
-
+<%
+	if (!isTempSaveWork) {
+%>
 <jsp:include page="/jsp/content/work/space/space_instance_list.jsp">
 	<jsp:param value="<%=work.getId() %>" name="workId"/>
 	<jsp:param value="<%=instId %>" name="instId"/>
 </jsp:include>	
-
+<%
+	}
+%>
 <!-- 목록 버튼 -->
 <div class="tc">
 	<div class="btn_gray" >

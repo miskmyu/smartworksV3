@@ -339,7 +339,7 @@ public class DbMailControllerImpl implements MailController {
 	}
 
 	public void appendMailReader(String userId, String messageId) throws Exception {
-		System.out.println("###### APPEND MAIL READER ####### messageId = " + messageId);
+		System.out.println("###### APPEND MAIL READER ####### messageId = " + messageId + "," + userId);
 		if(SmartUtil.isBlankObject(userId) || SmartUtil.isBlankObject(messageId)) return;
 		IGenericDao dao = null;
 		FolderControllerFactory fact = new FolderControllerFactory(auth, profile, handler);
@@ -352,6 +352,7 @@ public class DbMailControllerImpl implements MailController {
 			dao = Utility.getDbConnection();
 			QueryRunner run = new QueryRunner(DbConfigList.getDataSourceById("file"));
 			String username = auth.getEmailId();
+			
 			try {
 				String sql = "SELECT * FROM MSG_DB_OBJECTS WHERE USERNAME=? AND MESSAGE_ID = ?";
 				MsgDbObject result = (MsgDbObject)dao.read(MsgDbObject.class, sql, new Object[] {userId, messageId});

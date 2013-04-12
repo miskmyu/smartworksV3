@@ -1908,7 +1908,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			// Exception Handling Required			
 		}
 	}
-	private String saveTempWorkInstance(String userId, Map<String, Object> requestBody, HttpServletRequest request, boolean isIwork) throws Exception {
+	private String saveTempWorkInstance(String userId, String tempSavedId, Map<String, Object> requestBody, HttpServletRequest request, boolean isIwork) throws Exception {
 		if (requestBody == null)
 			return null;
 		
@@ -1929,9 +1929,79 @@ public class InstanceServiceImpl implements IInstanceService {
 		} else {
 			//프로세스 업무의 타이틀을 가져온
 			
+			
+			//넘어온 frmSamrtForm 정보로 레코드를 생성한다
+			SwfForm form = getSwfManager().getForm(userId, formId);
+			SwfField[] formFields = form.getFields();
+			List domainFieldList = new ArrayList();
+			
+			//제목으로 사용할 필드 (필수>단문>첫번째)
+			List requiredFieldIdList = new ArrayList();
+			List textInputFieldIdList = new ArrayList();
+			for (SwfField field: formFields) {
+				//제목으로 사용할 필드 (필수>단문>첫번째)
+				if (field.isRequired() && field.getFormat().getType().equals("textInput"))
+					requiredFieldIdList.add(field.getId());
+				//제목으로 사용할 필드 (필수>단문>첫번째)
+				if (field.getFormat().getType().equals("textInput"))
+					textInputFieldIdList.add(field.getId());
+				SwdField domainField = new SwdField();
+				domainField.setFormFieldId(field.getId());
+				domainField.setFormFieldName(field.getName());
+				domainField.setFormFieldType(field.getSystemType());
+				domainField.setArray(field.isArray());
+				domainField.setSystemField(field.isSystem());
+				domainFieldList.add(domainField);
+			}
+			SwdField[] domainFields = new SwdField[domainFieldList.size()];
+			domainFieldList.toArray(domainFields);
+			
+			SwdRecord recordObj = getSwdRecordByRequestBody(userId, domainFields, requestBody, request);
+			String taskDocument = null;
+			Map<String, List<Map<String, String>>> fileGroupMap = null;
+			if (recordObj != null) {
+				taskDocument = recordObj.toString();
+				fileGroupMap = recordObj.getFileGroupMap();
+			}
+			
+			//formId 로 실행할 태스크를 조회한다
+			TskTaskDefCond tskDefCond = new TskTaskDefCond();
+			tskDefCond.setForm(formId);
+			TskTaskDef[] taskDefs = SwManagerFactory.getInstance().getTskManager().getTaskDefs(userId, tskDefCond, IManager.LEVEL_ALL);
+			if (taskDefs == null || taskDefs.length == 0)
+				throw new Exception("Not Exist Task Definition : formId = " + formId);
+			TskTaskDef taskDef = taskDefs[0];
+			
+			if (!CommonUtil.isEmpty(taskDef.getExtendedPropertyValue("subjectFieldId"))) {
+				title = CommonUtil.toNotNull(recordObj.getDataFieldValue(taskDef.getExtendedPropertyValue("subjectFieldId")));
+			} else {
+				if (requiredFieldIdList.size() != 0) {
+					for (int i = 0; i < requiredFieldIdList.size(); i++) {
+						String temp = recordObj.getDataFieldValue((String)requiredFieldIdList.get(i));
+						if (!CommonUtil.isEmpty(temp)) {
+							title = temp;
+							break;
+						}
+					}
+				} else {
+					for (int i = 0; i < textInputFieldIdList.size(); i++) {
+						String temp = recordObj.getDataFieldValue((String)textInputFieldIdList.get(i));
+						if (!CommonUtil.isEmpty(temp)) {
+							title = temp;
+							break;
+						}
+						
+					}
+				}
+			}
 		}
-		
-		TskTask tempSaveTask = new TskTask();
+		TskTask tempSaveTask = null;
+		if (!CommonUtil.isEmpty(tempSavedId)) {
+			tempSaveTask = getTskManager().getTask(userId, tempSavedId, IManager.LEVEL_LITE);
+		}
+		if (tempSaveTask == null) {
+			tempSaveTask = new TskTask();
+		}
 		tempSaveTask.setName(formName);
 		//tempSaveTask.setDocument(requestBody.toString());
 		tempSaveTask.setDocument(JsonUtil.getJsonStringByMap(requestBody));
@@ -1940,6 +2010,12 @@ public class InstanceServiceImpl implements IInstanceService {
 		tempSaveTask.setDef(workId + "|" + formId);
 		tempSaveTask.setForm(formId);
 		tempSaveTask.setTitle(CommonUtil.toDefault(title, "(No Title) - " + new LocalDate()));
+		
+		if (isIwork) {
+			tempSaveTask.setRefType(TskTask.TASKTYPE_SINGLE);
+		} else {
+			tempSaveTask.setRefType(TskTask.TASKTYPE_COMMON);
+		}
 		
 		tempSaveTask = SwManagerFactory.getInstance().getTskManager().setTempTask(userId, tempSaveTask);
 		
@@ -1968,9 +2044,15 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 			//임시저장이라면 임시저장타입의 태스크를 생성한후 taskDoc 에 reqeustBody.toString() 자체를 저장하고 이후 조회시 파싱하여 보낸다
 			boolean isTempSave = CommonUtil.toBoolean((Boolean)requestBody.get("isTempSave"));
+			String tempSavedId = (String)requestBody.get("tempSavedId");
 			if (isTempSave) {
-				return this.saveTempWorkInstance(userId, requestBody, request, true);
+				return this.saveTempWorkInstance(userId, tempSavedId, requestBody, request, true);
+			} else {
+				if (!CommonUtil.isEmpty(tempSavedId)) {
+					getTskManager().removeTask(userId, tempSavedId);
+				}
 			}
+			
 			Map<String, Object> frmSmartFormMap = (Map<String, Object>)requestBody.get("frmSmartForm");
 			Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
 			Map<String, Object> frmTaskForwardMap = (Map<String, Object>)requestBody.get("frmTaskForward");
@@ -3825,8 +3907,11 @@ public class InstanceServiceImpl implements IInstanceService {
 				userId = cuser.getId();
 			
 			boolean isTempSave = CommonUtil.toBoolean((Boolean)requestBody.get("isTempSave"));
+			String tempSavedId = (String)requestBody.get("tempSavedId");
 			if (isTempSave) {
-				return this.saveTempWorkInstance(userId, requestBody, request, false);
+				return this.saveTempWorkInstance(userId, tempSavedId, requestBody, request, false);
+			} else if (!CommonUtil.isEmpty(tempSavedId)) {
+				getTskManager().removeTask(userId, tempSavedId);
 			}
 			
 			//패키지 정보로 프로세스 정보를 얻는다.
@@ -6753,9 +6838,12 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 		taskCond.setPageNo(currentPage - 1);
 		taskCond.setPageSize(pageSize);
-		if (sortingField != null)
+		if (sortingField != null) {
 			taskCond.setOrders(new Order[]{new Order(sortingField.getFieldId(), sortingField.isAscending())});
-		
+		} else {
+			taskCond.setOrders(new Order[]{new Order(TskTask.A_MODIFICATIONDATE, false)});
+		}
+			
 		TskTask[] tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, taskCond, IManager.LEVEL_LITE);
 		
 		InstanceInfoList list = new InstanceInfoList();
@@ -6789,21 +6877,22 @@ public class InstanceServiceImpl implements IInstanceService {
 			String taskDef = task.getDef();
 			String[] taskDefInfos = StringUtils.tokenizeToStringArray(taskDef, "|");
 			
-			boolean isIwork = true;
+			String taskRefType = task.getRefType();
 			
-			if (isIwork) {
-				instanceData.setSubject(task.getTitle());
-				instanceData.setWorkId(taskDefInfos[0]);
-				instanceData.setWorkName(task.getName());
+			if (taskRefType.equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 				instanceData.setWorkType(SmartWork.TYPE_INFORMATION);
-				instanceData.setWorkRunning(true);
-				instanceData.setWorkFullPathName(task.getName());
-				TaskInstanceInfo lastTask = new TaskInstanceInfo();
-				lastTask.setName(task.getName());
-				instanceData.setLastTask(lastTask);
 			} else {
-				
+				instanceData.setWorkType(SmartWork.TYPE_PROCESS);
 			}
+			instanceData.setSubject(task.getTitle());
+			instanceData.setWorkId(taskDefInfos[0]);
+			instanceData.setWorkName(task.getName());
+			instanceData.setWorkRunning(true);
+			instanceData.setWorkFullPathName(task.getName());
+			TaskInstanceInfo lastTask = new TaskInstanceInfo();
+			lastTask.setName(task.getName());
+			instanceData.setLastTask(lastTask);
+			
 			
 			instanceDatas[i] = instanceData;
 		}
@@ -7639,7 +7728,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			//workInstance.setTasks(tasks);
 			workInstance.setWork(ModelConverter.getInformationWorkByPkgPackage("", null, pkg));
 			workInstance.setWorkSpace(ModelConverter.getWorkSpace(record.getWorkSpaceType(), record.getWorkSpaceId()));
-			workInstance.setAccessPolicy(new AccessPolicy(2));
+			workInstance.setAccessPolicy(new AccessPolicy(Integer.parseInt(record.getAccessLevel())));
 			//workInstance.setForwardees(forwardees);
 			//workInstance.setLazyreferenceTask(isLazyreferenceTask);
 			//workInstance.setRepeatEventId(repeatEventId);
@@ -7647,9 +7736,75 @@ public class InstanceServiceImpl implements IInstanceService {
 			return workInstance;
 			
 		} else if (workType == SmartWork.TYPE_PROCESS) {
-		
+			
+			String requestBodyStr = savedTask.getDocument();
+			Map requestBody = JsonUtil.getMapByJsonString(requestBodyStr);
+			String formId = (String)requestBody.get("formId");
+
+			if (CommonUtil.isEmpty(workId))
+				workId = (String)requestBody.get("workId");
+			
+			PkgPackageCond pkgCond = new PkgPackageCond();
+			pkgCond.setPackageId(workId);
+			PkgPackage pkg = getPkgManager().getPackage("", pkgCond, IManager.LEVEL_LITE);
+			
+			ProcessWorkInstance workInstance = new ProcessWorkInstance();
+			
+			//workInstance.setApprovalLine(approvalLine);
+			//workInstance.setApprovalWork(isApprovalWork);
+			workInstance.setId(instanceId);
+			workInstance.setTempSaved(true);
+			workInstance.setSubject(savedTask.getTitle());
+			workInstance.setType(WorkInstance.TYPE_PROCESS);
+			//workInstance.setStatus();
+			User owner = ModelConverter.getUserByUserId(savedTask.getAssignee());
+			workInstance.setOwner(owner);
+			workInstance.setCreatedDate(new LocalDate(savedTask.getCreationDate().getTime()));
+			workInstance.setLastModifier(owner);
+			workInstance.setLastModifiedDate(new LocalDate(savedTask.getModificationDate().getTime()));
+			
+			UserInfo ownerInfo = ModelConverter.getUserInfoByUserId(savedTask.getAssignee());
+			TaskInstanceInfo task = new TaskInstanceInfo();
+			task.setName((String)requestBody.get("formName"));
+			task.setAssigner(ownerInfo);
+			task.setAssignee(ownerInfo);
+			task.setFormId(formId);
+			task.setLastModifiedDate(new LocalDate(savedTask.getModificationDate().getTime()));
+			task.setLastModifier(ownerInfo);
+			//task.setWorkInstance(workInstance);
+			
+			workInstance.setTasks(new TaskInstanceInfo[]{task});
+			
+			workInstance.setWork(ModelConverter.getProcessWorkByPkgPackage("", null, pkg));
 			
 			
+			
+			SwfForm form = getSwfManager().getForm("", formId);
+			SwfField[] formFields = form.getFields();
+			List domainFieldList = new ArrayList();
+			
+			//제목으로 사용할 필드 (필수>단문>첫번째)
+			for (SwfField field: formFields) {
+				SwdField domainField = new SwdField();
+				domainField.setFormFieldId(field.getId());
+				domainField.setFormFieldName(field.getName());
+				domainField.setFormFieldType(field.getSystemType());
+				domainField.setArray(field.isArray());
+				domainField.setSystemField(field.isSystem());
+				domainFieldList.add(domainField);
+			}
+			SwdField[] swdFields = new SwdField[domainFieldList.size()];
+			domainFieldList.toArray(swdFields);
+			SwdRecord record = ModelConverter.getSwdRecordByRequestBody("", swdFields, requestBody, null);
+			
+			workInstance.setWorkSpace(ModelConverter.getWorkSpace(record.getWorkSpaceType(), record.getWorkSpaceId()));
+			
+			workInstance.setAccessPolicy(new AccessPolicy(Integer.parseInt(record.getAccessLevel())));
+			//workInstance.setForwardees(forwardees);
+			//workInstance.setLazyreferenceTask(isLazyreferenceTask);
+			//workInstance.setRepeatEventId(repeatEventId);
+			
+			return workInstance;
 			
 			
 		} else {
