@@ -186,6 +186,42 @@
 					</tr>
 				</table>
 				<!-- 설명//-->
+				<%
+				if(work.getType() == SmartWork.TYPE_SCHEDULE){
+				%>
+<%-- 					<!--탭-->
+					<div class="tab js_space_tab_weekly_page js_space_tab_page"  startDate="">
+ 						<a href="" class="btn_arr_prev2 js_space_tab_index"></a> 
+						<a href="" class="btn_arr_prev js_space_tab_index"></a>
+					
+						<ul>
+ 							<li class=""><span class="intab"><a class="js_space_tab_index" href="">D+1</a></span></li>
+							<li class=""><span class="intab"><a class="js_space_tab_index" href="">D+1</a></span></li>
+							<li class=""><span class="intab"><a class="js_space_tab_index" href="">D+1</a></span></li>
+							<li class=""><span class="intab"><a class="js_space_tab_index" href="">D+1</a></span></li>
+							<li class=""><span class="intab"><a class="js_space_tab_index" href="">D+1</a></span></li>
+							<li class=""><span class="intab"><a class="js_space_tab_index" href="">D+1</a></span></li>
+						</ul>
+							<a href="" class="btn_arr_next js_space_tab_index"></a>
+							<a href="" class="btn_arr_next2 js_space_tab_index"></a>
+						<span class="js_progress_span" style="margin-top:10px;display:inline-block"></span>
+					
+						<div class="option_section js_space_date_scope">
+							<span class="js_progress_span"></span>
+					  		<span class="sel_date_section">2013.04.08<input type="hidden" class="js_space_datepicker" value=""><a href="space_tab_weekly.sw" class="btn_calendar js_space_datepicker_button"></a></span> 
+							<select class="js_space_select_scope">
+								<option value="space_tab_timeline.sw"><fmt:message key="space.title.tab_timeline"/></option>
+								<option value="space_tab_dayly.sw"><fmt:message key="space.title.tab_dayly"/></option>
+								<option selected><fmt:message key="space.title.tab_weekly"/></option>
+								<option value="space_tab_monthly.sw"><fmt:message key="space.title.tab_monthly"/></option>
+							</select>
+						</div>
+					
+					</div>
+					<!--탭//-->
+ --%>				<%
+				}
+				%>
 				<div class="up p0 js_smart_workbench_editor"></div>
 			</div>
 			<!-- 컨텐츠 //-->

@@ -892,6 +892,8 @@ public class WorkServiceImpl implements IWorkService {
 			String txtUserProfileSenderUserTitle = null;
 			String emailSignature = null;
 			String chkUserProfileEmailUseSign = null;
+			String birthYear = null, birthMonth = null, birthDay = null;
+			String homePhoneNo = null, homeAddress = null;
 
 			while (itr.hasNext()) {
 				String fieldId = (String)itr.next();
@@ -946,6 +948,16 @@ public class WorkServiceImpl implements IWorkService {
 						emailSignature = valueString;
 					else if(fieldId.equals("chkUserProfileEmailUseSign"))
 						chkUserProfileEmailUseSign = valueString;
+					else if (fieldId.equals("txtUserBirthYear"))
+						birthYear = valueString;
+					else if (fieldId.equals("txtUserBirthMonth"))
+						birthMonth = valueString;
+					else if (fieldId.equals("txtUserBirthDay"))
+						birthDay = valueString;
+					else if (fieldId.equals("txtUserHomePhoneNo"))
+						homePhoneNo = valueString;
+					else if (fieldId.equals("txtUserHomeAddress"))
+						homeAddress = valueString;
 				}
 			}
 
@@ -981,6 +993,19 @@ public class WorkServiceImpl implements IWorkService {
 			user.setMobileNo(txtUserProfileCellNo);
 			user.setPosition(txtUserProfilePosition);
 			user.setEmpNo(txtUserProfileEmpId);
+			user.setTelephoneNumber(homePhoneNo);
+			user.setAddress(homeAddress);
+			if(birthYear!=null && birthYear.length()==4 && birthMonth!=null && birthDay!=null){
+				if(birthMonth.length()==1) birthMonth="0"+birthMonth;
+				if(birthDay.length()==1) birthDay="0"+birthDay;
+				try{
+					user.setBirthDay(new Date(LocalDate.convertLocalDateStringToLocalDate1(birthYear+birthMonth+birthDay).getTime()));
+				}catch (Exception e){
+					user.setBirthDay(null);
+				}				
+			}else{
+				user.setBirthDay(null);
+			}
 			
 			try {
 				getSwoManager().setUser(txtUserProfileUserId, user, null);

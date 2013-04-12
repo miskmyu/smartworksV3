@@ -11,6 +11,7 @@ import java.util.Collection;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.DepartmentInfo;
+import net.smartworks.util.LocalDate;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,6 +51,10 @@ public class Login implements UserDetails {
 	private String mailId;
 	private String mailPassword;
 	private DepartmentInfo[] departments;
+	private LocalDate hireDate;
+	private LocalDate birthday;
+	private String homePhoneNo;
+	private String homeAddress;
 	
 	private Collection<GrantedAuthority> authorities; // 권한
 
@@ -250,6 +255,30 @@ public class Login implements UserDetails {
 	}
 	public void setDepartments(DepartmentInfo[] departments) {
 		this.departments = departments;
+	}
+	public LocalDate getHireDate() {
+		return hireDate;
+	}
+	public void setHireDate(LocalDate hireDate) {
+		this.hireDate = hireDate;
+	}
+	public LocalDate getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(LocalDate birthday) {
+		this.birthday = birthday;
+	}
+	public String getHomePhoneNo() {
+		return homePhoneNo;
+	}
+	public void setHomePhoneNo(String homePhoneNo) {
+		this.homePhoneNo = homePhoneNo;
+	}
+	public String getHomeAddress() {
+		return homeAddress;
+	}
+	public void setHomeAddress(String homeAddress) {
+		this.homeAddress = homeAddress;
 	}
 	@Override
 	public boolean isAccountNonExpired() {

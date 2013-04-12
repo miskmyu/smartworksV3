@@ -27,7 +27,6 @@
 	//MailAccount[] mailAccounts = cUser.getMailAccounts();
 	MailAccount mailAccount = (SmartUtil.isBlankObject(mailAccounts) || mailAccounts.length<1) ? new MailAccount() : mailAccounts[0];
 	EmailServer[] emailServers = smartWorks.getEmailServers();
-	cUser.setHireDate(new LocalDate());
 %>
 <script type="text/javascript">
 

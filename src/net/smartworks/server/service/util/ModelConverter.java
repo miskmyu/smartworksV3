@@ -3578,7 +3578,11 @@ public class ModelConverter {
 			processWork = new ProcessWork();
 		
 		getSmartWorkByPkgPackage(userId, processWork, pkg);
-		processWork.setType(SmartWork.TYPE_PROCESS);
+		if(pkg.getType().equals("PROCESS")){
+			processWork.setType(SmartWork.TYPE_PROCESS);
+		}else if(pkg.getType().equals("GANTT")){
+			processWork.setType(SmartWork.TYPE_SCHEDULE);			
+		}
 		processWork.setHelpUrl(pkg.getHelpUrl());
 		processWork.setManualFileId(pkg.getManualFileName());// Manual File Group Id
 		processWork.setDesc(pkg.getDescription());
