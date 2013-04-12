@@ -175,7 +175,7 @@
 							if(!SmartUtil.isBlankObject(user.getHireDate())){
 								hireYear = "" + user.getHireDate().getYear();
 								hireMonth = "" + (user.getHireDate().getMonth()+1);
-								hireDay = "" + user.getHireDate().getDaysOfMonth();
+								hireDay = "" + user.getHireDate().getDateOnly();
 							}
 							%>
 							<input style="width:40px" maxlength="4" name="txtMemberHireYear" class="fieldline tc" type="text" value="<%=hireYear %>" /><fmt:message key="common.title.year"/>
@@ -213,7 +213,7 @@
 							if(!SmartUtil.isBlankObject(user.getBirthday())){
 								birthYear = "" + user.getBirthday().getYear();
 								birthMonth = "" + (user.getBirthday().getMonth()+1);
-								birthDay = "" + user.getBirthday().getDaysOfMonth();
+								birthDay = "" + user.getBirthday().getDateOnly();
 							}
 							%>
 							<input style="width:40px" maxlength="4" name="txtMemberBirthYear" class="fieldline tc" type="text" value="<%=birthYear %>" /><fmt:message key="common.title.year"/>

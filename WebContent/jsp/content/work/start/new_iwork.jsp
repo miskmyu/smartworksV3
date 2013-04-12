@@ -22,6 +22,7 @@ function submitForms(tempSave) {
 	var newIwork = $('.js_new_iwork_page');
 	var workId = newIwork.attr("workId");
 	var instanceId = newIwork.attr("instanceId");
+	var tempSavedId = newIwork.attr("tempSavedId");
 	var scheduleWork = newIwork.find('form[name="frmScheduleWork"]');
 	
 	// 계획업무로 지정하기가 선택되어 있으면, 계획업무관련 입력필드들을 validation하기위한 클래스를 추가한다.. 
@@ -62,7 +63,11 @@ function submitForms(tempSave) {
 		if(tempSave){
 			paramsJson['isTempSave'] = true;
 			paramsJson['instanceId'] = instanceId;
+			if(!isEmpty(tempSavedId)){
+				paramsJson['tempSavedId'] = tempSavedId;
+			}
 		}
+		
 		console.log(JSON.stringify(paramsJson));
 		var url = "create_new_iwork.sw";
 		// 서비스요청 프로그래스바를 나타나게 한다....
@@ -80,6 +85,7 @@ function submitForms(tempSave) {
 				smartPop.closeProgress();
 				if(tempSave){
 					newIwork.attr('instanceId', data.instanceId);
+					newIwork.attr('tempSavedId', data.instanceId);
 				}else{
 					refreshCurrentContent(newIwork);
 					//window.location.reload(true);

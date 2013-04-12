@@ -571,10 +571,14 @@ public class ModelConverter {
 		taskInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 		
 		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())				
-				taskInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
-			else
+			if (task.getTskExpectEndDate() != null) {
+				if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())				
+					taskInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+				else
+					taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
+			} else {
 				taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
+			}
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 			taskInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -711,10 +715,14 @@ public class ModelConverter {
 			taskInfo.setWorkSpaceInfo((getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId())));
 			
 			if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-				if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
-					taskInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
-				else
+				if (task.getTskExpectEndDate() != null) {
+					if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+						taskInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+					else
+						taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
+				} else {
 					taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
+				}
 			} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 				taskInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 			} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -1027,10 +1035,14 @@ public class ModelConverter {
 		lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 		
 		if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
-				lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
-			else
+			if (task.getTskExpectEndDate() != null) {
+				if(task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+					lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
+				else
+					lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+			} else {
 				lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+			}
 		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 			lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -1318,6 +1330,7 @@ public class ModelConverter {
 						}else{
 							instInfo.setStatus(Instance.STATUS_RUNNING);
 						}
+						
 					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 						instInfo.setStatus(Instance.STATUS_COMPLETED);
 					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
@@ -1354,10 +1367,11 @@ public class ModelConverter {
 					lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 					
 					if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-						if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+						if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()) {
 							lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
-						else
+						} else {
 							lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+						}
 					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 						lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -1408,6 +1422,7 @@ public class ModelConverter {
 						}else{
 							tskInfo.setStatus(Instance.STATUS_RUNNING);
 						}
+						
 					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 						tskInfo.setStatus(Instance.STATUS_COMPLETED);
 					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
@@ -1502,10 +1517,11 @@ public class ModelConverter {
 				instInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 				
 				if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-					if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+					if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()) {
 						instInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
-					else
+					} else {
 						instInfo.setStatus(Instance.STATUS_RUNNING);
+					}
 				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 					instInfo.setStatus(Instance.STATUS_COMPLETED);
 				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
@@ -1544,10 +1560,11 @@ public class ModelConverter {
 				lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 				
 				if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-					if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+					if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()) {
 						lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
-					else
+					} else {
 						lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+					}
 				} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 					lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 				} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -1616,10 +1633,11 @@ public class ModelConverter {
 				tskInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 				
 				if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-					if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+					if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()) {
 						tskInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
-					else
+					} else {
 						tskInfo.setStatus(TaskInstance.STATUS_RUNNING);
+					}
 				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 					tskInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
@@ -2454,6 +2472,10 @@ public class ModelConverter {
 		userInfo.setUseSignPicture(userExtend.isUseSign());
 		userInfo.setSignPicture(userExtend.getSign());
 		userInfo.setEmployeeId(userExtend.getEmployeeId());
+		userInfo.setHireDate(userExtend.getHireDate()==null?null:new LocalDate(userExtend.getHireDate().getTime()));
+		userInfo.setBirthday(userExtend.getBirthDay()==null?null:new LocalDate(userExtend.getBirthDay().getTime()));
+		userInfo.setLunarBirthday(false);
+		
 		return userInfo;
 	}
 
@@ -2846,6 +2868,11 @@ public class ModelConverter {
 		user.setCellPhoneNo(userExtend.getCellPhoneNo());
 		user.setUseSignPicture(userExtend.isUseSign());
 		user.setSignPicture(userExtend.getSign());
+		user.setHireDate(new LocalDate(userExtend.getHireDate().getTime()));
+		user.setBirthday(new LocalDate(userExtend.getBirthDay().getTime()));
+		user.setLunarBirthday(false);
+		user.setHomePhoneNo(userExtend.getHomePhoneNo());
+		user.setHomeAddress(userExtend.getHomeAddress());
 
 		return user;
 	}
@@ -5367,10 +5394,11 @@ public class ModelConverter {
 		lastTask.setWorkSpaceInfo(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 		
 		if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+			if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()) {
 				lastTask.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
-			else
+			} else {
 				lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+			}
 		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 			lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -5405,10 +5433,11 @@ public class ModelConverter {
 		workInstanceInfo.setWorkSpaceInfo(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 		
 		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-			if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime())
+			if(task.getTskExpectEndDate()!=null && task.getTskExpectEndDate().getTime()<(new LocalDate()).getTime()) {
 				workInstanceInfo.setStatus(TaskInstance.STATUS_DELAYED_RUNNING);
-			else
+			} else {
 				workInstanceInfo.setStatus(TaskInstance.STATUS_RUNNING);
+			}
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 			workInstanceInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -5701,6 +5730,74 @@ public class ModelConverter {
 		
 		return taskInstance;
 	}
+	private static SwdRecord setDataFieldsInfo(SwdRecord swdRecord, SwfForm swfForm) throws Exception {
+		if (swdRecord == null || swfForm == null)
+			return null;
+		
+		SwfField[] swfFields = swfForm.getFields();
+		SwdDataField[] swdDataFields = swdRecord.getDataFields();
+		for(SwdDataField swdDataField : swdDataFields) {
+			for(SwfField swfField : swfFields) {
+				if(swdDataField.getId().equals(swfField.getId())) {
+					String formatType = swfField.getFormat().getType();
+					String value = swdDataField.getValue();
+					String refRecordId = swdDataField.getRefRecordId();
+					List<Map<String, String>> resultUsers = null;
+					if(formatType.equals(FormField.TYPE_USER)) {
+						if(value != null && refRecordId != null) {
+							String[] values = value.split(";");
+							String[] refRecordIds = refRecordId.split(";");
+							resultUsers = new ArrayList<Map<String,String>>();
+							if(values.length > 0 && refRecordIds.length > 0) {
+								for(int j=0; j<values.length; j++) {
+									Map<String, String> map = new LinkedHashMap<String, String>();
+									map.put("userId", refRecordIds[j]);
+									map.put("longName", values[j]);
+									resultUsers.add(map);
+								}
+							} else {
+								Map<String, String> map = new LinkedHashMap<String, String>();
+								map.put("userId", refRecordId);
+								map.put("longName", value);
+								resultUsers.add(map);
+							}
+						}
+						swdDataField.setUsers(resultUsers);
+					} else if(formatType.equals(FormField.TYPE_DATE)) {
+						if(value != null) {
+							try {
+								LocalDate localDate = LocalDate.convertGMTStringToLocalDate(value);
+								if(localDate != null)
+									value = localDate.toLocalDateSimpleString();
+							} catch (Exception e) {
+							}
+						}
+					} else if(formatType.equals(FormField.TYPE_TIME)) {
+						if(value != null) {
+							try {
+								LocalDate localDate = LocalDate.convertGMTTimeStringToLocalDate(value);
+								if(localDate != null)
+									value = localDate.toLocalTimeShortString();
+							} catch (Exception e) {
+							}
+						}
+					} else if(formatType.equals(FormField.TYPE_DATETIME)) {
+						if(value != null) {
+							try {
+								LocalDate localDate = LocalDate.convertGMTStringToLocalDate(value);
+								if(localDate != null)
+									value = localDate.toLocalDateTimeSimpleString();
+							} catch (Exception e) {
+							}
+						}
+					}
+					swdDataField.setValue(value);
+				}
+			}
+		}
+		return swdRecord;
+		
+	}
 	public static SwdRecord getSwdRecordByRequestBody(String userId, SwdField[] swdFields, Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try{
 			if (CommonUtil.isEmpty(swdFields))
@@ -5855,7 +5952,62 @@ public class ModelConverter {
 			obj.setRecordId(instanceId);
 			obj.setFileGroupId(groupId);
 			obj.setFileGroupMap(fileGroupMap);
+			
+			SwfForm swfForm = SwManagerFactory.getInstance().getSwfManager().getForm(userId, formId);
+			setDataFieldsInfo(obj, swfForm);
+			
+			Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
+			if(frmAccessSpaceMap != null) {
+				keySet = frmAccessSpaceMap.keySet();
+				itr = keySet.iterator();
+	
+				String workSpaceId = null;
+				String workSpaceType = null;
+				String accessLevel = null;
+				String accessValue = null;
+	
+				while (itr.hasNext()) {
+					String fieldId = (String)itr.next();
+					Object fieldValue = frmAccessSpaceMap.get(fieldId);
+					if (fieldValue instanceof LinkedHashMap) {
+						Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
+						users = (ArrayList<Map<String,String>>)valueMap.get("users");
+						if(!CommonUtil.isEmpty(users)) {
+							String symbol = ";";
+							if(users.size() == 1) {
+								accessValue = users.get(0).get("id");
+							} else {
+								accessValue = "";
+								for(int i=0; i < users.subList(0, users.size()).size(); i++) {
+									Map<String, String> user = users.get(i);
+									accessValue += user.get("id") + symbol;
+								}
+							}
+						}
+					} else if(fieldValue instanceof String) {
+						if(fieldId.equals("selWorkSpace")) {
+							workSpaceId = (String)fieldValue;
+						} else if(fieldId.equals("selWorkSpaceType")) {
+							workSpaceType = (String)fieldValue;
+						} else if(fieldId.equals("selAccessLevel")) {
+							accessLevel = (String)fieldValue;
+						}
+					}
+				}
 
+				if(String.valueOf(AccessPolicy.LEVEL_CUSTOM).equals(accessLevel) && CommonUtil.isEmpty(accessValue)) {
+					accessValue = ModelConverter.getAccessValue(userId, formId);
+				}
+				obj.setWorkSpaceId(workSpaceId);
+				obj.setWorkSpaceType(workSpaceType);
+				obj.setAccessLevel(accessLevel);
+				obj.setAccessValue(accessValue);
+				
+				//워크스페이스(workspaceid) 가 비공개 그룹이라면 무조건 비공개 그룹의 선택 공개로 저장이 된다
+				populatePrivateGroupAuth(userId, obj);
+				
+			}
+			
 			return obj;
 		}catch (Exception e){
 			// Exception Handling Required
@@ -5863,5 +6015,40 @@ public class ModelConverter {
 			return null;			
 			// Exception Handling Required			
 		}
+	}
+	public static void populatePrivateGroupAuth(String userId, SwdRecord obj) throws Exception {
+		if (obj == null)
+			return;
+		String workSpaceId = obj.getWorkSpaceId();
+		if (CommonUtil.isEmpty(workSpaceId))
+			return;
+		if (workSpaceId.indexOf("group_") == -1)
+			return;
+		SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup(userId, workSpaceId, IManager.LEVEL_LITE);
+		if (group == null)
+			return;
+		String groupType = group.getGroupType();
+		if (groupType.equalsIgnoreCase(SwoGroup.GROUP_TYPE_PUBLIC))
+			return;
+
+		if (!obj.getAccessLevel().equalsIgnoreCase("1")) {
+			obj.setAccessLevel("2");
+			obj.setAccessValue(workSpaceId);
+		}
+//		StringBuffer accessValueBuf = new StringBuffer();
+//		SwoGroupMember[] member = group.getSwoGroupMembers();
+//		if (member == null || member.length == 0) {
+//			obj.setAccessValue(userId);
+//		} else {
+//			boolean isFirst = true;
+//			for (int i = 0; i < member.length; i++) {
+//				String memberId = member[i].getUserId();
+//				
+//				accessValueBuf.append("")
+//			}
+//			
+//			
+//		}
+		
 	}
 }

@@ -520,6 +520,7 @@ public class SmartUtil {
 					}
 					user.setHireDate(login.getHireDate());
 					user.setBirthday(login.getBirthday());
+					user.setLunarBirthday(login.isLunarBirthday());
 					user.setHomePhoneNo(login.getHomePhoneNo());
 					user.setHomeAddress(login.getHomeAddress());
 				}

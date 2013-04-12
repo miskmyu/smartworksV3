@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.channels.Channel;
@@ -295,6 +296,18 @@ public class FileUtil {
 		} finally {
 			close(bw);
 			close(fw);
+		}
+	}
+	public static void writeString(String path, String content, boolean overwrite, String encoding) throws Exception {
+		createFile(path, overwrite);
+		OutputStreamWriter osw = null;
+		try {
+		    osw = new OutputStreamWriter(new FileOutputStream(path), encoding);
+		    osw.write(content);
+		} catch(IOException ioe) {
+		    ioe.printStackTrace();
+		} finally {
+		    if(osw != null) try { osw.close(); } catch(Exception e) {}
 		}
 	}
 	public static void delete(String path) throws Exception {

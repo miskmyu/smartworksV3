@@ -27,6 +27,7 @@ public class ItmMenuItem  extends MisObject implements Comparable {
 	public static final String A_IMGPATH = "imgPath";
 	public static final String A_CATEGORYID = "categoryId";
 	public static final String A_PACKAGEID = "packageId";
+	public static final String A_TYPE = "type";
 	public static final String A_PACKAGETYPE = "packageType";
 	public static final String A_FORMID = "formId";
 	public static final String A_GROUPID = "groupId";
@@ -37,6 +38,7 @@ public class ItmMenuItem  extends MisObject implements Comparable {
 	private String imgPath;
 	private String categoryId;
 	private String packageId;
+	private String type;
 	private String packageType;
 	private String formId;
 	private int itmSeq;
@@ -220,6 +222,12 @@ public class ItmMenuItem  extends MisObject implements Comparable {
 	}
 	public void setPackageId(String packageId) {
 		this.packageId = packageId;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	public String getPackageType() {
 		return packageType;

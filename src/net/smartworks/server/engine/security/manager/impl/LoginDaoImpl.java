@@ -9,7 +9,9 @@ package net.smartworks.server.engine.security.manager.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.Date;
 
 import javax.sql.DataSource;
 
@@ -44,7 +46,8 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 										 "	select 	orguser.id, orguser.name, orguser.nickName, orguser.companyId, orgcompany.name as companyName, orguser.deptId, orguser.adjunctDeptIds, orgdept.name as deptName, 		" +
 										 "		   	orguser.empNo, orguser.mobileNo, orguser.internalNo, orguser.locale, orguser.timeZone,										" +
 										 "          orguser.type, orguser.lang, orguser.pos, orguser.stdtime, orguser.authId,													" +
-										 "	        orguser.email, orguser.useMail, useSign, sign, orguser.passwd, orguser.picture, orguser.roleId								" +
+										 "	        orguser.email, orguser.useMail, useSign, sign, orguser.passwd, orguser.picture, orguser.roleId,								" +
+										 "	        orguser.hireDate, orguser.birthDay, orguser.lunarBirthday, orguser.homePhoneNo, orguser.homeAddress							" +
 										 "    from 	sworguser orguser, sworgdept orgdept, sworgcompany orgcompany																" +
 										 "	 where 	orguser.deptid = orgdept.id																									" +
 										 "	   and 	orguser.companyid = orgcompany.id																							" +
@@ -187,6 +190,14 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 
 			login.setRole(rs.getString("roleId").equals("DEPT LEADER") ? User.USER_ROLE_LEADER : User.USER_ROLE_MEMBER);
 			login.setUserLevel(login.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_DEFAULT);
+			
+			Date hireDate = rs.getTimestamp("hireDate");
+			login.setHireDate(hireDate==null ? null : new LocalDate(hireDate.getTime()));
+			Date birthday = rs.getTimestamp("birthDay");
+			login.setBirthday(birthday==null ? null : new LocalDate(birthday.getTime()));
+			login.setLunarBirthday(false);
+			login.setHomePhoneNo(rs.getString("homePhoneNo"));
+			login.setHomeAddress(rs.getString("homeAddress"));
 
 			return login;
 		}

@@ -53,6 +53,7 @@ public class Login implements UserDetails {
 	private DepartmentInfo[] departments;
 	private LocalDate hireDate;
 	private LocalDate birthday;
+	private boolean lunarBirthday;
 	private String homePhoneNo;
 	private String homeAddress;
 	
@@ -279,6 +280,12 @@ public class Login implements UserDetails {
 	}
 	public void setHomeAddress(String homeAddress) {
 		this.homeAddress = homeAddress;
+	}
+	public boolean isLunarBirthday() {
+		return lunarBirthday;
+	}
+	public void setLunarBirthday(boolean lunarBirthday) {
+		this.lunarBirthday = lunarBirthday;
 	}
 	@Override
 	public boolean isAccountNonExpired() {

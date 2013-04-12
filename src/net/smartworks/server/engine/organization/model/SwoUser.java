@@ -58,10 +58,11 @@ public class SwoUser extends SwoObject {
 	public static final String A_SIGN = "sign";
 	public static final String A_USESIGN = "useSign";
 	
-	public static final String A_JOINCOMPANYDATE = "joinCompanyDate";
+	public static final String A_HIREDATE = "hireDate";
 	public static final String A_BIRTHDAY = "birthDay";
-	public static final String A_TELEPHONENUMBER = "telephoneNumber";
-	public static final String A_ADDRESS = "address";
+	public static final String A_LUNARBIRTHDAY = "lunarBirthday";
+	public static final String A_HOMEPHONENO = "homePhoneNo";
+	public static final String A_HOMEADDRESS = "homeAddress";
 	//추가컬럼
 
 
@@ -88,10 +89,11 @@ public class SwoUser extends SwoObject {
 	private String extensionNo;
 	private String sign;
 	
-	private Date joinCompanyDate;
+	private Date hireDate;
 	private Date birthDay;
-	private String telephoneNumber;
-	private String address;
+	private Date lunarBirthday;
+	private String homePhoneNo;
+	private String homeAddress;
 	//추가컬럼
 	
 	
@@ -133,9 +135,6 @@ public class SwoUser extends SwoObject {
 		appendAttributeString(A_MOBILENO, mobileNo, true, buf);
 		appendAttributeString(A_EXTENSIONNO, extensionNo, true, buf);
 		
-		appendAttributeString(A_TELEPHONENUMBER, telephoneNumber, true, buf);
-		appendAttributeString(A_ADDRESS, address, true, buf);
-			
 		return buf.toString();
 	}
 	public String toElementsString(String tab, boolean lite) {
@@ -455,36 +454,34 @@ public class SwoUser extends SwoObject {
 	public void setUseSign(boolean useSign) {
 		this.useSign = useSign;
 	}
-	
-	public Date getJoinCompanyDate() {
-		return joinCompanyDate;
+	public Date getHireDate() {
+		return hireDate;
 	}
-	
-	public void setJoinCompanyDate(Date joinCompanyDate) {
-		this.joinCompanyDate = joinCompanyDate;
+	public void setHireDate(Date hireDate) {
+		this.hireDate = hireDate;
 	}
-	
 	public Date getBirthDay() {
 		return birthDay;
 	}
-	
 	public void setBirthDay(Date birthDay) {
 		this.birthDay = birthDay;
 	}
-	
-	public String getTelephoneNumber() {
-		return telephoneNumber;
+	public Date getLunarBirthday() {
+		return lunarBirthday;
 	}
-	
-	public void setTelephoneNumber(String telephoneNumber) {
-		this.telephoneNumber = telephoneNumber;
+	public void setLunarBirthday(Date lunarBirthday) {
+		this.lunarBirthday = lunarBirthday;
 	}
-	
-	public String getAddress() {
-		return address;
+	public String getHomePhoneNo() {
+		return homePhoneNo;
 	}
-	
-	public void setAddress(String address) {
-		this.address = address;
+	public void setHomePhoneNo(String homePhoneNo) {
+		this.homePhoneNo = homePhoneNo;
+	}
+	public String getHomeAddress() {
+		return homeAddress;
+	}
+	public void setHomeAddress(String homeAddress) {
+		this.homeAddress = homeAddress;
 	}
 }

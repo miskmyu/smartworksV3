@@ -134,14 +134,14 @@
 					<td>
 						<%if(!SmartUtil.isBlankObject(user.getBirthday())){ %>
 							<a href="<%=target %>">
-								<div><%=user.getBirthday().toDateSimpleString()%></div>
+								<div><%=user.getBirthday().toLocalDateSimpleString()%></div>
 							</a>
 						<%} %>
 					</td>
 					<td>
 						<%if(!SmartUtil.isBlankObject(user.getHireDate())){ %>
 							<a href="<%=target %>">
-								<div><%=user.getHireDate().toLocalString()%></div>
+								<div><%=user.getHireDate().toLocalDateSimpleString()%></div>
 							</a>
 						<%} %>
 					</td>

@@ -195,6 +195,7 @@ public class Smtp {
 		mimeMsg.saveChanges();
 
 		String mid = mimeMsg.getMessageID();
+		System.out.println("$$$$$$" + mid);
         mimeMsg.addHeader("Sent-Message-Id", mid);		
 		System.out.println("SENT-MESSAGE-ID TO SEND = " + mimeMsg.getHeader("Sent-Message-Id")[0]);
 		

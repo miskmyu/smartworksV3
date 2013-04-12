@@ -44,10 +44,11 @@ CREATE TABLE sworguser (
 	internalNo varchar(50),
 	locale varchar(20),
 	timeZone varchar(20),
-	joinCompanyDate Datetime;
-	birthDay Datetime;
-	telephoneNumber varchar(20);
-	address varchar(20);
+	hireDate Datetime,
+	birthDay Datetime,
+	lunarBirthday Datetime,
+	homePhoneNo varchar(20),
+	homePhoneAddress varchar(200),
 	primary key (id)
 );
 
