@@ -1138,7 +1138,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" creationDate=:creationDate, creationUser=:creationUser,");
 				buf.append(" modificationUser=:modificationUser, modificationDate=:modificationDate, retiree=:retiree,");
 				buf.append(" mobileNo=:mobileNo, extensionNo=:extensionNo,");
-				buf.append(" locale=:locale, timeZone=:timeZone");
+				buf.append(" locale=:locale, timeZone=:timeZone, hireDate=:hireDate, birthDay=:birthDay, lunarBirthday=:lunarBirthday, homePhoneNo=:homePhoneNo, homeAddress=:homeAddress ");
 				buf.append(" where id=:id");
 				Query query = this.getSession().createQuery(buf.toString());
 				query.setString(SwoUser.A_COMPANYID, obj.getCompanyId());
@@ -1166,6 +1166,11 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString(SwoUser.A_EXTENSIONNO, obj.getExtensionNo());
 				query.setString(SwoUser.A_LOCALE, obj.getLocale());
 				query.setString(SwoUser.A_TIMEZONE, obj.getTimeZone());
+				query.setTimestamp(SwoUser.A_HIREDATE, obj.getHireDate());
+				query.setTimestamp(SwoUser.A_BIRTHDAY, obj.getBirthDay());
+				query.setTimestamp(SwoUser.A_LUNARBIRTHDAY, obj.getLunarBirthday());
+				query.setString(SwoUser.A_HOMEPHONENO, obj.getHomePhoneNo());
+				query.setString(SwoUser.A_HOMEADDRESS, obj.getHomeAddress());
 				query.setString(SwoUser.A_ID, obj.getId());
 			}
 			
@@ -1234,6 +1239,12 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		String[] typeNotIns = null;
 		String[] idIns = null;
 		String[] idNotIns = null;
+		
+		Date hireDate = null;
+		Date birthDay = null;
+		Date lunarBirthday = null;
+		String homePhoneNo = null;
+		String homeAddress = null;
 
 		if (cond != null) {
 			id = cond.getId();
@@ -1264,6 +1275,13 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			extensionNo = cond.getExtensionNo();
 			idIns = cond.getIdIns();
 			idNotIns = cond.getIdNotIns();
+			
+			hireDate = cond.getHireDate();
+			birthDay = cond.getBirthDay();
+			lunarBirthday = cond.getLunarBirthday();
+			homePhoneNo = cond.getHomePhoneNo();
+			homeAddress = cond.getHomeAddress();
+			
 		}
 		buf.append(" from SwoUser obj");
 		buf.append(" where obj.id is not null");
@@ -1346,6 +1364,16 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				}
 				buf.append(")");
 			}
+			if (hireDate != null)
+				buf.append(" and obj.hireDate = :hireDate");
+			if (birthDay != null)
+				buf.append(" and obj.birthDay = :birthDay");
+			if (lunarBirthday != null)
+				buf.append(" and obj.lunarBirthday = :lunarBirthday");
+			if (homePhoneNo != null)
+				buf.append(" and obj.homePhoneNo = :homePhoneNo");
+			if (homeAddress != null)
+				buf.append(" and obj.homeAddress = :homeAddress");
 		}
 		this.appendOrderQuery(buf, "obj", cond);
 		
@@ -1420,6 +1448,16 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					query.setString("idNotIn"+i, idNotIns[i]);
 				}
 			}
+			if (hireDate != null)
+				query.setTimestamp("hireDate", hireDate);
+			if (birthDay != null)
+				query.setTimestamp("birthDay", birthDay);
+			if (lunarBirthday != null)
+				query.setTimestamp("lunarBirthday", lunarBirthday);
+			if (homePhoneNo != null)
+				query.setString("homePhoneNo", homePhoneNo);
+			if (homeAddress != null)
+				query.setString("homeAddress", homeAddress);
 		}
 		return query;
 	}
@@ -1492,7 +1530,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" obj.lang, obj.stdTime, obj.picture,");
 				buf.append(" obj.creationUser, obj.creationDate,");
 				buf.append(" obj.modificationUser, obj.modificationDate, obj.retiree, obj.mobileNo, obj.extensionNo, ");
-				buf.append(" obj.locale, obj.timeZone ");
+				buf.append(" obj.locale, obj.timeZone, obj.hireDate, obj.birthDay, obj.lunarBirthday, obj.homePhoneNo, obj.homeAddress ");
 			}
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
@@ -1530,6 +1568,12 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					obj.setExtensionNo(((String)fields[j++]));
 					obj.setLocale(((String)fields[j++]));
 					obj.setTimeZone(((String)fields[j++]));
+					obj.setHireDate(((Timestamp)fields[j++]));
+					obj.setBirthDay(((Timestamp)fields[j++]));
+					obj.setLunarBirthday(((Timestamp)fields[j++]));
+					obj.setHomePhoneNo(((String)fields[j++]));
+					obj.setHomeAddress(((String)fields[j++]));
+					
 					objList.add(obj);
 				}
 				list = objList;
@@ -2273,7 +2317,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			buff.append("  		   user.id, user.name, user.nickName, user.password, user.companyId,  company.name, ");
 			buff.append(" 		   user.deptId, user.adjunctDeptIds, dept.name, dept.description, user.locale, ");
 			buff.append(" 		   user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
-			buff.append("     	   user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
+			buff.append("     	   user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo, ");
+			buff.append(" 		   user.hireDate, user.birthDay, user.lunarBirthday, user.homePhoneNo, user.homeAddress )");
 			buff.append("     from SwoUser user, SwoDepartment dept, SwoCompany company ");
 			buff.append("    where user.deptId = dept.id");
 			buff.append("      and user.companyId = company.id");
@@ -2334,7 +2379,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append("  		   user.id, user.name, user.nickName, user.password, user.companyId, company.name, ");
 		buff.append(" 		   user.deptId, user.adjunctDeptIds, dept.name, dept.description, user.locale, ");
 		buff.append(" 		   user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
-		buff.append("     	   user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
+		buff.append("     	   user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo, ");
+		buff.append(" 		   user.hireDate, user.birthDay, user.lunarBirthday, user.homePhoneNo, user.homeAddress )");
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
 		buff.append(" where user.deptId = dept.id");
 		if (!CommonUtil.isEmpty(lastName))
@@ -2401,7 +2447,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append("  		   user.id, user.name, user.nickName, user.password, user.companyId,  company.name, ");
 		buff.append(" 		   user.deptId, user.adjunctDeptIds, dept.name, dept.description, user.locale, ");
 		buff.append(" 		   user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
-		buff.append("     	   user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
+		buff.append("     	   user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo, ");
+		buff.append(" 		   user.hireDate, user.birthDay, user.lunarBirthday, user.homePhoneNo, user.homeAddress )");
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
 		buff.append(" where user.deptId = dept.id");
 		buff.append(" and user.companyId = company.id");
@@ -2570,7 +2617,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append(" user.id,  user.name, user.nickName, user.password, user.companyId,  company.name, ");
 		buff.append(" user.deptId, user.adjunctDeptIds, dept.name, dept.description, user.locale, ");
 		buff.append(" user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
-		buff.append(" user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
+		buff.append(" user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo, ");
+		buff.append(" user.hireDate, user.birthDay, user.lunarBirthday, user.homePhoneNo, user.homeAddress )");
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
 		buff.append(" where user.deptId = dept.id");
 		buff.append(" and user.id != 'admin@maninsoft.co.kr' ");

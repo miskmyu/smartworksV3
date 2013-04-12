@@ -2016,9 +2016,9 @@ public class SettingsServiceImpl implements ISettingsService {
 						txtMemberCellPhoneNo = (String)frmEditMember.get("txtMemberCellPhoneNo");
 						swoUser.setMobileNo(txtMemberCellPhoneNo);
 					} else if(fieldId.equals("txtMemberHomePhoneNo")) {
-						swoUser.setTelephoneNumber((String)frmEditMember.get("txtMemberHomePhoneNo"));
+						swoUser.setHomePhoneNo((String)frmEditMember.get("txtMemberHomePhoneNo"));
 					} else if(fieldId.equals("txtMemberHomeAddress")) {
-						swoUser.setAddress((String)frmEditMember.get("txtMemberHomeAddress"));
+						swoUser.setHomeAddress((String)frmEditMember.get("txtMemberHomeAddress"));
 					} else if(fieldId.equals("txtMemberHireYear")) {
 						hireYear = (String)frmEditMember.get("txtMemberHireYear");
 					} else if(fieldId.equals("txtMemberHireMonth")) {
@@ -2083,12 +2083,12 @@ public class SettingsServiceImpl implements ISettingsService {
 				if(hireMonth.length()==1) hireMonth="0"+hireMonth;
 				if(hireDay.length()==1) hireDay="0"+hireDay;
 				try{
-					swoUser.setJoinCompanyDate(new Date(LocalDate.convertLocalDateStringToLocalDate1(hireYear+hireMonth+hireDay).getTime()));
+					swoUser.setHireDate(new Date(LocalDate.convertLocalDateStringToLocalDate1(hireYear+hireMonth+hireDay).getTime()));
 				}catch (Exception e){
-					swoUser.setJoinCompanyDate(null);
+					swoUser.setHireDate(null);
 				}				
 			}else{
-				swoUser.setJoinCompanyDate(null);
+				swoUser.setHireDate(null);
 			}
 			
 			if(birthYear!=null && birthYear.length()==4 && birthMonth!=null && birthDay!=null){

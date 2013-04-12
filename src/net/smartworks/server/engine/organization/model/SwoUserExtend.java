@@ -16,7 +16,9 @@ public class SwoUserExtend {
 	}
 	
 	public SwoUserExtend(String id, String name, String nickName, String password, String companyId, String companyName, String departmentId, String adjunctDeptIds, String departmentName, String departmentDesc, String locale,
-			String timeZone, String pictureName, String position, String roleId, String authId, String employeeId, String email, boolean useMail, boolean useSign, String sign, String phoneNo, String cellPhoneNo) {
+			String timeZone, String pictureName, String position, String roleId, String authId, String employeeId, String email, boolean useMail, boolean useSign, String sign, String phoneNo, String cellPhoneNo,
+				Date hireDate, Date birthDay, Date lunarBirthday, String homePhoneNo, String homeAddress
+			) {
 		this.id = id;
 		this.name = name;
 		this.nickName = nickName;
@@ -40,6 +42,11 @@ public class SwoUserExtend {
 		this.sign = sign;
 		this.phoneNo = phoneNo;
 		this.cellPhoneNo = cellPhoneNo;
+		this.hireDate = hireDate;
+		this.birthDay = birthDay;
+		this.lunarBirthday = lunarBirthday;
+		this.homePhoneNo = homePhoneNo;
+		this.homeAddress = homeAddress;
 	}
 
 	private String id = null;
@@ -71,7 +78,13 @@ public class SwoUserExtend {
 	private String bigPictureName = null;
 	private String smallPictureName = null;
 	private Date modifiedTime = null;
-
+	
+	private Date hireDate = null;
+	private Date birthDay = null;
+	private Date lunarBirthday = null;
+	private String homePhoneNo = null;
+	private String homeAddress = null;
+	
 	public String getEmployeeId() {
 		return employeeId;
 	}
@@ -231,15 +244,43 @@ public class SwoUserExtend {
 	public String getAdjunctDeptIds() {
 		return adjunctDeptIds;
 	}
-
 	public void setAdjunctDeptIds(String adjunctDeptIds) {
 		this.adjunctDeptIds = adjunctDeptIds;
 	}
-
 	public Date getModifiedTime() {
 		return modifiedTime;
 	}
 	public void setModifiedTime(Date modifiedTime) {
 		this.modifiedTime = modifiedTime;
+	}
+	public Date getHireDate() {
+		return hireDate;
+	}
+	public void setHireDate(Date hireDate) {
+		this.hireDate = hireDate;
+	}
+	public Date getBirthDay() {
+		return birthDay;
+	}
+	public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
+	}
+	public Date getLunarBirthday() {
+		return lunarBirthday;
+	}
+	public void setLunarBirthday(Date lunarBirthday) {
+		this.lunarBirthday = lunarBirthday;
+	}
+	public String getHomePhoneNo() {
+		return homePhoneNo;
+	}
+	public void setHomePhoneNo(String homePhoneNo) {
+		this.homePhoneNo = homePhoneNo;
+	}
+	public String getHomeAddress() {
+		return homeAddress;
+	}
+	public void setHomeAddress(String homeAddress) {
+		this.homeAddress = homeAddress;
 	}
 }

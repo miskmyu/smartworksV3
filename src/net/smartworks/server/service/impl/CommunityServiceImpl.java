@@ -3464,16 +3464,20 @@ public class CommunityServiceImpl implements ICommunityService {
 		
 		String communityId = comId;
 
-//		try{
-//			User cUser = SmartUtil.getCurrentUser();
-//			String companyId = cUser.getCompanyId();
-//			String userId = cUser.getId();
-//	
-//			ItmMenuItemListCond menuItemListCond = new ItmMenuItemListCond();
-//			menuItemListCond.setUserId(userId);
-//	
-//			ItmMenuItemList menuItemList = getItmManager().getMenuItemList(userId, menuItemListCond, IManager.LEVEL_LITE);
-//	
+		try{
+			User cUser = SmartUtil.getCurrentUser();
+			String companyId = cUser.getCompanyId();
+			String userId = cUser.getId();
+	
+			ItmMenuItemListCond menuItemListCond = new ItmMenuItemListCond();
+			menuItemListCond.setUserId(userId);
+	
+			ItmMenuItemList menuItemList = SwManagerFactory.getInstance().getItmManager().getMenuItemList(userId, menuItemListCond, IManager.LEVEL_LITE);
+	
+			//커뮤니티의 타입이 필요하다
+			
+			//커뮤니티아이디(사용자아이디, 부서아이디, 그룹아이디)
+			
 //			PkgPackageCond packageCond = new PkgPackageCond();
 //			packageCond.setPackageId(workId);
 //			packageCond.setCompanyId(companyId);
@@ -3533,11 +3537,11 @@ public class CommunityServiceImpl implements ICommunityService {
 //				menuItem.setItmSeq(itmSeq);
 //				getItmManager().addMenuItem(userId, menuItem);
 //			}
-//		}catch (Exception e){
-//			// Exception Handling Required
-//			e.printStackTrace();
-//			// Exception Handling Required			
-//		}
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			// Exception Handling Required			
+		}
 	}
 
 	@Override
