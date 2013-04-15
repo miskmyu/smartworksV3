@@ -91,7 +91,7 @@ public class SwoUser extends SwoObject {
 	
 	private Date hireDate;
 	private Date birthDay;
-	private Date lunarBirthday;
+	private boolean lunarBirthday;
 	private String homePhoneNo;
 	private String homeAddress;
 	//추가컬럼
@@ -466,10 +466,10 @@ public class SwoUser extends SwoObject {
 	public void setBirthDay(Date birthDay) {
 		this.birthDay = birthDay;
 	}
-	public Date getLunarBirthday() {
+	public boolean isLunarBirthday() {
 		return lunarBirthday;
 	}
-	public void setLunarBirthday(Date lunarBirthday) {
+	public void setLunarBirthday(boolean lunarBirthday) {
 		this.lunarBirthday = lunarBirthday;
 	}
 	public String getHomePhoneNo() {

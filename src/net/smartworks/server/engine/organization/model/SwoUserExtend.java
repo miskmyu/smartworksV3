@@ -17,7 +17,7 @@ public class SwoUserExtend {
 	
 	public SwoUserExtend(String id, String name, String nickName, String password, String companyId, String companyName, String departmentId, String adjunctDeptIds, String departmentName, String departmentDesc, String locale,
 			String timeZone, String pictureName, String position, String roleId, String authId, String employeeId, String email, boolean useMail, boolean useSign, String sign, String phoneNo, String cellPhoneNo,
-				Date hireDate, Date birthDay, Date lunarBirthday, String homePhoneNo, String homeAddress
+				Date hireDate, Date birthDay, boolean lunarBirthday, String homePhoneNo, String homeAddress
 			) {
 		this.id = id;
 		this.name = name;
@@ -81,7 +81,7 @@ public class SwoUserExtend {
 	
 	private Date hireDate = null;
 	private Date birthDay = null;
-	private Date lunarBirthday = null;
+	private boolean lunarBirthday = false;
 	private String homePhoneNo = null;
 	private String homeAddress = null;
 	
@@ -265,10 +265,10 @@ public class SwoUserExtend {
 	public void setBirthDay(Date birthDay) {
 		this.birthDay = birthDay;
 	}
-	public Date getLunarBirthday() {
+	public boolean isLunarBirthday() {
 		return lunarBirthday;
 	}
-	public void setLunarBirthday(Date lunarBirthday) {
+	public void setLunarBirthday(boolean lunarBirthday) {
 		this.lunarBirthday = lunarBirthday;
 	}
 	public String getHomePhoneNo() {

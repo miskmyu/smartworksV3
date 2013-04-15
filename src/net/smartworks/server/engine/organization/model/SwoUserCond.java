@@ -88,7 +88,7 @@ public class SwoUserCond extends SwoObjectCond {
 
 	private Date hireDate;
 	private Date birthDay;
-	private Date lunarBirthday;
+	private boolean lunarBirthday;
 	private String homePhoneNo;
 	private String homeAddress;
 	
@@ -507,10 +507,10 @@ public class SwoUserCond extends SwoObjectCond {
 	public void setBirthDay(Date birthDay) {
 		this.birthDay = birthDay;
 	}
-	public Date getLunarBirthday() {
+	public boolean isLunarBirthday() {
 		return lunarBirthday;
 	}
-	public void setLunarBirthday(Date lunarBirthday) {
+	public void setLunarBirthday(boolean lunarBirthday) {
 		this.lunarBirthday = lunarBirthday;
 	}
 	public String getHomePhoneNo() {

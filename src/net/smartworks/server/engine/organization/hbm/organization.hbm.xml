@@ -92,7 +92,7 @@
 		<property name="extensionNo" column="internalNo" type="string" length="50"/>
 		<property name="hireDate" column="hireDate" type="timestamp"/>
 		<property name="birthDay" column="birthDay" type="timestamp"/>
-		<property name="lunarBirthday" column="lunarBirthday" type="timestamp"/>
+		<property name="lunarBirthday" column="lunarBirthday" type="boolean"/>
 		<property name="homePhoneNo" type="string" length="20"/>
 		<property name="homeAddress" type="string" length="200"/>
 		<property name="creationUser" column="creator" type="string" length="50"/>

@@ -1168,7 +1168,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString(SwoUser.A_TIMEZONE, obj.getTimeZone());
 				query.setTimestamp(SwoUser.A_HIREDATE, obj.getHireDate());
 				query.setTimestamp(SwoUser.A_BIRTHDAY, obj.getBirthDay());
-				query.setTimestamp(SwoUser.A_LUNARBIRTHDAY, obj.getLunarBirthday());
+				query.setBoolean(SwoUser.A_LUNARBIRTHDAY, obj.isLunarBirthday());
 				query.setString(SwoUser.A_HOMEPHONENO, obj.getHomePhoneNo());
 				query.setString(SwoUser.A_HOMEADDRESS, obj.getHomeAddress());
 				query.setString(SwoUser.A_ID, obj.getId());
@@ -1242,7 +1242,6 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		
 		Date hireDate = null;
 		Date birthDay = null;
-		Date lunarBirthday = null;
 		String homePhoneNo = null;
 		String homeAddress = null;
 
@@ -1278,7 +1277,6 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			
 			hireDate = cond.getHireDate();
 			birthDay = cond.getBirthDay();
-			lunarBirthday = cond.getLunarBirthday();
 			homePhoneNo = cond.getHomePhoneNo();
 			homeAddress = cond.getHomeAddress();
 			
@@ -1368,8 +1366,6 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" and obj.hireDate = :hireDate");
 			if (birthDay != null)
 				buf.append(" and obj.birthDay = :birthDay");
-			if (lunarBirthday != null)
-				buf.append(" and obj.lunarBirthday = :lunarBirthday");
 			if (homePhoneNo != null)
 				buf.append(" and obj.homePhoneNo = :homePhoneNo");
 			if (homeAddress != null)
@@ -1452,8 +1448,6 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setTimestamp("hireDate", hireDate);
 			if (birthDay != null)
 				query.setTimestamp("birthDay", birthDay);
-			if (lunarBirthday != null)
-				query.setTimestamp("lunarBirthday", lunarBirthday);
 			if (homePhoneNo != null)
 				query.setString("homePhoneNo", homePhoneNo);
 			if (homeAddress != null)
@@ -1570,7 +1564,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					obj.setTimeZone(((String)fields[j++]));
 					obj.setHireDate(((Timestamp)fields[j++]));
 					obj.setBirthDay(((Timestamp)fields[j++]));
-					obj.setLunarBirthday(((Timestamp)fields[j++]));
+					obj.setLunarBirthday(((Boolean)fields[j++]));
 					obj.setHomePhoneNo(((String)fields[j++]));
 					obj.setHomeAddress(((String)fields[j++]));
 					

@@ -46,7 +46,7 @@ CREATE TABLE sworguser (
 	timeZone varchar(20),
 	hireDate Datetime,
 	birthDay Datetime,
-	lunarBirthday Datetime,
+	lunarBirthday bit,
 	homePhoneNo varchar(20),
 	homePhoneAddress varchar(200),
 	primary key (id)

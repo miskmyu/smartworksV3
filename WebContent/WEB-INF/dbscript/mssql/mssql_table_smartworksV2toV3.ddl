@@ -893,6 +893,9 @@ alter Table sworgconfig add setupcompanydate DateTime
 
 alter Table sworguser add hireDate Datetime;
 alter Table sworguser add birthDay Datetime;
-alter Table sworguser add lunarBirthday Datetime;
+alter Table sworguser add lunarBirthday bit;
 alter Table sworguser add homePhoneNo varchar(20);
 alter Table sworguser add homeAddress varchar(200);
+
+
+update sworguser set lunarBirthday='0'
