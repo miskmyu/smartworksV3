@@ -2474,7 +2474,9 @@ public class ModelConverter {
 		userInfo.setEmployeeId(userExtend.getEmployeeId());
 		userInfo.setHireDate(userExtend.getHireDate()==null?null:new LocalDate(userExtend.getHireDate().getTime()));
 		userInfo.setBirthday(userExtend.getBirthDay()==null?null:new LocalDate(userExtend.getBirthDay().getTime()));
-		userInfo.setLunarBirthday(false);
+		userInfo.setLunarBirthday(userExtend.isLunarBirthday());
+		
+		userInfo.setSpaceType(ISmartWorks.SPACE_TYPE_USER);
 		
 		return userInfo;
 	}
@@ -2868,9 +2870,11 @@ public class ModelConverter {
 		user.setCellPhoneNo(userExtend.getCellPhoneNo());
 		user.setUseSignPicture(userExtend.isUseSign());
 		user.setSignPicture(userExtend.getSign());
-		user.setHireDate(new LocalDate(userExtend.getHireDate().getTime()));
-		user.setBirthday(new LocalDate(userExtend.getBirthDay().getTime()));
-		user.setLunarBirthday(false);
+		if (userExtend.getHireDate() != null)
+			user.setHireDate(new LocalDate(userExtend.getHireDate().getTime()));
+		if (userExtend.getBirthDay() != null)
+			user.setBirthday(new LocalDate(userExtend.getBirthDay().getTime()));
+		user.setLunarBirthday(userExtend.isLunarBirthday());
 		user.setHomePhoneNo(userExtend.getHomePhoneNo());
 		user.setHomeAddress(userExtend.getHomeAddress());
 
@@ -2898,6 +2902,8 @@ public class ModelConverter {
 		departmentInfo.setBigPictureName(departmentExtend.getBigPictureName());
 		departmentInfo.setFullpathName(getDepartmentInfoFullpathNameByDepartmentId(departmentExtend.getId()));
 		departmentInfo.setHead(getUserInfoByUserId(departmentExtend.getHeadId()));
+		
+		departmentInfo.setSpaceType(ISmartWorks.SPACE_TYPE_DEPARTMENT);
 		return departmentInfo;
 	}
 	public static String getDepartmentInfoFullpathNameByDepartmentId(String departmentInfoId) throws Exception {
@@ -3224,6 +3230,8 @@ public class ModelConverter {
 		} else {
 			groupInfo.setPublic(true);
 		}
+		
+		groupInfo.setSpaceType(ISmartWorks.SPACE_TYPE_GROUP);
 		
 		return groupInfo;
 	}

@@ -4,6 +4,7 @@ import net.smartworks.server.engine.common.model.BaseObject;
 import net.smartworks.server.engine.common.model.MisObject;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.XmlUtil;
+import net.smartworks.server.engine.process.task.model.TskTask;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,6 +20,12 @@ public class ItmMenuItem  extends MisObject implements Comparable {
 	protected static final String PREFIX = "Itm";
 	private static final String NAME = CommonUtil.toName(ItmMenuItem.class, PREFIX);
 	
+	public static final String FAV_PACKAGE_TYPE_INFORWORK = TskTask.TASKTYPE_SINGLE;
+	public static final String FAV_PACKAGE_TYPE_PROCESS = TskTask.TASKTYPE_COMMON;
+	public static final String FAV_COMMUNITY_TYPE_USER = "COMMUNITY_USER";
+	public static final String FAV_COMMUNITY_TYPE_DEPT = "COMMUNITY_DEPT";
+	public static final String FAV_COMMUNITY_TYPE_GROUP = "COMMUNITY_GROUP";
+
 	public ItmMenuItem() {
 		super();
 	}
@@ -27,7 +34,6 @@ public class ItmMenuItem  extends MisObject implements Comparable {
 	public static final String A_IMGPATH = "imgPath";
 	public static final String A_CATEGORYID = "categoryId";
 	public static final String A_PACKAGEID = "packageId";
-	public static final String A_TYPE = "type";
 	public static final String A_PACKAGETYPE = "packageType";
 	public static final String A_FORMID = "formId";
 	public static final String A_GROUPID = "groupId";
@@ -38,7 +44,6 @@ public class ItmMenuItem  extends MisObject implements Comparable {
 	private String imgPath;
 	private String categoryId;
 	private String packageId;
-	private String type;
 	private String packageType;
 	private String formId;
 	private int itmSeq;
@@ -222,12 +227,6 @@ public class ItmMenuItem  extends MisObject implements Comparable {
 	}
 	public void setPackageId(String packageId) {
 		this.packageId = packageId;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
 	}
 	public String getPackageType() {
 		return packageType;

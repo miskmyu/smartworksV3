@@ -1,5 +1,6 @@
 package net.smartworks.server.service.impl;
 
+import java.awt.MenuItem;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.persistence.criteria.CriteriaBuilder.Case;
 import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.Community;
@@ -100,6 +102,7 @@ import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.server.service.util.SearchParallelProcessing;
+import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.Semaphore;
 import net.smartworks.util.SmartMessage;
@@ -181,12 +184,31 @@ public class CommunityServiceImpl implements ICommunityService {
 			getDeptTreeByDeptId(deptList, myDeptId);
 			DepartmentInfo[] deptInfos = new DepartmentInfo[deptList.size()];
 			int index = deptList.size() - 1;
+
+			List myFavorityCommunityList = new ArrayList();
+			String companyId = user.getCompanyId();
+			String userId = user.getId();
+			ItmMenuItemListCond menuItemListCond = new ItmMenuItemListCond();
+			menuItemListCond.setUserId(userId);
+			ItmMenuItemList menuItemList = SwManagerFactory.getInstance().getItmManager().getMenuItemList(userId, menuItemListCond, IManager.LEVEL_ALL);
+			if (menuItemList != null) {
+				ItmMenuItem[] menuItems = menuItemList.getMenuItems();
+				if (!CommonUtil.isEmpty(menuItems)) {
+					for (int i = 0; i < menuItems.length; i++) {
+						ItmMenuItem menuItem = menuItems[i];
+						myFavorityCommunityList.add(menuItem.getPackageId());	
+					}
+				}
+			}
+			
 			for (int i = 0; i < deptList.size(); i++) {
 				DepartmentInfo deptInfo = new DepartmentInfo();
 				SwoDepartment swDept = deptList.get(i);
 				deptInfo.setId(swDept.getId());
 				deptInfo.setName(swDept.getName());
 				deptInfo.setDesc(swDept.getDescription());
+				if (myFavorityCommunityList.contains(deptInfo.getId()))
+					deptInfo.setFavorite(true);
 				deptInfos[index--] = deptInfo;
 			}
 			return deptInfos;
@@ -306,10 +328,30 @@ public class CommunityServiceImpl implements ICommunityService {
 			swoGroupCond.setSwoGroupMembers(swoGroupMembers);
 			swoGroupCond.setOrders(new Order[]{new Order("creationDate", false)});
 			SwoGroup[] swoGroups = getSwoManager().getGroups(user.getId(), swoGroupCond, IManager.LEVEL_ALL);
+			
+			
+			List myFavorityCommunityList = new ArrayList();
+			String companyId = user.getCompanyId();
+			String userId = user.getId();
+			ItmMenuItemListCond menuItemListCond = new ItmMenuItemListCond();
+			menuItemListCond.setUserId(userId);
+			ItmMenuItemList menuItemList = SwManagerFactory.getInstance().getItmManager().getMenuItemList(userId, menuItemListCond, IManager.LEVEL_ALL);
+			if (menuItemList != null) {
+				ItmMenuItem[] menuItems = menuItemList.getMenuItems();
+				if (!CommonUtil.isEmpty(menuItems)) {
+					for (int i = 0; i < menuItems.length; i++) {
+						ItmMenuItem menuItem = menuItems[i];
+						myFavorityCommunityList.add(menuItem.getPackageId());	
+					}
+				}
+			}
+			
 			if(swoGroups != null) {
 				for(SwoGroup swoGroup : swoGroups) {
 //					GroupInfo groupInfo = ModelConverter.getGroupInfoByGroupId(swoGroup.getId());
 					GroupInfo groupInfo = ModelConverter.getGroupInfoBySwoGroup(null, swoGroup);
+					if (myFavorityCommunityList.contains(groupInfo.getId()))
+						groupInfo.setFavorite(true);
 					groupInfoList.add(groupInfo);
 				}
 				GroupInfo[] groupInfos = new GroupInfo[groupInfoList.size()];
@@ -3057,14 +3099,52 @@ public class CommunityServiceImpl implements ICommunityService {
 	int previousPageSize = 0;
 	@Override
 	public CommunityInfoList getCommunityInstanceList(int type, RequestParams params) throws Exception {
+		
+		CommunityInfoList communityInfoList = null;
+		
 		if(type == CommunityInfoList.TYPE_GROUP_INFO_LIST)
-			return getGroupInfoList(params);
+			communityInfoList = getGroupInfoList(params);
 		else if(type == CommunityInfoList.TYPE_DEPARTMENT_INFO_LIST)
-			return getDepartmentInfoList(params);
+			communityInfoList = getDepartmentInfoList(params);
 		else if(type == CommunityInfoList.TYPE_USER_INFO_LIST)
-			return getUserInfoList(params);
-		return null;
+			communityInfoList = getUserInfoList(params);
+		
+		applyFavortyCommunityInfoToCommunityInfoList(communityInfoList);
+		
+		return communityInfoList;
 	}
+	private void applyFavortyCommunityInfoToCommunityInfoList(CommunityInfoList communityInfoList) throws Exception {
+		
+		if (CommonUtil.isEmpty(communityInfoList))
+			return;
+		
+		User user = SmartUtil.getCurrentUser();
+		List myFavorityCommunityList = new ArrayList();
+		String companyId = user.getCompanyId();
+		String userId = user.getId();
+		ItmMenuItemListCond menuItemListCond = new ItmMenuItemListCond();
+		menuItemListCond.setUserId(userId);
+		ItmMenuItemList menuItemList = SwManagerFactory.getInstance().getItmManager().getMenuItemList(userId, menuItemListCond, IManager.LEVEL_ALL);
+		if (menuItemList != null) {
+			ItmMenuItem[] menuItems = menuItemList.getMenuItems();
+			if (!CommonUtil.isEmpty(menuItems)) {
+				for (int i = 0; i < menuItems.length; i++) {
+					ItmMenuItem menuItem = menuItems[i];
+					myFavorityCommunityList.add(menuItem.getPackageId());	
+				}
+			}
+		}
+		CommunityInfo[] communityInfos = communityInfoList.getCommunityDatas();
+		if (CommonUtil.isEmpty(communityInfos))
+			return;
+		
+		for (int i = 0; i < communityInfos.length; i++) {
+			CommunityInfo communityInfo = communityInfos[i];
+			if (myFavorityCommunityList.contains(communityInfo.getId()))
+					communityInfo.setFavorite(true);
+		}
+	}
+	
 	
 	private CommunityInfoList getGroupInfoList(RequestParams params) throws Exception{
 		try {
@@ -3454,15 +3534,79 @@ public class CommunityServiceImpl implements ICommunityService {
 			return null;
 		}
 	}
+	
+	private CommunityInfo[] getCommunityInfoByIds(String[] communityIds) throws Exception {
+		if (CommonUtil.isEmpty(communityIds))
+			return null;
+		
+		List<CommunityInfo> resultList = new ArrayList<CommunityInfo>();
+		for (int i = 0; i < communityIds.length; i++) {
+			String communityId = communityIds[i];
+			if (communityId.indexOf("@") != -1) {
+				//사용자공간
+				UserInfo userInfo = ModelConverter.getUserInfoByUserId(communityId);
+				if (!CommonUtil.isEmpty(userInfo)) {
+					resultList.add(userInfo);
+				}
+				
+			} else if (communityId.indexOf("dept_") != -1) {
+				//부서공간
+				DepartmentInfo deptInfo = ModelConverter.getDepartmentInfoByDepartmentId(communityId);
+				if (!CommonUtil.isEmpty(deptInfo)) {
+					resultList.add(deptInfo);
+				}
+				
+			} else if (communityId.indexOf("group_") != -1) {
+				//그룹공간
+				GroupInfo groupInfo = ModelConverter.getGroupInfoByGroupId(communityId);
+				if (!CommonUtil.isEmpty(groupInfo)) {
+					resultList.add(groupInfo);
+				}
+				
+			} else {
+				continue;
+			}
+		}
+		CommunityInfo[] communityInfos = new CommunityInfo[resultList.size()];
+		resultList.toArray(communityInfos);
+		return communityInfos;
+	}
+	
+	
 	@Override
 	public CommunityInfo[] getMyFavoriteCommunities() throws Exception {		
-		return null;
+		User cUser = SmartUtil.getCurrentUser();
+		String companyId = cUser.getCompanyId();
+		String userId = cUser.getId();
+		
+		ItmMenuItemListCond menuItemListCond = new ItmMenuItemListCond();
+		menuItemListCond.setUserId(userId);
+
+		ItmMenuItemList menuItemList = SwManagerFactory.getInstance().getItmManager().getMenuItemList(userId, menuItemListCond, IManager.LEVEL_ALL);
+		if (menuItemList == null) 
+			return null;
+		
+		ItmMenuItem[] menuItems = menuItemList.getMenuItems();
+		
+		if (CommonUtil.isEmpty(menuItems))
+			return null;
+		
+		List<String> communityIdList = new ArrayList<String>();
+		for (int i = 0; i < menuItems.length; i++) {
+			ItmMenuItem menuItem = menuItems[i];
+			if (menuItem.getPackageType() != null && (menuItem.getPackageType().equalsIgnoreCase(ItmMenuItem.FAV_COMMUNITY_TYPE_USER)
+					|| menuItem.getPackageType().equalsIgnoreCase(ItmMenuItem.FAV_COMMUNITY_TYPE_DEPT)
+						|| menuItem.getPackageType().equalsIgnoreCase(ItmMenuItem.FAV_COMMUNITY_TYPE_GROUP))) {
+				communityIdList.add(menuItem.getPackageId());
+			}
+		}
+		String[] communityIdArray = new String[communityIdList.size()];
+		communityIdList.toArray(communityIdArray);
+		
+		return getCommunityInfoByIds(communityIdArray);
 	}
 	@Override
 	public void addAFavoriteCommunity(String comId) throws Exception {
-		
-		String communityId = comId;
-
 		try{
 			User cUser = SmartUtil.getCurrentUser();
 			String companyId = cUser.getCompanyId();
@@ -3471,71 +3615,56 @@ public class CommunityServiceImpl implements ICommunityService {
 			ItmMenuItemListCond menuItemListCond = new ItmMenuItemListCond();
 			menuItemListCond.setUserId(userId);
 	
-			ItmMenuItemList menuItemList = SwManagerFactory.getInstance().getItmManager().getMenuItemList(userId, menuItemListCond, IManager.LEVEL_LITE);
+			ItmMenuItemList menuItemList = SwManagerFactory.getInstance().getItmManager().getMenuItemList(userId, menuItemListCond, IManager.LEVEL_ALL);
 	
-			//커뮤니티의 타입이 필요하다
+			CommunityInfo[] communityInfos = getCommunityInfoByIds(new String[]{comId});
+			if (communityInfos == null)
+				return;
 			
 			//커뮤니티아이디(사용자아이디, 부서아이디, 그룹아이디)
+			if (menuItemList == null) {
+				menuItemList = new ItmMenuItemList();
+				menuItemList.setCompanyId(companyId);
+				menuItemList.setUserId(userId);
+			} else {
+				ItmMenuItem[] menuItems = menuItemList.getMenuItems();
+				
+				if (!CommonUtil.isEmpty(menuItems)) {
+					for (int i = 0; i < menuItems.length; i++) {
+						ItmMenuItem menuItem = menuItems[i];
+						if (menuItem.getPackageId() != null && menuItem.getPackageId().equalsIgnoreCase(comId)) {
+							return;
+						}
+					}
+				}
+			}
 			
-//			PkgPackageCond packageCond = new PkgPackageCond();
-//			packageCond.setPackageId(workId);
-//			packageCond.setCompanyId(companyId);
-//			PkgPackage pkg = getPkgManager().getPackage(userId, packageCond, IManager.LEVEL_LITE);
-//			String groupId = "";
-//			String categoryId = "";
-//			String packageType = "";
-//			String packageName = "";
-//			if(pkg != null) {
-//				groupId = pkg.getObjId();
-//				categoryId = pkg.getCategoryId();
-//				packageType = pkg.getType();
-//				packageName = pkg.getName();
-//			}
-//	
-//			SwfFormCond formCond = new SwfFormCond();
-//			formCond.setCompanyId(companyId);
-//			formCond.setPackageId(workId);
-//			SwfForm[] forms = getSwfManager().getForms(userId, formCond, IManager.LEVEL_LITE);
-//			String formId = "";
-//			if(forms != null) {
-//				formId = forms[0].getId();
-//			}
-//	
-//			ItmMenuItemList newMenuItemList = new ItmMenuItemList();
-//			newMenuItemList.setCompanyId(companyId);
-//			newMenuItemList.setUserId(userId);
-//	
-//			List<ItmMenuItem> itmMenuItemList = new ArrayList<ItmMenuItem>();
-//			ItmMenuItem menuItem = new ItmMenuItem();
-//			menuItem.setCompanyId(companyId);
-//			menuItem.setPackageId(workId);
-//			menuItem.setName(packageName);
-//			menuItem.setGroupId(groupId);
-//			menuItem.setCategoryId(categoryId);
-//			menuItem.setPackageType(packageType);
-//			menuItem.setFormId(formId);
-//			String objId = "";
-//			int itmSeq = 0;
-//			if(menuItemList != null) {
-//				objId = menuItemList.getObjId();
-//				itmSeq = getItmManager().getMaxItmSeq(userId) + 1;
-//			}
-//			menuItem.setObjId(objId);
-//	
-//			itmMenuItemList.add(menuItem);
-//	
-//			ItmMenuItem[] menuItems = new ItmMenuItem[itmMenuItemList.size()];
-//			itmMenuItemList.toArray(menuItems);
-//	
-//			newMenuItemList.setMenuItems(menuItems);
-//	
-//			if(menuItemList == null) {
-//				getItmManager().createMenuItemList(userId, newMenuItemList);
-//			} else {
-//				menuItem.setObjId(objId);
-//				menuItem.setItmSeq(itmSeq);
-//				getItmManager().addMenuItem(userId, menuItem);
-//			}
+			ItmMenuItem menuItem = new ItmMenuItem();
+			menuItem.setCompanyId(companyId);
+			menuItem.setPackageId(comId);
+			menuItem.setName(communityInfos[0].getName());
+			
+			String communityType = null;
+			
+			switch (communityInfos[0].getSpaceType()) {
+			case ISmartWorks.SPACE_TYPE_USER :
+				communityType = ItmMenuItem.FAV_COMMUNITY_TYPE_USER;
+				break;
+				
+			case ISmartWorks.SPACE_TYPE_DEPARTMENT:
+				communityType = ItmMenuItem.FAV_COMMUNITY_TYPE_DEPT;
+				break;
+				
+			case ISmartWorks.SPACE_TYPE_GROUP:
+				communityType = ItmMenuItem.FAV_COMMUNITY_TYPE_GROUP;
+				break;
+			}
+			
+			menuItem.setPackageType(communityType);
+			menuItemList.addMenuItem(menuItem);
+	
+			SwManagerFactory.getInstance().getItmManager().setMenuItemList(userId, menuItemList, IManager.LEVEL_ALL);
+
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -3545,6 +3674,32 @@ public class CommunityServiceImpl implements ICommunityService {
 
 	@Override
 	public void removeAFavoriteCommunity(String comId) throws Exception {
+
+		User cUser = SmartUtil.getCurrentUser();
+		String companyId = cUser.getCompanyId();
+		String userId = cUser.getId();
+		
+		ItmMenuItemListCond menuItemListCond = new ItmMenuItemListCond();
+		menuItemListCond.setUserId(userId);
+
+		ItmMenuItemList menuItemList = SwManagerFactory.getInstance().getItmManager().getMenuItemList(userId, menuItemListCond, IManager.LEVEL_ALL);
+		if (menuItemList == null) 
+			return;
+		
+		ItmMenuItem[] menuItems = menuItemList.getMenuItems();
+		
+		if (CommonUtil.isEmpty(menuItems))
+			return;
+		
+		for (int i = 0; i < menuItems.length; i++) {
+			ItmMenuItem menuItem = menuItems[i];
+			
+			if (menuItem.getPackageId() != null && menuItem.getPackageId().equalsIgnoreCase(comId)) {
+				menuItemList.removeMenuItem(menuItem);
+				break;
+			}
+		}
+		SwManagerFactory.getInstance().getItmManager().setMenuItemList(userId, menuItemList, IManager.LEVEL_ALL);
 	}
 
 }
