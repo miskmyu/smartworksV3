@@ -2472,6 +2472,10 @@ public class ModelConverter {
 		userInfo.setUseSignPicture(userExtend.isUseSign());
 		userInfo.setSignPicture(userExtend.getSign());
 		userInfo.setEmployeeId(userExtend.getEmployeeId());
+		userInfo.setHireDate(userExtend.getHireDate()==null?null:new LocalDate(userExtend.getHireDate().getTime()));
+		userInfo.setBirthday(userExtend.getBirthDay()==null?null:new LocalDate(userExtend.getBirthDay().getTime()));
+		userInfo.setLunarBirthday(false);
+		
 		return userInfo;
 	}
 
@@ -2864,6 +2868,11 @@ public class ModelConverter {
 		user.setCellPhoneNo(userExtend.getCellPhoneNo());
 		user.setUseSignPicture(userExtend.isUseSign());
 		user.setSignPicture(userExtend.getSign());
+		user.setHireDate(new LocalDate(userExtend.getHireDate().getTime()));
+		user.setBirthday(new LocalDate(userExtend.getBirthDay().getTime()));
+		user.setLunarBirthday(false);
+		user.setHomePhoneNo(userExtend.getHomePhoneNo());
+		user.setHomeAddress(userExtend.getHomeAddress());
 
 		return user;
 	}
@@ -3596,7 +3605,11 @@ public class ModelConverter {
 			processWork = new ProcessWork();
 		
 		getSmartWorkByPkgPackage(userId, processWork, pkg);
-		processWork.setType(SmartWork.TYPE_PROCESS);
+		if(pkg.getType().equals("PROCESS")){
+			processWork.setType(SmartWork.TYPE_PROCESS);
+		}else if(pkg.getType().equals("GANTT")){
+			processWork.setType(SmartWork.TYPE_SCHEDULE);			
+		}
 		processWork.setHelpUrl(pkg.getHelpUrl());
 		processWork.setManualFileId(pkg.getManualFileName());// Manual File Group Id
 		processWork.setDesc(pkg.getDescription());

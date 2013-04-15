@@ -27,7 +27,6 @@
 	//MailAccount[] mailAccounts = cUser.getMailAccounts();
 	MailAccount mailAccount = (SmartUtil.isBlankObject(mailAccounts) || mailAccounts.length<1) ? new MailAccount() : mailAccounts[0];
 	EmailServer[] emailServers = smartWorks.getEmailServers();
-	cUser.setHireDate(new LocalDate());
 %>
 <script type="text/javascript">
 
@@ -177,7 +176,7 @@
 									if(!SmartUtil.isBlankObject(cUser.getHireDate())){
 										hireYear = "" + cUser.getHireDate().getYear();
 										hireMonth = "" + (cUser.getHireDate().getMonth()+1);
-										hireDay = "" + cUser.getHireDate().getDaysOfMonth();
+										hireDay = "" + cUser.getHireDate().getDateOnly();
 									%>
 										<span style="width:40px"><%=hireYear %></span><fmt:message key="common.title.year"/>
 										<span style="width:20px"><%=hireMonth %></span><fmt:message key="common.title.month"/>
@@ -219,7 +218,7 @@
 									if(!SmartUtil.isBlankObject(cUser.getBirthday())){
 										birthYear = "" + cUser.getBirthday().getYear();
 										birthMonth = "" + (cUser.getBirthday().getMonth()+1);
-										birthDay = "" + cUser.getBirthday().getDaysOfMonth();
+										birthDay = "" + cUser.getBirthday().getDateOnly();
 									}
 									%>
 									<input style="width:40px" maxlength="4" name="txtUserBirthYear" class="fieldline tc" type="text" value="<%=birthYear %>" /><fmt:message key="common.title.year"/>

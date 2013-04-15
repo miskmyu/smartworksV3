@@ -3455,9 +3455,8 @@ public class CommunityServiceImpl implements ICommunityService {
 		}
 	}
 	@Override
-	public CommunityInfo[] getMyFavoriteCommunities() throws Exception {
-		
-		return SmartTest.getMyCommunities();
+	public CommunityInfo[] getMyFavoriteCommunities() throws Exception {		
+		return null;
 	}
 	@Override
 	public void addAFavoriteCommunity(String comId) throws Exception {
@@ -3546,15 +3545,6 @@ public class CommunityServiceImpl implements ICommunityService {
 
 	@Override
 	public void removeAFavoriteCommunity(String comId) throws Exception {
-		String communityId = comId;
-//
-//		try{
-//			User cUser = SmartUtil.getCurrentUser();
-//			String userId = cUser.getId();
-//			getItmManager().removeMenuItem(userId, workId);
-//		}catch (Exception e){
-//			e.printStackTrace();
-//		}
 	}
 
 }
