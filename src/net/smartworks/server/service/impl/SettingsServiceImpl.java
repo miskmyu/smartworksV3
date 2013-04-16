@@ -2099,10 +2099,11 @@ public class SettingsServiceImpl implements ISettingsService {
 					
 				}catch (Exception e){
 					swoUser.setBirthDay(null);
-				}				
+				}			
 			}else{
 				swoUser.setBirthDay(null);
 			}
+			swoUser.setLunarBirthday(isLunarBirthday);
 			
 			getSwoManager().setUser(userId, swoUser, IManager.LEVEL_ALL);
 			if(!setUserId.equals(""))

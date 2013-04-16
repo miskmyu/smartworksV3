@@ -195,7 +195,7 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 			login.setHireDate(hireDate==null ? null : new LocalDate(hireDate.getTime()));
 			Date birthday = rs.getTimestamp("birthDay");
 			login.setBirthday(birthday==null ? null : new LocalDate(birthday.getTime()));
-			login.setLunarBirthday(false);
+			login.setLunarBirthday(rs.getBoolean("lunarBirthday"));
 			login.setHomePhoneNo(rs.getString("homePhoneNo"));
 			login.setHomeAddress(rs.getString("homeAddress"));
 

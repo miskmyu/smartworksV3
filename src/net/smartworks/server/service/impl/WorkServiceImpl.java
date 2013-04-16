@@ -893,6 +893,7 @@ public class WorkServiceImpl implements IWorkService {
 			String emailSignature = null;
 			String chkUserProfileEmailUseSign = null;
 			String birthYear = null, birthMonth = null, birthDay = null;
+			boolean lunarBirthday = false;
 			String homePhoneNo = null, homeAddress = null;
 
 			while (itr.hasNext()) {
@@ -954,6 +955,8 @@ public class WorkServiceImpl implements IWorkService {
 						birthMonth = valueString;
 					else if (fieldId.equals("txtUserBirthDay"))
 						birthDay = valueString;
+					else if (fieldId.equals("selUserLunarBirthday"))
+						lunarBirthday = "true".equalsIgnoreCase(valueString);
 					else if (fieldId.equals("txtUserHomePhoneNo"))
 						homePhoneNo = valueString;
 					else if (fieldId.equals("txtUserHomeAddress"))
@@ -1002,10 +1005,11 @@ public class WorkServiceImpl implements IWorkService {
 					user.setBirthDay(new Date(LocalDate.convertLocalDateStringToLocalDate1(birthYear+birthMonth+birthDay).getTime()));
 				}catch (Exception e){
 					user.setBirthDay(null);
-				}				
+				}
 			}else{
 				user.setBirthDay(null);
 			}
+			user.setLunarBirthday(lunarBirthday);
 			
 			try {
 				getSwoManager().setUser(txtUserProfileUserId, user, null);

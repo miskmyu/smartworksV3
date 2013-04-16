@@ -156,7 +156,7 @@
 						</a>
 					</td>
 					<td class="tc">
-						<div class="user_actions">
+						<div class="user_actions" style="height:18px">
 							<span class="pop_icon_mail"><a href="" class="js_send_mail_to_user" userId="<%=user.getId() %>" title="<fmt:message key='common.button.send_mail'/>"></a></span>
 							<%if(companyGeneral.isUseChattingService()){ %>
 								<span class="pop_icon_chat"><a href="" class="js_start_chat_with_user" userId="<%=user.getId() %>" title="<fmt:message key='common.button.start_chat'/>"></a></span>
