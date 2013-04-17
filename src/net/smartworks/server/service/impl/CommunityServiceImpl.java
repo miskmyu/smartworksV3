@@ -3279,7 +3279,7 @@ public class CommunityServiceImpl implements ICommunityService {
 
 			SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
 			
-			swoDepartmentCond.setIdNotIns(new String[]{Department.DEPARTMENT_ID_ROOT, user.getCompanyId()});
+			swoDepartmentCond.setIdNotIns(new String[]{Department.DEPARTMENT_ID_ROOT});
 			String filterId = params.getFilterId();
 			if(filterId != null) {
 				if(filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {
@@ -3564,7 +3564,11 @@ public class CommunityServiceImpl implements ICommunityService {
 				}
 				
 			} else {
-				continue;
+				//부서공간
+				DepartmentInfo deptInfo = ModelConverter.getDepartmentInfoByDepartmentId(communityId);
+				if (!CommonUtil.isEmpty(deptInfo)) {
+					resultList.add(deptInfo);
+				}
 			}
 		}
 		CommunityInfo[] communityInfos = new CommunityInfo[resultList.size()];
