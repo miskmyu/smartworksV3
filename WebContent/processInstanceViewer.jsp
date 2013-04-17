@@ -69,7 +69,7 @@
 	function getGeneralParams(){
 		return 	'serviceUrl=' + getServiceUrl() + 
 				'&compId=Maninsoft' + 
-				'&userId=kmyu@maninsoft.co.kr' + 
+				'&userId=kmyu@maninsoft.co.kr|' + lang + 
 				'&defaultLanguage=' + lang;	
 	};
 	function loadInstanceViewer(target, params){

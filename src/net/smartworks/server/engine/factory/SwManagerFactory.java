@@ -22,6 +22,7 @@ import net.smartworks.server.engine.docfile.manager.IDocFileManager;
 import net.smartworks.server.engine.folder.manager.IFdrManager;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.form.manager.ISwfManager;
+import net.smartworks.server.engine.invoker.manager.IInvokerManager;
 import net.smartworks.server.engine.like.manager.ILikeManager;
 import net.smartworks.server.engine.mail.manager.IMailManager;
 import net.smartworks.server.engine.message.manager.IMessageManager;
@@ -84,7 +85,14 @@ public class SwManagerFactory {
 	private IIdxManager autoIndexManager;
 	private IReportManager reportManager;
 	private IScheduleManager scheduleManager;
+	private IInvokerManager invokerManager;
 	
+	public IInvokerManager getInvokerManager() {
+		return invokerManager;
+	}
+	public void setInvokerManager(IInvokerManager invokerManager) {
+		this.invokerManager = invokerManager;
+	}
 	public IScheduleManager getScheduleManager() {
 		return scheduleManager;
 	}
