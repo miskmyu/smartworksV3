@@ -196,6 +196,9 @@ public class CommunityServiceImpl implements ICommunityService {
 				if (!CommonUtil.isEmpty(menuItems)) {
 					for (int i = 0; i < menuItems.length; i++) {
 						ItmMenuItem menuItem = menuItems[i];
+						if(menuItem == null){
+							continue;
+						}
 						myFavorityCommunityList.add(menuItem.getPackageId());	
 					}
 				}
@@ -341,6 +344,9 @@ public class CommunityServiceImpl implements ICommunityService {
 				if (!CommonUtil.isEmpty(menuItems)) {
 					for (int i = 0; i < menuItems.length; i++) {
 						ItmMenuItem menuItem = menuItems[i];
+						if(menuItem == null){
+							continue;
+						}
 						myFavorityCommunityList.add(menuItem.getPackageId());	
 					}
 				}
@@ -3130,6 +3136,9 @@ public class CommunityServiceImpl implements ICommunityService {
 			if (!CommonUtil.isEmpty(menuItems)) {
 				for (int i = 0; i < menuItems.length; i++) {
 					ItmMenuItem menuItem = menuItems[i];
+					if(menuItem == null){
+						continue;
+					}
 					myFavorityCommunityList.add(menuItem.getPackageId());	
 				}
 			}
@@ -3421,7 +3430,7 @@ public class CommunityServiceImpl implements ICommunityService {
 
 			SwoUserCond swoUserCond = new SwoUserCond();
 			
-			swoUserCond.setIdNotIns(new String[]{User.USER_ID_PROCESS, User.USER_ID_ADMINISTRATOR});
+			swoUserCond.setIdNotIns(new String[]{User.USER_ID_PROCESS, User.USER_ID_ADMINISTRATOR, "admin"});
 			String filterId = params.getFilterId();
 			if(filterId != null) {
 				if(filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {
@@ -3598,7 +3607,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		List<String> communityIdList = new ArrayList<String>();
 		for (int i = 0; i < menuItems.length; i++) {
 			ItmMenuItem menuItem = menuItems[i];
-			if (menuItem.getPackageType() != null && (menuItem.getPackageType().equalsIgnoreCase(ItmMenuItem.FAV_COMMUNITY_TYPE_USER)
+			if (menuItem != null && menuItem.getPackageType() != null && (menuItem.getPackageType().equalsIgnoreCase(ItmMenuItem.FAV_COMMUNITY_TYPE_USER)
 					|| menuItem.getPackageType().equalsIgnoreCase(ItmMenuItem.FAV_COMMUNITY_TYPE_DEPT)
 						|| menuItem.getPackageType().equalsIgnoreCase(ItmMenuItem.FAV_COMMUNITY_TYPE_GROUP))) {
 				communityIdList.add(menuItem.getPackageId());
