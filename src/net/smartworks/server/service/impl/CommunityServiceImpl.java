@@ -3421,7 +3421,7 @@ public class CommunityServiceImpl implements ICommunityService {
 
 			SwoUserCond swoUserCond = new SwoUserCond();
 			
-			swoUserCond.setIdNotIns(new String[]{User.USER_ID_PROCESS, User.USER_ID_ADMINISTRATOR});
+			swoUserCond.setIdNotIns(new String[]{User.USER_ID_PROCESS, User.USER_ID_ADMINISTRATOR, "admin"});
 			String filterId = params.getFilterId();
 			if(filterId != null) {
 				if(filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {
