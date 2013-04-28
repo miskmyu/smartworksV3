@@ -147,7 +147,7 @@
 							<%
 							}else{
 							%>
-								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%
 							}
 							%>
@@ -195,7 +195,7 @@
 							<%
 							}else{
 							%>
-								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%
 							}
 							%>
@@ -244,7 +244,7 @@
 							<%
 							}else{
 							%>
-								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%
 							}
 							%>
@@ -288,7 +288,7 @@
 							<%
 							}else{
 							%>
-								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%
 							}
 							%>
@@ -333,7 +333,7 @@
 							<%
 							}else{
 							%>
-								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%
 							}
 							%>
@@ -378,7 +378,7 @@
 							<%
 							}else{
 							%>
-								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%
 							}
 							%>
@@ -408,7 +408,7 @@
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>
@@ -432,7 +432,7 @@
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>
@@ -456,7 +456,7 @@
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>
@@ -493,7 +493,7 @@
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>
@@ -530,7 +530,7 @@
 											<%
 											}else{
 											%>
-												<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+												<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 											<%
 											}
 											%>
@@ -553,7 +553,7 @@
 											<%
 											}else{
 											%>
-												<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+												<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 											<%
 											}
 											%>
@@ -587,7 +587,7 @@
 										<%
 										}else{
 										%>
-											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 										<%
 										}
 										%>
@@ -612,7 +612,7 @@
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>
@@ -636,7 +636,7 @@
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>
@@ -660,7 +660,7 @@
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>

@@ -182,7 +182,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 					<%
 					}else{
 					%>
-						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 					<%
 					}
 					%>
@@ -221,7 +221,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>
@@ -246,7 +246,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>
@@ -278,7 +278,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 										<%
 										}else{
 										%>
-											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 										<%
 										}
 										%>
@@ -301,7 +301,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 										<%
 										}else{
 										%>
-											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 										<%
 										}
 										%>
@@ -327,7 +327,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>
@@ -352,7 +352,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>
@@ -377,7 +377,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>
@@ -404,7 +404,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 										<%
 										}else{
 										%>
-											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 										<%
 										}
 										%>
@@ -425,7 +425,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 										<%
 										}else{
 										%>
-											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 										<%
 										}
 										%>
@@ -446,7 +446,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 										<%
 										}else{
 										%>
-											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+											<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 										<%
 										}
 										%>
@@ -472,7 +472,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 									<%
 									}else{
 									%>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
 									<%
 									}
 									%>
@@ -506,7 +506,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 								%>
 								<fmt:message key="content.sentence.task_by_assignee">
 									<fmt:param>
-										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>" title="<%=assignee.getLongName()%>">
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>" title="<%=assignee.getLongName()%>">
 											<span class="t_name"><%=assignee.getName()%></span>
 										</a>
 									</fmt:param>
@@ -516,7 +516,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 										</a>
 									</fmt:param>
 									<fmt:param>
-										<a <%if(!cUser.getId().equals(assignee.getId())){ %>href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>" <%} %>><span class="t_name"><%=assignee.getLongName()%></span> </a>
+										<a <%if(!cUser.getId().equals(assignee.getId())){ %>href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>&wid=<%=assignee.getId()%>" <%} %>><span class="t_name"><%=assignee.getLongName()%></span> </a>
 									</fmt:param>
 								</fmt:message>
 							<%
@@ -542,7 +542,7 @@ if(!SmartUtil.isBlankObject(instances)) {
 							%>
 							<fmt:message key="content.sentence.and_user">
 								<fmt:param>
-									<a href="<%=forwardee.getSpaceController() %>?cid=<%=forwardee.getSpaceContextId()%>" title="<%=forwardee.getLongName()%>">
+									<a href="<%=forwardee.getSpaceController() %>?cid=<%=forwardee.getSpaceContextId()%>&wid=<%=forwardee.getId()%>" title="<%=forwardee.getLongName()%>">
 										<span class="t_name"><%=forwardee.getName()%></span>
 									</a>
 								</fmt:param>

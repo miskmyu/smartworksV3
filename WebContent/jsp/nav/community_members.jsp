@@ -42,7 +42,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 커뮤너티 멤버와 검색박스가 있는 헤더  -->
-<ul class="nav_tit js_community_members" communityId="<%=communityId%>">
+<ul class="nav_tit_mail js_community_members" communityId="<%=communityId%>">
 
 	<!-- 커뮤너티멤버 라벨과 클릭시 아래의 멤버선택트리화면을 접었다 폈다하는 기능 제공  -->
 	<!-- *** js_collapse_parent_siblings : sw_act_nav.js 에서 이클래스의 클릭이벤트를 받아서 -->
@@ -59,13 +59,14 @@
 		%>
 		<span></span><!--  프로그래스아이콘이 실행되는 곳 -->
 	</li>
-	
+
 	<!--  검색박스를 제공하여, 초성검색 기능을 제공 -->
-	<li class="nav_srch js_srch_com_members">
-		<div class="srch srch_wsize">
+	<li class="nav_srch js_srch_com_members" style="width:0">
+		<a href="" onclick="$(this).hide().next().show().parents('ul:first').removeClass('nav_tit_mail').addClass('nav_tit');$('#community_department li:first>span:first').removeClass('pl2');return false;"  title="<fmt:message key='search.search_people'/>"><div class="srch_icon_only"></div></a>
+		<div class="srch srch_wsize" style="display:none">
 			<input id="" class="nav_input js_auto_complete" type="text" title="<fmt:message key='search.search_people'/>"
 				placeholder="<fmt:message key='search.search_people'/>" href="community_member.sw">
-			<div class='srch_icon js_srch_x'></div>
+			<a href="" onclick="$(this).parent().hide().prev().show().parents('ul').removeClass('nav_tit').addClass('nav_tit_mail');$('#community_department  li:first>span:first').addClass('pl2');return false;"><div class='srch_icon js_srch_x'></div></a>
 		</div>
 		<!-- nav 검색 리스트 -->
 		<div class="nav_srch_list m0" style="display: none"></div>
@@ -140,7 +141,14 @@
 					<%
 					if (!SmartUtil.isBlankObject(communities)) {
 						String iconType = "";
+						boolean isFirst = true;
 						for (CommunityInfo community : communities) {
+							String depClass = "pl2";
+							if(isFirst){
+								isFirst = false;
+							}else{
+								depClass = "";
+							}
 							if (community.getClass().equals(UserInfo.class)) {
 								UserInfo user = (UserInfo)community;
 								if(user.getRole() == User.USER_ROLE_LEADER){
@@ -150,7 +158,7 @@
 								}
 					%>
 								<li>
-									<span class="dep">
+									<span class="dep <%=depClass%>">
 										<a href="<%=user.getSpaceController()%>?cid=<%=user.getSpaceContextId()%>&wid=<%=user.getId()%>" class="js_pop_user_info" userId="<%=user.getId()%>" longName="<%=user.getLongName() %>" minPicture="<%=user.getMinPicture() %>" profile="<%=user.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(user.getUserModel().getUserInfo())%>">
 											<span class="<%=iconType%>"></span><img src="<%=user.getMinPicture() %>" class="profile_size_s"><%=user.getLongName()%>
 										</a>
@@ -162,7 +170,7 @@
 								iconType = "btn_tree_plus fn vm";
 							%>
 								<li class="js_drill_down">
-									<span class="dep">
+									<span class="dep <%=depClass%>">
 										<a href="communitylist_by_depart.sw" departmentId="<%=department.getId()%>" class="js_popup js_expandable"><span class="<%=iconType%>"></span></a>
 										<a href="<%=department.getSpaceController()%>?cid=<%=department.getSpaceContextId()%>&wid=<%=department.getId()%>"><span class="js_department"> <%=department.getName()%> </span></a> 
 									</span>
