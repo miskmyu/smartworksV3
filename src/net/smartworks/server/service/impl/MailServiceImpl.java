@@ -722,7 +722,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							senderId = sender;
 						}else{
 							senderId = sender.substring(start+1, end);
-							sender = sender.substring(0, start-1);
+							sender = sender.substring(0,  start == 0 ? 0 : start-1);
 						}
 					}
 					

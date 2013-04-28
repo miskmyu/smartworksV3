@@ -105,6 +105,7 @@
 		<beans:property name="autoIndexManager" ref="autoIndexManager"/>
 		<beans:property name="reportManager" ref="reportManager"/>
 		<beans:property name="scheduleManager" ref="scheduleManager"/>
+		<beans:property name="invokerManager" ref="invokerManager"/>
 		
 		<beans:property name="ucityWorkListManager" ref="ucityWorkListManager"/>
 		<beans:property name="ucityContantsManager" ref="ucityContantsManager"/>
@@ -115,6 +116,8 @@
 		<beans:property name="updManager" ref="updManager"/-->
 	</beans:bean>
 
+	<beans:bean id="invokerManager" class="net.smartworks.server.engine.invoker.manager.impl.InvokerManagerImpl"/>
+	
 	<beans:bean id="ucityWorkListManager" class="pro.ucity.manager.ucityWorkList.manager.impl.UcityWorkListManagerImpl"/>
 	<beans:bean id="ssoManager" class="pro.ucity.sso.manager.impl.SsoManagerImpl"/>
 	

@@ -1361,6 +1361,9 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		dataField.setType(field.getSystemType());
 	}
 	private void postMapping(String user, TskTask obj, String action) throws Exception {
+		// 업무 반려가 일어나면 내보내기를 하지 않는
+		if (action != null && action.equalsIgnoreCase("return"))
+			return;
 		// 폼 연결이 되어있지 않으면 바로 반환
 		String formId = obj.getForm();
 		if (CommonUtil.isEmpty(formId))
