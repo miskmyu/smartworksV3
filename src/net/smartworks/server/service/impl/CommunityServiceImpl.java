@@ -3604,9 +3604,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		List<String> communityIdList = new ArrayList<String>();
 		for (int i = 0; i < menuItems.length; i++) {
 			ItmMenuItem menuItem = menuItems[i];
-			if (menuItem == null)
-				continue;
-			if (menuItem.getPackageType() != null && (menuItem.getPackageType().equalsIgnoreCase(ItmMenuItem.FAV_COMMUNITY_TYPE_USER)
+			if (menuItem != null && menuItem.getPackageType() != null && (menuItem.getPackageType().equalsIgnoreCase(ItmMenuItem.FAV_COMMUNITY_TYPE_USER)
 					|| menuItem.getPackageType().equalsIgnoreCase(ItmMenuItem.FAV_COMMUNITY_TYPE_DEPT)
 						|| menuItem.getPackageType().equalsIgnoreCase(ItmMenuItem.FAV_COMMUNITY_TYPE_GROUP))) {
 				communityIdList.add(menuItem.getPackageId());

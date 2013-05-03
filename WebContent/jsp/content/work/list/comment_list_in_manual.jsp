@@ -50,7 +50,7 @@ if (comments != null) {
 					<%
 					}
 					%>
-					<a href="<%=commentor.getSpaceController() %>?cid=<%=commentor.getSpaceContextId()%>">
+					<a href="<%=commentor.getSpaceController() %>?cid=<%=commentor.getSpaceContextId()%>&wid=<%=commentor.getId()%>">
 						<span class="t_name"><%=commentor.getLongName()%></span>
 					</a>
 					<span class="t_date"><%=comment.getLastModifiedDate().toLocalString()%></span>

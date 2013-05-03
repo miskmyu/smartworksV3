@@ -84,11 +84,9 @@
 				</a>
 			</th>
 			<th class="r_line"><fmt:message key='profile.title.email.id' /></th>
-			<th class="r_line"><fmt:message key='profile.title.employee_id' /></th>
-			<th class="r_line"><fmt:message key='profile.title.birthday' /></th>
 			<th class="r_line"><fmt:message key='profile.title.dateadmitted' /></th>
-			<th class="r_line"><fmt:message key='profile.title.phone_no' /></th>
-			<th class="r_line"><fmt:message key='profile.title.cell_phone_no' /></th>
+			<th class="r_line" style="width:100px"><fmt:message key='profile.title.phone_no' /></th>
+			<th class="r_line" style="width:100px"><fmt:message key='profile.title.cell_phone_no' /></th>
 			<th class="r_line" style="width:50px"></th>
 		</tr>	
 	<%
@@ -102,7 +100,7 @@
 				if (user.getId() == null)
 					continue;
 				String userRole = user.getRole()==User.USER_ROLE_LEADER ? SmartMessage.getString("department.role.head") : SmartMessage.getString("department.role.member");
-				String target = "user_space.sw?cid=" + ISmartWorks.CONTEXT_PREFIX_USER_SPACE + user.getId();
+				String target = "user_space.sw?cid=" + ISmartWorks.CONTEXT_PREFIX_USER_SPACE + user.getId() + "&wid=" + user.getId();
 			%>
 				<tr class="instance_list" href="<%=target%>">
 					<td class="tc"><%=currentCount--%></td>
@@ -127,18 +125,6 @@
 						<a href="<%=target %>">
 							<div><%=user.getId()%></div>
 						</a>
-					</td>
-					<td>
-						<a href="<%=target %>">
-							<div><%=user.getEmployeeId()%></div>
-						</a>
-					</td>
-					<td>
-						<%if(!SmartUtil.isBlankObject(user.getBirthday())){ %>
-							<a href="<%=target %>">
-								<div><%=user.getBirthday().toLocalDateSimpleString()%></div>
-							</a>
-						<%} %>
 					</td>
 					<td>
 						<%if(!SmartUtil.isBlankObject(user.getHireDate())){ %>
@@ -196,8 +182,6 @@
 				</a>
 			</th>
 			<th class="r_line"><fmt:message key='profile.title.email.id' /></th>
-			<th class="r_line"><fmt:message key='profile.title.employee_id' /></th>
-			<th class="r_line"><fmt:message key='profile.title.birthday' /></th>
 			<th class="r_line"><fmt:message key='profile.title.dateadmitted' /></th>
 			<th class="r_line"><fmt:message key='profile.title.phone_no' /></th>
 			<th class="r_line"><fmt:message key='profile.title.cell_phone_no' /></th>

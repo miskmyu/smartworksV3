@@ -420,6 +420,13 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				fileList.find('.js_file_category_list').html(data.listPage);
+				if(displayType === '1'){
+					var moveSelectedFiles = fileList.find('.js_move_selected_files');
+					var option1 = moveSelectedFiles.children(':first');
+					var options = $(data.listPage);
+					moveSelectedFiles.html(options);
+					moveSelectedFiles.find('option:first').replaceWith(option1);
+				}
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 			}

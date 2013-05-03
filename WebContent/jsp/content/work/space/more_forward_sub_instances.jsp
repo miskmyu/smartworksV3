@@ -112,7 +112,7 @@
 							</a>
 							<span class="txt_info">
 								<div>
-									<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+									<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&wid=<%=owner.getId()%>">
 										<span class="t_name"><%=owner.getLongName()%></span>
 									</a>
 									<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
