@@ -16,6 +16,15 @@
 	<definition name="smartcaster" extends="smart">
 		<put-attribute name="content" value="/jsp/content/smartcaster.jsp" />
 	</definition>
+	<definition name="department_list" extends="smart">
+		<put-attribute name="content" value="/jsp/content/community/department_list.jsp" />
+	</definition>
+	<definition name="group_list" extends="smart">
+		<put-attribute name="content" value="/jsp/content/community/group_list.jsp" />
+	</definition>
+	<definition name="user_list" extends="smart">
+		<put-attribute name="content" value="/jsp/content/community/user_list.jsp" />
+	</definition>
 	<definition name="dashboard" extends="smart">
 		<put-attribute name="content" value="/jsp/content/dashboard.jsp" />
 	</definition>
