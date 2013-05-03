@@ -40,11 +40,14 @@
 					<jsp:param value="<%=wid %>" name="wid"/>
 				</jsp:include>
 			</div>	
-			<div class="nav_list top">
+ 			<div class="nav_list">
 				<jsp:include page="/jsp/nav/community_members.jsp">
 					<jsp:param value="<%=wid %>" name="wid"/>
 					<jsp:param value="<%=workSpace.getSpaceType() %>" name="workSpaceType"/>
 				</jsp:include>				
+			</div>
+ 			<div class="nav_list">
+				<jsp:include page="/jsp/nav/communities.jsp" />
 			</div>
 			<div class="nav_list comming">
 				<jsp:include page="/jsp/nav/comming_events.jsp">
@@ -62,6 +65,9 @@
 			<div class="nav_list">
 				<jsp:include page="/jsp/nav/user_wall.jsp" />
 			</div>	
+			<div class="nav_list top">
+				<jsp:include page="/jsp/nav/communities.jsp" />
+			</div>
 	<%
 		}
 	// 커뮤너티공간이 아니면서 워크스페이스가 없거나 워크스페이스가 현재 사용자이면,
