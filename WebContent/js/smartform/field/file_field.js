@@ -15,7 +15,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 	};
 	SmartWorks.extend(options, config);
 
-//	if(options.refreshData) return options.container;
+	if(options.refreshData) return options.container;
 	
 	options.container.html('');
 

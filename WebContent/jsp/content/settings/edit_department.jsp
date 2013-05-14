@@ -42,7 +42,7 @@
 			var confirmMessage = smartMessage.get("saveConfirmation");
 			if(isEmpty(departId)){
 				url = "create_department.sw";
-				confirmMessage = smartMessage.get("createConfirmation")
+				confirmMessage = smartMessage.get("createConfirmation");
 			}
 			smartPop.confirm( confirmMessage, function(){
 				var progressSpan = editDepartment.find('.js_progress_span');

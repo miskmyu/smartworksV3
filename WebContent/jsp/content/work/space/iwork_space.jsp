@@ -624,7 +624,8 @@ function submitForms(tempSave) {
 
 	var mode = "view";
 	<%
-	boolean isApprovalTask = (SmartUtil.isBlankObject(approvalTaskInstId) || SmartUtil.isBlankObject(approvalTask)) ? false : (approvalTask.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED && approvalTask.getStatus() == Instance.STATUS_RUNNING) ? true : false;
+	boolean isApprovalTask = (SmartUtil.isBlankObject(approvalTaskInstId) || SmartUtil.isBlankObject(approvalTask)) ? false : (approvalTask.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED && (approvalTask.getStatus() == Instance.STATUS_RUNNING || approvalTask.getStatus() == Instance.STATUS_DELAYED_RUNNING)) ? true : false;
+	
 	if((isApprovalTask && instance.getStatus() == Instance.STATUS_RETURNED) || instance.isTempSaved()){
 	%>
 		mode = "edit";

@@ -40,7 +40,8 @@
 			var forms = editMember.find('form');
 			var paramsJson = {};
 			paramsJson['userId'] = editMember.attr('userId');
-			paramsJson['departmentId'] = editMember.attr('parentId');
+			paramsJson['departmentId'] = editMember.attr('departid');
+			paramsJson['parentId'] = editMember.attr('parentid');
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){
