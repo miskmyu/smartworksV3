@@ -124,10 +124,12 @@
 						</div>
 					</li>
 				<%
-				// Notice Message type 이 새로운 업무 생성 알림인 경우 
 				} else if (nMessage.getType() == NoticeMessage.TYPE_INSTANCE_CREATED) {
 					TaskInstanceInfo instance = (TaskInstanceInfo) nMessage.getInstance();
+					if (instance == null)
+						continue;
 					owner = instance.getOwner();
+					
 				%>
 					<li>
 						<div class="info_ms_section">

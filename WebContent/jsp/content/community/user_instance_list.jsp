@@ -97,6 +97,8 @@
 		if(instanceList.getCommunityDatas() != null) {
 			UserInfo[] userInfos = (UserInfo[])instanceList.getCommunityDatas();
 			for (UserInfo user : userInfos) {
+				if (user.getId() == null)
+					continue;
 				String userRole = user.getRole()==User.USER_ROLE_LEADER ? SmartMessage.getString("department.role.head") : SmartMessage.getString("department.role.member");
 				String target = "user_space.sw?cid=" + ISmartWorks.CONTEXT_PREFIX_USER_SPACE + user.getId() + "&wid=" + user.getId();
 			%>
@@ -115,8 +117,8 @@
 						</a>
 					</td>
 					<td>
-						<a href="<%=target %>" title="<%=user.getDepartment().getFullpathName()%>">
-							<div><%=user.getDepartment().getName()%></div>
+						<a href="<%=target %>" title="<%=user.getDepartment() != null ? user.getDepartment().getFullpathName() : "ERROR"%>">
+							<div><%=user.getDepartment() != null ? user.getDepartment().getName() : "ERROR"%></div>
 						</a>
 					</td>
 					<td>

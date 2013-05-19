@@ -2037,21 +2037,29 @@ public class SettingsServiceImpl implements ISettingsService {
 				} else {
 					if(fieldId.equals("memberDepartment")) {
 						Map<String, Object> memberDepartment = (Map<String, Object>)frmEditMember.get("memberDepartment");
+						
+						//신규 사용자추가 
 						String oldDepartmentId = (String)requestBody.get("departmentId");
+						//기존 사용자변경 
+						String oldParentId = (String)requestBody.get("parentId");
 						
 						if (memberDepartment != null && memberDepartment.size() != 0) {
-							Map<String, Object> department = (Map<String, Object>)memberDepartment.get("department");
-							if (department != null && department.size() != 0) {
-								String newDepartmentId = (String)department.get("id");
-								String newDepartmentName = (String)department.get("name");
+							//Map<String, Object> department = (Map<String, Object>)memberDepartment.get("department");
+							
+							List<Map<String, Object>> departmentList = (ArrayList<Map<String, Object>>)memberDepartment.get("departments");
+							if (departmentList.size() != 0) {
+								Map<String, Object> departmentMap = (Map<String, Object>)departmentList.get(0);
+								
+								String newDepartmentId = (String)departmentMap.get("id");
+								String newDepartmentName = (String)departmentMap.get("name");
 								
 								//겸직을 검사하여 겸직에서 이동하는것인지를 판단한다
 								String userDeptId = swoUser.getDeptId();
-								if (userDeptId != null && userDeptId.equalsIgnoreCase(oldDepartmentId)) {
+								if (userDeptId != null && userDeptId.equalsIgnoreCase(oldParentId)) {
 									swoUser.setDeptId(newDepartmentId);
 									String userAdjunctDeptIds = swoUser.getAdjunctDeptIds();
-									if (userAdjunctDeptIds != null && userAdjunctDeptIds.indexOf(oldDepartmentId + "|") != -1) {
-										userAdjunctDeptIds = StringUtils.replace(userAdjunctDeptIds, oldDepartmentId + "|LEADER;", "");
+									if (userAdjunctDeptIds != null && userAdjunctDeptIds.indexOf(oldParentId + "|") != -1) {
+										userAdjunctDeptIds = StringUtils.replace(userAdjunctDeptIds, oldParentId + "|LEADER;", "");
 										swoUser.setAdjunctDeptIds(userAdjunctDeptIds);
 									}
 								} else {
@@ -2060,14 +2068,14 @@ public class SettingsServiceImpl implements ISettingsService {
 									} else {
 										if (userDeptId.equalsIgnoreCase(newDepartmentId)) {
 											String userAdjunctDeptIds = swoUser.getAdjunctDeptIds();
-											if (userAdjunctDeptIds != null && userAdjunctDeptIds.indexOf(oldDepartmentId + "|") != -1) {
-												userAdjunctDeptIds = StringUtils.replace(userAdjunctDeptIds, oldDepartmentId + "|LEADER;", "");
+											if (userAdjunctDeptIds != null && userAdjunctDeptIds.indexOf(oldParentId + "|") != -1) {
+												userAdjunctDeptIds = StringUtils.replace(userAdjunctDeptIds, oldParentId + "|LEADER;", "");
 												swoUser.setAdjunctDeptIds(userAdjunctDeptIds);
 											}
 										} else {
 											String userAdjunctDeptIds = swoUser.getAdjunctDeptIds();
-											if (userAdjunctDeptIds != null && userAdjunctDeptIds.indexOf(oldDepartmentId + "|") != -1) {
-												userAdjunctDeptIds = StringUtils.replace(userAdjunctDeptIds, oldDepartmentId + "|", newDepartmentId + "|");
+											if (userAdjunctDeptIds != null && userAdjunctDeptIds.indexOf(oldParentId + "|") != -1) {
+												userAdjunctDeptIds = StringUtils.replace(userAdjunctDeptIds, oldParentId + "|", newDepartmentId + "|");
 												swoUser.setAdjunctDeptIds(userAdjunctDeptIds);
 											}
 										}
@@ -2211,12 +2219,17 @@ public class SettingsServiceImpl implements ISettingsService {
 						Map<String, Object> parentDepartment = (Map<String, Object>)frmEditDepartment.get("parentDepartment");
 
 						if (parentDepartment != null && parentDepartment.size() != 0) {
-							Map<String, Object> department = (Map<String, Object>)parentDepartment.get("department");
+							//Map<String, Object> department = (Map<String, Object>)parentDepartment.get("department");
+							List<Map<String, Object>> departmentList = (ArrayList<Map<String, Object>>)parentDepartment.get("departments");
+							
+							if (departmentList.size() != 0) {
+								Map<String, Object> departmentMap = (Map<String, Object>)departmentList.get(0);
+								
+								String newParentDepartmentId = (String)departmentMap.get("id");
+								String newParentDepartmentName = (String)departmentMap.get("name");
 
-							if (department != null && department.size() != 0) {
-								String newParentDepartmentId = (String)department.get("id");
-								String newParentDepartmentName = (String)department.get("name");
 								swoDepartment.setParentId(newParentDepartmentId);
+							
 							}
 						}
 					}

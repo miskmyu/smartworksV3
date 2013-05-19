@@ -2443,7 +2443,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			TskTaskCond tskCond = new TskTaskCond();
 			tskCond.setExtendedProperties(new Property[] {new Property("recordId", instanceId)});
-			tskCond.setModificationUser(userId);
+			//tskCond.setModificationUser(userId);
 			tskCond.setOrders(new Order[]{new Order(TskTaskCond.A_CREATIONDATE, false)});
 			TskTask[] tskTasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
 			String taskInstId = tskTasks[0].getObjId();
