@@ -49,7 +49,7 @@ public class SwdDataField extends BaseObject {
 	private String refRecordId;
 	private String value;
 	private String selectedValue;
-
+	
 	private SwdDataField[] dataFields;
 	
 	private List<Map<String, String>> users;
@@ -338,5 +338,4 @@ public class SwdDataField extends BaseObject {
 	public void setSelectedValue(String selectedValue) {
 		this.selectedValue = selectedValue;
 	}
-
 }

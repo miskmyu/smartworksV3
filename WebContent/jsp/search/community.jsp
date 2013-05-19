@@ -31,7 +31,7 @@
 	// 검색된 커뮤너티가 있으면 목록을 만들어 보여준다...
 	if (communities != null) {
 		for (WorkSpaceInfo workSpace : communities) {
-			String picName = null, comContext = null, targetContent = null, comName = null, comId = null;
+			String picName = null, comContext = null, targetContent = null, comName = null, comId = null, titleDesc = "";
 			if (workSpace.getClass() == UserInfo.class) {
 				UserInfo user = (UserInfo) workSpace;
 				picName = user.getMinPicture();
@@ -46,6 +46,7 @@
 				targetContent = "department_space.sw";
 				comName = depart.getName();
 				comId = depart.getId();
+				titleDesc = depart.getFullpathName();
 			} else if (workSpace.getClass() == GroupInfo.class) {
 				GroupInfo group = (GroupInfo) workSpace;
 				picName = group.getMinPicture();
@@ -56,7 +57,7 @@
 			}
 	%>
 			<li>
-				<a href="<%=targetContent%>?cid=<%=comContext%>&wid=<%=comId%>" class="js_location">
+				<a href="<%=targetContent%>?cid=<%=comContext%>&wid=<%=comId%>" class="js_location" <%if(workSpace.getClass() == DepartmentInfo.class){ %> title="<%=titleDesc%>"<%} %>>
 					<img src="<%=picName%>" class="profile_size_s">
 					<span class="nav_sub_area"><%=comName%></span>
 				</a>

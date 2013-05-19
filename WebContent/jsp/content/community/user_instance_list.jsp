@@ -115,8 +115,8 @@
 						</a>
 					</td>
 					<td>
-						<a href="<%=target %>">
-							<div><%=user.getDepartment().getFullpathName()%></div>
+						<a href="<%=target %>" title="<%=user.getDepartment().getFullpathName()%>">
+							<div><%=user.getDepartment().getName()%></div>
 						</a>
 					</td>
 					<td>
