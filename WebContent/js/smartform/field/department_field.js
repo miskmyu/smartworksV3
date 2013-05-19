@@ -50,12 +50,12 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.build = function(config) {
 	if(multiUsers === 'true'){
 		if(!isEmpty(departments) && isEmpty(departmentsHtml)){
 			for(var i=0; i<departments.length; i++)
-				departmentsHtml = departmentsHtml +  "<span class='js_community_item user_select' comId='" + departments[i].comId + "' comName='" + departments[i].name + "'>" + departments[i].name + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";		
+				departmentsHtml = departmentsHtml +  "<span class='js_community_item user_select' comId='" + departments[i].comId + "' comName='" + departments[i].name + "' title='" + departments[i].name + "'>" + getDepartNameFromFullpath(departments[i].name) + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";		
 		}
 		href = "community_name.sw";
 //		icoClass = ' class="icon_fb_departs"';
 	}else if (!isEmpty(departments) && isEmpty(departmentsHtml)) {
-		departmentsHtml = "<span class='js_community_item user_select' comId='" + departments[0].comId + "' comName='" + departments[0].name + "'>" + departments[0].name + "<a class='js_remove_community' href=''> x</a></span>";
+		departmentsHtml = "<span class='js_community_item user_select' comId='" + departments[0].comId + "' comName='" + departments[0].name + "' title='" + departments[0].name + "'>" + getDepartNameFromFullpath(departments[0].name) + "<a class='js_remove_community' href=''> x</a></span>";
 	}
 
 	var $html = $('<div class="form_value" style="width:' + valueWidth + '%"> <div class="icon_fb_space">\
@@ -78,7 +78,7 @@ SmartWorks.FormRuntime.DepartmentFieldBuilder.build = function(config) {
 				href = 'department_space.sw?cid=dp.sp.' + departments[i].comId + '&wid=' + departments[i].comId;
 				if(i == departments.length - 1)
 					separator = '';
-				viewDepartmentsHtml = viewDepartmentsHtml + '<a href="' + href + '"><span>' + departments[i].name + desc + separator + '</span></a>';
+				viewDepartmentsHtml = viewDepartmentsHtml + '<a href="' + href + '" title="' + departments[i].name +  '"><span>' + getDepartNameFromFullpath(departments[i].name) + desc + separator + '</span></a>';
 			}
 		}
 		$department.find('span').html(viewDepartmentsHtml);

@@ -133,7 +133,7 @@
 									<%
 									}
 									%>									
-									<a class="js_content_work_space" href="<%=target %>">									
+									<a class="js_content_work_space" href="<%=target %>" <%if(data.getFieldType().equals(FormField.TYPE_DEPARTMENT)){%>title="<%=CommonUtil.toNotNull(data.getValue())%>"<%}%>>									
 										<%if(data.getFieldType().equals(FormField.TYPE_FILE) && !SmartUtil.isBlankObject(data.getValue())){%>
 										<%	if(!SmartUtil.isBlankObject(data.getFiles())){%>
 												<img src="images/icon_file.gif" class="js_pop_files_detail" filesDetail="<%=data.getFilesHtml(work.getId(), null, instanceInfo.getId())%>">
@@ -145,6 +145,7 @@
 													data.getFieldType().equals(FormField.TYPE_RICHTEXT_EDITOR) ||
 													data.getFieldType().equals(FormField.TYPE_DATA_GRID)){%>
 										<%}else if(data.getFieldType().equals(FormField.TYPE_CHECK_BOX)){%><%=(data.getValue() != null && data.getValue().equals("true")) ? SmartMessage.getString("common.title.boolean.true") : SmartMessage.getString("common.title.boolean.false")%>
+										<%}else if(data.getFieldType().equals(FormField.TYPE_DEPARTMENT)){%><%=CommonUtil.toNotNull(SmartUtil.getDepartNameFromFullpath(data.getValue())) %>
 										<%}else{%><%=CommonUtil.toNotNull(data.getValue())%><%} %>
 										<%
 										if(displayFields[count++].getId().equals(work.getKeyField().getId())){

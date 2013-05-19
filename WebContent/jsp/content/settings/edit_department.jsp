@@ -95,8 +95,12 @@
 				<tbody>
 					<tr>
 						<%
-						String parentName = (SmartUtil.isBlankObject(department.getParent())) ? "" : department.getParent().getFullpathName();
-						if(SmartUtil.isBlankObject(departId) && !SmartUtil.isBlankObject(parentDepart)) parentName = parentDepart.getFullpathName(); 
+						String parentFullpathName = (SmartUtil.isBlankObject(department.getParent())) ? "" : department.getParent().getFullpathName();
+						String parentName = (SmartUtil.isBlankObject(department.getParent())) ? "" : department.getParent().getName();
+						if(SmartUtil.isBlankObject(departId) && !SmartUtil.isBlankObject(parentDepart)){
+							parentFullpathName = parentDepart.getFullpathName(); 
+							parentName = parentDepart.getName(); 
+						}
 						%>
 						<th width="20%" ><fmt:message key="settings.title.department.parent_name"/></th>
 						<%
@@ -106,7 +110,7 @@
 								<div style="width:100%" class="form_value">
 									<div class="icon_fb_space">
 										<div class="fieldline community_names js_community_names sw_required">
-											<span class="js_community_item user_select" comId="<%=CommonUtil.toNotNull(parentId)%>" comName="<%=CommonUtil.toNotNull(parentName)%>"><%=CommonUtil.toNotNull(parentName) %>
+											<span class="js_community_item user_select" comId="<%=CommonUtil.toNotNull(parentId)%>" comName="<%=CommonUtil.toNotNull(parentName)%>" title="<%=CommonUtil.toNotNull(parentFullpathName)%>"><%=CommonUtil.toNotNull(parentName) %>
 												<a href="" class="js_remove_community"> x</a>
 											</span>
 											<input class="m0 js_auto_complete" style="width:100px" href="department_name.sw" type="text">

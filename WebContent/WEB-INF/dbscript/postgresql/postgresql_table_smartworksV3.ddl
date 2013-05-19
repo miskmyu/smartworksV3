@@ -33,6 +33,7 @@ CREATE TABLE sworguser (
 	picture character varying(50),
 	sign character varying(50),
 	useSign bool,
+	lunarBirthDay bool,
 	domainid character varying(50),
 	workitemid character varying(50),
 	creator	character varying(50),

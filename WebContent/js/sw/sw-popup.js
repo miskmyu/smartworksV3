@@ -526,7 +526,7 @@ smartPop = {
 						var inputTarget = departField.find('input.js_auto_complete:first');
 
 						communityItems.remove();
-						$("<span class='js_community_item user_select' comId='" + comId + "' comName='" + comName + "'>" + comName
+						$("<span class='js_community_item user_select' comId='" + comId + "' comName='" + comName + "' title='" + comName + "'>" + getDepartNameFromFullpath(comName)
 								+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
 						inputTarget.focus();
 						departField.find('.js_community_names').change();

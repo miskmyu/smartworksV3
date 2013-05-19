@@ -30,8 +30,8 @@
 			String comId = community.getId();
 	%>
 				<li>
-					<a comName="<%=comName%>" comId="<%=comId %>" class="js_select_community">
-						<img src="<%=picName%>" class="profile_size_s"><%=comName%></a>
+					<a comName="<%=comName%>" comId="<%=comId %>" class="js_select_community" <%if(community.getClass().equals(DepartmentInfo.class)){ %> title="<%=comName%>"<%} %>>
+						<img src="<%=picName%>" class="profile_size_s"><%if(community.getClass().equals(DepartmentInfo.class)){ %><%=community.getName()%><%}else{ %><%=comName%><%} %></a>
 				</li>
 	<%
 		}

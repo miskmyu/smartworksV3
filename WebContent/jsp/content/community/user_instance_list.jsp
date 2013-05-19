@@ -117,8 +117,8 @@
 						</a>
 					</td>
 					<td>
-						<a href="<%=target %>">
-							<div><%=user.getDepartment() != null ? user.getDepartment().getFullpathName() : "ERROR"%></div>
+						<a href="<%=target %>" title="<%=user.getDepartment() != null ? user.getDepartment().getFullpathName() : "ERROR"%>">
+							<div><%=user.getDepartment() != null ? user.getDepartment().getName() : "ERROR"%></div>
 						</a>
 					</td>
 					<td>

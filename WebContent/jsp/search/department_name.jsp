@@ -27,8 +27,8 @@
 			String comId = department.getId();
 	%>
 				<li>
-					<a comName="<%=comName%>" comId="<%=comId %>" class="js_select_community">
-						<img src="<%=picName%>" class="profile_size_s"><%=comName%></a>
+					<a comName="<%=comName%>" comId="<%=comId %>" class="js_select_community" title="<%=comName%>">
+						<img src="<%=picName%>" class="profile_size_s"><%=department.getName()%></a>
 				</li>
 	<%
 		}

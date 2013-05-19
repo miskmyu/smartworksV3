@@ -16,7 +16,7 @@ public class FieldData {
 	private String value;
 	private String symbol;
 	private List<Map<String, String>> files;
-
+	
 	public List<Map<String, String>> getFiles() {
 		return files;
 	}
@@ -55,8 +55,7 @@ public class FieldData {
 		this.fieldId = fieldId;
 		this.fieldType = fieldType;
 		this.value = value;
-	}
-	
+	}	
 	public String getFilesHtml(String workId, String taskInstId, String recordId){
 		if(SmartUtil.isBlankObject(this.value) || SmartUtil.isBlankObject(this.files)) return "";
 		return SmartUtil.getFilesDetailInfo(this.files, workId, taskInstId, recordId);
