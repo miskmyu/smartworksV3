@@ -2922,12 +2922,10 @@ public class ModelConverter {
 		
 		if(departmentInfo.getParentId()!= null){
 			fullpathName = departmentInfo.getName() + (SmartUtil.isBlankObject(fullpathName) ? "" : "▶") + fullpathName;
-			if(!SmartUtil.getCurrentUser().getCompanyId().equals(departmentInfo.getParentId())){
-				try{
-					SwoDepartmentExtend departmentId = getSwoManager().getDepartmentExtend(null, departmentInfo.getParentId(), true);								
-					fullpathName = getDepartmentInfoParentsfullpathNameByDepartmentId(departmentId, fullpathName);
-				}catch (Exception e){
-				}
+			try{
+				SwoDepartmentExtend departmentId = getSwoManager().getDepartmentExtend(null, departmentInfo.getParentId(), true);								
+				fullpathName = getDepartmentInfoParentsfullpathNameByDepartmentId(departmentId, fullpathName);
+			}catch (Exception e){
 			}
 		}
 		return fullpathName;
@@ -3178,10 +3176,8 @@ public class ModelConverter {
 		
 		if(department.getParentId()!= null){
 			fullpathName = department.getName() + (SmartUtil.isBlankObject(fullpathName) ? "" : "▶") + fullpathName;
-			if(!SmartUtil.getCurrentUser().getCompanyId().equals(department.getParentId())){
-				SwoDepartmentExtend departmentId = getSwoManager().getDepartmentExtend(null, department.getParentId(), true);								
-				fullpathName = getParentsfullpathNameByDepartmentId(departmentId, fullpathName);		
-			}
+			SwoDepartmentExtend departmentId = getSwoManager().getDepartmentExtend(null, department.getParentId(), true);								
+			fullpathName = getParentsfullpathNameByDepartmentId(departmentId, fullpathName);		
 		}
 		return fullpathName;
 	}

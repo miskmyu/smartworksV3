@@ -67,6 +67,12 @@ var getBytesWithUnit = function( bytes ){
 	return bytes + units[i];
 };
 
+function getDepartNameFromFullpath(departFullpathName){
+	if(isEmpty(departFullpathName)) return "";
+	var tokens = departFullpathName.split("▶");
+	return tokens[tokens.length-1];
+}
+
 var randomUUID = function(prefix) {
 	  var s = [], itoh = '0123456789abcdef';
 

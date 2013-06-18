@@ -117,7 +117,7 @@
 								<div style="width:100%" class="form_value">
 									<div class="icon_fb_space">
 										<div class="fieldline community_names js_community_names sw_required">
-											<span class="js_community_item user_select" comId="<%=department.getId()%>" comName="<%=department.getName()%>"><%=CommonUtil.toNotNull(department.getFullpathName()) %>
+											<span class="js_community_item user_select" comId="<%=department.getId()%>" comName="<%=department.getName()%>" title="<%=CommonUtil.toNotNull(department.getFullpathName())%>"><%=CommonUtil.toNotNull(department.getName()) %>
 												<a href="" class="js_remove_community"> x</a>
 											</span>
 											<input class="m0 js_auto_complete" style="width:100px" href="department_name.sw" type="text">

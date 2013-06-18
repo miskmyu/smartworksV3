@@ -616,6 +616,12 @@ public class SmartUtil {
 	    return Long.toString(bytes) + Q[0];
 	}
 
+	public static String getDepartNameFromFullpath(String departFullpathName){
+		if(SmartUtil.isBlankObject(departFullpathName)) return "";
+		String[] tokens = departFullpathName.split("▶");
+		return tokens[tokens.length-1];
+	}
+	
 	public static String getFileExtension(String filename){
 		String extension = "none";
 		if(SmartUtil.isBlankObject(filename)) return extension;

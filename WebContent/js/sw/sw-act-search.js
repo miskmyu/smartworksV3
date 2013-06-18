@@ -236,12 +236,19 @@ $(function() {
 			}
 			if(!isSameId){
 				var comNameLong = comName;
+				var titleDesc = "";
 				if(inputTarget.attr('href') === "email_address.sw"){
 					if(!isEmailAddress(inputTarget.attr('value')) && isEmailAddress(comId) && !isEmailAddress(comName)){
 						comNameLong = comName + "&lt;" + comId + "&gt;";
 					}
+				}else if(inputTarget.attr('href') === "department_name.sw" || inputTarget.attr('href') === "community_name.sw"){
+					comNameLong = getDepartNameFromFullpath(comName);
+					if(comName !== comNameLong){
+						titleDesc = ' title="' + comName + '"';
+					}
 				}
-				$("<span class='js_community_item user_select' comId='" + comId + "' comName='" + comName+ "'>" + comNameLong
+
+				$("<span class='js_community_item user_select' comId='" + comId + "' comName='" + comName+ "'" + titleDesc + ">" + comNameLong
 						+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
 
 				var searchFilter = input.parents('.js_search_filter_page');

@@ -71,7 +71,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 			</th>
-			<th class="r_line"><fmt:message key='settings.title.department.parent_name' /></th>
 			<th class="r_line"><fmt:message key='department.title.desc' /></th>
 			<th class="r_line"><fmt:message key='department.role.head' /></th>
 			<th class="r_line"><fmt:message key='department.members_count' /></th>
@@ -107,16 +106,11 @@
 					<td class="tc"><%=currentCount--%></td>
 					<td class="tc"><div title="<fmt:message key='nav.works.my_favorite_works'/>" class="js_check_favorite_com icon_fvrt <%if(department.isFavorite()){ %> checked <%} %>" comId="<%=department.getId() %>" ></div></td>
 					<td>
-						<a href="<%=target %>">
+						<a href="<%=target %>" title="<%=department.getFullpathName()%>">
 							<div class="noti_pic">
 								<img src="<%=department.getMinPicture()%>" title="<%=department.getName()%>" class="profile_size_s" />
 								<span><%=department.getName()%></span>
 							</div>
-						</a>
-					</td>
-					<td>
-						<a href="<%=target %>">
-							<div><%=department.getFullpathName()%></div>
 						</a>
 					</td>
 					<td>
@@ -175,7 +169,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 			</th>
-			<th class="r_line"><fmt:message key='settings.title.department.parent_name' /></th>
 			<th class="r_line"><fmt:message key='department.title.desc' /></th>
 			<th class="r_line"><fmt:message key='department.role.head' /></th>
 			<th class="r_line"><fmt:message key='department.members_count' /></th>
