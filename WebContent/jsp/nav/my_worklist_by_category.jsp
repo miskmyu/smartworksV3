@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.															-->
 <!-- Created Date	: 2011.9.													 				-->
 
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
@@ -18,7 +19,11 @@
 	User cUser = SmartUtil.getCurrentUser();
 	
 	// 서버에서 전달된 카테고리아이디를 가지고 하위 카테고리와 업무들을 가져온다...
-	WorkInfo[] works = smartWorks.getMyAllWorksByCategoryId(request.getParameter("categoryId"));
+	String categoryId = request.getParameter("categoryId");
+	WorkInfo[] works = smartWorks.getMyAllWorksByCategoryId(categoryId);
+	boolean isSystemCategory = false;
+	if (categoryId.equalsIgnoreCase(WorkCategory.ID_DEFAULT_CATEGORY))
+		isSystemCategory = true;
 	String classType = "js_content", workContext = null, targetContent = null;
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />

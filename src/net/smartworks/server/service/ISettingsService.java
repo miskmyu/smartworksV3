@@ -73,6 +73,8 @@ public interface ISettingsService {
 	
 	public abstract void removeDepartment(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract boolean checkEmptyDepartment(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public abstract void checkIdDuplication(HttpServletRequest request) throws Exception;
 	
 	public abstract RecordList getEmailServerList(RequestParams params) throws Exception;
