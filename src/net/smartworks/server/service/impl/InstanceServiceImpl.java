@@ -797,7 +797,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					prcInstId = task.getProcessInstId();
 			}
 			
-			boolean isFirstSetMode = !retry; //초기 데이터 입력인지 수정인지를 판단한다
+			boolean isFirstSetMode = !retry; //초기 데이터 입력인지 수정인지를 판단한다0.
 			
 			//레코드 폼정보를 가져온다
 			if (CommonUtil.isEmpty(formId))
@@ -1457,6 +1457,26 @@ public class InstanceServiceImpl implements IInstanceService {
 							
 							dataField.setValue(value);
 							resultStack.push(dataField);
+						
+						// datetime 조건 생성
+						}else if(functionId.equals("mis:getCurrentDateTime")){
+							SwdDataField dataField = new SwdDataField();
+							dataField.setId(fieldId);
+							dataField.setType(fieldType);
+							dataField.setRefRecordId(null);
+							dataField.setRefForm(null);
+							dataField.setRefFormField(null);
+							
+							
+							long time = System.currentTimeMillis(); 
+							SimpleDateFormat dayTime = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+							String value = dayTime.format(new Date(time));
+							
+							dataField.setValue(value);
+							
+							resultStack.push(dataField);
+							
+							
 							
 						} else if (functionId.equals("mis:getCurrentUser")) {
 							SwdDataField dataField = toDataField(userId, field, userId);
@@ -2595,6 +2615,7 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	
 	private void populateSpaceNotice(SwdRecord record, String taskInstanceId) throws Exception {
+		//정보처리 업무 알림 ??
 		if (record == null)
 			return;
 		
@@ -2620,6 +2641,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 	}
 	private void populateSpaceNotice(TskTask task) throws Exception {
+		//프로세스 업무
 		if (task == null)
 			return;
 
@@ -2655,6 +2677,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 		//workSpaceId 에 속한 사용자를 가져온다
 		List targetUserId = new ArrayList();
+		
 		if (accessLevel.equalsIgnoreCase(AccessPolicy.LEVEL_CUSTOM + "")) {
 			if (CommonUtil.isEmpty(accessValue))
 				return;
@@ -2778,6 +2801,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			sn.setRefId(refId);
 			sn.setTaskId(taskId);
 			SwManagerFactory.getInstance().getPublishNoticeManager().setMessageNotice(userId, sn, IManager.LEVEL_ALL);
+			//공간알림 카운트를 증가시킨다.
 			SmartUtil.increaseNoticeCountByNoticeType((String)targetUserId.get(i), Notice.TYPE_NOTIFICATION);
 		}
 	}
@@ -4185,6 +4209,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			//태스크를 실행하며 프로세스업무를 실행한다
 			task = getTskManager().executeTask(userId, task, "execute");
+			
+			//공간 알림에 값을 추가한다.
+			this.populateSpaceNotice(task);
 
 			//자동채번을 위하여 아래를 호출한다
 			populateAutoIndexField(userId, TskTask.TASKTYPE_COMMON, formId, task.getProcessInstId(), recordObj);

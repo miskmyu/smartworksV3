@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.smartworks.model.instance.FieldData;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.manager.IManager;
@@ -617,9 +618,21 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				query.setBoolean(param, CommonUtil.toBoolean(value));
 			} else if (type.equalsIgnoreCase("datetime")) {
 				//TODO type이 datetime 으로 들어오는경우 날짜 포멧에 대한 정의 필요 - 임시로 if 문에서 ":"문자 포함여부로 데이터 포멧을 결정한다 변경필요
+
+				//프로세스 datetime type 변환
+				
+				if(type.equals("datetime")) {
+					if(value.length() == FieldData.SIZE_DATETIME) {
+						value = LocalDate.convertLocalDateTimeStringToLocalDate(value).toGMTDateString();								
+					} else if(value.length() == FieldData.SIZE_DATE) {
+						value = LocalDate.convertLocalDateStringToLocalDate(value).toGMTDateString();
+					}
+				} else if(type.equals("time")) {
+					value = LocalDate.convertLocalTimeStringToLocalDate(value).toGMTTimeString2();
+				}
 				if (value != null) {
 					if (value.indexOf(":") != -1) {
-						query.setTimestamp(param, DateUtil.toDate(value, "yyyy-MM-dd HH:mm:ss.SSS"));
+						query.setTimestamp(param, DateUtil.toDate(value, "yyyy.MM.dd HH:mm:ss"));
 					} else {
 						query.setTimestamp(param, DateUtil.toDate(value, "yyyy.MM.dd"));
 					}

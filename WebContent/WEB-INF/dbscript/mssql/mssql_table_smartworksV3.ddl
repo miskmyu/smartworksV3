@@ -2396,7 +2396,6 @@ CREATE TABLE SwMailServer (
 	smtpSsl bit,
 	pwChangeAPI varchar(300),
 	pwChangeDefaultData  varchar(100),
-	pwChangeParamId varchar(50),
 	pwChangeParamOldPW varchar(50),
 	pwChangeParamNewPW varchar(50),
 	creator	varchar(50),

@@ -65,7 +65,6 @@ import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoCompany;
 import net.smartworks.server.engine.organization.model.SwoConfig;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
-import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.process.approval.manager.IAprManager;
@@ -2287,30 +2286,10 @@ public class SettingsServiceImpl implements ISettingsService {
 				return;
 			getSwoManager().removeDepartment(cUser.getId(), departmentId);
 		} catch(Exception e) {
-			e.printStackTrace();
-			throw e;
+			e.printStackTrace();			
 		}
 	}
-	
-	@Override
-	public boolean checkEmptyDepartment(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		try {
-			User cUser = SmartUtil.getCurrentUser();
-			String departmentId = (String)requestBody.get("departmentId");
-			SwoUserCond cond = new SwoUserCond();
-			cond.setDeptIdWithAdjunct(departmentId);
-			long userSize = getSwoManager().getUserSize(cUser.getId(), cond);
-			if (userSize > 0) {
-				return false;
-			} else {
-				return true;
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-	
+
 	@Override
 	public void checkIdDuplication(HttpServletRequest request) throws Exception {
 
