@@ -16,4 +16,5 @@ public interface IWorkListManager {
 	public TaskWork[] getCastWorkList(String user, TaskWorkCond cond) throws Exception;
 	public long getTaskWorkListSize(String user, TaskWorkCond cond) throws Exception;
 	public TaskWork[] getTaskWorkList(String user, TaskWorkCond cond) throws Exception;
+	public TaskWork[] getTaskWorkList(String user, TaskWorkCond cond, boolean isWithoutAuth) throws Exception;
 }

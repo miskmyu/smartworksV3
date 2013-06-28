@@ -26,6 +26,7 @@
 <%@ page import="net.smartworks.service.ISmartWorks"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%
+try {
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
@@ -36,7 +37,6 @@
 	LocalDate to = SmartUtil.isBlankObject(toDate) ? null : LocalDate.convertLocalStringToLocalDate(toDate);
 	TaskInstanceInfo[] subInstances = smartWorks.getSubInstancesInForward(forwardId, fetchCount, to);
 	int instanceCount = smartWorks.getSubInstancesInForwardCount(forwardId);
-	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -110,5 +110,10 @@ if (subInstances != null) {
 		</li>					
 <%
 	}
+}
+
+
+} catch (Exception e) {
+	e.printStackTrace();
 }
 %>

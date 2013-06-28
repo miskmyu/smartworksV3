@@ -4328,7 +4328,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				workCond.setOrders(new Order[]{new Order("taskLastModifyDate", false)});
 				workCond.setPageSize(length);
 				workCond.setTskModifyDateTo(to);
-				TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, workCond);
+				TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, workCond, true);
 				
 				List<String> prcInstIdList = new ArrayList<String>();
 				if(!CommonUtil.isEmpty(tasks)) {
