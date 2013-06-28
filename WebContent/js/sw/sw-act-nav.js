@@ -198,11 +198,7 @@ $(function() {
 				removeNoticeId : noticeId
 			},
 			success : function(data, status, jqXHR) {
-				var boxPage = input.parents('.js_notice_message_box_page');
 				input.parents('li:first').remove();
-				if(isEmpty(boxPage.find('.js_notice_message_box_list li'))){
-					boxPage.find('.js_close_message a').click();
-				}
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 				

@@ -33,22 +33,18 @@ CREATE TABLE sworguser (
 	picture character varying(50),
 	sign character varying(50),
 	useSign bool,
+	lunarBirthDay bool,
 	domainid character varying(50),
 	workitemid character varying(50),
+	creator	character varying(50),
+	createdtime timestamp,
+	modifier	character varying(50),
+	modifiedtime timestamp,
 	retiree character varying(50),
 	mobileNo character varying(50),
 	internalNo character varying(50),
 	locale character varying(20),
 	timeZone character varying(20),
-	hiredate timestamp,
-	birthday timestamp,
-	lunarbirthday bool,
-	homephoneno character varying(20),
-	homeaddress character varying(200),
-	creator	character varying(50),
-	createdtime timestamp,
-	modifier	character varying(50),
-	modifiedtime timestamp,
 	primary key (id)
 );
 
@@ -969,7 +965,6 @@ CREATE TABLE SWNotice (
 	filegroupid character varying(255) NULL,
 	title character varying(255) NULL,
 	content text NULL,
-	duration timestamp without time zone NULL,
 	primary key (id)
 );
 
@@ -1222,15 +1217,11 @@ CREATE TABLE sworgconfig(
 	name character varying(255) NULL,
 	domainid character varying(50) NULL,
 	companyid character varying(100) NULL,
-	isactivity int NULL,
-	usemessagingservice int,
-	usechattingservice int,
-	userreturnfunction int,
-	setupcompanydate timestamp without time zone null,
 	creator character varying(50) NULL,
 	createdtime timestamp without time zone NULL,
 	modifier character varying(50) NULL,
 	modifiedtime timestamp without time zone NULL,
+	isactivity int NULL,
 	primary key (id)
 )
 ;
@@ -2398,11 +2389,6 @@ CREATE TABLE SwMailServer (
 	smtpServerPort int,
 	smtpAuthenticated bool,
 	smtpSsl bool,
-	pwChangeAPI character varying(300),
-	pwChangeDefaultData  character varying(100),
-	pwChangeParamId character varying(50),
-	pwChangeParamOldPW character varying(50),
-	pwChangeParamNewPW character varying(50),
 	creator	character varying(50),
 	createdtime timestamp without time zone,
 	modifier character varying(50),
@@ -2423,7 +2409,6 @@ CREATE TABLE SwMailAccount (
 	useMailSign bool,
 	senderUserTitle character varying(50),
 	mailDeleteFetched character varying(10),
-	junks text,
 	creator	character varying(50),
 	createdtime timestamp without time zone,
 	modifier character varying(50),
@@ -2531,37 +2516,3 @@ CREATE TABLE SwAutoIndexInst (
 	modifiedtime timestamp,
     primary key (objId)
 );
-
-
-CREATE TABLE SWMessageNotice (
-	id character varying(50) NOT NULL,
-	type character varying(50),
-	workId character varying(50),
-	workSpaceType character varying(50),
-	workSpaceId character varying(50),
-	refType character varying(50),
-	refId character varying(100),
-	taskId character varying(100),
-	assignee character varying(50),
-	creator character varying(50),
-	createdTime timestamp without time zone,
-	modifier character varying(50),
-	modifiedTime timestamp without time zone,
-	primary key (id)
-);
-
-CREATE TABLE SWAlarmNotice (
-	id character varying(50) NOT NULL,
-	noticeTime timestamp without time zone,
-	workId character varying(50),
-	recordId character varying(100),
-	targetUser character varying(50),
-	companyId character varying(50),
-	creator character varying(50),
-	createdTime timestamp without time zone,
-	modifier character varying (50),
-	modifiedTime timestamp without time zone,
-	primary key (id)
-);
-
-

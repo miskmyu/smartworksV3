@@ -320,38 +320,20 @@ $(function() {
 			paramsJson['departmentId'] = departId;
 			console.log(JSON.stringify(paramsJson));
 			$.ajax({
-				url : "check_empty_department.sw",
+				url : "remove_department.sw",
 				contentType : 'application/json',
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					console.log('isEmptyDepartment ', data.result);
-					if (data.result === true) {
-						$.ajax({
-							url : "remove_department.sw",
-							contentType : 'application/json',
-							type : 'POST',
-							data : JSON.stringify(paramsJson),
-							success : function(data, status, jqXHR) {
-								document.location.href = "organization_management.sw";					
-							},
-							error : function(e) {
-								// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-								smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeDepartmentError"), function(){
-								});
-							}
-						});
-						
-					} else {
-						smartPop.showInfo(smartPop.INFO, smartMessage.get("removeNotEmptyDepartment"), function(){
-						});
-					}
+					document.location.href = "organization_management.sw";					
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeDepartmentError"), function(){
 					});
+					
 				}
+				
 			});
 		});
 		return false;

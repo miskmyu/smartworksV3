@@ -1902,15 +1902,9 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			buf.append(" count(*) ");
 			Query query = this.appendQuery(user, buf, cond);
 			List list = query.list();
-				
-			Object value = list.get(0);
-
-			if (value instanceof BigInteger){
-				return ((BigInteger)list.get(0)).longValue();
-			} else {
-				long count =((Integer)list.get(0)).longValue();
-				return count;
-			}
+			
+			long count =((Integer)list.get(0)).longValue();
+			return count;
 		} catch (PrcException e) {
 			throw e;
 		} catch (Exception e) {

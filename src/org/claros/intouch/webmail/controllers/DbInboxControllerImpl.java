@@ -227,9 +227,6 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 									}
 									toBeDeleted.add(new Integer(msgId));
 								}
-								mailFact = null;
-								mailCont = null;
-								dbMailCont = null;
 							} catch (Exception e) {
 								//toBeDeleted.add(new Integer(msgId));
 								e.printStackTrace();
@@ -250,8 +247,6 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 						}
 					}
 					newMessages = toBeDeleted.size();
-					toBeDeleted = null;
-					msgs = null;
 				}catch(Exception e){
 				} finally {
 				}
@@ -266,17 +261,8 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
 					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
 					System.out.println(auth.getEmailId() + " Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
-					checkingEmail = null;
 				}catch(Exception e){
 				}
-				
-				foldCont = null;
-				fFactory = null;
-				protocol = null;
-				factory = null;
-				auth = null;
-				profile = null;
-				handler = null;
 			}
 		});
 		addThreadToChecking(index, checkingEmail);

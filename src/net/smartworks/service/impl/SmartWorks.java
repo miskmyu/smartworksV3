@@ -901,12 +901,6 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public boolean checkEmptyDepartment(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		boolean result = settingsService.checkEmptyDepartment(requestBody, request);
-		return result;
-	}
-
-	@Override
 	public void checkIdDuplication(HttpServletRequest request) throws Exception {
 		settingsService.checkIdDuplication(request);
 	}

@@ -777,7 +777,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 	private static SizeMap deptMap = new SizeMap(100);
 	public SwoDepartment getDepartment(String userId, String id, String level) throws SwoException {
 		try {
-			
+			 
 			if (deptMap.containsKey(id))
 				return (SwoDepartment)deptMap.get(id);
 			
@@ -3319,5 +3319,160 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public void memoryRefresh(String[] refreshIds){
+		
+		try{
+			
+			for(int i=0 ; i < refreshIds.length ; i++){
+				
+				String refreshId = refreshIds[i];
+				
+//				System.out.println("refreshId: " + refreshId);
+				
+				if( userMap.containsKey(refreshId)){
+					
+					System.out.println(refreshId);
+					
+					userMap.remove(refreshId);
+					
+					
+					if(userExtendMap.containsKey(refreshId)){
+						
+						System.out.println(refreshId);
+						
+						userExtendMap.remove(refreshId);
+						
+						
+					}
+//					else  if(departmentMap.containsKey(refreshId)){
+//						 
+//							System.out.println(refreshId);
+//							
+//							departmentMap.remove(refreshId);
+//							
+//							
+//						}
+//					
+					System.out.println("userMap_refreshValue: " + userMap.get(refreshId));
+					System.out.println("userExtendMap_refreshId_Value: " + userExtendMap.get(refreshId));
+//					System.out.println(" departmentMap_refreshId_Value: " + departmentMap.get(refreshId));
+					
+				}else if (deptMap.containsKey(refreshId)){
+					
+					System.out.println(refreshId);
+					
+					deptMap.remove(refreshId);
+					
+					if(departmentMap.containsKey(refreshId)){
+						 
+							System.out.println(refreshId);
+							
+							departmentMap.remove(refreshId);
+							
+							
+					}
+//					else if(userExtendMap.containsKey(refreshId)){
+//								
+//								System.out.println(refreshId);
+//								userExtendMap.remove(refreshId);
+//								
+//								
+//					}
+//					 
+					 System.out.println("deptMap_refreshId_Value: " + deptMap.get(refreshId));
+					 System.out.println("departmentMap_refreshId_Value: " + departmentMap.get(refreshId));
+//					 System.out.println("userExtendMap_refreshId_Value: " + userExtendMap.get(refreshId));
+			
+				}
+			}
+//			if(mapName == "userMap"){
+//				switch(refreshNum){
+//				case 1:
+//					userMap.remove(refreshId[0]);
+//					break;
+//				
+//				case 2:
+//					for(int i=0 ; i <= refreshId.length; i++){
+//						userMap.remove(refreshId[i]);
+//					}
+//					break;
+//				case 3: 
+//					userMap.clear();
+//				}
+//						
+//				
+//			}else if(mapName == "deptMap"){
+//				switch(refreshNum){
+//				case 1:
+//					userMap.remove(refreshId[0]);
+//					break;
+//				
+//				case 2:
+//					for(int i=0 ; i <= refreshId.length; i++){
+//						deptMap.remove(refreshId[i]);
+//					}
+//					
+//				case 3: 
+//					deptMap.clear();
+//				}
+////			
+//			}else if(mapName == "userExtendMap"){
+//				
+//				switch(refreshNum){
+//				case 1:
+//					userExtendMap.remove(refreshId[0]);
+//					break;
+//				
+//				case 2:
+//					for(int i=0 ; i <= refreshId.length; i++){
+//						userExtendMap.remove(refreshId[i]);
+//					}
+//					
+//				case 3: 
+//					userExtendMap.clear();
+//				}
+//				
+//			}else if(mapName == "deptExtendMap"){
+//				switch(refreshNum){
+//				case 1:
+//					departmentMap.remove(refreshId[0]);
+//					break;
+//				
+//				case 2:
+//					for(int i=0 ; i <= refreshId.length; i++){
+//						departmentMap.remove(refreshId[i]);
+//					}
+//					
+//				case 3: 
+//					departmentMap.clear();
+//				}
+//			}
+		
+		}catch (Exception e){
+			
+			e.printStackTrace();
+			
+		}
+	}
+	
+	public void memoryAllRefresh(){
+		
+		try{
+		
+			userMap.clear();
+				
+			deptMap.clear();
+		
+			userExtendMap.clear();
+		
+			departmentMap.clear();
+		
+		}catch(Exception e){
+			
+			e.printStackTrace();
+		}
+		
 	}
 }

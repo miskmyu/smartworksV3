@@ -138,7 +138,6 @@ smartMessage.bundle['ko'] = {
 	setDepartmentError : "부서정보 수정 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	removeDepartmentSucceed : "부서정보가 정상적으로 삭제되었습니다.",
 	removeDepartmentError : "부서정보 삭제 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다.",
-	removeNotEmptyDepartment : "부서에 속한 사용자가 존재하면 부서를 삭제할수 없습니다.",
 	createMemberSucceed : "새로운 사용자가 정상적으로 생성되었습니다.",
 	createMemberError : "새로운 사용자 생성 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	setMemberSucceed : "사용자정보가 정상적으로 수정되었습니다.",
