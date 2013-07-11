@@ -367,7 +367,10 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			throw new PrcException(e);
 		}
 	}
-	private Query appendQuery(StringBuffer queryBuffer , TaskWorkCond cond) throws Exception {
+	private Query appendQuery(StringBuffer queryBuffer, TaskWorkCond cond) throws Exception {
+		return appendQuery(queryBuffer, cond, false);
+	}
+	private Query appendQuery(StringBuffer queryBuffer , TaskWorkCond cond, boolean isWithoutAuth) throws Exception {
 		
 		String packageStatus = cond.getPackageStatus();
 		String tskAssignee = cond.getTskAssignee();
@@ -442,27 +445,29 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		User user = SmartUtil.getCurrentUser();
 		String currentUser = user.getId();
 		
-		//내가 속한 부서, 그룹으로 데이터를 조회한다
-		StringBuffer accessValueBuf = new StringBuffer();
-		accessValueBuf.append(" task.tskaccessValue like '%").append(currentUser).append("%' ");
-		String myDeptId = user.getDepartmentId();
-		accessValueBuf.append(" or task.tskaccessValue like '%").append(myDeptId).append("%' ");
-		DepartmentInfo[] adjunctDeptIds = user.getDepartments();
-		if (adjunctDeptIds != null && adjunctDeptIds.length != 0) {
-			for (int i = 0; i < adjunctDeptIds.length; i++) {
-				accessValueBuf.append(" or task.tskaccessValue like '%").append(adjunctDeptIds[i].getId()).append("%' ");
+		if (!isWithoutAuth) {
+			//내가 속한 부서, 그룹으로 데이터를 조회한다
+			StringBuffer accessValueBuf = new StringBuffer();
+			accessValueBuf.append(" task.tskaccessValue like '%").append(currentUser).append("%' ");
+			String myDeptId = user.getDepartmentId();
+			accessValueBuf.append(" or task.tskaccessValue like '%").append(myDeptId).append("%' ");
+			DepartmentInfo[] adjunctDeptIds = user.getDepartments();
+			if (adjunctDeptIds != null && adjunctDeptIds.length != 0) {
+				for (int i = 0; i < adjunctDeptIds.length; i++) {
+					accessValueBuf.append(" or task.tskaccessValue like '%").append(adjunctDeptIds[i].getId()).append("%' ");
+				}
 			}
-		}
-		GroupInfo[] myGroups = SwServiceFactory.getInstance().getCommunityService().getMyGroups();
-		if (myGroups != null && myGroups.length != 0) {
-			for (int i = 0; i < myGroups.length; i++) {
-				accessValueBuf.append(" or task.tskaccessValue like '%").append(myGroups[i].getId()).append("%' ");
+			GroupInfo[] myGroups = SwServiceFactory.getInstance().getCommunityService().getMyGroups();
+			if (myGroups != null && myGroups.length != 0) {
+				for (int i = 0; i < myGroups.length; i++) {
+					accessValueBuf.append(" or task.tskaccessValue like '%").append(myGroups[i].getId()).append("%' ");
+				}
 			}
+			
+			//assginee가 나거나 엑세스레벨이 공개이거나 만약 비공개라면 엑세스벨류에 내가 있는것
+//			queryBuffer.append("	and (task.tskAssignee ='").append(currentUser).append("' or (task.tskAccessLevel not in ('1','2')) or (task.tskaccessLevel = '2' and task.tskaccessValue like '%").append(currentUser).append("%')) ");
+			queryBuffer.append("	and (task.tskAssignee ='").append(currentUser).append("' or (task.tskAccessLevel not in ('1','2')) or (task.tskaccessLevel = '2' and (").append(accessValueBuf.toString()).append("))) ");
 		}
-		
-		//assginee가 나거나 엑세스레벨이 공개이거나 만약 비공개라면 엑세스벨류에 내가 있는것
-//		queryBuffer.append("	and (task.tskAssignee ='").append(currentUser).append("' or (task.tskAccessLevel not in ('1','2')) or (task.tskaccessLevel = '2' and task.tskaccessValue like '%").append(currentUser).append("%')) ");
-		queryBuffer.append("	and (task.tskAssignee ='").append(currentUser).append("' or (task.tskAccessLevel not in ('1','2')) or (task.tskaccessLevel = '2' and (").append(accessValueBuf.toString()).append("))) ");
 		
 		queryBuffer.append("	and form.packageId is not null ");
 		if (!CommonUtil.isEmpty(packageStatus))
@@ -673,14 +678,24 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			throw new PrcException(e);
 		}
 	}
+	
 	public TaskWork[] getTaskWorkList(String user, TaskWorkCond cond) throws Exception {
+		return getTaskWorkList(user, cond, false);
+	}
+	
+	public TaskWork[] getTaskWorkList(String user, TaskWorkCond cond, boolean isWithoutAuth) throws Exception {
 		try {
 
 			StringBuffer queryBuffer = new StringBuffer();
 			queryBuffer.append(" select taskInfo.*, ");
 			queryBuffer.append(" prcInstInfo.* ");
 			
-			Query query = this.appendQuery(queryBuffer, cond);
+			Query query = null;
+			if (isWithoutAuth) {
+				query = this.appendQuery(queryBuffer, cond, true);
+			} else {
+				query = this.appendQuery(queryBuffer, cond, false);
+			}
 		
 			List list = query.list();
 			if (list == null || list.isEmpty())
@@ -779,7 +794,6 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			throw new PrcException(e);
 		}
 	}
-	
 	private Query appendExtendQuery(StringBuffer queryBuffer, PrcProcessInstCond cond) throws PrcException {
 		
 		String packageId = cond.getPackageId();

@@ -8,7 +8,6 @@
 
 package net.smartworks.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -277,22 +276,12 @@ public class SettingsController extends ExceptionInterceptor {
 		smartworks.setDepartment(requestBody, request);
 	}
 	
-	
 	@RequestMapping(value = "/remove_department", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody void removeDepartment(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.removeDepartment(requestBody, request);
 	}
-	
-	@RequestMapping(value = "/check_empty_department", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> checkEmptyDepartment(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		boolean result = smartworks.checkEmptyDepartment(requestBody, request);
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("result", result);
-		return resultMap;
-	}
-	
+
 	@RequestMapping(value = "/check_id_duplication", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void checkIdDuplication(HttpServletRequest request, HttpServletResponse response) throws Exception {

@@ -138,7 +138,6 @@ smartMessage.bundle['en'] = {
 	setDepartmentError : "Error has been occured while updating Department. Please contact the Administrator!",
 	removeDepartmentSucceed : "Department has been deleted successfully.",
 	removeDepartmentError : "Error has been occured while deleting Department. Please contact the Administrator!",
-	removeNotEmptyDepartment : "There are users in the department. Please try again after removing all users!",
 	createMemberSucceed : "New Member has been created successfully.",
 	createMemberError : "Error has been occured while creating new Member. Please contact the Administrator!",
 	setMemberSucceed : "Member has been updated successfully.",
