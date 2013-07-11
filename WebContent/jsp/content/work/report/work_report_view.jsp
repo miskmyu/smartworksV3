@@ -23,14 +23,12 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!--  전체 레이아웃 -->
-<div class="js_work_report_view">
+<div class="js_work_report_view_page">
 
 	<!-- 컨텐츠 -->
-	<div class="fr mt2 ml10">
-		<%if(chartType.equals(ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_BAR]) 
-				|| chartType.equals(ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_COLUMN])){ %>
-			<div><fmt:message key="report.button.stacked_chart"/><input type="checkbox" name="chkStackedChart" class="js_change_stacked_chart"></div>
-		<%} %>
+	<div class="fr mt5 ml10 js_stacked_chart" <%if(!chartType.equals(ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_BAR]) 
+				&& !chartType.equals(ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_COLUMN])){ %> style="display:none" <%} %>>
+		<div><fmt:message key="report.button.stacked_chart"/><input type="checkbox" name="chkStackedChart" class="js_change_stacked_chart"></div>
 	</div>
 	<div class="fr">
 		<select name="selReportChartType" class="js_change_chart_type">
@@ -64,13 +62,13 @@
 				selected <%}%>>
 				<fmt:message key="report.chart.type.area" />
 			</option>
-			<option
+<%-- 			<option
 				value="<%=ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_GAUGE]%>"
 				<%if (chartType.equals(ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_GAUGE])) {%>
 				selected <%}%>>
 				<fmt:message key="report.chart.type.gauge" />
 			</option>
-			<option
+ --%>			<option
 				value="<%=ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_RADAR]%>"
 				<%if (chartType.equals(ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_RADAR])) {%>
 				selected <%}%>>
@@ -85,7 +83,8 @@
 		</select>
 		
 	</div>
-	<div id="chart_target" class="form_contents js_work_report_view">
+	<br/>
+	<div id="chart_target" class="form_contents">
 	</div>
 </div>
 <!-- 전체 레이아웃//-->

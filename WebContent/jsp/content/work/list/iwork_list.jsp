@@ -209,11 +209,11 @@
 
 			<!-- 목록영역  -->
 			<div class="contents_space">
-				<%-- <div>
+				<div>
 					<jsp:include page="/jsp/content/work/report/work_report.jsp">
 						<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
 					</jsp:include>
-				</div> --%>
+				</div>
 				<!-- 목록보기 -->
 				<div>
 					<!-- 목록보기 타이틀-->

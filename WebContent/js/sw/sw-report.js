@@ -13,7 +13,7 @@ Ext.onReady(function () {
 		MATRIX : 2,
 		TABLE : 3
 	};
-
+	
 	swChartType = {
 		LINE : "line",
 		AREA : "area",
@@ -26,15 +26,15 @@ Ext.onReady(function () {
 		DEFAULT : this.LINE
 	};
 	
-	chartUtil = {
-	
-	};
-	
 	smartChart = {
+		isResizing : false,
 		reportType : swReportType.CHART,
 		chartType : swChartType.DEFAULT,
+		is3Dimension : false,
 		isStacked : false,
 		target : null,
+		width : 1024/2,
+		height : 768/2,
 		companyId : currentUser.companyId,
 		userId : currentUser.userId,
 		xFieldName : null,
@@ -82,7 +82,7 @@ Ext.onReady(function () {
 				yAxisPosition = "bottom";
 				xAxisPosition = "left";
 			}
-			var labelRotate = smartChart.labelRotate;
+			
 			if(chartType === swChartType.BAR
 					|| chartType === swChartType.PIE
 					|| chartType === swChartType.GAUGE
@@ -91,16 +91,13 @@ Ext.onReady(function () {
 			}
 			
 			var numericLabel = {
-				renderer: Ext.util.Format.numberRenderer('0,0'),
-				font: smartChart.labelFont
-			};
-			var categoryLabel = {
-				font: smartChart.labelFont,
-				renderer: function(name) {
-					return name;
-				}
-			};
-	
+					renderer: Ext.util.Format.numberRenderer('0,0'),
+					font: smartChart.labelFont
+				};
+			var stringLabel = {
+					font: smartChart.labelFont
+				};
+
 			if(chartType === swChartType.PIE) return [];
 			else if(chartType === swChartType.RADAR){
 				return [{
@@ -135,7 +132,7 @@ Ext.onReady(function () {
 					        position: 'bottom',
 					        fields: [ smartChart.xFieldName ],
 					        title: smartChart.xFieldName,
-					        label: labelRotate
+					        label: stringLabel
 					    }];
 			}else if(chartType === swChartType.LINE 
 					|| chartType === swChartType.AREA
@@ -155,7 +152,7 @@ Ext.onReady(function () {
 					position : xAxisPosition,
 					fields : [ smartChart.xFieldName ],
 					title : smartChart.xFieldName,
-	                label: labelRotate
+	                label: stringLabel
 				} ];
 			}
 		},
@@ -169,11 +166,23 @@ Ext.onReady(function () {
 			    donut: 20,
 			    highlight: {
 			      segment: {
-			        margin: 10
+			        margin: 20
 			      }
 			    },
+                tips: {
+                    trackMouse: true,
+                    height : 32,
+                    width : 100,
+                    renderer: function(storeItem, item) {
+                    	var total = 0;
+                    	for(var i=0; i<smartChart.values.length; i++){
+                    		total += smartChart.values[i][ smartChart.groupNames[index]];
+                    	}
+                    	this.setTitle(storeItem.data[ smartChart.xFieldName] + "<br>" + storeItem.data[smartChart.groupNames[index]] + "  (" + Math.round(storeItem.data[smartChart.groupNames[index]]/total * 100) + "%)");
+                    }
+                },
 			    label: {
-			        field: 'name',
+			        field: smartChart.xFieldName,
 			        display: 'rotate',
 			        contrast: true,
 			        font: smartChart.labelFont
@@ -202,19 +211,20 @@ Ext.onReady(function () {
 						axis : axis,
 						xField : smartChart.xFieldName,
 						yField : smartChart.groupNames[i],
+						showInLegend: smartChart.is3Dimension,
 		                highlight: highlight,
 		                markerConfig: markerConfig,
 		                style:{
 							'stroke-width': 0		                	
+		                },
+		                tips: {
+		                    trackMouse: true,
+		                    height : 32,
+		                    width : 100,
+		                    renderer: function(storeItem, item) {
+		                    	this.setTitle(item.series.yField + "<br>" + item.value[1]);
+		                    }
 		                }
-//		                tips: {
-//		                    trackMouse: true,
-//		                    height : -1,
-//		                    width : -1,
-//		                    renderer: function(storeItem, item) {
-//		                    	this.setTitle(storeItem.data.name + ":" +item.value[1]);
-//		                    }
-//		                }
 					});
 				}
 				return series;
@@ -225,9 +235,17 @@ Ext.onReady(function () {
 						type : chartType,
 						xField : smartChart.xFieldName,
 						yField : smartChart.groupNames[i],
-						showInLegend: true,
+						showInLegend: smartChart.is3Dimension,
 						showMarkers: true,
 						markerConfig: markerConfig,
+		                tips: {
+		                    trackMouse: true,
+		                    height : 32,
+		                    width : 100,
+		                    renderer: function(storeItem, item) {
+		                    	this.setTitle(item.series.yField + "<br>" + storeItem.data[item.series.yField] );
+		                    }
+		                },
 						style:{
 							'stroke-width': 2,
 							fill: 'none'
@@ -241,12 +259,20 @@ Ext.onReady(function () {
 				for(var i=0; i<smartChart.groupNames.length; i++){
 					series.push({
 				        type: chartType,
-					    showInLegend: true,
+					    showInLegend: smartChart.is3Dimension,
 		                highlight: highlight,
 		                label: {
 		                	orientation: smartChart.labelOrientation
 		                },
 		                markerConfig: markerConfig,
+		                tips: {
+		                    trackMouse: true,
+		                    height : 32,
+		                    width : 100,
+		                    renderer: function(storeItem, item) {
+		                    	this.setTitle(item.series.yField + "<br>" + storeItem.data[item.series.yField] );
+		                    }
+		                },
 		                style : {
 		                    'stroke-width': 0
 		                },
@@ -257,8 +283,25 @@ Ext.onReady(function () {
 				}
 				return series;
 				
-			}else if(chartType === swChartType.AREA
-					|| chartType === swChartType.GAUGE
+			}else if(chartType === swChartType.AREA){
+				return [{
+					type : chartType,
+					axis : axis,
+					xField : smartChart.xFieldName,
+					yField : smartChart.groupNames,
+				    showInLegend: smartChart.is3Dimension,
+					highlight : false,
+	                tips: {
+	                    trackMouse: true,
+	                    height : 32,
+	                    width : 100,
+	                    renderer: function(storeItem, item) {
+	                    	this.setTitle(item.storeField + "<br>" + storeItem.data[item.storeField] );
+	                    }
+	                }
+				}];
+				
+			}else if( chartType === swChartType.GAUGE
 					|| chartType === swChartType.COLUMN
 					|| chartType === swChartType.BAR){
 				return [{
@@ -267,26 +310,29 @@ Ext.onReady(function () {
 					axis : axis,
 					xField : smartChart.xFieldName,
 					yField : smartChart.groupNames,
+				    showInLegend: smartChart.is3Dimension,
 					highlight : true,
-					stacked : smartChart.isStacked
-//	                tips: {
-//	                    trackMouse: true,
-//	                    height : 18,
-//	                    width : 60,
-//	                    renderer: function(storeItem, item) {                    	
-//	                    	this.setTitle(item.value[1]);
-//	                    }
-//	                }
+					stacked : smartChart.isStacked,
+	                tips: {
+	                    trackMouse: true,
+	                    height : 32,
+	                    width : 100,
+	                    renderer: function(storeItem, item) {
+	                    	this.setTitle(item.yField + "<br>" + item.value[1]);
+	                    }
+	                }
 				}];
 			}
 		},
 	
 		getChartData : function(reportId) {
-			var url = smartChart.requestUrl + "?companyId=" + smartChart.companyId
-					+ "&userId=" + smartChart.userId + "&reportId=" + reportId;
 			$.ajax({
-				url : url,
-				data : {},
+				url : smartChart.requestUrl,
+				data : {
+					companyId : smartChart.companyId,
+					userId : smartChart.userId,
+					reportId : reportId
+				},
 				success : function(data, status, jqXHR) {
 					if(data){
 						smartChart.xFieldName = data.xFieldName;
@@ -299,7 +345,21 @@ Ext.onReady(function () {
 				                		degrees : 270
 				                	}
 				                };
-						}else smartChart.labelRotate = null;
+						}else{
+							smartChart.labelRotate = null;
+						}
+						
+						if(smartChart.groupNames.length > 1){
+							if(smartChart.chartType == swChartType.BAR || smartChart.chartType == swChartType.COLUMN){
+								$('.js_work_report_view_page .js_stacked_chart').show();
+							}else{
+								$('.js_work_report_view_page .js_stacked_chart').hide();								
+							}
+							smartChart.is3Dimension = true;
+						}else{
+							$('.js_work_report_view_page .js_stacked_chart').hide();
+							smartChart.is3Dimension = false;
+						}
 						smartChart.createChart();
 					}
 				},
@@ -316,6 +376,7 @@ Ext.onReady(function () {
 			smartChart.isStacked = isStacked;
 			smartChart.target = target;
 			$('#'+target).html('');
+			smartChart.width = $('#' + target).width();
 			smartChart.getChartData(reportId);
 		},
 		
@@ -326,6 +387,7 @@ Ext.onReady(function () {
 			smartChart.isStacked = isStacked;
 			smartChart.target = target;
 			$('#'+target).html('');
+			smartChart.width = $('#' + target).width();
 			if(data){
 				smartChart.xFieldName = data.xFieldName;
 				smartChart.yValueName = data.yValueName;
@@ -339,6 +401,13 @@ Ext.onReady(function () {
 			smartChart.chartType = chartType;
 			smartChart.isStacked = isStacked;
 			$('#'+smartChart.target).html('');
+			smartChart.width = $('#' + smartChart.target).width();
+			smartChart.createChart();
+		},
+		
+		resize : function(){
+			$('#'+smartChart.target).html('');
+			smartChart.width = $('#' + smartChart.target).width();
 			smartChart.createChart();
 		},
 		
@@ -363,26 +432,14 @@ Ext.onReady(function () {
 		},
 		
 		createChart : function(){
-//		    gridPanel = Ext.create('Ext.grid.Panel', {
-//		        id: 'reportDataGrid',
-//		        align: 'stretch',
-//		        border: false,
-//		        height: 200,
-//		        resizable: true,
-//		        store:  Ext.create('Ext.data.JsonStore', {
-//					fields : smartChart.getFields(),
-//					data : smartChart.values
-//				}),
-//				renderTo : Ext.get(smartChart.target),
-//		        columns: smartChart.getColumns(),
 
 			if(smartChart.chartType === swChartType.PIE){
 				for(var i=0; i< smartChart.groupNames.length; i++)
-					Ext.create('Ext.chart.Chart', {
-						width: 300,
-						height: 200,
-						minHeight: 300,
-						minWidth: 200,
+					Ext.create('Ext.chart.Chart',{						
+						width: smartChart.height-60,
+						height: smartChart.height,
+						margin: '20 10 20 10' ,
+				        html: '<span style="font-weight: bold; font-size: 14px; font-family: Arial;">' + smartChart.groupNames[i] + '</span>',
 						animate: true,
 						renderTo : Ext.get(smartChart.target),
 						store : Ext.create('Ext.data.JsonStore', {
@@ -392,7 +449,7 @@ Ext.onReady(function () {
 						shadow : true,
 						axes : smartChart.getAxes(smartChart.chartType),
 						series : smartChart.getSeriesForPIE(i)
-					});		
+				  	});
 			}else if(smartChart.chartType === swChartType.GAUGE){
 				for(var i=0; i<smartChart.groupNames.length; i++)
 					Ext.create('Ext.chart.Chart', {
@@ -424,8 +481,8 @@ Ext.onReady(function () {
 	
 			}else if(smartChart.chartType === swChartType.SCATTER){
 					Ext.create('Ext.chart.Chart', {
-						width: 600,
-						height: 300,
+						width: smartChart.width,
+						height: smartChart.height,
 						animate: true,
 						theme: 'Category2',
 						resizable: true,
@@ -445,39 +502,29 @@ Ext.onReady(function () {
 					});
 	
 			}else{
-				Ext.create('Ext.form.Panel',{
-					layout: {
-						align: 'stretch',
-						type: 'vbox'
+				Ext.create('Ext.chart.Chart',{
+					width: smartChart.width,
+					height: smartChart.height,
+					animate: true,
+					theme: 'Category2',
+					resizable: false,
+					autoSize: true,
+					insetPadding: 20,// radar
+					renderTo : Ext.get(smartChart.target),
+					store : Ext.create('Ext.data.JsonStore', {
+						fields : smartChart.getFields(),
+						data : smartChart.values
+					}),
+					shadow : true,
+					legend : {
+						position : 'right'
 					},
-			        style: 'overflow: hidden;',
-					items: [{
-						xtype: 'container',
-						flex: 1,
-						layout: 'fit',
-						items: [{
-							xtype: 'chart',
-							width: 600,
-							height: 300,
-							animate: true,
-							theme: 'Category2',
-							resizable: true,
-							insetPadding: 20,// radar
-							renderTo : Ext.get(smartChart.target),
-							store : Ext.create('Ext.data.JsonStore', {
-								fields : smartChart.getFields(),
-								data : smartChart.values
-							}),
-							shadow : true,
-							legend : {
-								position : 'right'
-							},
-							axes : smartChart.getAxes(smartChart.chartType),
-							series : smartChart.getSeries(smartChart.chartType)
-						}]
-					}]
+					axes : smartChart.getAxes(smartChart.chartType),
+					series : smartChart.getSeries(smartChart.chartType)
 				});
 			}
+			$(".js_work_report_view_page text[text='" + smartChart.xFieldName + "']").css("font-size", "14px");
+			$(".js_work_report_view_page text[text='" + smartChart.yValueName + "']").css("font-size", "14px");
 		}
 	};
 });

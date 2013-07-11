@@ -680,9 +680,9 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public Data getReportData(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public Data getReportDataByDef(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
-		return workService.getReportData(requestBody, request);
+		return workService.getReportDataByDef(requestBody, request);
 	}
 
 	@Override
@@ -1826,5 +1826,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public CommunityInfoList getCommunityInstanceList(int type, RequestParams params) throws Exception {
 		return communityService.getCommunityInstanceList(type, params);
+	}
+
+	@Override
+	public Data getReportData(HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		return workService.getReportData(request);
 	}
 }

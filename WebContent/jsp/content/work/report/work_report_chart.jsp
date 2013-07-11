@@ -55,7 +55,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <tr class="js_report_chart_type" <%if(reportType != Report.TYPE_CHART){%> style="display: none" <%} %>>
-	<th><fmt:message key="report.chart.type" /></th>
+	<th width="200px"><fmt:message key="report.chart.type" /></th>
 	<td colspan="4" class="">
 		<select name="selReportChartType">
 			<option chartType="<%=ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_COLUMN] %>" value="<%=ChartReport.CHART_TYPE_COLUMN%>"
@@ -78,11 +78,11 @@
 				<%if (chart != null && chart.getChartType() == ChartReport.CHART_TYPE_AREA) {%> selected <%}%>>
 				<fmt:message key="report.chart.type.area" />
 			</option>
-			<option chartType="<%=ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_GAUGE] %>" value="<%=ChartReport.CHART_TYPE_GAUGE%>"
+<%-- 			<option chartType="<%=ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_GAUGE] %>" value="<%=ChartReport.CHART_TYPE_GAUGE%>"
 				<%if (chart != null && chart.getChartType() == ChartReport.CHART_TYPE_GAUGE) {%> selected <%}%>>
 				<fmt:message key="report.chart.type.gauge" />
 			</option>
-			<option chartType="<%=ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_RADAR] %>" value="<%=ChartReport.CHART_TYPE_RADAR%>"
+ --%>			<option chartType="<%=ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_RADAR] %>" value="<%=ChartReport.CHART_TYPE_RADAR%>"
 				<%if (chart != null && chart.getChartType() == ChartReport.CHART_TYPE_RADAR) {%> selected <%}%>>
 				<fmt:message key="report.chart.type.radar" />
 			</option>
@@ -94,7 +94,7 @@
 	</td>
 </tr>
 <tr>
-	<th><fmt:message key="report.title.xaxis" /></th>
+	<th width="200px"><fmt:message key="report.title.xaxis" /></th>
 	<td class="js_select_chart_axis" colspan="4">
 		<select name="selReportXAxis">
 			<%
@@ -172,7 +172,7 @@
 	</td>		
 </tr>
 <tr>
-	<th><fmt:message key="report.title.yaxis" /></th>
+	<th width="200px"><fmt:message key="report.title.yaxis" /></th>
 	<td colspan="4" class="">
 		<select name="selReportYAxis">
 			<%
@@ -251,7 +251,7 @@
 	</td>
 </tr>
 <tr class="js_chart_zaxis" <%if (SmartUtil.isBlankObject(zAxisId)) {%> style="display: none" <%}%>>
-	<th><fmt:message key="report.title.zaxis" /></th>
+	<th width="200px"><fmt:message key="report.title.zaxis" /></th>
 	<td class="js_select_chart_axis" colspan="4">
 		<select name="selReportZAxis">
 			<%
@@ -316,7 +316,7 @@
 	</td>
 </tr>
 <tr class="js_chart_xsecondaxis" <%if (SmartUtil.isBlankObject(xSecondAxisId)) {%> style="display: none" <%}%>>
-	<th><fmt:message key="report.title.xsecondaxis" /></th>
+	<th width="200px"><fmt:message key="report.title.xsecondaxis" /></th>
 	<td class="js_select_chart_axis" colspan="4">
 		<select name="selReportXSecondAxis">
 			<%
@@ -379,7 +379,7 @@
 	</td>
 </tr>
 <tr class="js_chart_zsecondaxis" <%if (SmartUtil.isBlankObject(zSecondAxisId)) {%> style="display: none" <%}%>>
-	<th><fmt:message key="report.title.zsecondaxis" /></th>
+	<th width="200px"><fmt:message key="report.title.zsecondaxis" /></th>
 	<td class="js_select_chart_axis">
 		<select name="selReportZSecondAxis">
 			<%

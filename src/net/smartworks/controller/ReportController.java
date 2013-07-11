@@ -14,12 +14,16 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.report.ChartReport;
 import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
+import net.smartworks.model.work.SmartWork;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.service.impl.SmartWorks;
+import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,8 +83,10 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/get_report_data", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> getReportData(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Data reportData = smartworks.getReportData(requestBody, request);
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> getReportData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Data reportData = smartworks.getReportData(request);
+//		Data reportData = SmartTest.getReportData();
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("xFieldName", reportData.getxFieldName());
@@ -93,8 +99,7 @@ public class ReportController {
 	@RequestMapping(value = "/get_report_data_by_def", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> getReportDataByDef(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		Data reportData = smartworks.getReportDataByDef(requestBody, request);
-		Data reportData = smartworks.getReportData(requestBody, request);
+		Data reportData = smartworks.getReportDataByDef(requestBody, request);
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("xFieldName", reportData.getxFieldName());

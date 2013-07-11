@@ -26,6 +26,7 @@
 	Report report = null;
 	String filterId = "";
 	int reportType = Report.TYPE_CHART;
+	if(reportId != null && reportId.equals(Report.REPORT_ID_NONE)) reportId = null;
 	if (reportId != null) {
 		report = smartWorks.getReportById(reportId);
 		reportType = report.getType();
@@ -39,15 +40,15 @@
 <div class="border_no_topline">
 <form name="frmWorkReport" class="form_contents js_validation_required js_work_report_edit_page" workId="<%=workId%>" reportId="<%=reportId%>">
 	<table class="table_normal js_report_title">
-		<tr style="display:none" class="js_work_report_name">
-			<th class="required_label"><fmt:message key="report.title.report_name" /></th>
+		<tr class="js_work_report_name" <%if(!SmartUtil.isBlankObject(report)){%>style="display:none"<%} %>>
+			<th class="required_label" width="200px"><fmt:message key="report.title.report_name" /></th>
 			<td colspan="4">
-				<input name="txtWorkReportName" type="text" class="fieldline required">
+				<input name="txtWorkReportName" type="text" class="fieldline required" style="width:300px">
 			</td>
 		</tr>
 
 		<tr class="js_work_report_type">
-			<th><fmt:message key="report.title.report_type" /></th>
+			<th width="200px"><fmt:message key="report.title.report_type" /></th>
 			<td colspan="4" class="">
 				<input name="rdoWorkReportType" type="radio" value="<%=Report.TYPE_CHART%>"
 					href="work_report_chart.sw?reportId=<%=CommonUtil.toNotNull(reportId)%>"
@@ -83,7 +84,7 @@
 
 		<table class="table_normal js_form_by_report_type">
 		<tr class="js_report_search_filter">
-			<th><fmt:message key="report.title.search_filter" /></th>
+			<th width="200px"><fmt:message key="report.title.search_filter" /></th>
 			<td colspan="4" class="">
 				<select name="selReportFilterName">
 					<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" <%if(SmartUtil.isBlankObject(filterId) || filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {%> selected <%} %> ><fmt:message key='filter.name.all_instances' /></option>
@@ -110,7 +111,7 @@
 <!-- 등록 취소 버튼 -->
 <div class="glo_btn_space js_button_space">
 	<div class="fr">
-		<span class="btn_gray js_button_save_as"> 
+		<span class="btn_gray js_button_save_as"   <%if(SmartUtil.isBlankObject(report)){ %>style="display:none" <%} %>> 
 			<a href="" class="js_work_report_saveas"> 
 				<span class="txt_btn_start"></span> 
 				<span class="txt_btn_center"><fmt:message key="common.button.save_as"/></span> 
@@ -158,6 +159,10 @@
 		</div>
 	</form>
 
+	<form name="frmReportSaveAsName" class="pr10 fr js_validation_required" style="display:none">
+		<input class="fieldline required" style="width:160px; line-height: 16px" type="text" name="txtReportSaveAsName"/>
+	</form>
+	
 	<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
 	<div class="fr form_space js_progress_span" ></div>
 	

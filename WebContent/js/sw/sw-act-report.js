@@ -109,7 +109,7 @@ $(function() {
 			var workReportEditPage = workReportEdit.find('.js_work_report_edit_page');
 			paramsJson['workId'] = workReportEditPage.attr('workId');
 			var url = "create_new_work_report.sw";
-			if(!workReportEdit.find(".js_work_report_name").is(':visible')){
+			if(!workReportEdit.find(".js_work_report_name").is(':visible') && !workReportEdit.find('form[name="frmReportSaveAsName"]').is(':visible')){
 				paramsJson['reportId'] = workReportEditPage.attr('reportId');
 				url = "set_work_report.sw";
 			}
@@ -173,7 +173,7 @@ $(function() {
 		var workReport = input.parents('.js_work_report_page:first');
 		workReport.find('.js_button_save_as').hide();
 		workReport.find('.js_button_save').show();
-		workReport.find('.js_work_report_name').show();
+		workReport.find('form[name="frmReportSaveAsName"]').show();
 		
 		return false;
 	});
@@ -181,7 +181,7 @@ $(function() {
 	$('select.js_select_work_report').live('change', function(e) {
 		var input = $(targetElement(e));
 		var workReport = $('div.js_work_report_page');
-		var target = workReport.find('div.js_work_report_view');
+		var target = workReport.find('.js_work_report_view');
 		var url = input.attr('href');
 		var reportType = workReport.attr("reportType");
 		var selected = input.children('option:selected');
@@ -194,6 +194,7 @@ $(function() {
 		var chartType = selected.attr('chartType');
 		var progressSpan = input.nextAll('span.js_progress_span');
 		smartPop.progressCont(progressSpan);						
+		workReport.find('.js_work_report_edit').slideUp().html('');
 		$.ajax({
 			url : url,
 			data : {
@@ -215,17 +216,18 @@ $(function() {
 	$('select.js_change_chart_type').live('change', function(e) {
 		var input = $(targetElement(e));
 		var chartType = input.attr('value');
-		var stackedChart = input.parents('.js_work_report_view').find('.js_change_stacked_chart');
-		if(chartType === "column" || chartType === "bar") stackedChart.parent().show();
-		else stackedChart.parent().hide();
-		smartChart.reload(chartType, stackedChart.is(':checked'));
+		var stackedChart = input.parents('.js_work_report_view_page').find('.js_stacked_chart');
+		if(chartType === "column" || chartType === "bar") stackedChart.show();
+		else stackedChart.hide();
+		
+		smartChart.reload(chartType, stackedChart.find('.js_change_stacked_chart').is(':checked'));
 		return false;
 	});
 
 	$('input.js_change_stacked_chart').live('click', function(e) {
 		var input = $(targetElement(e));
-		var chartType = input.parents('.js_work_report_view').find('select.js_change_chart_type').attr('value');
-		smartChart.reload(chartType, input.is(':checked') );
+		var chartType = input.parents('.js_work_report_view_page').find('select.js_change_chart_type').attr('value');
+		smartChart.reload(chartType, input.is(':checked'), chartGrouping.find('select option:selected').attr('value') );
 		return true;
 	});
 
@@ -320,5 +322,15 @@ $(function() {
 			});
 		}
 		return false;
+	});
+	
+	$(window).resize(function() {		
+		if(!smartChart.isResizing && !isEmpty($('.js_work_report_view_page'))){
+			smartChart.isResizing = true;
+			setTimeout(function(){
+				smartChart.resize();
+				smartChart.isResizing = false;
+			},300);
+		}
 	});
 });

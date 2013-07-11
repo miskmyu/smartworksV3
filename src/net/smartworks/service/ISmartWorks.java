@@ -333,7 +333,7 @@ public interface ISmartWorks {
 
 	public abstract SearchFilter getSearchFilterById(String workType, String workId, String filterId) throws Exception;
 	
-	public abstract Data getReportData(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract Data getReportDataByDef(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract String setInformationWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
@@ -815,4 +815,7 @@ public interface ISmartWorks {
 	public abstract WorkInfoList getAppWorkList(RequestParams params) throws Exception;
 
 	public abstract void downloadAppWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract Data getReportData(HttpServletRequest request) throws Exception;
+	
 }

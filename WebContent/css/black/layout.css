@@ -60,7 +60,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .icon_number { 
 	background: url("../../images/header_nico.png") no-repeat scroll -403px -102px transparent; 
 	display:inline-block; font-family: Tahoma, dotum; font-size:9px; color:#FFF; height:12px; letter-spacing:0; line-height:13px; padding-right:5px; position:absolute;
-	left:14px; top:13px; text-indent: 4px; z-index:1001
+	left:10px; top:13px; text-indent: 4px; z-index:1001
 }
 .icon_number span { 
 	background: url("../../images/header_nico.png") no-repeat scroll -494px -102px transparent !important;

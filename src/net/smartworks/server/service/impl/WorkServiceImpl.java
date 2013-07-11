@@ -785,7 +785,7 @@ public class WorkServiceImpl implements IWorkService {
 	}
 	
 	@Override
-	public Data getReportData(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public Data getReportDataByDef(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try{
 			String dbType = "ORACLE";
 			return SwManagerFactory.getInstance().getReportManager().getReportData(dbType, requestBody);
@@ -2115,6 +2115,11 @@ public class WorkServiceImpl implements IWorkService {
 	@Override
 	public WorkInfoList getAppWorkList(RequestParams params) throws Exception {
 		//return SmartTest.getAppWorkList(params);
+		return null;
+	}
+	@Override
+	public Data getReportData(HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }
