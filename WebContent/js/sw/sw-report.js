@@ -3,15 +3,15 @@ Ext.require([ 'Ext.Window',
               'Ext.form.*',
               'Ext.data.*',
               'Ext.chart.*',
-              'Ext.grid.Panel',
+              'Ext.grid.*',
               'Ext.layout.container.Column',
               'Ext.fx.target.Sprite',
               'Ext.layout.container.Fit' ]);
 Ext.onReady(function () {
 	swReportType = {
-		CHART : 1,
-		MATRIX : 2,
-		TABLE : 3
+		CHART : '1',
+		MATRIX : '2',
+		TABLE : '3'
 	};
 	
 	swChartType = {
@@ -39,15 +39,21 @@ Ext.onReady(function () {
 		userId : currentUser.userId,
 		xFieldName : null,
 		yValueName : null,
+		xGroupName : null,
+		yGroupName : null,
 		groupNames : null,
 		values : null,
 		requestUrl : "get_report_data.sw",
-		labelFont : '11px Arial',
+		labelFont : '11px dotum,Helvetica,sans-serif',
 		labelRotate : null,
 	
 		getFields : function() {
 			var fields = new Array();
 			fields.push({name: smartChart.xFieldName});
+			if(!isEmpty(smartChart.xGroupName))
+				fields.push({name: smartChart.xGroupName});
+			if(!isEmpty(smartChart.yGroupName))
+				fields.push({name: smartChart.yGroupName});
 			for ( var i = 0; i < smartChart.groupNames.length; i++)
 				fields.push({name: smartChart.groupNames[i]});
 			return fields;
@@ -337,30 +343,38 @@ Ext.onReady(function () {
 					if(data){
 						smartChart.xFieldName = data.xFieldName;
 						smartChart.yValueName = data.yValueName;
+						smartChart.xGroupName = data.xGroupName;
+						smartChart.yGroupName = data.yGroupName;
 						smartChart.groupNames = data.groupNames;
 						smartChart.values = data.values;
-						if(data.values.length>15){
-							smartChart.labelRotate = {
-				                	rotate : {
-				                		degrees : 270
-				                	}
-				                };
-						}else{
-							smartChart.labelRotate = null;
-						}
-						
-						if(smartChart.groupNames.length > 1){
-							if(smartChart.chartType == swChartType.BAR || smartChart.chartType == swChartType.COLUMN){
-								$('.js_work_report_view_page .js_stacked_chart').show();
+						if(smartChart.reportType === swReportType.CHART){
+							if(data.values.length>15){
+								smartChart.labelRotate = {
+					                	rotate : {
+					                		degrees : 270
+					                	}
+					                };
 							}else{
-								$('.js_work_report_view_page .js_stacked_chart').hide();								
+								smartChart.labelRotate = null;
 							}
-							smartChart.is3Dimension = true;
-						}else{
-							$('.js_work_report_view_page .js_stacked_chart').hide();
-							smartChart.is3Dimension = false;
+							
+							if(smartChart.groupNames.length > 1){
+								if(smartChart.chartType == swChartType.BAR || smartChart.chartType == swChartType.COLUMN){
+									$('.js_work_report_view_page .js_stacked_chart').show();
+								}else{
+									$('.js_work_report_view_page .js_stacked_chart').hide();								
+								}
+								smartChart.is3Dimension = true;
+							}else{
+								$('.js_work_report_view_page .js_stacked_chart').hide();
+								smartChart.is3Dimension = false;
+							}
+							smartChart.createChart();
+						}else if(smartChart.reportType === swReportType.MATRIX){
+							smartChart.createMatrix();						
+						}else if(smartChart.reportType === swReportType.TABLE){
+							
 						}
-						smartChart.createChart();
 					}
 				},
 				error : function(xhr, ajaxOptions, thrownError){
@@ -391,24 +405,45 @@ Ext.onReady(function () {
 			if(data){
 				smartChart.xFieldName = data.xFieldName;
 				smartChart.yValueName = data.yValueName;
+				smartChart.xGroupName = data.xGroupName;
+				smartChart.yGroupName = data.yGroupName;
 				smartChart.groupNames = data.groupNames;
 				smartChart.values = data.values;
-				smartChart.createChart();
+				if(smartChart.reportType === swReportType.CHART){
+					smartChart.createChart();
+				}else if(smartChart.reportType === swReportType.MATRIX){
+					smartChart.createMatrix();				
+					smartChart.resize();
+				}else if(smartChart.reportType === swReportType.TABLE){
+					
+				}
 			}
 		},
 		
-		reload : function(chartType, isStacked){
+		reload : function(chartType, isStacked, isChartView){
 			smartChart.chartType = chartType;
 			smartChart.isStacked = isStacked;
 			$('#'+smartChart.target).html('');
 			smartChart.width = $('#' + smartChart.target).width();
-			smartChart.createChart();
+			if(smartChart.reportType === swReportType.CHART && isChartView){
+				smartChart.createChart();
+			}else if((smartChart.reportType === swReportType.MATRIX) || (smartChart.reportType === swReportType.CHART && !isChartView)){
+				smartChart.createMatrix();				
+			}else if(smartChart.reportType === swReportType.TABLE){
+				
+			}
 		},
 		
 		resize : function(){
 			$('#'+smartChart.target).html('');
 			smartChart.width = $('#' + smartChart.target).width();
-			smartChart.createChart();
+			if(smartChart.reportType === swReportType.CHART){
+				smartChart.createChart();
+			}else if(smartChart.reportType === swReportType.MATRIX){
+				smartChart.createMatrix();				
+			}else if(smartChart.reportType === swReportType.TABLE){
+				
+			}
 		},
 		
 		getColumns : function(){
@@ -417,18 +452,73 @@ Ext.onReady(function () {
         		id: smartChart.xFieldName,
         		text: smartChart.xFieldName,
         		flex: 1,
-        		sortable: true,
-        		dataIndex: smartChart.xFieldName
-        	});
+        		sortable: false,
+        		dataIndex: smartChart.xFieldName,
+                summaryType: 'count',
+                summaryRenderer: function(value, summaryData, dataIndex) {
+                	if(value == smartChart.values.length){
+                		return smartMessage.get("reportGrandTotal") + '(' + value + ')';
+                	}else{
+                		return smartMessage.get("reportSubTotal") + '(' + value + ')';
+                	}
+                }        	});
         	for(var i=0; i<smartChart.groupNames.length; i++){
 	        	columns.push({
 	        		text: smartChart.groupNames[i],
 	        		align: 'right',
-	        		sortable: true,
+	        		sortable: false,
+	                summaryType: 'sum',
 	        		dataIndex: smartChart.groupNames[i]
 	        	});		        		
         	}
         	return columns;			
+		},
+		
+		createMatrix : function(){
+		    Ext.create('Ext.grid.Panel', {
+		        renderTo:  Ext.get(smartChart.target),
+		        collapsible: false,
+		        frame: false,
+		        frameHeader: false,
+		        bodyBorder: false,
+		        sortableColumns: false,
+		        enableColumnHide: false,
+		        enableColumnMove: false,
+		        draggable: false,
+		        columnLines: false,
+				store : Ext.create('Ext.data.JsonStore', {
+					fields : smartChart.getFields(),
+					groupField: smartChart.xGroupName,
+					data : smartChart.values
+				}),
+				width: smartChart.width,
+				minHeight: smartChart.height,
+		        features: [{
+		            id: 'group',
+		            ftype: 'groupingsummary',
+		            groupHeaderTpl: smartChart.xGroupName + ' : {name}',
+		            hideGroupedHeader: false,
+		            enableGroupingMenu: false,
+		            enableNoGroups: false
+		        },{
+		            id: 'summary',
+		            ftype: 'summary'
+		        }],
+		        columns: smartChart.getColumns()
+		    });
+		    var chartTarget = $(".js_work_report_view_page > #chart_target");
+			 chartTarget.find("div:first > div").css("border-color", "#c7c7c7");
+			var repeatTimeout = 5;
+			var intervalId = setInterval(function(){
+				if(!isEmpty(chartTarget.find("tr.x-grid-row-summary > td.x-grid-cell")) || repeatTimeout == 0){
+					clearInterval(intervalId);
+					chartTarget.find("div.x-column-header").css("font-family", "dotum,Helvetica,sans-serif").css("font-size", "12px").css("font-weight", "bold").css("text-align", "center");
+					chartTarget.find("div.x-grid-group-title").css("font-family", "dotum,Helvetica,sans-serif").css("font-size", "12px").css("font-weight", "bold");
+					chartTarget.find("td.x-grid-cell").css("font-family", "dotum,Helvetica,sans-serif");//.css("font-size", "12px");
+					chartTarget.find("tr.x-grid-row-summary > td.x-grid-cell").css("font-family", "dotum,Helvetica,sans-serif").css("font-size", "12px").css("font-weight", "bold");
+				}
+				repeatTimeout--;
+			}, 100);
 		},
 		
 		createChart : function(){
@@ -439,7 +529,7 @@ Ext.onReady(function () {
 						width: smartChart.height-60,
 						height: smartChart.height,
 						margin: '20 10 20 10' ,
-				        html: '<span style="font-weight: bold; font-size: 14px; font-family: Arial;">' + smartChart.groupNames[i] + '</span>',
+				        html: '<span style="font-weight: bold; font-size: 14px; font-family: dotum,Helvetica,sans-serif;">' + smartChart.groupNames[i] + '</span>',
 						animate: true,
 						renderTo : Ext.get(smartChart.target),
 						store : Ext.create('Ext.data.JsonStore', {

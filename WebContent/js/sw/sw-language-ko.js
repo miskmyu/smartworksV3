@@ -79,6 +79,8 @@ smartMessage.bundle['ko'] = {
 	rowNoText : "번호",
 	rowDeleteText : "항목삭제",
 	rowAddText : "항목추가",
+	reportSubTotal : "소계",
+	reportGrandTotal : "전체 합계",
 	
 	setMyProfileSucceed : "개인정보수정이 정상적으로 완료되었습니다.",
 	setMyProfileError : "개인정보수정하는 중 오류가 발생하였습니다. 관리자에게 확인바랍니다!",

@@ -16,29 +16,21 @@
 
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
-	String strReportType = request.getParameter("reportType");
 	String reportId = request.getParameter("reportId");
 	User cUser = SmartUtil.getCurrentUser();
 
 	int reportType = Report.TYPE_CHART;
-	if (!SmartUtil.isBlankObject(strReportType))
-		reportType = Integer.parseInt(strReportType);
 	SmartWork work = (SmartWork)session.getAttribute("smartWork");
 	String workId = work.getId();
 	Report report = null;
 	ChartReport chart = null;
-	MatrixReport matrix = null;
 	if (!SmartUtil.isBlankObject(workId))
 		work = (SmartWork) smartWorks.getWorkById(workId);
 	if (!SmartUtil.isBlankObject(reportId))
 		report = smartWorks.getReportById(reportId);
-	if (report != null && report.getType() == Report.TYPE_CHART) {
+
+	if(report != null && report.getClass().equals(ChartReport.class))
 		chart = (ChartReport) report;
-	}
-	if (report != null && report.getType() == Report.TYPE_MATRIX) {
-		chart = (ChartReport) report;
-		matrix = (MatrixReport) report;
-	}
 
 	FormField[] fields = null;
 	if ((work != null) && (work.getType() == SmartWork.TYPE_INFORMATION)) {
@@ -121,8 +113,6 @@
 		String xFieldType = "";
 		if (chart != null)
 			xFieldType = chart.getXAxis().getType();
-		else if (matrix != null)
-			xFieldType = matrix.getXAxis().getType();
 		String xAxisSelector = null;
 		if (chart != null && chart.getXAxisSelector() != null)
 			xAxisSelector = chart.getXAxisSelector();
@@ -225,24 +215,6 @@
 			zAxisSelector = chart.getZAxisSelector();
 		if (chart.getZAxisSort() != null)
 			zAxisSort = chart.getZAxisSort();
-	}
-	if (matrix != null) {
-		if (matrix.getXSecondAxis() != null){
-			xSecondFieldType = matrix.getXSecondAxis().getType();
-			xSecondAxisId = matrix.getXSecondAxis().getId();
-		}
-		if (matrix.getXSecondAxisSelector() != null)
-			xSecondAxisSelector = matrix.getXSecondAxisSelector();
-		if (matrix.getXSecondAxisSort() != null)
-			xSecondAxisSort = matrix.getXSecondAxisSort();
-		if (matrix.getZSecondAxis() != null){
-			zSecondFieldType = matrix.getZSecondAxis().getType();
-			zSecondAxisId = matrix.getZSecondAxis().getId();
-		}
-		if (matrix.getZSecondAxisSelector() != null)
-			zSecondAxisSelector = matrix.getZSecondAxisSelector();
-		if (matrix.getZSecondAxisSort() != null)
-			zSecondAxisSort = matrix.getZSecondAxisSort();
 	}
 %>
 <tr class="js_add_chart_zaxis" <%if (zAxisId != null) {%> style="display: none" <%}%>>

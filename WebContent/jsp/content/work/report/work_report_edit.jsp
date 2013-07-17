@@ -54,19 +54,26 @@
 					href="work_report_chart.sw?reportId=<%=CommonUtil.toNotNull(reportId)%>"
 					<%if (reportType == Report.TYPE_CHART) {%> checked <%}%>><fmt:message key="report.type.chart" />
 				<input name="rdoWorkReportType" type="radio" value="<%=Report.TYPE_MATRIX%>"
-					href="work_report_chart.sw?reportId=<%=CommonUtil.toNotNull(reportId)%>"
+					href="work_report_matrix.sw?reportId=<%=CommonUtil.toNotNull(reportId)%>"
 					<%if (reportType == Report.TYPE_MATRIX) {%> checked <%}%>><fmt:message key="report.type.matrix" />
-				<input name="rdoWorkReportType" type="radio" value="<%=Report.TYPE_TABLE%>"
+<%-- 				<input name="rdoWorkReportType" type="radio" value="<%=Report.TYPE_TABLE%>"
 					href="work_report_table.sw?reportId=<%=CommonUtil.toNotNull(reportId)%>"
 					<%if (reportType == Report.TYPE_TABLE) {%> checked <%}%>> <fmt:message key="report.type.table" />
-			</td>
+ --%>			</td>
 		</tr>
 	</table>
-	<table class="table_normal js_form_by_report_title">
+	<table class="table_normal js_form_by_report_type">
 		<%
-		if (reportType == Report.TYPE_CHART || reportType == Report.TYPE_MATRIX) {
+		if (reportType == Report.TYPE_CHART) {
 		%>
 			<jsp:include page="/jsp/content/work/report/work_report_chart.jsp">
+				<jsp:param name="reportId" value="<%=CommonUtil.toNotNull(reportId) %>" />
+				<jsp:param name="reportType" value="<%=reportType %>" />
+			</jsp:include>
+		<%
+		} else if (reportType == Report.TYPE_MATRIX) {
+		%>
+			<jsp:include page="/jsp/content/work/report/work_report_matrix.jsp">
 				<jsp:param name="reportId" value="<%=CommonUtil.toNotNull(reportId) %>" />
 				<jsp:param name="reportType" value="<%=reportType %>" />
 			</jsp:include>
@@ -82,7 +89,7 @@
 		%>
 	</table>
 
-		<table class="table_normal js_form_by_report_type">
+	<table class="table_normal js_form_by_report_type">
 		<tr class="js_report_search_filter">
 			<th width="200px"><fmt:message key="report.title.search_filter" /></th>
 			<td colspan="4" class="">

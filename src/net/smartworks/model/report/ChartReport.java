@@ -31,11 +31,14 @@ public class ChartReport extends Report {
 	public static final String CHART_PMIN_MONTHLY_DEPARTMENT = "chart.pmin.monthly.by_department";
 
 	public static final ChartReport[] DEFAULT_CHARTS_INFORMATION = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
+		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment()};
+
+	public static final ChartReport[] DEFAULT_CHARTS_PROCESS = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
 		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment(), getChartPSumMonthly(), getChartPSumMonthlyByDepartment(), getChartPMaxMonthly(),
 		getChartPMaxMonthlyByDepartment(), getChartPMinMonthly(), getChartPMinMonthlyByDepartment() };
-
-	public static final ChartReport[] DEFAULT_CHARTS_PROCESS = new ChartReport[] {};
-	public static final ChartReport[] DEFAULT_CHARTS_SCHEDULE = new ChartReport[] {};
+	public static final ChartReport[] DEFAULT_CHARTS_SCHEDULE = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
+		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment(), getChartPSumMonthly(), getChartPSumMonthlyByDepartment(), getChartPMaxMonthly(),
+		getChartPMaxMonthlyByDepartment(), getChartPMinMonthly(), getChartPMinMonthlyByDepartment() };
 
 	private int chartType = -1;
 	private FormField xAxis;

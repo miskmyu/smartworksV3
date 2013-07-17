@@ -64,6 +64,12 @@ public class ReportController {
 		return SmartUtil.returnMnv(request, "jsp/content/work/report/work_report_chart.jsp", "");
 	}
 
+	@RequestMapping("/work_report_matrix")
+	public ModelAndView workReportMatrix(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/work/report/work_report_matrix.jsp", "");
+	}
+
 	@RequestMapping("/work_report_table")
 	public ModelAndView workReportTable(HttpServletRequest request, HttpServletResponse response) {
 
@@ -85,13 +91,15 @@ public class ReportController {
 	@RequestMapping(value = "/get_report_data", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> getReportData(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Data reportData = smartworks.getReportData(request);
-//		Data reportData = SmartTest.getReportData();
+//		Data reportData = smartworks.getReportData(request);
+		Data reportData = SmartTest.getReportData4();
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("xFieldName", reportData.getxFieldName());
 		map.put("yValueName", reportData.getyValueName());
 		map.put("groupNames", reportData.getGroupNames());
+		map.put("xGroupName", reportData.getxGroupName());
+		map.put("yGroupName", reportData.getyGroupName());
 		map.put("values", reportData.getValues());
 		return map;
 	}
@@ -99,12 +107,15 @@ public class ReportController {
 	@RequestMapping(value = "/get_report_data_by_def", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> getReportDataByDef(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Data reportData = smartworks.getReportDataByDef(requestBody, request);
+//		Data reportData = smartworks.getReportDataByDef(requestBody, request);
+		Data reportData = SmartTest.getReportData4();
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("xFieldName", reportData.getxFieldName());
 		map.put("yValueName", reportData.getyValueName());
 		map.put("groupNames", reportData.getGroupNames());
+		map.put("xGroupName", reportData.getxGroupName());
+		map.put("yGroupName", reportData.getyGroupName());
 		map.put("values", reportData.getValues());
 		return map;
 	}

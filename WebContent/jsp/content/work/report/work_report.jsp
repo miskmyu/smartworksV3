@@ -92,6 +92,7 @@
 			if(!SmartUtil.isBlankObject(lastReport)){
 			%>
 				<jsp:include page="/jsp/content/work/report/work_report_view.jsp">
+					<jsp:param value="<%=lastReportType %>" name="reportType"/>
 					<jsp:param value="<%=lastChartType %>" name="chartType"/>
 				</jsp:include>
 				<script type="text/javascript">

@@ -66,29 +66,24 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					var reportData = data;
-					var reportType = forms.find('input[name="rdoWorkReportType"]').attr('value');
+					var reportType = forms.find('input[name="rdoWorkReportType"]:checked').attr('value');
 					var chartType = forms.find('select[name="selReportChartType"]').find('option:selected').attr('chartType');
-					if(isEmpty($('#chart_target'))){
-						$.ajax({
-							url : "work_report_view.sw",
-							data : {
-								workId: workId,
-								chartType: chartType
-							},
-							success : function(data, status, jqXHR) {
-								input.parents('.js_work_report_page').find('div.js_work_report_view').html(data).slideDown(500);
-								smartChart.loadWithData(reportType, reportData, chartType, false, "chart_target");
-								smartPop.closeProgress();
-							},
-							error : function(xhr, ajaxOptions, thrownError){
-								smartPop.closeProgress();						
-							}
-						});
-
-					}else{
-						smartChart.loadWithData(reportType, reportData, chartType, false, "chart_target");
-						smartPop.closeProgress();						
-					}
+					$.ajax({
+						url : "work_report_view.sw",
+						data : {
+							workId: workId,
+							reportType: reportType,
+							chartType: chartType
+						},
+						success : function(data, status, jqXHR) {
+							input.parents('.js_work_report_page').find('div.js_work_report_view').html(data).slideDown(500);
+							smartChart.loadWithData(reportType, reportData, chartType, false, "chart_target");
+							smartPop.closeProgress();
+						},
+						error : function(xhr, ajaxOptions, thrownError){
+							smartPop.closeProgress();						
+						}
+					});
  				},
 				error : function(e) {
 					smartPop.closeProgress();
@@ -183,7 +178,6 @@ $(function() {
 		var workReport = $('div.js_work_report_page');
 		var target = workReport.find('.js_work_report_view');
 		var url = input.attr('href');
-		var reportType = workReport.attr("reportType");
 		var selected = input.children('option:selected');
 		var reportId = selected.attr('value');
 		if(reportId==="none"){
@@ -191,6 +185,7 @@ $(function() {
 			workReport.find('.js_work_report_edit').slideUp().html('');
 			return false;
 		}
+		var reportType = selected.attr('reportType');
 		var chartType = selected.attr('chartType');
 		var progressSpan = input.nextAll('span.js_progress_span');
 		smartPop.progressCont(progressSpan);						
@@ -198,11 +193,12 @@ $(function() {
 		$.ajax({
 			url : url,
 			data : {
+				reportType: reportType,
 				chartType: chartType
 			},
 			success : function(data, status, jqXHR) {
 				target.html(data).slideDown(500);
-				smartChart.load(parseInt(reportType), reportId, chartType, false, "chart_target");
+				smartChart.load(reportType, reportId, chartType, false, "chart_target");
 				smartPop.closeProgress();						
 			},
 			error : function(xhr, ajaxOptions, thrownError){
@@ -220,15 +216,34 @@ $(function() {
 		if(chartType === "column" || chartType === "bar") stackedChart.show();
 		else stackedChart.hide();
 		
-		smartChart.reload(chartType, stackedChart.find('.js_change_stacked_chart').is(':checked'));
+		smartChart.reload(chartType, stackedChart.find('.js_change_stacked_chart').is(':checked'), true);
 		return false;
 	});
 
 	$('input.js_change_stacked_chart').live('click', function(e) {
 		var input = $(targetElement(e));
 		var chartType = input.parents('.js_work_report_view_page').find('select.js_change_chart_type').attr('value');
-		smartChart.reload(chartType, input.is(':checked'), chartGrouping.find('select option:selected').attr('value') );
+		smartChart.reload(chartType, input.is(':checked'), true);
 		return true;
+	});
+
+	$('a.js_toggle_chart_table').live('click', function(e) {
+		var input = $(targetElement(e));
+		var workReportView = input.parents('.js_work_report_view_page');
+		var chartType = workReportView.find('select.js_change_chart_type').attr('value');
+		var isChartView = workReportView.attr('isChartView');
+		if(isChartView === 'true'){
+			workReportView.attr('isChartView', 'false');
+			workReportView.find('.js_stacked_chart').hide();
+			workReportView.find('.js_chart_type').hide();
+		}else{
+			workReportView.attr('isChartView', 'true'); 
+			if(chartType === "column" || chartType === "bar") workReportView.find('.js_stacked_chart').show();
+			workReportView.find('.js_chart_type').show();
+		}
+		workReportView.find('a.js_toggle_chart_table').toggle();
+		smartChart.reload(chartType, workReportView.find('input.js_change_stacked_chart').is(':checked'), workReportView.attr('isChartView')==="true");
+		return false;
 	});
 
 	$('tr.js_work_report_type td').live('change', function(e) {
@@ -243,7 +258,7 @@ $(function() {
 				target.html(data).show();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
-				
+				console.log(xhr, thrownError);
 			}
 		});
 		return false;

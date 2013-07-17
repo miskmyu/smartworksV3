@@ -79,6 +79,9 @@ smartMessage.bundle['en'] = {
 	rowNoText : "No",
 	rowDeleteText : "Remove this row",
 	rowAddText : "Add a row",
+	reportSubTotal : "Sub Total",
+	reportGrandTotal : "Grand Total",
+
 	
 	setMyProfileSucceed : "My Profile has been updated successfully.",
 	setMyProfileError : "Error has been occured while updating this Profile Information. Please contact the Administrator!",
