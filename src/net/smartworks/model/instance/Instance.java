@@ -24,6 +24,7 @@ public class Instance {
 	public final static int TYPE_YTVIDEO = 13;
 	public final static int TYPE_CHAT_MESSAGE = 14;
 	public final static int TYPE_SENT_ASYNC_MESSAGE = 15;
+	public final static int TYPE_REPORT = 16;
 	
 	public final static int TYPE_SERA_MISSION = 21;
 	public final static int TYPE_SERA_MISSION_REPORT = 22;

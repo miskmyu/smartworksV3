@@ -55,6 +55,7 @@ import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
 import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
+import net.smartworks.model.report.ReportPane;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseAdList;
 import net.smartworks.model.sera.CourseList;
@@ -96,7 +97,7 @@ public interface ISmartWorks {
 	public final static String CONTEXT_DASHBOARD = "sf.db";
 	public final static String CONTEXT_MYPROFILE = "sf.pf";
 	public final static String CONTEXT_COMMUNITIES = "sf.cm";
-	
+
 	public final static String CONTEXT_USER_SPACE = "us.sp";
 	public final static String CONTEXT_GROUP_SPACE = "gp.sp";
 	public final static String CONTEXT_DEPARTMENT_SPACE = "dp.sp";
@@ -126,6 +127,7 @@ public interface ISmartWorks {
 	public final static int SPACE_TYPE_BOARD_LIST = 26;	
 	public final static int SPACE_TYPE_MAIL_LIST = 27;
 	public final static int SPACE_TYPE_SAVED_LIST = 28;	
+	public final static int SPACE_TYPE_REPORT_LIST = 29;	
 
 	public final static int CONTEXT_PREFIX_LENGTH = 6;
 	
@@ -155,6 +157,7 @@ public interface ISmartWorks {
 	public final static String CONTEXT_PREFIX_USER_LIST = "us.li.";
 	public final static String CONTEXT_PREFIX_DEPARTMENT_LIST = "dp.li.";
 	public final static String CONTEXT_PREFIX_GROUP_LIST = "gp.li.";
+	public final static String CONTEXT_PREFIX_REPORT_LIST = "rp.li.";
 
 	public final static String CONTEXT_PREFIX_IWORK_SPACE = "iw.sp.";
 	public final static String CONTEXT_PREFIX_PWORK_SPACE = "pw.sp.";
@@ -165,6 +168,7 @@ public interface ISmartWorks {
 	public final static String CONTEXT_PREFIX_MEMO_SPACE = "mm.sp.";
 	public final static String CONTEXT_PREFIX_BOARD_SPACE = "bd.sp.";
 	public final static String CONTEXT_PREFIX_MAIL_SPACE = "ml.sp.";
+	public final static String CONTEXT_PREFIX_REPORT_SPACE = "rp.sp.";
 
 	public final static String CONTEXT_PREFIX_BUILDER_SPACE = "bd.sp.";
 
@@ -332,6 +336,8 @@ public interface ISmartWorks {
 	public abstract Report getReportById(String reportId) throws Exception;
 
 	public abstract SearchFilter getSearchFilterById(String workType, String workId, String filterId) throws Exception;
+	
+	public abstract Data getReportData(HttpServletRequest request) throws Exception;
 	
 	public abstract Data getReportDataByDef(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
@@ -814,6 +820,14 @@ public interface ISmartWorks {
 
 	public abstract void downloadAppWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract Data getReportData(HttpServletRequest request) throws Exception;
+	public abstract String setWorkReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract String setWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract int getUserReportCount(String targetWorkId) throws Exception;
+
+	public abstract InstanceInfoList getReportInstanceList(String targetWorkId, int targetWorkType, String producedBy, RequestParams params) throws Exception;
+
+	public abstract ReportPane[] getMyDashboard() throws Exception;
 	
 }

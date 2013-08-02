@@ -58,7 +58,10 @@
 	<definition name="saved_list" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/list/saved_list.jsp" />
 	</definition>
-	<definition name="pwork_space" extends="smart">
+	<definition name="report_list" extends="smart">
+		<put-attribute name="content" value="/jsp/content/work/list/report_list.jsp" />
+	</definition>
+		<definition name="pwork_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/space/pwork_space.jsp" />
 	</definition>
 	<definition name="iwork_space" extends="smart">

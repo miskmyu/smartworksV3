@@ -17,15 +17,18 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String reportId = request.getParameter("reportId");
+	String targetWorkId = request.getParameter("targetWorkId");
+	String strTargetWorkType = request.getParameter("targetWorkType");
+	int targetWorkType = (SmartUtil.isBlankObject(strTargetWorkType)) ? Work.TYPE_NONE : Integer.parseInt(strTargetWorkType);
 	User cUser = SmartUtil.getCurrentUser();
 
 	int reportType = Report.TYPE_MATRIX;
 	SmartWork work = (SmartWork)session.getAttribute("smartWork");
-	String workId = work.getId();
+	if(!SmartUtil.isBlankObject(targetWorkId) && work.getId().equals(SmartWork.ID_REPORT_MANAGEMENT)){
+		work = (SmartWork) smartWorks.getWorkById(targetWorkId);
+	}
 	Report report = null;
 	MatrixReport matrix = null;
-	if (!SmartUtil.isBlankObject(workId))
-		work = (SmartWork) smartWorks.getWorkById(workId);
 	if (!SmartUtil.isBlankObject(reportId))
 		report = smartWorks.getReportById(reportId);
 
@@ -109,8 +112,11 @@
 		</span>
 		<%
 		String xAxisSort = null;
-		if (matrix != null && matrix.getXAxisSort() != null)
+		int xAxisMaxRecords = -1;
+		if (matrix != null && matrix.getXAxisSort() != null){
 			xAxisSort = matrix.getXAxisSort();
+			xAxisMaxRecords = matrix.getXAxisMaxRecords();
+		}
 		%>
 		<span>
 			<input type="radio" name="rdoReportXAxisSort" value="<%=Report.AXIS_SORT_DESCEND.getId()%>"
@@ -119,6 +125,19 @@
 			<input type="radio" name="rdoReportXAxisSort" value="<%=Report.AXIS_SORT_ASCEND.getId()%>"
 				<%if (xAxisSort != null && xAxisSort.equals(Report.AXIS_SORT_ASCEND.getId())) {%> checked <%}%>> 
 				<fmt:message key="<%=Report.AXIS_SORT_ASCEND.getKey() %>" />
+		</span>
+		<span>
+			<select class="js_select_xaxis_max" name="selReportXAxisMaxRecords">
+				<option value="unlimited" <%if (xAxisMaxRecords < 1) {%> selected <%}%>>
+					<fmt:message key="report.title.xaxis.unlimited" />
+				</option>
+				<option value="max" <%if (xAxisMaxRecords > 0) {%> selected <%}%>>
+					<fmt:message key="report.title.xaxis.max" />
+				</option>
+			</select>
+			<span <%if (xAxisMaxRecords < 1) {%> style="display:none" <%}%>>
+				<input type="text" name="numReportXAxisMaxRecords" class="fieldline required number" style="width:30px"/><fmt:message key="report.title.xaxis.records" />
+			</span>
 		</span>
 	</td>		
 </tr>

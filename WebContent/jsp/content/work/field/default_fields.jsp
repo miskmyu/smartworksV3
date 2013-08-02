@@ -44,14 +44,9 @@
 
 
 <%
-// 업무가 정보관리 업무인 경우.....
+// 업무가 파일 업무인 경우.....
 if(workType == SocialWork.TYPE_FILE){
 %>
-	<!--  필드가 업무제목인 경우   -->
-	<option page="<%=FormField.FIELD_WORK_SPACE.getPageName()%>" type="<%=FormField.FIELD_WORK_SPACE.getType() %>" value="<%=FormField.ID_WORK_SPACE%>"
-		<%if (fieldId.equals(FormField.ID_WORK_SPACE)) {%> selected <%}%>>
-		<%=FormField.FIELD_WORK_SPACE.getName()%>
-	</option>
 	<!--  필드가 업무제목인 경우   -->
 	<option page="<%=FormField.FIELD_FILE_CATEGORY.getPageName()%>" type="<%=FormField.FIELD_FILE_CATEGORY.getType() %>" value="<%=FormField.ID_FILE_CATEGORY%>"
 		<%if (fieldId.equals(FormField.ID_FILE_CATEGORY)) {%> selected <%}%>>
@@ -72,6 +67,11 @@ if(workType == SocialWork.TYPE_FILE){
 		<%if (fieldId.equals(FormField.ID_FILE_TYPE)) {%> selected <%}%>>
 		<%=FormField.FIELD_FILE_TYPE.getName()%>
 	</option>
+	<!-- 필드가 조회수인 경우  -->
+	<option page="<%=FormField.FIELD_INSTANCE_VIEWS.getPageName()%>" type="<%=FormField.FIELD_INSTANCE_VIEWS.getType() %>" value="<%=FormField.ID_INSTANCE_VIEWS%>"
+		<%if (fieldId.equals(FormField.ID_INSTANCE_VIEWS)) {%> selected <%}%>>
+			<%=FormField.FIELD_INSTANCE_VIEWS.getName()%>
+	</option>
 <%
 // 업무가 프로세스업무인 경우...
 }else if(workType == SmartWork.TYPE_PROCESS){
@@ -88,19 +88,94 @@ if(workType == SocialWork.TYPE_FILE){
 		<%=FormField.FIELD_SUBJECT.getName()%>
 	</option>
 	
-	<!-- 필드가 최종 택스크인경우  -->
+	<!-- 필드가 최종 태스크인 경우  -->
 	<option page="<%=FormField.FIELD_LAST_TASK.getPageName()%>" type="<%=FormField.FIELD_LAST_TASK.getType() %>" value="<%=FormField.ID_LAST_TASK%>"
 		<%if (fieldId.equals(FormField.ID_LAST_TASK)) {%> selected <%}%>>
 		<%=FormField.FIELD_LAST_TASK.getName()%>
 	</option>
+
+	<!-- 필드가 태스크 이름인 경우  -->
+	<option page="<%=FormField.FIELD_TASK_NAME.getPageName()%>" type="<%=FormField.FIELD_TASK_NAME.getType() %>" value="<%=FormField.ID_TASK_NAME%>"
+		<%if (fieldId.equals(FormField.ID_TASK_NAME)) {%> selected <%}%>>
+		<%=FormField.FIELD_TASK_NAME.getName()%>
+	</option>
+
+	<!-- 필드가 태스크 할당자인 경우  -->
+	<option page="<%=FormField.FIELD_TASK_ASSIGNEE.getPageName()%>" type="<%=FormField.FIELD_TASK_ASSIGNEE.getType() %>" value="<%=FormField.ID_TASK_ASSIGNEE%>"
+		<%if (fieldId.equals(FormField.ID_TASK_ASSIGNEE)) {%> selected <%}%>>
+		<%=FormField.FIELD_TASK_ASSIGNEE.getName()%>
+	</option>
+
+	<!-- 필드가 태스크 수행자인 경우  -->
+	<option page="<%=FormField.FIELD_TASK_PERFORMER.getPageName()%>" type="<%=FormField.FIELD_TASK_PERFORMER.getType() %>" value="<%=FormField.ID_TASK_PERFORMER%>"
+		<%if (fieldId.equals(FormField.ID_TASK_PERFORMER)) {%> selected <%}%>>
+		<%=FormField.FIELD_TASK_PERFORMER.getName()%>
+	</option>
+
+	<!-- 필드가 테스크 처리시간인 경우  -->
+	<option page="<%=FormField.FIELD_TASK_PROCESS_TIME.getPageName()%>" type="<%=FormField.FIELD_TASK_PROCESS_TIME.getType() %>" value="<%=FormField.ID_TASK_PROCESS_TIME%>"
+		<%if (fieldId.equals(FormField.ID_TASK_PROCESS_TIME)) {%> selected <%}%>>
+		<%=FormField.FIELD_TASK_PROCESS_TIME.getName()%>
+	</option>
+
+	<!-- 필드가 태스크 지연처리시간인 경우  -->
+	<option page="<%=FormField.FIELD_TASK_DELAYED_TIME.getPageName()%>" type="<%=FormField.FIELD_TASK_DELAYED_TIME.getType() %>" value="<%=FormField.ID_TASK_DELAYED_TIME%>"
+		<%if (fieldId.equals(FormField.ID_TASK_DELAYED_TIME)) {%> selected <%}%>>
+		<%=FormField.FIELD_TASK_DELAYED_TIME.getName()%>
+	</option>
+
+	<!-- 필드가 지연처리 태스크인 경우  -->
+	<option page="<%=FormField.FIELD_DELAYED_TASK.getPageName()%>" type="<%=FormField.FIELD_DELAYED_TASK.getType() %>" value="<%=FormField.ID_DELAYED_TASK%>"
+		<%if (fieldId.equals(FormField.ID_DELAYED_TASK)) {%> selected <%}%>>
+		<%=FormField.FIELD_DELAYED_TASK.getName()%>
+	</option>
+
+	<!-- 필드가 처리 시간인 경우  -->
+	<option page="<%=FormField.FIELD_PROCESS_TIME.getPageName()%>" type="<%=FormField.FIELD_PROCESS_TIME.getType() %>" value="<%=FormField.ID_PROCESS_TIME%>"
+		<%if (fieldId.equals(FormField.ID_PROCESS_TIME)) {%> selected <%}%>>
+		<%=FormField.FIELD_PROCESS_TIME.getName()%>
+	</option>
+
+	<!-- 필드가 처리 시간인 경우  -->
+	<option page="<%=FormField.FIELD_DELAYED_TIME.getPageName()%>" type="<%=FormField.FIELD_DELAYED_TIME.getType() %>" value="<%=FormField.ID_DELAYED_TIME%>"
+		<%if (fieldId.equals(FormField.ID_DELAYED_TIME)) {%> selected <%}%>>
+		<%=FormField.FIELD_DELAYED_TIME.getName()%>
+	</option>
+
+	<!-- 필드가 처리 시간인 경우  -->
+	<option page="<%=FormField.FIELD_DELAYED_INSTANCE.getPageName()%>" type="<%=FormField.FIELD_DELAYED_INSTANCE.getType() %>" value="<%=FormField.ID_DELAYED_INSTANCE%>"
+		<%if (fieldId.equals(FormField.ID_DELAYED_INSTANCE)) {%> selected <%}%>>
+		<%=FormField.FIELD_DELAYED_INSTANCE.getName()%>
+	</option>
+
 <%
 
 // 업무가 일정계획업무인 경우, 일정계획업무는 방향을 재정립하려고 고민 중에 있음.....
 }else if(workType == SmartWork.TYPE_SCHEDULE){
 %>
 <%	
+}else if(workType == SmartWork.TYPE_INFORMATION){
+%>
+	<!-- 필드가 조회수인 경우  -->
+	<option page="<%=FormField.FIELD_INSTANCE_VIEWS.getPageName()%>" type="<%=FormField.FIELD_INSTANCE_VIEWS.getType() %>" value="<%=FormField.ID_INSTANCE_VIEWS%>"
+		<%if (fieldId.equals(FormField.ID_INSTANCE_VIEWS)) {%> selected <%}%>>
+			<%=FormField.FIELD_INSTANCE_VIEWS.getName()%>
+	</option>
+<%
 }
 %>
+
+<!-- 필드가 댓글수인 경우  -->
+<option page="<%=FormField.FIELD_SUB_INSTANCE_COUNT.getPageName()%>" type="<%=FormField.FIELD_SUB_INSTANCE_COUNT.getType() %>" value="<%=FormField.ID_SUB_INSTANCE_COUNT%>"
+	<%if (fieldId.equals(FormField.ID_SUB_INSTANCE_COUNT)) {%> selected <%}%>>
+		<%=FormField.FIELD_SUB_INSTANCE_COUNT.getName()%>
+</option>
+
+<!-- 필드가 공간이름인 경우  -->
+<option page="<%=FormField.FIELD_WORK_SPACE_NAME.getPageName()%>" type="<%=FormField.FIELD_WORK_SPACE_NAME.getType() %>" value="<%=FormField.ID_WORK_SPACE_NAME%>"
+	<%if (fieldId.equals(FormField.ID_WORK_SPACE_NAME)) {%> selected <%}%>>
+	<%=FormField.FIELD_WORK_SPACE_NAME.getName()%>
+</option>
 
 <!-- 필드가 최초생성자(소유자)인경우.. -->
 <option page="<%=FormField.FIELD_OWNER.getPageName()%>" type="<%=FormField.FIELD_OWNER.getType() %>" value="<%=FormField.ID_OWNER%>"

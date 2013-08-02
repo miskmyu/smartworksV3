@@ -18,15 +18,18 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String reportId = request.getParameter("reportId");
+	String targetWorkId = request.getParameter("targetWorkId");
+	String strTargetWorkType = request.getParameter("targetWorkType");
+	int targetWorkType = (SmartUtil.isBlankObject(strTargetWorkType)) ? Work.TYPE_NONE : Integer.parseInt(strTargetWorkType);
 	User cUser = SmartUtil.getCurrentUser();
 
 	int reportType = Report.TYPE_TABLE;
 	SmartWork work = (SmartWork)session.getAttribute("smartWork");
-	String workId = work.getId();
+	if(!SmartUtil.isBlankObject(targetWorkId) && work.getId().equals(SmartWork.ID_REPORT_MANAGEMENT)){
+		work = (SmartWork) smartWorks.getWorkById(targetWorkId);
+	}
 	Report report = null;
 	TableReport table = null;
-	if (!SmartUtil.isBlankObject(workId))
-		work = (SmartWork) smartWorks.getWorkById(workId);
 	if (!SmartUtil.isBlankObject(reportId))
 		report = smartWorks.getReportById(reportId);
 

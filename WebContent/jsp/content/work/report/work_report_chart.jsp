@@ -17,18 +17,21 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String reportId = request.getParameter("reportId");
+	String targetWorkId = request.getParameter("targetWorkId");
+	String strTargetWorkType = request.getParameter("targetWorkType");
+	int targetWorkType = (SmartUtil.isBlankObject(strTargetWorkType)) ? Work.TYPE_NONE : Integer.parseInt(strTargetWorkType);
 	User cUser = SmartUtil.getCurrentUser();
 
 	int reportType = Report.TYPE_CHART;
 	SmartWork work = (SmartWork)session.getAttribute("smartWork");
+	if(!SmartUtil.isBlankObject(targetWorkId) && work.getId().equals(SmartWork.ID_REPORT_MANAGEMENT)){
+		work = (SmartWork) smartWorks.getWorkById(targetWorkId);
+	}
 	String workId = work.getId();
 	Report report = null;
 	ChartReport chart = null;
-	if (!SmartUtil.isBlankObject(workId))
-		work = (SmartWork) smartWorks.getWorkById(workId);
 	if (!SmartUtil.isBlankObject(reportId))
 		report = smartWorks.getReportById(reportId);
-
 	if(report != null && report.getClass().equals(ChartReport.class))
 		chart = (ChartReport) report;
 
@@ -54,7 +57,7 @@
 				<%if (chart != null && chart.getChartType() == ChartReport.CHART_TYPE_COLUMN) {%> selected <%}%>>
 				<fmt:message key="report.chart.type.column" />
 			</option>
-			<option chartType="<%=ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_COLUMN] %>" value="<%=ChartReport.CHART_TYPE_BAR%>"
+			<option chartType="<%=ChartReport.CHART_TYPES_STRING[ChartReport.CHART_TYPE_BAR] %>" value="<%=ChartReport.CHART_TYPE_BAR%>"
 				<%if (chart != null && chart.getChartType() == ChartReport.CHART_TYPE_BAR) {%> selected <%}%>>
 				<fmt:message key="report.chart.type.bar" />
 			</option>
@@ -148,8 +151,11 @@
 		</span>
 		<%
 		String xAxisSort = null;
-		if (chart != null && chart.getXAxisSort() != null)
+		int xAxisMaxRecords = -1;
+		if (chart != null && chart.getXAxisSort() != null){
 			xAxisSort = chart.getXAxisSort();
+			xAxisMaxRecords = chart.getXAxisMaxRecords();
+		}
 		%>
 		<span>
 			<input type="radio" name="rdoReportXAxisSort" value="<%=Report.AXIS_SORT_DESCEND.getId()%>"
@@ -158,6 +164,19 @@
 			<input type="radio" name="rdoReportXAxisSort" value="<%=Report.AXIS_SORT_ASCEND.getId()%>"
 				<%if (xAxisSort != null && xAxisSort.equals(Report.AXIS_SORT_ASCEND.getId())) {%> checked <%}%>> 
 				<fmt:message key="<%=Report.AXIS_SORT_ASCEND.getKey() %>" />
+		</span>
+		<span>
+			<select class="js_select_xaxis_max" name="selReportXAxisMaxRecords">
+				<option value="unlimited" <%if (xAxisMaxRecords < 1) {%> selected <%}%>>
+					<fmt:message key="report.title.xaxis.unlimited" />
+				</option>
+				<option value="max" <%if (xAxisMaxRecords > 0) {%> selected <%}%>>
+					<fmt:message key="report.title.xaxis.max" />
+				</option>
+			</select>
+			<span <%if (xAxisMaxRecords < 1) {%> style="display:none" <%}%>>
+				<input type="text" name="numReportXAxisMaxRecords" class="fieldline required number" style="width:30px"/><fmt:message key="report.title.xaxis.records" />
+			</span>
 		</span>
 	</td>		
 </tr>

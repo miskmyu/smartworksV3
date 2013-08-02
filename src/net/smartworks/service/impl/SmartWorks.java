@@ -51,6 +51,7 @@ import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
 import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
+import net.smartworks.model.report.ReportPane;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseAdList;
 import net.smartworks.model.sera.CourseList;
@@ -91,6 +92,7 @@ import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.ILoginService;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.INoticeService;
+import net.smartworks.server.service.IReportService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.ISettingsService;
 import net.smartworks.server.service.IWorkService;
@@ -113,6 +115,7 @@ public class SmartWorks implements ISmartWorks {
 	ICalendarService calendarService;
 	IInstanceService instanceService;
 	IWorkService workService;
+	IReportService reportService;
 	IMailService mailService;
 	IDocFileService docFileService;
 	ISettingsService settingsService;
@@ -120,6 +123,10 @@ public class SmartWorks implements ISmartWorks {
 	IYouTubeService youTubeService;
 	ISeraService seraService;
 
+	@Autowired
+	public void setReportService(IReportService reportService) {
+		this.reportService = reportService;
+	}
 	@Autowired
 	public void setCommunityService(ICommunityService communityService) {
 		this.communityService = communityService;
@@ -665,7 +672,7 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public Report getReportById(String reportId) throws Exception {
 		// TODO Auto-generated method stub
-		return workService.getReportById(reportId);
+		return reportService.getReportById(reportId);
 	}
 
 	@Override
@@ -680,9 +687,15 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public Data getReportData(HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		return reportService.getReportData(request);
+	}
+
+	@Override
 	public Data getReportDataByDef(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
-		return workService.getReportDataByDef(requestBody, request);
+		return reportService.getReportDataByDef(requestBody, request);
 	}
 
 	@Override
@@ -1823,8 +1836,25 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public Data getReportData(HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		return workService.getReportData(request);
+	public String setWorkReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return reportService.setWorkReport(requestBody, request);
+	}
+
+	@Override
+	public String setWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return reportService.setWorkReportPane(requestBody, request);
+	}
+
+	@Override
+	public int getUserReportCount(String targetWorkId) throws Exception {
+		return reportService.getUserReportCount(targetWorkId);
+	}
+	@Override
+	public InstanceInfoList getReportInstanceList(String targetWorkId, int targetWorkType, String producedBy, RequestParams params) throws Exception {
+		return reportService.getReportInstanceList(targetWorkId, targetWorkType, producedBy, params);
+	}
+	@Override
+	public ReportPane[] getMyDashboard() throws Exception {
+		return reportService.getMyDashboard();
 	}
 }

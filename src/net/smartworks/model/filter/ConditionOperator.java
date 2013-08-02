@@ -14,6 +14,7 @@ public class ConditionOperator {
 	public static final KeyMap GREATER_EQUAL = new KeyMap(">=", "filter.operator.title.greater_equal");
 	public static final KeyMap AND = new KeyMap("and", "filter.operator.title.and");
 	public static final KeyMap OR = new KeyMap("or", "filter.operator.title.or");
+	public static final KeyMap MAX = new KeyMap("max", "filter.operator.title.max");
 
 	public static final KeyMap TODAY = new KeyMap("today", "filter.operator.title.today");
 	public static final KeyMap RECENT_DAYS = new KeyMap("recentDays.5", "filter.operator.title.recent_5_days");
@@ -73,6 +74,10 @@ public class ConditionOperator {
 		GREATER_EQUAL
 	};
 	
+	public static KeyMap[] instanceCountOperators = new KeyMap[] {
+		MAX
+	};
+
 	public static KeyMap[] generalOperators = new KeyMap[] {
 		EQUAL,
 		NOT_EQUAL

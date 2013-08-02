@@ -104,7 +104,7 @@
 	}
 	%>
 	<br/>
-	<div id="chart_target" class="form_contents">
+	<div id="chart_target">
 	</div>
 </div>
 <!-- 전체 레이아웃//-->

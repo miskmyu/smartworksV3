@@ -5,12 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.filter.SearchFilter;
-import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
-import net.smartworks.model.report.Data;
-import net.smartworks.model.report.Report;
 import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.FileCategoryInfo;
@@ -42,13 +38,9 @@ public interface IWorkService {
 
 	public Work getWorkById(String workId) throws Exception;
 
-	public Report getReportById(String reportId) throws Exception;
-
 	public SearchFilter getSearchFilterById(String workType, String workId, String filterId) throws Exception;
 
 	public List<SwfFormFieldDef> findFormFieldByForm(String formId, boolean deployedCondition) throws SwfException, Exception;
-
-	public Data getReportDataByDef(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public String getFormXml(String formId, String workId) throws Exception;
 
@@ -78,5 +70,4 @@ public interface IWorkService {
 
 	public WorkInfoList getAppWorkList(RequestParams params) throws Exception;
 
-	public Data getReportData(HttpServletRequest request) throws Exception;
 }

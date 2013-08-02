@@ -19,6 +19,7 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String reportId = request.getParameter("reportId");
+	String targetWorkId = request.getParameter("targetWorkId");
 	User cUser = SmartUtil.getCurrentUser();
 
 	SmartWork work = (SmartWork)session.getAttribute("smartWork");
@@ -33,17 +34,28 @@
 		if (report.getSearchFilter() != null)
 			filterId = report.getSearchFilter().getId();
 	}
+	
+	String borderClass = workId.equals(SmartWork.ID_REPORT_MANAGEMENT) ? "border" : "border_no_topline";
+	int targetWorkType = (report!=null) ? report.getTargetWorkType() : Work.TYPE_NONE;
+	
+	String targetWorkName = request.getParameter("targetWorkName");
+	String targetWorkIcon = request.getParameter("targetWorkIcon");
+	if(!workId.equals(SmartWork.ID_REPORT_MANAGEMENT)){
+		targetWorkName = work.getFullpathName();
+		targetWorkIcon = work.getIconClass();
+	}
+	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!--  전체 레이아웃 -->
-<div class="border_no_topline">
-<form name="frmWorkReport" class="form_contents js_validation_required js_work_report_edit_page" workId="<%=workId%>" reportId="<%=reportId%>">
+<div class="<%=borderClass%>">
+<form name="frmWorkReport" class="form_contents js_validation_required js_work_report_edit_page js_form_filter_name" workId="<%=workId%>" targetWorkId="<%=targetWorkId %>" reportId="<%=reportId%>" targetWorkName="<%=targetWorkName%>" targetWorkIcon="<%=targetWorkIcon%>">
 	<table class="table_normal js_report_title">
-		<tr class="js_work_report_name" <%if(!SmartUtil.isBlankObject(report)){%>style="display:none"<%} %>>
+		<tr class="js_work_report_name" <%if(!workId.equals(SmartWork.ID_REPORT_MANAGEMENT) && !SmartUtil.isBlankObject(report)){%>style="display:none"<%} %>>
 			<th class="required_label" width="200px"><fmt:message key="report.title.report_name" /></th>
 			<td colspan="4">
-				<input name="txtWorkReportName" type="text" class="fieldline required" style="width:300px">
+				<input name="txtWorkReportName" <%if(workId.equals(SmartWork.ID_REPORT_MANAGEMENT) && !SmartUtil.isBlankObject(report)){%>disabled="disabled"<%} if(!SmartUtil.isBlankObject(report)){ %> value="<%=report.getName()%>"<%} %> type="text" class="fieldline required" style="width:300px">
 			</td>
 		</tr>
 
@@ -61,6 +73,19 @@
 					<%if (reportType == Report.TYPE_TABLE) {%> checked <%}%>> <fmt:message key="report.type.table" />
  --%>			</td>
 		</tr>
+		<%if(SmartWork.ID_ALL_WORKS.equals(targetWorkId)){ %>
+			<tr class="js_target_work_type" reportId="<%=CommonUtil.toNotNull(reportId)%>">
+				<th width="200px"><fmt:message key="report.title.target_work_type" /></th>
+				<td colspan="4" class="">
+					<select name="selTargetWorkType">
+						<option value="<%=Work.TYPE_NONE%>" <%if(targetWorkType == Work.TYPE_NONE) {%> selected <%} %> ><fmt:message key='report.title.all_works' /></option>
+						<option value="<%=SmartWork.TYPE_INFORMATION%>" <%if(targetWorkType == SmartWork.TYPE_INFORMATION) {%> selected <%} %> ><fmt:message key='report.title.information_works' /></option>
+						<option value="<%=SmartWork.TYPE_PROCESS%>" <%if(targetWorkType == SmartWork.TYPE_PROCESS) {%> selected <%} %> ><fmt:message key='report.title.process_works' /></option>
+	<%-- 					<option value="<%=SmartWork.TYPE_SCHEDULE%>" <%if(targetWorkType == SmartWork.TYPE_SCHEDULE) {%> selected <%} %> ><fmt:message key='report.title.schedule_works' /></option>
+	 --%>			</select>
+	 			</td>
+			</tr>
+		<%} %>
 	</table>
 	<table class="table_normal js_form_by_report_type">
 		<%
@@ -69,6 +94,8 @@
 			<jsp:include page="/jsp/content/work/report/work_report_chart.jsp">
 				<jsp:param name="reportId" value="<%=CommonUtil.toNotNull(reportId) %>" />
 				<jsp:param name="reportType" value="<%=reportType %>" />
+				<jsp:param name="targetWorkId" value="<%=targetWorkId %>" />
+				<jsp:param name="targetWorkType" value="<%=targetWorkType %>" />
 			</jsp:include>
 		<%
 		} else if (reportType == Report.TYPE_MATRIX) {
@@ -76,6 +103,8 @@
 			<jsp:include page="/jsp/content/work/report/work_report_matrix.jsp">
 				<jsp:param name="reportId" value="<%=CommonUtil.toNotNull(reportId) %>" />
 				<jsp:param name="reportType" value="<%=reportType %>" />
+				<jsp:param name="targetWorkId" value="<%=targetWorkId %>" />
+				<jsp:param name="targetWorkType" value="<%=targetWorkType %>" />
 			</jsp:include>
 		<%
 		} else if (reportType == Report.TYPE_TABLE) {
@@ -83,6 +112,8 @@
 			<jsp:include page="/jsp/content/work/report/work_report_table.jsp">
 				<jsp:param name="reportId" value="<%=CommonUtil.toNotNull(reportId) %>" />
 				<jsp:param name="reportType" value="<%=reportType %>" />
+				<jsp:param name="targetWorkId" value="<%=targetWorkId %>" />
+				<jsp:param name="targetWorkType" value="<%=targetWorkType %>" />
 			</jsp:include>
 		<%
 		}
@@ -93,11 +124,13 @@
 		<tr class="js_report_search_filter">
 			<th width="200px"><fmt:message key="report.title.search_filter" /></th>
 			<td colspan="4" class="">
-				<select name="selReportFilterName">
+				<select name="selReportFilterName" class="js_select_search_filter">
 					<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" <%if(SmartUtil.isBlankObject(filterId) || filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {%> selected <%} %> ><fmt:message key='filter.name.all_instances' /></option>
 					<option value="<%=SearchFilter.FILTER_MY_INSTANCES%>" <%if(filterId.equals(SearchFilter.FILTER_MY_INSTANCES)) {%> selected <%} %> ><fmt:message key='filter.name.my_instances' /></option>
 					<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>" <%if(filterId.equals(SearchFilter.FILTER_RECENT_INSTANCES)) {%> selected <%} %> ><fmt:message key='filter.name.recent_instances' /></option>
 					<option value="<%=SearchFilter.FILTER_MY_RECENT_INSTANCES%>" <%if(filterId.equals(SearchFilter.FILTER_MY_RECENT_INSTANCES)) {%> selected <%} %> ><fmt:message key='filter.name.my_recent_instances' /></option>
+					<option value="<%=SearchFilter.FILTER_RECENT_1YEAR_INSTANCES%>" <%if(filterId.equals(SearchFilter.FILTER_RECENT_1YEAR_INSTANCES)) {%> selected <%} %> ><fmt:message key='filter.name.recent_1year_instances' /></option>
+					<option value="<%=SearchFilter.FILTER_RECENT_3YEARS_INSTANCES%>" <%if(filterId.equals(SearchFilter.FILTER_RECENT_3YEARS_INSTANCES)) {%> selected <%} %> ><fmt:message key='filter.name.recent_3years_instances' /></option>
 					<%
 					SearchFilterInfo[] filters = work.getSearchFilters();
 					if (filters != null) {
@@ -110,6 +143,12 @@
 					}
 					%>
 				</select>
+				<a href="search_filter.sw?workId=<%=workId%>&targetWorkId=<%=targetWorkId%>" class="js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
+					<div class="icon_btn_edit" style="vertical-align:middle;"></div>
+				</a>
+				<!-- 상세필터 및 새업무등록하기 화면 -->
+				<div id="search_filter" class="filter_section"></div>
+				<!-- 상세필터 -->
 			</td>
 		</tr>
 	</table>
@@ -145,6 +184,13 @@
 			<a href="" class="js_work_report_execute"> 
 				<span class="txt_btn_start"></span> 
 				<span class="txt_btn_center"><fmt:message key="common.button.execute"/></span> 
+				<span class="txt_btn_end"></span>
+			</a> 
+		</span> 
+		<span class="btn_gray" <%if(SmartUtil.isBlankObject(report)){ %>style="display:none" <%} %>> 
+			<a href="" class="js_work_report_register"> 
+				<span class="txt_btn_start"></span> 
+				<span class="txt_btn_center"><fmt:message key="common.button.report_register"/></span> 
 				<span class="txt_btn_end"></span>
 			</a> 
 		</span> 

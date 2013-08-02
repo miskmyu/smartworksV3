@@ -17,13 +17,20 @@ $(function() {
 		var workReport = input.parents('div.js_work_report_page');
 		var target = workReport.find('div.js_work_report_edit');
 		var url = input.attr('href');
+		if(isEmpty(url)) url = input.find('a').attr('href');
+		var targetWorkId = workReport.attr('targetWorkId');
+		var targetWorkName = workReport.attr('targetWorkName');
+		var targetWorkIcon = workReport.attr('targetWorkIcon');
 		var progressSpan = input.next('span.js_progress_span');
 		var reportId = workReport.find('select[name="selMyReportList"]').attr('value');
 		smartPop.progressCont(progressSpan);
 		$.ajax({
 			url : url,
 			data : {
-				reportId: reportId
+				reportId: reportId,
+				targetWorkId: targetWorkId,
+				targetWorkName: targetWorkName,
+				targetWorkIcon: targetWorkIcon
 			},
 			success : function(data, status, jqXHR) {
 				target.html(data).slideDown(500);
@@ -37,6 +44,11 @@ $(function() {
 	});
 
 	$('a.js_work_report_close').live('click', function(e) {
+		var input = $(targetElement(e));
+		var reportId = input.parents('.js_work_report_edit').find('.js_work_report_edit_page').attr('reportId');
+		if(isEmpty(reportId) || reportId == 'null' || !isEmpty(input.parents('.js_report_list_page'))){
+			input.parents('.js_work_report_page').find('.js_work_report_view').html('').hide();
+		}
 		$(targetElement(e)).parents('.js_work_report_edit').slideUp().html('');
 		return false;
 	});
@@ -49,8 +61,11 @@ $(function() {
 		if (SmartWorks.GridLayout.validate(forms, $('.js_report_error_message'))) {
 			var paramsJson = {};
 			var workReportEdit = forms.find('.js_work_report_edit_page');
+			if(isEmpty(workReportEdit)) workReportEdit = forms.parents('.js_report_list_page').find('.js_work_report_edit_page');
 			var workId = workReportEdit.attr('workId');
+			var targetWorkId = workReportEdit.attr('targetWorkId');
 			paramsJson['workId'] = workId;
+			paramsJson['targetWorkId'] = targetWorkId;
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				var visibleForm = form.find(':visible');
@@ -95,6 +110,37 @@ $(function() {
 		forms.find('.js_work_report_name input').addClass('required');
 		return false;
 	});
+	
+	$('a.js_work_report_register').live('click', function(e) {
+		var input = $(targetElement(e));
+		var workReportEdit = input.parents('.js_work_report_edit').find('.js_work_report_edit_page');
+		var workReportView = input.parents('.js_work_report_edit').nextAll('.js_work_report_view').find('.js_work_report_view_page');
+		var paneId = null;
+		var paneName = null;
+		var targetWorkName = workReportEdit.attr('targetWorkName');
+		var targetWorkIcon = workReportEdit.attr('targetWorkIcon');
+		var reportId = workReportEdit.attr('reportId');
+		var reportName = workReportEdit.find('input[name="txtWorkReportName"]').attr('value');
+		var reportType = workReportEdit.find('input[name="rdoWorkReportType"]:checked').attr('value');
+		
+		var config = {};
+		if(!isEmpty(workReportView)){
+			config.chartType = workReportView.find('.js_change_chart_type option:selected').attr('chartType');
+			config.isChartView = isEmpty(workReportView.find('.js_toggle_chart_table:visible'));
+			config.isStacked = !isEmpty(workReportView.find('input[name="chkStackedChart"]:checked'));
+		}else{
+			config.chartType = workReportEdit.find('.js_report_chart_type option:selected').attr('chartType');
+			config.isChartView = true;
+			config.isStacked = false;			
+		}
+		
+		config.showLegend = true;
+		config.stringLabelRotation = null;
+		config.paneColumnSpans = null;
+		config.panePosition = null;
+		smartPop.createReportPane(paneId, paneName, targetWorkName, targetWorkIcon, reportId, reportName, reportType, config);
+		return false;
+	});
 
 	$('a.js_work_report_save').live('click', function(e) {
 		var workReportEdit = $(targetElement(e)).parents('.js_work_report_edit');
@@ -103,6 +149,7 @@ $(function() {
 			var paramsJson = {};
 			var workReportEditPage = workReportEdit.find('.js_work_report_edit_page');
 			paramsJson['workId'] = workReportEditPage.attr('workId');
+			paramsJson['targetWorkId'] = workReportEditPage.attr('targetWorkId');
 			var url = "create_new_work_report.sw";
 			if(!workReportEdit.find(".js_work_report_name").is(':visible') && !workReportEdit.find('form[name="frmReportSaveAsName"]').is(':visible')){
 				paramsJson['reportId'] = workReportEditPage.attr('reportId');
@@ -209,6 +256,37 @@ $(function() {
 		return false;
 	});
 
+	$('.js_select_work_report').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_select_work_report');
+		var workReport = $('div.js_work_report_page');
+		var target = workReport.find('.js_work_report_edit');
+		var url = input.attr('href');
+		var targetWorkId = workReport.attr('targetWorkId');
+		var targetWorkName = workReport.attr('targetWorkName');
+		var targetWorkIcon = workReport.attr('targetWorkIcon');
+		var reportId = input.attr('reportId');
+		var progressSpan = input.next('span.js_progress_span');
+		smartPop.progressCont(progressSpan);
+		$.ajax({
+			url : url,
+			data : {
+				reportId: reportId,
+				targetWorkId: targetWorkId,
+				targetWorkName: targetWorkName,
+				targetWorkIcon: targetWorkIcon
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data).slideDown(500);
+				smartPop.closeProgress();						
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();						
+			}
+		});
+		
+		return false;
+	});
+
 	$('select.js_change_chart_type').live('change', function(e) {
 		var input = $(targetElement(e));
 		var chartType = input.attr('value');
@@ -255,6 +333,31 @@ $(function() {
 			url : url,
 			data : {reportType : reportType },
 			success : function(data, status, jqXHR) {
+				input.parents('.js_work_report_edit_page').find('.js_target_work_type option:first').attr('selected', 'selected');
+				target.html(data).show();
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				console.log(xhr, thrownError);
+			}
+		});
+		return false;
+	});
+
+	$('tr.js_target_work_type select').live('change', function(e) {
+		var input = $(targetElement(e));
+		var target = input.parents('table.js_report_title').next('table.js_form_by_report_type');
+		var workReportEdit = input.parents('.js_work_report_edit_page');
+		var reportTypeElement = workReportEdit.find('.js_work_report_type input[name="rdoWorkReportType"]:checked');
+		var url = reportTypeElement.attr('href');
+		var reportType = reportTypeElement.attr('value');
+		var targetWorkType = input.find('option:selected').attr('value');
+		$.ajax({
+			url : url,
+			data : {
+				reportType: reportType,
+				targetWorkType: targetWorkType
+			},
+			success : function(data, status, jqXHR) {
 				target.html(data).show();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
@@ -278,6 +381,16 @@ $(function() {
 		}else{
 			targetDate.hide();
 			targetUser.hide();			
+		}
+		return false;
+	});
+	
+	$('select.js_select_xaxis_max').live('change', function(e) {
+		var input = $(targetElement(e));		
+		if(input.children('option:selected').attr('value') === "unlimited"){
+			input.next().hide();
+		}else{
+			input.next().show();
 		}
 		return false;
 	});
@@ -339,13 +452,169 @@ $(function() {
 		return false;
 	});
 	
-	$(window).resize(function() {		
-		if(!smartChart.isResizing && !isEmpty($('.js_work_report_view_page'))){
-			smartChart.isResizing = true;
+	$('a.js_refresh_report_pane').live('click', function(e) {
+		var input = $(targetElement(e));
+		var workReportPane = input.parents('.js_work_report_pane_page');
+		var paneId = workReportPane.attr('paneId');
+		var paneName = workReportPane.attr('paneName');
+		var paneColumnSpans = workReportPane.attr('paneColumnSpans');
+		var panePosition = workReportPane.attr('panePosition');
+		var targetWorkName = workReportPane.attr('targetWorkName');
+		var targetWorkIcon = workReportPane.attr('targetWorkIcon');
+		var reportId = workReportPane.attr('reportId');
+		var reportName = workReportPane.attr('reportName');
+		var reportType = workReportPane.attr('reportType');
+		var chartType = workReportPane.attr('chartType');
+		var isChartView = workReportPane.attr('isChartView');
+		var isStacked = workReportPane.attr('isStacked');
+		var showLegend = workReportPane.attr('showLegend');
+		var stringLabelRotation = workReportPane.attr('stringLabelRotation');
+		var progressSpan = input.nextAll('span.js_progress_span');
+		smartPop.progressCont(progressSpan);						
+		$.ajax({
+			url : 'work_report_pane.sw',
+			data : {
+				paneId: paneId,
+				paneName: paneName,
+				paneColumnSpans: paneColumnSpans,
+				panePosition: panePosition,
+				targetWorkName: targetWorkName,
+				targetWorkIcon: targetWorkIcon,
+				reportId: reportId,
+				reportName: reportName,
+				reportType: reportType,
+				chartType: chartType,
+				isChartView: isChartView,
+				isStacked: isStacked,
+				showLegend: showLegend,
+				stringLabelRotation: stringLabelRotation
+			},
+			success : function(data, status, jqXHR) {
+				workReportPane.css('height', '0px');
+				workReportPane.find('.js_chart_target_pane').removeClass('js_chart_target_pane').attr('id', '');
+				workReportPane.parent().append(data);
+				smartChart.loadPane(reportType, reportId, chartType, isStacked==='true', isChartView==='true', showLegend==='true', stringLabelRotation, "chart_target_"+panePosition, isEmpty(paneColumnSpans) ? 1 : parseInt(paneColumnSpans), workReportPane.parent().find('.js_work_report_pane_page:first'));
+				smartPop.closeProgress();						
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();						
+			}
+		});
+		return false;
+	});
+	
+	$('.js_edit_report_pane').live('click', function(e) {
+		var input = $(targetElement(e));
+		var workReportPane = input.parents('.js_work_report_pane_page');
+		var paneId = workReportPane.attr('paneId');
+		var paneName = workReportPane.attr('paneName');
+		var targetWorkName = workReportPane.attr('targetWorkName');
+		var targetWorkIcon = workReportPane.attr('targetWorkIcon');
+		var reportId = workReportPane.attr('reportId');
+		var reportName = workReportPane.attr('reportName');
+		var reportType = workReportPane.attr('reportType');
+		
+		var config = {};
+		config.chartType = workReportPane.attr('chartType');
+		config.isChartView = workReportPane.attr('isChartView');
+		config.isStacked = workReportPane.attr('isStacked');
+		config.showLegend = workReportPane.attr('showLegend');
+		config.stringLabelRotation = workReportPane.attr('stringLabelRotation');
+		config.paneColumnSpans = workReportPane.attr('paneColumnSpans');
+		config.panePosition = workReportPane.attr('panePosition');
+		smartPop.createReportPane(paneId, paneName, targetWorkName, targetWorkIcon, reportId, reportName, reportType, config);
+		return false;
+	});
+	
+	$('.js_remove_report_pane').live('click', function(e) {
+		var input = $(targetElement(e));
+		var workReportPane = input.parents('.js_work_report_pane_page');
+		var paneId = workReportPane.attr('paneId');
+		var paneName = workReportPane.attr('paneName');
+		var paneColumnSpans = parseInt(workReportPane.attr('paneColumnSpans'));
+		var panePosition = parseInt(workReportPane.attr('panePosition'));
+		var reportId = workReportPane.attr('reportId');
+		var paramsJson = {};
+		paramsJson['paneId'] = paneId;
+		smartPop.confirm("[" + paneName + "]" + smartMessage.get("removeConfirmation"), 
+			function(){
+				$.ajax({
+					url : "remove_work_report_pane.sw",
+					contentType : 'application/json',
+					type : 'POST',
+					data : JSON.stringify(paramsJson),
+					success : function(data, status, jqXHR) {
+						var dashboardPaneRow = workReportPane.parents('.js_dashboard_pane_row');
+						workReportPane.remove();
+						if(paneColumnSpans>1 && panePosition>-1){
+							var panesInSameRow = dashboardPaneRow.find('.js_work_report_pane_page');
+							if(!isEmpty(panesInSameRow)){
+								panesInSameRow.attr('paneColumnSpans', "" + (parseInt(paneColumnSpans)-1));
+								for(var i=0; i<panesInSameRow.length; i++){
+									smartChart.resizePane($(panesInSameRow[i]));
+								}
+							}
+						}
+					},
+					error : function() {
+	 					smartPop.showInfo(smartPop.ERROR, smartMessage.get('removeReportPaneError'), function(){
+	  					});
+					}					
+				});
+			},
+			function(){
+			});
+		return false;
+	});
+	
+	$('.js_pop_all_target_works').live('click', function(e) {
+		var input = $(targetElement(e));
+		var reportList = input.parents('.js_report_list_page');
+		var target = reportList.find('.js_all_target_work_popup');
+		target.css('left', input.position().left + input.width() + 10 + 'px').css('top', target.position().top + 1 + 'px');
+		smartPop.selectWork(target);
+		return false;
+	});
+
+	$('.js_report_list_title').live('click', function(e) {
+		var input = $(targetElement(e));
+		if(input.hasClass('js_user_report_count')) input = input.parent();
+		input.parent().removeClass('disabled').siblings().addClass('disabled');
+		
+		var reportList = input.parents(".js_report_list_page");
+		var targetWorkId = reportList.attr('targetWorkId');
+		var targetWorkType = reportList.attr('targetWorkType');
+		var producedBy = input.attr('producedBy');
+		if(producedBy === "smartworks") reportList.find('form[name="frmSearchInstance"]').hide();
+		else reportList.find('form[name="frmSearchInstance"]').show();
+		reportList.find('.js_work_report_close').click();
+		smartPop.progressCenter();
+		$.get('get_user_report_count.sw?targetWorkId=' + targetWorkId,  function(data){
+			reportList.find('.js_user_report_count').html('[' + data + ']');
+		});
+		$.get('report_instance_list.sw?targetWorkId=' + targetWorkId + '&targetWorkType=' + targetWorkType + '&producedBy=' + producedBy,  function(data){
+			reportList.find('#report_instance_list_page').html(data);
+			reportList.attr('producedBy', producedBy);
+			smartPop.closeProgress();
+		});
+		return false;
+	});
+
+	$(window).resize(function() {
+		if(swReportResizing) return;
+		
+		if(!isEmpty($('.js_work_report_pane_page'))){
+			swReportResizing = true;
+			setTimeout(function(){
+				smartChart.resizePane();
+				swReportResizing = false;
+			},1000);
+		}else if(!isEmpty($('.js_work_report_view_page'))){
+			swReportResizing = true;
 			setTimeout(function(){
 				smartChart.resize();
-				smartChart.isResizing = false;
-			},300);
+				swReportResizing = false;
+			},1000);
 		}
 	});
 });

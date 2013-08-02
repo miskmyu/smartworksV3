@@ -5,17 +5,22 @@ import net.smartworks.model.KeyMap;
 import net.smartworks.model.community.User;
 import net.smartworks.model.filter.SearchFilter;
 import net.smartworks.model.security.AccessPolicy;
+import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
 
 public class Report extends BaseObject {
 
 	public final static int TYPE_CHART = 1;
 	public final static int TYPE_MATRIX = 2;
 	public final static int TYPE_TABLE = 3;
+	
+	public final static String PRODUCED_BY_SMARTWORKS = "smartworks";
+	public final static String PRODUCED_BY_USER = "user";
 		
 	public final static String REPORT_ID_NONE = "none";
-
+	
 	public static final KeyMap VALUE_TYPE_COUNT = new KeyMap("count", "report.value.type.count");
 	public static final KeyMap VALUE_TYPE_SUM = new KeyMap("sum", "report.value.type.sum");
 	public static final	KeyMap VALUE_TYPE_MEAN = new KeyMap("mean", "report.value.type.mean");
@@ -45,6 +50,8 @@ public class Report extends BaseObject {
 	public static final KeyMap AXIS_SORT_DESCEND = new KeyMap("descend", "report.axis.sort.descend");
 
 	private int type=-1;
+	private String targetWorkId = SmartWork.ID_ALL_WORKS;
+	private int targetWorkType = Work.TYPE_NONE;
 	private SearchFilter searchFilter;
 	private AccessPolicy accessPolicy = new AccessPolicy();
 	private Work work;
@@ -58,6 +65,18 @@ public class Report extends BaseObject {
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+	public String getTargetWorkId() {
+		return targetWorkId;
+	}
+	public void setTargetWorkId(String targetWorkId) {
+		this.targetWorkId = targetWorkId;
+	}
+	public int getTargetWorkType() {
+		return targetWorkType;
+	}
+	public void setTargetWorkType(int targetWorkType) {
+		this.targetWorkType = targetWorkType;
 	}
 	public SearchFilter getSearchFilter() {
 		return searchFilter;
@@ -118,6 +137,13 @@ public class Report extends BaseObject {
 		this.lastModifier = lastModifier;
 		this.lastModifiedDate = lastModifiedDate;
 	}
+
+	public String getName(){
+		if(this.isSystemReport()){
+			return SmartMessage.getString(super.getName());
+		}
+		return super.getName();
+	}
 	
 	public boolean isSystemReport(){
 		switch(this.getType()){
@@ -126,17 +152,47 @@ public class Report extends BaseObject {
 				if(report.getId().equals(this.getId())) return true;
 			for(ChartReport report : ChartReport.DEFAULT_CHARTS_PROCESS)
 				if(report.getId().equals(this.getId())) return true;
+			for(ChartReport report : ChartReport.DEFAULT_CHARTS_SCHEDULE)
+				if(report.getId().equals(this.getId())) return true;
+			for(ChartReport report : ChartReport.DEFAULT_CHARTS_ALL_WORKS)
+				if(report.getId().equals(this.getId())) return true;
+			for(ChartReport report : ChartReport.DEFAULT_CHARTS_ALL_PROCESSES)
+				if(report.getId().equals(this.getId())) return true;
+			for(ChartReport report : ChartReport.DEFAULT_CHARTS_ALL_INFORMATIONS)
+				if(report.getId().equals(this.getId())) return true;
+			for(ChartReport report : ChartReport.DEFAULT_CHARTS_ALL_SCHEDULES)
+				if(report.getId().equals(this.getId())) return true;
 			break;
 		case Report.TYPE_MATRIX:
 			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_INFORMATION)
 				if(report.getId().equals(this.getId())) return true;
 			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_PROCESS)
 				if(report.getId().equals(this.getId())) return true;
+			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_SCHEDULE)
+				if(report.getId().equals(this.getId())) return true;
+			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_ALL_WORKS)
+				if(report.getId().equals(this.getId())) return true;
+			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_ALL_PROCESSES)
+				if(report.getId().equals(this.getId())) return true;
+			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_ALL_INFORMATIONS)
+				if(report.getId().equals(this.getId())) return true;
+			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_ALL_SCHEDULES)
+				if(report.getId().equals(this.getId())) return true;
 			break;
 		case Report.TYPE_TABLE:
 			for(TableReport report : TableReport.DEFAULT_TABLES_INFORMATION)
 				if(report.getId().equals(this.getId())) return true;
 			for(TableReport report : TableReport.DEFAULT_TABLES_PROCESS)
+				if(report.getId().equals(this.getId())) return true;
+			for(TableReport report : TableReport.DEFAULT_TABLES_SCHEDULE)
+				if(report.getId().equals(this.getId())) return true;
+			for(TableReport report : TableReport.DEFAULT_TABLES_ALL_WORKS)
+				if(report.getId().equals(this.getId())) return true;
+			for(TableReport report : TableReport.DEFAULT_TABLES_ALL_PROCESSES)
+				if(report.getId().equals(this.getId())) return true;
+			for(TableReport report : TableReport.DEFAULT_TABLES_ALL_INFORMATIONS)
+				if(report.getId().equals(this.getId())) return true;
+			for(TableReport report : TableReport.DEFAULT_TABLES_ALL_SCHEDULES)
 				if(report.getId().equals(this.getId())) return true;
 			break;			
 		}

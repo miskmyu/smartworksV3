@@ -8,6 +8,11 @@ public class MatrixReport extends ChartReport {
 	
 	public static final MatrixReport[] DEFAULT_MATRIXS_INFORMATION = new MatrixReport[]{};
 	public static final MatrixReport[] DEFAULT_MATRIXS_PROCESS = new MatrixReport[]{};
+	public static final MatrixReport[] DEFAULT_MATRIXS_SCHEDULE = new MatrixReport[]{};
+	public static final MatrixReport[] DEFAULT_MATRIXS_ALL_WORKS = new MatrixReport[]{};
+	public static final MatrixReport[] DEFAULT_MATRIXS_ALL_PROCESSES = new MatrixReport[]{};
+	public static final MatrixReport[] DEFAULT_MATRIXS_ALL_INFORMATIONS = new MatrixReport[]{};
+	public static final MatrixReport[] DEFAULT_MATRIXS_ALL_SCHEDULES = new MatrixReport[]{};
 
 	private FormField xSecondAxis;
 	private String xSecondAxisSelector;

@@ -125,27 +125,6 @@ public class SmartUtil {
 	}
 
 	/* (non-Javadoc)
-	 * @see net.smartworks.service.impl.ISmartWorks#isWorkContextType(java.lang.String)
-	 */
-	public static boolean isWorkContextType(String contextId) throws Exception {
-		if (contextId == null || contextId.length() < 3)
-			return false;
-		if (contextId.substring(0, 3).equals("iw.")
-				|| contextId.substring(0, 3).equals("pw.")
-				|| contextId.substring(0, 3).equals("sw.")
-				|| contextId.substring(0, 3).equals("fl.")
-				|| contextId.substring(0, 3).equals("fl.")
-				|| contextId.substring(0, 3).equals("mm.")
-				|| contextId.substring(0, 3).equals("im.")
-				|| contextId.substring(0, 3).equals("ev.")
-				|| contextId.substring(0, 3).equals("bd.")
-				|| contextId.substring(0, 3).equals("ml.")
-				|| contextId.substring(0, 3).equals("sv."))
-			return true;
-		return false;
-	}
-
-	/* (non-Javadoc)
 	 * @see net.smartworks.service.impl.ISmartWorks#isWorkSpaceContextType(java.lang.String)
 	 */
 	public static boolean isWorkSpaceContextType(String contextId) throws Exception {
@@ -217,6 +196,8 @@ public class SmartUtil {
 			return ISmartWorks.SPACE_TYPE_MAIL_LIST;
 		else if(contextId.substring(0, 6).equals(ISmartWorks.CONTEXT_PREFIX_SAVED_LIST))
 			return ISmartWorks.SPACE_TYPE_SAVED_LIST;
+		else if(contextId.substring(0, 6).equals(ISmartWorks.CONTEXT_PREFIX_REPORT_LIST))
+			return ISmartWorks.SPACE_TYPE_REPORT_LIST;
 		else if(contextId.substring(0, 6).equals(ISmartWorks.CONTEXT_PREFIX_USER_SPACE))
 			return ISmartWorks.SPACE_TYPE_USER;
 		else if(contextId.substring(0, 6).equals(ISmartWorks.CONTEXT_PREFIX_GROUP_SPACE))
@@ -311,6 +292,7 @@ public class SmartUtil {
 			
 		if(		lastLocation.equals("iwork_list.sw") 
 				 || lastLocation.equals("pwork_list.sw") 
+				 || lastLocation.equals("report_list.sw") 
 				 || lastLocation.equals("mail_list.sw")){ 
 			String cid = (String)request.getSession().getAttribute("cid");
 			return lastLocation + "?cid=" + cid;

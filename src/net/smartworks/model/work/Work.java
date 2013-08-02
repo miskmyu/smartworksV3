@@ -15,6 +15,7 @@ public class Work extends BaseObject{
 	public static final String PICTURE_PATH = SmartConfUtil.getInstance().getImageServer();
 	public static final String WORKDEF_IMG_DIR = "workDef";
 	
+	public final static int TYPE_NONE = -1;
 	public final static int	TYPE_ASYNC_MESSAGE	= 1;
 	public final static int	TYPE_NOTIFICAITON	= 2;
 	public final static int	TYPE_COMMENTS		= 3;

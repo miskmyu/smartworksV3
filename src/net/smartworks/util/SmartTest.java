@@ -11,6 +11,7 @@ import org.cometd.client.transport.ClientTransport;
 import org.cometd.client.transport.LongPollingTransport;
 import org.eclipse.jetty.client.HttpClient;
 
+import net.smartworks.model.Matrix;
 import net.smartworks.model.calendar.CompanyCalendar;
 import net.smartworks.model.calendar.CompanyEvent;
 import net.smartworks.model.calendar.WorkHour;
@@ -44,6 +45,7 @@ import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.MemoInstanceInfo;
 import net.smartworks.model.instance.info.PWInstanceInfo;
+import net.smartworks.model.instance.info.ReportInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
@@ -54,7 +56,9 @@ import net.smartworks.model.notice.NoticeMessage;
 import net.smartworks.model.report.ChartReport;
 import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
+import net.smartworks.model.report.ReportPane;
 import net.smartworks.model.report.info.ReportInfo;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.service.Variable;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WSDLOperation;
@@ -65,6 +69,7 @@ import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.ImageCategory;
 import net.smartworks.model.work.InformationWork;
 import net.smartworks.model.work.ProcessWork;
+import net.smartworks.model.work.ReportWork;
 import net.smartworks.model.work.SmartDiagram;
 import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.SmartTask;
@@ -1233,7 +1238,9 @@ public class SmartTest {
 	}
 
 	public static Report getReportById() throws Exception{
-		return ChartReport.getChartPCntMonthly();
+		Report report = ChartReport.getChartPCntMonthly();
+		report.setId("testReport");
+		return report;
 	}
 	
 	public static SearchFilter getSearchFilterById() throws Exception{
@@ -1722,5 +1729,141 @@ public class SmartTest {
 		AppWorkInfo[] workDatas = {appWork1, appWork2, appWork3 };
 		workInfoList.setWorkDatas(workDatas);
 		return workInfoList;
+	}
+
+	public static ReportPane[] getMyDashboard() throws Exception{
+		
+		ReportPane pane00 = new ReportPane("pane1", "월간 생산량 추이");
+		pane00.setColumnSpans(3);
+		pane00.setPosition(new Matrix(0,0));
+		pane00.setTargetWork(SmartTest.getInformationWorkInfo1());
+		pane00.setReportId("report");
+		pane00.setReportName("보고서이름입니다");
+		pane00.setReportType(Report.TYPE_CHART);
+		pane00.setChartType(ChartReport.CHART_TYPE_COLUMN);
+		pane00.setChartView(true);
+		pane00.setStacked(false);
+		pane00.setShowLegend(false);
+		pane00.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_AUTO);
+		
+		ReportPane pane01 = new ReportPane("pane2", "주간 불량률");
+		pane01.setColumnSpans(3);
+		pane01.setPosition(new Matrix(0,1));
+		pane01.setTargetWork(SmartTest.getInformationWorkInfo1());
+		pane01.setReportId("report");
+		pane01.setReportName("보고서이름입니다");
+		pane01.setReportType(Report.TYPE_CHART);
+		pane01.setChartType(ChartReport.CHART_TYPE_COLUMN);
+		pane01.setChartView(false);
+		pane01.setStacked(false);
+		pane01.setShowLegend(false);
+		pane01.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_ROTATED);
+		
+		ReportPane pane02 = new ReportPane("pane3", "개인별 생산량");
+		pane02.setColumnSpans(3);
+		pane02.setPosition(new Matrix(0,2));
+		pane02.setTargetWork(SmartTest.getInformationWorkInfo1());
+		pane02.setReportId("report");
+		pane02.setReportName("보고서이름입니다");
+		pane02.setReportType(Report.TYPE_CHART);
+		pane02.setChartType(ChartReport.CHART_TYPE_COLUMN);
+		pane02.setChartView(true);
+		pane02.setStacked(true);
+		pane02.setShowLegend(false);
+		pane02.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_HORIZONTAL);
+		
+		ReportPane pane10 = new ReportPane("pane4", "부서별 지연처리 건수");
+		pane10.setColumnSpans(2);
+		pane10.setPosition(new Matrix(1,0));
+		pane10.setTargetWork(SmartTest.getInformationWorkInfo1());
+		pane10.setReportId("report");
+		pane10.setReportName("보고서이름입니다");
+		pane10.setReportType(Report.TYPE_CHART);
+		pane10.setChartType(ChartReport.CHART_TYPE_COLUMN);
+		pane10.setChartView(true);
+		pane10.setStacked(true);
+		pane10.setShowLegend(false);
+		pane10.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_AUTO);
+		
+		ReportPane pane11 = new ReportPane("pane5", "개인별 평균처리 시간");
+		pane11.setColumnSpans(2);
+		pane11.setPosition(new Matrix(1,1));
+		pane11.setTargetWork(SmartTest.getInformationWorkInfo1());
+		pane11.setReportId("report");
+		pane11.setReportName("보고서이름입니다");
+		pane11.setReportType(Report.TYPE_CHART);
+		pane11.setChartType(ChartReport.CHART_TYPE_COLUMN);
+		pane11.setChartView(false);
+		pane11.setStacked(false);
+		pane11.setShowLegend(true);
+		pane11.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_AUTO);
+		
+		ReportPane pane20 = new ReportPane("pane6", "2013년도 월간 처리 건수");
+		pane20.setColumnSpans(1);
+		pane20.setPosition(new Matrix(2,0));
+		pane20.setTargetWork(SmartTest.getInformationWorkInfo1());
+		pane20.setReportId("report");
+		pane20.setReportName("보고서이름입니다");
+		pane20.setReportType(Report.TYPE_CHART);
+		pane20.setChartType(ChartReport.CHART_TYPE_COLUMN);
+		pane20.setChartView(true);
+		pane20.setStacked(false);
+		pane20.setShowLegend(true);
+		pane20.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_HORIZONTAL);
+		
+		
+		return new ReportPane[] {pane00, pane01, pane02, pane10, pane11, pane20};
+	}
+	
+	public static ReportWork getReportWorkInformation() throws Exception{
+		ReportWork work = new ReportWork(SmartWork.ID_REPORT_MANAGEMENT, "보고서");
+		work.setMyCategory(new WorkCategory("category1", "기본"));
+		return work;
+	}
+	
+	public static SmartWork getAllSmartWork() throws Exception{
+		SmartWork work = new SmartWork(SmartWork.ID_ALL_WORKS, SmartMessage.getString("report.title.company_all_works"));
+		work.setMyCategory(new WorkCategory("category1", "기본"));
+		return work;
+	}
+	
+	private static ReportInstanceInfo[] getReportInstances1() throws Exception{
+		ReportInstanceInfo instance = new ReportInstanceInfo("instance1", "부서별 주간 처리 건수", getUserInfo1(), getUserInfo2(), new LocalDate());
+		instance.setAccessPolicy(new AccessPolicy(AccessPolicy.LEVEL_PUBLIC));
+		instance.setReportType(Report.TYPE_CHART);
+		instance.setChartType(ChartReport.CHART_TYPE_BAR);
+		instance.setTargetWorkType(Work.TYPE_NONE);
+		ReportInstanceInfo instance1 = new ReportInstanceInfo("instance1", "부서별 주간 품의처리 건수", getUserInfo1(), getUserInfo2(), new LocalDate());
+		instance1.setAccessPolicy(new AccessPolicy(AccessPolicy.LEVEL_PRIVATE));
+		instance1.setReportType(Report.TYPE_MATRIX);
+		instance1.setTargetWorkType(SmartWork.TYPE_PROCESS);
+		return new ReportInstanceInfo[]{instance, instance1};
+	}
+
+	private static ReportInstanceInfo[] getWorkReportInstances1() throws Exception{
+		ReportInstanceInfo instance = new ReportInstanceInfo("instance1", "영업대표별 주간 영업실적", getUserInfo1(), getUserInfo2(), new LocalDate());
+		instance.setAccessPolicy(new AccessPolicy(AccessPolicy.LEVEL_PUBLIC));
+		instance.setReportType(Report.TYPE_CHART);
+		instance.setChartType(ChartReport.CHART_TYPE_BAR);
+		return new ReportInstanceInfo[]{instance};
+	}
+
+	public static InstanceInfoList getReportInstanceList(String workId, RequestParams params) throws Exception{
+		InstanceInfoList instanceList = new InstanceInfoList();
+		instanceList.setType(InstanceInfoList.TYPE_INFORMATION_INSTANCE_LIST);
+		instanceList.setPageSize(params.getPageSize());
+		instanceList.setTotalPages(31);
+		instanceList.setCurrentPage(params.getCurrentPage());
+		if(SmartWork.ID_ALL_WORKS.equals(workId)){
+			instanceList.setInstanceDatas(getReportInstances1());
+		}else{
+			instanceList.setInstanceDatas(getWorkReportInstances1());			
+		}
+		return instanceList;
+	}
+	
+	public static int getUserReportCount(String targetWorkId) throws Exception{
+		if(SmartWork.ID_ALL_WORKS.equals(targetWorkId)) return 31;
+		return 56;
 	}
 }

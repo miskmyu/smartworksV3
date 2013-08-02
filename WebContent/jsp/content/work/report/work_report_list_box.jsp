@@ -40,8 +40,7 @@
 			if(report.getType() == Report.TYPE_CHART) chartType = ((ChartReport)report).getChartTypeInString();
 	%>
 	<option value="<%=report.getId()%>" reportType="<%=report.getType()%>" <%if(chartType!=null){ %>chartType="<%=chartType%>"<%}%>
-		<%if(report.getId().equals(work.getLastReportId())){ %> selected <%} %>>
-		<fmt:message key="<%=report.getName()%>" />
+		<%if(report.getId().equals(work.getLastReportId())){ %> selected <%} %>><%=report.getName()%>
 	</option>
 	<%
 		}

@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.work.info.SmartWorkInfo"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
@@ -30,10 +31,11 @@
 					targetContent = "pop_worklist_by_category.sw";
 				}
 				if (work.getType() != WorkCategory.TYPE_CATEGORY) {
+					String fullpathName = ((SmartWorkInfo)work).getFullpathName();
 	%>
 	<li>
 		<span class="dep">
-			<a href="<%=targetContent%>?workId=<%=work.getId()%>" class="<%=classType%>" workId="<%=work.getId()%>"><span class="<%=work.getIconClass()%>"></span><%=work.getName()%></a>
+			<a href="<%=targetContent%>?workId=<%=work.getId()%>" class="<%=classType%>" workId="<%=work.getId()%>" fullpathName="<%=fullpathName%>" iconClass="<%=work.getIconClass()%>" workType=<%=work.getType() %>><span class="<%=work.getIconClass()%>"></span><%=work.getName()%></a>
 		</span>
 	</li>
 	<%

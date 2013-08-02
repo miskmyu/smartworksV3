@@ -120,6 +120,12 @@ public class WorkController extends ExceptionInterceptor {
 		return SmartUtil.returnMnv(request, "jsp/content/work/list/saved_list.jsp", "saved_list.tiles");
 	}
 
+	@RequestMapping("/report_list")
+	public ModelAndView reportList(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/work/list/report_list.jsp", "report_list.tiles");
+	}
+
 	@RequestMapping("/search_filter")
 	public ModelAndView searchFilter(HttpServletRequest request, HttpServletResponse response) {
 

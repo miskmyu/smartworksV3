@@ -206,4 +206,10 @@ public class PopupController {
 		return SmartUtil.returnMnv(request, "jsp/popup/pop_event_alarm.jsp", "");
 	}
 
+	@RequestMapping("/pop_new_report_pane")
+	public ModelAndView popNewReportPane(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_new_report_pane.jsp", "");
+	}
+
 }

@@ -258,6 +258,14 @@
 									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_MY_RUNNING_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.my_running_instances' />
 								</option>
+								<option value="<%=SearchFilter.FILTER_RECENT_1YEAR_INSTANCES%>"
+									<%if(SearchFilter.FILTER_RECENT_1YEAR_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									<fmt:message key='filter.name.recent_1year_instances' />
+								</option>
+								<option value="<%=SearchFilter.FILTER_RECENT_3YEARS_INSTANCES%>"
+									<%if(SearchFilter.FILTER_RECENT_3YEARS_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									<fmt:message key='filter.name.recent_3years_instances' />
+								</option>
 								<%
 								SearchFilterInfo[] filters = work.getSearchFilters();
 								if (filters != null) {
