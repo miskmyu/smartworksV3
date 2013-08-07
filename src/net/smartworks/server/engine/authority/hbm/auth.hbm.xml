@@ -43,5 +43,13 @@
 		<property name="roleKey" type="string" length="50"/>
 		<property name="customUser" type="string" length="4000"/>
 	</class>
-	
+	<class name="SwaAuthProxy" table="SWAuthProxy">
+		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="resourceId" type="string" length="50"/>
+		<property name="type" type="string" length="20"/>
+		<property name="accessLevel" type="string" length="50"/>
+		<property name="accessValue" type="string" length="4000"/>
+	</class>
 </hibernate-mapping>

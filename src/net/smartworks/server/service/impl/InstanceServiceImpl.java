@@ -2416,14 +2416,23 @@ public class InstanceServiceImpl implements IInstanceService {
 						}
 					}
 				}
-
+				obj.setWorkSpaceId(workSpaceId);
+				obj.setWorkSpaceType(workSpaceType);
+				
 				if(String.valueOf(AccessPolicy.LEVEL_CUSTOM).equals(accessLevel) && CommonUtil.isEmpty(accessValue)) {
 					accessValue = ModelConverter.getAccessValue(userId, formId);
 				}
-				obj.setWorkSpaceId(workSpaceId);
-				obj.setWorkSpaceType(workSpaceType);
+
+				//authProxy
+				boolean isDefaultAccessPolicy = SwManagerFactory.getInstance().getSwaManager().compareAccessPolicyWithAuthProxy(userId, formId, accessLevel, accessValue);
+				//사용자가 선택한 접근권한과 기본 빌더의 접근권한을 비교하여 사용자가 선택한 접근권한이라면 나중에 빌더의 권한이 바뀌더라도 적용되지 않는다
+				if (!isDefaultAccessPolicy) 
+					obj.setIsUserSetAccessLevel("true");
+				
+				
 				obj.setAccessLevel(accessLevel);
 				obj.setAccessValue(accessValue);
+				
 				
 				//워크스페이스(workspaceid) 가 비공개 그룹이라면 무조건 비공개 그룹의 선택 공개로 저장이 된다
 				populatePrivateGroupAuth(userId, obj);

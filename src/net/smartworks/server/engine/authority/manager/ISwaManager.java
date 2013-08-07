@@ -17,6 +17,8 @@ import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
 import net.smartworks.server.engine.authority.model.SwaUser;
 import net.smartworks.server.engine.authority.model.SwaUserCond;
+import net.smartworks.server.engine.authority.model.SwaAuthProxy;
+import net.smartworks.server.engine.authority.model.SwaAuthProxyCond;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.infowork.domain.exception.SwdException;
 import net.smartworks.server.engine.organization.exception.SwoException;
@@ -57,4 +59,16 @@ public interface ISwaManager extends IManager {
 	public void removeAuthGroup(String user, SwaGroupCond cond) throws SwaException;
 	public long getAuthGroupSize(String user, SwaGroupCond cond) throws SwaException;
 	public SwaGroup[] getAuthGroups(String user, SwaGroupCond cond, String level) throws SwaException;
+	
+	public SwaAuthProxy getAuthProxy(String user, String objId, String level) throws SwaException;
+	public SwaAuthProxy getAuthProxy(String user, SwaAuthProxyCond cond, String level) throws SwaException;
+	public void setAuthProxy(String user, SwaAuthProxy obj, String level) throws SwaException;
+	public void removeAuthProxy(String user, String objId) throws SwaException;
+	public void removeAuthProxy(String user, SwaAuthProxyCond cond) throws SwaException;
+	public long getAuthProxySize(String user, SwaAuthProxyCond cond) throws SwaException;
+	public SwaAuthProxy[] getAuthProxys(String user, SwaAuthProxyCond cond, String level) throws SwaException;
+	public boolean compareAccessPolicyWithAuthProxy(String user, String resourceId, String accessLevel, String accessValue) throws Exception;	
+	
+	public void setAuthProxy(String userId, SwaUser[] objs) throws Exception;
+	public void removeAllAuthProxyByResourceId(String userId, String resourceId) throws Exception;
 }

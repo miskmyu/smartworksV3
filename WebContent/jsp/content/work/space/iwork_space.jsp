@@ -3,6 +3,8 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.server.service.factory.SwServiceFactory"%>
+<%@page import="com.google.gdata.data.introspection.IWorkspace"%>
 <%@page import="net.smartworks.model.company.CompanyOption"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.work.info.SmartWorkInfo"%>
@@ -345,7 +347,8 @@ function submitForms(tempSave) {
 					<!-- 수정, 삭제버튼 -->
 				    <div class="fr">
 						<%
-						if(!instance.isTempSaved() && work.getEditPolicy().isEditableForMe(owner.getId()) && approvalTask==null && !instance.isApprovalWork()){
+						boolean isEditableInstance = SwServiceFactory.getInstance().getCommunityService().isEditable_Board_EventWorkInstanceBySpacePolicy(instance);
+						if(!instance.isTempSaved() && work.getEditPolicy().isEditableForMe(owner.getId()) && approvalTask==null && !instance.isApprovalWork() || isEditableInstance){
 						%>
 					        <span class="btn_gray js_btn_modify">
 					        	<a href="" class="js_modify_iwork_instance">
@@ -424,7 +427,7 @@ function submitForms(tempSave) {
 					   		</span>
 				
 							<%
-							if(work.getEditPolicy().isEditableForMe(owner.getId()) && approvalTask==null && !instance.isApprovalWork()){
+							if(work.getEditPolicy().isEditableForMe(owner.getId()) && approvalTask==null && !instance.isApprovalWork() || isEditableInstance){
 							%>
 								<span class="btn_gray ml5 js_btn_delete">
 						        	<a href="" class="js_delete_iwork_instance">

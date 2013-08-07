@@ -66,6 +66,8 @@ public class EventNoticeJob  extends QuartzJobBean   {
 						AlarmNotice alarmNotice = alarmNotices[i];
 
 						SwoUser targetUser = SwManagerFactory.getInstance().getSwoManager().getUser("", alarmNotice.getTargetUser(), IManager.LEVEL_ALL);
+						if (targetUser == null)
+							continue;
 						UserInfo user =ModelConverter.getUserInfoByUserId(alarmNotice.getTargetUser());
 						NoticeMessage noticeMessage = new NoticeMessage();
 						noticeMessage.setType(NoticeMessage.TYPE_EVENT_ALARM);

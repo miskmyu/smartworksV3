@@ -239,32 +239,32 @@ smartPop = {
 	progressTarget : "",
 	progressCenter : function(){
 		$('<img class="js_progress_icon" src="images/load_wh.gif"/>').appendTo($(document));
-		if(!$.browser.msie)
+		//if(!$.browser.msie)
 			smartPop.overlay();
 	},
 	
 	progressCont : function(target){
 		smartPop.progressTarget= target;
 		$('<img class="js_progress_icon" src="images/load_wh.gif"/>').appendTo(target);
-		if(!$.browser.msie)
+		//if(!$.browser.msie)
 			smartPop.overlay();
 	},
 	progressContGray : function(target){
 		smartPop.progressTarget= target;
 		$('<img class="js_progress_icon" src="images/load_wh_02.gif" align="bottom"/>').appendTo(target);
-		if(!$.browser.msie)
+		//if(!$.browser.msie)
 			smartPop.overlay();
 	},
 	progressNav : function(target){
 		smartPop.progressTarget= target;
 		$('<img class="js_progress_icon" src="images/load_gr.gif" align="bottom"/>').appendTo(target);
-		if(!$.browser.msie)
+		//if(!$.browser.msie)
 			smartPop.overlay();
 	},
 	progressNavGray : function(target){
 		smartPop.progressTarget= target;
 		$('<img class="js_progress_icon" src="images/load_gr_02.gif" align="bottom"/>').appendTo(target);
-		if(!$.browser.msie)
+		//if(!$.browser.msie)
 			smartPop.overlay();
 	},
 

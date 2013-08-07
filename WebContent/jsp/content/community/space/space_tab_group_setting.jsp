@@ -34,7 +34,7 @@
 
 	WorkSpace workSpace = (WorkSpace)session.getAttribute("workSpace");
 	Group group = (Group)workSpace;
-	UserInfo[] users = null;
+	WorkSpaceInfo[] users = null;
 	
 %>
 <script type="text/javascript">
@@ -217,7 +217,7 @@
 															users = group.getBoardWritePolicy().getCustoms();
 															if(!SmartUtil.isBlankObject(users)){
 																for(int i=0; i<users.length; i++){
-																	UserInfo user = users[i];
+																	WorkSpaceInfo user = users[i];
 															%>
 																	<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%
@@ -252,7 +252,7 @@
 															users = group.getBoardEditPolicy().getCustoms();
 															if(!SmartUtil.isBlankObject(users)){
 																for(int i=0; i<users.length; i++){
-																	UserInfo user = users[i];
+																	WorkSpaceInfo user = users[i];
 															%>
 																	<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%
@@ -286,7 +286,7 @@
 															users = group.getEventWritePolicy().getCustoms();
 															if(!SmartUtil.isBlankObject(users)){
 																for(int i=0; i<users.length; i++){
-																	UserInfo user = users[i];
+																	WorkSpaceInfo user = users[i];
 															%>
 																	<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%
@@ -321,7 +321,7 @@
 															users = group.getEventEditPolicy().getCustoms();
 															if(!SmartUtil.isBlankObject(users)){
 																for(int i=0; i<users.length; i++){
-																	UserInfo user = users[i];
+																	WorkSpaceInfo user = users[i];
 															%>
 																	<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%
