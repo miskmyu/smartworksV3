@@ -69,6 +69,7 @@ public class SwdRecordCond extends ClassObjectCond {
 	private String[] workSpaceIdNotIns;
 	//private String workSpaceIdNotIns;
 	private String workSpaceType;
+	private String isUserSetAccessLevel;
 	private String accessLevel;
 	private String accessValue;
 	private String[] likeAccessValues;
@@ -440,6 +441,12 @@ public class SwdRecordCond extends ClassObjectCond {
 	}
 	public void setFromDate(Date fromDate) {
 		this.fromDate = fromDate;
+	}
+	public String getIsUserSetAccessLevel() {
+		return isUserSetAccessLevel;
+	}
+	public void setIsUserSetAccessLevel(String isUserSetAccessLevel) {
+		this.isUserSetAccessLevel = isUserSetAccessLevel;
 	}
 
 }

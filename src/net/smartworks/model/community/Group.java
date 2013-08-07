@@ -1,10 +1,11 @@
 package net.smartworks.model.community;
 
+import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
-import net.smartworks.model.security.EditPolicy;
+import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.security.SpacePolicy;
-import net.smartworks.model.security.WritePolicy;
+import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
@@ -168,16 +169,28 @@ public class Group extends WorkSpace {
 		return groupInfo;
 	}
 	
-	public boolean amIInvitableMember(){
+	public boolean amIInvitableMember() throws Exception{
 		User currentUser = SmartUtil.getCurrentUser();
 		if(amIGroupLeader(currentUser)) return true;
 		if(SmartUtil.isBlankObject(invitableMembers)) return false;
 		if(invitableMembers.isLeaderChecked() && amIGroupLeader(currentUser)) return true;
 		else if(invitableMembers.isMembersChecked() && this.amIMember()) return true;
 		else if(invitableMembers.isCustomChecked() && !SmartUtil.isBlankObject(invitableMembers.getCustoms())){
-			for(UserInfo custom : invitableMembers.getCustoms())
-				if(custom.getId().equals(currentUser.getId()))
-					return true;
+			GroupInfo[] myGroup = SwServiceFactory.getInstance().getCommunityService().getMyGroups();
+			for(WorkSpaceInfo custom : invitableMembers.getCustoms()) {
+				if (custom instanceof UserInfo) {
+					if(custom.getId().equals(currentUser.getId()))
+						return true;
+				} else if (custom instanceof DepartmentInfo) {
+					if(custom.getId().equals(currentUser.getDepartmentId()))
+						return true;
+				} else if (custom instanceof GroupInfo) {
+					for (int i = 0; i < myGroup.length; i++) {
+						if (myGroup[i].getId().equals(custom.getId()))
+							return true;
+					}
+				}
+			}
 		}
 		return false;
 	}

@@ -893,9 +893,21 @@ alter Table sworgconfig add setupcompanydate DateTime
 
 alter Table sworguser add hireDate Datetime;
 alter Table sworguser add birthDay Datetime;
-alter Table sworguser add lunarBirthday boolean;
+alter Table sworguser add lunarBirthday bit;
 alter Table sworguser add homePhoneNo varchar(20);
 alter Table sworguser add homeAddress varchar(200);
 
 
-update sworguser set lunarBirthday='false'
+update sworguser set lunarBirthday=0
+
+
+CREATE TABLE SWAuthProxy (
+	id varchar(50) NOT NULL,
+	resourceId varchar(50),
+	type varchar(20),
+	accessLevel varchar(50),
+	accessValue varchar(4000),
+	primary key (id)
+);
+
+

@@ -21,11 +21,11 @@ import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
 import net.smartworks.server.engine.authority.model.SwaUser;
 import net.smartworks.server.engine.authority.model.SwaUserCond;
+import net.smartworks.server.engine.authority.model.SwaAuthProxy;
 import net.smartworks.server.engine.category.manager.ICtgManager;
 import net.smartworks.server.engine.category.model.CtgCategory;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
-import net.smartworks.server.engine.common.util.XmlUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
@@ -35,30 +35,23 @@ import net.smartworks.server.engine.infowork.form.manager.ISwfManager;
 import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
+import net.smartworks.server.engine.organization.model.SwoDepartment;
+import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
-import net.smartworks.server.engine.process.process.model.PrcProcessCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcSwProcess;
 import net.smartworks.server.engine.process.process.model.PrcSwProcessCond;
 import net.smartworks.server.engine.resource.manager.IResourceDesigntimeManager;
-import net.smartworks.server.engine.resource.model.IFormDef;
 import net.smartworks.server.engine.resource.model.IPackageModel;
 import net.smartworks.server.engine.resource.model.IProcessModel;
-import net.smartworks.server.engine.resource.util.SmartServerModelUtil;
 import net.smartworks.server.service.IBuilderService;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
-import org.jdom.output.XMLOutputter;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 
 @Service
 public class BuilderServiceImpl implements IBuilderService {
@@ -445,7 +438,6 @@ public class BuilderServiceImpl implements IBuilderService {
 					getSwaManager().removeUser(userId, objId);
 				}
 			}
-
 			if(!CommonUtil.isEmpty(txtAccessableUsers)) {
 				if(rdoAccessLevel.equals(Integer.toString(AccessPolicy.LEVEL_CUSTOM)))
 					setSwaUsers(txtAccessableUsers, resourceId, SwaUser.MODE_READ);
@@ -458,6 +450,23 @@ public class BuilderServiceImpl implements IBuilderService {
 				if(rdoEditLevel.equals(Integer.toString(EditPolicy.LEVEL_CUSTOM)))
 					setSwaUsers(txtEditableUsers, resourceId, SwaUser.MODE_MODIFY);
 			}
+			
+			//userProxy
+			getSwaManager().removeAllAuthProxyByResourceId(userId, resourceId);
+			//resourceId, rdoAcceessLevel, txtAccessableUsers
+			SwaAuthProxy authProxy = new SwaAuthProxy();
+			authProxy.setAccessLevel(rdoAccessLevel);
+			authProxy.setResourceId(resourceId);
+			if (rdoAccessLevel.equals(Integer.toString(AccessPolicy.LEVEL_CUSTOM))) {
+				StringBuffer accessValueBuff = new StringBuffer();
+				for(int i=0; i< txtAccessableUsers.size(); i++) {
+					Map<String, String> userMap = txtAccessableUsers.get(i);
+					String id = userMap.get("id");
+					accessValueBuff.append(id).append(";");
+				}
+				authProxy.setAccessValue(accessValueBuff.toString());
+			}
+			getSwaManager().setAuthProxy(userId, authProxy, IManager.LEVEL_ALL);
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -31,6 +31,7 @@ import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
 import net.smartworks.model.filter.SearchFilter;
 import net.smartworks.model.instance.FieldData;
+import net.smartworks.model.instance.InformationWorkInstance;
 import net.smartworks.model.instance.SortingField;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.IWInstanceInfo;
@@ -1072,6 +1073,34 @@ public class CommunityServiceImpl implements ICommunityService {
 			if (isAdmin && !result) {
 				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_ADMIN) != -1 ? true : false;
 			}
+			
+			if (roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_CUSTOM) != -1) {
+				String customUserIds = myDeptAuth.getCustomUser();
+				
+				if (customUserIds.indexOf(user.getId()) != -1) {
+					result = true;
+				} else if (customUserIds.indexOf(user.getDepartmentId()) != -1) {
+					result = true;
+				} else {
+					SwoGroupCond swoGroupCond = new SwoGroupCond();
+					SwoGroupMember swoGroupMember = new SwoGroupMember();       
+					swoGroupMember.setUserId(user.getId());		
+					SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
+					swoGroupMembers[0] = swoGroupMember;
+					swoGroupCond.setSwoGroupMembers(swoGroupMembers);
+					swoGroupCond.setOrders(new Order[]{new Order("creationDate", false)});
+					SwoGroup[] swoGroups = getSwoManager().getGroups(user.getId(), swoGroupCond, IManager.LEVEL_ALL);
+					if (!CommonUtil.isEmpty(swoGroups)) {
+						for (SwoGroup myGroups : swoGroups) {
+							if (customUserIds.indexOf(myGroups.getId()) != -1) {
+								result = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+			
 			if (result && !deptIdList.contains(dept[i].getId())) {
 				deptList.add(dept[i]);
 				deptIdList.add(dept[i].getId());
@@ -1157,6 +1186,24 @@ public class CommunityServiceImpl implements ICommunityService {
 				if (isAdmin && !result) {
 					result = roleKey.indexOf(SwaGroup.GROUP_ROLEKYE_ADMIN) != -1 ? true : false;
 				}
+				
+				if (roleKey.indexOf(SwaGroup.GROUP_ROLEKYE_CUSTOM) != -1) {
+					String customUserIds = myGroupAuth.getCustomUser();
+					
+					if (customUserIds.indexOf(user.getId()) != -1) {
+						result = true;
+					} else if (customUserIds.indexOf(user.getDepartmentId()) != -1) {
+						result = true;
+					} else {
+						for (SwoGroup myGroups : swoGroups) {
+							if (customUserIds.indexOf(myGroups.getId()) != -1) {
+								result = true;
+								break;
+							}
+						}
+					}
+				}
+				
 				if (result && !groupIdList.contains(swoGroup.getId())) {
 					groupList.add(swoGroup);
 					groupIdList.add(swoGroup.getId());
@@ -2973,6 +3020,19 @@ public class CommunityServiceImpl implements ICommunityService {
 			if (customUser != null && customUser.indexOf(user.getId()) != -1)
 				return true;
 			
+			if (customUser != null && customUser.indexOf(user.getDepartmentId()) != -1)
+				return true;
+			
+			if (customUser != null) {
+				GroupInfo[] myGroups = getMyGroups();
+				if (!CommonUtil.isEmpty(myGroups)) {
+					for (GroupInfo myGroup : myGroups) {
+						if (customUser.indexOf(myGroup.getId()) != -1) 
+							return true;
+					}
+				}
+			}
+			
 			if (workSpaceId.equalsIgnoreCase(myDepartmentId)) {
 				if (isLeader) {
 					if (roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_LEADER) != -1) {
@@ -3019,8 +3079,22 @@ public class CommunityServiceImpl implements ICommunityService {
 			
 			if (isAdmin && roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_ADMIN) != -1)
 				return true;
+			
 			if (customUser != null && customUser.indexOf(user.getId()) != -1)
 				return true;
+			
+			if (customUser != null && customUser.indexOf(user.getDepartmentId()) != -1)
+				return true;
+			
+			if (customUser != null) {
+				GroupInfo[] myGroups = getMyGroups();
+				if (!CommonUtil.isEmpty(myGroups)) {
+					for (GroupInfo myGroup : myGroups) {
+						if (customUser.indexOf(myGroup.getId()) != -1) 
+							return true;
+					}
+				}
+			}
 			
 			if (isMyGroups) {
 				if (isLeader) {
@@ -3711,5 +3785,124 @@ public class CommunityServiceImpl implements ICommunityService {
 		}
 		SwManagerFactory.getInstance().getItmManager().setMenuItemList(userId, menuItemList, IManager.LEVEL_ALL);
 	}
+	@Override
+	public boolean isEditable_Board_EventWorkInstanceBySpacePolicy(InformationWorkInstance instance) throws Exception {
+		if (CommonUtil.isEmpty(instance))
+			return false;
+		
+		if (!instance.getWork().getId().equalsIgnoreCase(SmartWork.ID_BOARD_MANAGEMENT) && !instance.getWork().getId().equalsIgnoreCase(SmartWork.ID_EVENT_MANAGEMENT)) 
+			return false;
 
+		if (instance.getWorkSpace().getSpaceType() != ISmartWorks.SPACE_TYPE_DEPARTMENT && instance.getWorkSpace().getSpaceType() != ISmartWorks.SPACE_TYPE_GROUP) 
+			return false;
+		
+
+		User cUser = SmartUtil.getCurrentUser();
+		String companyId = cUser.getCompanyId();
+		String userId = cUser.getId();
+		String departmentId = cUser.getDepartmentId();
+		
+		boolean isEditableForMeBySpacePolicy = false;			
+		//업무가 부서,그룹 타입이냐
+			
+		String workSpaceId = instance.getWorkSpace().getId();
+		switch(instance.getWorkSpace().getSpaceType()){
+		case ISmartWorks.SPACE_TYPE_DEPARTMENT:
+			
+			SwaDepartmentCond deptAuthCond = new SwaDepartmentCond();
+			deptAuthCond.setDeptId(workSpaceId);
+			
+			if (instance.getWork().getId().equalsIgnoreCase(SmartWork.ID_BOARD_MANAGEMENT)) {
+				deptAuthCond.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_BOARD_EDIT);
+			} else if (instance.getWork().getId().equalsIgnoreCase(SmartWork.ID_EVENT_MANAGEMENT)) {
+				deptAuthCond.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_EVENT_EDIT);
+			}
+			SwaDepartment[] authDepts = SwManagerFactory.getInstance().getSwaManager().getAuthDepartments("", deptAuthCond, null);
+			
+			if (authDepts == null)
+				break;
+			
+			SwaDepartment editAuth = authDepts[0];
+			
+			String roleKeysStr = editAuth.getRoleKey();
+			String[] roleKeys = StringUtils.tokenizeToStringArray(roleKeysStr, ";");
+			for (int i = 0; i < roleKeys.length; i++) {
+				if (roleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_CUSTOM)) {
+					String usersStr = editAuth.getCustomUser();
+					String[] tempUsers = StringUtils.tokenizeToStringArray(usersStr, ";");
+					String[] users = ModelConverter.convertUserIdsByUserAndDeptAndGroupIdArray(tempUsers);
+					if (CommonUtil.isEmpty(users))
+						continue;
+					for (int j = 0; j < users.length; j++) {
+						String name = users[j];
+						if (name.equalsIgnoreCase(userId))
+							return true;
+					}
+					
+				} else if (roleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_LEADER)) {
+					int userRole = cUser.getRole();
+					
+					if (departmentId.equalsIgnoreCase(instance.getWorkSpace().getId()) && userRole == User.USER_ROLE_LEADER)
+						return true;
+					
+				} else if (roleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_ADMIN)) {
+					
+					if (cUser.getUserLevel() == User.USER_LEVEL_AMINISTRATOR)
+						return true;
+				}
+			}
+			break;
+		case ISmartWorks.SPACE_TYPE_GROUP:
+
+			
+			SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup("", workSpaceId, IManager.LEVEL_ALL);
+			if (CommonUtil.isEmpty(group))
+				return false;
+			
+			SwaGroupCond groupAuthCond = new SwaGroupCond();
+			groupAuthCond.setGroupId(workSpaceId);
+			if (instance.getWork().getId().equalsIgnoreCase(SmartWork.ID_BOARD_MANAGEMENT)) {
+				groupAuthCond.setGroupAuthType(SwaGroup.GROUP_AUTHTYPE_BOARD_EDIT);
+			} else if (instance.getWork().getId().equalsIgnoreCase(SmartWork.ID_EVENT_MANAGEMENT)) {
+				groupAuthCond.setGroupAuthType(SwaGroup.GROUP_AUTHTYPE_EVENT_EDIT);
+			}
+			SwaGroup[] authGroups = SwManagerFactory.getInstance().getSwaManager().getAuthGroups("", groupAuthCond, null);
+			
+			if (authGroups == null)
+				break;
+
+			SwaGroup editGroupAuth = authGroups[0];
+			
+			String groupRoleKeysStr = editGroupAuth.getRoleKey();
+			String[] groupRoleKeys = StringUtils.tokenizeToStringArray(groupRoleKeysStr, ";");
+			for (int i = 0; i < groupRoleKeys.length; i++) {
+				if (groupRoleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_CUSTOM)) {
+					String usersStr = editGroupAuth.getCustomUser();
+					String[] tempUsers = StringUtils.tokenizeToStringArray(usersStr, ";");
+					String[] users = ModelConverter.convertUserIdsByUserAndDeptAndGroupIdArray(tempUsers);
+					if (CommonUtil.isEmpty(users))
+						continue;
+					for (int j = 0; j < users.length; j++) {
+						String name = users[j];
+						if (name.equalsIgnoreCase(userId))
+							return true;
+					}
+					
+				} else if (groupRoleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_LEADER)) {
+				
+					String groupLeaderId = group.getGroupLeader();
+					
+					if (userId.equalsIgnoreCase(groupLeaderId))
+						return true;
+					
+				} else if (groupRoleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_ADMIN)) {
+					
+					if (cUser.getUserLevel() == User.USER_LEVEL_AMINISTRATOR)
+						return true;
+				}
+			}
+			break;
+		}	
+		return false;
+	}
 }

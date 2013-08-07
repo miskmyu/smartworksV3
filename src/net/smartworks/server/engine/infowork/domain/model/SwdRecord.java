@@ -59,6 +59,7 @@ public class SwdRecord extends BaseObject {
 	private Date modificationDate;
 	private String workSpaceId;
 	private String workSpaceType;
+	private String isUserSetAccessLevel;
 	private String accessLevel;
 	private String accessValue;
 	private int hits;
@@ -440,5 +441,10 @@ public class SwdRecord extends BaseObject {
 	public void setFileGroupMap(Map<String, List<Map<String, String>>> fileGroupMap) {
 		this.fileGroupMap = fileGroupMap;
 	}
-
+	public String getIsUserSetAccessLevel() {
+		return isUserSetAccessLevel;
+	}
+	public void setIsUserSetAccessLevel(String isUserSetAccessLevel) {
+		this.isUserSetAccessLevel = isUserSetAccessLevel;
+	}
 }

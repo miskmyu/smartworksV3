@@ -1,6 +1,7 @@
 package net.smartworks.model.security;
 
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.community.info.WorkSpaceInfo;
 
 public class SpacePolicy {
 
@@ -15,7 +16,7 @@ public class SpacePolicy {
 	private boolean systemAdministratorChecked;
 	private boolean membersChecked;
 	private boolean customChecked;
-	private UserInfo[] customs;
+	private WorkSpaceInfo[] customs;
 
 	public boolean isOwnerChecked() {
 		return ownerChecked;
@@ -57,11 +58,11 @@ public class SpacePolicy {
 		this.customChecked = customChecked;
 	}
 
-	public UserInfo[] getCustoms() {
+	public WorkSpaceInfo[] getCustoms() {
 		return customs;
 	}
 
-	public void setCustoms(UserInfo[] customs) {
+	public void setCustoms(WorkSpaceInfo[] customs) {
 		this.customs = customs;
 	}
 

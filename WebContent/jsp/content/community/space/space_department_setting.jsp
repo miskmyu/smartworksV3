@@ -122,10 +122,10 @@
 													<div class="icon_fb_space">
 														<div class="fieldline community_names js_community_names sw_required">
 															<%
-															UserInfo[] users = department.getBoardWritePolicy().getCustoms();
+															WorkSpaceInfo[] users = department.getBoardWritePolicy().getCustoms();
 															if(!SmartUtil.isBlankObject(users)){
 																for(int i=0; i<users.length; i++){
-																	UserInfo user = users[i];
+																	WorkSpaceInfo user = users[i];
 															%>
 																	<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%
@@ -160,7 +160,7 @@
 															users = department.getBoardEditPolicy().getCustoms();
 															if(!SmartUtil.isBlankObject(users)){
 																for(int i=0; i<users.length; i++){
-																	UserInfo user = users[i];
+																	WorkSpaceInfo user = users[i];
 															%>
 																	<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%
@@ -195,7 +195,7 @@
 															users = department.getEventWritePolicy().getCustoms();
 															if(!SmartUtil.isBlankObject(users)){
 																for(int i=0; i<users.length; i++){
-																	UserInfo user = users[i];
+																	WorkSpaceInfo user = users[i];
 															%>
 																	<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%
@@ -230,7 +230,7 @@
 															users = department.getEventEditPolicy().getCustoms();
 															if(!SmartUtil.isBlankObject(users)){
 																for(int i=0; i<users.length; i++){
-																	UserInfo user = users[i];
+																	WorkSpaceInfo user = users[i];
 															%>
 																	<span class="js_community_item user_select" comId="<%=user.getId() %>" comName="<%=user.getLongName() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
 															<%

@@ -72,9 +72,9 @@ public static IPackageModel convertPkgModel(PkgPackage pkg) {
 }
 %>
 <%
-	String filePath = "/Users/gwangminyu/development/productFile/samsin.txt";
+	String filePath = "/Users/gwangminyu/Desktop/onegene_temp2.txt";
 	String userId = "kmyu@maninsoft.co.kr";
-	String targetCatId = "402880b93dd46ddb013dd47af78e0001";
+	String targetCatId = "402880bb3fcc8e62013fccd89a930001";
 	
 	
 	String returnStr = FileUtil.readString(new File(filePath), "UTF-8");

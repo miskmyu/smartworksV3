@@ -10,14 +10,16 @@ package net.smartworks.server.engine.authority.manager.impl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.server.engine.authority.exception.SwaException;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
+import net.smartworks.server.engine.authority.model.SwaAuthProxy;
+import net.smartworks.server.engine.authority.model.SwaAuthProxyCond;
 import net.smartworks.server.engine.authority.model.SwaDepartment;
 import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
 import net.smartworks.server.engine.authority.model.SwaGroup;
@@ -26,10 +28,8 @@ import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
 import net.smartworks.server.engine.authority.model.SwaUser;
 import net.smartworks.server.engine.authority.model.SwaUserCond;
-import net.smartworks.server.engine.autoindex.exception.AutoIndexException;
-import net.smartworks.server.engine.autoindex.model.AutoIndexDef;
-import net.smartworks.server.engine.autoindex.model.AutoIndexDefCond;
 import net.smartworks.server.engine.common.manager.AbstractManager;
+import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.exception.SwdException;
@@ -39,13 +39,13 @@ import net.smartworks.server.engine.organization.exception.SwoException;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoCompanyCond;
 import net.smartworks.server.engine.organization.model.SwoUser;
-import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstCond;
 
 import org.hibernate.Query;
+import org.springframework.util.StringUtils;
 
 public class SwaManagerImpl extends AbstractManager implements ISwaManager {
 
@@ -938,5 +938,273 @@ public class SwaManagerImpl extends AbstractManager implements ISwaManager {
 			logger.error(e, e);
 			throw new SwaException(e);
 		}
+	}
+	
+	
+	@Override
+	public SwaAuthProxy getAuthProxy(String user, String objId, String level) throws SwaException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			if (level.equals(LEVEL_ALL)) {
+				SwaAuthProxy obj = (SwaAuthProxy)this.get(SwaAuthProxy.class, objId);
+				return obj;
+			} else {
+				SwaAuthProxyCond cond = new SwaAuthProxyCond();
+				cond.setObjId(objId);
+				return getAuthProxy(user, cond, level);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public SwaAuthProxy getAuthProxy(String user, SwaAuthProxyCond cond, String level) throws SwaException {
+		if (level == null)
+			level = LEVEL_ALL;
+		cond.setPageSize(2);
+		SwaAuthProxy[] objs = getAuthProxys(user, cond, level);
+		if (CommonUtil.isEmpty(objs))
+			return null;
+		try {
+			if (objs.length != 1)
+				throw new SwaException("More than 1 Object");
+		} catch (SwaException e) {
+			logger.error(e, e);
+			throw e;
+		}
+		return objs[0];
+	}
+	@Override
+	public void setAuthProxy(String user, SwaAuthProxy obj, String level) throws SwaException {
+		try {
+			fill(user, obj);
+			set(obj);
+		} catch (SwaException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public void removeAuthProxy(String user, String objId) throws SwaException {
+		try {
+			remove(SwaAuthProxy.class, objId);
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public void removeAuthProxy(String user, SwaAuthProxyCond cond) throws SwaException {
+		SwaAuthProxy obj = getAuthProxy(user, cond, null);
+		if (obj == null)
+			return;
+		removeAuthProxy(user, obj.getObjId());
+	}
+	
+	private Query appendQuery(StringBuffer buf, SwaAuthProxyCond cond) throws Exception {
+		
+		String objId = null;
+		String resourceId = null;
+		
+		if (cond != null) {
+			objId = cond.getObjId();
+			resourceId = cond.getResourceId();
+		}
+		buf.append(" from SwaAuthProxy obj");
+		buf.append(" where obj.objId is not null");
+		Map filterMap = new HashMap();
+		//TODO 시간 검색에 대한 확인 필요
+		if (cond != null) {
+			if (objId != null)
+				buf.append(" and obj.objId = :objId");
+			if (resourceId != null)
+				buf.append(" and obj.resourceId = :resourceId");
+		}
+		this.appendOrderQuery(buf, "obj", cond);
+		
+		Query query = this.createQuery(buf.toString(), cond);
+		if (cond != null) {
+			if (objId != null)
+				query.setString("objId", objId);
+			if (resourceId != null)
+				query.setString("resourceId", resourceId);
+		}
+		return query;
+	}
+	
+	@Override
+	public long getAuthProxySize(String user, SwaAuthProxyCond cond) throws SwaException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" count(obj)");
+			Query query = this.appendQuery(buf,cond);
+			List list = query.list();
+			long count = ((Long)list.get(0)).longValue();
+			return count;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public SwaAuthProxy[] getAuthProxys(String user, SwaAuthProxyCond cond, String level) throws SwaException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" obj");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			SwaAuthProxy[] objs = new SwaAuthProxy[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public void setAuthProxy(String userId, SwaUser[] objs) throws Exception {
+
+		if (CommonUtil.isEmpty(objs))
+			return;
+		String resourceId = objs[0].getResourceId();
+		
+		SwaAuthProxyCond proxyCond = new SwaAuthProxyCond();
+		proxyCond.setResourceId(resourceId);
+		
+		SwaAuthProxy proxy = getAuthProxy(userId, proxyCond, null);
+		
+		if (CommonUtil.isEmpty(proxy)) {
+			SwaAuthProxy newProxy = new SwaAuthProxy();
+			newProxy.setResourceId(resourceId);
+			for (int i = 0; i < objs.length; i++) {
+				newProxy.addAccessValue(objs[i].getUserId());
+			}
+			setAuthProxy(userId, newProxy, null);
+		} else {
+			String[] userIds = new String[objs.length];
+			for (int i = 0; i < objs.length; i++) {
+				userIds[i] = objs[i].getUserId();
+			}
+			proxy.resetAccessValue(userIds);
+			setAuthProxy(userId, proxy, null);
+		}
+	}
+	public void removeAllAuthProxyByResourceId(String userId, String resourceId) throws Exception {
+		if (CommonUtil.isEmpty(resourceId))
+			return;
+		SwaAuthProxyCond cond = new SwaAuthProxyCond();
+		cond.setResourceId(resourceId);
+		SwaAuthProxy[] userProxys = getAuthProxys(userId, cond, null);
+		if (CommonUtil.isEmpty(userProxys))
+			return;
+		for (int i = 0; i < userProxys.length; i++) {
+			SwaAuthProxy userProxy = userProxys[i];
+			removeAuthProxy(userId, userProxy.getObjId());
+		}
+	}
+	
+	private SwaAuthProxy makeAuthProxy(String user, String resourceId) throws Exception {
+		if (CommonUtil.isEmpty(resourceId))
+			return null;
+		
+		SwaAuthProxyCond authProxyCond = new SwaAuthProxyCond();
+		authProxyCond.setResourceId(resourceId);
+		SwaAuthProxy authProxy = getAuthProxy(user, authProxyCond, IManager.LEVEL_ALL);
+		if  (authProxy != null)
+			return authProxy;
+		
+		SwaResourceCond cond = new SwaResourceCond();
+		cond.setResourceId(resourceId);
+		cond.setMode(SwaResource.MODE_READ);
+		
+		SwaResource resource = getResource(user, cond, IManager.LEVEL_ALL);
+		if (resource == null)
+			return null;
+		
+		String permission = resource.getPermission();
+		SwaAuthProxy proxy = new SwaAuthProxy();
+		proxy.setResourceId(resourceId);
+		if (permission.equalsIgnoreCase(SwaResource.PERMISSION_ALL)) {
+			proxy.setAccessLevel(AccessPolicy.LEVEL_PUBLIC + "");
+		} else if (permission.equalsIgnoreCase(SwaResource.PERMISSION_NO)) {
+			proxy.setAccessLevel(AccessPolicy.LEVEL_PRIVATE + "");
+		} else if (permission.equalsIgnoreCase(SwaResource.PERMISSION_SELECT)) {
+			proxy.setAccessLevel(AccessPolicy.LEVEL_CUSTOM + "");
+			
+			SwaUserCond userCond = new SwaUserCond();
+			userCond.setResourceId(resourceId);
+			userCond.setMode(SwaUser.MODE_READ);
+			SwaUser[] users = getUsers(user, userCond, IManager.LEVEL_ALL);
+			if (users == null || users.length == 0) {
+				proxy.setAccessLevel(AccessPolicy.LEVEL_PRIVATE + "");
+			} else {
+				StringBuffer userBuff = new StringBuffer();
+				for (int i = 0; i < users.length; i++) {
+					userBuff.append(users[i].getUserId()).append(";");
+				}
+				proxy.setAccessValue(userBuff.toString());
+			}
+		}
+		setAuthProxy(user, proxy, IManager.LEVEL_ALL);
+		
+		return proxy;
+	}
+	
+	
+	
+	@Override
+	public boolean compareAccessPolicyWithAuthProxy(String user, String resourceId, String accessLevel, String accessValue) throws Exception {
+
+		//비교할 authProxy 가 존재하지 않는다면 생성한다
+		SwaAuthProxy authProxy = makeAuthProxy(user, resourceId);
+		if (authProxy == null)
+			return false;
+		
+		String resourceAccessLevel = authProxy.getAccessLevel();
+		String resourceAccessValue = authProxy.getAccessValue();
+		
+		
+		if (accessLevel.equalsIgnoreCase(resourceAccessLevel)) {
+			
+			String[] ids = StringUtils.tokenizeToStringArray(accessValue, ";");
+			String[] resourceUserIds = StringUtils.tokenizeToStringArray(resourceAccessValue, ";");
+			
+			if ((ids == null && resourceUserIds != null) || (ids != null && resourceUserIds == null))
+				return false;
+			
+			if (CommonUtil.isEmpty(ids) && CommonUtil.isEmpty(resourceUserIds)) {
+				return true;
+			} else {
+				if (ids.length != resourceUserIds.length)
+					return false;
+				for (int i = 0; i < resourceUserIds.length; i++) {
+					
+					String resourceUserId = resourceUserIds[i];
+					boolean isExistId = false;
+					for (int j = 0; j < ids.length; j++) {
+						String id = ids[j];
+						if (id.equalsIgnoreCase(resourceUserId)) {
+							isExistId = true;
+							break;
+						}
+					}
+					if (!isExistId)
+						return false;
+				}
+				return true;
+			}
+		} else {
+			return false;
+		}
+		
 	}
 }

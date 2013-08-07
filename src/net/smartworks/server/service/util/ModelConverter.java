@@ -2736,7 +2736,7 @@ public class ModelConverter {
 				}else{
 					taskInstInfo.setStatus(Instance.STATUS_COMPLETED);
 				}
-			}else{
+			} else{
 				taskInstInfo.setStatus(Instance.STATUS_COMPLETED);
 			}
 		}
@@ -3066,12 +3066,13 @@ public class ModelConverter {
 				boardWritePolicy.setCustomChecked(true);
 				String usersStr = boardWrite.getCustomUser();
 				String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
-				SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(cUser.getId(), users);
-				UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
-				for (int j = 0; j < userExtendsArray.length; j++) {
-					userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
-				}
-				boardWritePolicy.setCustoms(userInfoArray);
+				
+				//SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(cUser.getId(), users);
+				//UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+				//for (int j = 0; j < userExtendsArray.length; j++) {
+				//	userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+				//}
+				boardWritePolicy.setCustoms(getWorkSpaceInfoByIds(users));
 			} else if (roleKeys[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_LEADER)) {
 				boardWritePolicy.setLeaderChecked(true);
 			} else if (roleKeys[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_MEMBER)) {
@@ -3091,12 +3092,14 @@ public class ModelConverter {
 				boardEditPolicy.setCustomChecked(true);
 				String usersStr = boardEdit.getCustomUser();
 				String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
-				SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(cUser.getId(), users);
-				UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
-				for (int j = 0; j < userExtendsArray.length; j++) {
-					userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
-				}
-				boardEditPolicy.setCustoms(userInfoArray);
+				
+				//SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(cUser.getId(), users);
+				//UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+				//for (int j = 0; j < userExtendsArray.length; j++) {
+				//	userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+				//}
+				
+				boardEditPolicy.setCustoms(getWorkSpaceInfoByIds(users));
 			} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_LEADER)) {
 				boardEditPolicy.setLeaderChecked(true);
 			} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_MEMBER)) {
@@ -3116,12 +3119,13 @@ public class ModelConverter {
 				eventWritePolicy.setCustomChecked(true);
 				String usersStr = eventWrite.getCustomUser();
 				String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
-				SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(cUser.getId(), users);
-				UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
-				for (int j = 0; j < userExtendsArray.length; j++) {
-					userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
-				}
-				eventWritePolicy.setCustoms(userInfoArray);
+				
+				//SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(cUser.getId(), users);
+				//UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+				//for (int j = 0; j < userExtendsArray.length; j++) {
+				//	userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+				//}
+				eventWritePolicy.setCustoms(getWorkSpaceInfoByIds(users));
 			} else if (roleKeyEventWrites[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_LEADER)) {
 				eventWritePolicy.setLeaderChecked(true);
 			} else if (roleKeyEventWrites[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_MEMBER)) {
@@ -3141,12 +3145,12 @@ public class ModelConverter {
 				eventEditPolicy.setCustomChecked(true);
 				String usersStr = eventEdit.getCustomUser();
 				String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
-				SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(cUser.getId(), users);
-				UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
-				for (int j = 0; j < userExtendsArray.length; j++) {
-					userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
-				}
-				eventEditPolicy.setCustoms(userInfoArray);
+				//SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(cUser.getId(), users);
+				//UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+				//for (int j = 0; j < userExtendsArray.length; j++) {
+				//	userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+				//}
+				eventEditPolicy.setCustoms(getWorkSpaceInfoByIds(users));
 			} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_LEADER)) {
 				eventEditPolicy.setLeaderChecked(true);
 			} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_MEMBER)) {
@@ -3370,13 +3374,12 @@ public class ModelConverter {
 				if (roleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_CUSTOM)) {
 					boardWritePolicy.setCustomChecked(true);
 					String usersStr = boardWrite.getCustomUser();
+					
 					String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
-					SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
-					UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
-					for (int j = 0; j < userExtendsArray.length; j++) {
-						userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
-					}
-					boardWritePolicy.setCustoms(userInfoArray);
+					//String[] users = convertUserIdsByUserAndDeptAndGroupIdArray(tempUsers);
+					
+					boardWritePolicy.setCustoms(getWorkSpaceInfoByIds(users));
+					
 				} else if (roleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_LEADER)) {
 					boardWritePolicy.setLeaderChecked(true);
 				} else if (roleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_MEMBER)) {
@@ -3395,13 +3398,17 @@ public class ModelConverter {
 				} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_CUSTOM)) {
 					boardEditPolicy.setCustomChecked(true);
 					String usersStr = boardEdit.getCustomUser();
+
 					String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
-					SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
-					UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
-					for (int j = 0; j < userExtendsArray.length; j++) {
-						userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
-					}
-					boardEditPolicy.setCustoms(userInfoArray);
+					//String[] users = convertUserIdsByUserAndDeptAndGroupIdArray(tempUsers);
+					
+					//SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
+					//UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+					//for (int j = 0; j < userExtendsArray.length; j++) {
+					//	userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+					//}
+					boardEditPolicy.setCustoms(getWorkSpaceInfoByIds(users));
+					
 				} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_LEADER)) {
 					boardEditPolicy.setLeaderChecked(true);
 				} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_MEMBER)) {
@@ -3418,13 +3425,17 @@ public class ModelConverter {
 				if (roleKeyEventWrites[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_CUSTOM)) {
 					eventWritePolicy.setCustomChecked(true);
 					String usersStr = eventWrite.getCustomUser();
+					
 					String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
-					SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
-					UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
-					for (int j = 0; j < userExtendsArray.length; j++) {
-						userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
-					}
-					eventWritePolicy.setCustoms(userInfoArray);
+					//String[] users = convertUserIdsByUserAndDeptAndGroupIdArray(tempUsers);
+					
+					//SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
+					//UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+					//for (int j = 0; j < userExtendsArray.length; j++) {
+					//	userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+					//}
+					eventWritePolicy.setCustoms(getWorkSpaceInfoByIds(users));
+					
 				} else if (roleKeyEventWrites[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_LEADER)) {
 					eventWritePolicy.setLeaderChecked(true);
 				} else if (roleKeyEventWrites[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_MEMBER)) {
@@ -3443,13 +3454,16 @@ public class ModelConverter {
 				} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_CUSTOM)) {
 					eventEditPolicy.setCustomChecked(true);
 					String usersStr = eventEdit.getCustomUser();
+
 					String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
-					SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
-					UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
-					for (int j = 0; j < userExtendsArray.length; j++) {
-						userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
-					}
-					eventEditPolicy.setCustoms(userInfoArray);
+					//String[] users = convertUserIdsByUserAndDeptAndGroupIdArray(tempUsers);
+					
+					//SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
+					//UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+					//for (int j = 0; j < userExtendsArray.length; j++) {
+					//	userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+					//}
+					eventEditPolicy.setCustoms(getWorkSpaceInfoByIds(users));
 				} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_LEADER)) {
 					eventEditPolicy.setLeaderChecked(true);
 				} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_MEMBER)) {
@@ -3466,13 +3480,17 @@ public class ModelConverter {
 				if (roleKeyInviteMembers[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_CUSTOM)) {
 					inviteMemberPolicy.setCustomChecked(true);
 					String usersStr = eventEdit.getCustomUser();
+
 					String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
-					SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
-					UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
-					for (int j = 0; j < userExtendsArray.length; j++) {
-						userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
-					}
-					inviteMemberPolicy.setCustoms(userInfoArray);
+					//String[] users = convertUserIdsByUserAndDeptAndGroupIdArray(tempUsers);
+					
+					//SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
+					//UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+					//for (int j = 0; j < userExtendsArray.length; j++) {
+					//	userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+					//}
+					
+					inviteMemberPolicy.setCustoms(getWorkSpaceInfoByIds(users));
 				} else if (roleKeyInviteMembers[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_LEADER)) {
 					inviteMemberPolicy.setLeaderChecked(true);
 				} else if (roleKeyInviteMembers[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_MEMBER)) {
@@ -3503,6 +3521,52 @@ public class ModelConverter {
 		}
 
 	}
+	
+	private static WorkSpaceInfo[] getWorkSpaceInfoByIds(String[] ids) throws Exception {
+		
+		List userList = new ArrayList();
+		List deptList = new ArrayList();
+		List groupList = new ArrayList();
+		List workSpaceList = new ArrayList();
+		
+		for (int j = 0; j < ids.length; j++) {
+			String id = ids[j];
+			if (id.indexOf("dept_") != -1) {
+				deptList.add(id);
+			} else if (id.indexOf("group_") != -1) {
+				groupList.add(id);
+			} else {
+				userList.add(id);
+			}
+		}
+		
+		if (userList.size() != 0) {
+			String[] users = new String[userList.size()];
+			userList.toArray(users);
+			SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend("", users);
+			UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+			for (int j = 0; j < userExtendsArray.length; j++) {
+				workSpaceList.add(ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]));
+			}
+		}
+		if (deptList.size() != 0) {
+			for (int j = 0; j < deptList.size(); j++) {
+				workSpaceList.add(getDepartmentInfoByDepartmentId((String)deptList.get(j)));
+			}
+		}
+		if (groupList.size() != 0) {
+			for (int j = 0; j < groupList.size(); j++) {
+				workSpaceList.add(getGroupInfoByGroupId((String)groupList.get(j)));
+			}
+		}
+		
+		WorkSpaceInfo[] workSpaceInfo = new WorkSpaceInfo[workSpaceList.size()];
+		workSpaceList.toArray(workSpaceInfo);
+		
+		return workSpaceInfo;
+	}
+	
+	
 	public static Work getWorkByCtgCategory(Work work, CtgCategory ctg) throws Exception {
 		if (ctg == null)
 			return null;
@@ -4530,7 +4594,7 @@ public class ModelConverter {
 	 * 사용자 아이디와 부서아이디 그룹아이디가 섞여서 들어온 스트링 어레이를 부서에 속한 사용자, 그룹에 속한 사용자를 모두꺼내어
 	 * 사용자 아이디(스트링 어레이)로 변경한다
 	 */
-	private static String[] convertUserIdsByUserAndDeptAndGroupIdArray(String[] ids) throws Exception {
+	public static String[] convertUserIdsByUserAndDeptAndGroupIdArray(String[] ids) throws Exception {
 		
 		if (!CommonUtil.isEmpty(ids)) {
 			List refUserIdList = new ArrayList();

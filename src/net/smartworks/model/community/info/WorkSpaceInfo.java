@@ -14,6 +14,10 @@ public class WorkSpaceInfo extends CommunityInfo {
 	private WorkInfo instanceWork;
 	private String instanceWorkSpaceId;
 
+	public String getLongName() {
+		return this.getName();
+	}
+	
 	public int getSpaceType() {
 		return spaceType;
 	}

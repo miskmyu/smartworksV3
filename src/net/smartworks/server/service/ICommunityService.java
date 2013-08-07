@@ -9,16 +9,15 @@ import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
+import net.smartworks.model.community.info.CommunityInfoList;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
-import net.smartworks.model.community.info.CommunityInfoList;
 import net.smartworks.model.community.info.GroupMemberList;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
-import net.smartworks.model.instance.info.InstanceInfoList;
+import net.smartworks.model.instance.InformationWorkInstance;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.mail.MailAccount;
-import net.smartworks.model.work.info.SmartWorkInfo;
 
 public interface ICommunityService {
 
@@ -104,4 +103,6 @@ public interface ICommunityService {
 
 	public void removeAFavoriteCommunity(String workId) throws Exception;
 
+	public boolean isEditable_Board_EventWorkInstanceBySpacePolicy(InformationWorkInstance instance) throws Exception;
+	
 }
