@@ -37,6 +37,7 @@
 	
 	String borderClass = workId.equals(SmartWork.ID_REPORT_MANAGEMENT) ? "border" : "border_no_topline";
 	int targetWorkType = (report!=null) ? report.getTargetWorkType() : Work.TYPE_NONE;
+	int dataSourceType = (report!=null) ? report.getDataSourceType() : Report.DATA_SOURCE_DEFAULT;
 	
 	String targetWorkName = request.getParameter("targetWorkName");
 	String targetWorkIcon = request.getParameter("targetWorkIcon");
@@ -93,6 +94,7 @@
 		%>
 			<jsp:include page="/jsp/content/work/report/work_report_chart.jsp">
 				<jsp:param name="reportId" value="<%=CommonUtil.toNotNull(reportId) %>" />
+				<jsp:param name="dataSourceType" value="<%=reportType %>" />
 				<jsp:param name="reportType" value="<%=reportType %>" />
 				<jsp:param name="targetWorkId" value="<%=targetWorkId %>" />
 				<jsp:param name="targetWorkType" value="<%=targetWorkType %>" />
