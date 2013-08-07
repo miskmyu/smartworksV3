@@ -72,6 +72,9 @@ public class ReportServiceImpl implements IReportService {
 
 	@Override
 	public Data getReportData(HttpServletRequest request) throws Exception {
+		
+		System.out.println(request.getParameter("reportId"));
+		
 		return SmartTest.getReportData4();
 	}
 
