@@ -79,6 +79,9 @@ smartMessage.bundle['ko'] = {
 	rowNoText : "번호",
 	rowDeleteText : "항목삭제",
 	rowAddText : "항목추가",
+	reportSubTotal : "소계",
+	reportGrandTotal : "전체 합계",
+	companyAllWorks : "회사 전체 업무",
 	
 	setMyProfileSucceed : "개인정보수정이 정상적으로 완료되었습니다.",
 	setMyProfileError : "개인정보수정하는 중 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
@@ -239,6 +242,10 @@ smartMessage.bundle['ko'] = {
 	moveFileInstancesError : "파일을 이동하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	removeMailFolderSucceed : "메일폴더가 정상적으로 삭제되었습니다.",
 	removeMailFolderError : "메일폴더를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	createReportPaneSucceed : "새로운 보고서가 대시보드에 정상적으로 추가되었습니다.",
+	createReportPaneError : "새로운 보고서를 대시보드에 추가하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	setReportPaneSucceed : "대시보드 보고서가 정상적으로 수정되었습니다.",
+	setReportPaneError : "대시보드 보고서를 수정하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	sendMailConfirm: "메일을 보내려고 합니다. 정말로 보내시겠습니까?",
 	sendMailSucceed : "메일 보내기가 정상적으로 이루어졌습니다.",
 	sendMailError : "메일을 보내는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
@@ -273,6 +280,7 @@ smartMessage.bundle['ko'] = {
 	removeCommentError : "댓글삭제에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.",
 	boardDurationDateError : "공지종료일자가 현재보다 과거일자 입니다.. 수정 후 다시 하시기 바랍니다.", 
 	newMailPasswordConfirmError : "새로운 비밀번호확인이 잘못되었습니다. 확인 후 다시 하시기 바랍니다.",
+	removeReportPaneError : "보고서 항목을 삭제하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	
 	addJunkMailError : "차단할 메일을 추가하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.",
 	addJunkDomainError : "차단할 도메인을 추가하는데 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.",

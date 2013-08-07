@@ -26,9 +26,12 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String filterId = request.getParameter("filterId");
+	String targetWorkId = request.getParameter("targetWorkId");
 	User cUser = SmartUtil.getCurrentUser();
 	SmartWork work = (SmartWork)session.getAttribute("smartWork");
 	String workId = work.getId();
+	if(workId.equals(SmartWork.ID_REPORT_MANAGEMENT) && !SmartUtil.isBlankObject(targetWorkId))
+	work = (SmartWork)smartWorks.getWorkById(targetWorkId);
 
 	String filterName = "";
 	FormField[] fields = null;
@@ -132,10 +135,6 @@
 						} else if (fieldType.equals(FormField.TYPE_COMBO_STATUS)) {
 						%> 
 							<jsp:include page="/jsp/content/work/field/combo_status_field.jsp"></jsp:include>
-						<%
-						} else if (fieldType.equals(FormField.TYPE_COMBO_PROCESS_TYPE)) {
-						%> 
-							<jsp:include page="/jsp/content/work/field/combo_process_type_field.jsp"></jsp:include>
 						<%
 						} else {
 						%> 
@@ -282,13 +281,6 @@
 	 										<jsp:param name="operandValue" value="<%=rightOperand %>" />
 	 									</jsp:include> 
 									<%
-					 				} else if (fieldType.equals(FormField.TYPE_COMBO_PROCESS_TYPE)) {
-	 								%> 
-	 									<jsp:include page="/jsp/content/work/field/combo_process_type_field.jsp">
-	 										<jsp:param name="operator" value="<%=operator%>" />
-	 										<jsp:param name="operandValue" value="<%=rightOperand %>" />
-	 									</jsp:include> 
-	 								<%
 					 				} else {
 					 					String operandValue = URLEncoder.encode((String) rightOperand, "UTF-8");
 	 								%> 

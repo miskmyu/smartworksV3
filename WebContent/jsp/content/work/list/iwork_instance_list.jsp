@@ -92,8 +92,13 @@
 				</a>
 				<span class="js_progress_span"></span>
 			</th>		
-	 		<th style="width:40px;">
-				<span><fmt:message key="common.title.views"/></span>
+	 		<th style="width:60px;">
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_INSTANCE_VIEWS%>">
+	 				<fmt:message key="common.title.views"/>
+			 		<span class="<%if(sortedField.getFieldId().equals(FormField.ID_INSTANCE_VIEWS)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}}%>"></span>
+				</a>
+				<span class="js_progress_span"></span>
 			</th>
 		</tr>	
 	<%
@@ -215,8 +220,13 @@
 				</a>
 				<span class="js_progress_span"></span>
 			</th>		
-	 		<th class="r_line" style="width:40px;">
-				<span><fmt:message key="common.title.views"/></span>
+	 		<th class="r_line" style="width:60px;">
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_INSTANCE_VIEWS%>">
+	 				<fmt:message key="common.title.views"/>
+			 		<span class="<%if(sortedField.getFieldId().equals(FormField.ID_INSTANCE_VIEWS)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}}%>"></span>
+				</a>
+				<span class="js_progress_span"></span>
 			</th>
 		</tr>	
 	<%

@@ -17,6 +17,7 @@ public class SmartWork extends Work {
 	public final static int TYPE_INFORMATION = 21;
 	public final static int TYPE_PROCESS = 22;
 	public final static int TYPE_SCHEDULE = 23;
+	public final static int TYPE_REPORT = 24;
 	
 	public final static String ID_FILE_MANAGEMENT = "pkg_309666dd2bb5493c9d7e618b3a0aad96";
 	public final static String ID_EVENT_MANAGEMENT = "pkg_c08a02b36192489fbc13fdb6bed6f5fc";
@@ -28,6 +29,7 @@ public class SmartWork extends Work {
 	public final static String ID_FORUM_MANAGEMENT = "pkg_af2c5abbdc694feab78b2706c31f3bde";
 	public final static String ID_CONTACTS_MANAGEMENT = "pkg_dde3f719c50143cd821e6c46e8df8655";
 	public final static String ID_MESSAGE_MANAGEMENT = "";
+	public final static String ID_REPORT_MANAGEMENT = "reportManagement";
 	public final static String ID_ALL_WORKS = "allSmartWorks";
 	public final static String ID_SAVED_WORKS = "savedSmartWorks";
 

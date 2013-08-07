@@ -1,3 +1,7 @@
+<%@page import="net.smartworks.model.work.WorkCategory"%>
+<%@page import="net.smartworks.model.work.info.WorkInfo"%>
+<%@page import="net.smartworks.model.work.ReportWork"%>
+<%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.service.impl.SmartWorks"%>
 <%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
@@ -36,7 +40,7 @@
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				$('#iwork_instance_list_page').html(data);
+				$('#report_instance_list_page').html(data);
 				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError) {
@@ -47,7 +51,7 @@
 	};
 	
 	saveAsSearchFilter = function(filterId){
-		var iworkList = $('.js_iwork_list_page');
+		var reportList = $('.js_report_list_page');
 		var searchFilter = $('.js_search_filter_page');
 		var url = "set_work_search_filter.sw";
 		if(isEmpty(filterId)){
@@ -58,7 +62,7 @@
 		if (!SmartWorks.GridLayout.validate(searchFilter.find('form.js_validation_required'), $('.js_filter_error_message'))) return;
 
 		var paramsJson = {};
-		var workId = iworkList.attr('workId');
+		var workId = reportList.attr('workId');
 		var searchFilters = searchFilter.find('form[name="frmSearchFilter"]');
 		paramsJson['workId'] = workId;
 		paramsJson['workType'] = <%=SmartWork.TYPE_INFORMATION%>;
@@ -86,7 +90,7 @@
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				var selectSearchFilter = iworkList.find('.js_select_search_filter');
+				var selectSearchFilter = reportList.find('.js_select_search_filter');
 				selectSearchFilter.find('.js_custom_filter').remove();
 				selectSearchFilter.append(data);
 				$('a.js_search_filter_close').click();
@@ -118,12 +122,14 @@
 	};
 
 	selectListParam = function(progressSpan, isGray){
-		var iworkList = $('.js_iwork_list_page');
-		var forms = iworkList.find('form:visible');
+		var reportList = $('.js_report_list_page');
+		var forms = reportList.find('form:visible');
 		var paramsJson = {};
-		var workId = iworkList.attr('workId');
-		paramsJson["href"] = "jsp/content/work/list/iwork_instance_list.jsp?workId=" + workId;
-		var searchFilters = iworkList.find('form[name="frmSearchFilter"]');
+		var targetWorkId = reportList.attr('targetWorkId');
+		var targetWorkType = reportList.attr('targetWorkType');
+		var producedBy = reportList.attr('producedBy');
+		paramsJson["href"] = "jsp/content/work/list/report_instance_list.jsp?targetWorkId=" + targetWorkId + "&targetWorkType=" + targetWorkType + "&producedBy=" + producedBy;
+		var searchFilters = reportList.find('form[name="frmSearchFilter"]');
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);
 			if(form.attr('name') !== "frmSearchFilter" && !(!isEmpty(searchFilters) && form.attr('name') === "frmSearchInstance")){
@@ -139,7 +145,7 @@
 			}
 			paramsJson['frmSearchFilters'] = searchFilterArray;
 		}
-		if(isEmpty(progressSpan)) progressSpan = iworkList.find('.js_search_filter_page').next('span.js_progress_span:first');
+		if(isEmpty(progressSpan)) progressSpan = reportList.find('.js_search_filter_page').next('span.js_progress_span:first');
 		getIntanceList(paramsJson, progressSpan, isGray);		
 	};
 </script>
@@ -150,11 +156,13 @@
 
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
-	session.setAttribute("lastLocation", "iwork_list.sw");
+	session.setAttribute("lastLocation", "report_list.sw");
 
-	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
+	String workId = SmartWork.ID_REPORT_MANAGEMENT;
+	String targetWorkId = SmartUtil.getSpaceIdFromContentContext(cid);
+	String producedBy = Report.PRODUCED_BY_SMARTWORKS;
 	User cUser = SmartUtil.getCurrentUser();
-	InformationWork work = (InformationWork) smartWorks.getWorkById(workId);
+	ReportWork work = (ReportWork) smartWorks.getWorkById(workId);
 	String selectedFilterId = SearchFilter.FILTER_ALL_INSTANCES;
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
 	String searchKey = "";
@@ -170,14 +178,19 @@
 		params.setSearchFilter(null);
 	}
 
+	int userReportCount = smartWorks.getUserReportCount(targetWorkId);
+	
 	session.setAttribute("smartWork", work);
 	session.removeAttribute("workInstance");
+	
+	WorkInfo[] workCategories = smartWorks.getAllWorksByCategoryId("");
+	String categoryId = "";
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_iwork_list_page js_work_list_page" workId="<%=work.getId()%>">
+<div class="section_portlet js_report_list_page js_work_list_page js_work_report_page" workId="<%=SmartWork.ID_REPORT_MANAGEMENT%>" targetWorkId="<%=targetWorkId %>" targetWorkName="<fmt:message key="report.title.company_all_works"/>" targetWorkIcon="icon_depart" targetWorkType="<%=Work.TYPE_NONE %>" producedBy="<%=producedBy%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
@@ -186,52 +199,40 @@
 			<div class="body_titl">
 				<div class="body_titl_iworks title"><%=work.getFullpathName()%></div>
 				<!-- 우측 버튼 -->
-				<div class="fr txt_btn icon_smartbuilder">
-					<%if(work.amIBuilderUser()){ %>
-						<a href="tab_workbench.sw?cid=<%=work.getContextId() %>" class="js_content">
-							<fmt:message key="header.global_menu.smartbuilder"/>
+				<div class="txt_btn" style="text-align:left;font-size:14px;">
+					<span class="btn_gray" style="margin-left:40px"> 
+						<a href="" class="js_pop_all_target_works"> 
+							<span class="txt_btn_start"></span>
+							<span class="txt_btn_center"><fmt:message key="report.title.target_work"/></span> 
+							<span class="txt_btn_end"></span> 
 						</a>
-					<%} %>
-				</div>
-				<div class="txt_btn" style="line-height: 27px">
-					<span class="js_progress_span"></span>
-					<a class="js_view_work_manual" href="iwork_manual.sw"><fmt:message key="common.button.view.work_manual" /><span class="icon_in_down"></span></a>
-					<a style="display: none" class="js_view_work_manual" href=""><fmt:message key="common.button.close.work_manual" /><span class="icon_in_down"></span></a>
+					</span>
+					<div class="js_target_work_info" style="display:inline-block">
+						<span class="icon_depart"></span>
+						<span style="font-size:13px;line-height:21px;margin-left:4px;"><fmt:message key="report.title.company_all_works"/></span>
+					</div>
 				</div>
 				<!-- 우측 버튼 //-->
 				<div class="solid_line"></div>
+				<!-- 업무트리가 나타나는 곳 -->
+				<span class="js_all_target_work_popup" style="position:absolute;"></span>
 			</div>
 			<!-- 타이틀 -->
 
-			<!-- 업무매뉴얼 보기 -->
-			<div id="work_manual" style="display: none"></div>
-			<!-- 업무매뉴얼 보기 //-->
-
 			<!-- 목록영역  -->
 			<div class="contents_space">
-				<div>
-					<jsp:include page="/jsp/content/work/report/work_report.jsp">
-						<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
-					</jsp:include>
-				</div>
 				<!-- 목록보기 -->
 				<div>
 					<!-- 목록보기 타이틀-->
 					<div class="list_title_space js_work_list_title mt15">
-						<div class="title"><fmt:message key="common.title.instance_list" /></div>
+						<div class="title pr10 fl js_report_list_title js_report_count">
+							<span class="js_view_report_list"><a href="" producedBy="smartworks"><fmt:message key="report.title.default_reports"/></a></span> | 
+							<span class="disabled js_view_report_list"><a href="" producedBy='user'><fmt:message key="report.title.user_reports"/> <span class="t_red_bold js_user_report_count"> [<%=userReportCount %>]</span> </a></span> 
+						</div>					
 						<div class="title_line_btns">
-							<%
-							if(work.getWritePolicy().isWritableForMe()) {
-							%>
-								<div class="icon_btn_start">
-									<a href="new_iwork.sw?workId=<%=workId%>" class="js_create_new_work icon_btn_tail" workId="<%=workId%>"><fmt:message key="common.button.add_new_iwork"/></a>
-								</div>
-								<div class="icon_btn_start">
-									<a href="" class="icon_btn_tail js_import_from_excel"><fmt:message key="common.button.excel_import"/></a>
-								</div>
-							<%
-								}
-							%>
+							<div class="icon_btn_start">
+								<a href="work_report_edit.sw" class="js_edit_work_report icon_btn_tail" targetWorkId="<%=targetWorkId%>"><fmt:message key="common.button.add_new_iwork"/></a>
+							</div>
 							<div class="icon_btn_start">
 								<a href="" class="icon_btn_tail js_export_to_iwork_list_excel"><fmt:message key="common.button.excel_export"/></a>
 							</div>
@@ -239,68 +240,29 @@
 						</div>
 					
 						<div class="title_line_options">
-							<form name="frmSearchInstance" class="po_left"> 
+							<form name="frmSearchInstance" class="po_left" <%if(Report.PRODUCED_BY_SMARTWORKS.equals(producedBy)){ %>style="display:none"<%} %>> 
 								<div class="srch_wh srch_wsize">
 									<input name="txtSearchInstance" class="nav_input" value="<%=CommonUtil.toNotNull(searchKey) %>" type="text" placeholder="<fmt:message key='search.search_instance' />">
 									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 								</div>
 							</form>
-							<form class="form_space po_left js_form_filter_name" name="frmIworkFilterName">
-								<select name="selFilterName" class="js_select_search_filter">
-									<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" 
-										<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_ALL_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-										<fmt:message key='filter.name.all_instances' />
-									</option>
-									<option value="<%=SearchFilter.FILTER_MY_INSTANCES%>"
-										<%if(SearchFilter.FILTER_MY_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-										<fmt:message key='filter.name.my_instances' />
-									</option>
-									<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>"
-										<%if(SearchFilter.FILTER_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-										<fmt:message key='filter.name.recent_instances' />
-									</option>
-									<option value="<%=SearchFilter.FILTER_MY_RECENT_INSTANCES%>"
-										<%if(SearchFilter.FILTER_MY_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-										<fmt:message key='filter.name.my_recent_instances' />
-									</option>
-									<option value="<%=SearchFilter.FILTER_RECENT_1YEAR_INSTANCES%>"
-										<%if(SearchFilter.FILTER_RECENT_1YEAR_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-										<fmt:message key='filter.name.recent_1year_instances' />
-									</option>
-									<option value="<%=SearchFilter.FILTER_RECENT_3YEARS_INSTANCES%>"
-										<%if(SearchFilter.FILTER_RECENT_3YEARS_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-										<fmt:message key='filter.name.recent_3years_instances' />
-									</option>
-									<%
-									SearchFilterInfo[] filters = work.getSearchFilters();
-									if (filters != null) {
-										for (SearchFilterInfo filter : filters) {
-											if(SmartUtil.isBlankObject(filter.getId())) continue;
-									%>
-											<option class="js_custom_filter" value="<%=filter.getId()%>" <%if(filter.getId().equals(selectedFilterId)){%> selected <%} %>><%=CommonUtil.toNotNull(filter.getName())%></option>
-									<%
-										}
-									}
-									%>
-								</select>
-							</form>
-							<a href="search_filter.sw?workId=<%=workId%>" class="js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
-								<div class="icon_btn_edit"></div>
-							</a>
 							<span class="js_progress_span"></span>
 						</div>
 					</div>
 					<!-- 목록보기 타이틀-->
 
-					<!-- 상세필터 및 새업무등록하기 화면 -->
-					<div id="search_filter" class="filter_section js_new_work_form"></div>
-					<!-- 상세필터 -->
+					<!-- 새보고서등록하기 화면 -->
+					<div class="js_work_report_edit"></div>
+					<div class="js_work_report_view border_no_topline" style="display:none"></div>
+					<!-- 새보고서등록하기 화면 -->
 
 					<!-- 목록 테이블 -->
 					<div class="list_contents">
-						<div id='iwork_instance_list_page' >
-							<jsp:include page="/jsp/content/work/list/iwork_instance_list.jsp">
-								<jsp:param value="<%=workId%>" name="workId"/>
+						<div id='report_instance_list_page' >
+ 							<jsp:include page="/jsp/content/work/list/report_instance_list.jsp">
+								<jsp:param value="<%=targetWorkId%>" name="targetWorkId"/>
+								<jsp:param value="<%=Work.TYPE_NONE%>" name="targetWorkType"/>
+								<jsp:param value="<%=producedBy%>" name="producedBy"/>
 							</jsp:include>
 						</div>
 					</div>

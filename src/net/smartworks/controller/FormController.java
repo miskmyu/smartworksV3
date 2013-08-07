@@ -122,11 +122,5 @@ public class FormController {
 	public ModelAndView comboBooleanField(HttpServletRequest request, HttpServletResponse response) {
 	
 		return SmartUtil.returnMnv(request, "jsp/content/work/field/combo_boolean_field.jsp", "");
-	}
-	
-	@RequestMapping("/combo_process_type_field")
-	public ModelAndView comboProcessTypeField(HttpServletRequest request, HttpServletResponse response) {
-	
-		return SmartUtil.returnMnv(request, "jsp/content/work/field/combo_process_type_field.jsp", "");
-	}
+	}	
 }

@@ -11,6 +11,7 @@ import org.cometd.client.transport.ClientTransport;
 import org.cometd.client.transport.LongPollingTransport;
 import org.eclipse.jetty.client.HttpClient;
 
+import net.smartworks.model.Matrix;
 import net.smartworks.model.calendar.CompanyCalendar;
 import net.smartworks.model.calendar.CompanyEvent;
 import net.smartworks.model.calendar.WorkHour;
@@ -44,6 +45,7 @@ import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.MemoInstanceInfo;
 import net.smartworks.model.instance.info.PWInstanceInfo;
+import net.smartworks.model.instance.info.ReportInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
@@ -54,6 +56,9 @@ import net.smartworks.model.notice.NoticeMessage;
 import net.smartworks.model.report.ChartReport;
 import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
+import net.smartworks.model.report.ReportPane;
+import net.smartworks.model.report.info.ReportInfo;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.service.Variable;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WSDLOperation;
@@ -64,6 +69,7 @@ import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.ImageCategory;
 import net.smartworks.model.work.InformationWork;
 import net.smartworks.model.work.ProcessWork;
+import net.smartworks.model.work.ReportWork;
 import net.smartworks.model.work.SmartDiagram;
 import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.SmartTask;
@@ -1226,12 +1232,15 @@ public class SmartTest {
 		return null;
 	}
 
-	public static Report[] getReportsByWorkId() throws Exception{
-		return ChartReport.DEFAULT_CHARTS_INFORMATION;
+	public static ReportInfo[] getReportsByWorkId() throws Exception{
+		ReportInfo report = new ReportInfo(ChartReport.getChartPCntMonthly().getId(), ChartReport.getChartPCntMonthly().getName());
+		return new ReportInfo[]{report};
 	}
 
 	public static Report getReportById() throws Exception{
-		return ChartReport.getChartPCntMonthly();
+		Report report = ChartReport.getChartPCntMonthly();
+		report.setId("testReport");
+		return report;
 	}
 	
 	public static SearchFilter getSearchFilterById() throws Exception{
@@ -1326,7 +1335,7 @@ public class SmartTest {
 		
 		
 	}
-	public static Data getReportData() throws Exception{
+	public static Data getReportData3() throws Exception{
 		Data reportData = new Data();
 	    Map<String,Object> value1 = new HashMap<String, Object>();
 	    Map<String,Object> value2 = new HashMap<String, Object>();
@@ -1341,90 +1350,90 @@ public class SmartTest {
 	    Map<String,Object> value11 = new HashMap<String, Object>();
 	    Map<String,Object> value12 = new HashMap<String, Object>();
 	    List<Map<String , Object>> values  = new java.util.ArrayList<Map<String,Object>>();
-	    value1.put("name", "정 윤식");
-	    value1.put("yesterday", 10);
-	    value1.put("today", 9);
-	    value1.put("tomorrow", 11);
-	    value1.put("sunday", 10);
-	    value1.put("monday", 9);
-	    value1.put("tuesday", 11);
-	    value2.put("name", "유 광민");
-	    value2.put("yesterday", 5);
-	    value2.put("today", 3);
-	    value2.put("tomorrow", 7);
-	    value2.put("sunday", 10);
-	    value2.put("monday", 9);
-	    value2.put("tuesday", 11);
-	    value3.put("name", "신 현성");
-	    value3.put("yesterday", 8);
-	    value3.put("today", 13);
-	    value3.put("tomorrow", 1);
-	    value3.put("sunday", 10);
-	    value3.put("monday", 9);
-	    value3.put("tuesday", 11);
-	    value4.put("name", "이 현정");
-	    value4.put("yesterday", 8);
-	    value4.put("today", 13);
-	    value4.put("tomorrow", 1);
-	    value4.put("sunday", 10);
-	    value4.put("monday", 9);
-	    value4.put("tuesday", 11);
-	    value5.put("name", "김 지숙");
-	    value5.put("yesterday", 8);
-	    value5.put("today", 13);
-	    value5.put("tomorrow", 1);
-	    value5.put("sunday", 10);
-	    value5.put("monday", 9);
-	    value5.put("tuesday", 11);
-	    value6.put("name", "김 태수");
-	    value6.put("yesterday", 8);
-	    value6.put("today", 13);
-	    value6.put("tomorrow", 1);
-	    value6.put("sunday", 10);
-	    value6.put("monday", 9);
-	    value6.put("tuesday", 11);
-	    value7.put("name", "김 정남");
-	    value7.put("yesterday", 10);
-	    value7.put("today", 9);
-	    value7.put("tomorrow", 11);
-	    value7.put("sunday", 10);
-	    value7.put("monday", 9);
-	    value7.put("tuesday", 11);
-	    value8.put("name", "전 태일");
-	    value8.put("yesterday", 5);
-	    value8.put("today", 3);
-	    value8.put("tomorrow", 7);
-	    value8.put("sunday", 10);
-	    value8.put("monday", 9);
-	    value8.put("tuesday", 11);
-	    value9.put("name", "이 현주");
-	    value9.put("yesterday", 8);
-	    value9.put("today", 13);
-	    value9.put("tomorrow", 1);
-	    value9.put("sunday", 10);
-	    value9.put("monday", 9);
-	    value9.put("tuesday", 11);
-	    value10.put("name", "박 은현");
-	    value10.put("yesterday", 8);
-	    value10.put("today", 13);
-	    value10.put("tomorrow", 1);
-	    value10.put("sunday", 10);
-	    value10.put("monday", 9);
-	    value10.put("tuesday", 11);
-	    value11.put("name", "정 동빈");
-	    value11.put("yesterday", 8);
-	    value11.put("today", 13);
-	    value11.put("tomorrow", 1);
-	    value11.put("sunday", 10);
-	    value11.put("monday", 9);
-	    value11.put("tuesday", 11);
-	    value12.put("name", "정 병준");
-	    value12.put("yesterday", 8);
-	    value12.put("today", 13);
-	    value12.put("tomorrow", 1);
-	    value12.put("sunday", 10);
-	    value12.put("monday", 9);
-	    value12.put("tuesday", 11);
+	    value1.put("이름", "정 윤식");
+	    value1.put("yesterdayyesterday", 10);
+	    value1.put("todaytoday", 9);
+	    value1.put("tomorrowtomorrow", 11);
+	    value1.put("sundaysunday", 10);
+	    value1.put("mondaymonday", 9);
+	    value1.put("tuesdaytuesday", 11);
+	    value2.put("이름", "유 광민");
+	    value2.put("yesterdayyesterday", 5);
+	    value2.put("todaytoday", 3);
+	    value2.put("tomorrowtomorrow", 7);
+	    value2.put("sundaysunday", 10);
+	    value2.put("mondaymonday", 9);
+	    value2.put("tuesdaytuesday", 11);
+	    value3.put("이름", "신 현성");
+	    value3.put("yesterdayyesterday", 8);
+	    value3.put("todaytoday", 13);
+	    value3.put("tomorrowtomorrow", 1);
+	    value3.put("sundaysunday", 10);
+	    value3.put("mondaymonday", 9);
+	    value3.put("tuesdaytuesday", 11);
+	    value4.put("이름", "이 현정");
+	    value4.put("yesterdayyesterday", 8);
+	    value4.put("todaytoday", 13);
+	    value4.put("tomorrowtomorrow", 1);
+	    value4.put("sundaysunday", 10);
+	    value4.put("mondaymonday", 9);
+	    value4.put("tuesdaytuesday", 11);
+	    value5.put("이름", "김 지숙");
+	    value5.put("yesterdayyesterday", 8);
+	    value5.put("todaytoday", 13);
+	    value5.put("tomorrowtomorrow", 1);
+	    value5.put("sundaysunday", 10);
+	    value5.put("mondaymonday", 9);
+	    value5.put("tuesdaytuesday", 11);
+	    value6.put("이름", "김 태수");
+	    value6.put("yesterdayyesterday", 8);
+	    value6.put("todaytoday", 13);
+	    value6.put("tomorrowtomorrow", 1);
+	    value6.put("sundaysunday", 10);
+	    value6.put("mondaymonday", 9);
+	    value6.put("tuesdaytuesday", 11);
+	    value7.put("이름", "김 정남");
+	    value7.put("yesterdayyesterday", 10);
+	    value7.put("todaytoday", 9);
+	    value7.put("tomorrowtomorrow", 11);
+	    value7.put("sundaysunday", 10);
+	    value7.put("mondaymonday", 9);
+	    value7.put("tuesdaytuesday", 11);
+	    value8.put("이름", "전 태일");
+	    value8.put("yesterdayyesterday", 5);
+	    value8.put("todaytoday", 3);
+	    value8.put("tomorrowtomorrow", 7);
+	    value8.put("sundaysunday", 10);
+	    value8.put("mondaymonday", 9);
+	    value8.put("tuesdaytuesday", 11);
+	    value9.put("이름", "이 현주");
+	    value9.put("yesterdayyesterday", 8);
+	    value9.put("todaytoday", 13);
+	    value9.put("tomorrowtomorrow", 1);
+	    value9.put("sundaysunday", 10);
+	    value9.put("mondaymonday", 9);
+	    value9.put("tuesdaytuesday", 11);
+	    value10.put("이름", "박 은현");
+	    value10.put("yesterdayyesterday", 8);
+	    value10.put("todaytoday", 13);
+	    value10.put("tomorrowtomorrow", 1);
+	    value10.put("sundaysunday", 10);
+	    value10.put("mondaymonday", 9);
+	    value10.put("tuesdaytuesday", 11);
+	    value11.put("이름", "정 동빈");
+	    value11.put("yesterdayyesterday", 8);
+	    value11.put("todaytoday", 13);
+	    value11.put("tomorrowtomorrow", 1);
+	    value11.put("sundaysunday", 10);
+	    value11.put("mondaymonday", 9);
+	    value11.put("tuesdaytuesday", 11);
+	    value12.put("이름", "정 병준");
+	    value12.put("yesterdayyesterday", 8);
+	    value12.put("todaytoday", 13);
+	    value12.put("tomorrowtomorrow", 1);
+	    value12.put("sundaysunday", 10);
+	    value12.put("mondaymonday", 9);
+	    value12.put("tuesdaytuesday", 11);
 	    values.add(value1);
 	    values.add(value2);
 	    values.add(value3);
@@ -1438,9 +1447,141 @@ public class SmartTest {
 	    values.add(value11);
 	    values.add(value12);
 	    reportData.setValues(values);
-	    reportData.setGroupNames(new String[]{"yesterday", "today", "tomorrow", "sunday", "monday", "tuesday"});
-	    reportData.setxFieldName("name");
-	    reportData.setyValueName("count");
+	    reportData.setGroupNames(new String[]{"yesterdayyesterday", "todaytoday", "tomorrowtomorrow", "sundaysunday", "mondaymonday", "tuesdaytuesday"});
+	    reportData.setxFieldName("이름");
+	    reportData.setyValueName("횟수");
+	    
+	    return reportData;
+	}
+	
+	public static Data getReportData4() throws Exception{
+		Data reportData = new Data();
+	    Map<String,Object> value1 = new HashMap<String, Object>();
+	    Map<String,Object> value2 = new HashMap<String, Object>();
+	    Map<String,Object> value3 = new HashMap<String, Object>();
+	    Map<String,Object> value4 = new HashMap<String, Object>();
+	    Map<String,Object> value5 = new HashMap<String, Object>();
+	    Map<String,Object> value6 = new HashMap<String, Object>();
+	    Map<String,Object> value7 = new HashMap<String, Object>();
+	    Map<String,Object> value8 = new HashMap<String, Object>();
+	    Map<String,Object> value9 = new HashMap<String, Object>();
+	    Map<String,Object> value10 = new HashMap<String, Object>();
+	    Map<String,Object> value11 = new HashMap<String, Object>();
+	    Map<String,Object> value12 = new HashMap<String, Object>();
+	    List<Map<String , Object>> values  = new java.util.ArrayList<Map<String,Object>>();
+	    value1.put("이름", "정 윤식");
+	    value1.put("부서", "기술연구소");
+	    value1.put("yesterdayyesterday", 10);
+	    value1.put("todaytoday", 9);
+	    value1.put("tomorrowtomorrow", 11);
+	    value1.put("sundaysunday", 10);
+	    value1.put("mondaymonday", 9);
+	    value1.put("tuesdaytuesday", 11);
+	    value2.put("이름", "유 광민");
+	    value2.put("부서", "기술연구소");
+	    value2.put("yesterdayyesterday", 5);
+	    value2.put("todaytoday", 3);
+	    value2.put("tomorrowtomorrow", 7);
+	    value2.put("sundaysunday", 10);
+	    value2.put("mondaymonday", 9);
+	    value2.put("tuesdaytuesday", 11);
+	    value3.put("이름", "신 현성");
+	    value3.put("부서", "기술연구소");
+	    value3.put("yesterdayyesterday", 8);
+	    value3.put("todaytoday", 13);
+	    value3.put("tomorrowtomorrow", 1);
+	    value3.put("sundaysunday", 10);
+	    value3.put("mondaymonday", 9);
+	    value3.put("tuesdaytuesday", 11);
+	    value4.put("이름", "이 현정");
+	    value4.put("부서", "관리부");
+	    value4.put("yesterdayyesterday", 8);
+	    value4.put("todaytoday", 13);
+	    value4.put("tomorrowtomorrow", 1);
+	    value4.put("sundaysunday", 10);
+	    value4.put("mondaymonday", 9);
+	    value4.put("tuesdaytuesday", 11);
+	    value5.put("이름", "김 지숙");
+	    value5.put("부서", "마케팅부");
+	    value5.put("yesterdayyesterday", 8);
+	    value5.put("todaytoday", 13);
+	    value5.put("tomorrowtomorrow", 1);
+	    value5.put("sundaysunday", 10);
+	    value5.put("mondaymonday", 9);
+	    value5.put("tuesdaytuesday", 11);
+	    value6.put("이름", "김 태수");
+	    value6.put("부서", "사업본부");
+	    value6.put("yesterdayyesterday", 8);
+	    value6.put("todaytoday", 13);
+	    value6.put("tomorrowtomorrow", 1);
+	    value6.put("sundaysunday", 10);
+	    value6.put("mondaymonday", 9);
+	    value6.put("tuesdaytuesday", 11);
+	    value7.put("이름", "김 정남");
+	    value7.put("부서", "사업본부");
+	    value7.put("yesterdayyesterday", 10);
+	    value7.put("todaytoday", 9);
+	    value7.put("tomorrowtomorrow", 11);
+	    value7.put("sundaysunday", 10);
+	    value7.put("mondaymonday", 9);
+	    value7.put("tuesdaytuesday", 11);
+	    value8.put("이름", "전 태일");
+	    value8.put("부서", "관리부");
+	    value8.put("yesterdayyesterday", 5);
+	    value8.put("todaytoday", 3);
+	    value8.put("tomorrowtomorrow", 7);
+	    value8.put("sundaysunday", 10);
+	    value8.put("mondaymonday", 9);
+	    value8.put("tuesdaytuesday", 11);
+	    value9.put("이름", "이 현주");
+	    value9.put("부서", "관리부");
+	    value9.put("yesterdayyesterday", 8);
+	    value9.put("todaytoday", 13);
+	    value9.put("tomorrowtomorrow", 1);
+	    value9.put("sundaysunday", 10);
+	    value9.put("mondaymonday", 9);
+	    value9.put("tuesdaytuesday", 11);
+	    value10.put("이름", "박 은현");
+	    value10.put("부서", "영업부");
+	    value10.put("yesterdayyesterday", 8);
+	    value10.put("todaytoday", 13);
+	    value10.put("tomorrowtomorrow", 1);
+	    value10.put("sundaysunday", 10);
+	    value10.put("mondaymonday", 9);
+	    value10.put("tuesdaytuesday", 11);
+	    value11.put("이름", "정 동빈");
+	    value11.put("부서", "기술연구소");
+	    value11.put("yesterdayyesterday", 8);
+	    value11.put("todaytoday", 13);
+	    value11.put("tomorrowtomorrow", 1);
+	    value11.put("sundaysunday", 10);
+	    value11.put("mondaymonday", 9);
+	    value11.put("tuesdaytuesday", 11);
+	    value12.put("이름", "정 병준");
+	    value12.put("부서", "영업부");
+	    value12.put("yesterdayyesterday", 8);
+	    value12.put("todaytoday", 13);
+	    value12.put("tomorrowtomorrow", 1);
+	    value12.put("sundaysunday", 10);
+	    value12.put("mondaymonday", 9);
+	    value12.put("tuesdaytuesday", 11);
+	    values.add(value1);
+	    values.add(value2);
+	    values.add(value3);
+	    values.add(value4);
+	    values.add(value5);
+	    values.add(value6);
+	    values.add(value7);
+	    values.add(value8);
+	    values.add(value9);
+	    values.add(value10);
+	    values.add(value11);
+	    values.add(value12);
+	    reportData.setValues(values);
+	    reportData.setGroupNames(new String[]{"yesterdayyesterday", "todaytoday", "tomorrowtomorrow", "sundaysunday", "mondaymonday", "tuesdaytuesday"});
+	    reportData.setxFieldName("이름");
+	    reportData.setyValueName("횟수");
+	    reportData.setxGroupName("부서");
 	    
 	    return reportData;
 	}
@@ -1588,5 +1729,141 @@ public class SmartTest {
 		AppWorkInfo[] workDatas = {appWork1, appWork2, appWork3 };
 		workInfoList.setWorkDatas(workDatas);
 		return workInfoList;
+	}
+
+	public static ReportPane[] getMyDashboard() throws Exception{
+		
+		ReportPane pane00 = new ReportPane("pane1", "월간 생산량 추이");
+		pane00.setColumnSpans(3);
+		pane00.setPosition(new Matrix(0,0));
+		pane00.setTargetWork(SmartTest.getInformationWorkInfo1());
+		pane00.setReportId("report");
+		pane00.setReportName("보고서이름입니다");
+		pane00.setReportType(Report.TYPE_CHART);
+		pane00.setChartType(ChartReport.CHART_TYPE_COLUMN);
+		pane00.setChartView(true);
+		pane00.setStacked(false);
+		pane00.setShowLegend(false);
+		pane00.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_AUTO);
+		
+		ReportPane pane01 = new ReportPane("pane2", "주간 불량률");
+		pane01.setColumnSpans(3);
+		pane01.setPosition(new Matrix(0,1));
+		pane01.setTargetWork(SmartTest.getInformationWorkInfo1());
+		pane01.setReportId("report");
+		pane01.setReportName("보고서이름입니다");
+		pane01.setReportType(Report.TYPE_CHART);
+		pane01.setChartType(ChartReport.CHART_TYPE_COLUMN);
+		pane01.setChartView(false);
+		pane01.setStacked(false);
+		pane01.setShowLegend(false);
+		pane01.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_ROTATED);
+		
+		ReportPane pane02 = new ReportPane("pane3", "개인별 생산량");
+		pane02.setColumnSpans(3);
+		pane02.setPosition(new Matrix(0,2));
+		pane02.setTargetWork(SmartTest.getInformationWorkInfo1());
+		pane02.setReportId("report");
+		pane02.setReportName("보고서이름입니다");
+		pane02.setReportType(Report.TYPE_CHART);
+		pane02.setChartType(ChartReport.CHART_TYPE_COLUMN);
+		pane02.setChartView(true);
+		pane02.setStacked(true);
+		pane02.setShowLegend(false);
+		pane02.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_HORIZONTAL);
+		
+		ReportPane pane10 = new ReportPane("pane4", "부서별 지연처리 건수");
+		pane10.setColumnSpans(2);
+		pane10.setPosition(new Matrix(1,0));
+		pane10.setTargetWork(SmartTest.getInformationWorkInfo1());
+		pane10.setReportId("report");
+		pane10.setReportName("보고서이름입니다");
+		pane10.setReportType(Report.TYPE_CHART);
+		pane10.setChartType(ChartReport.CHART_TYPE_COLUMN);
+		pane10.setChartView(true);
+		pane10.setStacked(true);
+		pane10.setShowLegend(false);
+		pane10.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_AUTO);
+		
+		ReportPane pane11 = new ReportPane("pane5", "개인별 평균처리 시간");
+		pane11.setColumnSpans(2);
+		pane11.setPosition(new Matrix(1,1));
+		pane11.setTargetWork(SmartTest.getInformationWorkInfo1());
+		pane11.setReportId("report");
+		pane11.setReportName("보고서이름입니다");
+		pane11.setReportType(Report.TYPE_CHART);
+		pane11.setChartType(ChartReport.CHART_TYPE_COLUMN);
+		pane11.setChartView(false);
+		pane11.setStacked(false);
+		pane11.setShowLegend(true);
+		pane11.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_AUTO);
+		
+		ReportPane pane20 = new ReportPane("pane6", "2013년도 월간 처리 건수");
+		pane20.setColumnSpans(1);
+		pane20.setPosition(new Matrix(2,0));
+		pane20.setTargetWork(SmartTest.getInformationWorkInfo1());
+		pane20.setReportId("report");
+		pane20.setReportName("보고서이름입니다");
+		pane20.setReportType(Report.TYPE_CHART);
+		pane20.setChartType(ChartReport.CHART_TYPE_COLUMN);
+		pane20.setChartView(true);
+		pane20.setStacked(false);
+		pane20.setShowLegend(true);
+		pane20.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_HORIZONTAL);
+		
+		
+		return new ReportPane[] {pane00, pane01, pane02, pane10, pane11, pane20};
+	}
+	
+	public static ReportWork getReportWorkInformation() throws Exception{
+		ReportWork work = new ReportWork(SmartWork.ID_REPORT_MANAGEMENT, "보고서");
+		work.setMyCategory(new WorkCategory("category1", "기본"));
+		return work;
+	}
+	
+	public static SmartWork getAllSmartWork() throws Exception{
+		SmartWork work = new SmartWork(SmartWork.ID_ALL_WORKS, SmartMessage.getString("report.title.company_all_works"));
+		work.setMyCategory(new WorkCategory("category1", "기본"));
+		return work;
+	}
+	
+	private static ReportInstanceInfo[] getReportInstances1() throws Exception{
+		ReportInstanceInfo instance = new ReportInstanceInfo("instance1", "부서별 주간 처리 건수", getUserInfo1(), getUserInfo2(), new LocalDate());
+		instance.setAccessPolicy(new AccessPolicy(AccessPolicy.LEVEL_PUBLIC));
+		instance.setReportType(Report.TYPE_CHART);
+		instance.setChartType(ChartReport.CHART_TYPE_BAR);
+		instance.setTargetWorkType(Work.TYPE_NONE);
+		ReportInstanceInfo instance1 = new ReportInstanceInfo("instance1", "부서별 주간 품의처리 건수", getUserInfo1(), getUserInfo2(), new LocalDate());
+		instance1.setAccessPolicy(new AccessPolicy(AccessPolicy.LEVEL_PRIVATE));
+		instance1.setReportType(Report.TYPE_MATRIX);
+		instance1.setTargetWorkType(SmartWork.TYPE_PROCESS);
+		return new ReportInstanceInfo[]{instance, instance1};
+	}
+
+	private static ReportInstanceInfo[] getWorkReportInstances1() throws Exception{
+		ReportInstanceInfo instance = new ReportInstanceInfo("instance1", "영업대표별 주간 영업실적", getUserInfo1(), getUserInfo2(), new LocalDate());
+		instance.setAccessPolicy(new AccessPolicy(AccessPolicy.LEVEL_PUBLIC));
+		instance.setReportType(Report.TYPE_CHART);
+		instance.setChartType(ChartReport.CHART_TYPE_BAR);
+		return new ReportInstanceInfo[]{instance};
+	}
+
+	public static InstanceInfoList getReportInstanceList(String workId, RequestParams params) throws Exception{
+		InstanceInfoList instanceList = new InstanceInfoList();
+		instanceList.setType(InstanceInfoList.TYPE_INFORMATION_INSTANCE_LIST);
+		instanceList.setPageSize(params.getPageSize());
+		instanceList.setTotalPages(31);
+		instanceList.setCurrentPage(params.getCurrentPage());
+		if(SmartWork.ID_ALL_WORKS.equals(workId)){
+			instanceList.setInstanceDatas(getReportInstances1());
+		}else{
+			instanceList.setInstanceDatas(getWorkReportInstances1());			
+		}
+		return instanceList;
+	}
+	
+	public static int getUserReportCount(String targetWorkId) throws Exception{
+		if(SmartWork.ID_ALL_WORKS.equals(targetWorkId)) return 31;
+		return 56;
 	}
 }

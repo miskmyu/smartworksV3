@@ -6,7 +6,9 @@ import java.util.Map;
 public class Data{
 
 	private String xFieldName;
+	private String xGroupName;
 	private String yValueName;
+	private String yGroupName;
 	private String[] groupNames;
 	private List<Map<String, Object>> values; 
 		
@@ -28,6 +30,18 @@ public class Data{
 	public void setGroupNames(String[] groupNames) {
 		this.groupNames = groupNames;
 	}	
+	public String getxGroupName() {
+		return xGroupName;
+	}
+	public void setxGroupName(String xGroupName) {
+		this.xGroupName = xGroupName;
+	}
+	public String getyGroupName() {
+		return yGroupName;
+	}
+	public void setyGroupName(String yGroupName) {
+		this.yGroupName = yGroupName;
+	}
 	public List<Map<String, Object>> getValues() {
 		return values;
 	}

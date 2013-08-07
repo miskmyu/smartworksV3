@@ -574,34 +574,68 @@ smartPop = {
 				},
 				overlayClose: true,
 				onShow: function(dialog){
+					var isAllTargetWork = target.hasClass('js_all_target_work_popup');
+					if(isAllTargetWork){
+						target.find('ul').prepend('<li><span class="dep"><a href="" class="js_pop_select_work" workId="allSmartWorks" workType="-1" fullpathName="' + smartMessage.get("companyAllWorks") + 
+														'" iconClass="icon_depart"><span class="icon_depart"></span>' + smartMessage.get("companyAllWorks") + '</a></span></li>');
+					}
 					$('.js_pop_select_work').die('click');
 					$('.js_pop_select_work').live( 'click', function(e){
 						var input = $(targetElement(e)).parents('li:first').find('a');
-						$('#form_works').html('').hide();
-						$('#upload_work_list').hide().parents(".js_start_work_page").hide();
-						var href = input.attr('href');
-						smartPop.progressCenter();
-						$.get(href,  function(data){
-							$('#form_works').html(data);
-							var formContent = $('#form_works').find('div.js_form_content');
-							var workId = input.attr('workId');
-							new SmartWorks.GridLayout({
-								target : formContent,
-								mode : "edit",
-								workId : workId,
-								onSuccess : function(){
-									$('#form_works').show().parent().show();
-									smartPop.close();
-									target.html('');
-									smartPop.closeProgress();
-								},
-								onError : function(){
-									smartPop.close();
-									target.html('');											
-									smartPop.closeProgress();
-								}
+						if(!isAllTargetWork){
+							$('#form_works').html('').hide();
+							$('#upload_work_list').hide().parents(".js_start_work_page").hide();
+							var href = input.attr('href');
+							smartPop.progressCenter();
+							$.get(href,  function(data){
+								$('#form_works').html(data);
+								var formContent = $('#form_works').find('div.js_form_content');
+								var workId = input.attr('workId');
+								new SmartWorks.GridLayout({
+									target : formContent,
+									mode : "edit",
+									workId : workId,
+									onSuccess : function(){
+										$('#form_works').show().parent().show();
+										smartPop.close();
+										target.html('');
+										smartPop.closeProgress();
+									},
+									onError : function(){
+										smartPop.close();
+										target.html('');											
+										smartPop.closeProgress();
+									}
+								});
 							});
-						});
+						}else{
+							var reportList = target.parents(".js_report_list_page");
+							var targetWorkId = input.attr('workId');
+							var targetWorkName = input.attr('fullpathName');
+							var targetWorkIcon = input.attr('iconClass');
+							var targetWorkType = input.attr('workType');
+							reportList.attr('targetWorkId', targetWorkId); 
+							reportList.attr('targetWorkName', targetWorkName); 
+							reportList.attr('targetWorkIcon', targetWorkIcon); 
+							reportList.attr('targetWorkType', targetWorkType); 
+							reportList.attr('producedBy', 'smartworks');
+							reportList.find('form[name="frmSearchInstance"]').hide();
+							reportList.find('.js_target_work_info > span:first').attr('class', input.attr('iconClass'));
+							reportList.find('.js_target_work_info > span:eq(1)').html(input.attr('fullpathName'));
+							reportList.find('.js_work_report_close').click();
+							smartPop.close();
+							target.html('');
+							smartPop.progressCenter();
+							$.get('get_user_report_count.sw?targetWorkId=' + targetWorkId,  function(data){
+								reportList.find('.js_view_report_list:eq(0)').removeClass('disabled');
+								reportList.find('.js_view_report_list:eq(1)').addClass('disabled');
+								reportList.find('.js_user_report_count').html('[' + data + ']');
+							});
+							$.get('report_instance_list.sw?targetWorkId=' + targetWorkId + '&targetWorkType=' + targetWorkType + '&producedBy=smartworks',  function(data){
+								reportList.find('#report_instance_list_page').html(data);
+								smartPop.closeProgress();
+							});
+						}
 						return false;
 					});
 				}
@@ -1173,5 +1207,52 @@ smartPop = {
 		}else{
 			popEventAlarm.find('ul').append(noticeData);
 		}
+	},
+	
+	createReportPane : function(paneId, paneName, targetWorkName, targetWorkIcon, reportId, reportName, reportType, config){
+		var options = {
+				chartType: null,
+				isChartView: true,
+				isStacked: false,
+				showLegend: true,
+				stringLabelRotation: 'auto',			
+				paneColumnSpans: 1,
+				panePosition: null
+		};
+		SmartWorks.extend(options, config);
+
+		var url = "pop_new_report_pane.sw?paneId=" + paneId + "&paneName=" + paneName + "&targetWorkName=" + targetWorkName + "&targetWorkIcon=" + targetWorkIcon + "&reportId=" + reportId + "&reportName=" + reportName + "&reportType=" + reportType
+						+ "&chartType=" + options.chartType + "&isChartView=" + options.isChartView + "&isStacked=" + options.isStacked + "&showLegend=" + options.showLegend
+						+ "&stringLabelRotation=" + options.stringLabelRotation + "&paneColumnSpans=" + options.paneColumnSpans + "&panePosition=" + options.panePosition;
+		$.get( url, { contentType : "charset=utf-8"}, function(data){
+		$(data).modal({
+			opacity: 10,
+			overlayCss: {backgroundColor:"#000"},
+			containerCss:{
+				height:300,
+				width:560
+			},
+			overlayClose: false,
+			onShow: function(dialog){
+				$('.js_close_new_report_pane').die('click');
+				$('.js_close_new_report_pane').live( 'click', function(e){
+					smartPop.close();
+					return false;
+				});
+				$('.js_close_new_report_pane').focus();
+				$('.js_close_new_report_pane').keypress(function (e) {
+					var e = window.event || e;
+					var keyCode = e.which || e.keyCode;
+			        if (keyCode == $.ui.keyCode.ENTER) {
+			            $('.js_close_new_report_pane').click();
+			            return false;
+			        } else {
+			            return true;
+			        }
+			    });
+			}
+			});
+		});
 	}
+	
 };

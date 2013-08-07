@@ -60,7 +60,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .icon_number { 
 	background: url("../../images/header_nico.png") no-repeat scroll -403px -102px transparent; 
 	display:inline-block; font-family: Tahoma, dotum; font-size:9px; color:#FFF; height:12px; letter-spacing:0; line-height:13px; padding-right:5px; position:absolute;
-	left:14px; top:13px; text-indent: 4px; z-index:1001
+	left:10px; top:13px; text-indent: 4px; z-index:1001
 }
 .icon_number span { 
 	background: url("../../images/header_nico.png") no-repeat scroll -494px -102px transparent !important;
@@ -69,7 +69,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 #notice_message_box .reply {background: url("../../images/header_nico.png") no-repeat scroll -828px -268px transparent; clear:both; overflow: hidden; padding: 0 0 0 23px; margin: 6px 0 0 4px}
 
 /*Top Menu*/
-.top_menu {width:71px; margin:0 auto; z-index:40} /* 검색 추가 시 width:345px으로 변경, 대시보드 추가 시 width:138px */
+.top_menu {width:138px; margin:0 auto; z-index:40} /* 검색 추가 시 width:345px으로 변경, 대시보드 추가 시 width:138px */
 /*.top_menu ul {width:71px; height:34px; background:url("../../images/top_menu.png") no-repeat left top}*/
 .top_menu ul li {float:left; height:34px; background:url("../../images/top_menu.png") no-repeat; text-align:center; vertical-align:middle; font-weight:bold}
 .top_menu ul li a:hover,
@@ -81,13 +81,17 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .top_menu ul li.idx1 a:hover,
 .top_menu ul li.idx1 .current {width:70px; background-position:left -60px}
 
-.top_menu ul li.idx2 {width:100px; background-position:-70px top}
+.top_menu ul li.idx2 {width:68px; background-position:-170px top}
 .top_menu ul li.idx2 a:hover,
-.top_menu ul li.idx2 .current {width:100px; background-position:-70px -60px}
+.top_menu ul li.idx2 .current {width:68px; background-position:-170px -60px}
 
-.top_menu ul li.idx3 {width:68px; background-position:-170px top}
+.top_menu ul li.idx3 {width:100px; background-position:-70px top}
 .top_menu ul li.idx3 a:hover,
-.top_menu ul li.idx3 .current {width:68px; background-position:-170px -60px}
+.top_menu ul li.idx3 .current {width:100px; background-position:-70px -60px}
+
+.top_menu ul li.idx4 {width:68px; background-position:-170px top}
+.top_menu ul li.idx4 a:hover,
+.top_menu ul li.idx4 .current {width:68px; background-position:-170px -60px}
 
 .top_menu ul li a,.top_menu ul li a:hover {display:block; height: 24px; padding-top: 10px}
 
@@ -134,7 +138,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 #nav {background-color:#6b6b6b; float:left; width:226px; height:100%; clear:both; z-index:30}
 /* In Hover Actions */
 /* ctgr_action_item:Nav-빌더nav, group_action_item:Nav-빌더 그룹 nav, work_action_item:Nav-빌더 work, folder_actions:Nav_Mail함, dep:파일공간, picture_folder:사진공간, picture_detail_area:사진 상세 - 폴더추가  */
-li.ctgr_action_item .ctgr_action, 
+li.ctgr_action_item .ctgr_action,
 li.group_action_item a .group_action, 
 li.work_action_item .work_action,
 li.folder_actions .ctgr_action,
@@ -142,13 +146,16 @@ li .dep .ctgr_action,
 li .picture_folder .ctgr_action,
 li .picture_detail_area .ctgr_action {visibility:hidden; position:absolute; right:0; top:0; margin:4px 5px 0 0}
 
+div.pane_action_item .pane_action {visibility:hidden; margin:4px 5px 0 0}
+
 li.ctgr_action_item a:hover .ctgr_action, 
 li.group_action_item a:hover .group_action,
 li.work_action_item a:hover .work_action,
 li .dep:hover .ctgr_action,
 li.folder_actions a:hover .ctgr_action,
 li .picture_folder:hover .ctgr_action,
-li .picture_detail_area:hover .ctgr_action {visibility:visible}
+li .picture_detail_area:hover .ctgr_action,
+div.pane_action_item:hover .pane_action {visibility:visible}
 
 ul.list_action_item .list_action {visibility:hidden}
 ul.list_action_item li:hover .list_action {visibility:visible; cursor:pointer}

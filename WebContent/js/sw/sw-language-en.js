@@ -79,6 +79,9 @@ smartMessage.bundle['en'] = {
 	rowNoText : "No",
 	rowDeleteText : "Remove this row",
 	rowAddText : "Add a row",
+	reportSubTotal : "Sub Total",
+	reportGrandTotal : "Grand Total",
+	companyAllWorks : "Company's All Works",
 	
 	setMyProfileSucceed : "My Profile has been updated successfully.",
 	setMyProfileError : "Error has been occured while updating this Profile Information. Please contact the Administrator!",
@@ -250,6 +253,10 @@ smartMessage.bundle['en'] = {
 	changeMailPasswordError : "Error has been occured while changing Mail password. Please contact the Administrator!",
 	downloadAppSucceed : "The Work App has been downloaded from the App Store successfully.",
 	downloadAppError : "Error has been occured while downloading from the App Store. Please contact the Administrator!",
+	createReportPaneSucceed : "New Report Pane has been added in Dashboard successfully.",
+	createReportPaneError : "Error has been occured while adding new Report Pane in Dashboard. Please contact the Administrator!",
+	setReportPaneSucceed : "Report Pane in Dashboard has been changed successfully.",
+	setReportPaneError : "Error has been occured while changing Report Pane in Dashboard. Please contact the Administrator!",
 	replyMailError : "Error has been occured while repling Mail Instance. Please contact the Administrator!",
 	forwardMailError : "Error has been occured while forwarding Mail Instance. Please contact the Administrator!",
 	fetchMailsError : "Error has been occured while fetching Mail Instances. Please contact the Administrator!",
@@ -267,6 +274,7 @@ smartMessage.bundle['en'] = {
 	removeCommentError : "Error has beeon occured while removing the Comment. Please contact the Administrator!",
 	boardDurationDateError : "The Duration Date of Board must be the future. Please retry with valid Duration Date", 
 	newMailPasswordConfirmError : "Error has been occured while confirming new password, Please retry with valid password confirmation",
+	removeReportPaneError : "Error has been occured while removing Work Report Pane. Please contact the Administrator!",
 	
 	addJunkMailError : "Error has been occured while adding Junk Mail. Please contanct the Administrator!",
 	addJunkDomainError : "Error has been occured while adding Junk Domain. Please contanct the Administrator!",

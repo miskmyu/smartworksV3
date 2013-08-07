@@ -24,6 +24,8 @@ public class SearchFilter extends BaseObject{
 	public static final String FILTER_BY_CREATED_DATE = SYSTEM_FILTER_PREFIX + "byCreatedDate";
 	public static final String FILTER_MY_ASCEND_DEPARTMENTS = SYSTEM_FILTER_PREFIX + "myAscendDepartments";
 	public static final String FILTER_MY_DESCEND_DEPARTMENTS = SYSTEM_FILTER_PREFIX + "myDescendDepartments";
+	public static final String FILTER_RECENT_1YEAR_INSTANCES = SYSTEM_FILTER_PREFIX + "recent1YearInstances";
+	public static final String FILTER_RECENT_3YEARS_INSTANCES = SYSTEM_FILTER_PREFIX + "recent3YearsInstances";
 	
 	private Condition[] conditions;
 
@@ -64,6 +66,16 @@ public class SearchFilter extends BaseObject{
 	public static SearchFilter getRecentInstancesFilter(){
 		return new SearchFilter(FILTER_RECENT_INSTANCES, FILTER_RECENT_INSTANCES, new Condition[] {
 					new Condition(FormField.FIELD_LAST_MODIFIED_DATE, ConditionOperator.RECENT_DAYS.getId(), null)
+				});
+	}
+	public static SearchFilter getRecent1YearInstancesFilter(){
+		return new SearchFilter(FILTER_RECENT_1YEAR_INSTANCES, FILTER_RECENT_1YEAR_INSTANCES, new Condition[] {
+					new Condition(FormField.FIELD_LAST_MODIFIED_DATE, ConditionOperator.RECENT_SOME_MONTHS.getId(), 12)
+				});
+	}
+	public static SearchFilter getRecent3YearsInstancesFilter(){
+		return new SearchFilter(FILTER_RECENT_3YEARS_INSTANCES, FILTER_RECENT_3YEARS_INSTANCES, new Condition[] {
+					new Condition(FormField.FIELD_LAST_MODIFIED_DATE, ConditionOperator.RECENT_SOME_MONTHS.getId(), 36)
 				});
 	}
 	public static SearchFilter getMyRecentInstancesFilter(User currentUser){

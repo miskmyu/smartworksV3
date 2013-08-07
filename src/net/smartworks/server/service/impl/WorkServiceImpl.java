@@ -521,7 +521,18 @@ public class WorkServiceImpl implements IWorkService {
 		try{
 			if (CommonUtil.isEmpty(workId))
 				return null;
-	
+
+			if(workId.equals(SmartWork.ID_REPORT_MANAGEMENT)){
+				// TO DO 보고서업무 정보 가져오는 코드 구현 필요
+				// 개발을 위해 임시로 스마트테스트에서 가져오게 하였음..
+				// 구현하고 아래 코드는 삭제바람.
+				return SmartTest.getReportWorkInformation();
+			}else if(workId.equals(SmartWork.ID_ALL_WORKS)){
+				// TO DO 보고서업무 정보 가져오는 코드 구현 필요
+				// 개발을 위해 임시로 스마트테스트에서 가져오게 하였음..
+				// 구현하고 아래 코드는 삭제바람.
+				return SmartTest.getAllSmartWork();				
+			}
 			User user = SmartUtil.getCurrentUser();
 			PkgPackageCond pkgCond = new PkgPackageCond();
 			pkgCond.setCompanyId(user.getCompanyId());
@@ -733,27 +744,6 @@ public class WorkServiceImpl implements IWorkService {
 	}	
 
 	@Override
-	public Report getReportById(String reportId) throws Exception {
-
-		try{
-			ChartReport[] defaultInformationCharts = ChartReport.DEFAULT_CHARTS_INFORMATION;
-			for(ChartReport report : defaultInformationCharts){
-				if(report.getId().equals(reportId)) return report;
-			}
-			ChartReport[] defaultProcessCharts = ChartReport.DEFAULT_CHARTS_PROCESS;
-			for(ChartReport report : defaultProcessCharts){
-				if(report.getId().equals(reportId)) return report;
-			}		
-			return SmartTest.getReportById();
-		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
-		}
-	}
-
-	@Override
 	public SearchFilter getSearchFilterById(String type, String workId, String filterId) throws Exception {
 
 		try{
@@ -784,19 +774,6 @@ public class WorkServiceImpl implements IWorkService {
 		}
 	}
 	
-	@Override
-	public Data getReportData(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		try{
-			String dbType = "ORACLE";
-			return SwManagerFactory.getInstance().getReportManager().getReportData(dbType, requestBody);
-		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
-		}
-	}
-
 	@Override
 	public String getFormXml(String formId, String workId) throws Exception {
 

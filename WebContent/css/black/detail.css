@@ -119,6 +119,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .default_title_space{padding-bottom:5px !important} /* Case in No right Button */
 .list_title_space,.default_title_space {padding:0 0 2px 0; overflow:hidden} /* Case in right Button */
 .list_title_space .title, .list_title, .default_title_space .title {background: url("../../images/iconTitle.gif") 0 3px no-repeat; font-size:14px; font-weight:bold; padding: 2px 8px 0 20px; line-height: 18px; color:#454545; float:left}
+.list_title_space .title .disabled a{font-size:12px; font-weight:normal; color:#888888 !important;}
 
 .list_contents {}
 /*.list_contents table {min-width:700px}*/

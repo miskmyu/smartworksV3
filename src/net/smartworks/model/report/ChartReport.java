@@ -1,8 +1,14 @@
 package net.smartworks.model.report;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.instance.info.ReportInstanceInfo;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FormField;
+import net.smartworks.model.work.SmartWork;
+import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
 public class ChartReport extends Report {
@@ -15,10 +21,14 @@ public class ChartReport extends Report {
 	public static final int CHART_TYPE_GAUGE = 6;
 	public static final int CHART_TYPE_RADAR = 7;
 	public static final int CHART_TYPE_SCATTER = 8;
-	public static final int DEFAULT_CHART_TYPE = CHART_TYPE_BAR;
+	public static final int DEFAULT_CHART_TYPE = CHART_TYPE_COLUMN;
 	
 	public static String[] CHART_TYPES_STRING = new String[]{"", "line", "area", "bar", "column", "pie", "gauge", "radar", "scatter"};
 
+	public final static String STRING_LABEL_ROTATION_AUTO = "auto";
+	public final static String STRING_LABEL_ROTATION_HORIZONTAL = "horizontal";
+	public final static String STRING_LABEL_ROTATION_ROTATED = "rotated";
+	
 	public static final String CHART_PCNT_MONTHLY = "chart.pcnt.monthly";
 	public static final String CHART_PCNT_MONTHLY_DEPARTMENT = "chart.pcnt.monthly.by_department";
 	public static final String CHART_PMEAN_MONTHLY = "chart.pmean.monthly";
@@ -29,18 +39,34 @@ public class ChartReport extends Report {
 	public static final String CHART_PMAX_MONTHLY_DEPARTMENT = "chart.pmax.monthly.by_department";
 	public static final String CHART_PMIN_MONTHLY = "chart.pmin.monthly";
 	public static final String CHART_PMIN_MONTHLY_DEPARTMENT = "chart.pmin.monthly.by_department";
+	
 
-	public static final ChartReport[] DEFAULT_CHARTS_INFORMATION = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
+	public static final ChartReport[] DEFAULT_CHARTS_INFORMATION = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment()};
+
+	public static final ChartReport[] DEFAULT_CHARTS_PROCESS = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
 		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment(), getChartPSumMonthly(), getChartPSumMonthlyByDepartment(), getChartPMaxMonthly(),
 		getChartPMaxMonthlyByDepartment(), getChartPMinMonthly(), getChartPMinMonthlyByDepartment() };
-
-	public static final ChartReport[] DEFAULT_CHARTS_PROCESS = new ChartReport[] {};
-	public static final ChartReport[] DEFAULT_CHARTS_SCHEDULE = new ChartReport[] {};
+	public static final ChartReport[] DEFAULT_CHARTS_SCHEDULE = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
+		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment(), getChartPSumMonthly(), getChartPSumMonthlyByDepartment(), getChartPMaxMonthly(),
+		getChartPMaxMonthlyByDepartment(), getChartPMinMonthly(), getChartPMinMonthlyByDepartment() };
+	public static final ChartReport[] DEFAULT_CHARTS_ALL_WORKS = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
+		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment(), getChartPSumMonthly(), getChartPSumMonthlyByDepartment(), getChartPMaxMonthly(),
+		getChartPMaxMonthlyByDepartment(), getChartPMinMonthly(), getChartPMinMonthlyByDepartment() };
+	public static final ChartReport[] DEFAULT_CHARTS_ALL_PROCESSES = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
+		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment(), getChartPSumMonthly(), getChartPSumMonthlyByDepartment(), getChartPMaxMonthly(),
+		getChartPMaxMonthlyByDepartment(), getChartPMinMonthly(), getChartPMinMonthlyByDepartment() };
+	public static final ChartReport[] DEFAULT_CHARTS_ALL_INFORMATIONS = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
+		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment(), getChartPSumMonthly(), getChartPSumMonthlyByDepartment(), getChartPMaxMonthly(),
+		getChartPMaxMonthlyByDepartment(), getChartPMinMonthly(), getChartPMinMonthlyByDepartment() };
+	public static final ChartReport[] DEFAULT_CHARTS_ALL_SCHEDULES = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
+		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment(), getChartPSumMonthly(), getChartPSumMonthlyByDepartment(), getChartPMaxMonthly(),
+		getChartPMaxMonthlyByDepartment(), getChartPMinMonthly(), getChartPMinMonthlyByDepartment() };
 
 	private int chartType = -1;
 	private FormField xAxis;
 	private String xAxisSelector;
 	private String xAxisSort = Report.AXIS_SORT_ASCEND.getId();
+	private int xAxisMaxRecords = -1;// Unlimited
 	private FormField yAxis;
 	private String yAxisSelector;
 	private String valueType;
@@ -75,6 +101,12 @@ public class ChartReport extends Report {
 	}
 	public void setXAxisSort(String xAxisSort) {
 		this.xAxisSort = xAxisSort;
+	}
+	public int getXAxisMaxRecords() {
+		return xAxisMaxRecords;
+	}
+	public void setXAxisMaxRecords(int xAxisMaxRecords) {
+		this.xAxisMaxRecords = xAxisMaxRecords;
 	}
 	public FormField getYAxis() {
 		return yAxis;
@@ -128,120 +160,248 @@ public class ChartReport extends Report {
 	public static ChartReport getChartPCntMonthly() {
 		ChartReport chart = new ChartReport(CHART_PCNT_MONTHLY, CHART_PCNT_MONTHLY, SmartUtil.getSystemUser(), SmartUtil.getSystemUser(),
 				new LocalDate());
-		chart.chartType = DEFAULT_CHART_TYPE;
+		chart.chartType = CHART_TYPE_BAR;
 		chart.xAxis = FormField.FIELD_LAST_MODIFIED_DATE;
 		chart.xAxisSelector = Report.AXIS_SELECTOR_BY_MONTH.getId();
 		chart.yAxis = FormField.FIELD_LAST_MODIFIED_DATE;
 		chart.valueType = Report.VALUE_TYPE_COUNT.getId();
+		chart.setSearchFilter(SearchFilter.getRecent1YearInstancesFilter());
 		return chart;
 	}
 
 	public static ChartReport getChartPCntMonthlyByDepartment() {
 		ChartReport chart = new ChartReport(CHART_PCNT_MONTHLY_DEPARTMENT, CHART_PCNT_MONTHLY_DEPARTMENT, SmartUtil.getSystemUser(),
 				SmartUtil.getSystemUser(), new LocalDate());
-		chart.chartType = DEFAULT_CHART_TYPE;
+		chart.chartType = CHART_TYPE_BAR;
 		chart.xAxis = FormField.FIELD_LAST_MODIFIED_DATE;
 		chart.xAxisSelector = Report.AXIS_SELECTOR_BY_MONTH.getId();
 		chart.yAxis = FormField.FIELD_LAST_MODIFIED_DATE;
 		chart.valueType = Report.VALUE_TYPE_COUNT.getId();
 		chart.zAxis = FormField.FIELD_LAST_MODIFIER;
 		chart.zAxisSelector = Report.AXIS_SELECTOR_USER_DEPARTMENT.getId();
+		chart.setSearchFilter(SearchFilter.getRecent1YearInstancesFilter());
 		return chart;
 	}
 
 	public static ChartReport getChartPMeanMonthly() {
 		ChartReport chart = new ChartReport(CHART_PMEAN_MONTHLY, CHART_PMEAN_MONTHLY, SmartUtil.getSystemUser(), SmartUtil.getSystemUser(),
 				new LocalDate());
-		chart.chartType = DEFAULT_CHART_TYPE;
+		chart.chartType = CHART_TYPE_COLUMN;
 		chart.xAxis = FormField.FIELD_LAST_MODIFIED_DATE;
 		chart.xAxisSelector = Report.AXIS_SELECTOR_BY_MONTH.getId();
 		chart.yAxis = FormField.FIELD_PROCESS_TIME;
 		chart.valueType = Report.VALUE_TYPE_MEAN.getId();
+		chart.setSearchFilter(SearchFilter.getRecent1YearInstancesFilter());
 		return chart;
 	}
 
 	public static ChartReport getChartPMeanMonthlyByDepartment() {
 		ChartReport chart = new ChartReport(CHART_PMEAN_MONTHLY_DEPARTMENT, CHART_PMEAN_MONTHLY_DEPARTMENT, SmartUtil.getSystemUser(),
 				SmartUtil.getSystemUser(), new LocalDate());
-		chart.chartType = DEFAULT_CHART_TYPE;
+		chart.chartType = CHART_TYPE_COLUMN;
 		chart.xAxis = FormField.FIELD_LAST_MODIFIED_DATE;
 		chart.xAxisSelector = Report.AXIS_SELECTOR_BY_MONTH.getId();
 		chart.yAxis = FormField.FIELD_PROCESS_TIME;
 		chart.valueType = Report.VALUE_TYPE_MEAN.getId();
 		chart.zAxis = FormField.FIELD_LAST_MODIFIER;
 		chart.zAxisSelector = Report.AXIS_SELECTOR_USER_DEPARTMENT.getId();
+		chart.setSearchFilter(SearchFilter.getRecent1YearInstancesFilter());
 		return chart;
 	}
 
 	public static ChartReport getChartPSumMonthly() {
 		ChartReport chart = new ChartReport(CHART_PSUM_MONTHLY, CHART_PSUM_MONTHLY, SmartUtil.getSystemUser(), SmartUtil.getSystemUser(),
 				new LocalDate());
-		chart.chartType = DEFAULT_CHART_TYPE;
+		chart.chartType = CHART_TYPE_LINE;
 		chart.xAxis = FormField.FIELD_LAST_MODIFIED_DATE;
 		chart.xAxisSelector = Report.AXIS_SELECTOR_BY_MONTH.getId();
 		chart.yAxis = FormField.FIELD_PROCESS_TIME;
 		chart.valueType = Report.VALUE_TYPE_SUM.getId();
+		chart.setSearchFilter(SearchFilter.getRecent1YearInstancesFilter());
 		return chart;
 	}
 
 	public static ChartReport getChartPSumMonthlyByDepartment() {
 		ChartReport chart = new ChartReport(CHART_PSUM_MONTHLY_DEPARTMENT, CHART_PSUM_MONTHLY_DEPARTMENT, SmartUtil.getSystemUser(),
 				SmartUtil.getSystemUser(), new LocalDate());
-		chart.chartType = DEFAULT_CHART_TYPE;
+		chart.chartType = CHART_TYPE_LINE;
 		chart.xAxis = FormField.FIELD_LAST_MODIFIED_DATE;
 		chart.xAxisSelector = Report.AXIS_SELECTOR_BY_MONTH.getId();
 		chart.yAxis = FormField.FIELD_PROCESS_TIME;
 		chart.valueType = Report.VALUE_TYPE_SUM.getId();
 		chart.zAxis = FormField.FIELD_LAST_MODIFIER;
 		chart.zAxisSelector = Report.AXIS_SELECTOR_USER_DEPARTMENT.getId();
+		chart.setSearchFilter(SearchFilter.getRecent1YearInstancesFilter());
 		return chart;
 	}
 
 	public static ChartReport getChartPMaxMonthly() {
 		ChartReport chart = new ChartReport(CHART_PMAX_MONTHLY, CHART_PMAX_MONTHLY, SmartUtil.getSystemUser(), SmartUtil.getSystemUser(),
 				new LocalDate());
-		chart.chartType = DEFAULT_CHART_TYPE;
+		chart.chartType = CHART_TYPE_LINE;
 		chart.xAxis = FormField.FIELD_LAST_MODIFIED_DATE;
 		chart.xAxisSelector = Report.AXIS_SELECTOR_BY_MONTH.getId();
 		chart.yAxis = FormField.FIELD_PROCESS_TIME;
 		chart.valueType = Report.VALUE_TYPE_MAX.getId();
+		chart.setSearchFilter(SearchFilter.getRecent1YearInstancesFilter());
 		return chart;
 	}
 
 	public static ChartReport getChartPMaxMonthlyByDepartment() {
 		ChartReport chart = new ChartReport(CHART_PMAX_MONTHLY_DEPARTMENT, CHART_PMAX_MONTHLY_DEPARTMENT, SmartUtil.getSystemUser(),
 				SmartUtil.getSystemUser(), new LocalDate());
-		chart.chartType = DEFAULT_CHART_TYPE;
+		chart.chartType = CHART_TYPE_LINE;
 		chart.xAxis = FormField.FIELD_LAST_MODIFIED_DATE;
 		chart.xAxisSelector = Report.AXIS_SELECTOR_BY_MONTH.getId();
 		chart.yAxis = FormField.FIELD_PROCESS_TIME;
 		chart.valueType = Report.VALUE_TYPE_MAX.getId();
 		chart.zAxis = FormField.FIELD_LAST_MODIFIER;
 		chart.zAxisSelector = Report.AXIS_SELECTOR_USER_DEPARTMENT.getId();
+		chart.setSearchFilter(SearchFilter.getRecent1YearInstancesFilter());
 		return chart;
 	}
 
 	public static ChartReport getChartPMinMonthly() {
 		ChartReport chart = new ChartReport(CHART_PMIN_MONTHLY, CHART_PMIN_MONTHLY, SmartUtil.getSystemUser(), SmartUtil.getSystemUser(),
 				new LocalDate());
-		chart.chartType = DEFAULT_CHART_TYPE;
+		chart.chartType = CHART_TYPE_LINE;
 		chart.xAxis = FormField.FIELD_LAST_MODIFIED_DATE;
 		chart.xAxisSelector = Report.AXIS_SELECTOR_BY_MONTH.getId();
 		chart.yAxis = FormField.FIELD_PROCESS_TIME;
 		chart.valueType = Report.VALUE_TYPE_MIN.getId();
+		chart.setSearchFilter(SearchFilter.getRecent1YearInstancesFilter());
 		return chart;
 	}
 
 	public static ChartReport getChartPMinMonthlyByDepartment() {
 		ChartReport chart = new ChartReport(CHART_PMIN_MONTHLY_DEPARTMENT, CHART_PMIN_MONTHLY_DEPARTMENT, SmartUtil.getSystemUser(),
 				SmartUtil.getSystemUser(), new LocalDate());
-		chart.chartType = DEFAULT_CHART_TYPE;
+		chart.chartType = CHART_TYPE_LINE;
 		chart.xAxis = FormField.FIELD_LAST_MODIFIED_DATE;
 		chart.xAxisSelector = Report.AXIS_SELECTOR_BY_MONTH.getId();
 		chart.yAxis = FormField.FIELD_PROCESS_TIME;
 		chart.valueType = Report.VALUE_TYPE_MIN.getId();
 		chart.zAxis = FormField.FIELD_LAST_MODIFIER;
 		chart.zAxisSelector = Report.AXIS_SELECTOR_USER_DEPARTMENT.getId();
+		chart.setSearchFilter(SearchFilter.getRecent1YearInstancesFilter());
 		return chart;
+	}
+	
+	public static ReportInstanceInfo[] getDefaultChartInstanceInformation(){
+		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_INFORMATION)) return null;
+		
+		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_INFORMATION.length];
+		for(int i=0; i<ChartReport.DEFAULT_CHARTS_INFORMATION.length; i++){
+			ChartReport report = ChartReport.DEFAULT_CHARTS_INFORMATION[i];
+			if(!SmartUtil.isBlankObject(report)){
+				instances[i] = report.getReportInstanceInfo();
+			}
+		}
+		return instances;
+	}
+	
+	public static ReportInstanceInfo[] getDefaultChartInstanceProcess(){
+		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_PROCESS)) return null;
+		
+		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_PROCESS.length];
+		for(int i=0; i<ChartReport.DEFAULT_CHARTS_PROCESS.length; i++){
+			ChartReport report = ChartReport.DEFAULT_CHARTS_PROCESS[i];
+			if(!SmartUtil.isBlankObject(report)){
+				instances[i] = report.getReportInstanceInfo();
+			}
+		}
+		return instances;
+	}
+	
+	public static ReportInstanceInfo[] getDefaultChartInstanceSchedule(){
+		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_SCHEDULE)) return null;
+		
+		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_SCHEDULE.length];
+		for(int i=0; i<ChartReport.DEFAULT_CHARTS_SCHEDULE.length; i++){
+			ChartReport report = ChartReport.DEFAULT_CHARTS_SCHEDULE[i];
+			if(!SmartUtil.isBlankObject(report)){
+				instances[i] = report.getReportInstanceInfo();
+			}
+		}
+		return instances;
+	}
+	
+	public static ReportInstanceInfo[] getDefaultChartInstanceAllWorks(){
+		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_ALL_WORKS)) return null;
+		
+		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_ALL_WORKS.length];
+		for(int i=0; i<ChartReport.DEFAULT_CHARTS_ALL_WORKS.length; i++){
+			ChartReport report = ChartReport.DEFAULT_CHARTS_ALL_WORKS[i];
+			if(!SmartUtil.isBlankObject(report)){
+				ReportInstanceInfo instance = report.getReportInstanceInfo();
+				instance.setTargetWorkType(Work.TYPE_NONE);
+				instances[i] = instance;
+			}
+		}
+		return instances;
+	}
+	
+	public static ReportInstanceInfo[] getDefaultChartInstanceAllProcesses(){
+		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_ALL_PROCESSES)) return null;
+		
+		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_ALL_PROCESSES.length];
+		for(int i=0; i<ChartReport.DEFAULT_CHARTS_ALL_PROCESSES.length; i++){
+			ChartReport report = ChartReport.DEFAULT_CHARTS_ALL_PROCESSES[i];
+			if(!SmartUtil.isBlankObject(report)){
+				ReportInstanceInfo instance = report.getReportInstanceInfo();
+				instance.setTargetWorkType(SmartWork.TYPE_PROCESS);
+				instances[i] = instance;
+			}
+		}
+		return instances;
+	}
+	
+	public static ReportInstanceInfo[] getDefaultChartInstanceAllInformations(){
+		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_ALL_INFORMATIONS)) return null;
+		
+		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_ALL_INFORMATIONS.length];
+		for(int i=0; i<ChartReport.DEFAULT_CHARTS_ALL_INFORMATIONS.length; i++){
+			ChartReport report = ChartReport.DEFAULT_CHARTS_ALL_INFORMATIONS[i];
+			if(!SmartUtil.isBlankObject(report)){
+				ReportInstanceInfo instance = report.getReportInstanceInfo();
+				instance.setTargetWorkType(SmartWork.TYPE_INFORMATION);
+				instances[i] = instance;
+			}
+		}
+		return instances;
+	}
+	
+	public static ReportInstanceInfo[] getDefaultChartInstanceAllSchedules(){
+		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_ALL_SCHEDULES)) return null;
+		
+		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_ALL_SCHEDULES.length];
+		for(int i=0; i<ChartReport.DEFAULT_CHARTS_ALL_SCHEDULES.length; i++){
+			ChartReport report = ChartReport.DEFAULT_CHARTS_ALL_SCHEDULES[i];
+			if(!SmartUtil.isBlankObject(report)){
+				ReportInstanceInfo instance = report.getReportInstanceInfo();
+				instance.setTargetWorkType(SmartWork.TYPE_SCHEDULE);
+				instances[i] = instance;
+			}
+		}
+		return instances;
+	}
+	
+	public static String getChartTypeInString(int chartType){
+		if(chartType<1 || chartType>ChartReport.CHART_TYPES_STRING.length) return ChartReport.CHART_TYPES_STRING[ChartReport.DEFAULT_CHART_TYPE];
+		return ChartReport.CHART_TYPES_STRING[chartType];
+	}
+	
+	int count = 0;
+	public ReportInstanceInfo getReportInstanceInfo(){
+		ReportInstanceInfo instance = new ReportInstanceInfo();
+		instance.setId(this.getId());
+		instance.setSubject(this.getName());
+		instance.setOwner(this.getOwner().getUserInfo());
+		instance.setLastModifier(this.getLastModifier().getUserInfo());
+		instance.setLastModifiedDate(this.getLastModifiedDate());
+		instance.setAccessPolicy(new AccessPolicy(AccessPolicy.LEVEL_PUBLIC));
+		instance.setReportType(Report.TYPE_CHART);
+		instance.setChartType(this.getChartType());
+		return instance;
 	}
 }

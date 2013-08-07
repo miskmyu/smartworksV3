@@ -4,6 +4,7 @@
 <!-- Author			: Y.S. JUNG										 -->
 <!-- Created Date	: 2011.9.										 -->
 
+<%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.model.mail.MailFolder"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@ page contentType="text/html; charset=utf-8"%>
@@ -223,24 +224,24 @@ function logout() {
 		</li>
 		<!--  홈메뉴  //-->
  
-		<!--  스마트케스트 메뉴  -->
+		<!--  대시보드 메뉴  -->
 		<li class="idx2">
+ 				<a href="dashboard.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>"><fmt:message key="header.top_menu.dashboard" /></a> 
+		</li>
+		<!--  대시보드 메뉴  //-->
+
+		<!--  스마트케스트 메뉴  -->
+		<li class="idx3">
  				<a href="smartcaster.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_SMARTCASTER + cUser.getId()%>"><fmt:message key="header.top_menu.smartcaster" /></a> 
 		</li>
 		<!--  스마트케스트 메뉴 // -->
 
 		<!--  커뮤너티 메뉴  -->
-		<li class="idx3">
+		<li class="idx4">
  				<a href="communities.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_COMMUNITIES + cUser.getId()%>"><fmt:message key="header.top_menu.communities" /></a> 
 		</li>
 		<!--  스마트케스트 메뉴 // -->
-<%--
-		<!--  대시보드 메뉴  -->
-		<li class="idx3">
- 				<a href="dashboard.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>"><fmt:message key="header.top_menu.dashboard" /></a> 
-		</li>
-		<!--  대시보드 메뉴  //-->
- --%>
+
  	</ul>
 	
 	<!-- 통합 검색 기능  -->
@@ -254,8 +255,6 @@ function logout() {
 
 </div>
 <!-- 헤더에 있는 메뉴들 및 연결 기능 // -->
-
-
 
 <!--  전체 메뉴  -->
 <div class="global_menu">

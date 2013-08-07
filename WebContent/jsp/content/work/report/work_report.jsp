@@ -23,14 +23,15 @@
 
 	SmartWork work = (SmartWork)session.getAttribute("smartWork");
 	String workId = work.getId();
-	String lastReportId = work.getLastReportId();
-	Report lastReport = null;
+	String lastReportId = (SmartUtil.isBlankObject(work.getLastReportId())) ? Report.REPORT_ID_NONE : work.getLastReportId();
+	Report lastReport = smartWorks.getReportById(lastReportId);
 	int lastReportType = -1;
 	String lastChartType = null;
-	if(lastReportId != null){
-		lastReport = smartWorks.getReportById(lastReportId);
+	if(!SmartUtil.isBlankObject(lastReport)){
 		lastReportType = lastReport.getType();
 		if(lastReport.getType() == Report.TYPE_CHART) lastChartType = ((ChartReport)lastReport).getChartTypeInString();
+	}else{
+		lastReportId = Report.REPORT_ID_NONE;
 	}
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -56,8 +57,7 @@
 						if(report.getType() == Report.TYPE_CHART) chartType = ((ChartReport)report).getChartTypeInString();
 				%>
 						<option value="<%=report.getId()%>" reportType="<%=report.getType()%>" <%if(chartType!=null){ %>chartType="<%=chartType%>"<%}%>
-							<%if(report.getId().equals(lastReportId)){ %> selected <%} %>>
-							<fmt:message key="<%=report.getName()%>" />
+							<%if(report.getId().equals(lastReportId)){ %> selected <%} %>><%=report.getName()%>
 						</option>
 				<%
 					}
@@ -87,11 +87,12 @@
 	<div>
 		<!-- 컨텐츠 -->
 		<div class="js_work_report_edit" style="display:none"></div>
-		<div class="js_work_report_view border_no_topline" style="display:none">
+		<div class="js_work_report_view border_no_topline" <% if(SmartUtil.isBlankObject(lastReport) || lastReport.getId().equals(Report.REPORT_ID_NONE)) {%>style="display:none" <%} %>>
 			<%
-			if(!SmartUtil.isBlankObject(lastReport)){
+			if(!SmartUtil.isBlankObject(lastReport) && !lastReport.getId().equals(Report.REPORT_ID_NONE)){
 			%>
 				<jsp:include page="/jsp/content/work/report/work_report_view.jsp">
+					<jsp:param value="<%=lastReportType %>" name="reportType"/>
 					<jsp:param value="<%=lastChartType %>" name="chartType"/>
 				</jsp:include>
 				<script type="text/javascript">
@@ -99,8 +100,9 @@
 					var reportId = workReport.attr("reportId");
 					var reportType = workReport.attr("reportType");
 					var chartType = workReport.attr("chartType");
-					smartChart.load(parseInt(reportType), reportId, chartType, false, "chart_target");
-	
+					Ext.onReady(function () {
+						smartChart.load(reportType, reportId, chartType, false, "chart_target");
+					});
 				</script>
 			<%} %>
 		</div>

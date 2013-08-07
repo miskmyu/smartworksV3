@@ -204,11 +204,11 @@
 
 			<!-- 목록보기 -->
 			<div class=" contents_space">
-				<%-- <div>
+				<div>
 					<jsp:include page="/jsp/content/work/report/work_report.jsp">
 						<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
 					</jsp:include>
-				</div> --%>
+				</div>
 				<!-- 목록보기 타이틀-->
 				<div class="list_title_space js_work_list_title mt15">
 					<div class="title"><fmt:message key="common.title.instance_list" /></div>
@@ -257,6 +257,14 @@
 								<option value="<%=SearchFilter.FILTER_MY_RUNNING_INSTANCES%>"
 									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_MY_RUNNING_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.my_running_instances' />
+								</option>
+								<option value="<%=SearchFilter.FILTER_RECENT_1YEAR_INSTANCES%>"
+									<%if(SearchFilter.FILTER_RECENT_1YEAR_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									<fmt:message key='filter.name.recent_1year_instances' />
+								</option>
+								<option value="<%=SearchFilter.FILTER_RECENT_3YEARS_INSTANCES%>"
+									<%if(SearchFilter.FILTER_RECENT_3YEARS_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									<fmt:message key='filter.name.recent_3years_instances' />
 								</option>
 								<%
 								SearchFilterInfo[] filters = work.getSearchFilters();
