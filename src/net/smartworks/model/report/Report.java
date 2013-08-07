@@ -16,6 +16,11 @@ public class Report extends BaseObject {
 	public final static int TYPE_MATRIX = 2;
 	public final static int TYPE_TABLE = 3;
 	
+	public final static int DATA_SOURCE_WORKS = 1;
+	public final static int DATA_SOURCE_REPORT_TABLE = 2;
+	public final static int DATA_SOURCE_EXTERNAL_SERVICE = 3;
+	public final static int DATA_SOURCE_DEFAULT = Report.DATA_SOURCE_WORKS;
+	
 	public final static String PRODUCED_BY_SMARTWORKS = "smartworks";
 	public final static String PRODUCED_BY_USER = "user";
 		
@@ -52,9 +57,11 @@ public class Report extends BaseObject {
 	private int type=-1;
 	private String targetWorkId = SmartWork.ID_ALL_WORKS;
 	private int targetWorkType = Work.TYPE_NONE;
+	private int dataSourceType = Report.DATA_SOURCE_DEFAULT;
+	private String externalServiceId;
+	private String reportTableKey;
 	private SearchFilter searchFilter;
 	private AccessPolicy accessPolicy = new AccessPolicy();
-	private Work work;
 	private User owner;
 	private LocalDate createdDate;
 	private User lastModifier;
@@ -78,6 +85,24 @@ public class Report extends BaseObject {
 	public void setTargetWorkType(int targetWorkType) {
 		this.targetWorkType = targetWorkType;
 	}
+	public int getDataSourceType() {
+		return dataSourceType;
+	}
+	public void setDataSourceType(int dataSourceType) {
+		this.dataSourceType = dataSourceType;
+	}
+	public String getExternalServiceId() {
+		return externalServiceId;
+	}
+	public void setExternalServiceId(String externalServiceId) {
+		this.externalServiceId = externalServiceId;
+	}
+	public String getReportTableKey() {
+		return reportTableKey;
+	}
+	public void setReportTableKey(String reportTableKey) {
+		this.reportTableKey = reportTableKey;
+	}
 	public SearchFilter getSearchFilter() {
 		return searchFilter;
 	}
@@ -89,12 +114,6 @@ public class Report extends BaseObject {
 	}
 	public void setAccessPolicy(AccessPolicy accessPolicy) {
 		this.accessPolicy = accessPolicy;
-	}
-	public Work getWork() {
-		return work;
-	}
-	public void setWork(Work work) {
-		this.work = work;
 	}
 	public User getOwner() {
 		return owner;
