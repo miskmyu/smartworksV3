@@ -428,7 +428,7 @@ public class SmartWorks implements ISmartWorks {
 
 	@Override
 	public int getSubInstancesInInstanceCount(String workId) throws Exception {
-		return instanceService.getSubInstancesInInstanceCount(workId);
+		return instanceService.getSubInstanceCountInInstance(workId);
 	}
 
 	@Override

@@ -1109,7 +1109,7 @@ public class ModelConverter {
 			tskWorkSpaceId = record.getRecordId();
 		}
 		// Start - modified by ysjung at 2013-3-3
-		workInstanceInfo.setSubInstanceCount(instanceService.getSubInstancesInInstanceCount(tskWorkSpaceId));
+		workInstanceInfo.setSubInstanceCount(instanceService.getSubInstanceCountInInstance(tskWorkSpaceId));
 		workInstanceInfo.setSubInstances(instanceService.getRecentSubInstancesInInstance(tskWorkSpaceId, WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT));
 		// End - modified by ysjung at 2013-3-3
 		
@@ -4740,7 +4740,7 @@ public class ModelConverter {
 		tempWorkInstance.setImgSource(imgSrc);
 		tempWorkInstance.setContent(content);
 		//start : sjlee
-		tempWorkInstance.setSubInstanceCount(instanceService.getSubInstancesInInstanceCount(swdRecord.getRecordId()));
+		tempWorkInstance.setSubInstanceCount(instanceService.getSubInstanceCountInInstance(swdRecord.getRecordId()));
 		tempWorkInstance.setSubInstances(instanceService.getRecentSubInstancesInInstance(swdRecord.getRecordId(), WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT));
 		//end : sjlee		
 		imageInstance = tempWorkInstance;
@@ -5515,7 +5515,7 @@ public class ModelConverter {
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
 			workInstanceInfo.setStatus(TaskInstance.STATUS_RETURNED);
 		}
-		
+		workInstanceInfo.setSubInstanceCount(instanceService.getSubInstanceCountInInstance(workInstanceInfo.getId()));
 		workInstanceInfo.setOwner(getUserInfoByUserId(task.getTskAssignee()));
 		workInstanceInfo.setCreatedDate(new LocalDate(task.getTskCreateDate().getTime()));
 		workInstanceInfo.setLastModifiedDate(new LocalDate(task.getTaskLastModifyDate().getTime()));

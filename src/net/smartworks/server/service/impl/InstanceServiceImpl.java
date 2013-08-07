@@ -331,7 +331,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					WorkInfo workInfo = new WorkInfo(workId, null, SocialWork.TYPE_BOARD);
 					boardInstanceInfo.setWorkInfo(workInfo);
 					
-					boardInstanceInfo.setSubInstanceCount(getSubInstancesInInstanceCount(boardInstanceInfo.getId()));
+					boardInstanceInfo.setSubInstanceCount(getSubInstanceCountInInstance(boardInstanceInfo.getId()));
 
 					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
@@ -4529,7 +4529,7 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	@Override
-	public int getSubInstancesInInstanceCount(String instanceId) throws Exception {
+	public int getSubInstanceCountInInstance(String instanceId) throws Exception {
 		try{
 			if (CommonUtil.isEmpty(instanceId)) 
 				return 0;
@@ -4597,7 +4597,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					FormField leftOperand = condition.getLeftOperand();
 					String formFieldId = leftOperand.getId();
 					String tableColName = formFieldId;
-					if(!formFieldId.equals(FormField.ID_OWNER) && !formFieldId.equals(FormField.ID_CREATED_DATE) && !formFieldId.equals(FormField.ID_LAST_MODIFIER) && !formFieldId.equals(FormField.ID_LAST_MODIFIED_DATE))
+					if(!formFieldId.equals(FormField.ID_INSTANCE_VIEWS) && !formFieldId.equals(FormField.ID_SUB_INSTANCE_COUNT) && !formFieldId.equals(FormField.ID_WORK_SPACE_NAME) && !formFieldId.equals(FormField.ID_OWNER) && !formFieldId.equals(FormField.ID_CREATED_DATE) && !formFieldId.equals(FormField.ID_LAST_MODIFIER) && !formFieldId.equals(FormField.ID_LAST_MODIFIED_DATE))
 						tableColName = getSwdManager().getTableColName(swdDomain.getObjId(), formFieldId);
 
 					String formFieldType = leftOperand.getType();
@@ -4832,6 +4832,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 				iWInstanceInfo.setWorkInfo(workInfo);
 				iWInstanceInfo.setViews(swdRecord.getHits());
+				iWInstanceInfo.setSubInstanceCount(getSubInstanceCountInInstance(iWInstanceInfo.getId()));
 				SwdDataField[] swdDataFields = swdRecord.getDataFields();
 				List<FieldData> fieldDataList = new ArrayList<FieldData>();
 
@@ -6234,6 +6235,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						pwInstInfo.setLastTask(lastTaskInfo);//마지막 태스크
 					}
 					pwInstInfo.setLastTaskCount(prcInst.getLastTask_tskCount());
+					pwInstInfo.setSubInstanceCount(getSubInstanceCountInInstance(pwInstInfo.getId()));
 					pwInstInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(prcInst.getPrcWorkSpaceType(), prcInst.getPrcWorkSpaceId()));
 					pwInstanceInfoList.add(pwInstInfo);
 				}

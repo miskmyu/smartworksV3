@@ -245,8 +245,8 @@
  						<%if(!SmartUtil.isBlankObject(fileInstance.getWorkInstance())){%>
 							<a class="js_content_work_space" href="<%=target %>">					
 	 							<%=fileInstance.getWorkInstance().getSubject()%>
-								<%if(((WorkInstanceInfo)fileInstance.getWorkInstance()).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)fileInstance.getWorkInstance()).getSubInstanceCount() %></b>]</font><%} %>
-								<%if(fileInstance.getWorkInstance().isNew()){ %><span class="icon_new"></span><%} %> 							
+								<%if(((WorkInstanceInfo)fileInstance).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)fileInstance).getSubInstanceCount() %></b>]</font><%} %>
+								<%if(fileInstance.isNew()){ %><span class="icon_new"></span><%} %> 							
 							</a>
  						<%} %>
 					</td>

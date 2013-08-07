@@ -516,6 +516,8 @@ public class WorkInstanceController extends ExceptionInterceptor {
 			String ownerName;
 			String ownerPicture;
 			String workSpaceId;
+			String newInstance;
+			int subInstanceCount;
 			
 			public String getId() {
 				return id;
@@ -544,6 +546,12 @@ public class WorkInstanceController extends ExceptionInterceptor {
 			public String getWorkId() {
 				return SmartWork.ID_EVENT_MANAGEMENT;
 			}
+			public String getNewInstance() {
+				return newInstance;
+			}
+			public int getSubInstanceCount() {
+				return subInstanceCount;
+			}
 			public EventInfo(){
 			}
 		}
@@ -560,6 +568,8 @@ public class WorkInstanceController extends ExceptionInterceptor {
 			event.ownerName = eventInstance.getOwner().getLongName();
 			event.ownerPicture = eventInstance.getOwner().getMinPicture();
 			event.workSpaceId = eventInstance.getWorkSpaceId();
+			event.subInstanceCount = eventInstance.getSubInstanceCount();
+			event.newInstance = "" + eventInstance.isNew();
 			events[i] = event;
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
