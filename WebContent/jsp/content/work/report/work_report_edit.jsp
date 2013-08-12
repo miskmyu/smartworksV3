@@ -42,6 +42,7 @@
 	String targetWorkName = request.getParameter("targetWorkName");
 	String targetWorkIcon = request.getParameter("targetWorkIcon");
 	if(!workId.equals(SmartWork.ID_REPORT_MANAGEMENT)){
+		targetWorkId = work.getId();
 		targetWorkName = work.getFullpathName();
 		targetWorkIcon = work.getIconClass();
 	}

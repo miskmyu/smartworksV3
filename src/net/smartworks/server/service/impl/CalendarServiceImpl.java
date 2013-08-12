@@ -407,7 +407,7 @@ public class CalendarServiceImpl implements ICalendarService {
 						workSpaceType = String.valueOf(ISmartWorks.SPACE_TYPE_USER);
 					eventInstanceInfo.setWorkSpaceInfo(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
 					
-					eventInstanceInfo.setSubInstanceCount(SwServiceFactory.getInstance().getInstanceService().getSubInstancesInInstanceCount(eventInstanceInfo.getId()));
+					eventInstanceInfo.setSubInstanceCount(SwServiceFactory.getInstance().getInstanceService().getSubInstanceCountInInstance(eventInstanceInfo.getId()));
 					
 					/*WorkCategoryInfo workGroupInfo = null;
 					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))

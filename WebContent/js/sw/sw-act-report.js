@@ -60,7 +60,7 @@ $(function() {
 		forms.find('.js_work_report_name input').removeClass('required');
 		if (SmartWorks.GridLayout.validate(forms, $('.js_report_error_message'))) {
 			var paramsJson = {};
-			var workReportEdit = forms.find('.js_work_report_edit_page');
+			var workReportEdit = forms.parent().find('.js_work_report_edit_page');
 			if(isEmpty(workReportEdit)) workReportEdit = forms.parents('.js_report_list_page').find('.js_work_report_edit_page');
 			var workId = workReportEdit.attr('workId');
 			var targetWorkId = workReportEdit.attr('targetWorkId');

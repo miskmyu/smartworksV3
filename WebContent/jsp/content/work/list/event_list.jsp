@@ -139,8 +139,8 @@ $(document).ready(function(){
 		                for(var i=0; i<eventInstances.length; i++){
 		                	var event = eventInstances[i];
 		                	var ownerHtml = "";
-	                		ownerHtml = event.ownerPicture + '&=' + event.ownerName + '&=' + event.name;
-	                		console.log('ownerName=', event.ownerName, ", name=", event.name);
+	                		ownerHtml = event.ownerPicture + '&=' + event.ownerName + '&=' + event.name + '&=' + event.subInstanceCount + '&=' + event.newInstance ;
+	                		console.log('event=', event, ', ownerName=', event.ownerName, ", name=", event.name, ", subInstanceCount=", event.subInstanceCount, ", newInstance=", event.newInstance);
 
 	                		events.push({
 			                 	id: event.id,
@@ -183,7 +183,10 @@ $(document).ready(function(){
 	    	var title = $(element).find('.fc-event-title');
 	    	var titleText = title.html();
 	    	var tokens = titleText.split("&amp;=");
-	    	var titleHtml = (tokens.length==3) ? '<img class="profile_size_s" src="' + tokens[0] + '" title="' + tokens[1] + '"/>  ' +  tokens[2] : tokens[0]; 
+	    	var subInstanceHtml = (tokens.length==5 && tokens[3] > '0') ? '<font class="t_sub_count"><b>[' + tokens[3] + ']</b></font>' : "";
+	    	var isNewHtml = (tokens.length==5 && tokens[4] === 'true') ? '<span class="icon_new"></span>' : "";
+	    	
+	    	var titleHtml = (tokens.length==5) ? '<img class="profile_size_s" src="' + tokens[0] + '" title="' + tokens[1] + '"/>  ' +  tokens[2] + subInstanceHtml + isNewHtml : tokens[0]; 
 	    	title.html(titleHtml);
 	    	//var eventTime = $(element).find('.fc-event-time').html();
 	    	//if(eventTime === '0') $(element).find('.fc-event-time').html('');
