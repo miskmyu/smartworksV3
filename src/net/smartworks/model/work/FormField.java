@@ -1,5 +1,8 @@
 package net.smartworks.model.work;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.smartworks.model.BaseObject;
 import net.smartworks.util.SmartMessage;
 
