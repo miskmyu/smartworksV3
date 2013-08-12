@@ -275,6 +275,7 @@ smartMessage.bundle['en'] = {
 	boardDurationDateError : "The Duration Date of Board must be the future. Please retry with valid Duration Date", 
 	newMailPasswordConfirmError : "Error has been occured while confirming new password, Please retry with valid password confirmation",
 	removeReportPaneError : "Error has been occured while removing Work Report Pane. Please contact the Administrator!",
+	removeReportError : "Error has been occured while removing Work Report. Please contact the Administrator!",
 	
 	addJunkMailError : "Error has been occured while adding Junk Mail. Please contanct the Administrator!",
 	addJunkDomainError : "Error has been occured while adding Junk Domain. Please contanct the Administrator!",

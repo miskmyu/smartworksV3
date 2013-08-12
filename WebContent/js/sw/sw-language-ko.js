@@ -281,6 +281,7 @@ smartMessage.bundle['ko'] = {
 	boardDurationDateError : "공지종료일자가 현재보다 과거일자 입니다.. 수정 후 다시 하시기 바랍니다.", 
 	newMailPasswordConfirmError : "새로운 비밀번호확인이 잘못되었습니다. 확인 후 다시 하시기 바랍니다.",
 	removeReportPaneError : "보고서 항목을 삭제하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	removeReportError : "보고서 항목을 삭제하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	
 	addJunkMailError : "차단할 메일을 추가하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.",
 	addJunkDomainError : "차단할 도메인을 추가하는데 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.",
