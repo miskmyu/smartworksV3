@@ -51,10 +51,14 @@ import net.smartworks.model.instance.info.FileInstanceInfo;
 import net.smartworks.model.instance.info.IWInstanceInfo;
 import net.smartworks.model.instance.info.ImageInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
+import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.MemoInstanceInfo;
 import net.smartworks.model.instance.info.PWInstanceInfo;
+import net.smartworks.model.instance.info.ReportInstanceInfo;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
+import net.smartworks.model.report.ChartReport;
+import net.smartworks.model.report.Report;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.security.EditPolicy;
 import net.smartworks.model.security.SpacePolicy;
@@ -165,6 +169,7 @@ import net.smartworks.server.engine.process.xpdl.xpdl2.ProcessType1;
 import net.smartworks.server.engine.process.xpdl.xpdl2.Task;
 import net.smartworks.server.engine.process.xpdl.xpdl2.TaskApplication;
 import net.smartworks.server.engine.process.xpdl.xpdl2.WorkflowProcesses;
+import net.smartworks.server.engine.report.model.RptReport;
 import net.smartworks.server.engine.resource.model.IFormModel;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.service.ICommunityService;
@@ -177,7 +182,6 @@ import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
-import org.claros.intouch.webmail.services.GetAllHeadersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -6119,4 +6123,38 @@ public class ModelConverter {
 //		}
 		
 	}
+	
+	
+	public static ReportInstanceInfo[] getReportInstanceInfoArrayByRptReportArray(String userId, RptReport[] reports) throws Exception {
+
+//		ReportInstanceInfo instance = new ReportInstanceInfo("instance1", "부서별 주간 처리 건수", getUserInfo1(), getUserInfo2(), new LocalDate());
+//		instance.setAccessPolicy(new AccessPolicy(AccessPolicy.LEVEL_PUBLIC));
+//		instance.setReportType(Report.TYPE_CHART);
+//		instance.setChartType(ChartReport.CHART_TYPE_BAR);
+//		instance.setTargetWorkType(Work.TYPE_NONE);
+//		ReportInstanceInfo instance1 = new ReportInstanceInfo("instance1", "부서별 주간 품의처리 건수", getUserInfo1(), getUserInfo2(), new LocalDate());
+//		instance1.setAccessPolicy(new AccessPolicy(AccessPolicy.LEVEL_PRIVATE));
+//		instance1.setReportType(Report.TYPE_MATRIX);
+//		instance1.setTargetWorkType(SmartWork.TYPE_PROCESS);
+//		return new ReportInstanceInfo[]{instance, instance1};
+		
+		if (CommonUtil.isEmpty(reports))
+			return null;
+		
+		ReportInstanceInfo[] reportInstanceInfos = new ReportInstanceInfo[reports.length];
+		for (int i = 0; i < reports.length; i++) {
+			RptReport report = reports[i];
+			UserInfo owner = getUserInfoByUserId(report.getOwner());
+			UserInfo lastModifier = report.getOwner().equalsIgnoreCase(report.getModificationUser()) ? owner : getUserInfoByUserId(report.getModificationUser());
+			ReportInstanceInfo instance = new ReportInstanceInfo(report.getObjId(), report.getName(), owner, lastModifier, new LocalDate(report.getModificationDate().getTime()));
+			instance.setReportType(report.getType());
+			instance.setChartType(report.getChartType());
+			instance.setTargetWorkType(report.getTargetWorkType());
+			instance.setAccessPolicy(new AccessPolicy(Integer.parseInt(report.getAccessLevel())));
+			reportInstanceInfos[i] = instance;
+		}
+		return reportInstanceInfos;
+	}
+	
+	
 }

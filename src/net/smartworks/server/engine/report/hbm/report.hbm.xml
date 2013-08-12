@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.smartworks.server.engine.report.model" default-lazy="false">
+	<class name="RptReport" table="SWReport">
+		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="name" type="string" length="100"/>
+		<property name="type" type="int" />
+		<property name="targetWorkId" type="string" length="50"/>
+		<property name="targetWorkType" type="int" />
+		<property name="dataSourceType" type="int" />
+		<property name="externalServiceId" type="string" length="50"/>
+		<property name="reportTableKey" type="string" length="50"/>
+		<property name="searchFilterId" type="string" length="50"/>
+		<property name="owner" type="string" length="50"/>
+		<property name="chartType" type="int" />
+		<property name="xAxis" type="string" length="50"/>
+		<property name="xAxisSelector" type="string" length="50"/>
+		<property name="xAxisSort" type="string" length="50"/>
+		<property name="xAxisMaxRecords" type="int" />
+		<property name="xSecondAxis" type="string" length="50"/>
+		<property name="xSecondAxisSelector" type="string" length="50"/>
+		<property name="xSecondAxisSort" type="string" length="50"/>
+		<property name="yAxis" type="string" length="50"/>
+		<property name="yAxisSelector" type="string" length="50"/>
+		<property name="valueType" type="string" length="50"/>
+		<property name="zAxis" type="string" length="50"/>
+		<property name="zAxisSelector" type="string" length="50"/>
+		<property name="zAxisSort" type="string" length="50"/>
+		<property name="zSecondAxis" type="string" length="50"/>
+		<property name="zSecondAxisSelector" type="string" length="50"/>
+		<property name="zSecondAxisSort" type="string" length="50"/>
+		<property name="workSpaceId"  type="string" length="100"/>
+		<property name="workSpaceType" type="string" length="50"/>
+		<property name="accessLevel" type="string" length="50"/>
+		<property name="accessValue" type="string" length="4000"/>
+		<property name="creationUser" column="creator" type="string" length="50"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="50"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+	</class>
+	<class name="RptReportPane" table="SWReportPane">
+		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="name" type="string" length="100"/>
+		<property name="columnSpans" type="int" />
+		<property name="position" type="int" />
+		<property name="reportId" type="string" length="50"/>
+		<property name="reportName" type="string" length="100"/>
+		<property name="reportType" type="int" />
+		<property name="targetWorkId" type="string" length="50"/>
+		<property name="chartType" type="int" />
+		<property name="isChartView" type="boolean" />
+		<property name="isStacked" type="boolean" />
+		<property name="showLegend" type="boolean" />
+		<property name="stringLabelRotation" type="string" length="50"/>
+		<property name="owner" type="string" length="50"/>
+	</class>
+	
+</hibernate-mapping>

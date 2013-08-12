@@ -54,14 +54,14 @@ public class Report extends BaseObject {
 	public static final KeyMap AXIS_SORT_ASCEND = new KeyMap("ascend", "report.axis.sort.ascend");
 	public static final KeyMap AXIS_SORT_DESCEND = new KeyMap("descend", "report.axis.sort.descend");
 
-	private int type=-1;
-	private String targetWorkId = SmartWork.ID_ALL_WORKS;
-	private int targetWorkType = Work.TYPE_NONE;
-	private int dataSourceType = Report.DATA_SOURCE_DEFAULT;
+	private int type=-1;//리포트타입(차트, 메트릭스), 테이블 제
+	private String targetWorkId = SmartWork.ID_ALL_WORKS; // 업무에 들어가서 만들면 workId, 대쉬보드에서 만들때 모든 업무, 해당 업무 선택 가
+	private int targetWorkType = Work.TYPE_NONE; //모든 업무일때 정보관리, 프로세스, 간트.., none 이라면 모든 업
+	private int dataSourceType = Report.DATA_SOURCE_DEFAULT; //스마트웍스, 인터페이스테이블, 웹서비
 	private String externalServiceId;
-	private String reportTableKey;
+	private String reportTableKey; 
 	private SearchFilter searchFilter;
-	private AccessPolicy accessPolicy = new AccessPolicy();
+	private AccessPolicy accessPolicy = new AccessPolicy(); //공개 , 비공
 	private User owner;
 	private LocalDate createdDate;
 	private User lastModifier;

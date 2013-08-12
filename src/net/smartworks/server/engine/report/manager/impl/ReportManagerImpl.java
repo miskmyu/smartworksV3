@@ -9,16 +9,28 @@
 package net.smartworks.server.engine.report.manager.impl;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import net.smartworks.model.report.Data;
+import net.smartworks.server.engine.authority.exception.SwaException;
+import net.smartworks.server.engine.authority.model.SwaAuthProxy;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.opinion.exception.OpinionException;
+import net.smartworks.server.engine.opinion.model.Opinion;
+import net.smartworks.server.engine.opinion.model.OpinionCond;
+import net.smartworks.server.engine.report.Exception.RptException;
 import net.smartworks.server.engine.report.manager.IReportManager;
+import net.smartworks.server.engine.report.model.RptReport;
+import net.smartworks.server.engine.report.model.RptReportCond;
+import net.smartworks.server.engine.report.model.RptReportPane;
+import net.smartworks.server.engine.report.model.RptReportPaneCond;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -510,5 +522,324 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 		return reportData;
 //		return SmartTest.getReportData2();
 	}
+	
+	
+	
+	@Override
+	public RptReport getRptReport(String user, String objId, String level) throws RptException {
+		if (level == null)
+			level = LEVEL_ALL;
+		if (level.equals(LEVEL_ALL)) {
+			try {
+				RptReport obj = (RptReport)get(RptReport.class, objId);
+				return obj;
+			} catch (Exception e) {
+				throw new RptException(e);
+			}
+		} else {
+			RptReportCond cond = new RptReportCond();
+			cond.setObjId(objId);
+			RptReport[] objs = this.getRptReports(user, cond, level);
+			if (CommonUtil.isEmpty(objs))
+				return null;
+			return objs[0];
+		}
+	}
+	@Override
+	public RptReport getRptReport(String user, RptReportCond cond, String level) throws RptException {
+		if (cond == null)
+			return null;
+		if (level == null)
+			level = LEVEL_ALL;
+		cond.setPageSize(2);
+		RptReport[] objs = getRptReports(user, cond, level);
+		if (CommonUtil.isEmpty(objs))
+			return null;
+		if (objs.length > 1)
+			throw new RptException("More than 1 RptReport. ");
+		return objs[0];
+	}
+	@Override
+	public void setRptReport(String user, RptReport obj, String level) throws RptException {
+		
+		if (level == null)
+			level = LEVEL_ALL;
+		try {
+			fill(user, obj);
+			set(obj);
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new RptException(e);
+		}
+		
+	}
+	@Override
+	public void removeRptReport(String user, String objId) throws RptException {
+		try {
+			remove(RptReport.class, objId);
+		} catch (Exception e) {
+			throw new RptException(e);
+		}
+		
+	}
+	@Override
+	public void removeRptReport(String user, RptReportCond cond) throws RptException {
+		RptReport obj = getRptReport(user, cond, null);
+		if (obj == null)
+			return;
+		removeRptReport(user, obj.getObjId());
+	}
+	private Query appendQuery(StringBuffer buf, RptReportCond cond) throws Exception {
+		String objId = null;
+		String owner = null;
+		int targetWorkType = 0;
+		String targetWorkId = null;
+		
+		String creationUser = null;
+		Date creationDate = null;
+		String modificationUser = null;
+		Date modificationDate = null;
 
+		if (cond != null) {
+			objId = cond.getObjId();
+			owner = cond.getOwner();
+			targetWorkType = cond.getTargetWorkType();
+			targetWorkId = cond.getTargetWorkId();
+			creationUser = cond.getCreationUser();
+			creationDate = cond.getCreationDate();
+			modificationUser = cond.getModificationUser();
+			modificationDate = cond.getModificationDate();
+		}
+		buf.append(" from RptReport obj");
+		buf.append(" where obj.objId is not null");
+		//TODO 시간 검색에 대한 확인 필요
+		if (cond != null) {
+			if (objId != null) 
+				buf.append(" and obj.objId = :objId");
+			if (owner != null) 
+				buf.append(" and obj.owner = :owner");
+			if (targetWorkType != 0)
+				buf.append(" and obj.targetWorkType = :targetWorkType");
+			if (targetWorkId != null) 
+				buf.append(" and obj.targetWorkId = :targetWorkId");
+			if (creationUser != null)
+				buf.append(" and obj.creationUser = :creationUser");
+			if (creationDate != null)
+				buf.append(" and obj.creationDate = :creationDate");
+			if (modificationUser != null)
+				buf.append(" and obj.modificationUser = :modificationUser");
+			if (modificationDate != null)
+				buf.append(" and obj.modificationDate = :modificationDate");
+		}
+		this.appendOrderQuery(buf, "obj", cond);
+		
+		Query query = this.createQuery(buf.toString(), cond);
+		if (cond != null) {
+			if (objId != null)
+				query.setString("objId", objId);
+			if (owner != null)
+				query.setString("owner", owner);
+			if (targetWorkType != 0)
+				query.setInteger("targetWorkType", targetWorkType);
+			if (targetWorkId != null)
+				query.setString("targetWorkId", targetWorkId);
+			if (creationUser != null)
+				query.setString("creationUser", creationUser);
+			if (creationDate != null)
+				query.setTimestamp("creationDate", creationDate);
+			if (modificationUser != null)
+				query.setString("modificationUser", modificationUser);
+			if (modificationDate != null)
+				query.setTimestamp("modificationDate", modificationDate);
+		}
+		return query;
+	}
+	
+	@Override
+	public long getRptReportSize(String user, RptReportCond cond) throws RptException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" count(obj)");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			long count = ((Long)list.get(0)).longValue();
+			return count;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new RptException(e);
+		}
+	}
+	@Override
+	public RptReport[] getRptReports(String user, RptReportCond cond, String level) throws RptException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" obj");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			RptReport[] objs = new RptReport[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new RptException(e);
+		}
+	}
+	
+	
+	@Override
+	public RptReportPane getRptReportPane(String user, String objId, String level) throws RptException {
+		if (level == null)
+			level = LEVEL_ALL;
+		if (level.equals(LEVEL_ALL)) {
+			try {
+				RptReportPane obj = (RptReportPane)get(RptReportPane.class, objId);
+				return obj;
+			} catch (Exception e) {
+				throw new RptException(e);
+			}
+		} else {
+			RptReportPaneCond cond = new RptReportPaneCond();
+			cond.setObjId(objId);
+			RptReportPane[] objs = this.getRptReportPanes(user, cond, level);
+			if (CommonUtil.isEmpty(objs))
+				return null;
+			return objs[0];
+		}
+	}
+	@Override
+	public RptReportPane getRptReportPane(String user, RptReportPaneCond cond, String level) throws RptException {
+		if (cond == null)
+			return null;
+		if (level == null)
+			level = LEVEL_ALL;
+		cond.setPageSize(2);
+		RptReportPane[] objs = getRptReportPanes(user, cond, level);
+		if (CommonUtil.isEmpty(objs))
+			return null;
+		if (objs.length > 1)
+			throw new RptException("More than 1 RptReportPane. ");
+		return objs[0];
+	}
+	@Override
+	public void setRptReportPane(String user, RptReportPane obj, String level) throws RptException {
+		if (level == null)
+			level = LEVEL_ALL;
+		try {
+			fill(user, obj);
+			set(obj);
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new RptException(e);
+		}
+	}
+	@Override
+	public void removeRptReportPane(String user, String objId) throws RptException {
+		try {
+			remove(RptReportPane.class, objId);
+		} catch (Exception e) {
+			throw new RptException(e);
+		}
+	}
+	@Override
+	public void removeRptReportPane(String user, RptReportPaneCond cond) throws RptException {
+		RptReportPane obj = getRptReportPane(user, cond, null);
+		if (obj == null)
+			return;
+		removeRptReportPane(user, obj.getObjId());
+	}
+	private Query appendQuery(StringBuffer buf, RptReportPaneCond cond) throws Exception {
+		String objId = null;
+		String owner = null;
+		
+		String creationUser = null;
+		Date creationDate = null;
+		String modificationUser = null;
+		Date modificationDate = null;
+
+		if (cond != null) {
+			objId = cond.getObjId();
+			owner = cond.getOwner();
+			creationUser = cond.getCreationUser();
+			creationDate = cond.getCreationDate();
+			modificationUser = cond.getModificationUser();
+			modificationDate = cond.getModificationDate();
+		}
+		buf.append(" from RptReportPane obj");
+		buf.append(" where obj.objId is not null");
+		//TODO 시간 검색에 대한 확인 필요
+		if (cond != null) {
+			if (objId != null) 
+				buf.append(" and obj.objId = :objId");
+			if (owner != null) 
+				buf.append(" and obj.owner = :owner");
+			if (creationUser != null)
+				buf.append(" and obj.creationUser = :creationUser");
+			if (creationDate != null)
+				buf.append(" and obj.creationDate = :creationDate");
+			if (modificationUser != null)
+				buf.append(" and obj.modificationUser = :modificationUser");
+			if (modificationDate != null)
+				buf.append(" and obj.modificationDate = :modificationDate");
+		}
+		this.appendOrderQuery(buf, "obj", cond);
+		
+		Query query = this.createQuery(buf.toString(), cond);
+		if (cond != null) {
+			if (objId != null)
+				query.setString("objId", objId);
+			if (owner != null)
+				query.setString("owner", owner);
+			if (creationUser != null)
+				query.setString("creationUser", creationUser);
+			if (creationDate != null)
+				query.setTimestamp("creationDate", creationDate);
+			if (modificationUser != null)
+				query.setString("modificationUser", modificationUser);
+			if (modificationDate != null)
+				query.setTimestamp("modificationDate", modificationDate);
+		}
+		return query;
+	}
+	
+	@Override
+	public long getRptReportPaneSize(String user, RptReportPaneCond cond) throws RptException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" count(obj)");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			long count = ((Long)list.get(0)).longValue();
+			return count;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new RptException(e);
+		}
+	}
+	@Override
+	public RptReportPane[] getRptReportPanes(String user, RptReportPaneCond cond, String level) throws RptException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" obj");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			RptReportPane[] objs = new RptReportPane[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new RptException(e);
+		}
+	}
 }

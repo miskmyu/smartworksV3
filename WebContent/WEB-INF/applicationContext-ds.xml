@@ -69,6 +69,7 @@
 				<beans:value>classpath:/net/smartworks/server/engine/publishnotice/hbm</beans:value>
 				<beans:value>classpath:/net/smartworks/server/engine/mail/hbm</beans:value>
 				<beans:value>classpath:/net/smartworks/server/engine/autoindex/hbm</beans:value>
+				<beans:value>classpath:/net/smartworks/server/engine/report/hbm</beans:value>
 				<!-- <beans:value>classpath:/net/smartworks/server/engine/scheduling/hbm</beans:value> -->
 				
 				<beans:value>classpath:/pro/ucity/manager/ucityWorkList/hbm</beans:value>

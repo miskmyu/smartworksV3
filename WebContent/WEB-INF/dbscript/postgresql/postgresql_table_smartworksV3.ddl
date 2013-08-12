@@ -2516,3 +2516,66 @@ CREATE TABLE SwAutoIndexInst (
 	modifiedtime timestamp,
     primary key (objId)
 );
+
+
+
+CREATE TABLE SwReport (
+	id character varying(50) NOT NULL,
+	name character varying(100),
+	type int,
+	targetWorkId character varying(50),
+	targetWorkType int,
+	dataSourceType int,
+	externalServiceId character varying(50),
+	reportTableKey character varying(50),
+	searchFilterId character varying(50),
+	owner character varying(50),
+	chartType int,
+	
+	xAxis character varying(50),
+	xAxisSelector character varying(50),
+	xAxisSort character varying(50),
+	xAxisMaxRecords int,
+	xSecondAxis character varying(50),
+	xSecondAxisSelector character varying(50),
+	xSecondAxisSort character varying(50),
+	yAxis character varying(50),
+	yAxisSelector character varying(50),
+	valueType character varying(50),
+	zAxis character varying(50),
+	zAxisSelector character varying(50),
+	zAxisSort character varying(50),
+	zSecondAxis character varying(50),
+	zSecondAxisSelector character varying(50),
+	zSecondAxisSort character varying(50),
+	workspaceid character varying(100),
+	workspacetype character varying(50),
+	accesslevel character varying(50),
+	accessvalue character varying(4000),
+	creator	character varying(50),
+	createdtime timestamp,
+	modifier character varying(50),
+	modifiedtime timestamp,
+    primary key (id)
+);
+
+
+CREATE TABLE SwReportPane (
+	id character varying(50) NOT NULL,
+	name character varying(100),
+	columnSpans int,
+	position int,
+	reportId character varying(50),
+	reportName character varying(100),
+	reportType int,
+	targetWorkId character varying(50),
+	chartType int,
+	isChartView boolean,
+	isStacked boolean,
+	showLegend boolean,
+	stringLabelRotation character varying(50),
+	owner character varying(50),
+    primary key (id)
+);
+
+
