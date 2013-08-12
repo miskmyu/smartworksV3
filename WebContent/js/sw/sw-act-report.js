@@ -171,6 +171,7 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					$('.js_work_report_list_box:first').html(data);
 					$('a.js_work_report_close').click();
+					$('.js_view_report_list a[producedBy="user"]').click();
 					smartPop.closeProgress();
  				},
 				error : function(e) {
@@ -185,26 +186,32 @@ $(function() {
 
 	$('a.js_work_report_delete').live('click', function(e) {
 		var paramsJson = {};
-		var workReportEdit = $(targetElement(e)).parents('.js_work_report_edit_page');
-		paramsJson['workId'] = workReportEdit.attr('workId');
-		paramsJson['reportId'] = workReportEdit.attr('reportId');
+		var workReportEdit = $(targetElement(e)).parents('.js_work_report_edit');
+		var workReportEditPage = workReportEdit.find('.js_work_report_edit_page');
+		paramsJson['workId'] = workReportEditPage.attr('workId');
+		paramsJson['reportId'] = workReportEditPage.attr('reportId');
 		console.log(JSON.stringify(paramsJson));
-		smartPop.progressCont($(targetElement(e)).parents('.js_work_report_edit').find('form[name="frmAccessPolicy"]').nextAll('.js_progress_span'));
-		$.ajax({
-			url : "remove_work_report.sw",
-			contentType : 'application/json',
-			type : 'POST',
-			data : JSON.stringify(paramsJson),
-			success : function(data, status, jqXHR) {
-				$('.js_work_report_list_box:first').html(data);
-				$('a.js_work_report_close').click();
-				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.INFO, smartMessage.get('setReportSucceed'));
-			},
-			error : function(e) {
-				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.ERROR, smartMessage.get("createReportError"));
-			}
+		smartPop.confirm("[" + workReportEditPage.find('input[name="txtWorkReportName"]').attr('value') + "]" + smartMessage.get("removeConfirmation"), 
+			function(){
+				smartPop.progressCont($(targetElement(e)).parents('.js_work_report_edit').find('form[name="frmAccessPolicy"]').nextAll('.js_progress_span'));
+				$.ajax({
+					url : "remove_work_report.sw",
+					contentType : 'application/json',
+					type : 'POST',
+					data : JSON.stringify(paramsJson),
+					success : function(data, status, jqXHR) {
+						$('.js_work_report_list_box:first').html(data);
+						$('a.js_work_report_close').click();
+						$('.js_view_report_list a[producedBy="user"]').click();
+						smartPop.closeProgress();
+					},
+					error : function(e) {
+						smartPop.closeProgress();
+						smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeReportError"));
+					}
+				});
+		},
+		function(){			
 		});
 		
 		return false;
