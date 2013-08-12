@@ -911,3 +911,61 @@ CREATE TABLE SWAuthProxy (
 );
 
 
+CREATE TABLE SwReport (
+	id varchar(50) NOT NULL,
+	name varchar(100),
+	type int,
+	targetWorkId varchar(50),
+	targetWorkType int,
+	dataSourceType int,
+	externalServiceId varchar(50),
+	reportTableKey varchar(50),
+	searchFilterId varchar(50),
+	owner varchar(50),
+	chartType int,
+	
+	xAxis varchar(50),
+	xAxisSelector varchar(50),
+	xAxisSort varchar(50),
+	xAxisMaxRecords int,
+	xSecondAxis varchar(50),
+	xSecondAxisSelector varchar(50),
+	xSecondAxisSort varchar(50),
+	yAxis varchar(50),
+	yAxisSelector varchar(50),
+	valueType varchar(50),
+	zAxis varchar(50),
+	zAxisSelector varchar(50),
+	zAxisSort varchar(50),
+	zSecondAxis varchar(50),
+	zSecondAxisSelector varchar(50),
+	zSecondAxisSort varchar(50),
+	workspaceid varchar(100),
+	workspacetype varchar(50),
+	accesslevel varchar(50),
+	accessvalue varchar(4000),
+	creator	varchar(50),
+	createdtime datetime,
+	modifier varchar(50),
+	modifiedtime datetime,
+    primary key (id)
+);
+
+
+CREATE TABLE SwReportPane (
+	id varchar(50) NOT NULL,
+	name varchar(100),
+	columnSpans int,
+	position int,
+	reportId varchar(50),
+	reportName varchar(100),
+	reportType int,
+	targetWorkId varchar(50),
+	chartType int,
+	isChartView bit,
+	isStacked bit,
+	showLegend bit,
+	stringLabelRotation varchar(50),
+	owner varchar(50),
+    primary key (id)
+);

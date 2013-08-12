@@ -1,5 +1,7 @@
 package net.smartworks.server.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +22,13 @@ import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomainCond;
+import net.smartworks.server.engine.infowork.domain.model.SwdField;
+import net.smartworks.server.engine.infowork.domain.model.SwdFieldCond;
+import net.smartworks.server.engine.infowork.form.model.SwfForm;
+import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
+import net.smartworks.server.engine.infowork.form.model.SwfFormFieldDef;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
 import net.smartworks.server.engine.report.model.RptReport;
@@ -67,14 +76,21 @@ public class ReportServiceImpl implements IReportService {
 			// Exception Handling Required			
 		}
 	}
-	
-	private FormField getFormFieldByValue(String value) throws Exception {
+
+	private FormField getFormFieldByValue(String value, Map<String, SwfFormFieldDef> fieldMap) throws Exception {
+		
+		if (CommonUtil.isEmpty(value))
+			return null;
 		
 		FormField result = FormField.FORM_FIELD_MAP.get(value);
 		if (CommonUtil.isEmpty(result)) {
-			//TODO 
-			//정보관리 업무의 폼필드아이디를 가지고 해당 정보관리 업무의 formField 를 생성하여 리턴하여야 한
-			return null;
+			
+			SwfFormFieldDef field = fieldMap.get(value);
+			if (field == null)
+				return null;
+			
+			FormField formField = new FormField(field.getId(), field.getName(), field.getViewingType());
+			return formField;
 		} else {
 			return result;
 		}
@@ -84,6 +100,41 @@ public class ReportServiceImpl implements IReportService {
 	private Report getReportByRptReport(RptReport report) throws Exception {
 		
 		int reportType = report.getType();
+		Map<String, SwfFormFieldDef> fieldInfoMap = null;
+		String targetWorkId = report.getTargetWorkId();
+		if (!CommonUtil.isEmpty(targetWorkId) && !targetWorkId.equalsIgnoreCase(SmartWork.ID_ALL_WORKS)) {
+			
+			PkgPackageCond cond = new PkgPackageCond();
+			cond.setPackageId(targetWorkId);
+			PkgPackage pkg = SwManagerFactory.getInstance().getPkgManager().getPackage("", cond, IManager.LEVEL_ALL);
+			if (!CommonUtil.isEmpty(pkg)) {
+				
+				String pkgType = pkg.getType();
+				if (pkgType.equalsIgnoreCase("PROCESS")) {
+					
+					
+				} else if (pkgType.equalsIgnoreCase("SINGLE")) {
+					
+					SwfFormCond formCond = new SwfFormCond();
+					formCond.setPackageId(targetWorkId);
+					SwfForm[] forms = SwManagerFactory.getInstance().getSwfManager().getForms("", formCond, IManager.LEVEL_LITE);
+					
+					if (!CommonUtil.isEmpty(forms)) {
+						String formId = forms[0].getId();
+						
+						List<SwfFormFieldDef>  formFieldDefs = SwManagerFactory.getInstance().getSwfManager().findFormFieldByForm(formId, false);
+						
+						if (!CommonUtil.isEmpty(formFieldDefs)) {
+							fieldInfoMap = new HashMap<String, SwfFormFieldDef>();
+							for (SwfFormFieldDef field : formFieldDefs) {
+								fieldInfoMap.put(field.getId(), field);
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		Report result = null;
 		if (reportType == Report.TYPE_CHART) {
 			User owner = ModelConverter.getUserByUserId(report.getOwner());
@@ -102,13 +153,13 @@ public class ReportServiceImpl implements IReportService {
 			chartResult.setTargetWorkType(report.getTargetWorkType());
 			chartResult.setType(report.getType());
 			chartResult.setValueType(report.getValueType());
-			chartResult.setXAxis(getFormFieldByValue(report.getxAxis()));
+			chartResult.setXAxis(getFormFieldByValue(report.getxAxis(), fieldInfoMap));
 			chartResult.setXAxisMaxRecords(report.getxAxisMaxRecords());
 			chartResult.setXAxisSelector(report.getxAxisSelector());
 			chartResult.setXAxisSort(report.getxAxisSort());
-			chartResult.setYAxis(getFormFieldByValue(report.getyAxis()));
+			chartResult.setYAxis(getFormFieldByValue(report.getyAxis(), fieldInfoMap));
 			chartResult.setYAxisSelector(report.getyAxisSelector());
-			chartResult.setZAxis(getFormFieldByValue(report.getzAxis()));
+			chartResult.setZAxis(getFormFieldByValue(report.getzAxis(), fieldInfoMap));
 			chartResult.setZAxisSelector(report.getzAxisSelector());
 			chartResult.setZAxisSort(report.getzAxisSort());
 			
@@ -133,19 +184,19 @@ public class ReportServiceImpl implements IReportService {
 			matrixResult.setTargetWorkType(report.getTargetWorkType());
 			matrixResult.setType(report.getType());
 			matrixResult.setValueType(report.getValueType());
-			matrixResult.setXAxis(getFormFieldByValue(report.getxAxis()));
+			matrixResult.setXAxis(getFormFieldByValue(report.getxAxis(), fieldInfoMap));
 			matrixResult.setXAxisMaxRecords(report.getxAxisMaxRecords());
 			matrixResult.setXAxisSelector(report.getxAxisSelector());
 			matrixResult.setXAxisSort(report.getxAxisSort());
-			matrixResult.setXSecondAxis(getFormFieldByValue(report.getxSecondAxis()));
+			matrixResult.setXSecondAxis(getFormFieldByValue(report.getxSecondAxis(), fieldInfoMap));
 			matrixResult.setXSecondAxisSelector(report.getxSecondAxisSelector());
 			matrixResult.setXSecondAxisSort(report.getxSecondAxisSort());
-			matrixResult.setYAxis(getFormFieldByValue(report.getyAxis()));
+			matrixResult.setYAxis(getFormFieldByValue(report.getyAxis(), fieldInfoMap));
 			matrixResult.setYAxisSelector(report.getyAxisSelector());
-			matrixResult.setZAxis(getFormFieldByValue(report.getzAxis()));
+			matrixResult.setZAxis(getFormFieldByValue(report.getzAxis(), fieldInfoMap));
 			matrixResult.setZAxisSelector(report.getzAxisSelector());
 			matrixResult.setZAxisSort(report.getzAxisSort());
-			matrixResult.setZSecondAxis(getFormFieldByValue(report.getzSecondAxis()));
+			matrixResult.setZSecondAxis(getFormFieldByValue(report.getzSecondAxis(), fieldInfoMap));
 			matrixResult.setZSecondAxisSelector(report.getzSecondAxisSelector());
 			matrixResult.setZSecondAxisSort(report.getzSecondAxisSort());
 			
