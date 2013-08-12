@@ -474,4 +474,10 @@ public class ReportServiceImpl implements IReportService {
 	public ReportPane[] getMyDashboard() throws Exception {
 		return SmartTest.getMyDashboard();
 	}
+
+	@Override
+	public String removeWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -826,6 +826,8 @@ public interface ISmartWorks {
 	
 	public abstract String setWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract String removeWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public abstract int getUserReportCount(String targetWorkId) throws Exception;
 
 	public abstract InstanceInfoList getReportInstanceList(String targetWorkId, int targetWorkType, String producedBy, RequestParams params) throws Exception;

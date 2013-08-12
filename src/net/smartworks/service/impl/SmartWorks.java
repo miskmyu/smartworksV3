@@ -1862,4 +1862,8 @@ public class SmartWorks implements ISmartWorks {
 	public ReportPane[] getMyDashboard() throws Exception {
 		return reportService.getMyDashboard();
 	}
+	@Override
+	public String removeWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return reportService.removeWorkReportPane(requestBody, request);
+	}
 }
