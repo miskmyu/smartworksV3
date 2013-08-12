@@ -1839,6 +1839,11 @@ public class SmartWorks implements ISmartWorks {
 	public String setWorkReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return reportService.setWorkReport(requestBody, request);
 	}
+	
+	@Override
+	public String removeWorkReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return reportService.removeWorkReport(requestBody, request);
+	}
 
 	@Override
 	public String setWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {

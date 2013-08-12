@@ -821,6 +821,8 @@ public interface ISmartWorks {
 	public abstract void downloadAppWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract String setWorkReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract String removeWorkReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract String setWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	

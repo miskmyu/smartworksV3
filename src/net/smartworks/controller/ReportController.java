@@ -157,7 +157,7 @@ public class ReportController {
 	@RequestMapping(value = "/remove_work_report", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public ModelAndView removeWorkReport(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String reportId = smartworks.setWorkReport(requestBody, request);
+		String reportId = smartworks.removeWorkReport(requestBody, request);
 		String workId = (String)requestBody.get("workId");
 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
 		ModelAndView mnv = new ModelAndView();

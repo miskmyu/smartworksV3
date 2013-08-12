@@ -19,6 +19,8 @@ public interface IReportService {
 	public Data getReportDataByDef(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public String setWorkReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public String removeWorkReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public String setWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	

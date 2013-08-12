@@ -244,6 +244,17 @@ public class ReportServiceImpl implements IReportService {
 		
 		return SmartTest.getReportData4();
 	}
+	@Override
+	public String removeWorkReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+		String reportId = (String)requestBody.get("reportId");
+		if (CommonUtil.isEmpty(reportId))
+			return null;
+		
+		SwManagerFactory.getInstance().getReportManager().removeRptReport("", reportId);
+		
+		return reportId;
+	}
 
 	@Override
 	public String setWorkReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
