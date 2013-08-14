@@ -2575,6 +2575,10 @@ CREATE TABLE SwReportPane (
 	showLegend boolean,
 	stringLabelRotation character varying(50),
 	owner character varying(50),
+	creator	character varying(50),
+	createdtime timestamp,
+	modifier character varying(50),
+	modifiedtime timestamp,
     primary key (id)
 );
 

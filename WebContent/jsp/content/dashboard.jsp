@@ -81,8 +81,8 @@
 								<jsp:param value="<%=SmartUtil.escape(pane.getName())%>" name="paneName"/>
 								<jsp:param value="<%=pane.getColumnSpans() %>" name="paneColumnSpans"/>
 								<jsp:param value="<%=pane.getPosition().toString() %>" name="panePosition"/>
-								<jsp:param value="<%=SmartUtil.escape(pane.getTargetWork().getFullpathName()) %>" name="targetWorkName"/>
-								<jsp:param value="<%=pane.getTargetWork().getIconClass() %>" name="targetWorkIcon"/>
+								<jsp:param value="<%=pane.getTargetWork() != null ? SmartUtil.escape(pane.getTargetWork().getFullpathName()) : null %>" name="targetWorkName"/>
+								<jsp:param value="<%=pane.getTargetWork() != null ? pane.getTargetWork().getIconClass() : null %>" name="targetWorkIcon"/>
 								<jsp:param value="<%=pane.getReportId() %>" name="reportId"/>
 								<jsp:param value="<%=SmartUtil.escape(pane.getReportName()) %>" name="reportName"/>
 								<jsp:param value="<%=pane.getReportType() %>" name="reportType"/>

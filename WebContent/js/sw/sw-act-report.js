@@ -151,8 +151,8 @@ $(function() {
 			paramsJson['workId'] = workReportEditPage.attr('workId');
 			paramsJson['targetWorkId'] = workReportEditPage.attr('targetWorkId');
 			var url = "create_new_work_report.sw";
+			paramsJson['reportId'] = workReportEditPage.attr('reportId');
 			if(!workReportEdit.find(".js_work_report_name").is(':visible') && !workReportEdit.find('form[name="frmReportSaveAsName"]').is(':visible')){
-				paramsJson['reportId'] = workReportEditPage.attr('reportId');
 				url = "set_work_report.sw";
 			}
 				

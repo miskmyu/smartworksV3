@@ -51,14 +51,12 @@ import net.smartworks.model.instance.info.FileInstanceInfo;
 import net.smartworks.model.instance.info.IWInstanceInfo;
 import net.smartworks.model.instance.info.ImageInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
-import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.MemoInstanceInfo;
 import net.smartworks.model.instance.info.PWInstanceInfo;
 import net.smartworks.model.instance.info.ReportInstanceInfo;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
-import net.smartworks.model.report.ChartReport;
-import net.smartworks.model.report.Report;
+import net.smartworks.model.report.info.ReportInfo;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.security.EditPolicy;
 import net.smartworks.model.security.SpacePolicy;
@@ -170,6 +168,7 @@ import net.smartworks.server.engine.process.xpdl.xpdl2.Task;
 import net.smartworks.server.engine.process.xpdl.xpdl2.TaskApplication;
 import net.smartworks.server.engine.process.xpdl.xpdl2.WorkflowProcesses;
 import net.smartworks.server.engine.report.model.RptReport;
+import net.smartworks.server.engine.report.model.RptReportCond;
 import net.smartworks.server.engine.resource.model.IFormModel;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.service.ICommunityService;
@@ -3704,9 +3703,39 @@ public class ModelConverter {
 
 		//상세필터
 		processWork.setSearchFilters(ModelConverter.getSearchFilterInfoByPkgPackage(userId, pkg));
+		
+		processWork.setReports(getReportInfoByPkg(pkg));
 
 		return processWork;
 	}
+	
+	public static ReportInfo[] getReportInfoByPkg(PkgPackage pkg) throws Exception {
+		if (CommonUtil.isEmpty(pkg))
+			return null;
+		
+		String packageId = pkg.getPackageId();
+		
+		RptReportCond cond = new RptReportCond();
+		cond.setTargetWorkId(packageId);
+		
+		RptReport[] reports = SwManagerFactory.getInstance().getReportManager().getRptReports("", cond, IManager.LEVEL_LITE);
+		
+		if (CommonUtil.isEmpty(reports))
+			return null;
+		
+		ReportInfo[] reportInfos = new ReportInfo[reports.length];
+		for (int i = 0; i < reports.length; i++) {
+			RptReport report = reports[i];
+			
+			ReportInfo reportInfo = new ReportInfo(report.getObjId(), report.getName());
+			reportInfo.setType(report.getType());
+			reportInfo.setChartType(report.getChartType());
+			reportInfos[i] = reportInfo;
+		}
+		return reportInfos;
+	}
+	
+	
 	private static SmartDiagram getSmartDiagramByPkgInfo(String userId, PkgPackage pkg) throws Exception {
 		
 		SmartDiagram smartDiagram = new SmartDiagram();

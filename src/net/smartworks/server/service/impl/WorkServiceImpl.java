@@ -736,6 +736,8 @@ public class WorkServiceImpl implements IWorkService {
 				resultwork.setManualFilePath(SmartConfUtil.getInstance().getImageServer() +  companyId + "/" + file.get(0).getFileName());
 			}
 			
+			resultwork.setReports(ModelConverter.getReportInfoByPkg(pkg));
+			
 			return resultwork;
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -107,7 +107,7 @@ public class ReportPane extends BaseObject {
 		super(id, name);
 	}
 	public static Matrix[] getAvailablePositions(ReportPane[] reportPanes, Matrix removePosition){
-		if(reportPanes==null) return null;
+		if(reportPanes==null) return ReportPane.getAvailablePositions(null);
 		ReportPane[] removedReportPanes = new ReportPane[reportPanes.length - (removePosition==null?0:1)];
 		int count = 0;
 		for(int i=0; i<reportPanes.length; i++){
@@ -174,8 +174,8 @@ public class ReportPane extends BaseObject {
 		
 		Matrix[] newRowPositions = null;
 		if(rows<ReportPane.MAX_ROWS){
-			newRowPositions = new Matrix[ReportPane.MAX_ROWS];
-			for(int i=0; i<ReportPane.MAX_ROWS; i++){
+			newRowPositions = new Matrix[rows + 1];
+			for(int i=0; i<rows + 1; i++){
 				newRowPositions[i] = new Matrix(i,0);
 				newRowPositions[i].setNewRow(true);
 			}

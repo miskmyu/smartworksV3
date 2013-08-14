@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.net.ssl.ManagerFactoryParameters;
 import javax.servlet.http.HttpServletRequest;
 
+import net.smartworks.model.Matrix;
 import net.smartworks.model.community.User;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.info.InstanceInfoList;
@@ -20,19 +22,20 @@ import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.engine.common.manager.IManager;
+import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
-import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
-import net.smartworks.server.engine.infowork.domain.model.SwdDomainCond;
-import net.smartworks.server.engine.infowork.domain.model.SwdField;
-import net.smartworks.server.engine.infowork.domain.model.SwdFieldCond;
 import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.engine.infowork.form.model.SwfFormFieldDef;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
+import net.smartworks.server.engine.report.manager.IReportManager;
 import net.smartworks.server.engine.report.model.RptReport;
 import net.smartworks.server.engine.report.model.RptReportCond;
+import net.smartworks.server.engine.report.model.RptReportPane;
+import net.smartworks.server.engine.report.model.RptReportPaneCond;
+import net.smartworks.server.engine.report.model.RptReportPaneSorter;
 import net.smartworks.server.service.IReportService;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
@@ -289,8 +292,30 @@ public class ReportServiceImpl implements IReportService {
 	
 		String workId = (String)requestBody.get("workId");
 		String targetWorkId = (String)requestBody.get("targetWorkId");
-			
+		String reportId = (String)requestBody.get("reportId");
+
+		String saveAsName = (String)frmReportSaveAsNameMap.get("txtReportSaveAsName");
+		
+		RptReport report = null;
+		if (CommonUtil.isEmpty(reportId) || !CommonUtil.isEmpty(saveAsName)) {
+			report = new RptReport();
+		} else {
+			report = SwManagerFactory.getInstance().getReportManager().getRptReport(userId, reportId, IManager.LEVEL_ALL);
+			if (CommonUtil.isEmpty(report))
+				report = new RptReport();
+		}
+		
 		String txtWorkReportName = (String)frmWorkReportMap.get("txtWorkReportName");
+		
+		if (CommonUtil.isEmpty(txtWorkReportName) || !CommonUtil.isEmpty(saveAsName)) {
+			if (!CommonUtil.isEmpty(saveAsName)) {
+				txtWorkReportName = saveAsName;
+			} else {
+				txtWorkReportName = report.getName();
+			}
+			
+		}
+		
 		String rdoWorkReportType = (String)frmWorkReportMap.get("rdoWorkReportType");
 		String selTargetWorkType = (String)frmWorkReportMap.get("selTargetWorkType");
 		String selReportChartType = (String)frmWorkReportMap.get("selReportChartType");
@@ -319,7 +344,6 @@ public class ReportServiceImpl implements IReportService {
 			
 		String selAccessPolicy = (String)frmAccessPolicyMap.get("selAccessPolicy");
 		
-		RptReport report = new RptReport();
 		report.setOwner(userId);
 		report.setTargetWorkId(targetWorkId);
 		report.setName(txtWorkReportName);
@@ -375,9 +399,84 @@ public class ReportServiceImpl implements IReportService {
 	@Override
 	public String setWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		
+//		{
+//				reportId=402880bb4072397101407513dd450004, 
+//				frmNewReportPane={
+//							txtPaneName=123, 
+//							selReportPanePosition=11
+//				}
+//		}
+
+		String userId = SmartUtil.getCurrentUser().getId();
+		
+		String reportId = (String)requestBody.get("reportId");
+		if (CommonUtil.isEmpty(reportId))
+			return null;
+		
+		IReportManager reportManager = SwManagerFactory.getInstance().getReportManager();
+		
+		RptReport report = reportManager.getRptReport(userId, reportId, IManager.LEVEL_ALL);
+		if (CommonUtil.isEmpty(report))
+			return null;
+		
+		Map<String, Object> frmNewReportPane = (Map<String, Object>)requestBody.get("frmNewReportPane");
+		String txtPaneName = (String)frmNewReportPane.get("txtPaneName");
+		String selReportPanePosition = (String)frmNewReportPane.get("selReportPanePosition");
+		
+		RptReportPane pane = new RptReportPane();
+		pane.setName(txtPaneName);
+		pane.setReportName(report.getName());
+		pane.setReportId(reportId);
+		pane.setReportType(report.getType());
+		pane.setChartType(report.getChartType());
+		pane.setTargetWorkId(report.getTargetWorkId());
+		pane.setOwner(userId);
+		//TODO
+		pane.setChartView(true);
+		pane.setStacked(true);
+		pane.setShowLegend(true);
+		pane.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_AUTO);
+
+		//pane.setColumnSpans(columnSpans);
+		pane.setPosition(Integer.parseInt(selReportPanePosition));
+		
+		reportManager.setRptReportPane(userId, pane, IManager.LEVEL_ALL);
+		
+		return pane.getObjId();
 	}
 
+	private void reSortingPaneByNewPane(RptReportPane pane) throws Exception {
+		
+		if (CommonUtil.isEmpty(pane))
+			return;
+		
+		String owner = pane.getOwner();
+		
+		RptReportPaneCond cond = new RptReportPaneCond();
+		cond.setOwner(owner);
+		
+		RptReportPane[] panes = SwManagerFactory.getInstance().getReportManager().getRptReportPanes("", cond, IManager.LEVEL_ALL);
+		
+		if (CommonUtil.isEmpty(panes))
+			return;
+		
+		int position = pane.getPosition();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
 	@Override
 	public int getUserReportCount(String targetWorkId) throws Exception {
 		RptReportCond cond = new RptReportCond();
@@ -446,6 +545,9 @@ public class ReportServiceImpl implements IReportService {
 			
 			cond.setPageNo(currentPage -1);
 			cond.setPageSize(pageSize);
+			
+			cond.setOrders(new Order[]{new Order(RptReport.A_CREATIONDATE, false)});
+			
 			RptReport[] reports = SwManagerFactory.getInstance().getReportManager().getRptReports(userId, cond, IManager.LEVEL_ALL);
 			if (CommonUtil.isEmpty(reports))
 				return list;
@@ -472,6 +574,62 @@ public class ReportServiceImpl implements IReportService {
 
 	@Override
 	public ReportPane[] getMyDashboard() throws Exception {
-		return SmartTest.getMyDashboard();
+		
+		String userId = SmartUtil.getCurrentUser().getId();
+		IReportManager reportManager = SwManagerFactory.getInstance().getReportManager();
+		
+		RptReportPaneCond cond = new RptReportPaneCond();
+		cond.setOwner(userId);
+		cond.setOrders(new Order[]{new Order("position", true)});
+		
+		RptReportPane[] panes = reportManager.getRptReportPanes(userId, cond, IManager.LEVEL_ALL);
+		
+		if (CommonUtil.isEmpty(panes))
+			return null;
+		
+		RptReportPaneSorter paneSorter = new RptReportPaneSorter();
+		for (int i = 0; i < panes.length; i++) {
+			RptReportPane pane = panes[i];
+			paneSorter.setReportPane(pane);
+		}
+		for (int i = 0; i < panes.length; i++) {
+			RptReportPane pane = panes[i];
+			paneSorter.setRowSpanToRptReportPane(pane);
+		}
+		ReportPane[] resultPanes = new ReportPane[panes.length];
+		for (int i = 0; i < panes.length; i++) {
+			RptReportPane pane = panes[i];
+			ReportPane resultPane = new ReportPane();
+			
+			resultPane.setChartType(pane.getChartType());
+			resultPane.setChartView(pane.isChartView());
+			resultPane.setColumnSpans(pane.getColumnSpans());
+			resultPane.setId(pane.getObjId());
+			resultPane.setName(pane.getName());
+			
+			int position = pane.getPosition();
+			int row = 0;
+			int column = 0;
+			
+			if (position < 10) {
+				column = position;
+			} else {
+				String positionStr = position + "";
+				row = Integer.parseInt(positionStr.substring(0, 1));
+				column = Integer.parseInt(positionStr.substring(1, 2));
+			}
+			resultPane.setPosition(new Matrix(row, column));
+			resultPane.setReportId(pane.getReportId());
+			resultPane.setReportName(pane.getReportName());
+			resultPane.setReportType(pane.getReportType());
+			resultPane.setShowLegend(pane.isShowLegend());
+			resultPane.setStacked(pane.getIsChartView());
+			resultPane.setStringLabelRotation(pane.getStringLabelRotation());
+			resultPane.setTargetWork(ModelConverter.getSmartWorkInfoByPackageId(pane.getTargetWorkId()));
+			
+			resultPanes[i] = resultPane;
+		}
+		return resultPanes;
+		//return SmartTest.getMyDashboard();
 	}
 }

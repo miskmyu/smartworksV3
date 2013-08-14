@@ -136,7 +136,7 @@
 				</option>
 			</select>
 			<span <%if (xAxisMaxRecords < 1) {%> style="display:none" <%}%>>
-				<input type="text" name="numReportXAxisMaxRecords" class="fieldline required number" style="width:30px"/><fmt:message key="report.title.xaxis.records" />
+				<input type="text" name="numReportXAxisMaxRecords" class="fieldline required number" style="width:30px" value="<%=xAxisMaxRecords%>"/><fmt:message key="report.title.xaxis.records" />
 			</span>
 		</span>
 	</td>		

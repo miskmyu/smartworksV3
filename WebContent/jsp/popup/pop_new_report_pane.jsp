@@ -158,7 +158,7 @@
 							}
 							ReportPane[] dashboardPanes = smartWorks.getMyDashboard();
 							Matrix currentPosition = SmartUtil.isBlankObject(panePosition) ? null : new Matrix(panePosition);
-							Matrix[] availablePositions = ReportPane.getAvailablePositions(smartWorks.getMyDashboard(), currentPosition);
+							Matrix[] availablePositions = ReportPane.getAvailablePositions(dashboardPanes, currentPosition);
 							if(!SmartUtil.isBlankObject(availablePositions)){
 								for(int i=0; i<availablePositions.length; i++){
 									Matrix position = availablePositions[i];

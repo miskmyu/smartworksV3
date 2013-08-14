@@ -967,5 +967,9 @@ CREATE TABLE SwReportPane (
 	showLegend bit,
 	stringLabelRotation varchar(50),
 	owner varchar(50),
+	creator	varchar(50),
+	createdtime datetime,
+	modifier varchar(50),
+	modifiedtime datetime,
     primary key (id)
 );
