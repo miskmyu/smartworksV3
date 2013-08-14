@@ -463,19 +463,7 @@ public class ReportServiceImpl implements IReportService {
 		
 		int position = pane.getPosition();
 		
-		
-		
-		
-		
-		
-		
-		
-		
 	}
-	
-	
-	
-	
 	
 	@Override
 	public int getUserReportCount(String targetWorkId) throws Exception {

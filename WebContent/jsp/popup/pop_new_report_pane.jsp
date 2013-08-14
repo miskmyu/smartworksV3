@@ -70,7 +70,7 @@
 				}
 				paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 			}
-			paramsJson['isNewRow'] = workReportEditPage.find('select[name="selReportPanePosition"] option:selected').attr("isNewRow");
+			paramsJson['isNewRow'] = newReportPane.find('select[name="selReportPanePosition"] option:selected').attr("isNewRow");
 			console.log(JSON.stringify(paramsJson));
 			var progressSpan = newReportPane.find('.js_progress_span');
 			smartPop.progressCont(progressSpan);
