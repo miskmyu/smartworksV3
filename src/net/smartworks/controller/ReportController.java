@@ -143,7 +143,7 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/set_work_report", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.OK)
 	public ModelAndView setWorkReport(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String reportId = smartworks.setWorkReport(requestBody, request);
 		String workId = (String)requestBody.get("workId");
@@ -155,7 +155,7 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/remove_work_report", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.OK)
 	public ModelAndView removeWorkReport(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String reportId = smartworks.removeWorkReport(requestBody, request);
 		String workId = (String)requestBody.get("workId");
@@ -167,7 +167,7 @@ public class ReportController {
 	}
 	
 	@RequestMapping(value = "/create_new_work_report_pane", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.CREATED)
 	public void createWorkReportPane(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String paneId = smartworks.setWorkReportPane(requestBody, request);
 	}
@@ -181,7 +181,7 @@ public class ReportController {
 	@RequestMapping(value = "/remove_work_report_pane", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public void removeWorkReportPane(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String paneId = smartworks.setWorkReportPane(requestBody, request);
+		String paneId = smartworks.removeWorkReportPane(requestBody, request);
 	}
 	
 	@RequestMapping(value = "/get_user_report_count", method = RequestMethod.GET)

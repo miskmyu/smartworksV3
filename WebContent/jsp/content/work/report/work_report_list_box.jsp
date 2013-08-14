@@ -23,25 +23,29 @@
 
 	SmartWork work = (SmartWork)session.getAttribute("smartWork");
 	String workId = work.getId();
+	String lastReportId = work.getLastReportId();
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<select name="selMyReportList" class="js_select_work_report" href="work_report_view.sw?workType=<%=work.getType()%>">
+<select name="selMyReportList" class="js_select_work_report" href="work_report_view.sw?workId=<%=workId%>&workType=<%=work.getType()%>">							
 	<option value="<%=Report.REPORT_ID_NONE %>" 
-		<%if(SmartUtil.isBlankObject(work.getLastReportId()) || work.getLastReportId().equals(Report.REPORT_ID_NONE)){ %> selected <%} %>>
+		<%if(SmartUtil.isBlankObject(lastReportId) || lastReportId.equals(Report.REPORT_ID_NONE)){ %> selected <%} %>>
 		<fmt:message key="report.title.no_report" />
 	</option>
 	<%
-	Report[] infoReports = ChartReport.DEFAULT_CHARTS_INFORMATION;
-	if (infoReports != null) {
-		for (Report report : infoReports) {
+	Report[] defaultReports = null;
+	if(work.getType() == SmartWork.TYPE_INFORMATION) defaultReports =  ChartReport.DEFAULT_CHARTS_INFORMATION;
+	else if(work.getType() == SmartWork.TYPE_PROCESS) defaultReports =  ChartReport.DEFAULT_CHARTS_PROCESS;
+	else if(work.getType() == SmartWork.TYPE_SCHEDULE) defaultReports =  ChartReport.DEFAULT_CHARTS_SCHEDULE;
+	if (defaultReports != null) {
+		for (Report report : defaultReports) {
 			String chartType = null;
 			if(report.getType() == Report.TYPE_CHART) chartType = ((ChartReport)report).getChartTypeInString();
 	%>
-	<option value="<%=report.getId()%>" reportType="<%=report.getType()%>" <%if(chartType!=null){ %>chartType="<%=chartType%>"<%}%>
-		<%if(report.getId().equals(work.getLastReportId())){ %> selected <%} %>><%=report.getName()%>
-	</option>
+			<option value="<%=report.getId()%>" reportType="<%=report.getType()%>" <%if(chartType!=null){ %>chartType="<%=chartType%>"<%}%>
+				<%if(report.getId().equals(lastReportId)){ %> selected <%} %>><%=report.getName()%>
+			</option>
 	<%
 		}
 	}
@@ -49,10 +53,11 @@
 	if (reports != null) {
 		for (ReportInfo report : reports) {
 			String chartType = report.getChartTypeInString();
+			if(SmartUtil.isBlankObject(report.getId())) continue;
 	%>
-	<option value="<%=report.getId()%>" reportType="<%=report.getType()%>" <%if(chartType!=null){ %>chartType="<%=chartType%>"<%}%>
-		<%if(report.getId().equals(work.getLastReportId())){ %> selected <%} %>><%=report.getName()%>
-		</option>
+			<option value="<%=report.getId()%>" reportType="<%=report.getType()%>" <%if(chartType!=null){ %>chartType="<%=chartType%>"<%}%>
+				<%if(report.getId().equals(lastReportId)){ %> selected <%} %>><%=report.getName()%>
+			</option>
 	<%
 		}
 	}

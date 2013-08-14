@@ -70,6 +70,7 @@
 				}
 				paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 			}
+			paramsJson['isNewRow'] = workReportEditPage.find('select[name="selReportPanePosition"] option:selected').attr("isNewRow");
 			console.log(JSON.stringify(paramsJson));
 			var progressSpan = newReportPane.find('.js_progress_span');
 			smartPop.progressCont(progressSpan);
@@ -163,7 +164,7 @@
 								for(int i=0; i<availablePositions.length; i++){
 									Matrix position = availablePositions[i];
 							%>
-									<option value="<%=position.toString()%>"><%=position.getPositionName() %></option>
+									<option value="<%=position.toString()%>" isNewRow=<%=position.isNewRow() %>><%=position.getPositionName() %></option>
 							<%
 								}
 							}

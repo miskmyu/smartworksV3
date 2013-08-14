@@ -24,6 +24,8 @@ public interface IReportService {
 	
 	public String setWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public String removeWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public int getUserReportCount(String targetWorkId) throws Exception;
 
 	public InstanceInfoList getReportInstanceList(String targetWorkId, int targetWorkType, String producedBy, RequestParams params) throws Exception;

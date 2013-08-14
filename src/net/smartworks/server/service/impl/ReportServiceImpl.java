@@ -632,4 +632,10 @@ public class ReportServiceImpl implements IReportService {
 		return resultPanes;
 		//return SmartTest.getMyDashboard();
 	}
+
+	@Override
+	public String removeWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
