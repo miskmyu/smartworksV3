@@ -410,6 +410,9 @@ Ext.onReady(function () {
 								smartChart.reportInfos[target] = swReportInfo;
 							}
 							smartChart.createChart(target);
+							if(!isEmpty(target))
+								smartChart.resizePane($('#' + target).parent());
+
 						}else if(!swReportInfo.isChartView || swReportInfo.reportType === swReportType.MATRIX){
 							if(!isEmpty(target)){
 								smartChart.reportInfos[target] = swReportInfo;
@@ -838,6 +841,7 @@ Ext.onReady(function () {
 			$(".js_work_report_pane_page div.x-surface").css("vertical-align", "top");
 			
 		    $(".js_work_report_pane_page").css("display", "inline-block");
+		    
 		}
 	};
 });

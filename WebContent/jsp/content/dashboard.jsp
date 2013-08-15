@@ -81,6 +81,7 @@
 								<jsp:param value="<%=SmartUtil.escape(pane.getName())%>" name="paneName"/>
 								<jsp:param value="<%=pane.getColumnSpans() %>" name="paneColumnSpans"/>
 								<jsp:param value="<%=pane.getPosition().toString() %>" name="panePosition"/>
+								<jsp:param value="<%=pane.getTargetWork() != null ? pane.getTargetWork().getId() : null%>" name="targetWorkId"/>
 								<jsp:param value="<%=pane.getTargetWork() != null ? SmartUtil.escape(pane.getTargetWork().getFullpathName()) : null %>" name="targetWorkName"/>
 								<jsp:param value="<%=pane.getTargetWork() != null ? pane.getTargetWork().getIconClass() : null %>" name="targetWorkIcon"/>
 								<jsp:param value="<%=pane.getReportId() %>" name="reportId"/>
@@ -96,7 +97,7 @@
 							<script type="text/javascript">
 								Ext.onReady(function () {
 									
-									setTimeout(function(){
+//									setTimeout(function(){
 										smartChart.loadPane("<%=pane.getReportType()%>", 
 															"<%=pane.getReportId()%>", 
 															"<%=ChartReport.getChartTypeInString(pane.getChartType())%>", 
@@ -106,7 +107,7 @@
 															"<%=pane.getStringLabelRotation()%>",
 															"chart_target_" + "<%=pane.getPosition().toString()%>",
 															parseInt(<%=pane.getColumnSpans()%>));
-									},100);
+//									},100);
 								});
 							</script>
 						<%
@@ -116,6 +117,15 @@
 							</div>
 						<%
 						}
+					}else{
+					%>
+						<div class="js_dashboard_window">
+							<div class="js_dashboard_pane_row" style="margin-top:14px;height:412px;text-align:center">
+								<span><br><br><br><br><br><fmt:message key="report.message.no_report_pane"/></span>
+							</div>				
+						</div>
+					
+					<%
 					}
 					%>
  				</div>

@@ -316,5 +316,6 @@ smartMessage.bundle['en'] = {
 	spaceOverDateSeleted : "Future date has been selected. Please select today or before!",
 			
 	nullPointerException : "Null Pointer Exception. Please contact the Administrator!",
-	duplicateKeyException : "Duplicate Key Exception. Please contact the Administrator!"	
+	duplicateKeyException : "Duplicate Key Exception. Please contact the Administrator!",	
+	reportMessageNoReportPane : 'No report pane is registered in Dashboard.<br><br>You can register using "Add Report Pane" button on the right-top side of window!'
 };

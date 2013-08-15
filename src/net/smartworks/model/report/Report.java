@@ -4,11 +4,13 @@ import net.smartworks.model.BaseObject;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.community.User;
 import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.instance.info.ReportInstanceInfo;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
+import net.smartworks.util.SmartUtil;
 
 public class Report extends BaseObject {
 
@@ -165,56 +167,188 @@ public class Report extends BaseObject {
 	}
 	
 	public boolean isSystemReport(){
-		switch(this.getType()){
+		return Report.isSystemReport(this.getId(), this.getType());
+	}
+	
+	private static boolean isSystemReport(String reportId, int type){
+		if(SmartUtil.isBlankObject(reportId)) return false;
+		switch(type){
 		case Report.TYPE_CHART:
 			for(ChartReport report : ChartReport.DEFAULT_CHARTS_INFORMATION)
-				if(report.getId().equals(this.getId())) return true;
+				if(report.getId().equals(reportId)) return true;
 			for(ChartReport report : ChartReport.DEFAULT_CHARTS_PROCESS)
-				if(report.getId().equals(this.getId())) return true;
+				if(report.getId().equals(reportId)) return true;
 			for(ChartReport report : ChartReport.DEFAULT_CHARTS_SCHEDULE)
-				if(report.getId().equals(this.getId())) return true;
+				if(report.getId().equals(reportId)) return true;
 			for(ChartReport report : ChartReport.DEFAULT_CHARTS_ALL_WORKS)
-				if(report.getId().equals(this.getId())) return true;
-			for(ChartReport report : ChartReport.DEFAULT_CHARTS_ALL_PROCESSES)
-				if(report.getId().equals(this.getId())) return true;
-			for(ChartReport report : ChartReport.DEFAULT_CHARTS_ALL_INFORMATIONS)
-				if(report.getId().equals(this.getId())) return true;
-			for(ChartReport report : ChartReport.DEFAULT_CHARTS_ALL_SCHEDULES)
-				if(report.getId().equals(this.getId())) return true;
+				if(report.getId().equals(reportId)) return true;
 			break;
 		case Report.TYPE_MATRIX:
 			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_INFORMATION)
-				if(report.getId().equals(this.getId())) return true;
+				if(report.getId().equals(reportId)) return true;
 			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_PROCESS)
-				if(report.getId().equals(this.getId())) return true;
+				if(report.getId().equals(reportId)) return true;
 			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_SCHEDULE)
-				if(report.getId().equals(this.getId())) return true;
+				if(report.getId().equals(reportId)) return true;
 			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_ALL_WORKS)
-				if(report.getId().equals(this.getId())) return true;
-			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_ALL_PROCESSES)
-				if(report.getId().equals(this.getId())) return true;
-			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_ALL_INFORMATIONS)
-				if(report.getId().equals(this.getId())) return true;
-			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_ALL_SCHEDULES)
-				if(report.getId().equals(this.getId())) return true;
+				if(report.getId().equals(reportId)) return true;
 			break;
 		case Report.TYPE_TABLE:
 			for(TableReport report : TableReport.DEFAULT_TABLES_INFORMATION)
-				if(report.getId().equals(this.getId())) return true;
+				if(report.getId().equals(reportId)) return true;
 			for(TableReport report : TableReport.DEFAULT_TABLES_PROCESS)
-				if(report.getId().equals(this.getId())) return true;
+				if(report.getId().equals(reportId)) return true;
 			for(TableReport report : TableReport.DEFAULT_TABLES_SCHEDULE)
-				if(report.getId().equals(this.getId())) return true;
+				if(report.getId().equals(reportId)) return true;
 			for(TableReport report : TableReport.DEFAULT_TABLES_ALL_WORKS)
-				if(report.getId().equals(this.getId())) return true;
-			for(TableReport report : TableReport.DEFAULT_TABLES_ALL_PROCESSES)
-				if(report.getId().equals(this.getId())) return true;
-			for(TableReport report : TableReport.DEFAULT_TABLES_ALL_INFORMATIONS)
-				if(report.getId().equals(this.getId())) return true;
-			for(TableReport report : TableReport.DEFAULT_TABLES_ALL_SCHEDULES)
-				if(report.getId().equals(this.getId())) return true;
-			break;			
+				if(report.getId().equals(reportId)) return true;
+			break;
+		default:
+			for(ChartReport report : ChartReport.DEFAULT_CHARTS_INFORMATION)
+				if(report.getId().equals(reportId)) return true;
+			for(ChartReport report : ChartReport.DEFAULT_CHARTS_PROCESS)
+				if(report.getId().equals(reportId)) return true;
+			for(ChartReport report : ChartReport.DEFAULT_CHARTS_SCHEDULE)
+				if(report.getId().equals(reportId)) return true;
+			for(ChartReport report : ChartReport.DEFAULT_CHARTS_ALL_WORKS)
+				if(report.getId().equals(reportId)) return true;
+			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_INFORMATION)
+				if(report.getId().equals(reportId)) return true;
+			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_PROCESS)
+				if(report.getId().equals(reportId)) return true;
+			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_SCHEDULE)
+				if(report.getId().equals(reportId)) return true;
+			for(MatrixReport report : MatrixReport.DEFAULT_MATRIXS_ALL_WORKS)
+				if(report.getId().equals(reportId)) return true;
+			for(TableReport report : TableReport.DEFAULT_TABLES_INFORMATION)
+				if(report.getId().equals(reportId)) return true;
+			for(TableReport report : TableReport.DEFAULT_TABLES_PROCESS)
+				if(report.getId().equals(reportId)) return true;
+			for(TableReport report : TableReport.DEFAULT_TABLES_SCHEDULE)
+				if(report.getId().equals(reportId)) return true;
+			for(TableReport report : TableReport.DEFAULT_TABLES_ALL_WORKS)
+				if(report.getId().equals(reportId)) return true;
+			break;
 		}
 		return false;
+		
+	}
+	
+	public static boolean isSystemReport(String reportId){
+		return Report.isSystemReport(reportId, -1);
+	}
+	
+	public static ReportInstanceInfo getSystemReportById(String reportId){
+		if(SmartUtil.isBlankObject(reportId)) return null;
+		for(ReportInstanceInfo instance : Report.getDefaultInstancesAllWorks())
+			if(instance.getId().equals(reportId)) return instance;
+		for(ReportInstanceInfo instance : Report.getDefaultInstancesInformation())
+			if(instance.getId().equals(reportId)) return instance;
+		for(ReportInstanceInfo instance : Report.getDefaultInstancesProcess())
+			if(instance.getId().equals(reportId)) return instance;
+		for(ReportInstanceInfo instance : Report.getDefaultInstancesSchedule())
+			if(instance.getId().equals(reportId)) return instance;
+		return null;
+	}
+
+	public static ReportInstanceInfo[] getDefaultInstancesAllWorks(){
+		ReportInstanceInfo[] chartInstances = ChartReport.getDefaultInstancesAllWorks();;
+		ReportInstanceInfo[] matrixInstances = MatrixReport.getDefaultInstancesAllWorks();
+		ReportInstanceInfo[] tableInstances = TableReport.getDefaultInstancesAllWorks();
+		
+		int chartCount = chartInstances==null?0:chartInstances.length;
+		int matrixCount = matrixInstances==null?0:matrixInstances.length;
+		int tableCount = tableInstances==null?0:tableInstances.length;
+		ReportInstanceInfo[] defaultInstances = new ReportInstanceInfo[chartCount+matrixCount+tableCount];
+		int defaultCount = 0;
+		for(int i=0; i<chartCount; i++)
+			defaultInstances[defaultCount++] = chartInstances[i];
+		for(int i=0; i<matrixCount; i++)
+			defaultInstances[defaultCount++] = matrixInstances[i];
+		for(int i=0; i<tableCount; i++)
+			defaultInstances[defaultCount++] = tableInstances[i];
+		return defaultInstances;
+		
+	}
+	
+	public static ReportInstanceInfo[] getDefaultInstancesInformation(){
+		ReportInstanceInfo[] chartInstances = ChartReport.getDefaultInstancesInformation();;
+		ReportInstanceInfo[] matrixInstances = MatrixReport.getDefaultInstancesInformation();
+		ReportInstanceInfo[] tableInstances = TableReport.getDefaultInstancesInformation();
+		
+		int chartCount = chartInstances==null?0:chartInstances.length;
+		int matrixCount = matrixInstances==null?0:matrixInstances.length;
+		int tableCount = tableInstances==null?0:tableInstances.length;
+		ReportInstanceInfo[] defaultInstances = new ReportInstanceInfo[chartCount+matrixCount+tableCount];
+		int defaultCount = 0;
+		for(int i=0; i<chartCount; i++)
+			defaultInstances[defaultCount++] = chartInstances[i];
+		for(int i=0; i<matrixCount; i++)
+			defaultInstances[defaultCount++] = matrixInstances[i];
+		for(int i=0; i<tableCount; i++)
+			defaultInstances[defaultCount++] = tableInstances[i];
+		return defaultInstances;
+		
+	}
+	
+	public static ReportInstanceInfo[] getDefaultInstancesProcess(){
+		ReportInstanceInfo[] chartInstances = ChartReport.getDefaultInstancesProcess();;
+		ReportInstanceInfo[] matrixInstances = MatrixReport.getDefaultInstancesProcess();
+		ReportInstanceInfo[] tableInstances = TableReport.getDefaultInstancesProcess();
+		
+		int chartCount = chartInstances==null?0:chartInstances.length;
+		int matrixCount = matrixInstances==null?0:matrixInstances.length;
+		int tableCount = tableInstances==null?0:tableInstances.length;
+		ReportInstanceInfo[] defaultInstances = new ReportInstanceInfo[chartCount+matrixCount+tableCount];
+		int defaultCount = 0;
+		for(int i=0; i<chartCount; i++)
+			defaultInstances[defaultCount++] = chartInstances[i];
+		for(int i=0; i<matrixCount; i++)
+			defaultInstances[defaultCount++] = matrixInstances[i];
+		for(int i=0; i<tableCount; i++)
+			defaultInstances[defaultCount++] = tableInstances[i];
+		return defaultInstances;
+		
+	}
+	
+	public static ReportInstanceInfo[] getDefaultInstancesSchedule(){
+		ReportInstanceInfo[] chartInstances = ChartReport.getDefaultInstancesSchedule();;
+		ReportInstanceInfo[] matrixInstances = MatrixReport.getDefaultInstancesSchedule();
+		ReportInstanceInfo[] tableInstances = TableReport.getDefaultInstancesSchedule();
+		
+		int chartCount = chartInstances==null?0:chartInstances.length;
+		int matrixCount = matrixInstances==null?0:matrixInstances.length;
+		int tableCount = tableInstances==null?0:tableInstances.length;
+		ReportInstanceInfo[] defaultInstances = new ReportInstanceInfo[chartCount+matrixCount+tableCount];
+		int defaultCount = 0;
+		for(int i=0; i<chartCount; i++)
+			defaultInstances[defaultCount++] = chartInstances[i];
+		for(int i=0; i<matrixCount; i++)
+			defaultInstances[defaultCount++] = matrixInstances[i];
+		for(int i=0; i<tableCount; i++)
+			defaultInstances[defaultCount++] = tableInstances[i];
+		return defaultInstances;
+		
+	}
+	
+	
+	public static ReportInstanceInfo[] getSystemReportInstances(String targetWorkId, int targetWorkType){
+		ReportInstanceInfo[] instances = null;
+		if(SmartWork.ID_ALL_WORKS.equals(targetWorkId)){
+			instances = Report.getDefaultInstancesAllWorks();
+		}else{
+			switch(targetWorkType){
+			case SmartWork.TYPE_INFORMATION:
+				instances = Report.getDefaultInstancesInformation();
+				break;
+			case SmartWork.TYPE_PROCESS:
+				instances = Report.getDefaultInstancesProcess();
+				break;
+			case SmartWork.TYPE_SCHEDULE:
+				instances = Report.getDefaultInstancesSchedule();
+				break;
+			}
+		}
+		return instances;
 	}
 }
