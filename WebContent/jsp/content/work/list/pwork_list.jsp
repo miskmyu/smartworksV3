@@ -204,7 +204,7 @@
 
 			<!-- 목록보기 -->
 			<div class=" contents_space">
-				<div>
+ 				<div>
 					<jsp:include page="/jsp/content/work/report/work_report.jsp">
 						<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
 					</jsp:include>
@@ -243,19 +243,19 @@
 									<fmt:message key='filter.name.all_instances' />
 								</option>
 								<option value="<%=SearchFilter.FILTER_MY_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_MY_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									<%if(SearchFilter.FILTER_MY_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.my_instances' />
 								</option>
 								<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									<%if(SearchFilter.FILTER_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.recent_instances' />
 								</option>
 								<option value="<%=SearchFilter.FILTER_MY_RECENT_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_MY_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									<%if(SearchFilter.FILTER_MY_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.my_recent_instances' />
 								</option>
 								<option value="<%=SearchFilter.FILTER_MY_RUNNING_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_MY_RUNNING_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									<%if(SearchFilter.FILTER_MY_RUNNING_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.my_running_instances' />
 								</option>
 								<option value="<%=SearchFilter.FILTER_RECENT_1YEAR_INSTANCES%>"

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.net.ssl.ManagerFactoryParameters;
 import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.Matrix;
@@ -420,9 +419,16 @@ public class ReportServiceImpl implements IReportService {
 		if (CommonUtil.isEmpty(report))
 			return null;
 		
+		String isNewRowStr = (String)requestBody.get("isNewRow");
+		boolean isNewRow = CommonUtil.toBoolean(isNewRowStr);
 		Map<String, Object> frmNewReportPane = (Map<String, Object>)requestBody.get("frmNewReportPane");
 		String txtPaneName = (String)frmNewReportPane.get("txtPaneName");
 		String selReportPanePosition = (String)frmNewReportPane.get("selReportPanePosition");
+
+		String chkChartView = (String)frmNewReportPane.get("chkChartView");
+		String chkShowLegend = (String)frmNewReportPane.get("chkShowLegend");
+		String chkStackedChart = (String)frmNewReportPane.get("chkStackedChart");
+		String selStringLabelRotation = (String)frmNewReportPane.get("selStringLabelRotation");
 		
 		RptReportPane pane = new RptReportPane();
 		pane.setName(txtPaneName);
@@ -433,36 +439,85 @@ public class ReportServiceImpl implements IReportService {
 		pane.setTargetWorkId(report.getTargetWorkId());
 		pane.setOwner(userId);
 		//TODO
-		pane.setChartView(true);
-		pane.setStacked(true);
-		pane.setShowLegend(true);
-		pane.setStringLabelRotation(ChartReport.STRING_LABEL_ROTATION_AUTO);
+		pane.setChartView(chkChartView != null && chkChartView.equalsIgnoreCase("on") ? true : false);
+		pane.setStacked(chkStackedChart != null && chkStackedChart.equalsIgnoreCase("on") ? true : false);
+		pane.setShowLegend(chkShowLegend != null && chkShowLegend.equalsIgnoreCase("on") ? true : false);
+		pane.setStringLabelRotation(selStringLabelRotation);
 
 		//pane.setColumnSpans(columnSpans);
 		pane.setPosition(Integer.parseInt(selReportPanePosition));
+		
+		reSortingPaneByNewPane(pane, isNewRow);
 		
 		reportManager.setRptReportPane(userId, pane, IManager.LEVEL_ALL);
 		
 		return pane.getObjId();
 	}
 
-	private void reSortingPaneByNewPane(RptReportPane pane) throws Exception {
+	private void reSortingPaneByNewPane(RptReportPane pane, boolean isNewRow) throws Exception {
 		
 		if (CommonUtil.isEmpty(pane))
 			return;
 		
 		String owner = pane.getOwner();
 		
+		IReportManager rptMgr = SwManagerFactory.getInstance().getReportManager();
 		RptReportPaneCond cond = new RptReportPaneCond();
 		cond.setOwner(owner);
 		
-		RptReportPane[] panes = SwManagerFactory.getInstance().getReportManager().getRptReportPanes("", cond, IManager.LEVEL_ALL);
+		RptReportPane[] panes = rptMgr.getRptReportPanes("", cond, IManager.LEVEL_ALL);
 		
 		if (CommonUtil.isEmpty(panes))
 			return;
 		
 		int position = pane.getPosition();
 		
+		if (isNewRow) {
+			for (int i = 0; i < panes.length; i++) {
+				int otherPanePosition = panes[i].getPosition();
+				if (position <= otherPanePosition) {
+					panes[i].setPosition(otherPanePosition + 10);
+					rptMgr.setRptReportPane(owner, panes[i], IManager.LEVEL_ALL);
+				}
+			}
+		} else {
+			int min = 0;
+			int max = 0;
+			if (position < 10) {
+				max = 10;
+			} else if (position < 20) {
+				min = 10;
+				max = 20;
+			} else if (position < 30) {
+				min = 20;
+				max = 30;
+			} else if (position < 40) {
+				min = 30;
+				max = 40;
+			} else if (position < 50) {
+				min = 40;
+				max = 50;
+			} else if (position < 60) {
+				min = 50;
+				max = 60;
+			}
+			int colPosition = position % 10;
+			for (int i = 0; i < panes.length; i++) {
+				int otherPanePosition = panes[i].getPosition();
+				if (otherPanePosition >= min && otherPanePosition < max) {
+					int colPositionOther = otherPanePosition % 10;
+					if (colPosition == colPositionOther) {
+						if (colPosition == ReportPane.MAX_COLUMNS -1) {
+							panes[i].setPosition(otherPanePosition - 1);
+						} else {
+							panes[i].setPosition(otherPanePosition + 1);
+						}
+						reSortingPaneByNewPane(panes[i], false);
+						rptMgr.setRptReportPane(owner, panes[i], IManager.LEVEL_ALL);
+					}
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -623,7 +678,11 @@ public class ReportServiceImpl implements IReportService {
 
 	@Override
 	public String removeWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+
+		String paneId = (String)requestBody.get("paneId");
+
+		SwManagerFactory.getInstance().getReportManager().removeRptReportPane("", paneId);
+		
+		return paneId;
 	}
 }

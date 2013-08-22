@@ -685,7 +685,7 @@ $(document).ready(function(){
 	$.ajax({
 		url : 'get_server_ip_address.sw',
 		success : function(data, status, jqXHR) {
-			//serverUrl = "http://" + data + ":8011";
+			serverUrl = "http://" + data + ":8011";
 		 	smartTalk.init();
 		 	console.log('Message Server = ' + serverUrl + " is initialized successfully !!!");
 		}

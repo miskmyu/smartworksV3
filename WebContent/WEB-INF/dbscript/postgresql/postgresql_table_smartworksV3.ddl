@@ -34,6 +34,9 @@ CREATE TABLE sworguser (
 	sign character varying(50),
 	useSign bool,
 	lunarBirthDay bool,
+	hiredate timestamp,
+	homephoneno character varying(20),
+	homeaddress character varying(200),
 	domainid character varying(50),
 	workitemid character varying(50),
 	creator	character varying(50),
@@ -958,13 +961,14 @@ CREATE TABLE SWNotice (
 	domainId character varying(50) NULL,
 	workItemId character varying(50) NULL,
 	masterRecordId character varying(50) NULL,
+	filegroupid character varying(255) NULL,
+	title character varying(255) NULL,
+	content text NULL,
+	duration timestamp,
 	creator character varying(50) NULL,
 	createdTime timestamp without time zone NULL,
 	modifier character varying(50) NULL,
 	modifiedTime timestamp without time zone NULL,
-	filegroupid character varying(255) NULL,
-	title character varying(255) NULL,
-	content text NULL,
 	primary key (id)
 );
 
@@ -1217,11 +1221,15 @@ CREATE TABLE sworgconfig(
 	name character varying(255) NULL,
 	domainid character varying(50) NULL,
 	companyid character varying(100) NULL,
+	isactivity int NULL,
+	usemessagingservice boolean,
+	usechattingservice boolean,
+	userreturnfunction boolean,
+	setupcompanydate timestamp,	
 	creator character varying(50) NULL,
 	createdtime timestamp without time zone NULL,
 	modifier character varying(50) NULL,
 	modifiedtime timestamp without time zone NULL,
-	isactivity int NULL,
 	primary key (id)
 )
 ;
@@ -2409,6 +2417,7 @@ CREATE TABLE SwMailAccount (
 	useMailSign bool,
 	senderUserTitle character varying(50),
 	mailDeleteFetched character varying(10),
+	junks text,
 	creator	character varying(50),
 	createdtime timestamp without time zone,
 	modifier character varying(50),
@@ -2518,6 +2527,19 @@ CREATE TABLE SwAutoIndexInst (
 );
 
 
+CREATE TABLE SWAlarmNotice (
+	id character varying(50) NOT NULL,
+	noticeTime timestamp,
+	workId character varying(50),
+	recordId character varying(100),
+	targetUser character varying(50),
+	companyId character varying(50),
+	creator character varying (50),
+	createdTime timestamp,
+	modifier character varying (50),
+	modifiedTime timestamp,
+	primary key (id)
+);
 
 CREATE TABLE SwReport (
 	id character varying(50) NOT NULL,

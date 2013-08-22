@@ -19,6 +19,7 @@ import net.smartworks.server.engine.common.searcher.manager.ISchManager;
 import net.smartworks.server.engine.common.searcher.model.SchUser;
 import net.smartworks.server.engine.common.searcher.model.SchWorkspace;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.ConfigPropertiesUtil;
 
 import org.hibernate.Query;
 
@@ -120,10 +121,25 @@ public class SchManagerImpl extends AbstractManager implements ISchManager {
 		queryBuffer.append("  from sworguser usr, sworgdept dept ");
 		queryBuffer.append(" where usr.deptId = dept.id ");
 		queryBuffer.append("   and usr.name like :key ");
-
+		
+		//TODO 퇴사자 처리 방안 마련 필
+		queryBuffer.append(" and usr.name not like '%퇴사%'");
+		
+//		String excludeDeptId = null;
+//		try {
+//			excludeDeptId = (String)ConfigPropertiesUtil.getProperties("excludeDeptId");
+//		} catch (Exception e) {
+//		}
+//		if (!CommonUtil.isEmpty(excludeDeptId)) {
+//			queryBuffer.append(" and dept.id != :excludeDeptId ");
+//		}
+		
 		Query query = this.getSession().createSQLQuery(queryBuffer.toString());
 
 		query.setString("key", CommonUtil.toLikeString(key));
+//		if (!CommonUtil.isEmpty(excludeDeptId)) {
+//			query.setString("excludeDeptId", excludeDeptId);
+//		}
 
 		List list = query.list();
 		if (list == null || list.isEmpty())

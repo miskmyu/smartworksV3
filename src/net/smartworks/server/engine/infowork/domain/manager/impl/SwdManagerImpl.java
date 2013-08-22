@@ -488,7 +488,9 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			SwdField field;
 			Map<String, SwdDataField> paramMap = new HashMap<String, SwdDataField>();
 			if (exist) {
-				buf.append("update ").append(tableName).append(" set modifier = :modifier, modifiedTime = :modifiedTime, workSpaceId = :workSpaceId, workSpaceType = :workSpaceType, isUserSetAccessLevel = :isUserSetAccessLevel, accessLevel = :accessLevel, accessValue = :accessValue");
+				//userSetAccessLevel
+				//buf.append("update ").append(tableName).append(" set modifier = :modifier, modifiedTime = :modifiedTime, workSpaceId = :workSpaceId, workSpaceType = :workSpaceType, isUserSetAccessLevel = :isUserSetAccessLevel, accessLevel = :accessLevel, accessValue = :accessValue");
+				buf.append("update ").append(tableName).append(" set modifier = :modifier, modifiedTime = :modifiedTime, workSpaceId = :workSpaceId, workSpaceType = :workSpaceType, accessLevel = :accessLevel, accessValue = :accessValue");
 				if (!CommonUtil.isEmpty(dataFields)) {
 					int i = 0;
 					String param;
@@ -509,14 +511,17 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				query.setTimestamp("modifiedTime", obj.getModificationDate());
 				query.setString("workSpaceId", obj.getWorkSpaceId());
 				query.setString("workSpaceType", obj.getWorkSpaceType());
-				query.setString("isUserSetAccessLevel", obj.getIsUserSetAccessLevel());
+				//userSetAccessLevel
+				//query.setString("isUserSetAccessLevel", obj.getIsUserSetAccessLevel());
 				query.setString("accessLevel", obj.getAccessLevel());
 				query.setString("accessValue", obj.getAccessValue());
 				this.setQueryParameters(query, paramMap);
 				query.setString("id", obj.getRecordId());
 			} else {
 				buf.append("insert into ").append(tableName).append(" (");
-				buf.append("id, domainId, creator, createdTime, modifier, modifiedTime, workSpaceId, workSpaceType, isUserSetAccessLevel, accessLevel, accessValue, hits");
+				//userSetAccessLevel
+				//buf.append("id, domainId, creator, createdTime, modifier, modifiedTime, workSpaceId, workSpaceType, isUserSetAccessLevel, accessLevel, accessValue, hits");
+				buf.append("id, domainId, creator, createdTime, modifier, modifiedTime, workSpaceId, workSpaceType, accessLevel, accessValue, hits");
 				if (!CommonUtil.isEmpty(dataFields)) {
 					for (SwdDataField dataField : dataFields) {
 						fieldId = dataField.getId();
@@ -532,7 +537,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 								colName.equalsIgnoreCase("modifiedTime") ||
 								colName.equalsIgnoreCase("workSpaceId") ||
 								colName.equalsIgnoreCase("workSpaceType") ||
-								colName.equalsIgnoreCase("isUserSetAccessLevel") ||
+								//userSetAccessLevel
+								//colName.equalsIgnoreCase("isUserSetAccessLevel") ||
 								colName.equalsIgnoreCase("accessLevel") ||
 								colName.equalsIgnoreCase("accessValue") ||
 								colName.equalsIgnoreCase("hits")) {
@@ -543,7 +549,9 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 						buf.append(", ").append(colName);
 					}
 				}
-				buf.append(") values (:id, :domainId, :creator, :createdTime, :modifier, :modifiedTime, :workSpaceId, :workSpaceType, :isUserSetAccessLevel, :accessLevel, :accessValue, :hits");
+				//userSetAccessLevel
+				//buf.append(") values (:id, :domainId, :creator, :createdTime, :modifier, :modifiedTime, :workSpaceId, :workSpaceType, :isUserSetAccessLevel, :accessLevel, :accessValue, :hits");
+				buf.append(") values (:id, :domainId, :creator, :createdTime, :modifier, :modifiedTime, :workSpaceId, :workSpaceType, :accessLevel, :accessValue, :hits");
 				if (!CommonUtil.isEmpty(dataFields)) {
 					int i = 0;
 					String param;
@@ -566,7 +574,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				query.setTimestamp("modifiedTime", obj.getModificationDate());
 				query.setString("workSpaceId", obj.getWorkSpaceId());
 				query.setString("workSpaceType", obj.getWorkSpaceType());
-				query.setString("isUserSetAccessLevel", obj.getIsUserSetAccessLevel());
+				//userSetAccessLevel
+				//query.setString("isUserSetAccessLevel", obj.getIsUserSetAccessLevel());
 				query.setString("accessLevel", obj.getAccessLevel());
 				query.setString("accessValue", obj.getAccessValue());
 				query.setInteger("hits", obj.getHits());
@@ -581,7 +590,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703")) {
 				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
-				this.addTableColumn("", domain.getTableName(), "isUserSetAccessLevel", "varchar(10)");
+				//userSetAccessLevel
+				//this.addTableColumn("", domain.getTableName(), "isUserSetAccessLevel", "varchar(10)");
 				this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
 				this.addTableColumn("", domain.getTableName(), "accessValue", "varchar(4000)");
 				this.addTableColumn("", domain.getTableName(), "hits", "int");
@@ -735,7 +745,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				SwdDomain domain = getDomain(user, cond);
 				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
-				this.addTableColumn("", domain.getTableName(), "isUserSetAccessLevel", "varchar(10)");
+				//userSetAccessLevel
+				//this.addTableColumn("", domain.getTableName(), "isUserSetAccessLevel", "varchar(10)");
 				this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
 				this.addTableColumn("", domain.getTableName(), "accessValue", "varchar(4000)");
 				this.addTableColumn("", domain.getTableName(), "hits", "int");
@@ -778,7 +789,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				SwdDomain domain = getDomain(user, cond);
 				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
-				this.addTableColumn("", domain.getTableName(), "isUserSetAccessLevel", "varchar(10)");
+				//userSetAccessLevel
+				//this.addTableColumn("", domain.getTableName(), "isUserSetAccessLevel", "varchar(10)");
 				this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
 				this.addTableColumn("", domain.getTableName(), "accessValue", "varchar(4000)");
 				this.addTableColumn("", domain.getTableName(), "hits", "int");
@@ -840,7 +852,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				obj.setModificationDate((Timestamp)fields[j++]);
 				obj.setWorkSpaceId((String)fields[j++]);
 				obj.setWorkSpaceType((String)fields[j++]);
-				obj.setIsUserSetAccessLevel((String)fields[j++]);
+				//userSetAccessLevel
+				//obj.setIsUserSetAccessLevel((String)fields[j++]);
 				obj.setAccessLevel((String)fields[j++]);
 				obj.setAccessValue((String)fields[j++]);
 				obj.setHits(CommonUtil.toInt(fields[j++]));
@@ -923,7 +936,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703")) {
 				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
-				this.addTableColumn("", domain.getTableName(), "isUserSetAccessLevel", "varchar(10)");
+				//userSetAccessLevel
+				//this.addTableColumn("", domain.getTableName(), "isUserSetAccessLevel", "varchar(10)");
 				this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
 				this.addTableColumn("", domain.getTableName(), "accessValue", "varchar(4000)");
 				this.addTableColumn("", domain.getTableName(), "hits", "int");
@@ -1027,7 +1041,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		//buf.append("select obj.id, obj.domainId, domain.formId, domain.formName, obj.creator, obj.createdTime");
 		buf.append("select obj.id, obj.domainId, obj.creator, obj.createdTime");
 		buf.append(", obj.modifier, obj.modifiedTime, obj.workspaceId, obj.workspaceType");
-		buf.append(", obj.isUserSetAccessLevel");
+		//userSetAccessLevel
+		//buf.append(", obj.isUserSetAccessLevel");
 		buf.append(", obj.accessLevel");
 		buf.append(", obj.accessValue");
 		buf.append(", obj.hits");
@@ -1051,6 +1066,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		// from
 		//authProxy
 		buf.append(" from ").append(tableName).append(" obj");
+		//userSetAccessLevel
 		//buf.append(" from ").append(makeAuthTable(cond, domain, domain.getFormId())).append(" obj");
 		
 		//buf.append(", swdomain domain");
@@ -1085,7 +1101,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		String searchKey = cond.getSearchKey();
 		String workSpaceId = cond.getWorkSpaceId();
 		String workSpaceType = cond.getWorkSpaceType();
-		String isUserSetAccessLevel = cond.getIsUserSetAccessLevel();
+		//userSetAccessLevel
+		//String isUserSetAccessLevel = cond.getIsUserSetAccessLevel();
 		String accessLevel = cond.getAccessLevel();
 		String accessValue = cond.getAccessValue();
 		String creatorOrSpaceId = cond.getCreatorOrSpaceId();
@@ -1121,8 +1138,9 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			cond.addFilter(new Filter("=", "obj.workSpaceId", workSpaceId));
 		if (workSpaceType != null)
 			cond.addFilter(new Filter("=", "obj.workSpaceType", workSpaceType));
-		if (isUserSetAccessLevel != null)
-			cond.addFilter(new Filter("=", "obj.isUserSetAccessLevel", isUserSetAccessLevel));
+		//userSetAccessLevel
+		//if (isUserSetAccessLevel != null)
+		//cond.addFilter(new Filter("=", "obj.isUserSetAccessLevel", isUserSetAccessLevel));
 		if (accessLevel != null)
 			cond.addFilter(new Filter("=", "obj.accessLevel", accessLevel));
 		if (accessValue != null) {

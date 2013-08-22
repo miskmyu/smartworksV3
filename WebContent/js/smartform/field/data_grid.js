@@ -235,17 +235,17 @@ SmartWorks.FormRuntime.DataGridBuilder.serializeObject = function(dataGrids){
 
 SmartWorks.FormRuntime.DataGridBuilder.validate = function(dataGrids){
 	var gridsValid = true;
-	for(var i=0; i<dataGrids.length; i++){
-		var dataGrid = $(dataGrids[i]);
-		var gridRows = dataGrid.find('.form_value tbody .js_grid_row');
-		var required = dataGrid.find('div.sw_required');
-		if(!isEmpty(required) && isEmpty(gridRows)){
-			dataGrid.find('div.sw_required').addClass("sw_error");
-			gridsValid = false;
-		}else{
-			dataGrid.find('div.sw_required').removeClass("sw_error");
-		}
-	}
+//	for(var i=0; i<dataGrids.length; i++){
+//		var dataGrid = $(dataGrids[i]);
+//		var gridRows = dataGrid.find('.form_value tbody .js_grid_row');
+//		var required = dataGrid.find('div.sw_required');
+//		if(!isEmpty(required) && isEmpty(gridRows)){
+//			dataGrid.find('div.sw_required').addClass("sw_error");
+//			gridsValid = false;
+//		}else{
+//			dataGrid.find('div.sw_required').removeClass("sw_error");
+//		}
+//	}
 	return gridsValid;
 };
 

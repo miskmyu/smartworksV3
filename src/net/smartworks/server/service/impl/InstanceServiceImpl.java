@@ -1485,11 +1485,14 @@ public class InstanceServiceImpl implements IInstanceService {
 							
 						} else if (functionId.equals("mis:getDeptId")){		
 							if(func != null){
-								funcDeptId = func.getDeptId();
-//								SwoDepartment funcdept = getSwoManager().getDepartment(userId, funcDeptId, "all");
-//								if(funcdept != null){
-//									funcDeptName = funcdept.getName();
-//								}
+								if (field.getFormat().getViewingType().equalsIgnoreCase("departmentField")) {
+									funcDeptId = func.getDeptId();
+								} else {
+									SwoDepartment funcdept = getSwoManager().getDepartment(userId, func.getDeptId(), "all");
+									if(funcdept != null){
+										funcDeptId = funcdept.getName();
+									}
+								}
 							}
 							SwdDataField dataField = toDataField(userId, field, funcDeptId);
 							dataField.setId(fieldId);
@@ -2423,11 +2426,12 @@ public class InstanceServiceImpl implements IInstanceService {
 					accessValue = ModelConverter.getAccessValue(userId, formId);
 				}
 
+				//userSetAccessLevel
 				//authProxy
-				boolean isDefaultAccessPolicy = SwManagerFactory.getInstance().getSwaManager().compareAccessPolicyWithAuthProxy(userId, formId, accessLevel, accessValue);
+				//boolean isDefaultAccessPolicy = SwManagerFactory.getInstance().getSwaManager().compareAccessPolicyWithAuthProxy(userId, formId, accessLevel, accessValue);
 				//사용자가 선택한 접근권한과 기본 빌더의 접근권한을 비교하여 사용자가 선택한 접근권한이라면 나중에 빌더의 권한이 바뀌더라도 적용되지 않는다
-				if (!isDefaultAccessPolicy) 
-					obj.setIsUserSetAccessLevel("true");
+				//if (!isDefaultAccessPolicy) 
+				//	obj.setIsUserSetAccessLevel("true");
 				
 				
 				obj.setAccessLevel(accessLevel);
