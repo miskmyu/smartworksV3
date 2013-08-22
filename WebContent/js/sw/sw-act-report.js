@@ -115,8 +115,7 @@ $(function() {
 		var input = $(targetElement(e));
 		var workReportEdit = input.parents('.js_work_report_edit').find('.js_work_report_edit_page');
 		var workReportView = input.parents('.js_work_report_edit').nextAll('.js_work_report_view').find('.js_work_report_view_page');
-		var paneId = null;
-		var paneName = null;
+		var targetWorkId = workReportEdit.attr('targetWorkId');
 		var targetWorkName = workReportEdit.attr('targetWorkName');
 		var targetWorkIcon = workReportEdit.attr('targetWorkIcon');
 		var reportId = workReportEdit.attr('reportId');
@@ -138,7 +137,7 @@ $(function() {
 		config.stringLabelRotation = null;
 		config.paneColumnSpans = null;
 		config.panePosition = null;
-		smartPop.createReportPane(paneId, paneName, targetWorkName, targetWorkIcon, reportId, reportName, reportType, config);
+		smartPop.createReportPane(null, reportName, targetWorkId, targetWorkName, targetWorkIcon, reportId, reportName, reportType, config);
 		return false;
 	});
 
@@ -497,7 +496,6 @@ $(function() {
 				stringLabelRotation: stringLabelRotation
 			},
 			success : function(data, status, jqXHR) {
-				workReportPane.css('height', '0px');
 				workReportPane.find('.js_chart_target_pane').removeClass('js_chart_target_pane').attr('id', '');
 				workReportPane.parent().append(data);
 				smartChart.loadPane(reportType, reportId, chartType, isStacked==='true', isChartView==='true', showLegend==='true', stringLabelRotation, "chart_target_"+panePosition, isEmpty(paneColumnSpans) ? 1 : parseInt(paneColumnSpans), workReportPane.parent().find('.js_work_report_pane_page:first'));
@@ -515,6 +513,7 @@ $(function() {
 		var workReportPane = input.parents('.js_work_report_pane_page');
 		var paneId = workReportPane.attr('paneId');
 		var paneName = workReportPane.attr('paneName');
+		var targetWorkId = workReportPane.attr('targetWorkId');
 		var targetWorkName = workReportPane.attr('targetWorkName');
 		var targetWorkIcon = workReportPane.attr('targetWorkIcon');
 		var reportId = workReportPane.attr('reportId');
@@ -529,7 +528,7 @@ $(function() {
 		config.stringLabelRotation = workReportPane.attr('stringLabelRotation');
 		config.paneColumnSpans = workReportPane.attr('paneColumnSpans');
 		config.panePosition = workReportPane.attr('panePosition');
-		smartPop.createReportPane(paneId, paneName, targetWorkName, targetWorkIcon, reportId, reportName, reportType, config);
+		smartPop.createReportPane(paneId, paneName, targetWorkId, targetWorkName, targetWorkIcon, reportId, reportName, reportType, config);
 		return false;
 	});
 	
@@ -540,7 +539,6 @@ $(function() {
 		var paneName = workReportPane.attr('paneName');
 		var paneColumnSpans = parseInt(workReportPane.attr('paneColumnSpans'));
 		var panePosition = parseInt(workReportPane.attr('panePosition'));
-		var reportId = workReportPane.attr('reportId');
 		var paramsJson = {};
 		paramsJson['paneId'] = paneId;
 		smartPop.confirm("[" + paneName + "]" + smartMessage.get("removeConfirmation"), 
@@ -561,6 +559,10 @@ $(function() {
 									smartChart.resizePane($(panesInSameRow[i]));
 								}
 							}
+						}else if($('.js_dashboard_pane_row').length == 1){
+							dashboardPaneRow.css('height','412px').css('text-align','center').html('<span><br><br><br><br><br>' + smartMessage.get('reportMessageNoReportPane') + '</span>');
+						}else{
+							dashboardPaneRow.remove();
 						}
 					},
 					error : function() {

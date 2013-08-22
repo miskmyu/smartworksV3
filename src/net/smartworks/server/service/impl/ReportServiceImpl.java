@@ -409,40 +409,56 @@ public class ReportServiceImpl implements IReportService {
 
 		String userId = SmartUtil.getCurrentUser().getId();
 		
+		String paneId = (String)requestBody.get("paneId");
 		String reportId = (String)requestBody.get("reportId");
+		String targetWorkId = (String)requestBody.get("targetWorkId");
 		if (CommonUtil.isEmpty(reportId))
 			return null;
 		
 		IReportManager reportManager = SwManagerFactory.getInstance().getReportManager();
 		
-		RptReport report = reportManager.getRptReport(userId, reportId, IManager.LEVEL_ALL);
-		if (CommonUtil.isEmpty(report))
-			return null;
+		RptReport report = null;
+		if(Report.isSystemReport(reportId)){
+			ReportInstanceInfo instance = Report.getSystemReportById(reportId);
+			report = new RptReport();
+			report.setObjId(reportId);
+			report.setName(instance.getSubject());
+			report.setType(instance.getReportType());
+			report.setChartType(instance.getChartType());
+			report.setTargetWorkId(targetWorkId);
+			
+		}else{
+			report = reportManager.getRptReport(userId, reportId, IManager.LEVEL_ALL);
+			if (CommonUtil.isEmpty(report))
+				return null;			
+		}
 		
 		String isNewRowStr = (String)requestBody.get("isNewRow");
 		boolean isNewRow = CommonUtil.toBoolean(isNewRowStr);
 		Map<String, Object> frmNewReportPane = (Map<String, Object>)requestBody.get("frmNewReportPane");
 		String txtPaneName = (String)frmNewReportPane.get("txtPaneName");
 		String selReportPanePosition = (String)frmNewReportPane.get("selReportPanePosition");
-
-		String chkChartView = (String)frmNewReportPane.get("chkChartView");
-		String chkShowLegend = (String)frmNewReportPane.get("chkShowLegend");
-		String chkStackedChart = (String)frmNewReportPane.get("chkStackedChart");
-		String selStringLabelRotation = (String)frmNewReportPane.get("selStringLabelRotation");
+		String strChartType = (String)frmNewReportPane.get("selReportChartType");
+		String chartView = (String)frmNewReportPane.get("chkChartView");
+		String isStacked = (String)frmNewReportPane.get("chkStackedChart");
+		String showLegend = (String)frmNewReportPane.get("chkShowLegend");
+		String stringLabelRotation = (String)frmNewReportPane.get("selStringLabelRotation");
 		
 		RptReportPane pane = new RptReportPane();
+		if(!SmartUtil.isBlankObject(paneId))
+			pane.setObjId(paneId);
 		pane.setName(txtPaneName);
 		pane.setReportName(report.getName());
 		pane.setReportId(reportId);
 		pane.setReportType(report.getType());
-		pane.setChartType(report.getChartType());
+		int chartType = (SmartUtil.isBlankObject(strChartType)) ? report.getChartType() : Integer.parseInt(strChartType);
+		pane.setChartType(chartType);
 		pane.setTargetWorkId(report.getTargetWorkId());
 		pane.setOwner(userId);
-		//TODO
-		pane.setChartView(chkChartView != null && chkChartView.equalsIgnoreCase("on") ? true : false);
-		pane.setStacked(chkStackedChart != null && chkStackedChart.equalsIgnoreCase("on") ? true : false);
-		pane.setShowLegend(chkShowLegend != null && chkShowLegend.equalsIgnoreCase("on") ? true : false);
-		pane.setStringLabelRotation(selStringLabelRotation);
+		pane.setChartView("on".equals(chartView));
+		pane.setStacked("on".equals(isStacked));
+		pane.setShowLegend("on".equals(showLegend));
+		pane.setStringLabelRotation(stringLabelRotation);
 
 		//pane.setColumnSpans(columnSpans);
 		pane.setPosition(Integer.parseInt(selReportPanePosition));
@@ -540,17 +556,17 @@ public class ReportServiceImpl implements IReportService {
 		ReportInstanceInfo[] instances = null;
 		if(Report.PRODUCED_BY_SMARTWORKS.equals(producedBy)){
 			if(SmartWork.ID_ALL_WORKS.equals(targetWorkId)){
-				instances = ChartReport.getDefaultChartInstanceAllWorks();
+				instances = Report.getDefaultInstancesAllWorks();
 			}else{
 				switch(targetWorkType){
 				case SmartWork.TYPE_INFORMATION:
-					instances = ChartReport.getDefaultChartInstanceInformation();
+					instances = Report.getDefaultInstancesInformation();
 					break;
 				case SmartWork.TYPE_PROCESS:
-					instances = ChartReport.getDefaultChartInstanceProcess();
+					instances = Report.getDefaultInstancesProcess();
 					break;
 				case SmartWork.TYPE_SCHEDULE:
-					instances = ChartReport.getDefaultChartInstanceSchedule();
+					instances = Report.getDefaultInstancesSchedule();
 					break;
 				}
 			}
@@ -666,7 +682,7 @@ public class ReportServiceImpl implements IReportService {
 			resultPane.setReportName(pane.getReportName());
 			resultPane.setReportType(pane.getReportType());
 			resultPane.setShowLegend(pane.isShowLegend());
-			resultPane.setStacked(pane.getIsChartView());
+			resultPane.setStacked(pane.isStacked());
 			resultPane.setStringLabelRotation(pane.getStringLabelRotation());
 			resultPane.setTargetWork(ModelConverter.getSmartWorkInfoByPackageId(pane.getTargetWorkId()));
 			
@@ -678,9 +694,9 @@ public class ReportServiceImpl implements IReportService {
 
 	@Override
 	public String removeWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-
 		String paneId = (String)requestBody.get("paneId");
-
+		if (CommonUtil.isEmpty(paneId))
+			return null;
 		SwManagerFactory.getInstance().getReportManager().removeRptReportPane("", paneId);
 		
 		return paneId;

@@ -29,6 +29,7 @@
 
 	String paneId = request.getParameter("paneId");
 	String paneName = request.getParameter("paneName");
+	String targetWorkId = request.getParameter("targetWorkId");
 	String targetWorkName = request.getParameter("targetWorkName");
 	String targetWorkIcon = request.getParameter("targetWorkIcon");
 	String reportId = request.getParameter("reportId");
@@ -55,6 +56,7 @@
 			var forms = newReportPane.find('form');
 			var paneId = newReportPane.attr('paneId');
 			var reportId = newReportPane.attr('reportId');
+			var targetWorkId = newReportPane.attr('targetWorkId');
 			var paramsJson = {};
 			var url = "create_new_work_report_pane.sw";
 			if(!isEmpty(paneId)){
@@ -62,6 +64,7 @@
 				url = "set_work_report_pane.sw";
 			}
 			paramsJson['reportId'] = reportId;
+			paramsJson['targetWorkId'] = targetWorkId;
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){
@@ -83,7 +86,13 @@
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
 					smartPop.close();
-					smartPop.showInfo(smartPop.INFO, isEmpty(paneId) ? smartMessage.get('createReportPaneSucceed') : smartMessage.get('setReportPaneSucceed'));
+					if(isEmpty(paneId)){
+						smartPop.showInfo(smartPop.INFO, smartMessage.get('createReportPaneSucceed'));
+					}else{
+						$.get( "dashboard.sw", { contentType : "charset=utf-8"}, function(data){
+							$('#content').html(data);
+						});
+					}
 				},
 				error : function(e) {
 					smartPop.closeProgress();
@@ -99,7 +108,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  전체 레이아웃 -->
-<div class="pop_corner_all js_new_report_pane_page" paneId="<%=paneId%>" reportId="<%=reportId%>">
+<div class="pop_corner_all js_new_report_pane_page" paneId="<%=paneId%>" reportId="<%=reportId%>" targetWorkId=<%=targetWorkId %>>
 
 	<!-- 팝업 타이틀 -->
 	<div class="form_title">

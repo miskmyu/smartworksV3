@@ -52,15 +52,6 @@ public class ChartReport extends Report {
 	public static final ChartReport[] DEFAULT_CHARTS_ALL_WORKS = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
 		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment(), getChartPSumMonthly(), getChartPSumMonthlyByDepartment(), getChartPMaxMonthly(),
 		getChartPMaxMonthlyByDepartment(), getChartPMinMonthly(), getChartPMinMonthlyByDepartment() };
-	public static final ChartReport[] DEFAULT_CHARTS_ALL_PROCESSES = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
-		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment(), getChartPSumMonthly(), getChartPSumMonthlyByDepartment(), getChartPMaxMonthly(),
-		getChartPMaxMonthlyByDepartment(), getChartPMinMonthly(), getChartPMinMonthlyByDepartment() };
-	public static final ChartReport[] DEFAULT_CHARTS_ALL_INFORMATIONS = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
-		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment(), getChartPSumMonthly(), getChartPSumMonthlyByDepartment(), getChartPMaxMonthly(),
-		getChartPMaxMonthlyByDepartment(), getChartPMinMonthly(), getChartPMinMonthlyByDepartment() };
-	public static final ChartReport[] DEFAULT_CHARTS_ALL_SCHEDULES = new ChartReport[] { getChartPCntMonthly(), getChartPCntMonthlyByDepartment(),
-		getChartPMeanMonthly(), getChartPMeanMonthlyByDepartment(), getChartPSumMonthly(), getChartPSumMonthlyByDepartment(), getChartPMaxMonthly(),
-		getChartPMaxMonthlyByDepartment(), getChartPMinMonthly(), getChartPMinMonthlyByDepartment() };
 
 	private int chartType = -1;
 	private FormField xAxis;
@@ -287,7 +278,7 @@ public class ChartReport extends Report {
 		return chart;
 	}
 	
-	public static ReportInstanceInfo[] getDefaultChartInstanceInformation(){
+	public static ReportInstanceInfo[] getDefaultInstancesInformation(){
 		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_INFORMATION)) return null;
 		
 		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_INFORMATION.length];
@@ -300,7 +291,7 @@ public class ChartReport extends Report {
 		return instances;
 	}
 	
-	public static ReportInstanceInfo[] getDefaultChartInstanceProcess(){
+	public static ReportInstanceInfo[] getDefaultInstancesProcess(){
 		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_PROCESS)) return null;
 		
 		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_PROCESS.length];
@@ -313,7 +304,7 @@ public class ChartReport extends Report {
 		return instances;
 	}
 	
-	public static ReportInstanceInfo[] getDefaultChartInstanceSchedule(){
+	public static ReportInstanceInfo[] getDefaultInstancesSchedule(){
 		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_SCHEDULE)) return null;
 		
 		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_SCHEDULE.length];
@@ -326,7 +317,7 @@ public class ChartReport extends Report {
 		return instances;
 	}
 	
-	public static ReportInstanceInfo[] getDefaultChartInstanceAllWorks(){
+	public static ReportInstanceInfo[] getDefaultInstancesAllWorks(){
 		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_ALL_WORKS)) return null;
 		
 		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_ALL_WORKS.length];
@@ -340,58 +331,12 @@ public class ChartReport extends Report {
 		}
 		return instances;
 	}
-	
-	public static ReportInstanceInfo[] getDefaultChartInstanceAllProcesses(){
-		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_ALL_PROCESSES)) return null;
 		
-		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_ALL_PROCESSES.length];
-		for(int i=0; i<ChartReport.DEFAULT_CHARTS_ALL_PROCESSES.length; i++){
-			ChartReport report = ChartReport.DEFAULT_CHARTS_ALL_PROCESSES[i];
-			if(!SmartUtil.isBlankObject(report)){
-				ReportInstanceInfo instance = report.getReportInstanceInfo();
-				instance.setTargetWorkType(SmartWork.TYPE_PROCESS);
-				instances[i] = instance;
-			}
-		}
-		return instances;
-	}
-	
-	public static ReportInstanceInfo[] getDefaultChartInstanceAllInformations(){
-		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_ALL_INFORMATIONS)) return null;
-		
-		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_ALL_INFORMATIONS.length];
-		for(int i=0; i<ChartReport.DEFAULT_CHARTS_ALL_INFORMATIONS.length; i++){
-			ChartReport report = ChartReport.DEFAULT_CHARTS_ALL_INFORMATIONS[i];
-			if(!SmartUtil.isBlankObject(report)){
-				ReportInstanceInfo instance = report.getReportInstanceInfo();
-				instance.setTargetWorkType(SmartWork.TYPE_INFORMATION);
-				instances[i] = instance;
-			}
-		}
-		return instances;
-	}
-	
-	public static ReportInstanceInfo[] getDefaultChartInstanceAllSchedules(){
-		if(SmartUtil.isBlankObject(ChartReport.DEFAULT_CHARTS_ALL_SCHEDULES)) return null;
-		
-		ReportInstanceInfo[] instances = new ReportInstanceInfo[ChartReport.DEFAULT_CHARTS_ALL_SCHEDULES.length];
-		for(int i=0; i<ChartReport.DEFAULT_CHARTS_ALL_SCHEDULES.length; i++){
-			ChartReport report = ChartReport.DEFAULT_CHARTS_ALL_SCHEDULES[i];
-			if(!SmartUtil.isBlankObject(report)){
-				ReportInstanceInfo instance = report.getReportInstanceInfo();
-				instance.setTargetWorkType(SmartWork.TYPE_SCHEDULE);
-				instances[i] = instance;
-			}
-		}
-		return instances;
-	}
-	
 	public static String getChartTypeInString(int chartType){
 		if(chartType<1 || chartType>ChartReport.CHART_TYPES_STRING.length) return ChartReport.CHART_TYPES_STRING[ChartReport.DEFAULT_CHART_TYPE];
 		return ChartReport.CHART_TYPES_STRING[chartType];
 	}
 	
-	int count = 0;
 	public ReportInstanceInfo getReportInstanceInfo(){
 		ReportInstanceInfo instance = new ReportInstanceInfo();
 		instance.setId(this.getId());

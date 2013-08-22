@@ -324,5 +324,6 @@ smartMessage.bundle['ko'] = {
 	spaceOverDateSeleted : "미래의 날짜를 선택하였습니다. 오늘이나 과거의 날짜를 선택하십시요!",
 	
 	nullPointerException : "접근할 수 없는 값을 호출 하였습니다. 관리자에게 확인바랍니다!",
-	duplicateKeyException : "키값이 중복 되었습니다. 키에 해당되는 값을 다른 이름으로 바꾸어 다시 시도 바랍니다!"
+	duplicateKeyException : "키값이 중복 되었습니다. 키에 해당되는 값을 다른 이름으로 바꾸어 다시 시도 바랍니다!",
+	reportMessageNoReportPane : '대시보드에 등록되어 있는 보고서가 없습니다.<br><br>우측상단에 있는 "보고서 추가하기"버튼을 클릭하여 등록할 수 있습니다!'
 };

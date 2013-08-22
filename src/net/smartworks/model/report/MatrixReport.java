@@ -1,8 +1,12 @@
 package net.smartworks.model.report;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.instance.info.ReportInstanceInfo;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FormField;
+import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 public class MatrixReport extends ChartReport {
 	
@@ -10,9 +14,6 @@ public class MatrixReport extends ChartReport {
 	public static final MatrixReport[] DEFAULT_MATRIXS_PROCESS = new MatrixReport[]{};
 	public static final MatrixReport[] DEFAULT_MATRIXS_SCHEDULE = new MatrixReport[]{};
 	public static final MatrixReport[] DEFAULT_MATRIXS_ALL_WORKS = new MatrixReport[]{};
-	public static final MatrixReport[] DEFAULT_MATRIXS_ALL_PROCESSES = new MatrixReport[]{};
-	public static final MatrixReport[] DEFAULT_MATRIXS_ALL_INFORMATIONS = new MatrixReport[]{};
-	public static final MatrixReport[] DEFAULT_MATRIXS_ALL_SCHEDULES = new MatrixReport[]{};
 
 	private FormField xSecondAxis;
 	private String xSecondAxisSelector;
@@ -72,4 +73,69 @@ public class MatrixReport extends ChartReport {
 		super.setType(Report.TYPE_MATRIX);
 	}
 
+	public static ReportInstanceInfo[] getDefaultInstancesInformation(){
+		if(SmartUtil.isBlankObject(MatrixReport.DEFAULT_MATRIXS_INFORMATION)) return null;
+		
+		ReportInstanceInfo[] instances = new ReportInstanceInfo[MatrixReport.DEFAULT_MATRIXS_INFORMATION.length];
+		for(int i=0; i<MatrixReport.DEFAULT_MATRIXS_INFORMATION.length; i++){
+			MatrixReport report = MatrixReport.DEFAULT_MATRIXS_INFORMATION[i];
+			if(!SmartUtil.isBlankObject(report)){
+				instances[i] = report.getReportInstanceInfo();
+			}
+		}
+		return instances;
+	}
+	
+	public static ReportInstanceInfo[] getDefaultInstancesProcess(){
+		if(SmartUtil.isBlankObject(MatrixReport.DEFAULT_MATRIXS_PROCESS)) return null;
+		
+		ReportInstanceInfo[] instances = new ReportInstanceInfo[MatrixReport.DEFAULT_MATRIXS_PROCESS.length];
+		for(int i=0; i<MatrixReport.DEFAULT_MATRIXS_PROCESS.length; i++){
+			MatrixReport report = MatrixReport.DEFAULT_MATRIXS_PROCESS[i];
+			if(!SmartUtil.isBlankObject(report)){
+				instances[i] = report.getReportInstanceInfo();
+			}
+		}
+		return instances;
+	}
+	
+	public static ReportInstanceInfo[] getDefaultInstancesSchedule(){
+		if(SmartUtil.isBlankObject(MatrixReport.DEFAULT_MATRIXS_SCHEDULE)) return null;
+		
+		ReportInstanceInfo[] instances = new ReportInstanceInfo[MatrixReport.DEFAULT_MATRIXS_SCHEDULE.length];
+		for(int i=0; i<MatrixReport.DEFAULT_MATRIXS_SCHEDULE.length; i++){
+			MatrixReport report = MatrixReport.DEFAULT_MATRIXS_SCHEDULE[i];
+			if(!SmartUtil.isBlankObject(report)){
+				instances[i] = report.getReportInstanceInfo();
+			}
+		}
+		return instances;
+	}
+	
+	public static ReportInstanceInfo[] getDefaultInstancesAllWorks(){
+		if(SmartUtil.isBlankObject(MatrixReport.DEFAULT_MATRIXS_ALL_WORKS)) return null;
+		
+		ReportInstanceInfo[] instances = new ReportInstanceInfo[MatrixReport.DEFAULT_MATRIXS_ALL_WORKS.length];
+		for(int i=0; i<MatrixReport.DEFAULT_MATRIXS_ALL_WORKS.length; i++){
+			MatrixReport report = MatrixReport.DEFAULT_MATRIXS_ALL_WORKS[i];
+			if(!SmartUtil.isBlankObject(report)){
+				ReportInstanceInfo instance = report.getReportInstanceInfo();
+				instance.setTargetWorkType(Work.TYPE_NONE);
+				instances[i] = instance;
+			}
+		}
+		return instances;
+	}
+		
+	public ReportInstanceInfo getReportInstanceInfo(){
+		ReportInstanceInfo instance = new ReportInstanceInfo();
+		instance.setId(this.getId());
+		instance.setSubject(this.getName());
+		instance.setOwner(this.getOwner().getUserInfo());
+		instance.setLastModifier(this.getLastModifier().getUserInfo());
+		instance.setLastModifiedDate(this.getLastModifiedDate());
+		instance.setAccessPolicy(new AccessPolicy(AccessPolicy.LEVEL_PUBLIC));
+		instance.setReportType(Report.TYPE_MATRIX);
+		return instance;
+	}
 }

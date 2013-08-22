@@ -1209,7 +1209,7 @@ smartPop = {
 		}
 	},
 	
-	createReportPane : function(paneId, paneName, targetWorkName, targetWorkIcon, reportId, reportName, reportType, config){
+	createReportPane : function(paneId, paneName, targetWorkId, targetWorkName, targetWorkIcon, reportId, reportName, reportType, config){
 		var options = {
 				chartType: null,
 				isChartView: true,
@@ -1221,7 +1221,7 @@ smartPop = {
 		};
 		SmartWorks.extend(options, config);
 
-		var url = "pop_new_report_pane.sw?paneId=" + paneId + "&paneName=" + paneName + "&targetWorkName=" + targetWorkName + "&targetWorkIcon=" + targetWorkIcon + "&reportId=" + reportId + "&reportName=" + reportName + "&reportType=" + reportType
+		var url = "pop_new_report_pane.sw?paneId=" + paneId + "&paneName=" + paneName + "&targetWorkId=" + targetWorkId + "&targetWorkName=" + targetWorkName + "&targetWorkIcon=" + targetWorkIcon + "&reportId=" + reportId + "&reportName=" + reportName + "&reportType=" + reportType
 						+ "&chartType=" + options.chartType + "&isChartView=" + options.isChartView + "&isStacked=" + options.isStacked + "&showLegend=" + options.showLegend
 						+ "&stringLabelRotation=" + options.stringLabelRotation + "&paneColumnSpans=" + options.paneColumnSpans + "&panePosition=" + options.panePosition;
 		$.get( url, { contentType : "charset=utf-8"}, function(data){

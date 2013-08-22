@@ -106,67 +106,71 @@ public class ReportPane extends BaseObject {
 	public ReportPane(String id, String name){
 		super(id, name);
 	}
-	public static Matrix[] getAvailablePositions(ReportPane[] reportPanes, Matrix removePosition){
-		if(reportPanes==null) return ReportPane.getAvailablePositions(null);
-		ReportPane[] removedReportPanes = new ReportPane[reportPanes.length - (removePosition==null?0:1)];
-		int count = 0;
-		for(int i=0; i<reportPanes.length; i++){
-			if(reportPanes[i].getPosition().isSamePosition(removePosition)) continue;
-			removedReportPanes[count++] = reportPanes[i];
+	public static Matrix[] getAvailablePositions(ReportPane[] reportPanes, Matrix currentPosition){
+		ReportPane[] removedReportPanes = null;
+		if(reportPanes!=null){
+			removedReportPanes = new ReportPane[reportPanes.length - (currentPosition==null?0:1)];
+			int count = 0;
+			for(int i=0; i<reportPanes.length; i++){
+				if(reportPanes[i].getPosition().isSamePosition(currentPosition)) continue;
+				removedReportPanes[count++] = reportPanes[i];
+			}
 		}
-		return ReportPane.getAvailablePositions(removedReportPanes);
-	}
-	public static Matrix[] getAvailablePositions(ReportPane[] reportPanes){
-
 		Matrix[] availablePositions = null; 
-		if(SmartUtil.isBlankObject(reportPanes)){
-			availablePositions = new Matrix[ReportPane.MAX_ROWS*ReportPane.MAX_COLUMNS];
-			int count=0;
-			for(int i=0; i<ReportPane.MAX_ROWS; i++)
-				for(int j=0; j<ReportPane.MAX_COLUMNS; j++){
-					availablePositions[count] = new Matrix(i, j);
-					availablePositions[count++].setNewRow(true);
-				}
+		if(SmartUtil.isBlankObject(removedReportPanes)){
+			if(SmartUtil.isBlankObject(currentPosition)){
+				availablePositions = new Matrix[1];
+				availablePositions[0] = new Matrix(0, 0);
+				availablePositions[0].setNewRow(true);
+			}
 			return availablePositions;
 		}
 		
-		Matrix[] newColumnPositions = new Matrix[ReportPane.MAX_ROWS*ReportPane.MAX_COLUMNS];
+		Matrix[] newColumnPositions = new Matrix[ReportPane.MAX_ROWS*ReportPane.MAX_COLUMNS - (SmartUtil.isBlankObject(currentPosition)?0:1)];
 		int rows =0, columns=0, panes=0, lastRow=-1;
-		for(int i=0; i<reportPanes.length; i++){
-			int thisRow = reportPanes[i].getPosition().getRow();
-			int thisColumn = reportPanes[i].getPosition().getColumn();
+		boolean isCurrentPositionAlone = false, currentRowExist=false;
+		for(int i=0; i<removedReportPanes.length; i++){
+			int thisRow = removedReportPanes[i].getPosition().getRow();
+			if(currentPosition!=null && thisRow == currentPosition.getRow())
+				currentRowExist = true;
 			
 			if(thisRow==lastRow){
 				columns++;
-				if(i==reportPanes.length-1){
+				if(i==removedReportPanes.length-1){
 					if(columns<ReportPane.MAX_COLUMNS){
-						if(columns!=1){
-							newColumnPositions[panes++] = new Matrix(rows-1, 1);
-						}
-						newColumnPositions[panes++] = new Matrix(rows-1, 0); 
-						newColumnPositions[panes++] = new Matrix(rows-1, 2);
+						if(columns!=1 && !(new Matrix(thisRow, 1)).isSamePosition(currentPosition))
+							newColumnPositions[panes++] = new Matrix(thisRow, 1);
+						if(!(new Matrix(thisRow, 0)).isSamePosition(currentPosition))
+							newColumnPositions[panes++] = new Matrix(thisRow, 0); 
+						if(!(new Matrix(thisRow, 2)).isSamePosition(currentPosition))
+							newColumnPositions[panes++] = new Matrix(thisRow, 2);
 					}					
 				}
 			}else if(thisRow>lastRow ){
 				if(lastRow>-1){
 					if(columns<ReportPane.MAX_COLUMNS){
-						if(columns!=1){
-							newColumnPositions[panes++] = new Matrix(rows-1, 1);
-						}
-						newColumnPositions[panes++] = new Matrix(rows-1, 0); 
-						newColumnPositions[panes++] = new Matrix(rows-1, 2);
+						if(columns!=1 && !(new Matrix(lastRow, 1)).isSamePosition(currentPosition))
+							newColumnPositions[panes++] = new Matrix(lastRow, 1);
+						if(!(new Matrix(lastRow, 0)).isSamePosition(currentPosition))
+							newColumnPositions[panes++] = new Matrix(lastRow, 0); 
+						if(!(new Matrix(lastRow, 2)).isSamePosition(currentPosition))
+							newColumnPositions[panes++] = new Matrix(lastRow, 2);
 					}
+				}
+				if(!SmartUtil.isBlankObject(currentPosition) && currentPosition.getRow()==lastRow && columns==1){
+					isCurrentPositionAlone= true;
 				}
 				columns = 1;
 				rows++;
 				lastRow = thisRow;
-				if(i==reportPanes.length-1){
+				if(i==removedReportPanes.length-1){
 					if(columns<ReportPane.MAX_COLUMNS){
-						if(columns!=1){
-							newColumnPositions[panes++] = new Matrix(rows-1, 1);
-						}
-						newColumnPositions[panes++] = new Matrix(rows-1, 0); 
-						newColumnPositions[panes++] = new Matrix(rows-1, 2);
+						if(columns!=1 && !(new Matrix(thisRow, 1)).isSamePosition(currentPosition))
+							newColumnPositions[panes++] = new Matrix(thisRow, 1);
+						if(!(new Matrix(thisRow, 0)).isSamePosition(currentPosition))
+							newColumnPositions[panes++] = new Matrix(thisRow, 0); 
+						if(!(new Matrix(thisRow, 2)).isSamePosition(currentPosition))
+							newColumnPositions[panes++] = new Matrix(thisRow, 2);
 					}					
 				}
 			}
@@ -174,10 +178,21 @@ public class ReportPane extends BaseObject {
 		
 		Matrix[] newRowPositions = null;
 		if(rows<ReportPane.MAX_ROWS){
-			newRowPositions = new Matrix[rows + 1];
+			Matrix[] tempRowPositions = new Matrix[rows + 1];
+			int finalRows = 0;
 			for(int i=0; i<rows + 1; i++){
-				newRowPositions[i] = new Matrix(i,0);
-				newRowPositions[i].setNewRow(true);
+				if(currentPosition!=null && currentPosition.isSamePosition(new Matrix(i,0)) && (isCurrentPositionAlone || currentPosition.getRow()==rows || !currentRowExist))
+					continue;
+				tempRowPositions[finalRows] = new Matrix(i,0);
+				tempRowPositions[finalRows].setNewRow(true);
+				finalRows++;
+			}
+			if(finalRows!=rows+1){
+				newRowPositions = new Matrix[finalRows];
+				for(int i=0; i<finalRows; i++)
+					newRowPositions[i] = tempRowPositions[i];
+			}else{
+				newRowPositions = tempRowPositions;
 			}
 		}
 		
