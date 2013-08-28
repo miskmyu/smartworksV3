@@ -241,7 +241,7 @@ function logout() {
 		</div>
 		<!-- Header//-->
 
-		<!-- Navigation -->
+ 		<!-- Navigation -->
 		<div id="nav">
 			<tiles:insertAttribute name="nav" />
 		</div>
