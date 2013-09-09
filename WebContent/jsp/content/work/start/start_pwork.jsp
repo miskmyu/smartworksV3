@@ -59,6 +59,9 @@ function submitForms(tempSave) {
 		// 서비스요청 프로그래스바를 나타나게 한다....
 		var progressSpan = startPwork.find('.js_progress_span');
 		smartPop.progressCont(progressSpan);
+		if(!isEmpty(startPwork.find('.js_complete_action'))){
+			startPwork.find('.js_complete_action').attr('onclick','return false;');
+		}
 		// start_new_pwork.sw서비스를 요청한다..
 		$.ajax({
 			url : url,

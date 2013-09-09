@@ -985,9 +985,9 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		return buf.toString();
 	}
 	
-	
-	
-	
+	public Query getRecordQuery(String user, SwdRecordCond cond) throws Exception {
+		return appendQuery(user, cond, null, null, null, null, null);
+	}
 	
 	private Query appendQuery(String user, SwdRecordCond cond, SwdDomain domain, List<SwdField> selectedFieldList, String funcField,
 			String preQuery, String postQuery) throws Exception {

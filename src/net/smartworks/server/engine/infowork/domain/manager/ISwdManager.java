@@ -11,6 +11,8 @@ package net.smartworks.server.engine.infowork.domain.manager;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Query;
+
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Cond;
 import net.smartworks.server.engine.common.model.Property;
@@ -52,6 +54,8 @@ public interface ISwdManager extends IManager {
 	public double getRecordValue(String user, String field, String func, SwdRecordCond cond) throws SwdException;
 	public SwdRecord[] getRecords(String user, SwdRecordCond cond, String level) throws SwdException;
 
+	public Query getRecordQuery(String user, SwdRecordCond cond) throws Exception;
+	
 	public SwdDataRef getDataRef(String user, String objId, String level) throws SwdException;
 	public void setDataRef(String user, SwdDataRef obj, String level) throws SwdException;
 	public void removeDataRef(String user, String objId) throws SwdException;

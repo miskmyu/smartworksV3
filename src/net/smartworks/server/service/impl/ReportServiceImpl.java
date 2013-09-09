@@ -226,8 +226,11 @@ public class ReportServiceImpl implements IReportService {
 	
 	@Override
 	public Data getReportDataByDef(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+
+		String user = SmartUtil.getCurrentUser().getId();
+//		return SmartTest.getReportData3();
+		return SwManagerFactory.getInstance().getReportManager().getReportData(user, "POSTGRES", requestBody);
 		
-		return SmartTest.getReportData3();
 //		try{
 //			String dbType = "ORACLE";
 //			return SwManagerFactory.getInstance().getReportManager().getReportData(dbType, requestBody);
@@ -241,9 +244,6 @@ public class ReportServiceImpl implements IReportService {
 
 	@Override
 	public Data getReportData(HttpServletRequest request) throws Exception {
-		
-		System.out.println(request.getParameter("reportId"));//ex: chart.pcnt.monthly
-		
 		return SmartTest.getReportData4();
 	}
 	@Override
@@ -397,8 +397,6 @@ public class ReportServiceImpl implements IReportService {
 
 	@Override
 	public String setWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
 //		{
 //				reportId=402880bb4072397101407513dd450004, 
 //				frmNewReportPane={
