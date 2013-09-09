@@ -219,7 +219,7 @@ function logout() {
 <div class="top_menu">
 	<ul class="fl" style="width:470px">
 		<!--  홈메뉴  -->
-		<li class="idx1">
+ 		<li class="idx1">
 				<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>"><fmt:message key="header.top_menu.home" /></a>
 		</li>
 		<!--  홈메뉴  //-->
