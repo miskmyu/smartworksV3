@@ -77,6 +77,32 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		checkingQueue.add(new CheckingModel(userId, companyId));
 		return checkingQueue.size() -1;
 	}
+	
+	static void clearChecking(String userId, String companyId){
+		if(SmartUtil.isBlankObject(userId) || SmartUtil.isBlankObject(companyId)){
+			System.out.println("UserId or CompanyId does not exist Error!!!!, UserId=" + userId + ", CompanyId=" + companyId);
+		}
+		
+		if(SmartUtil.isBlankObject(checkingQueue)){
+			return;
+		}
+		
+		while(true){
+			boolean found = false;
+			for(int index=0; index<checkingQueue.size(); index++){
+				CheckingModel checkingModel = checkingQueue.get(index);
+				if(checkingModel.getCompanyId().equals(companyId) && checkingModel.getUserId().equals(userId)){
+					checkingQueue.remove(index);
+					found = true;
+					break;
+				}
+			}
+			if(!found){
+				break;
+			}
+		}
+	}
+	
 	synchronized static void addThreadToChecking(int index, Thread thread){
 		if( index<0 || thread==null || !(index < checkingQueue.size())) return;
 		

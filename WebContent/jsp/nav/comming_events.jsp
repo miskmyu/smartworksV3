@@ -47,7 +47,7 @@
  	%>
       <li>
        <a href="<%=target %>" class="js_content">
-	       <span class="t_date"><%=event.getStart().toString() %></span>
+	       <span class="t_date"><%=event.getStart().toLocalString() %></span>
 	       <div><%=event.getSubject() %></div>
        </a>
       </li>	
