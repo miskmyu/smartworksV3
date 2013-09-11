@@ -137,40 +137,42 @@
 	
 		<!-- Btn -->
 		<div class="tr mt8">
-			<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-			<span class="form_space sw_error_message js_profile_error_message" style="text-align:right; color: red"></span>
-			<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
-			<span class="js_progress_span"></span>
-			<span class="btn_gray">
-				<a href="" onclick='submitForms(); return false;'>
-					<span class="txt_btn_start"></span>
-					<%
-					if(SmartUtil.isBlankObject(departId)){
-					%>
-						<span class="txt_btn_center"><fmt:message key="common.button.add_new"/></span>
-					<%
-					}else{
-					%>
-						<span class="txt_btn_center"><fmt:message key="common.button.modify"/></span>
-					<%
-					}
-					%>
-					<span class="txt_btn_end"></span>
-				</a>
-			</span>
-			<%
-			if(!SmartUtil.isBlankObject(departId)){
-			%>
+			<div class="fr ml10">
 				<span class="btn_gray">
-					<a href="" class="js_delete_department">
+					<a href="" onclick='submitForms(); return false;'>
 						<span class="txt_btn_start"></span>
-							<span class="txt_btn_center"><fmt:message key="common.button.delete"/></span>
+						<%
+						if(SmartUtil.isBlankObject(departId)){
+						%>
+							<span class="txt_btn_center"><fmt:message key="common.button.add_new"/></span>
+						<%
+						}else{
+						%>
+							<span class="txt_btn_center"><fmt:message key="common.button.modify"/></span>
+						<%
+						}
+						%>
 						<span class="txt_btn_end"></span>
 					</a>
 				</span>
-			<%
-			}
-			%>
+				<%
+				if(!SmartUtil.isBlankObject(departId)){
+				%>
+					<span class="btn_gray">
+						<a href="" class="js_delete_department">
+							<span class="txt_btn_start"></span>
+								<span class="txt_btn_center"><fmt:message key="common.button.delete"/></span>
+							<span class="txt_btn_end"></span>
+						</a>
+					</span>
+				<%
+				}
+				%>
+			</div>	
+			<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
+			<span class="fr form_space js_progress_span"></span>
+			<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
+			<div class="form_space sw_error_message js_profile_error_message" style="text-align:right; color: red; line-height:20px"></div>
 		</div>
 		<!-- Btn //-->
 	</div>

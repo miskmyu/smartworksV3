@@ -19,7 +19,6 @@ var showErrors = function(errorMap, errorList) {
 		if(this.noOfErrors>0){
 			$(".sw_error_message:visible:first").html("입력한 내용중에 " + this.noOfErrors + "개 항목이 입력되지 않았습니다. 위의 붉은색으로 선택된 항목(들)을 입력바랍니다.");
 		}else{
-			$(".sw_error_message:visible:first").html("보이지 않는 항목중에 입력되지 않은 항목이 있습니다. 관리자에게 문의하시기 바랍니다!!!");
 			$(".sw_error_message:visible:first").html("");
 		}
 	}

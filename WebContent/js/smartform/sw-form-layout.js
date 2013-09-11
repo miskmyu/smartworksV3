@@ -518,6 +518,9 @@ SmartWorks.GridLayout.validate = function(form, messageTarget){
 		showErrors();
 	}
 	if(messageTarget instanceof jQuery) $('.sw_error_message').show();
+	if(!sw_validate && $(".sw_error_message:visible:first").html() === "")
+		$(".sw_error_message:visible:first").html("보이지 않는 항목중에 입력되지 않은 항목이 있습니다. 관리자에게 문의하시기 바랍니다!!!");
+
 	return sw_validate;
 };
 

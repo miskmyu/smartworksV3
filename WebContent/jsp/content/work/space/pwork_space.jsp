@@ -735,7 +735,7 @@ function submitForms(tempSave) {
 				</div>     
 
 				<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-				<span class="form_space sw_error_message js_space_error_message" style="text-align:right; color: red"></span>
+				<div class="form_space sw_error_message js_space_error_message" style="text-align:right; color: red; line-height:20px"></div>
 
 			</div>
 			<!-- 버튼 영역 //-->     				

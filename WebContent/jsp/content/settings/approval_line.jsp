@@ -108,14 +108,17 @@
 										</tr>
 								<%
 									}
-								}else{
-								%>
-									<tr><td><fmt:message key="common.message.no_instance"/></td></tr>
-								<%
 								}
 								%>
 							</tbody>
 						</table>
+						<%
+						if(SmartUtil.isBlankObject(approvalLines)){
+						%>
+							<div class="tc"><fmt:message key="common.message.no_instance"/></div>
+						<%
+						}
+						%>
 						<form name="frmApprovalLineListPaging">
 							<!-- 페이징 -->
 							<div class="paginate">

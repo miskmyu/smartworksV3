@@ -595,7 +595,7 @@ function submitForms(tempSave) {
 					<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 //-->
 					
 					<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
-					<div class="fr form_space js_progress_span" ></div>
+					<div class="fr form_space js_progress_span"></div>
 					
 					<div class="txt_btn task_information">
 					    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
@@ -613,7 +613,7 @@ function submitForms(tempSave) {
 					</div>     
 
 					<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-					<span class="form_space sw_error_message js_space_error_message" style="text-align:right; color: red"></span>
+					<div class="form_space sw_error_message js_space_error_message" style="text-align:right; color: red; line-height:20px"></div>
 				</div>
 				<!-- 버튼 영역 //-->     				
 			
