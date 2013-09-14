@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.smartworks.model.KeyMap;
 import net.smartworks.model.Matrix;
 import net.smartworks.model.community.User;
 import net.smartworks.model.instance.Instance;
@@ -41,6 +42,7 @@ import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
+import org.apache.axis.utils.JavaUtils.ConvertCache;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -243,9 +245,408 @@ public class ReportServiceImpl implements IReportService {
 //		}
 	}
 
+	
+	private Map<String, Object> convertRptReportToRequestBody(RptReport report) throws Exception {
+		
+		if (CommonUtil.isEmpty(report))
+			return null;
+		
+		String userId = report.getOwner();
+		String targetWorkId = report.getTargetWorkId();
+		String txtWorkReportName = report.getName();
+	    String rdoWorkReportType = report.getType() + "";
+		
+		String selTargetWorkType = report.getTargetWorkType() + "";
+		String selReportChartType = report.getChartType() + "";
+		
+		String selReportXAxis = report.getxAxis();
+		String tempXaxisSelector = report.getxAxisSelector();
+		String selReportXAxisSelectorUser = null;
+		String selReportXAxisSelectorDate = null;
+		for (int i = 0; i < Report.AXIS_SELECTORS_DATE.length; i++) {
+			KeyMap map = Report.AXIS_SELECTORS_DATE[i];
+			if (map.getId().equalsIgnoreCase(tempXaxisSelector)) {
+				selReportXAxisSelectorDate = tempXaxisSelector;
+				break;
+			}
+		}
+		for (int i = 0; i < Report.AXIS_SELECTORS_USER.length; i++) {
+			KeyMap map = Report.AXIS_SELECTORS_USER[i];
+			if (map.getId().equalsIgnoreCase(tempXaxisSelector)) {
+				selReportXAxisSelectorUser = tempXaxisSelector;
+				break;
+			}
+		}
+		
+		String rdoReportXAxisSort = report.getxAxisSort();
+		String selReportXAxisMaxRecords = report.getxAxisMaxRecords() == -1 ? null : report.getxAxisMaxRecords() + "";
+		String selReportYAxis = report.getyAxis();
+		String selReportYAxisValue = report.getValueType();
+		
+		String selReportZAxis = report.getzAxis();
+		String tempSelReportZAxisSelector = report.getzAxisSelector();
+		String selReportZAxisSelectorUser = null;
+		String selReportZAxisSelectorDate = null;
+		for (int i = 0; i < Report.AXIS_SELECTORS_DATE.length; i++) {
+			KeyMap map = Report.AXIS_SELECTORS_DATE[i];
+			if (map.getId().equalsIgnoreCase(tempSelReportZAxisSelector)) {
+				selReportZAxisSelectorDate = tempSelReportZAxisSelector;
+				break;
+			}
+		}
+		for (int i = 0; i < Report.AXIS_SELECTORS_USER.length; i++) {
+			KeyMap map = Report.AXIS_SELECTORS_USER[i];
+			if (map.getId().equalsIgnoreCase(tempSelReportZAxisSelector)) {
+				selReportZAxisSelectorUser = tempSelReportZAxisSelector;
+				break;
+			}
+		}
+		String rdoReportZAxisSort = report.getzAxisSort();
+		String selReportZSecondAxis = report.getzSecondAxis();
+		
+		String tempSelReportZSecondAxisSelector = report.getzSecondAxisSelector();
+		String selReportZSecondAxisSelectorUser = null;
+		String selReportZSecondAxisSelectorDate = null;
+		for (int i = 0; i < Report.AXIS_SELECTORS_DATE.length; i++) {
+			KeyMap map = Report.AXIS_SELECTORS_DATE[i];
+			if (map.getId().equalsIgnoreCase(tempSelReportZSecondAxisSelector)) {
+				selReportZSecondAxisSelectorDate = tempSelReportZSecondAxisSelector;
+				break;
+			}
+		}
+		for (int i = 0; i < Report.AXIS_SELECTORS_USER.length; i++) {
+			KeyMap map = Report.AXIS_SELECTORS_USER[i];
+			if (map.getId().equalsIgnoreCase(tempSelReportZSecondAxisSelector)) {
+				selReportZSecondAxisSelectorUser = tempSelReportZSecondAxisSelector;
+				break;
+			}
+		}
+		String rdoReportZSecondAxisSort = report.getzSecondAxisSort();
+		String selReportFilterName = report.getSearchFilterId();
+		String selAccessPolicy = report.getAccessLevel();
+		
+		
+		Map<String, Object> requestBody = new HashMap<String, Object>();
+		
+		requestBody.put("targetWorkId", targetWorkId);
+		//requestBody.put("workId", );
+		requestBody.put("reportId", report.getObjId());
+		
+		Map<String, Object> frmWorkReport = new HashMap<String, Object>();
+		
+		if (!CommonUtil.isEmpty(txtWorkReportName))
+			frmWorkReport.put("txtWorkReportName", txtWorkReportName);
+		if (!CommonUtil.isEmpty(rdoWorkReportType))
+			frmWorkReport.put("rdoWorkReportType", rdoWorkReportType);
+		if (!CommonUtil.isEmpty(selTargetWorkType))
+			frmWorkReport.put("selTargetWorkType", selTargetWorkType);
+		if (!CommonUtil.isEmpty(selReportChartType))
+			frmWorkReport.put("selReportChartType", selReportChartType);
+		if (!CommonUtil.isEmpty(selReportXAxis))
+			frmWorkReport.put("selReportXAxis", selReportXAxis);
+		if (!CommonUtil.isEmpty(selReportXAxisSelectorUser))
+			frmWorkReport.put("selReportXAxisSelectorUser", selReportXAxisSelectorUser);
+		if (!CommonUtil.isEmpty(selReportXAxisSelectorDate))
+			frmWorkReport.put("selReportXAxisSelectorDate", selReportXAxisSelectorDate);
+		if (!CommonUtil.isEmpty(rdoReportXAxisSort))
+			frmWorkReport.put("rdoReportXAxisSort", rdoReportXAxisSort);
+		if (!CommonUtil.isEmpty(selReportXAxisMaxRecords))
+			frmWorkReport.put("selReportXAxisMaxRecords", selReportXAxisMaxRecords);
+		if (!CommonUtil.isEmpty(selReportYAxis))
+			frmWorkReport.put("selReportYAxis", selReportYAxis);
+		if (!CommonUtil.isEmpty(selReportYAxisValue))
+			frmWorkReport.put("selReportYAxisValue", selReportYAxisValue);
+		if (!CommonUtil.isEmpty(selReportZAxis))
+			frmWorkReport.put("selReportZAxis", selReportZAxis);
+		if (!CommonUtil.isEmpty(selReportZAxisSelectorUser))
+			frmWorkReport.put("selReportZAxisSelectorUser", selReportZAxisSelectorUser);
+		if (!CommonUtil.isEmpty(selReportZAxisSelectorDate))
+			frmWorkReport.put("selReportZAxisSelectorDate", selReportZAxisSelectorDate);
+		if (!CommonUtil.isEmpty(rdoReportZAxisSort))
+			frmWorkReport.put("rdoReportZAxisSort", rdoReportZAxisSort);
+		if (!CommonUtil.isEmpty(selReportZSecondAxis))
+			frmWorkReport.put("selReportZSecondAxis", selReportZSecondAxis);
+		if (!CommonUtil.isEmpty(selReportZSecondAxisSelectorUser))
+			frmWorkReport.put("selReportZSecondAxisSelectorUser", selReportZSecondAxisSelectorUser);
+		if (!CommonUtil.isEmpty(selReportZSecondAxisSelectorDate))
+			frmWorkReport.put("selReportZSecondAxisSelectorDate", selReportZSecondAxisSelectorDate);
+		if (!CommonUtil.isEmpty(rdoReportZSecondAxisSort))
+			frmWorkReport.put("rdoReportZSecondAxisSort", rdoReportZSecondAxisSort);
+		if (!CommonUtil.isEmpty(selReportFilterName))
+			frmWorkReport.put("selReportFilterName", selReportFilterName);
+		
+		Map<String, Object> frmAccessPolicy = new HashMap<String, Object>();
+		frmAccessPolicy.put("selAccessPolicy", selAccessPolicy);
+		
+		requestBody.put("frmWorkReport", frmWorkReport);
+		requestBody.put("frmAccessPolicy", frmAccessPolicy);
+		
+		return requestBody;
+	}
+	private Map<String, Object> convertReportToRequestBody(Report report) throws Exception {
+		if (CommonUtil.isEmpty(report))
+			return null;
+		
+
+		String userId = report.getOwner().getId();
+		String targetWorkId = report.getTargetWorkId();
+		String txtWorkReportName = report.getName();
+	    String rdoWorkReportType = report.getType() + "";
+		
+		String selTargetWorkType = report.getTargetWorkType() + "";
+		
+		String selReportChartType = null;
+		String selReportXAxis = null;
+		String selReportXAxisSelectorUser = null;
+		String selReportXAxisSelectorDate = null;
+		String rdoReportXAxisSort = null;
+		String selReportXAxisMaxRecords = null;
+		String selReportYAxis = null;
+		String selReportYAxisValue = null;
+		
+		String selReportZAxis = null;
+		String selReportZAxisSelectorUser = null;
+		String selReportZAxisSelectorDate = null;
+		String rdoReportZAxisSort = null;
+		String selReportZSecondAxis = null;
+		
+		String selReportZSecondAxisSelectorUser = null;
+		String selReportZSecondAxisSelectorDate = null;
+		String rdoReportZSecondAxisSort = null;
+		String selReportFilterName = null;
+		String selAccessPolicy = null;
+		
+		if (report instanceof ChartReport) {
+			ChartReport chartReport = (ChartReport)report;
+			
+			selReportChartType = chartReport.getChartType() + "";
+			
+			selReportXAxis = chartReport.getXAxis() == null ? null : chartReport.getXAxis().getId();
+			String tempXaxisSelector = chartReport.getXAxisSelector();
+			selReportXAxisSelectorUser = null;
+			selReportXAxisSelectorDate = null;
+			for (int i = 0; i < Report.AXIS_SELECTORS_DATE.length; i++) {
+				KeyMap map = Report.AXIS_SELECTORS_DATE[i];
+				if (map.getId().equalsIgnoreCase(tempXaxisSelector)) {
+					selReportXAxisSelectorDate = tempXaxisSelector;
+					break;
+				}
+			}
+			for (int i = 0; i < Report.AXIS_SELECTORS_USER.length; i++) {
+				KeyMap map = Report.AXIS_SELECTORS_USER[i];
+				if (map.getId().equalsIgnoreCase(tempXaxisSelector)) {
+					selReportXAxisSelectorUser = tempXaxisSelector;
+					break;
+				}
+			}
+			
+			rdoReportXAxisSort = chartReport.getXAxisSort();
+			selReportXAxisMaxRecords = chartReport.getXAxisMaxRecords() == -1 ? null : chartReport.getXAxisMaxRecords() + "";
+			selReportYAxis = chartReport.getYAxis() == null ? null : chartReport.getYAxis().getId();
+			selReportYAxisValue = chartReport.getValueType();
+			
+			selReportZAxis = chartReport.getZAxis() == null ? null : chartReport.getZAxis().getId();
+			String tempSelReportZAxisSelector = chartReport.getZAxisSelector();
+			selReportZAxisSelectorUser = null;
+			selReportZAxisSelectorDate = null;
+			for (int i = 0; i < Report.AXIS_SELECTORS_DATE.length; i++) {
+				KeyMap map = Report.AXIS_SELECTORS_DATE[i];
+				if (map.getId().equalsIgnoreCase(tempSelReportZAxisSelector)) {
+					selReportZAxisSelectorDate = tempSelReportZAxisSelector;
+					break;
+				}
+			}
+			for (int i = 0; i < Report.AXIS_SELECTORS_USER.length; i++) {
+				KeyMap map = Report.AXIS_SELECTORS_USER[i];
+				if (map.getId().equalsIgnoreCase(tempSelReportZAxisSelector)) {
+					selReportZAxisSelectorUser = tempSelReportZAxisSelector;
+					break;
+				}
+			}
+			rdoReportZAxisSort = chartReport.getZAxisSort();
+			//selReportZSecondAxis = chartReport.getZSecondAxis().getId();
+			
+//			String tempSelReportZSecondAxisSelector = chartReport.getZSecondAxisSelector();
+//			selReportZSecondAxisSelectorUser = null;
+//			selReportZSecondAxisSelectorDate = null;
+//			for (int i = 0; i < Report.AXIS_SELECTORS_DATE.length; i++) {
+//				KeyMap map = Report.AXIS_SELECTORS_DATE[i];
+//				if (map.getId().equalsIgnoreCase(tempSelReportZSecondAxisSelector)) {
+//					selReportZSecondAxisSelectorDate = tempSelReportZSecondAxisSelector;
+//					break;
+//				}
+//			}
+//			for (int i = 0; i < Report.AXIS_SELECTORS_USER.length; i++) {
+//				KeyMap map = Report.AXIS_SELECTORS_USER[i];
+//				if (map.getId().equalsIgnoreCase(tempSelReportZSecondAxisSelector)) {
+//					selReportZSecondAxisSelectorUser = tempSelReportZSecondAxisSelector;
+//					break;
+//				}
+//			}
+			//rdoReportZSecondAxisSort = chartReport.getZSecondAxisSort();
+			selReportFilterName = chartReport.getSearchFilter() == null ? null : chartReport.getSearchFilter().getId();
+			selAccessPolicy = chartReport.getAccessPolicy() == null ? null : chartReport.getAccessPolicy().getLevel() + "";
+			
+		} else if (report instanceof MatrixReport) {
+			MatrixReport matrixReport = (MatrixReport)report;
+			
+			selReportChartType = matrixReport.getChartType() + "";
+			
+			selReportXAxis = matrixReport.getXAxis() == null ? null : matrixReport.getXAxis().getId();
+			String tempXaxisSelector = matrixReport.getXAxisSelector();
+			selReportXAxisSelectorUser = null;
+			selReportXAxisSelectorDate = null;
+			for (int i = 0; i < Report.AXIS_SELECTORS_DATE.length; i++) {
+				KeyMap map = Report.AXIS_SELECTORS_DATE[i];
+				if (map.getId().equalsIgnoreCase(tempXaxisSelector)) {
+					selReportXAxisSelectorDate = tempXaxisSelector;
+					break;
+				}
+			}
+			for (int i = 0; i < Report.AXIS_SELECTORS_USER.length; i++) {
+				KeyMap map = Report.AXIS_SELECTORS_USER[i];
+				if (map.getId().equalsIgnoreCase(tempXaxisSelector)) {
+					selReportXAxisSelectorUser = tempXaxisSelector;
+					break;
+				}
+			}
+			
+			rdoReportXAxisSort = matrixReport.getXAxisSort();
+			selReportXAxisMaxRecords = matrixReport.getXAxisMaxRecords() == -1 ? null : matrixReport.getXAxisMaxRecords() + "";
+			selReportYAxis = matrixReport.getYAxis() == null ? null : matrixReport.getYAxis().getId();
+			selReportYAxisValue = matrixReport.getValueType();
+			
+			selReportZAxis = matrixReport.getZAxis() == null ? null : matrixReport.getZAxis().getId();
+			String tempSelReportZAxisSelector = matrixReport.getZAxisSelector();
+			selReportZAxisSelectorUser = null;
+			selReportZAxisSelectorDate = null;
+			for (int i = 0; i < Report.AXIS_SELECTORS_DATE.length; i++) {
+				KeyMap map = Report.AXIS_SELECTORS_DATE[i];
+				if (map.getId().equalsIgnoreCase(tempSelReportZAxisSelector)) {
+					selReportZAxisSelectorDate = tempSelReportZAxisSelector;
+					break;
+				}
+			}
+			for (int i = 0; i < Report.AXIS_SELECTORS_USER.length; i++) {
+				KeyMap map = Report.AXIS_SELECTORS_USER[i];
+				if (map.getId().equalsIgnoreCase(tempSelReportZAxisSelector)) {
+					selReportZAxisSelectorUser = tempSelReportZAxisSelector;
+					break;
+				}
+			}
+			rdoReportZAxisSort = matrixReport.getZAxisSort();
+			selReportZSecondAxis = matrixReport.getZSecondAxis() == null ? null : matrixReport.getZSecondAxis().getId();
+			
+			String tempSelReportZSecondAxisSelector = matrixReport.getZSecondAxisSelector();
+			selReportZSecondAxisSelectorUser = null;
+			selReportZSecondAxisSelectorDate = null;
+			for (int i = 0; i < Report.AXIS_SELECTORS_DATE.length; i++) {
+				KeyMap map = Report.AXIS_SELECTORS_DATE[i];
+				if (map.getId().equalsIgnoreCase(tempSelReportZSecondAxisSelector)) {
+					selReportZSecondAxisSelectorDate = tempSelReportZSecondAxisSelector;
+					break;
+				}
+			}
+			for (int i = 0; i < Report.AXIS_SELECTORS_USER.length; i++) {
+				KeyMap map = Report.AXIS_SELECTORS_USER[i];
+				if (map.getId().equalsIgnoreCase(tempSelReportZSecondAxisSelector)) {
+					selReportZSecondAxisSelectorUser = tempSelReportZSecondAxisSelector;
+					break;
+				}
+			}
+			rdoReportZSecondAxisSort = matrixReport.getZSecondAxisSort();
+			selReportFilterName = matrixReport.getSearchFilter() == null? null : matrixReport.getSearchFilter().getId();
+			selAccessPolicy = matrixReport.getAccessPolicy() == null ? null : matrixReport.getAccessPolicy().getLevel() + "";
+		}
+		
+		
+		Map<String, Object> requestBody = new HashMap<String, Object>();
+		
+		requestBody.put("targetWorkId", targetWorkId);
+		//requestBody.put("workId", );
+		requestBody.put("reportId", report.getId());
+		
+		Map<String, Object> frmWorkReport = new HashMap<String, Object>();
+		
+		if (!CommonUtil.isEmpty(txtWorkReportName))
+			frmWorkReport.put("txtWorkReportName", txtWorkReportName);
+		if (!CommonUtil.isEmpty(rdoWorkReportType))
+			frmWorkReport.put("rdoWorkReportType", rdoWorkReportType);
+		if (!CommonUtil.isEmpty(selTargetWorkType))
+			frmWorkReport.put("selTargetWorkType", selTargetWorkType);
+		if (!CommonUtil.isEmpty(selReportChartType))
+			frmWorkReport.put("selReportChartType", selReportChartType);
+		if (!CommonUtil.isEmpty(selReportXAxis))
+			frmWorkReport.put("selReportXAxis", selReportXAxis);
+		if (!CommonUtil.isEmpty(selReportXAxisSelectorUser))
+			frmWorkReport.put("selReportXAxisSelectorUser", selReportXAxisSelectorUser);
+		if (!CommonUtil.isEmpty(selReportXAxisSelectorDate))
+			frmWorkReport.put("selReportXAxisSelectorDate", selReportXAxisSelectorDate);
+		if (!CommonUtil.isEmpty(rdoReportXAxisSort))
+			frmWorkReport.put("rdoReportXAxisSort", rdoReportXAxisSort);
+		if (!CommonUtil.isEmpty(selReportXAxisMaxRecords))
+			frmWorkReport.put("selReportXAxisMaxRecords", selReportXAxisMaxRecords);
+		if (!CommonUtil.isEmpty(selReportYAxis))
+			frmWorkReport.put("selReportYAxis", selReportYAxis);
+		if (!CommonUtil.isEmpty(selReportYAxisValue))
+			frmWorkReport.put("selReportYAxisValue", selReportYAxisValue);
+		if (!CommonUtil.isEmpty(selReportZAxis))
+			frmWorkReport.put("selReportZAxis", selReportZAxis);
+		if (!CommonUtil.isEmpty(selReportZAxisSelectorUser))
+			frmWorkReport.put("selReportZAxisSelectorUser", selReportZAxisSelectorUser);
+		if (!CommonUtil.isEmpty(selReportZAxisSelectorDate))
+			frmWorkReport.put("selReportZAxisSelectorDate", selReportZAxisSelectorDate);
+		if (!CommonUtil.isEmpty(rdoReportZAxisSort))
+			frmWorkReport.put("rdoReportZAxisSort", rdoReportZAxisSort);
+		if (!CommonUtil.isEmpty(selReportZSecondAxis))
+			frmWorkReport.put("selReportZSecondAxis", selReportZSecondAxis);
+		if (!CommonUtil.isEmpty(selReportZSecondAxisSelectorUser))
+			frmWorkReport.put("selReportZSecondAxisSelectorUser", selReportZSecondAxisSelectorUser);
+		if (!CommonUtil.isEmpty(selReportZSecondAxisSelectorDate))
+			frmWorkReport.put("selReportZSecondAxisSelectorDate", selReportZSecondAxisSelectorDate);
+		if (!CommonUtil.isEmpty(rdoReportZSecondAxisSort))
+			frmWorkReport.put("rdoReportZSecondAxisSort", rdoReportZSecondAxisSort);
+		if (!CommonUtil.isEmpty(selReportFilterName))
+			frmWorkReport.put("selReportFilterName", selReportFilterName);
+		
+		Map<String, Object> frmAccessPolicy = new HashMap<String, Object>();
+		frmAccessPolicy.put("selAccessPolicy", selAccessPolicy);
+		
+		requestBody.put("frmWorkReport", frmWorkReport);
+		requestBody.put("frmAccessPolicy", frmAccessPolicy);
+		
+		return requestBody;
+	}
+	
 	@Override
 	public Data getReportData(HttpServletRequest request) throws Exception {
-		return SmartTest.getReportData4();
+		
+		String userId = (String)request.getParameter("userId");
+		String reportId = (String)request.getParameter("reportId");
+		
+		RptReport report = SwManagerFactory.getInstance().getReportManager().getRptReport(userId, reportId, IManager.LEVEL_ALL);
+		
+		Map<String, Object> requestBody = null;
+		if (CommonUtil.isEmpty(report)) {
+			for (int i = 0; i < ChartReport.DEFAULT_CHARTS_ALL_WORKS.length; i++) {
+				ChartReport defaultChartReport = ChartReport.DEFAULT_CHARTS_ALL_WORKS[i];
+				if (defaultChartReport.getId().equalsIgnoreCase(reportId)) {
+					requestBody = convertReportToRequestBody(defaultChartReport);
+					break;
+				}
+			}
+			for (int i = 0; i < MatrixReport.DEFAULT_MATRIXS_ALL_WORKS.length; i++) {
+				MatrixReport defaultMatrixReport = MatrixReport.DEFAULT_MATRIXS_ALL_WORKS[i];
+				if (defaultMatrixReport.getId().equalsIgnoreCase(reportId)) {
+					requestBody = convertReportToRequestBody(defaultMatrixReport);
+					break;
+				}
+			}
+		} else {
+			requestBody = convertRptReportToRequestBody(report);
+		}
+		return SwManagerFactory.getInstance().getReportManager().getReportData(userId, requestBody);
+		//return SmartTest.getReportData4();
 	}
 	@Override
 	public String removeWorkReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -263,7 +664,8 @@ public class ReportServiceImpl implements IReportService {
 	public String setWorkReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/**{
 			workId=reportManagement, 
-			targetWorkId=allSmartWorks, 
+			targetWorkId=allSmartWorks,
+			reportId=abdirds, 
 			frmWorkReport={
 				txtWorkReportName=1, 
 				rdoWorkReportType=1, 
