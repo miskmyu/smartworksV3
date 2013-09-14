@@ -19,7 +19,7 @@ import net.smartworks.server.engine.report.model.RptReportPaneCond;
 
 public interface IReportManager {
 	
-	public Data getReportData(String user, String dbType, Map<String, Object> requestBody) throws Exception;
+	public Data getReportData(String user, Map<String, Object> requestBody) throws Exception;
 	
 	public RptReport getRptReport(String user, String objId, String level) throws RptException;
 	public RptReport getRptReport(String user, RptReportCond cond, String level) throws RptException;

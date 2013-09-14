@@ -8,6 +8,7 @@
 
 package net.smartworks.server.engine.infowork.domain.manager.impl;
 
+import java.io.Reader;
 import java.math.BigInteger;
 import java.sql.Clob;
 import java.sql.Connection;
@@ -20,6 +21,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.jsp.tagext.TryCatchFinally;
 
 import net.smartworks.model.instance.FieldData;
 import net.smartworks.model.security.AccessPolicy;
@@ -75,13 +78,16 @@ import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.util.LocalDate;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.exception.SQLGrammarException;
+import org.springframework.jdbc.object.SqlQuery;
 import org.springframework.util.StringUtils;
 
 public class SwdManagerImpl extends AbstractManager implements ISwdManager {
@@ -587,7 +593,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			return obj.getRecordId();
 
 		} catch (SQLGrammarException e) {
-			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703")) {
+			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703") || e.getSQLState().equals("42000")) {
 				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
 				//userSetAccessLevel
@@ -741,7 +747,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			} 
 			return size;
 		} catch (SQLGrammarException e) {
-			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703")) {
+			System.out.println("########## SQL STATUS : " + e.getSQLState());
+			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703") || e.getSQLState().equals("42000")) {
 				SwdDomain domain = getDomain(user, cond);
 				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
@@ -785,7 +792,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			} 
 			return size;
 		} catch (SQLGrammarException e) {
-			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703")) {
+			System.out.println("########## SQL STATUS : " + e.getSQLState());
+			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703") || e.getSQLState().equals("42000")) {
 				SwdDomain domain = getDomain(user, cond);
 				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
@@ -833,7 +841,9 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				level = LEVEL_LITE;
 			domain = getDomain(user, cond);
 			query = this.appendQuery(user, cond, domain, selectedFieldList, null, null, null);
+			
 			List list = query.list();
+			
 			if (list == null || list.isEmpty())
 				return null;
 			List<SwdRecord> objList = new ArrayList<SwdRecord>();
@@ -881,6 +891,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 					if (fieldValue == null)
 						continue;
 					if(fieldValue instanceof Clob) {
+						
 						Clob clob = (Clob)fieldValue;
 						try {
 							int clobLength = (int)clob.length();
@@ -933,7 +944,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			objList.toArray(objs);
 			return objs;
 		} catch (SQLGrammarException e) {
-			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703")) {
+			System.out.println("########## SQL STATUS : " + e.getSQLState());
+			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703") || e.getSQLState().equals("42000")) {
 				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
 				//userSetAccessLevel
@@ -950,7 +962,6 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			throw new SwdException(e);
 		}
 	}
-	
 	
 	private String makeAuthTable(SwdRecordCond cond, SwdDomain domain, String resourceId) throws Exception {
 		
@@ -2873,3 +2884,5 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 	}
 
 }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                   

@@ -1,4 +1,4 @@
--- »∏ªÁ : ¥‹¿ß + Ω√Ω∫≈€
+-- ÌöåÏÇ¨ : Îã®ÏúÑ + ÏãúÏä§ÌÖú
 CREATE TABLE sworgcompany (
 	id varchar(50) NOT NULL,
 	name varchar(50),
@@ -6,13 +6,14 @@ CREATE TABLE sworgcompany (
 	domainid varchar(50),
 	workitemid varchar(50),
 	creator	varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
 	primary key (id)
 );	
 
--- ªÁøÎ¿⁄ : ¥‹¿ß + Ω√Ω∫≈€
+
+-- ÏÇ¨Ïö©Ïûê : Îã®ÏúÑ + ÏãúÏä§ÌÖú
 CREATE TABLE sworguser (
 	id varchar(50) NOT NULL,
 	companyid varchar(50),
@@ -26,33 +27,33 @@ CREATE TABLE sworguser (
 	type varchar(50),
 	pos varchar(50),
 	email varchar(50),
-	useMail bit,
+	useMail Number(3),
 	passwd varchar(50),
 	lang varchar(20),
 	stdtime varchar(20),
 	picture varchar(50),
 	sign varchar(50),
-	useSign bit,
+	useSign Number(3),
 	domainid varchar(50),
 	workitemid varchar(50),
 	creator	varchar(50),
-	createdtime datetime,
-	modifier varchar(50),
-	modifiedtime datetime,
+	createdtime timestamp,
+	modifier	varchar(50),
+	modifiedtime timestamp,
 	retiree varchar(50),
 	mobileNo varchar(50),
 	internalNo varchar(50),
 	locale varchar(20),
 	timeZone varchar(20),
-	hireDate Datetime,
-	birthDay Datetime,
-	lunarBirthday boolean,
-	homePhoneNo varchar(20),
-	homePhoneAddress varchar(200),
+	hiredate timestamp,
+	birthday timestamp,
+	lunarbirthday int,
+	homephoneno varchar(20),
+	homeaddress varchar(200),
 	primary key (id)
 );
 
--- ∫Œº≠ : ¥‹¿ß + Ω√Ω∫≈€
+-- Î∂ÄÏÑú : Îã®ÏúÑ + ÏãúÏä§ÌÖú
 CREATE TABLE sworgdept (
 	id varchar(50) NOT NULL,
 	companyid varchar(50),
@@ -64,13 +65,13 @@ CREATE TABLE sworgdept (
 	picture varchar(50),
 	workitemid varchar(50),
 	creator	varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier	varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
 	primary key (id)
 );
 
--- ø™«“ : ¥‹¿ß + Ω√Ω∫≈€
+-- Ïó≠Ìï† : Îã®ÏúÑ + ÏãúÏä§ÌÖú
 CREATE TABLE sworgrole (
 	id varchar(50) NOT NULL,
 	companyid varchar(50),
@@ -79,23 +80,23 @@ CREATE TABLE sworgrole (
 	domainid varchar(50),
 	workitemid varchar(50),
 	creator	varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier	varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
 	primary key (id)
 );
 
----- ¿œ¡§ : ¥‹¿ß + Ω√Ω∫≈€
+---- ÏùºÏ†ï : Îã®ÏúÑ + ÏãúÏä§ÌÖú
 --CREATE TABLE swschedule (
 --	id 	varchar(50) NOT NULL,
 --	userid varchar(50) NOT NULL,
 --	title varchar(255),
---	startdate datetime,
---	enddate datetime,
+--	startdate timestamp,
+--	enddate timestamp,
 --	type varchar(50),
 --	place varchar(255),
---	fromtime datetime,
---	totime datetime,
+--	fromtime timestamp,
+--	totime timestamp,
 --	referencer varchar(1000),
 --	content varchar(4000),
 --	alerttype varchar(50),
@@ -103,26 +104,26 @@ CREATE TABLE sworgrole (
 --	domainid varchar(50),
 --	workitemid varchar(50),
 --	creator	varchar(50),
---	createdtime datetime,
+--	createdtime timestamp,
 --	modifier	varchar(50),
---	modifiedtime datetime,
+--	modifiedtime timestamp,
 --	primary key (id)
 --);
 
----- ∫Œ¿Á º≥¡§
+---- Î∂ÄÏû¨ ÏÑ§Ï†ï
 --CREATE TABLE swabsentee (
 --	id varchar(50) NOT NULL,
 --	absentee varchar(30),
---	startdate datetime,
---	enddate datetime,
---	registeredtime datetime,
+--	startdate timestamp,
+--	enddate timestamp,
+--	registeredtime timestamp,
 --	entrustyn char(1),
 --	entruster varchar(30),
 --	reason varchar(4000),
 --	primary key (id)
 --);
 
----- ƒ⁄µÂ
+---- ÏΩîÎìú
 --CREATE TABLE swcode (
 --	id varchar(50) NOT NULL,
 --	categoryid varchar(50),
@@ -133,7 +134,7 @@ CREATE TABLE sworgrole (
 --	primary key (id)
 --);
 
--- ∏Æº“Ω∫
+-- Î¶¨ÏÜåÏä§
 CREATE TABLE swcategory (
 	id varchar(50) NOT NULL,
 	companyid varchar(100),
@@ -142,9 +143,9 @@ CREATE TABLE swcategory (
 	disporder int,
 	description varchar(4000),
 	creator varchar(30),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(30),
-	modifiedtime datetime,	
+	modifiedtime timestamp,	
 	primary key (id)
 );
 
@@ -168,9 +169,9 @@ CREATE TABLE swpackage (
 	helpUrl varchar(500),
 	manualFileName varchar(100),
 	creator varchar(30),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(30),
-	modifiedtime datetime,
+	modifiedtime timestamp,
 	description varchar(4000),
 	primary key (id)
 );
@@ -185,14 +186,14 @@ CREATE TABLE swprocess (
 	publishmode varchar(10),
 	keyword varchar(255),	
 	creator varchar(30),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(30),
-	modifiedtime datetime,
+	modifiedtime timestamp,
 	ownerdept varchar(30),
 	owner varchar(30),
 	encoding varchar(15),
 	description varchar(4000),
-	content text,
+	content clob,
 	primary key (id)
 );
 
@@ -207,14 +208,14 @@ CREATE TABLE swform (
 	publishmode varchar(10),
 	keyword varchar(255),
 	creator varchar(30),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(30),
-	modifiedtime datetime,
+	modifiedtime timestamp,
 	ownerdept varchar(30),
 	owner varchar(30),
 	encoding varchar(15),
 	description varchar(4000),
-	content text,
+	content clob,
 	primary key (id)
 );
 
@@ -236,7 +237,7 @@ CREATE TABLE swworktype (
 --	primary key (worktypeid, step)
 --);
 
--- ¿«∞ﬂ
+-- ÏùòÍ≤¨
 CREATE TABLE swopinion (
 	id varchar(50) NOT NULL,
 	reftype int,
@@ -247,9 +248,9 @@ CREATE TABLE swopinion (
 	title varchar(255),
 	opinion varchar(4000),
 	writer varchar(30),
-	writtentime datetime,
+	writtentime timestamp,
 	modifier varchar(30),
-	modifiedTime datetime,
+	modifiedTime timestamp,
 	primary key (id)	
 );
 
@@ -260,18 +261,18 @@ CREATE TABLE swopinion (
 --	reftype int,
 --	refid varchar(50),
 --	writer varchar(30),
---	writtentime datetime,
+--	writtentime timestamp,
 --	title varchar(255),
 --	content varchar(4000),
 --	primary key (id)
 --);
 
--- tag : ±∏º∫ πŸ≤„æﬂ «‘... TO-D0 - taskObjIdøÕ ∏≈«Œµ… ºˆ ¿÷µµ∑œ ±∏º∫ 
+-- tag : Íµ¨ÏÑ± Î∞îÍøîÏïº Ìï®... TO-D0 - taskObjIdÏôÄ Îß§ÌïëÎê† Ïàò ÏûàÎèÑÎ°ù Íµ¨ÏÑ± 
 CREATE TABLE swtag (
 	id varchar(50) NOT NULL,
 	userid varchar(30),
 	tag varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	primary key (id)
 );
 
@@ -283,11 +284,11 @@ CREATE TABLE swtag (
 --	refid varchar(50),
 --	typename varchar(255),
 --	title varchar(4000),
---	createdtime datetime,
+--	createdtime timestamp,
 --	primary key (id)
 --);
 
----- πÆº≠∞¸∏Æ : ¥‹¿ß + Ω√Ω∫≈€
+---- Î¨∏ÏÑúÍ¥ÄÎ¶¨ : Îã®ÏúÑ + ÏãúÏä§ÌÖú
 --CREATE TABLE swdocument (
 --  	id varchar(50) NOT NULL,
 --  	title varchar(50),
@@ -300,9 +301,9 @@ CREATE TABLE swtag (
 --	domainid varchar(50),
 --	workitemid varchar(50),
 --	creator	varchar(50),
---	createdtime datetime,
+--	createdtime timestamp,
 --	modifier	varchar(50),
---	modifiedtime datetime,
+--	modifiedtime timestamp,
 --  	primary key(id)
 --);
 
@@ -312,8 +313,8 @@ CREATE TABLE swfile (
   	filename varchar(255),
   	filepath varchar(1000),  
 	filesize int,
-	writtentime datetime,
-	deleteAction bit,
+	writtentime timestamp,
+	deleteAction Number(3),
   	primary key(id)
 );
 
@@ -324,7 +325,7 @@ CREATE TABLE swdocgroup (
   	primary key(groupId, docId)
 );
 
----- «¡∑ŒººΩ∫ ø£¡¯
+---- ÌîÑÎ°úÏÑ∏Ïä§ ÏóîÏßÑ
 --CREATE TABLE swactinstprop (
 --	id varchar(50) NOT NULL,
 --	name varchar(100) NOT NULL,
@@ -344,8 +345,8 @@ CREATE TABLE swdocgroup (
 --	status varchar(30),
 --	type int,
 --	apprefid varchar(50),
---	starttime datetime,
---	endtime datetime,
+--	starttime timestamp,
+--	endtime timestamp,
 --	primary key (id)
 --);
 
@@ -358,8 +359,8 @@ CREATE TABLE swdocgroup (
 --	step int,
 --	status varchar(30),
 --	initiator varchar(50),
---	starttime datetime,
---	endtime datetime,
+--	starttime timestamp,
+--	endtime timestamp,
 --	bizstatus varchar(50),
 --	keyword varchar(100),
 --	description varchar(4000),
@@ -380,7 +381,7 @@ CREATE TABLE swdocgroup (
 --	name varchar(50) NOT NULL,
 --	type int,
 --	datatype varchar(50),
---	data text,
+--	data char,
 --	primary key (prcinstid, refid, name)
 --);
 
@@ -397,13 +398,13 @@ CREATE TABLE swdocgroup (
 --	source varchar(50),
 --	type varchar(255),
 --	trace varchar(2000),
---	occurredtime datetime,
---	reactedtime datetime,
---	message text,
+--	occurredtime timestamp,
+--	reactedtime timestamp,
+--	message char,
 --	primary key (id)
 --);
 
----- øˆ≈©∏ÆΩ∫∆Æ
+---- ÏõåÌÅ¨Î¶¨Ïä§Ìä∏
 --CREATE TABLE swworkitem (
 --	id varchar(50) NOT NULL,
 --	worktypeid varchar(50),
@@ -416,9 +417,9 @@ CREATE TABLE swdocgroup (
 --	keyword varchar(255),
 --	importance char(1),
 --	priority char(1),
---	createdtime datetime,
---	completedtime datetime,
---	duetime datetime,
+--	createdtime timestamp,
+--	completedtime timestamp,
+--	duetime timestamp,
 --	previousid varchar(50),
 --	type int,
 --	step int,
@@ -426,7 +427,7 @@ CREATE TABLE swdocgroup (
 --	groupid varchar(50),
 --	deletedyn char(1),
 --	description varchar(4000),	
---	data text,
+--	data char,
 --	primary key (id)
 --);
 
@@ -436,7 +437,7 @@ CREATE TABLE swdocgroup (
 --	previousassignee varchar(30),
 --	entruster varchar(30),
 --	operator varchar(30),
---	entrustedtime datetime,
+--	entrustedtime timestamp,
 --	primary key (id)
 --);
 
@@ -461,7 +462,7 @@ CREATE TABLE swworkhistory (
 	type varchar(20),
 	formid varchar(50),
 	title varchar(4000),
-	executedtime datetime,
+	executedtime timestamp,
 	primary key (id)
 );
 
@@ -469,11 +470,11 @@ CREATE TABLE swworktypehistory (
 	id varchar(50) NOT NULL,
 	userid varchar(30),
 	formid varchar(50),
-	executedtime datetime,
+	executedtime timestamp,
 	primary key (id)
 );
 
--- µµ∏ﬁ¿Œ µ•¿Ã≈Õ
+-- ÎèÑÎ©îÏù∏ Îç∞Ïù¥ÌÑ∞
 CREATE TABLE swdomain (
 	id varchar(50) NOT NULL,
 	companyid varchar(100),
@@ -484,15 +485,13 @@ CREATE TABLE swdomain (
 	tblname varchar(100),
 	keycolumn varchar(100),
 	titlefieldid varchar(50),
-	keyDuplicable bit,
+	keyDuplicable Number(3) default '0',
 	masterid varchar(50),
 	masterfieldid varchar(50),
 	systemdomainyn char(1),
 	publishmode varchar(10),
 	primary key (id)
 );
-
-alter table swdomain add constraint swdomain_df default 0 for keyDuplicable
 
 CREATE TABLE swremoveddomain (
 	formid varchar(50) NOT NULL,
@@ -528,26 +527,26 @@ CREATE TABLE swdataref (
 	primary key (id)
 );
 
--- ∞°¡¨ ¡§∫∏
+-- Í∞ÄÏ†Ø Ï†ïÎ≥¥
 CREATE TABLE swgadget (
 	id 	varchar(50) NOT NULL,
 	companyid varchar(50),
 	name varchar(255),
 	userid varchar(50) NOT NULL,
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
 	type varchar(50),
 	formid varchar(50),
 	query varchar(4000),
 	classname varchar(255),
 	location varchar(255),
 	enabledyn char(1),
-	content text,
+	content clob,
 	primary key (id)
 );
 
--- ±««— ¡§∫∏
+-- Í∂åÌïú Ï†ïÎ≥¥
 CREATE TABLE swauthresource (
 	id 	varchar(50) NOT NULL,
 	companyid varchar(50),
@@ -556,9 +555,9 @@ CREATE TABLE swauthresource (
 	authmode char(1) NOT NULL,
 	permission varchar(20),	
 	creator varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
 	primary key (id)
 );
 
@@ -572,7 +571,7 @@ CREATE TABLE swauthuser (
 	primary key (id)
 );
 
--- ∑Œ∞Ì
+-- Î°úÍ≥†
 CREATE TABLE swconfig (
 	id varchar(50) NOT NULL,
 	logo varchar(50),
@@ -580,7 +579,7 @@ CREATE TABLE swconfig (
 	primary key (id)
 );
 
----- ±π¡¶»≠
+---- Íµ≠Ï†úÌôî
 --CREATE TABLE swlanguage (
 --	id varchar(255) NOT NULL,
 --	kor varchar(255),
@@ -592,16 +591,16 @@ CREATE TABLE aprapr (
     aprobjid varchar(100) NOT NULL,
     aprname varchar(100),
     aprcreateuser varchar(50),
-    aprcreatedate datetime,
+    aprcreatedate timestamp,
     aprmodifyuser varchar(50),
-    aprmodifydate datetime,
-    aprdesc text,
+    aprmodifydate timestamp,
+    aprdesc clob,
     aprstatus varchar(50),
     aprtype varchar(50),
     aprapprover varchar(50),
    	aprDueDate varchar(100),
-    aprismanda tinyint,
-    aprismodify tinyint,
+    aprismanda Number(3),
+    aprismodify Number(3),
     approvalline varchar(100),
     aprseq int,
     primary key (aprobjid)
@@ -619,10 +618,10 @@ CREATE TABLE apraprline (
     aprobjid varchar(100) NOT NULL,
     aprname varchar(100),
     aprcreateuser varchar(50),
-    aprcreatedate datetime,
+    aprcreatedate timestamp,
     aprmodifyuser varchar(50),
-    aprmodifydate datetime,
-    aprdesc text,
+    aprmodifydate timestamp,
+    aprdesc clob,
     aprstatus varchar(50),
     aprcorr varchar(50),
     aprRefAppLineDefId varchar(50),
@@ -636,9 +635,9 @@ CREATE TABLE apraprlinedef(
 	aprlevel varchar(50) NULL,
 	companyid varchar(255) NULL,
 	creator varchar(50) NULL,
-	createdtime datetime NULL,
+	createdtime timestamp NULL,
 	modifier varchar(50) NULL,
-	modifiedtime datetime NULL,
+	modifiedtime timestamp NULL,
 	primary key (objid)
 );
 
@@ -655,13 +654,13 @@ CREATE TABLE apraprlineextprop (
 --    chtcharttype varchar(20) NOT NULL,
 --    chtname varchar(50),
 --    chtcreateuser varchar(255),
---    chtcreatedate datetime,
+--    chtcreatedate timestamp,
 --    chtmodifyuser varchar(255),
---    chtmodifydate datetime,
---    chtobjstr text
+--    chtmodifydate timestamp,
+--    chtobjstr char
 --);
 
---CREATE TABLE chtchartextprop (
+--CREATE TABLE chtcharcharprop (
 --    chtobjid varchar(100) NOT NULL,
 --    chtname varchar(100),
 --    chtvalue varchar(100),
@@ -672,13 +671,13 @@ CREATE TABLE collist (
     colobjid varchar(100) NOT NULL,
     colname varchar(100),
     colcreateuser varchar(50),
-    colcreatedate datetime,
+    colcreatedate timestamp,
     colmodifyuser varchar(50),
-    colmodifydate datetime,
+    colmodifydate timestamp,
     coltype varchar(100),
     colcorr varchar(200),
     colstatus varchar(50),
-    coldesc text,
+    coldesc clob,
     primary key(colobjid)
 );
 
@@ -695,7 +694,7 @@ CREATE TABLE collistitem (
     coltype varchar(100),
     colref varchar(100),
     collabel varchar(100),
-    colexpr text,
+    colexpr clob,
     colseq int NOT NULL,
     primary key(colobjid, colseq)
 );
@@ -704,21 +703,21 @@ CREATE TABLE lnklnk (
     lnkobjid varchar(100) NOT NULL,
     lnkname varchar(100),
     lnkcreateuser varchar(50),
-    lnkcreatedate datetime,
+    lnkcreatedate timestamp,
     lnkmodifyuser varchar(50),
-    lnkmodifydate datetime,
+    lnkmodifydate timestamp,
     lnktype varchar(100),
     lnkcorr varchar(400),
     lnkfromtype varchar(100),
     lnkfromref varchar(200),
     lnkfromlabel varchar(100),
-    lnkfromexpr text,
+    lnkfromexpr clob,
     lnktotype varchar(100),
     lnktoref varchar(200),
     lnktolabel varchar(100),
-    lnktoexpr text,
+    lnktoexpr clob,
     lnkcondtype varchar(100),
-    lnkcondexpr text,
+    lnkcondexpr clob,
     primary key(lnkobjid)
 );
 
@@ -734,9 +733,9 @@ CREATE TABLE colmap (
     colobjid varchar(100) NOT NULL,
     colname varchar(100),
     colcreateuser varchar(50),
-    colcreatedate datetime,
+    colcreatedate timestamp,
     colmodifyuser varchar(50),
-    colmodifydate datetime,
+    colmodifydate timestamp,
     coltype varchar(200),
     colfromtype varchar(200),
     colfromref varchar(200),
@@ -757,15 +756,15 @@ CREATE TABLE colvalue (
     colobjid varchar(100) NOT NULL,
     colname varchar(100),
     colcreateuser varchar(50),
-    colcreatedate datetime,
+    colcreatedate timestamp,
     colmodifyuser varchar(50),
-    colmodifydate datetime,
+    colmodifydate timestamp,
     coltype varchar(100),
     colref varchar(200),
-    colexpdate datetime,
+    colexpdate timestamp,
     colstatus varchar(50),
-    coldesc text,
-    colvalue text,
+    coldesc clob,
+    colvalue clob,
     primary key(colobjid)
 );
 
@@ -781,12 +780,12 @@ CREATE TABLE colvalueextprop (
 --    mdlobjid varchar(100) NOT NULL,
 --    mdlname varchar(50),
 --    mdlcreateuser varchar(255),
---    mdlcreatedate datetime,
+--    mdlcreatedate timestamp,
 --    mdlmodifyuser varchar(255),
---    mdlmodifydate datetime,
+--    mdlmodifydate timestamp,
 --    mdlpkg varchar(50),
 --    mdlprefix varchar(50),
---    mdlobjstr text,
+--    mdlobjstr char,
 --	  primary key(mdlobjid)
 --);
 
@@ -802,14 +801,14 @@ CREATE TABLE prcprc (
     prcobjid varchar(100) NOT NULL,
     prcname varchar(100),
     prccreateuser varchar(50),
-    prccreatedate datetime,
+    prccreatedate timestamp,
     prcmodifyuser varchar(50),
-    prcmodifydate datetime,
-    tskdesc text,
+    prcmodifydate timestamp,
+    tskdesc clob,
     prcdid varchar(100),
     prcdver varchar(100),
     prcprcid varchar(100),
-    prcdiagram text,
+    prcdiagram clob,
     prcType varchar(100),
 	primary key(prcobjid)
 );
@@ -826,19 +825,19 @@ CREATE TABLE prcprcinst (
     prcobjid varchar(100) NOT NULL,
     prcname varchar(100),
     prccreateuser varchar(50),
-    prccreatedate datetime,
+    prccreatedate timestamp,
     prcmodifyuser varchar(50),
-    prcmodifydate datetime,
+    prcmodifydate timestamp,
     prcstatus varchar(100),
     prctitle varchar(255),
-    tskdesc text,
+    tskdesc clob,
     tskpriority varchar(50),
     prcdid varchar(100),
     prcdver varchar(100),
     prcprcid varchar(100),
-    prcdiagram text,
+    prcdiagram clob,
     issubinstance varchar(50) NULL,
-    prcinstvariable text NULL,
+    prcinstvariable clob NULL,
     prcPackageId varchar(100),
     prcType varchar(100),
     prcWorkspaceId varchar(100),
@@ -860,24 +859,24 @@ CREATE TABLE tsktask (
     tskobjid varchar(100) NOT NULL,
     tskname varchar(100),
     tskcreateuser varchar(50),
-    tskcreatedate datetime,
+    tskcreatedate timestamp,
     tskmodifyuser varchar(50),
-    tskmodifydate datetime,
+    tskmodifydate timestamp,
     tskstatus varchar(50),
     tskcorr varchar(50),
     tsktype varchar(100),
     tskprcinstid varchar(50),
     tsktitle varchar(255),
-    tskdesc text,
+    tskdesc clob,
     tskpriority varchar(50),
-    tskdoc text,
+    tskdoc clob,
     tskassigner varchar(50),
     tskassignee varchar(50),
     tskperformer varchar(50),
-    tskstartdate datetime,
-    tskassigndate datetime,
-    tskexecutedate datetime,
-    tskduedate datetime,
+    tskstartdate timestamp,
+    tskassigndate timestamp,
+    tskexecutedate timestamp,
+    tskduedate timestamp,
     tskdef varchar(100),
     tskform varchar(100),
     tskmultiinstid varchar(100),
@@ -885,11 +884,11 @@ CREATE TABLE tsktask (
     tskmultiinstflowcond varchar(10),
     tskstep int,
     tskloopcnt int,
-    tskexpectstartdate datetime NULL ,
-    tskexpectenddate datetime NULL ,
-    tskrealstartdate datetime NULL ,
-    tskrealenddate datetime NULL ,
-    tskinstvariable text NULL,
+    tskexpectstartdate timestamp NULL ,
+    tskexpectenddate timestamp NULL ,
+    tskrealstartdate timestamp NULL ,
+    tskrealenddate timestamp NULL ,
+    tskinstvariable clob NULL,
     isStartActivity varchar(10),
     tskFromRefType varchar(50),
     tskFromRefId varchar(100),
@@ -902,7 +901,7 @@ CREATE TABLE tsktask (
     tskAccessLevel varchar(50),
     tskAccessValue varchar(4000),
     tskRefType varchar(100),
-    primary key(tskobjid)
+	primary key(tskobjid)
 );
 
 
@@ -910,17 +909,17 @@ CREATE TABLE tsktaskdef (
     tskobjid varchar(100) NOT NULL,
     tskname varchar(100),
     tskcreateuser varchar(50),
-    tskcreatedate datetime,
+    tskcreatedate timestamp,
     tskmodifyuser varchar(50),
-    tskmodifydate datetime,
+    tskmodifydate timestamp,
     tskstatus varchar(50),
     tskcorr varchar(100),
     tsktype varchar(100),
     tskprcinstid varchar(100),
     tsktitle varchar(200),
-    tskdesc text,
+    tskdesc clob,
     tskpriority varchar(100),
-    tskdoc text,
+    tskdoc clob,
     tskassigner varchar(100),
     tskassignee varchar(100),
     tskassigndate varchar(100),
@@ -951,51 +950,51 @@ CREATE TABLE tsktaskextprop (
 	primary key(tskobjid, tskseq)
 );
 
--- ∞¯¡ˆªÁ«◊
+-- Í≥µÏßÄÏÇ¨Ìï≠
 CREATE TABLE SWNotice (
 	id varchar(50) NOT NULL,
 	domainId varchar(50) NULL,
 	workItemId varchar(50) NULL,
 	masterRecordId varchar(50) NULL,
 	creator varchar(50) NULL,
-	createdTime datetime NULL,
+	createdTime timestamp NULL,
 	modifier varchar(50) NULL,
-	modifiedTime datetime NULL,
+	modifiedTime timestamp NULL,
 	filegroupid varchar(255) NULL,
 	title varchar(255) NULL,
-	content text NULL,
-	Duration datetime NULL,
+	content clob NULL,
+	duration timestamp null,
 	primary key (id)
 );
 
--- ∞‘Ω√∆«
+-- Í≤åÏãúÌåê
 CREATE TABLE SwBoard (
 	id 	varchar(50) NOT NULL,
 	title varchar(255),
 	priority varchar(10),
-	content text,
+	content clob,
 	filegroupid varchar(255),
 	domainid varchar(50),
 	workitemid varchar(50),
 	creator	varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier	varchar(50),
-	modifiedtime datetime,
-	notice bit,
+	modifiedtime timestamp,
+	notice Number(3),
 	primary key (id)
 );
 
--- ¿⁄∑·Ω«
+-- ÏûêÎ£åÏã§
 CREATE TABLE SWAttachment (
 	id varchar(50) NOT NULL,
 	domainid varchar(50) NULL,
 	workitemid varchar(50) NULL,
 	masterrecordid varchar(50) NULL,
 	creator varchar(50) NULL,
-	createdtime datetime NULL,
+	createdtime timestamp NULL,
 	modifier varchar(50) NULL,
-	modifiedtime datetime NULL,
-	content text NULL,
+	modifiedtime timestamp NULL,
+	content clob NULL,
 	filegroupid varchar(255) NULL,
 	searchword varchar(255) NULL,
 	ownerdept varchar(255) NULL,
@@ -1003,7 +1002,7 @@ CREATE TABLE SWAttachment (
 	owneruser varchar(255) NULL
 );
 
--- ø¨∂Ù√≥
+-- Ïó∞ÎùΩÏ≤ò
 CREATE TABLE sworgcontact (
 	id varchar(50) NOT NULL,
 	name varchar(50),
@@ -1017,90 +1016,90 @@ CREATE TABLE sworgcontact (
 	swaddress varchar(255),
 	swcountry varchar(50),
 	swcat varchar(50),
-	swdesc text,
+	swdesc clob,
 	swattach varchar(255),
 	domainid varchar(50),
 	workitemid varchar(50),
 	creator	varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier	varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
 	primary key (id)
 );
 
--- ¿Ã∫•∆Æ
+-- Ïù¥Î≤§Ìä∏
 CREATE TABLE SWEvent (
 	id varchar(50) NOT NULL,
 	domainId varchar(50) NULL,
 	workItemId varchar(50) NULL,
 	masterRecordId varchar(50) NULL,
 	creator varchar(50) NULL,
-	createdTime datetime NULL,
+	createdTime timestamp NULL,
 	modifier varchar(50) NULL,
-	modifiedTime datetime NULL,
-	enddate datetime NULL,
-	relatedusers varchar(4000) NULL, -- userField¥¬ varchar(4000)¿∏∑Œ ª˝º∫
-	content text NULL,
-	startdate datetime NULL,
+	modifiedTime timestamp NULL,
+	enddate timestamp NULL,
+	relatedusers varchar(4000) NULL, -- userFieldÎäî varchar(4000)ÏúºÎ°ú ÏÉùÏÑ±
+	content clob NULL,
+	startdate timestamp NULL,
 	name varchar(255) NULL,
 	place varchar(255) NULL,
 	alarm varchar(255) NULL,
 	primary key (id)
 );
 
--- ∏ﬁ∏
+-- Î©îÎ™®
 CREATE TABLE SWMemo (
 	id varchar(50) NOT NULL primary key,
 	domainid varchar(50),
 	workitemid varchar(50),
 	masterrecordid varchar(50),
 	creator varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime,
-	content text,
+	modifiedtime timestamp,
+	content clob,
 	title varchar(255)
 );
 
-----æ˜π´¿¸¥ﬁ
+----ÏóÖÎ¨¥Ï†ÑÎã¨
 --CREATE TABLE dt_1287553898892 (
 --	id varchar(50) NOT NULL,
 --	domainid varchar(50) NULL,
 --	workitemid varchar(50) NULL,
 --	masterrecordid varchar(50) NULL,
 --	creator varchar(50) NULL,
---	createdtime datetime NULL,
+--	createdtime timestamp NULL,
 --	modifier varchar(50) NULL,
---	modifiedtime datetime NULL,
---	c8 text NULL,
+--	modifiedtime timestamp NULL,
+--	c8 char NULL,
 --	c12 varchar(255) NULL,
 --	c4 varchar(255) NULL
 --);
 
-----æ˜π´∫∏∞Ì
+----ÏóÖÎ¨¥Î≥¥Í≥†
 --CREATE TABLE dt_1287553898894(
 --	id varchar(50)NOT NULL,
 --	domainid varchar(50),
 --	workitemid varchar(50),
 --	masterrecordid varchar(50),
 --	creator varchar(50),
---	createdtime datetime ,
+--	createdtime timestamp ,
 --	modifier varchar(50),
---	modifiedtime datetime ,
---	c15 text,
+--	modifiedtime timestamp ,
+--	c15 char,
 --	c2 varchar(255),
 --	c6 varchar(255),
 --	c4 varchar(255),
 --	c19 varchar(255),
---	c61 datetime ,
---	c17 text,
---	c13 text,
+--	c61 timestamp ,
+--	c17 char,
+--	c13 char,
 --	c0 varchar(255),
---	c63 datetime ,
---	c8 datetime 
+--	c63 timestamp ,
+--	c8 timestamp 
 --);
 
---sw2.0 √ﬂ∞°
+--sw2.0 Ï∂îÍ∞Ä
 CREATE TABLE swmenuitem(
 	objid varchar(50) NOT NULL,
 	name varchar(255) NULL,
@@ -1112,9 +1111,9 @@ CREATE TABLE swmenuitem(
 	groupid varchar(50) NULL,
 	formid varchar(50) NULL,
 	creator varchar(50) NULL,
-	createdtime datetime NULL,
+	createdtime timestamp NULL,
 	modifier varchar(50) NULL,
-	modifiedtime datetime NULL,
+	modifiedtime timestamp NULL,
 	itmseq int NOT NULL,
 	primary key (objid, itmseq)
 ) 
@@ -1125,9 +1124,9 @@ CREATE TABLE swmenuitemlist(
 	companyid varchar(50) NULL,
 	userid varchar(50) NULL,
 	creator varchar(50) NULL,
-	createdtime datetime NULL,
+	createdtime timestamp NULL,
 	modifier varchar(50) NULL,
-	modifiedtime datetime NULL,
+	modifiedtime timestamp NULL,
 	primary key (objid)
 )
 ;
@@ -1137,13 +1136,13 @@ CREATE TABLE sweventday(
 	name varchar(50),
 	companyid varchar(100),
 	type varchar(50),
-	startday datetime,
-	endday datetime,
+	startday timestamp,
+	endday timestamp,
 	description varchar(4000),
 	creator varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime NULL,
+	modifiedtime timestamp NULL,
 	reltdperson varchar(4000),
 	primary key (objid)
 )
@@ -1155,14 +1154,14 @@ CREATE TABLE sworgteam(
 	name varchar(255) NULL,
 	teamleader varchar(50) NULL,
 	dept varchar(50) NULL,
-	member text NULL,
+	member clob NULL,
 	accesslevel varchar(50) NULL,
 	state varchar(50) NULL,
 	description varchar(4000) NULL,
 	creator varchar(50) NULL,
-	createdtime datetime NULL,
+	createdtime timestamp NULL,
 	modifier varchar(50) NULL,
-	modifiedtime datetime NULL,
+	modifiedtime timestamp NULL,
 	primary key (id)
 )
 ;
@@ -1173,8 +1172,8 @@ CREATE TABLE msgmessage(
 	targetuser varchar(300) NULL,
 	userid varchar(50) NULL,
 	modifier varchar(50) NULL,
-	modifiedtime datetime NULL,
-	createdtime datetime NULL,
+	modifiedtime timestamp NULL,
+	createdtime timestamp NULL,
 	primary key (id)
 )
 ;
@@ -1185,26 +1184,26 @@ CREATE TABLE swworkhour (
 	type varchar(50),
 	startdayofweek varchar(50),
 	workingdays int,
-	validfromdate datetime,
-	validtodate datetime,
-	monstarttime datetime,
-	monendtime datetime,
-	tuestarttime datetime,
-	tueendtime datetime,
-	wedstarttime datetime,
-	wedendtime datetime,
-	thustarttime datetime,
-	thuendtime datetime,
-	fristarttime datetime,
-	friendtime datetime,
-	satstarttime datetime,
-	satendtime datetime,
-	sunstarttime datetime,
-	sunendtime datetime,
+	validfromdate timestamp,
+	validtodate timestamp,
+	monstarttime timestamp,
+	monendtime timestamp,
+	tuestarttime timestamp,
+	tueendtime timestamp,
+	wedstarttime timestamp,
+	wedendtime timestamp,
+	thustarttime timestamp,
+	thuendtime timestamp,
+	fristarttime timestamp,
+	friendtime timestamp,
+	satstarttime timestamp,
+	satendtime timestamp,
+	sunstarttime timestamp,
+	sunendtime timestamp,
 	creator varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
 	primary key (objid)
 )
 ;
@@ -1217,31 +1216,31 @@ CREATE TABLE sworgconfig(
 	name varchar(255) NULL,
 	domainid varchar(50) NULL,
 	companyid varchar(100) NULL,
-	useMessagingService bit,
-	useChattingService bit,
-	isactivity int NULL,
-	setupcompanydate Datetime,
-	userReturnFunction bit,
 	creator varchar(50) NULL,
-	createdtime datetime NULL,
+	createdtime timestamp NULL,
 	modifier varchar(50) NULL,
-	modifiedtime datetime NULL,
+	modifiedtime timestamp NULL,
+	isactivity int NULL,
+	setupcompanydate timestamp,
+	userreturnfunction int,
+	usechattingservice int,
+	usemessagingservice int,
 	primary key (id)
 )
 ;
 
---√ﬂ∞°
+--Ï∂îÍ∞Ä
 CREATE TABLE apraprdef(  
 	objid varchar(50),
 	type varchar(255),
 	aprname varchar(150),
 	aprperson varchar(50),
 	dueDate varchar(100),
-	level varchar(50),
+	level_ varchar(50),
 	creator varchar(50),
-	createdtime datetime NULL,
+	createdtime timestamp NULL,
 	modifier varchar(50),
-	modifiedtime datetime NULL,
+	modifiedtime timestamp NULL,
 	defseq int NOT NULL,
 	constraint apraprdef_pkey primary key (objid, defseq),
 	constraint fkaprapprovaldef foreign key (objid) references apraprlinedef (objid)
@@ -1255,7 +1254,7 @@ CREATE TABLE apraprdef(
 --	filename varchar(100),
 --	filepath varchar(200),
 --	filesize decimal(19, 0) NULL,
---	writtentime datetime NULL,
+--	writtentime timestamp NULL,
 --	constraint docfile_pkey primary key (id)
 --);
 
@@ -1264,9 +1263,9 @@ CREATE TABLE apraprdef(
 --	lcsobjid varchar(100),
 --	lcsname varchar(100),
 --	lcscreateuser varchar(50),
---	lcscreatedate datetime NULL,
+--	lcscreatedate timestamp NULL,
 --	lcsmodifyuser varchar(50),
---	lcsmodifydate datetime NULL,
+--	lcsmodifydate timestamp NULL,
 --	lcsusername varchar(50),
 --	lcsprod varchar(50),
 --	lcscurrentver varchar(50),
@@ -1274,8 +1273,8 @@ CREATE TABLE apraprdef(
 --	lcsdomain varchar(100),
 --	lcsmacaddr varchar(100),
 --	lcsusersize decimal(19, 0) NULL,
---	lcsexpiredate datetime NULL,
---	lcsdesc text,
+--	lcsexpiredate timestamp NULL,
+--	lcsdesc char,
 --	lcsstatus varchar(50),
 --	constraint lcslcs_pkey primary key (lcsobjid)
 --);
@@ -1295,9 +1294,9 @@ CREATE TABLE apraprdef(
 CREATE TABLE prcprcinstrel(
 	prcobjid varchar(100),
 	prccreateuser varchar(50),
-	prccreatedate datetime NULL,
+	prccreatedate timestamp NULL,
 	prcmodifyuser varchar(50),
-	prcmodifydate datetime NULL,
+	prcmodifydate timestamp NULL,
 	prctype varchar(50),
 	prcinstanceid varchar(100),
 	prcparentinstid varchar(100),
@@ -1320,15 +1319,15 @@ CREATE TABLE prcprcinstrel(
 --	prcobjid varchar(100),
 --	prcname varchar(100),
 --	prccreateuser varchar(50),
---	prccreatedate datetime NULL,
+--	prccreatedate timestamp NULL,
 --	prcmodifyuser varchar(50),
---	prcmodifydate datetime NULL,
+--	prcmodifydate timestamp NULL,
 --	prctype varchar(50),
 --	prcprcinstid varchar(100),
 --	prcvariableid varchar(100),
 --	prcrequired tinyint NULL,
 --	prcmode varchar(50),
---	prcvalue text,
+--	prcvalue char,
 --        constraint prcprcinstvariable_pkey primary key (prcobjid)
 --);
 
@@ -1348,9 +1347,9 @@ CREATE TABLE prcprcinstrel(
 --	prcobjid varchar(100),
 --	prcname varchar(100),
 --	prccreateuser varchar(50),
---	prccreatedate datetime NULL,
+--	prccreatedate timestamp NULL,
 --	prcmodifyuser varchar(50),
---	prcmodifydate datetime NULL,
+--	prcmodifydate timestamp NULL,
 --	prctype varchar(50),
 --	prcprcid varchar(100),
 --	prcinitialvalue varchar(100),
@@ -1377,11 +1376,11 @@ CREATE TABLE prcprcinstrel(
 --	name varchar(255),
 --	customercode varchar(100),
 --	smartworksurl varchar(200),
---	description text,
+--	description char,
 --	creator varchar(50),
---	createdtime datetime NULL,
+--	createdtime timestamp NULL,
 --	modifier varchar(50),
---	modifiedtime datetime NULL,
+--	modifiedtime timestamp NULL,
 --	constraint swcustomer_pkey primary key (id)
 --);
 
@@ -1415,9 +1414,9 @@ CREATE TABLE sworguser_backup(
 	domainid varchar(50),
 	workitemid varchar(50),
 	creator varchar(50),
-	createdtime datetime NULL,
+	createdtime timestamp NULL,
 	modifier varchar(50),
-	modifiedtime datetime NULL,
+	modifiedtime timestamp NULL,
 	retiree varchar(50),
 	constraint sworguser_backup_pkey primary key (id)
 );
@@ -1439,36 +1438,36 @@ CREATE TABLE sworguserdetail(
 --	id varchar(50),
 --	name varchar(255),
 --	creator varchar(50),
---	createdtime datetime NULL,
+--	createdtime timestamp NULL,
 --	modifier varchar(50),
---	modifiedtime datetime NULL,
---	description text,
+--	modifiedtime timestamp NULL,
+--	description char,
 --	status varchar(30),
 --	type varchar(20),
 --	company varchar(100),
 --	price varchar(50),
 --	score float NULL,
 --	mainimg varchar(255),
---	value text,
+--	value char,
 --	businesstypectgid varchar(100),
 --	businessctgid varchar(100),
 --	hitcount decimal(19, 0) NULL,
 --	downcount decimal(19, 0) NULL,
 --	ispublished varchar(20),
 --	productcode varchar(50),
---	packagerels text,
---	extvalue text,
+--	packagerels char,
+--	extvalue char,
 --	constraint swproduct_pkey primary key (id)
 --);
 
 
---CREATE TABLE swproductextprop(  
+--CREATE TABLE swproduccharprop(  
 --	id varchar(50),
 --	swmname varchar(100),
 --	swmvalue varchar(100),
 --	swmseq int NOT NULL,
---	constraint swproductextprop_pkey primary key (id, swmseq),
---	constraint fkswmproductextprop foreign key (id)
+--	constraint swproduccharprop_pkey primary key (id, swmseq),
+--	constraint fkswmproduccharprop foreign key (id)
 --	references swproduct (id)
 --);
 
@@ -1482,9 +1481,9 @@ CREATE TABLE sworguserdetail(
 --	filepath varchar(200),
 --	filesize varchar(50),
 --	creator varchar(50),
---	createdtime datetime NULL,
+--	createdtime timestamp NULL,
 --	modifier varchar(50),
---	modifiedtime datetime NULL,	
+--	modifiedtime timestamp NULL,	
 --	constraint swproductfile_pkey primary key (id)
 --);
 
@@ -1494,9 +1493,9 @@ CREATE TABLE sworguserdetail(
 --	swmtype varchar(20),
 --	swmname varchar(100),
 --	swmimageid varchar(100),
---	swmdesc text,
---	swmimage text,
---	swmimagetn text,
+--	swmdesc char,
+--	swmimage char,
+--	swmimagetn char,
 --	swmseq int NOT NULL,
 --	constraint swproductprop_pkey primary key (id, swmseq),
 --	constraint fkswmproductproperty foreign key (id)
@@ -1558,15 +1557,15 @@ CREATE TABLE swwebserviceparameter(
 --	updobjid varchar(100),
 --	updname varchar(100),
 --	updcreateuser varchar(50),
---	updcreatedate datetime NULL,
+--	updcreatedate timestamp NULL,
 --	updmodifyuser varchar(50),
---	updmodifydate datetime NULL,
---	upddesc text,
+--	updmodifydate timestamp NULL,
+--	upddesc char,
 --	updstatus varchar(50),
 --	updtype varchar(50),
 --	updmethod varchar(50),
---	updsrc text,
---	updtgt text,	
+--	updsrc char,
+--	updtgt char,	
 --	constraint updupd_pkey primary key (updobjid)
 --);
 --
@@ -1581,7 +1580,7 @@ CREATE TABLE swwebserviceparameter(
 --	references updupd (updobjid)
 --);
 
--- ªÁøÎ¿⁄ æ˜π´¡¢±Ÿ ∑Œ±◊ (2011.10.13 Add)
+-- ÏÇ¨Ïö©Ïûê ÏóÖÎ¨¥Ï†ëÍ∑º Î°úÍ∑∏ (2011.10.13 Add)
 --CREATE TABLE SWActionLog(
 --	userId varchar(50) NOT NULL,
 --	userName varchar(50) NULL,
@@ -1591,7 +1590,7 @@ CREATE TABLE swwebserviceparameter(
 --	menuName varchar(100) NULL,
 --	menuType varchar(100) NULL,
 --	actionType varchar(50) NULL,
---	actionTime datetime NULL
+--	actionTime timestamp NULL
 --);
 
 --ALTER TABLE [dbo].[AprApr] WITH NOCHECK ADD 
@@ -1631,7 +1630,7 @@ CREATE TABLE swwebserviceparameter(
 --	)  ON [PRIMARY] 
 --GO
 
---ALTER TABLE [ChtChartExtProp] WITH NOCHECK ADD 
+--ALTER TABLE [ChtCharcharProp] WITH NOCHECK ADD 
 --	 PRIMARY KEY  CLUSTERED 
 --	(
 --		[chtObjId],
@@ -1646,7 +1645,7 @@ CREATE TABLE swwebserviceparameter(
 --	)  ON [PRIMARY] 
 --GO
 
---ALTER TABLE [LnkListExtProp] WITH NOCHECK ADD 
+--ALTER TABLE [LnkLischarProp] WITH NOCHECK ADD 
 --	 PRIMARY KEY  CLUSTERED 
 --	(
 --		[lnkObjId],
@@ -1744,7 +1743,7 @@ CREATE TABLE swwebserviceparameter(
 --	)  ON [PRIMARY] 
 --GO
 
---ALTER TABLE [PrcPrcInstExtProp] WITH NOCHECK ADD 
+--ALTER TABLE [PrcPrcInscharProp] WITH NOCHECK ADD 
 --	 PRIMARY KEY  CLUSTERED 
 --	(
 --		[prcObjId],
@@ -1836,10 +1835,10 @@ CREATE TABLE swwebserviceparameter(
 -- CREATE  INDEX [IxChtChart2] ON [ChtChart]([chtCreateUser]) ON [PRIMARY]
 --GO
 --
--- CREATE  INDEX [IxChtChartExtProp2] ON [ChtChartExtProp]([chtValue]) ON [PRIMARY]
+-- CREATE  INDEX [IxChtCharcharProp2] ON [ChtCharcharProp]([chtValue]) ON [PRIMARY]
 --GO
 --
--- CREATE  INDEX [IxChtChartExtProp] ON [ChtChartExtProp]([chtName]) ON [PRIMARY]
+-- CREATE  INDEX [IxChtCharcharProp] ON [ChtCharcharProp]([chtName]) ON [PRIMARY]
 --GO
 --
 -- CREATE  INDEX [IxLnkList] ON [LnkList]([lnkCreateUser]) ON [PRIMARY]
@@ -1851,10 +1850,10 @@ CREATE TABLE swwebserviceparameter(
 -- CREATE  INDEX [IxLnkList2] ON [LnkList]([lnkType], [lnkCorr]) ON [PRIMARY]
 --GO
 --
--- CREATE  INDEX [IxLnkListExtProp1] ON [LnkListExtProp]([tskValue]) ON [PRIMARY]
+-- CREATE  INDEX [IxLnkLischarProp1] ON [LnkLischarProp]([tskValue]) ON [PRIMARY]
 --GO
 --
--- CREATE  INDEX [IxLnkListExtProp] ON [LnkListExtProp]([tskName]) ON [PRIMARY]
+-- CREATE  INDEX [IxLnkLischarProp] ON [LnkLischarProp]([tskName]) ON [PRIMARY]
 --GO
 --
 -- CREATE  INDEX [IxLnkListItem1] ON [LnkListItem]([lnkRef]) ON [PRIMARY]
@@ -1992,10 +1991,10 @@ CREATE TABLE swwebserviceparameter(
 -- CREATE  INDEX [IxPrcPrcInst5] ON [PrcPrcInst]([prcDVer]) ON [PRIMARY]
 --GO
 --
--- CREATE  INDEX [IxPrcPrcInstExtProp] ON [PrcPrcInstExtProp]([prcName]) ON [PRIMARY]
+-- CREATE  INDEX [IxPrcPrcInscharProp] ON [PrcPrcInscharProp]([prcName]) ON [PRIMARY]
 --GO
 --
--- CREATE  INDEX [IxPrcPrcInstExtProp2] ON [PrcPrcInstExtProp]([prcValue]) ON [PRIMARY]
+-- CREATE  INDEX [IxPrcPrcInscharProp2] ON [PrcPrcInscharProp]([prcValue]) ON [PRIMARY]
 --GO
 --
 -- CREATE  INDEX [IxTskTask10] ON [TskTask]([tskAssignee]) ON [PRIMARY]
@@ -2118,8 +2117,8 @@ CREATE TABLE swwebserviceparameter(
 --	)
 --GO
 --
---ALTER TABLE [ChtChartExtProp] ADD 
---	CONSTRAINT [FkChtChartExtProp] FOREIGN KEY 
+--ALTER TABLE [ChtCharcharProp] ADD 
+--	CONSTRAINT [FkChtCharcharProp] FOREIGN KEY 
 --	(
 --		[chtObjId]
 --	) REFERENCES [ChtChart] (
@@ -2127,8 +2126,8 @@ CREATE TABLE swwebserviceparameter(
 --	)
 --GO
 --
---ALTER TABLE [LnkListExtProp] ADD 
---	CONSTRAINT [FkLnkListExtProp] FOREIGN KEY 
+--ALTER TABLE [LnkLischarProp] ADD 
+--	CONSTRAINT [FkLnkLischarProp] FOREIGN KEY 
 --	(
 --		[lnkObjId]
 --	) REFERENCES [LnkList] (
@@ -2190,8 +2189,8 @@ CREATE TABLE swwebserviceparameter(
 --	)
 --GO
 --
---ALTER TABLE [PrcPrcInstExtProp] ADD 
---	CONSTRAINT [FkPrcPrcInstExtProp] FOREIGN KEY 
+--ALTER TABLE [PrcPrcInscharProp] ADD 
+--	CONSTRAINT [FkPrcPrcInscharProp] FOREIGN KEY 
 --	(
 --		[prcObjId]
 --	) REFERENCES [PrcPrcInst] (
@@ -2217,10 +2216,10 @@ CREATE TABLE swwebserviceparameter(
 --	)
 --GO
 
--- 3.0 √ﬂ∞°
+-- 3.0 Ï∂îÍ∞Ä
 
 
--- ƒøπ¬¥œ∆º ±◊∑Ï
+-- Ïª§ÎÆ§ÎãàÌã∞ Í∑∏Î£π
 CREATE TABLE SWOrgGroup (
 	id	varchar(50) not null,
 	companyId	varchar(50),
@@ -2231,31 +2230,31 @@ CREATE TABLE SWOrgGroup (
 	picture varchar(100),
 	description	varchar(4000),
 	maxMember int,
-	autoApproval bit,
+	autoApproval Number(3),
 	creator	varchar(50),
-	createdTime	datetime,
+	createdTime	timestamp,
 	modifier	varchar(50),
-	modifiedTime	datetime,
+	modifiedTime	timestamp,
 	primary key (id)
 );
 
--- ƒøπ¬¥œ∆º ±◊∑Ï ∏‚πˆ
+-- Ïª§ÎÆ§ÎãàÌã∞ Í∑∏Î£π Î©§Î≤Ñ
 CREATE TABLE SWOrgGroupMember (
 	groupId	varchar(50) not null,
 	userId	varchar(50) not null,
 	joinType	varchar(1),
 	joinStatus	varchar(1),
-	joinTime	datetime,
-	outTime 	datetime,
+	joinTime	timestamp,
+	outTime 	timestamp,
 	memberSeq	int,
 	creator varchar(50),
-	createdtime datetime ,
+	createdtime timestamp ,
 	modifier varchar(50),
-	modifiedtime datetime ,
+	modifiedtime timestamp ,
 	primary key (groupId, userId)
 );
 
--- ∆˙¥ı
+-- Ìè¥Îçî
 CREATE TABLE SwFolder (
 	id varchar(50) NOT NULL,
 	companyid varchar(100),
@@ -2264,15 +2263,15 @@ CREATE TABLE SwFolder (
 	disporder int,
 	description varchar(4000),
 	creator varchar(30),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(30),
-	modifiedtime datetime,
+	modifiedtime timestamp,
 	tskWorkspaceId varchar(50),
 	tskRefType varchar(50),
 	primary key (id)
 );
 
--- ∆˙¥ı∆ƒ¿œ
+-- Ìè¥ÎçîÌååÏùº
 CREATE TABLE SwFolderFile (
 	folderId varchar(50) NOT NULL,
 	fileId varchar(50) NOT NULL,
@@ -2280,81 +2279,89 @@ CREATE TABLE SwFolderFile (
   	primary key(folderId, fileId)
 );
 
--- ¡¡æ∆ø‰
+-- Ï¢ãÏïÑÏöî
 CREATE TABLE SwLike (
 	id varchar(50) NOT NULL,
 	refType int,
 	refId varchar(50),
 	creator varchar(50),
-	createdTime datetime,
+	createdTime timestamp,
 	primary key (id)
 );
 
--- ∏ﬁºº¡ˆ
+-- Î©îÏÑ∏ÏßÄ
 CREATE TABLE SWMessage(
 	id varchar(50) NOT NULL,
-	content varchar(4000),
+	content clob,
 	sendUserId varchar(50),
 	targetUserId varchar(50),
 	deleteUserId varchar(50),
-	isChecked bit,
+	isChecked Number(3),
 	chatId varchar(50),
 	chattersId varchar(2000),
-	checkedTime datetime,
+	checkedTime timestamp,
 	creator varchar (50),
-	createdTime datetime,
+	createdTime timestamp,
 	modifier varchar (50),
-	modifiedTime datetime,
+	modifiedTime timestamp,
 	primary key (id)
 );
 
 
--- ∑Œ±◊¿Œ ªÁøÎ¿⁄
+-- Î°úÍ∑∏Ïù∏ ÏÇ¨Ïö©Ïûê
 CREATE TABLE SwLoginUser (
 	userId varchar(50) NOT NULL,
-	loginTime datetime,
+	loginTime timestamp,
 	primary key (userId)
 );
 
---∏ﬁ¿œ∞¸∑√ ≈◊¿Ã∫Ì Start
+--Î©îÏùºÍ¥ÄÎ†® ÌÖåÏù¥Î∏î Start
+
+-- create sequence autonum 
+--     increment by 1  
+--     start with 1       
+--     nomaxvalue    
+--     nocycle             
+--     nocache;
+
 CREATE TABLE folder_db_objects (
-    id bigint IDENTITY(1,1) NOT NULL,
+    id Number NOT NULL,
     username varchar(255) NOT NULL,
-    parent_id bigint NOT NULL,
+    parent_id Number NOT NULL,
     folder_name varchar(100) NOT NULL,
     folder_type int NOT NULL,
     primary key (id)
 );
 
 CREATE TABLE msg_db_objects (
-    id bigint IDENTITY(1,1) NOT NULL,
-    uid varchar(100),
+    id Number NOT NULL,
+    uid_ varchar(100),
     username varchar(255) NOT NULL,
-    folder_id bigint NOT NULL,
+    folder_id Number NOT NULL,
     unique_id varchar(100) NOT NULL,
     sender varchar(255),
-    receiver text,
-    cc text,
-    bcc text,
+    receiver clob,
+    cc clob,
+    bcc clob,
     replyTo varchar(255),
     subject varchar(255),
     multipart smallint,
     priority int,
-    sentdate datetime,
+    sentdate timestamp,
     unread smallint NOT NULL,
-    msg_size bigint NOT NULL,
-    email varbinary(max) NOT NULL,
+    msg_size Number NOT NULL,
+    email blob NOT NULL,
     primary key (id)
 );
 
 CREATE TABLE msg_db_uids (
     username varchar(255) NOT NULL,
-    uid varchar(100) NOT NULL
+    uid_ varchar(100) NOT NULL
 );
 
 
 CREATE TABLE msg_rules (
-    id bigint IDENTITY(1,1) NOT NULL,
+    id Number NOT NULL,
     username varchar(255) NOT NULL,
     portion varchar(100) NOT NULL,
     rule_condition varchar(30) NOT NULL,
@@ -2363,9 +2370,9 @@ CREATE TABLE msg_rules (
     destination varchar(100) NOT NULL,
     primary key (id)
 );
---∏ﬁ¿œ∞¸∑√ ≈◊¿Ã∫Ì End
+--Î©îÏùºÍ¥ÄÎ†® ÌÖåÏù¥Î∏î End
 
---æÀ∏≤ ƒ´øÓ∆Æ∏¶ ºº∞Ì æÀ∏≤ ¡∂»∏∏¶ ¿ß«— ≈◊¿Ã∫Ì
+--ÏïåÎ¶º Ïπ¥Ïö¥Ìä∏Î•º ÏÑ∏Í≥† ÏïåÎ¶º Ï°∞ÌöåÎ•º ÏúÑÌïú ÌÖåÏù¥Î∏î
 CREATE TABLE SWPublishNotice (
 	id varchar(50) NOT NULL,
 	type int,
@@ -2373,15 +2380,14 @@ CREATE TABLE SWPublishNotice (
 	refId varchar(100),
 	assignee varchar(50),
 	creator varchar (50),
-	createdTime datetime,
+	createdTime timestamp,
 	modifier varchar (50),
-	modifiedTime datetime,
+	modifiedTime timestamp,
 	primary key (id)
 );
 
 
-
--- SwMailServer (∏ﬁ¿œº≠πˆ¡§∫∏)
+-- SwMailServer (Î©îÏùºÏÑúÎ≤ÑÏ†ïÎ≥¥)
 CREATE TABLE SwMailServer (
 	id varchar(50) NOT NULL,
 	name varchar(100) NOT NULL,
@@ -2389,24 +2395,24 @@ CREATE TABLE SwMailServer (
 	fetchServer varchar(50),
 	fetchServerPort int,
 	fetchProtocol varchar(10),
-	fetchSsl bit,
+	fetchSsl Number(3),
 	smtpServer varchar(50),
 	smtpServerPort int,
-	smtpAuthenticated bit,
-	smtpSsl bit,
-	pwChangeAPI varchar(300),
-	pwChangeDefaultData  varchar(100),
-	pwChangeParamId varchar(50),
-	pwChangeParamOldPW varchar(50),
-	pwChangeParamNewPW varchar(50),
+	smtpAuthenticated Number(3),
+	smtpSsl Number(3),
+	pwchangeapi varchar(300),
+	pwchangedefaultdata varchar(100),
+	pwchangeparamid varchar(50),
+	pwchangeparamoldpw varchar(50),
+	pwchangeparamnewpw varchar(50),
 	creator	varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime,
-	primary key (id)
+	modifiedtime timestamp,
+    primary key (id)
 );
 
--- SwMailAccount (ªÁøÎ¿⁄∏ﬁ¿œ∞Ë¡§)
+-- SwMailAccount (ÏÇ¨Ïö©ÏûêÎ©îÏùºÍ≥ÑÏ†ï)
 CREATE TABLE SwMailAccount (
 	id varchar(50) NOT NULL,
 	userId varchar(50) NOT NULL,
@@ -2416,37 +2422,51 @@ CREATE TABLE SwMailAccount (
 	mailUserName varchar(50),
 	mailPassword varchar(50) NOT NULL,
 	mailSignature varchar(4000),
-	useMailSign bit,
+	useMailSign Number(3),
 	senderUserTitle varchar(50),
 	mailDeleteFetched varchar(10),
-	junks text,
+	junks clob,
 	creator	varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
     primary key (id)
 );
 
--- æ∆¿Ãµ ¿⁄µøª˝º∫
+-- ÏïÑÏù¥Îîî ÏûêÎèôÏÉùÏÑ±
 CREATE TABLE SwAutoIndexDef (
 	objId varchar(50) NOT NULL,
 	formId varchar(100) NOT NULL,
 	version int,
 	fieldId varchar(10) NOT NULL,	
 	creator	varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
     primary key (objId)
 );
 
+-- Ïò§ÎùºÌÅ¥ ÏòàÏïΩÏñ¥ Ïù∏ÎìØ(increment)
+--CREATE TABLE SwAutoIndexRuls (
+--	objId varchar(50) NOT NULL,
+--	ruleId varchar(100),
+--	type varchar(50),
+--	codeValue varchar(100),
+--	seperator varchar(10),
+--	increment int,
+--	incrementBy varchar(50),
+--	digits varchar(10),
+--	items varchar(500),
+--	indexSeq int NOT NULL,	
+--    primary key (objId, indexSeq)
+--);
 CREATE TABLE SwAutoIndexRuls (
 	objId varchar(50) NOT NULL,
 	ruleId varchar(100),
 	type varchar(50),
 	codeValue varchar(100),
 	seperator varchar(10),
-	increment int,
+	increments int,
 	incrementBy varchar(50),
 	digits varchar(10),
 	items varchar(500),
@@ -2464,12 +2484,12 @@ CREATE TABLE SwAutoIndexInst (
 	idValue varchar(200),
 	seq int,
 	creator	varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
     primary key (objId)
 );
---∫Œº≠ ±««—
+--Î∂ÄÏÑú Í∂åÌïú
 CREATE TABLE SwAuthDepartment (
 	id varchar(50) NOT NULL,
 	deptId varchar(100),
@@ -2478,7 +2498,7 @@ CREATE TABLE SwAuthDepartment (
 	customUser varchar(4000),
     primary key (id)
 );
---±◊∑Ï ±««—
+--Í∑∏Î£π Í∂åÌïú
 CREATE TABLE SwAuthGroup (
 	id varchar(50) NOT NULL,
 	groupId varchar(100),
@@ -2499,18 +2519,20 @@ CREATE TABLE SWFileDownHistory (
 	refTaskId varchar(50),
 	refTaskName varchar(200),
 	creator	varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
     primary key (id)
 );
 
 CREATE TABLE SwLoginUserHistory (
 	id varchar(50) NOT NULL,
 	userId varchar(50),
-	loginTime datetime,
+	loginTime timestamp,
     primary key (id)
 );
+
+
 CREATE TABLE SWScheduleDef (
 	objId varchar(50) NOT NULL,
 	targetPackageType varchar(10),
@@ -2526,9 +2548,9 @@ CREATE TABLE SWScheduleDef (
 	cronExpression varchar(50),
 	isAutoStart varchar(10),
 	creator	varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
     primary key (objId)
 );
 
@@ -2543,22 +2565,101 @@ CREATE TABLE SWMessageNotice (
 	taskId varchar(100),
 	assignee varchar(50),
 	creator varchar (50),
-	createdTime datetime,
+	createdTime timestamp,
 	modifier varchar (50),
-	modifiedTime datetime,
+	modifiedTime timestamp,
 	primary key (id)
 );
 
 CREATE TABLE SWAlarmNotice (
 	id varchar(50) NOT NULL,
-	noticeTime datetime,
+	noticeTime timestamp,
 	workId varchar(50),
 	recordId varchar(100),
 	targetUser varchar(50),
 	companyId varchar(50),
 	creator varchar (50),
-	createdTime datetime,
+	createdTime timestamp,
 	modifier varchar (50),
-	modifiedTime datetime,
+	modifiedTime timestamp,
 	primary key (id)
 );
+
+
+
+CREATE TABLE SWAuthProxy (
+	id varchar(50) NOT NULL,
+	resourceId varchar(50),
+	type varchar(20),
+	accessLevel varchar(50),
+	accessValue varchar(4000),
+	primary key (id)
+);
+
+
+CREATE TABLE SwReport (
+	id varchar(50) NOT NULL,
+	name varchar(100),
+	type int,
+	targetWorkId varchar(50),
+	targetWorkType int,
+	dataSourceType int,
+	externalServiceId varchar(50),
+	reportTableKey varchar(50),
+	searchFilterId varchar(50),
+	owner varchar(50),
+	chartType int,
+	
+	xAxis varchar(50),
+	xAxisSelector varchar(50),
+	xAxisSort varchar(50),
+	xAxisMaxRecords int,
+	xSecondAxis varchar(50),
+	xSecondAxisSelector varchar(50),
+	xSecondAxisSort varchar(50),
+	yAxis varchar(50),
+	yAxisSelector varchar(50),
+	valueType varchar(50),
+	zAxis varchar(50),
+	zAxisSelector varchar(50),
+	zAxisSort varchar(50),
+	zSecondAxis varchar(50),
+	zSecondAxisSelector varchar(50),
+	zSecondAxisSort varchar(50),
+	workspaceid varchar(100),
+	workspacetype varchar(50),
+	accesslevel varchar(50),
+	accessvalue varchar(4000),
+	creator	varchar(50),
+	createdtime timestamp,
+	modifier varchar(50),
+	modifiedtime timestamp,
+    primary key (id)
+);
+
+
+CREATE TABLE SwReportPane (
+	id varchar(50) NOT NULL,
+	name varchar(100),
+	columnSpans int,
+	position int,
+	reportId varchar(50),
+	reportName varchar(100),
+	reportType int,
+	targetWorkId varchar(50),
+	chartType int,
+	isChartView int,
+	isStacked int,
+	showLegend int,
+	stringLabelRotation varchar(50),
+	owner varchar(50),
+	creator	varchar(50),
+	createdtime timestamp,
+	modifier varchar(50),
+	modifiedtime timestamp,
+    primary key (id)
+);
+
+
+
+

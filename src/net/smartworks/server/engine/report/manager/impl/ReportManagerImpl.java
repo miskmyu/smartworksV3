@@ -37,7 +37,7 @@ import org.hibernate.Query;
 public class ReportManagerImpl extends AbstractManager implements IReportManager  {
 
 	@Override
-	public Data getReportData(String user, String dbType, Map<String, Object> requestBody) throws Exception {
+	public Data getReportData(String user, Map<String, Object> requestBody) throws Exception {
 		/*{
 			"frmWorkReport":
 				{
@@ -57,12 +57,27 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 		}*/
 		
 		String targetWorkId = (String)requestBody.get("targetWorkId");
+		String dbType = this.getDbType();
 		if (targetWorkId.equalsIgnoreCase(SmartWork.ID_ALL_WORKS)) {
 			return getReportDataAllWork(user, dbType, requestBody);
 		} else {
 			return getReportDataTargetWork(user, dbType, requestBody);
 		}
 //		return SmartTest.getReportData2();
+	}
+	
+	
+	public String getInforworkSqlQuery() throws Exception {
+		
+//		select t.c30, (select dept.name from sworguser usr, sworgdept dept where t.c30_id = usr.id and usr.deptid=dept.id) , t.c3, (select usr.authid from sworguser usr where t.c3_id = usr.id)
+//		from (
+//			select tbl.c30, ref.refrecordid as c30_id, c3, ref2.refrecordid as c3_id from dt_1373531630210 tbl, swdomainfield field, swdataref ref, swdomainfield field2, swdataref ref2 
+//			where tbl.id = ref.myrecordid and field.domainid='md_fc704a7b2fa645608ef302798e69185c' and field.tablecolname='c30' and field.formfieldid=ref.myformfieldid
+//			and tbl.id = ref2.myrecordid and field2.domainid='md_fc704a7b2fa645608ef302798e69185c' and field2.tablecolname='c3' and field2.formfieldid=ref2.myformfieldid
+//		) t
+		 
+		return null;
+		
 	}
 	
 	public Data getReportDataTargetWork(String user, String dbType, Map<String, Object> requestBody) throws Exception {
@@ -86,124 +101,11 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 
 		Data reportData = new Data();
 		
-		if (dbType.equalsIgnoreCase("ORACLE")) {
-//			//ORACLE
-//			sqlBuf.append(" select ");
-//			
-//			//String xAxis =  (getColumnName(selReportXAxis) == null ? selReportXAxisSelectorDate == null || selReportXAxisSelectorDate == "" ? getColumnName(selReportXAxis, selReportXAxisSelectorUser) : getColumnName(selReportXAxis, selReportXAxisSelectorDate)  : getColumnName(selReportXAxis));
-//
-//			String tempXSubKey = CommonUtil.toNull(selReportXAxisSelectorDate) == null ? selReportXAxisSelectorUser : selReportXAxisSelectorDate;
-//			
-//			String xAxis =  getColumnNameByUserSelect(selReportXAxis, tempXSubKey);
-//			sqlBuf.append(xAxis);
-//			String zAxis = null;
-//			if (!CommonUtil.isEmpty(selReportZAxis)) {
-//				resultColumnCount = 3;
-//				//zAxis =  (getColumnName(selReportZAxis) == null ? selReportZAxisSelectorDate == null || selReportZAxisSelectorDate == "" ? getColumnName(selReportZAxis, selReportZAxisSelectorUser) : getColumnName(selReportZAxis, selReportZAxisSelectorDate)  : getColumnName(selReportZAxis));
-//				String tempZSubKey = CommonUtil.toNull(selReportZAxisSelectorDate) ==  null ? selReportZAxisSelectorUser : selReportZAxisSelectorDate;
-//				zAxis = getColumnNameByUserSelect(selReportZAxis, tempZSubKey);
-//				sqlBuf.append(" , ").append(zAxis);
-//			}
-//			String function = getZaxisFunction(selReportYAxisValue);
-//			sqlBuf.append(" , ").append(function).append("(").append(getColumnName(selReportYAxis)).append(")");	
-//			
-//			sqlBuf.append(" from ( ").append(getProcessInfoTableForOracleReport(requestBody)).append(" ) tbl");
-//			
-//			sqlBuf.append(" group by ").append(xAxis);
-//			if (zAxis != null) {
-//				sqlBuf.append(" , ").append(zAxis);
-//			}
-//			sqlBuf.append(" order by ").append(xAxis);
-//			if (!CommonUtil.isEmpty(rdoReportXAxisSort)) {
-//				if (rdoReportXAxisSort.equalsIgnoreCase("descend")) {
-//					sqlBuf.append(" desc");
-//				} else if (rdoReportXAxisSort.equalsIgnoreCase("ascend")) {
-//					sqlBuf.append(" asc");
-//				}
-//			}
-//			if (zAxis != null) {
-//				sqlBuf.append(" , ").append(zAxis);
-//				if (!CommonUtil.isEmpty(rdoReportZAxisSort)) {
-//					if (rdoReportZAxisSort.equalsIgnoreCase("descend")) {
-//						sqlBuf.append(" desc");
-//					} else if (rdoReportZAxisSort.equalsIgnoreCase("ascend")) {
-//						sqlBuf.append(" asc");
-//					}
-//				}
-//			}
-//			Query query = this.getSession().createSQLQuery(sqlBuf.toString());
-//			
-//			List list = query.list();
-//			if (list == null || list.isEmpty())
-//				return null;
-//			List objList = new ArrayList();
-//
-//			List<Map<String , Object>> values  = new java.util.ArrayList<Map<String,Object>>();
-//			
-//			List zAxisValueList = new ArrayList();
-//			Map<String, Map<String, BigDecimal>> resultMap = new HashMap<String, Map<String, BigDecimal>>();
-//			for (Iterator itr = list.iterator(); itr.hasNext();) {
-//				Object[] fields = (Object[]) itr.next();
-//				int j = 0;
-//				if (resultColumnCount == 2) {
-//				    Map<String,Object> value = new HashMap<String, Object>();
-//				    value.put(selReportXAxis, (String)fields[j++]);
-//				    value.put(selReportYAxisValue, (BigDecimal)fields[j++]);
-//				    values.add(value);
-//				} else if (resultColumnCount == 3) {
-//					
-//					String value1 = (String)fields[j++];
-//					String value2 = (String)fields[j++];
-//					if (!zAxisValueList.contains(CommonUtil.toNotNull(value2)))
-//						zAxisValueList.add(CommonUtil.toNotNull(value2));
-//					
-//					BigDecimal value3 = (BigDecimal)fields[j++];
-//
-//				    if (resultMap.get(value1) != null) {
-//				    	Map<String, BigDecimal> zAxisMap = resultMap.get(value1);
-//				    	zAxisMap.put(value2, value3);
-//				    } else {
-//				    	Map<String, BigDecimal> zAxisMap = new HashMap<String, BigDecimal>();
-//				    	zAxisMap.put(value2, value3);
-//				    	resultMap.put(value1, zAxisMap);
-//				    }
-//				}
-//			}
-//			if (resultColumnCount == 2) {
-//			    reportData.setValues(values);
-//			    reportData.setGroupNames(new String[]{selReportYAxisValue});
-//			    reportData.setxFieldName(selReportXAxis);
-//			    reportData.setyValueName(selReportYAxisValue);
-//			} else if (resultColumnCount == 3) {
-//				
-//				Iterator itr = resultMap.keySet().iterator();
-//				while (itr.hasNext()) {
-//				    Map<String,Object> value = new HashMap<String, Object>();
-//					String key = (String)itr.next();
-//				    value.put(selReportXAxis, key);
-//					Map<String, BigDecimal> zAxisMap = resultMap.get(key);
-//					for (int i = 0; i < zAxisValueList.size(); i++) {
-//						BigDecimal tempKey = zAxisMap.get((String)zAxisValueList.get(i));
-//						if (CommonUtil.isEmpty(tempKey)) {
-//							value.put((String)zAxisValueList.get(i), 0);
-//						} else {
-//							value.put((String)zAxisValueList.get(i), tempKey);
-//						}
-//					}
-//					values.add(value);
-//				}
-//
-//			    reportData.setValues(values);
-//			    String[] groupNames = new String[zAxisValueList.size()];
-//			    zAxisValueList.toArray(groupNames);
-//			    reportData.setGroupNames(groupNames);
-//			    reportData.setxFieldName(selReportXAxis);
-//			    reportData.setyValueName(selReportYAxisValue);
-//			}
+		if (dbType.equalsIgnoreCase("oracle")) {
 			
-		} else if (dbType.equalsIgnoreCase("MSSQL")) {
+		} else if (dbType.equalsIgnoreCase("sqlserver")) {
 			//MSSQL
-		} else if (dbType.equalsIgnoreCase("POSTGRES")) {
+		} else if (dbType.equalsIgnoreCase("postgresql")) {
 			sqlBuf.append(" select ");
 			
 			//String xAxis =  (getColumnName(selReportXAxis) == null ? selReportXAxisSelectorDate == null || selReportXAxisSelectorDate == "" ? getColumnName(selReportXAxis, selReportXAxisSelectorUser) : getColumnName(selReportXAxis, selReportXAxisSelectorDate)  : getColumnName(selReportXAxis));
@@ -331,21 +233,13 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 			    reportData.setyValueName(selReportYAxisValue);
 			}
 		}
-		
 		return reportData;
 	}
 	
 	public String getInforWorkColumnNameByUserSelect(String key, String subKey) throws Exception {
-		
-		
-		
-		
 		return null;
 	}
 	public String getInforWorkColumnName(String key) throws Exception {
-		
-		
-		
 		return null;
 	}
 	public String getInforWorkTableForReport(String user, Map<String, Object> requestBody) throws Exception {
@@ -365,13 +259,8 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 		
 		Query query = SwManagerFactory.getInstance().getSwdManager().getRecordQuery(user, cond);
 		
-		//System.out.println(query.getQueryString());
-		
 		return query.getQueryString();
 	}
-	
-	
-	
 	
 	public Data getReportDataAllWork(String user, String dbType, Map<String, Object> requestBody) throws Exception {
 		
@@ -394,7 +283,7 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 
 		Data reportData = new Data();
 		
-		if (dbType.equalsIgnoreCase("ORACLE")) {
+		if (dbType.equalsIgnoreCase("oracle")) {
 			//ORACLE
 			sqlBuf.append(" select ");
 			
@@ -509,9 +398,136 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 			    reportData.setyValueName(selReportYAxisValue);
 			}
 			
-		} else if (dbType.equalsIgnoreCase("MSSQL")) {
-			//MSSQL
-		} else if (dbType.equalsIgnoreCase("POSTGRES")) {
+		} else if (dbType.equalsIgnoreCase("sqlserver")) {
+
+			sqlBuf.append(" select ");
+			
+			//String xAxis =  (getColumnName(selReportXAxis) == null ? selReportXAxisSelectorDate == null || selReportXAxisSelectorDate == "" ? getColumnName(selReportXAxis, selReportXAxisSelectorUser) : getColumnName(selReportXAxis, selReportXAxisSelectorDate)  : getColumnName(selReportXAxis));
+
+			String tempXSubKey = CommonUtil.toNull(selReportXAxisSelectorDate) == null ? selReportXAxisSelectorUser : selReportXAxisSelectorDate;
+			
+			String xAxis =  getColumnNameByUserSelect(selReportXAxis, tempXSubKey);
+			sqlBuf.append(xAxis);
+			String zAxis = null;
+			if (!CommonUtil.isEmpty(selReportZAxis)) {
+				resultColumnCount = 3;
+				//zAxis =  (getColumnName(selReportZAxis) == null ? selReportZAxisSelectorDate == null || selReportZAxisSelectorDate == "" ? getColumnName(selReportZAxis, selReportZAxisSelectorUser) : getColumnName(selReportZAxis, selReportZAxisSelectorDate)  : getColumnName(selReportZAxis));
+				String tempZSubKey = CommonUtil.toNull(selReportZAxisSelectorDate) ==  null ? selReportZAxisSelectorUser : selReportZAxisSelectorDate;
+				zAxis = getColumnNameByUserSelect(selReportZAxis, tempZSubKey);
+				sqlBuf.append(" , ").append(zAxis);
+			}
+			String function = getZaxisFunction(selReportYAxisValue);
+			sqlBuf.append(" , ").append(function).append("(").append(getColumnName(selReportYAxis)).append(")");	
+			
+			sqlBuf.append(" from ( ").append(getProcessInfoTableForMsSqlReport(requestBody)).append(" ) tbl");
+			
+			sqlBuf.append(" group by ").append(xAxis);
+			if (zAxis != null) {
+				sqlBuf.append(" , ").append(zAxis);
+			}
+			sqlBuf.append(" order by ").append(xAxis);
+			if (!CommonUtil.isEmpty(rdoReportXAxisSort)) {
+				if (rdoReportXAxisSort.equalsIgnoreCase("descend")) {
+					sqlBuf.append(" desc");
+				} else if (rdoReportXAxisSort.equalsIgnoreCase("ascend")) {
+					sqlBuf.append(" asc");
+				}
+			}
+			if (zAxis != null) {
+				sqlBuf.append(" , ").append(zAxis);
+				if (!CommonUtil.isEmpty(rdoReportZAxisSort)) {
+					if (rdoReportZAxisSort.equalsIgnoreCase("descend")) {
+						sqlBuf.append(" desc");
+					} else if (rdoReportZAxisSort.equalsIgnoreCase("ascend")) {
+						sqlBuf.append(" asc");
+					}
+				}
+			}
+			Query query = this.getSession().createSQLQuery(sqlBuf.toString());
+			
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			List objList = new ArrayList();
+
+			List<Map<String , Object>> values  = new java.util.ArrayList<Map<String,Object>>();
+			
+			List zAxisValueList = new ArrayList();
+			//Map<String, Map<String, BigInteger>> resultMap = new HashMap<String, Map<String, BigInteger>>();
+			//Map<String, Map<String, Object>> resultMap = new HashMap<String, Map<String, Object>>();
+			Map<Object, Map<Object, Object>> resultMap = new HashMap<Object, Map<Object, Object>>();
+			for (Iterator itr = list.iterator(); itr.hasNext();) {
+				Object[] fields = (Object[]) itr.next();
+				int j = 0;
+				if (resultColumnCount == 2) {
+				    Map<String,Object> value = new HashMap<String, Object>();
+				    value.put(selReportXAxis, (String)fields[j++]);
+				    //value.put(selReportYAxisValue, (BigInteger)fields[j++]);
+				    value.put(selReportYAxisValue, (Object)fields[j++]);
+				    values.add(value);
+				} else if (resultColumnCount == 3) {
+					
+//					String value1 = (String)fields[j++];
+//					String value2 = (String)fields[j++];
+					Object value1 = (Object)fields[j++];
+					Object value2 = (Object)fields[j++];
+					if (!zAxisValueList.contains(CommonUtil.toNotNull(value2)))
+						zAxisValueList.add(CommonUtil.toNotNull(value2));
+					
+					//BigInteger value3 = (BigInteger)fields[j++];
+					Object value3 = (Object)fields[j++];
+
+				    if (resultMap.get(value1) != null) {
+				    	//Map<String, BigInteger> zAxisMap = resultMap.get(value1);
+//				    	Map<String, Object> zAxisMap = resultMap.get(value1);
+				    	Map<Object, Object> zAxisMap = resultMap.get(value1);
+				    	zAxisMap.put(value2, value3);
+				    } else {
+				    	//Map<String, BigInteger> zAxisMap = new HashMap<String, BigInteger>();
+//				    	Map<String, Object> zAxisMap = new HashMap<String, Object>();
+				    	Map<Object, Object> zAxisMap = new HashMap<Object, Object>();
+				    	zAxisMap.put(value2, value3);
+				    	resultMap.put(value1, zAxisMap);
+				    }
+				}
+			}
+			if (resultColumnCount == 2) {
+			    reportData.setValues(values);
+			    reportData.setGroupNames(new String[]{selReportYAxisValue});
+			    reportData.setxFieldName(selReportXAxis);
+			    reportData.setyValueName(selReportYAxisValue);
+			} else if (resultColumnCount == 3) {
+				
+				Iterator itr = resultMap.keySet().iterator();
+				while (itr.hasNext()) {
+				    Map<String,Object> value = new HashMap<String, Object>();
+//					String key = (String)itr.next();
+					Object key = (Object)itr.next();
+				    value.put(selReportXAxis, key);
+					//Map<String, BigInteger> zAxisMap = resultMap.get(key);
+				    //Map<String, Object> zAxisMap = resultMap.get(key);
+				    Map<Object, Object> zAxisMap = resultMap.get(key);
+					for (int i = 0; i < zAxisValueList.size(); i++) {
+					//	BigInteger tempKey = zAxisMap.get((String)zAxisValueList.get(i));
+						Object tempKey = zAxisMap.get((String)zAxisValueList.get(i));
+						if (CommonUtil.isEmpty(tempKey)) {
+							value.put((String)zAxisValueList.get(i), 0);
+						} else {
+							value.put((String)zAxisValueList.get(i), tempKey);
+						}
+					}
+					values.add(value);
+				}
+
+			    reportData.setValues(values);
+			    String[] groupNames = new String[zAxisValueList.size()];
+			    zAxisValueList.toArray(groupNames);
+			    reportData.setGroupNames(groupNames);
+			    reportData.setxFieldName(selReportXAxis);
+			    reportData.setyValueName(selReportYAxisValue);
+			}
+			
+		} else if (dbType.equalsIgnoreCase("postgresql")) {
 			sqlBuf.append(" select ");
 			
 			//String xAxis =  (getColumnName(selReportXAxis) == null ? selReportXAxisSelectorDate == null || selReportXAxisSelectorDate == "" ? getColumnName(selReportXAxis, selReportXAxisSelectorUser) : getColumnName(selReportXAxis, selReportXAxisSelectorDate)  : getColumnName(selReportXAxis));
@@ -642,6 +658,118 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 		
 		return reportData;
 	}
+	
+	private String getProcessInfoTableForMsSqlReport(Map<String, Object> requestBody) throws Exception {
+		
+		Map<String, Object> frmWorkReportMap = (Map<String, Object>)requestBody.get("frmWorkReport");
+		String selTargetWorkType = (String)frmWorkReportMap.get("selTargetWorkType");
+		int targetWorkType = Integer.parseInt(selTargetWorkType);
+		String targetWorkId = (String)requestBody.get("targetWorkId");
+		
+		StringBuffer tableBuff = new StringBuffer();
+		
+		tableBuff.append("select result.*, case when result.recordId is null then (select count(*) from swopinion opinion where result.prcobjid = opinion.refid) when result.recordId is not null then (select count(*) from swopinion opinion where result.recordId = opinion.refid) end as opinioncount ");
+		tableBuff.append("from ( ");
+		tableBuff.append("select instance.*, instanceExtProp.prcValue as recordId ");
+		tableBuff.append("from ( ");
+		
+		tableBuff.append("select	prcInst.prcObjid "); 
+		tableBuff.append(" , case when prcInst.prcStatus = '2' then '진행중' when prcInst.prcStatus='3' then '완료' end as prcStatus  ");
+		tableBuff.append(" , prcInst.prcTitle  ");
+		tableBuff.append(" , prcInst.prccreateDate  ");
+		tableBuff.append(" , convert(varchar, prccreatedate, 23) +' '+ datename(HH, prccreatedate) as prccreatedate_yyyymmddhh  ");
+		tableBuff.append(" , convert(varchar, prccreatedate, 23) as prccreatedate_yyyymmdd     ");
+		tableBuff.append(" , datename(yyyy, prccreatedate)+ '-' + datename(mm, prccreatedate) as prccreatedate_yyyymm  ");
+		tableBuff.append(" , datename(yyyy, prccreatedate) as prccreatedate_yyyy ");
+		tableBuff.append(" , datename(yyyy, prccreatedate)+ '-' + datename(mm, prccreatedate) + ' ' + datename(ww, prccreatedate) + '주' as prccreatedate_week  ");
+		tableBuff.append(" , case when datename(MM, prccreatedate) between '01' and '03' then datename(yyyy, prccreatedate) + ' 1분기'   ");
+		tableBuff.append(" 	when datename(MM, prccreatedate) between '04' and '06' then datename(yyyy, prccreatedate) + ' 2분기'   ");
+		tableBuff.append(" 		when datename(MM, prccreatedate) between '07' and '09' then datename(yyyy, prccreatedate) + ' 3분기'  ");
+		tableBuff.append(" 			when datename(MM, prccreatedate) between '10' and '12' then datename(yyyy, prccreatedate) + ' 4분기'  ");  
+		tableBuff.append(" 	end as prccreatedate_quarter  ");
+		tableBuff.append(" , case when datename(MM, prccreatedate) between '01' and '06' then datename(yyyy, prccreatedate) + ' 전반기'   ");
+		tableBuff.append(" 	when datename(MM, prccreatedate) between '04' and '12' then datename(yyyy, prccreatedate) + ' 후반기'   ");
+		tableBuff.append(" 	end as prccreatedate_half  ");
+		tableBuff.append(" , usr.name as prcCreateUser  ");
+		tableBuff.append(" , usr.pos as prcCreateUser_pos  ");
+		tableBuff.append(" , case when usr.locale = 'ko' then '한국어' when usr.locale ='en' then '영어' end as prcCreateUser_locale  ");
+
+		tableBuff.append(" , cast(case when usr.authid = 'ADMINISTRATOR' then '관리자' when usr.authid='USER' then '사용자' end as character varying(100)) as prcCreateUser_authId  ");
+		tableBuff.append(" , dept.name as prccreateuser_dept  ");
+		tableBuff.append(" , prcInst.prcmodifyDate  ");
+		tableBuff.append(" , convert(varchar, prcmodifyDate, 23) +' '+ datename(HH, prcmodifyDate) as prcmodifyDate_yyyymmddhh  ");
+		tableBuff.append(" , convert(varchar, prcmodifyDate, 23) as prcmodifyDate_yyyymmdd  ");
+		tableBuff.append(" , datename(yyyy, prcmodifyDate)+ '-' + datename(mm, prcmodifyDate) as prcmodifyDate_yyyymm  ");
+		tableBuff.append(" , datename(yyyy, prcmodifyDate) as prcmodifyDate_yyyy  ");
+		tableBuff.append(" , datename(yyyy, prcmodifyDate)+ '-' + datename(mm, prcmodifyDate) + ' ' + datename(ww, prcmodifyDate) + '주' as prcmodifyDate_week  ");
+		tableBuff.append(" , case when datename(MM, prcmodifyDate) between '01' and '03' then datename(yyyy, prcmodifyDate) + ' 1분기'   ");
+		tableBuff.append(" 	when datename(MM, prcmodifyDate) between '04' and '06' then datename(yyyy, prcmodifyDate) + ' 2분기'   ");
+		tableBuff.append(" 		when datename(MM, prcmodifyDate) between '07' and '09' then datename(yyyy, prcmodifyDate) + ' 3분기'  ");
+		tableBuff.append(" 			when datename(MM, prcmodifyDate) between '10' and '12' then datename(yyyy, prcmodifyDate) + ' 4분기'    ");
+		tableBuff.append(" 	end as prcmodifyDate_quarter  ");
+		tableBuff.append(" , case when datename(MM, prcmodifyDate) between '01' and '06' then datename(yyyy, prcmodifyDate) + ' 전반기'   ");
+		tableBuff.append(" 	when datename(MM, prcmodifyDate) between '04' and '12' then datename(yyyy, prcmodifyDate) + ' 후반기'   ");
+		tableBuff.append(" 	end as prcmodifyDate_half  ");
+		tableBuff.append(" , lastTask.tskname as lastTaskName  ");
+		tableBuff.append(" , usr2.name as lastTaskuserName  ");
+		tableBuff.append(" , usr2.pos as lastTaskuserName_pos  ");
+		tableBuff.append(" , case when usr2.authid = 'ADMINISTRATOR' then '관리자' when usr2.authid='USER' then '사용자' end as lastTaskuserName_authId  ");
+		tableBuff.append(" , case when usr2.locale = 'ko' then '한국어' when usr2.locale ='en' then '영어' end as lastTaskuserName_locale  ");
+		tableBuff.append(" , dept2.name as lastTaskuserName_dept  ");
+		tableBuff.append(" , case when prcInst.prcworkspacetype='4' then (select name from sworguser where id=prcInst.prcworkspaceid) when prcInst.prcworkspacetype='6' then (select name from sworgdept where id=prcInst.prcworkspaceid) end as workspace "); 
+		tableBuff.append(" from prcprcinst prcInst, sworguser usr, sworgdept dept, sworgdept dept2,  ");
+		tableBuff.append(" (  ");
+		tableBuff.append(" 	select maxTask.lastTskPrcInstId, task.tskName, task.tskAssignee  ");
+		tableBuff.append(" 	from (  ");
+		tableBuff.append(" 		select tskPrcInstId lastTskPrcInstId , max(tskCreateDate) as createDate  ");
+		tableBuff.append(" 		from tsktask  ");
+		tableBuff.append(" 		where tsktype not in ('and','route','SUBFLOW','xor', 'reference', 'approval')  ");
+		tableBuff.append(" 		group by tskprcinstid  ");
+		tableBuff.append(" 	) maxTask,  ");
+		tableBuff.append(" 	tskTask task  ");
+		tableBuff.append(" 	where maxTask.createdate = task.tskcreatedate  ");
+		tableBuff.append(" ) lastTask, sworguser usr2  ");
+		tableBuff.append(" where 1=1 ");
+		
+		if (targetWorkId.equals(SmartWork.ID_ALL_WORKS)) {
+			switch (targetWorkType) {
+			case -1:
+				//모든 업무
+			break;
+			case SmartWork.TYPE_INFORMATION:
+				//정보관리업무만
+				tableBuff.append("and prctype='SINGLE' ");
+			break;
+			case SmartWork.TYPE_PROCESS:
+				//프로세스업무만
+				tableBuff.append("and prctype='PROCESS' ");
+			break;
+			}
+			
+		} else {
+			//특정업
+		}
+		
+		tableBuff.append("and usr.id = prcInst.prccreateUser ");
+		tableBuff.append("and usr.deptid = dept.id ");
+		tableBuff.append("and lastTask.lastTskPrcInstId = prcInst.prcObjid ");
+		tableBuff.append("and usr2.id = lastTask.tskAssignee ");
+		tableBuff.append("and usr2.deptid = dept2.id ");
+				
+		
+		tableBuff.append(") instance ");
+		tableBuff.append("left outer join ");
+		tableBuff.append("prcprcinstextprop instanceExtProp ");
+		tableBuff.append("on instance.prcobjid = instanceExtProp.prcobjid ");
+		tableBuff.append("and instanceExtProp.prcname='recordId' ");
+		tableBuff.append(") result ");
+		
+		
+		return tableBuff.toString();
+		
+	}
+	
+	
 	
 	private String getProcessInfoTableForOracleReport(Map<String, Object> requestBody) throws Exception {
 		

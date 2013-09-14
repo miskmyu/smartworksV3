@@ -648,9 +648,9 @@ public class HbDomainDdlDaoImpl extends HibernateDaoSupport implements IDomainDd
 			} else if(IFormFieldDef.TYPE_TIME.equals(fieldType)) {
 				return IDBDomainField.COLUMN_TYPE_TIME;
 			} else if(IFormFieldDef.TYPE_TEXT.equals(fieldType)) {
-				return IDBDomainField.COLUMN_TYPE_TEXT;
+				return "CLOB";
 			} else if (IFormFieldDef.TYPE_COMPLEX.equals(fieldType)) {
-				return IDBDomainField.COLUMN_TYPE_TEXT;
+				return "CLOB";
 			} else {
 				return DBDomainConstant.COLUMNDATATYPE_DEFAULT;
 			}

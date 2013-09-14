@@ -4900,8 +4900,10 @@ public class InstanceServiceImpl implements IInstanceService {
 											LocalDate localDateValue = null;
 											if(value != null) {
 												localDateValue = LocalDate.convertGMTStringToLocalDate(value);
-												if(localDateValue != null)
-													value = localDateValue.toLocalDateTimeSimpleString();
+												if(localDateValue != null) {
+													//value = localDateValue.toLocalDateTimeSimpleString();
+													value = localDateValue.toDateTimeSimpleString();
+												}
 											}
 										} else if(formatType.equals(FormField.TYPE_FILE)) { 
 											List<IFileModel> fileModelList = getDocManager().findFileGroup(value);

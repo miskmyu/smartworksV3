@@ -228,9 +228,10 @@ public class ReportServiceImpl implements IReportService {
 	public Data getReportDataByDef(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
 		String user = SmartUtil.getCurrentUser().getId();
-//		return SmartTest.getReportData3();
-		return SwManagerFactory.getInstance().getReportManager().getReportData(user, "POSTGRES", requestBody);
 		
+		return SwManagerFactory.getInstance().getReportManager().getReportData(user, requestBody);
+		
+//		return SmartTest.getReportData3();
 //		try{
 //			String dbType = "ORACLE";
 //			return SwManagerFactory.getInstance().getReportManager().getReportData(dbType, requestBody);
