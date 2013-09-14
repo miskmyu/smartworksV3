@@ -111,14 +111,18 @@
 										</tr>
 								<%
 									}
-								}else{
-								%>
-									<tr><td><fmt:message key="common.message.no_instance"/></td></tr>
-								<%
 								}
 								%>
 							</tbody>
 						</table>
+						<%
+						if(SmartUtil.isBlankObject(externalForms)){
+						%>
+							<div class="tc"><fmt:message key="common.message.no_instance"/></div>
+						<%
+						}
+						%>
+						
 						<!-- Paging -->
 						<form name="frmExternalFormListPaging">
 							<!-- 페이징 -->

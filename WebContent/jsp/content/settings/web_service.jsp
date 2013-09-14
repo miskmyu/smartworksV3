@@ -118,6 +118,14 @@
 								%>
 							</tbody>
 						</table>
+						<%
+						if(SmartUtil.isBlankObject(webServices)){
+						%>
+							<div class="tc"><fmt:message key="common.message.no_instance"/></div>
+						<%
+						}
+						%>
+						
 						<!-- Paging -->
 						<form name="frmWebServiceListPaging">
 							<!-- 페이징 -->

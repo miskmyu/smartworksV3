@@ -126,19 +126,19 @@
 											<td><a href=""><%=relatedUsers%></a></td>
 											<td><%if(!SmartUtil.isBlankObject(event.getId())){ %><div class="list_action"><div title="<fmt:message key='common.button.delete'/>" class="js_delete_company_event"> X </div></div><%} %></td>
 										</tr>
-									</a>
 								<%
 									}
-								}else{
-								%>
-									<tr><td><fmt:message key="common.message.no_instance"/></td></tr>
-								<%
 								}
-
 								%>
 							</tbody>
 						</table>
-
+						<%
+						if(SmartUtil.isBlankObject(companyEvents)){
+						%>
+							<div class="tc"><fmt:message key="common.message.no_instance"/></div>
+						<%
+						}
+						%>
 						<form name="frmCompanyEventListPaging">
 							<!-- 페이징 -->
 							<div class="paginate">

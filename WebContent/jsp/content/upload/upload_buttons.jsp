@@ -77,6 +77,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <div class="glo_btn_space js_upload_buttons_page">
+
 <%
 
 	if (!CommonUtil.isEmpty(workId) && workId.equalsIgnoreCase(SmartWork.ID_BOARD_MANAGEMENT)) {
@@ -286,9 +287,8 @@
 	<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 //-->
 
 	<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
-	<div class="fr form_space js_progress_span" ></div>
+	<div class="fr form_space js_progress_span"></div>
 	
 	<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-	<div class="form_space sw_error_message js_upload_error_message cb" style="text-align:right; color: red"></div>
-
+	<span class="form_space sw_error_message js_upload_error_message" style="text-align:right; color: red; line-height:20px"></span>
 </div>

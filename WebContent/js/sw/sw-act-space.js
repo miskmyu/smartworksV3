@@ -103,7 +103,7 @@ $(function() {
 				url : "more_smartcast.sw",
 				data : {
 					fromDate : fromDate,
-					maxSize : 20
+					maxSize : 10
 				},
 				success : function(data, status, jqXHR) {
 					input.parents('li:first').remove();
@@ -126,7 +126,7 @@ $(function() {
 				spaceId : spaceId,
 				fromDate : fromDate,
 				toDate : toDate,
-				maxSize : 20
+				maxSize : 10
 			},
 			success : function(data, status, jqXHR) {
 				input.parents('li:first').remove();

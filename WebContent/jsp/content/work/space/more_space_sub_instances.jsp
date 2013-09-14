@@ -21,7 +21,7 @@
 	String spaceId = request.getParameter("spaceId");
 	String fromDate = request.getParameter("fromDate");
 	String maxSizeStr = request.getParameter("maxSize");
-	int maxSize = (SmartUtil.isBlankObject(maxSizeStr)) ? 20 : Integer.parseInt(maxSizeStr);
+	int maxSize = (SmartUtil.isBlankObject(maxSizeStr)) ? 10 : Integer.parseInt(maxSizeStr);
 
 	InstanceInfo[] subInstances = smartWorks.getSpaceInstancesByDate(spaceId, LocalDate.convertLocalStringToLocalDate(fromDate), maxSize); 
 

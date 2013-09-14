@@ -1765,7 +1765,7 @@ $(function() {
 				url : "more_smartcast.sw",
 				data : {
 					fromDate : '',
-					maxSize : 20
+					maxSize : 10
 				},
 				success : function(data, status, jqXHR) {
 					target.html(data);

@@ -34,7 +34,7 @@
 	String fromDateStr = request.getParameter("fromDate"); //yyyy-MM-dd HH:mm:ss.SSS
 	String maxSizeStr = request.getParameter("maxSize");
 	if(!SmartUtil.isBlankObject(fromDate)) fromDate = LocalDate.convertLocalStringToLocalDate(fromDateStr);
-	int maxSize = (SmartUtil.isBlankObject(maxSizeStr)) ? 20 : Integer.parseInt(maxSizeStr);
+	int maxSize = (SmartUtil.isBlankObject(maxSizeStr)) ? 10 : Integer.parseInt(maxSizeStr);
 
 	TaskInstanceInfo[] moreTasks = smartWorks.getCastTaskInstancesByDate(fromDate, maxSize);
 

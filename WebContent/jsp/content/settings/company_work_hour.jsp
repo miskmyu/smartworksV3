@@ -115,43 +115,45 @@
 									for(WorkHourPolicy whp : workHourPolicies){	
 										WorkHour[] workHours = whp.getWorkHours();
 								%>
-											<tr class="js_edit_work_hour list_action_item border_bottom" policyId=<%=CommonUtil.toNotNull(whp.getId()) %>>
-												<td><a href=""><%=whp.getValidFrom().toLocalDateSimpleString() %></a></td>
-												<td><a href=""><%=LocalDate.getDayLocalString(whp.getFirstDayOfWeek()) %></a></td>
-												<td><a href=""><%=whp.getWorkingDays() %> <fmt:message key="calendar.title.days"/></a></td>
-												<%
-												if(!SmartUtil.isBlankObject(workHours) && workHours.length==7){
-													for(WorkHour workHour : workHours){
-														if(workHour != null) {
-												%>													
-															<td><a href=""><%=LocalDate.convertTimeToString(workHour.getStart()) %> ~ <%=LocalDate.convertTimeToString(workHour.getEnd()) %></a></td>
-														<%
-														} else {
-														%>
-															<td><a href=""><fmt:message key="settings.title.work_hour.none"/></a></td>
-												<%
-														}
+										<tr class="js_edit_work_hour list_action_item border_bottom" policyId=<%=CommonUtil.toNotNull(whp.getId()) %>>
+											<td><a href=""><%=whp.getValidFrom().toLocalDateSimpleString() %></a></td>
+											<td><a href=""><%=LocalDate.getDayLocalString(whp.getFirstDayOfWeek()) %></a></td>
+											<td><a href=""><%=whp.getWorkingDays() %> <fmt:message key="calendar.title.days"/></a></td>
+											<%
+											if(!SmartUtil.isBlankObject(workHours) && workHours.length==7){
+												for(WorkHour workHour : workHours){
+													if(workHour != null) {
+											%>													
+														<td><a href=""><%=LocalDate.convertTimeToString(workHour.getStart()) %> ~ <%=LocalDate.convertTimeToString(workHour.getEnd()) %></a></td>
+													<%
+													} else {
+													%>
+														<td><a href=""><fmt:message key="settings.title.work_hour.none"/></a></td>
+											<%
 													}
-												}else{
-												%>
-													<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-												<%
 												}
-												%>
-												<td><%if(!SmartUtil.isBlankObject(whp.getId())){ %><div class="list_action"><div title="<fmt:message key='common.button.delete'/>" class="js_delete_work_hour"> X </div></div><%} %></td>
-											</tr>
+											}else{
+											%>
+												<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+											<%
+											}
+											%>
+											<td><%if(!SmartUtil.isBlankObject(whp.getId())){ %><div class="list_action"><div title="<fmt:message key='common.button.delete'/>" class="js_delete_work_hour"> X </div></div><%} %></td>
+										</tr>
 								<%
 									}
-								}else{
-								%>
-									<tr><td><fmt:message key="common.message.no_instance"/></td></tr>
-								<%
 								}
-
 								%>
 
 							</tbody>
 						</table>
+						<%
+						if(SmartUtil.isBlankObject(workHourPolicies)){
+						%>
+							<div class="tc"><fmt:message key="common.message.no_instance"/></div>
+						<%
+						}
+						%>
 
 						<form name="frmWorkHourListPaging">
 							<!-- 페이징 -->

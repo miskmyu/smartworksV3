@@ -47,7 +47,7 @@
 	startDateStr = startDate.toLocalDateSimpleString();
 	session.setAttribute("startDate", startDateStr);
 
-	TaskInstanceInfo[] taskInstances = smartWorks.getTaskInstancesByTimeline(contextStr, workSpace.getId(), startDate, 20); 
+	TaskInstanceInfo[] taskInstances = smartWorks.getTaskInstancesByTimeline(contextStr, workSpace.getId(), startDate, 10); 
 	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->

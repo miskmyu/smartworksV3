@@ -248,7 +248,7 @@
 		<span class="fr js_progress_span"></span>
 	
 		<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-		<div class="sw_error_message js_pop_error_message" style="text-align:right; color: red"></div>
+		<div class="sw_error_message js_pop_error_message" style="color: red; line-height: 20px"></div>
 
 	</div>
 	<!-- 버튼 영역 //-->
