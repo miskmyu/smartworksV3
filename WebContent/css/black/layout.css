@@ -121,7 +121,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .srch_wsize_mail{width:195px;height:23px;margin: 28px 0 0; overflow:hidden}
 .srch_icon_only{
 	background:url("../../images/btn_srch_o.png") no-repeat;cursor:pointer;height:23px;
-	width:25px;padding:0; position:relative;top:-20px;left:169px;border:0
+	width:25px;padding:0; position:relative;top:-20px;left:190px;border:0
 }
 .srch_icon_only:hover{background:url("../../images/btn_srch_o.png") -25px 0 no-repeat}
 
@@ -179,7 +179,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{visibility:visible; cu
 .global_menu .pop_admin a {float:left; margin-left:2px}
 
 /*Personal Info*/
-.personal_info {background: url("../../images/personal_info_bg.png")repeat-x scroll 0 0; padding:11px; border-bottom:1px solid #1f1f1f}
+.personal_info {padding:11px}
 .personal_info ul {overflow:hidden}
 .personal_info li {float:left; vertical-align:bottom; margin-right:6px; color:#dddddd; line-height: 16px } 
 .personal_info li.info { width:129px}
@@ -192,14 +192,15 @@ tr.list_action_item:hover td.btn_move_field .move_actions{visibility:visible; cu
 .personal_info a:hover {text-decoration:underline !important}
 
 /* Nav List*/
-.nav_list {width:226px; border-bottom:1px solid #7a7a7a}
+.nav_list {width:226px}
 .nav_list a:link, .nav_list a:visited {color:#dddddd !important}
-.nav_list.top { border-top:1px solid #7a7a7a}
+/* .nav_list.top { border-top:1px solid #7a7a7a}
+ */
 .nav_list.recent .profile_size_s {float:left}
 .nav_list.recent a div {margin:0 0 0 25px}
 .nav_current {color:#fcab4c; text-decoration:underline}
 .nav_tit {background: url("../../images/naviti_bg.jpg") repeat-x scroll 0 0; width:206px; height:38px; padding:7px 10px 10px; color:#FFF}
-.nav_sub_list {border:2px solid #363636; border-top:none; padding-bottom: 10px; background-color:#6b6b6b}
+.nav_sub_list {border-top:none; padding-bottom: 10px; background-color:#6b6b6b}
 .nav_sub_list.noline { border:none; background-color:#444444; padding:5px 0}
 .nav_tit_mail, .nav_tit_default{background: url("../../images/naviti_mail_bg.jpg") repeat-x scroll 0 0; width:206px; padding:4px 10px 4px; height:17px}
 .nav_tit_chat {background-color:#363636; border-top:1px solid #969696; width:205px; padding:10px}

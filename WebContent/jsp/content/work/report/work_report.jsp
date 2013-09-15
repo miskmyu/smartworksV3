@@ -39,8 +39,10 @@
 <!--  전체 레이아웃 -->
 <div class="js_work_report_page mt15" workId="<%=workId %>" reportId="<%=lastReportId%>" reportType="<%=lastReportType %>" chartType="<%=lastChartType%>">
 	<div class="list_title_space solid_line_sb pb3">
-		<div class="title"><fmt:message key="report.title.report" /></div>
-		<div class="title_line_options js_work_report_list_box">
+		<a href="work_report_edit.sw" class="fr js_edit_work_report ml5" title="<fmt:message key='report.button.edit_report'/>">
+			<span class="icon_btn_edit"></span>
+		</a>
+		<div class="title_line_options fr js_work_report_list_box">
 			<select name="selMyReportList" class="js_select_work_report" href="work_report_view.sw?workId=<%=workId%>&workType=<%=work.getType()%>">							
 				<option value="<%=Report.REPORT_ID_NONE %>" 
 					<%if(SmartUtil.isBlankObject(lastReportId) || lastReportId.equals(Report.REPORT_ID_NONE)){ %> selected <%} %>>
@@ -78,9 +80,7 @@
 			</select>
 			
 		</div>			
-		<a href="work_report_edit.sw" class="js_edit_work_report ml5" title="<fmt:message key='report.button.edit_report'/>">
-			<span class="icon_btn_edit"></span>
-		</a>
+ 		<div class="tc w100" style="font-weight:bold; font-size:13px;"><fmt:message key="report.title.report" /></div>
 		<span class="js_progress_span"></span>
 	</div>
 	
