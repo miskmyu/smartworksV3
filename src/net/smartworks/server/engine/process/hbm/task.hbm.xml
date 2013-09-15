@@ -49,6 +49,7 @@
 		<property name="loopCounterInteger" column="tskLoopCnt" type="int"/>
 		<property name="workSpaceId" column="tskWorkSpaceId" type="string" length="100" index="IxTskTask18"/>
 		<property name="workSpaceType" column="tskWorkSpaceType" type="string" length="50"/>
+		<property name="isUserSetAccessLevel" column="isUserSetAccessLevel" type="string" length="10"/>
 		<property name="accessLevel" column="tskAccessLevel" type="string" length="50"/>
 		<property name="accessValue" column="tskAccessValue" type="string" length="4000"/>
 		<array name="extendedProperties" table="TskTaskExtProp">

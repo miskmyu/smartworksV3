@@ -57,6 +57,7 @@ public class PrcProcessInst extends MisObject {
 	private String instVariable;
 	private String workSpaceId;
 	private String workSpaceType;
+	private String isUserSetAccessLevel;
 	private String accessLevel;
 	private String accessValue;
 
@@ -340,5 +341,11 @@ public class PrcProcessInst extends MisObject {
 	}
 	public void setAccessValue(String accessValue) {
 		this.accessValue = accessValue;
+	}
+	public String getIsUserSetAccessLevel() {
+		return isUserSetAccessLevel;
+	}
+	public void setIsUserSetAccessLevel(String isUserSetAccessLevel) {
+		this.isUserSetAccessLevel = isUserSetAccessLevel;
 	}
 }

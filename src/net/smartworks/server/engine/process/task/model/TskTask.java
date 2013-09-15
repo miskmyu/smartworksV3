@@ -115,6 +115,7 @@ public class TskTask extends MisObject {
 	private String targetApprovalStatus;
 	private String workSpaceId;
 	private String workSpaceType;
+	private String isUserSetAccessLevel;
 	private String accessLevel;
 	private String accessValue;
 	
@@ -626,5 +627,11 @@ public class TskTask extends MisObject {
 	}
 	public void setTargetApprovalStatus(String targetApprovalStatus) {
 		this.targetApprovalStatus = targetApprovalStatus;
+	}
+	public String getIsUserSetAccessLevel() {
+		return isUserSetAccessLevel;
+	}
+	public void setIsUserSetAccessLevel(String isUserSetAccessLevel) {
+		this.isUserSetAccessLevel = isUserSetAccessLevel;
 	}
 }

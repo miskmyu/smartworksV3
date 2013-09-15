@@ -1107,6 +1107,8 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		String prcInstId = toTaskProcessInstId(context, data, def);
 		String workSpaceId = context.getWorkSpaceId();
 		String workSpaceType = context.getWorkSpaceType();
+		//isSetUserAccessLevel
+		String isUserSetAccessLevel = context.getIsUserSetAccessLevel();
 		String accessLevel = context.getAccessLevel();
 		String accessValue = context.getAccessValue();
 		if (workSpaceId == null || workSpaceType == null) {
@@ -1193,6 +1195,8 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			task.setDef(defId);
 			task.setWorkSpaceId(workSpaceId);
 			task.setWorkSpaceType(workSpaceType);
+			//isSetUserAccessLevel
+			task.setIsUserSetAccessLevel(isUserSetAccessLevel);
 			task.setAccessLevel(accessLevel);
 			task.setAccessValue(accessValue);
 			task.setMultiInstId(miId);

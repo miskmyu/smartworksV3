@@ -22,6 +22,24 @@ public class DbUtil {
 		super();
 	}
 	
+	public static String getDbFunction(String dbType, String function) throws Exception {
+		
+		if (dbType.equalsIgnoreCase("sqlserver")) {
+			if (function.equalsIgnoreCase("substring")) {
+				return "substring";
+			}
+		} else if (dbType.equalsIgnoreCase("oracle")) {
+			if (function.equalsIgnoreCase("substring")) {
+				return "substr";
+			}
+		} else if (dbType.equalsIgnoreCase("postgresql")) {
+			if (function.equalsIgnoreCase("substring")) {
+				return "substring";
+			}
+		}
+		return null;
+	}
+	
 	public static void execute(String className, String url, String username, String password, String query) throws Exception {
 		Connection con = null;
 		Statement stmt = null;

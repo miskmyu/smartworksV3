@@ -93,7 +93,9 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				buf.append(", diagramId=:diagramId, diagramVersion=:diagramVersion");
 				buf.append(", processId=:processId, diagram=:diagram, isSubInstance=:isSubInstance");
 				buf.append(", instVariable=:instVariable, workSpaceId=:workSpaceId, workSpaceType=:workSpaceType");
-				buf.append(", accessLevel=:accessLevel, accessValue=:accessValue");
+				//isUserSetAccessLevel
+				//buf.append(", accessLevel=:accessLevel, accessValue=:accessValue");
+				buf.append(", isUserSetAccessLevel=:isUserSetAccessLevel, accessLevel=:accessLevel, accessValue=:accessValue");
 				//buf.append(", companyId=:companyId");
 				buf.append(" where objId=:objId");
 				Query query = this.getSession().createQuery(buf.toString());
@@ -116,6 +118,8 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				query.setString(PrcProcessInst.A_INSTVARIABLE, obj.getInstVariable());
 				query.setString(PrcProcessInst.A_WORKSPACEID, obj.getWorkSpaceId());
 				query.setString(PrcProcessInst.A_WORKSPACETYPE, obj.getWorkSpaceType());
+				//isUserSetAccessLevel
+				query.setString("isUserSetAccessLevel", obj.getIsUserSetAccessLevel());
 				query.setString(PrcProcessInst.A_ACCESSLEVEL, obj.getAccessLevel());
 				query.setString(PrcProcessInst.A_ACCESSVALUE, obj.getAccessValue());
 				//query.setString(PrcProcessInst.A_COMPANYID, obj.getCompanyId());
@@ -521,7 +525,9 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				buf.append(" obj.objId, obj.name, obj.creationUser, obj.creationDate, obj.modificationUser, obj.modificationDate");
 				buf.append(", obj.status, obj.title, obj.type, obj.packageId, obj.priority");
 				buf.append(", obj.diagramId, obj.diagramVersion, obj.processId, obj.diagram, obj.isSubInstance");
-				buf.append(", obj.instVariable, obj.workSpaceId, obj.workSpaceType, obj.accessLevel, obj.accessValue ");
+				//isUserSetAccessLevel
+				//buf.append(", obj.instVariable, obj.workSpaceId, obj.workSpaceType, obj.accessLevel, obj.accessValue ");
+				buf.append(", obj.instVariable, obj.workSpaceId, obj.workSpaceType, obj.isUserSetAccessLevel, obj.accessLevel, obj.accessValue ");
 				//buf.append(", obj.companyId");
 			}
 			Query query = this.appendQuery(buf, cond);
@@ -553,6 +559,8 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 					obj.setInstVariable((String)fields[j++]);
 					obj.setWorkSpaceId((String)fields[j++]);
 					obj.setWorkSpaceType((String)fields[j++]);
+					//isUserSetAccessLevel
+					obj.setIsUserSetAccessLevel(((String)fields[j++]));
 					obj.setAccessLevel(((String)fields[j++]));
 					obj.setAccessValue(((String)fields[j++]));
 					//obj.setCompanyId(((String)fields[j++]));
@@ -607,8 +615,19 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		queryBuffer.append(" 			, prcInst.prcPrcId ");
 		queryBuffer.append(" 			, prcInst.prcWorkSpaceId ");
 		queryBuffer.append(" 			, prcInst.prcWorkSpaceType ");
-		queryBuffer.append(" 			, prcInst.prcAccessLevel ");
-		queryBuffer.append(" 			, prcInst.prcAccessValue ");
+		
+		//isUserSetAccessLevel
+		//queryBuffer.append(" 			, prcInst.prcAccessLevel ");
+		//queryBuffer.append(" 			, prcInst.prcAccessValue ");
+		String resourceId = cond.getExtendedAttributeValue("resourceId");
+		if (CommonUtil.isEmpty(resourceId)) {
+			queryBuffer.append(" 			, prcInst.prcAccessLevel ");
+			queryBuffer.append(" 			, prcInst.prcAccessValue ");
+		} else {
+			queryBuffer.append(", case when prcInst.isUserSetAccessLevel is null then (select accessLevel from swauthproxy where resourceid='").append(resourceId).append("') when prcInst.isUserSetAccessLevel ='false' then (select accessLevel from swauthproxy where resourceid='").append(resourceId).append("') when prcInst.isUserSetAccessLevel ='true' then (prcInst.prcAccessLevel) end as prcAccessLevel");
+			queryBuffer.append(", case when prcInst.isUserSetAccessLevel is null then (select accessValue from swauthproxy where resourceid='").append(resourceId).append("') when prcInst.isUserSetAccessLevel ='false' then (select accessValue from swauthproxy where resourceid='").append(resourceId).append("') when prcInst.isUserSetAccessLevel ='true' then (prcInst.prcAccessValue) end as prcAccessValue");
+		}
+		
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskobjid ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskname ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskcreateuser ");

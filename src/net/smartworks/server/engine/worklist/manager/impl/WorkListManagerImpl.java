@@ -21,6 +21,7 @@ import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.DbUtil;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstExtend;
@@ -104,18 +105,47 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append(" 		( ");
 		queryBuffer.append(" 			select *  ");
 		queryBuffer.append(" 			from ( ");
-		queryBuffer.append(" 				select * from tsktask where tskassignee in (").append(userIdIns).append(") ");
-		queryBuffer.append(" 				and tsktype not in ('SUBFLOW','xor','route','and') ");
-		queryBuffer.append(" 				union all ");
-		queryBuffer.append(" 				select * from tsktask where tskprcinstid in ( ");
-		queryBuffer.append(" 					select prcobjid from prcprcinst where prccreateuser='").append(userId).append("' ");
-		queryBuffer.append(" 				) ");
-		queryBuffer.append(" 				and tskobjid not in ( ");
-		queryBuffer.append(" 					select tskobjid from tsktask where tskassignee in (").append(userIdIns).append(") ");
-		queryBuffer.append(" 					 ");
-		queryBuffer.append(" 				) ");
-		queryBuffer.append(" 				and tsktype not in ('SUBFLOW','xor','route','and') ");
-		queryBuffer.append(" 				and tskassignee != '' ");
+		
+//		isUserSetAccessLevel
+//		queryBuffer.append(" 				select * from tsktask where tskassignee in (").append(userIdIns).append(") ");
+//		queryBuffer.append(" 				and tsktype not in ('SUBFLOW','xor','route','and') ");
+//		queryBuffer.append(" 				union all ");
+//		queryBuffer.append(" 				select * from tsktask where tskprcinstid in ( ");
+//		queryBuffer.append(" 					select prcobjid from prcprcinst where prccreateuser='").append(userId).append("' ");
+//		queryBuffer.append(" 				) ");
+//		queryBuffer.append(" 				and tskobjid not in ( ");
+//		queryBuffer.append(" 					select tskobjid from tsktask where tskassignee in (").append(userIdIns).append(") ");
+//		queryBuffer.append(" 					 ");
+//		queryBuffer.append(" 				) ");
+//		queryBuffer.append(" 				and tsktype not in ('SUBFLOW','xor','route','and') ");
+//		queryBuffer.append(" 				and tskassignee != '' ");
+		
+		queryBuffer.append(" 				select tsk.tskobjid ,tsk.tskname, tsk.tskcreateuser, tsk.tskcreatedate, tsk.tskmodifyuser, tsk.tskmodifydate, tsk.tskstatus, tsk.tskcorr,  ");
+		queryBuffer.append(" 					tsk.tsktype, tsk.tskprcinstid, tsk.tsktitle, tsk.tskdesc, tsk.tskpriority, tsk.tskdoc, tsk.tskassigner, tsk.tskassignee, tsk.tskperformer,  ");
+		queryBuffer.append(" 					tsk.tskstartdate, tsk.tskassigndate, tsk.tskexecutedate, tsk.tskduedate, tsk.tskdef, tsk.tskform, tsk.tskmultiinstid, tsk.tskmultiinstorder,  ");
+		queryBuffer.append(" 					tsk.tskmultiinstflowcond, tsk.tskstep, tsk.tskloopcnt, tsk.tskexpectstartdate, tsk.tskexpectenddate, tsk.tskrealstartdate, tsk.tskrealenddate,  ");
+		queryBuffer.append(" 					tsk.tskinstvariable, tsk.isstartactivity, tsk.tskfromreftype, tsk.tskfromrefid, tsk.tskapprovalid, tsk.tskforwardid, tsk.tskisapprovalsourcetask,  ");
+		queryBuffer.append(" 					tsk.tsktargetapprovalstatus, ");
+		queryBuffer.append(" 					tsk.tskworkspaceid, tsk.tskworkspacetype, tsk.tskreftype,  ");
+		queryBuffer.append(" 					case when tsk.isUserSetAccessLevel is null then (select accessLevel from swauthproxy where resourceid=tsk.resourceid) when tsk.isUserSetAccessLevel ='false' then (select accessLevel from swauthproxy where resourceid=tsk.resourceid) when tsk.isUserSetAccessLevel ='true' then (tsk.tskaccessLevel) end as tskaccessLevel, ");
+		queryBuffer.append(" 					case when tsk.isUserSetAccessLevel is null then (select accessValue from swauthproxy where resourceid=tsk.resourceid) when tsk.isUserSetAccessLevel ='false' then (select accessValue from swauthproxy where resourceid=tsk.resourceid) when tsk.isUserSetAccessLevel ='true' then (tsk.tskaccessValue) end as tskaccessValue ");
+		queryBuffer.append(" 				from ( ");
+		queryBuffer.append(" 					select *, case when tsktype='SINGLE' then tskform when tsktype='COMMON' then ").append(DbUtil.getDbFunction(this.getDbType(), "substring")).append( "(tskdef, 38, 36) end as resourceid from tsktask where tskassignee in (").append(userIdIns).append(") ");
+		queryBuffer.append(" 					and tsktype not in ('SUBFLOW','xor','route','and') ");
+		queryBuffer.append(" 					union all ");
+		queryBuffer.append(" 					select *, case when tsktype='SINGLE' then tskform when tsktype='COMMON' then ").append(DbUtil.getDbFunction(this.getDbType(), "substring")).append("(tskdef, 38, 36) end as resourceid from tsktask where tskprcinstid in ( ");
+		queryBuffer.append(" 						select prcobjid from prcprcinst where prccreateuser='").append(userId).append("' ");
+		queryBuffer.append(" 					) ");
+		queryBuffer.append(" 					and tskobjid not in ( ");
+		queryBuffer.append(" 						select tskobjid from tsktask where tskassignee in (").append(userIdIns).append(") ");
+		queryBuffer.append(" 						 ");
+		queryBuffer.append(" 					) ");
+		queryBuffer.append(" 					and tsktype not in ('SUBFLOW','xor','route','and') ");
+		queryBuffer.append(" 					and tskassignee != '' ");
+		queryBuffer.append(" 				) tsk ");
+		
+		
+		
 		queryBuffer.append(" 			) tsktask ");
 		queryBuffer.append(" 			where 1=1 ");
 		
@@ -370,6 +400,22 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 	private Query appendQuery(StringBuffer queryBuffer, TaskWorkCond cond) throws Exception {
 		return appendQuery(queryBuffer, cond, false);
 	}
+	private String getApplyUserSetAccessLevelTaskTableStr() throws Exception {
+		StringBuffer queryBuffer = new StringBuffer();
+		queryBuffer.append(" select tsk.tskobjid ,tsk.tskname, tsk.tskcreateuser, tsk.tskcreatedate, tsk.tskmodifyuser, tsk.tskmodifydate, tsk.tskstatus, tsk.tskcorr, "); 
+		queryBuffer.append(" 	tsk.tsktype, tsk.tskprcinstid, tsk.tsktitle, tsk.tskdesc, tsk.tskpriority, tsk.tskdoc, tsk.tskassigner, tsk.tskassignee, tsk.tskperformer,  ");
+		queryBuffer.append(" 	tsk.tskstartdate, tsk.tskassigndate, tsk.tskexecutedate, tsk.tskduedate, tsk.tskdef, tsk.tskform, tsk.tskmultiinstid, tsk.tskmultiinstorder,  ");
+		queryBuffer.append(" 	tsk.tskmultiinstflowcond, tsk.tskstep, tsk.tskloopcnt, tsk.tskexpectstartdate, tsk.tskexpectenddate, tsk.tskrealstartdate, tsk.tskrealenddate, "); 
+		queryBuffer.append(" 	tsk.tskinstvariable, tsk.isstartactivity, tsk.tskfromreftype, tsk.tskfromrefid, tsk.tskapprovalid, tsk.tskforwardid, tsk.tskisapprovalsourcetask, "); 
+		queryBuffer.append(" 	tsk.tsktargetapprovalstatus, ");
+		queryBuffer.append(" 	tsk.tskworkspaceid, tsk.tskworkspacetype, tsk.tskreftype,  ");
+		queryBuffer.append(" 	case when tsk.isUserSetAccessLevel is null then (select accessLevel from swauthproxy where resourceid=tsk.resourceid) when tsk.isUserSetAccessLevel ='false' then (select accessLevel from swauthproxy where resourceid=tsk.resourceid) when tsk.isUserSetAccessLevel ='true' then (tsk.tskaccessLevel) end as tskaccessLevel, ");
+		queryBuffer.append(" 	case when tsk.isUserSetAccessLevel is null then (select accessValue from swauthproxy where resourceid=tsk.resourceid) when tsk.isUserSetAccessLevel ='false' then (select accessValue from swauthproxy where resourceid=tsk.resourceid) when tsk.isUserSetAccessLevel ='true' then (tsk.tskaccessValue) end as tskaccessValue ");
+		queryBuffer.append(" from ( ");
+		queryBuffer.append(" 	select *,case when tsktype='SINGLE' then tskform when tsktype='COMMON' then ").append(DbUtil.getDbFunction(this.getDbType(), "substring")).append("(tskdef, 38, 36) end as resourceid from tsktask  ");
+		queryBuffer.append(" ) tsk ");
+		return queryBuffer.toString();
+	}
 	private Query appendQuery(StringBuffer queryBuffer , TaskWorkCond cond, boolean isWithoutAuth) throws Exception {
 		
 		String packageStatus = cond.getPackageStatus();
@@ -428,7 +474,13 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append("		, ctg.name as childCtgName ");
 		queryBuffer.append("		, case when ctg.parentId = '_PKG_ROOT_' then null else ctg2.id end as parentCtgId ");
 		queryBuffer.append("		, case when ctg.parentId = '_PKG_ROOT_' then null else ctg2.name end as parentCtgName ");
-		queryBuffer.append("	from tsktask task, ");
+		
+		
+		//isUserSetAccessLevel
+		//queryBuffer.append("	from tsktask task, ");
+		
+		queryBuffer.append(" from (").append(getApplyUserSetAccessLevelTaskTableStr()).append(") task, ");
+		
 		queryBuffer.append("		swform form ");
 		queryBuffer.append("		left outer join ");
 		queryBuffer.append("		swpackage pkg ");

@@ -962,7 +962,6 @@ CREATE TABLE SwReportPane (
 	reportType int,
 	targetWorkId varchar(50),
 	chartType int,
-	isChartView bit,
 	isStacked bit,
 	showLegend bit,
 	stringLabelRotation varchar(50),
@@ -973,3 +972,9 @@ CREATE TABLE SwReportPane (
 	modifiedtime datetime,
     primary key (id)
 );
+
+
+alter table tsktask add isUserSetAccessLevel varchar(10)
+
+alter table prcprcinst add isUserSetAccessLevel varchar(10)
+

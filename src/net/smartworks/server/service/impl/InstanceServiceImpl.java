@@ -2428,10 +2428,10 @@ public class InstanceServiceImpl implements IInstanceService {
 
 				//userSetAccessLevel
 				//authProxy
-				//boolean isDefaultAccessPolicy = SwManagerFactory.getInstance().getSwaManager().compareAccessPolicyWithAuthProxy(userId, formId, accessLevel, accessValue);
+				boolean isDefaultAccessPolicy = SwManagerFactory.getInstance().getSwaManager().compareAccessPolicyWithAuthProxy(userId, formId, accessLevel, accessValue);
 				//사용자가 선택한 접근권한과 기본 빌더의 접근권한을 비교하여 사용자가 선택한 접근권한이라면 나중에 빌더의 권한이 바뀌더라도 적용되지 않는다
-				//if (!isDefaultAccessPolicy) 
-				//	obj.setIsUserSetAccessLevel("true");
+				if (!isDefaultAccessPolicy) 
+					obj.setIsUserSetAccessLevel("true");
 				
 				
 				obj.setAccessLevel(accessLevel);
@@ -4190,6 +4190,13 @@ public class InstanceServiceImpl implements IInstanceService {
 
 				task.setWorkSpaceId(workSpaceId);
 				task.setWorkSpaceType(workSpaceType);
+				
+				//isUserSetAccessLevel
+				boolean isDefaultAccessPolicy = SwManagerFactory.getInstance().getSwaManager().compareAccessPolicyWithAuthProxy(userId, processId, accessLevel, accessValue);
+				//사용자가 선택한 접근권한과 기본 빌더의 접근권한을 비교하여 사용자가 선택한 접근권한이라면 나중에 빌더의 권한이 바뀌더라도 적용되지 않는다
+				if (!isDefaultAccessPolicy) 
+					task.setIsUserSetAccessLevel("true");
+				
 				task.setAccessLevel(accessLevel);
 				task.setAccessValue(accessValue);
 				
@@ -4684,8 +4691,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			String formName = swdDomain.getFormName();
 			String titleFieldId = swdDomain.getTitleFieldId();
 
-			if(!ModelConverter.isAccessibleAllInstance(formId, userId))
-				swdRecordCond.setCreationUser(userId);
+//			if(!ModelConverter.isAccessibleAllInstance(formId, userId))
+//				swdRecordCond.setCreationUser(userId);
 
 			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
 			if(workId.equals(SmartWork.ID_BOARD_MANAGEMENT) || workId.equals(SmartWork.ID_EVENT_MANAGEMENT))
@@ -6041,8 +6048,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			pkgPackageCond.setPackageId(workId);
 			PkgPackage pkgPackage = getPkgManager().getPackage(userId, pkgPackageCond, IManager.LEVEL_LITE);
 
-			if(!ModelConverter.isAccessibleAllInstance(ModelConverter.getResourceIdByPkgPackage(pkgPackage), userId))
-				prcInstCond.setCreationUser(userId);
+			String resourceId = ModelConverter.getResourceIdByPkgPackage(pkgPackage);
+			prcInstCond.setExtendedAttributeValue("resourceId", resourceId);
+			
+			//if(!ModelConverter.isAccessibleAllInstance(resourceId, userId))
+			//	prcInstCond.setCreationUser(userId);
 
 			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
 			//prcInstCond.setWorkSpaceIdIns(workSpaceIdIns);

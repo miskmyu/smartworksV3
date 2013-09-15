@@ -292,6 +292,8 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 				task.setDef(domainId + "|" + recordId);
 				task.setWorkSpaceId(obj.getWorkSpaceId());
 				task.setWorkSpaceType(obj.getWorkSpaceType());
+				//isUserSetAccessLevel
+				task.setIsUserSetAccessLevel(obj.getIsUserSetAccessLevel());
 				task.setAccessLevel(obj.getAccessLevel());
 				task.setAccessValue(obj.getAccessValue());
 				task.setExtendedPropertyValue("domainId", domainId);
