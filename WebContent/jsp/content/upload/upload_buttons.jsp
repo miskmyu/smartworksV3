@@ -6,7 +6,6 @@
 
 <%@page import="net.smartworks.util.SmartMessage"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
-<%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.community.info.GroupInfo"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
@@ -160,7 +159,7 @@
 				<input name="selWorkSpace" type="hidden" value="<%=spaceId%>">
 				<input name="selWorkSpaceType" type="hidden" value="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT %>">
 			<%
-			}else if((workSpace.getClass().equals(Group.class)  && foundInCommunities) || workSpace.getClass().equals(Course.class)){
+			}else if((workSpace.getClass().equals(Group.class)  && foundInCommunities)){
 			%>
 				<input name="selWorkSpace" type="hidden" value="<%=spaceId%>">
 				<input name="selWorkSpaceType" type="hidden" value="<%=ISmartWorks.SPACE_TYPE_GROUP %>">

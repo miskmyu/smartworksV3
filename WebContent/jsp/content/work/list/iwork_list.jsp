@@ -218,7 +218,6 @@
 				<div>
 					<!-- 목록보기 타이틀-->
 					<div class="list_title_space js_work_list_title mt15">
-						<div class="title"><fmt:message key="common.title.instance_list" /></div>
 						<div class="title_line_btns">
 							<%
 							if(work.getWritePolicy().isWritableForMe()) {
@@ -239,12 +238,6 @@
 						</div>
 					
 						<div class="title_line_options">
-							<form name="frmSearchInstance" class="po_left"> 
-								<div class="srch_wh srch_wsize">
-									<input name="txtSearchInstance" class="nav_input" value="<%=CommonUtil.toNotNull(searchKey) %>" type="text" placeholder="<fmt:message key='search.search_instance' />">
-									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
-								</div>
-							</form>
 							<form class="form_space po_left js_form_filter_name" name="frmIworkFilterName">
 								<select name="selFilterName" class="js_select_search_filter">
 									<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" 
@@ -284,9 +277,15 @@
 									%>
 								</select>
 							</form>
-							<a href="search_filter.sw?workId=<%=workId%>" class="js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
+							<a href="search_filter.sw?workId=<%=workId%>" class="po_left js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
 								<div class="icon_btn_edit"></div>
 							</a>
+							<form name="frmSearchInstance" class="po_left ml10"> 
+								<div class="srch_wh srch_wsize">
+									<input name="txtSearchInstance" class="nav_input" value="<%=CommonUtil.toNotNull(searchKey) %>" type="text" placeholder="<fmt:message key='search.search_instance' />">
+									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
+								</div>
+							</form>
 							<span class="js_progress_span"></span>
 						</div>
 					</div>

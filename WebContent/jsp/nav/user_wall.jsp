@@ -30,7 +30,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="nav_sub_list noline js_space_wall" style="display:block">
+<div class="pb10 noline js_space_wall" style="display:block">
 	<div id="m_setting">
 		<!-- 내부 메뉴 -->				
 		<ul>
@@ -38,11 +38,11 @@
 			<%
 			if(wid.equals(cUser.getId())){				
 			%>
-				<a href="<%=workSpace.getSpaceController() %>?cid=<%=workSpace.getSpaceContextId() %>" class="js_content"><span class="js_collapse_detail  arr_off fl" style="margin-left:-11px;margin-top:2px"></span><span class="icon_user_space ml-1"><span class="mt3"><fmt:message key="space.title.my.all_items"/></span></span></a>
+				<a href="<%=workSpace.getSpaceController() %>?cid=<%=workSpace.getSpaceContextId() %>" class="js_content"><span class="js_collapse_detail  arr_off fl" style="margin-left:-11px;margin-top:2px"></span><span><fmt:message key="space.title.my.all_items"/></span></a>
 			<%
 			}else{				
 			%>
-				<a href="<%=workSpace.getSpaceController() %>?cid=<%=workSpace.getSpaceContextId() %>" class="js_content"><span class="js_collapse_detail arr_off fl" style="margin-left:-11px;margin-top:2px"></span><span class="icon_user_space ml-1"><span class="mt3"><fmt:message key="space.title.user.all_items"/></span></span></a>
+				<a href="<%=workSpace.getSpaceController() %>?cid=<%=workSpace.getSpaceContextId() %>" class="js_content"><span class="js_collapse_detail arr_off fl" style="margin-left:-11px;margin-top:2px"></span><span><fmt:message key="space.title.user.all_items"/></span></a>
 			<%
 			}
 			%>

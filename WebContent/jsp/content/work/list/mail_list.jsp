@@ -116,49 +116,49 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<!-- 타이틀 -->
-<div class="body_titl list js_mail_list_title_page">
-	<div class="body_titl_area ti_mail title">
-		<div class="title myspace_h"><%=mailFolder.getFullName() %>
-			<span class="t_mail"><span class="t_s11"><fmt:message key="mail.title.count.unread"/></span><span class="new_mail <%=unreadCountTarget%>"><%=mailFolder.getUnreadItemCount() %></span><span class="bar"> / </span><%=mailFolder.getTotalItemCount() %></span><span class=" t_s11"><fmt:message key="mail.title.count"/></span>
-		</div>
-		<%
-		if(mailFolder.getType() == MailFolder.TYPE_SYSTEM_JUNK){
-		%>
-			<a href="" class="js_junk_list_btn" title="<fmt:message key='common.button.edit_junk_list' />">
-				<span class="icon_btn_edit ml10 mt8"></span>
-			</a>
-			<span class="js_progress_span"></span>
-		<%
-		}
-		%>
-	</div>
-
-	<!-- 메일 검색 -->
-	<form name="frmSearchInstance" class="mail_srch">
-		<div class="srch_wh srch_wsize_mail">
-			<input name="txtSearchInstance" class="nav_input" value="<%=CommonUtil.toNotNull(searchKey) %>" type="text" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>" />
-			<button title="<fmt:message key="search.search"/>" onclick="selectListParam($(this).parents('.js_mail_list_title_page').find('.js_progress_span:first'), false);return false;"></button>
-		</div>
-	</form>
-	<span class="js_progress_span fr" style="margin:30px 5px 0 0"></span>
-	<!-- 메일 검색//-->
-
-	<div class="solid_line cb"></div>
-</div>
-<!-- 타이틀 //-->
-
-<div class="js_junk_list_form"></div>
-
-			
 <!-- 컨텐츠 레이아웃-->
 <div class="section_portlet js_mail_list_page js_work_list_page" currentHref="<%=SmartUtil.getLastHref(request) %>" workId=<%=work.getId()%> folderId="<%=folderId%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block ">
 		<ul class="portlet_r" style="display: block">
 
+			<!-- 타이틀 -->
+			<div class="body_titl js_mail_list_title_page">
+				<div class="body_titl_area ti_mail title">
+					<div class="title myspace_h"><%=mailFolder.getFullName() %>
+						<span class="t_mail"><span class="t_s11"><fmt:message key="mail.title.count.unread"/></span><span class="new_mail <%=unreadCountTarget%>"><%=mailFolder.getUnreadItemCount() %></span><span class="bar"> / </span><%=mailFolder.getTotalItemCount() %></span><span class=" t_s11"><fmt:message key="mail.title.count"/></span>
+					</div>
+					<%
+					if(mailFolder.getType() == MailFolder.TYPE_SYSTEM_JUNK){
+					%>
+						<a href="" class="js_junk_list_btn" title="<fmt:message key='common.button.edit_junk_list' />">
+							<span class="icon_btn_edit ml10 mt8"></span>
+						</a>
+						<span class="js_progress_span"></span>
+					<%
+					}
+					%>
+				</div>
+			
+				<!-- 메일 검색 -->
+				<form name="frmSearchInstance" class="mail_srch">
+					<div class="srch_wh srch_wsize_mail">
+						<input name="txtSearchInstance" class="nav_input" value="<%=CommonUtil.toNotNull(searchKey) %>" type="text" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>" />
+						<button title="<fmt:message key="search.search"/>" onclick="selectListParam($(this).parents('.js_mail_list_title_page').find('.js_progress_span:first'), false);return false;"></button>
+					</div>
+				</form>
+				<span class="js_progress_span fr" style="margin:30px 5px 0 0"></span>
+				<!-- 메일 검색//-->
+			
+				<div class="solid_line cb"></div>
+			</div>
+			<!-- 타이틀 //-->
+			
 			<!-- 컨텐츠 -->
 			<div class="contents_space">
+			
+				<div class="js_junk_list_form"></div>
+			
 				<div class="buttonSet">
 					<button class="js_delete_mails_btn"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
 					<%if(mailFolder.getType() == MailFolder.TYPE_SYSTEM_TRASH){ %><button class="js_empty_trash_btn"><fmt:message key="common.button.empty_trash"/></button><%} %>

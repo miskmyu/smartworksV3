@@ -218,12 +218,12 @@ function logout() {
 <!-- 헤더에 있는 메뉴들 및 연결 기능 -->
 <div class="top_menu">
 	<ul class="fl" style="width:470px">
-		<!--  홈메뉴  -->
+<%-- 		<!--  홈메뉴  -->
  		<li class="idx1">
 				<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>"><fmt:message key="header.top_menu.home" /></a>
 		</li>
 		<!--  홈메뉴  //-->
- 
+ --%> 
 		<!--  대시보드 메뉴  -->
 		<li class="idx2">
  				<a href="dashboard.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>"><fmt:message key="header.top_menu.dashboard" /></a> 
