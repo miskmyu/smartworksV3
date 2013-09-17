@@ -305,6 +305,13 @@
 							<span class="txt_btn_end"></span>
 						</a>
 					</span>
+					<span class="btn_gray">
+						<a href="" class="js_retire_member">
+							<span class="txt_btn_start"></span>
+								<span class="txt_btn_center"><fmt:message key="common.button.retire_member"/></span>
+							<span class="txt_btn_end"></span>
+						</a>
+					</span>
 				<%
 				}
 				%>

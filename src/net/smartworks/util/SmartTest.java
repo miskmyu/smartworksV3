@@ -83,6 +83,7 @@ import net.smartworks.model.work.info.SmartFormInfo;
 import net.smartworks.model.work.info.SmartTaskInfo;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.SocialWorkInfo;
+import net.smartworks.model.work.info.UsedWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.model.work.info.WorkInfoList;
@@ -1865,5 +1866,20 @@ public class SmartTest {
 	public static int getUserReportCount(String targetWorkId) throws Exception{
 		if(SmartWork.ID_ALL_WORKS.equals(targetWorkId)) return 31;
 		return 56;
+	}
+	
+	public static UserInfo getHeadByUserId(String userId) throws Exception{
+		return SmartTest.getUserInfo1();
+	}
+	
+	public static UsedWorkInfo[] getUsedWorkListByUserId(String userId) throws Exception{
+		UsedWorkInfo usedWork1 = new UsedWorkInfo();
+		WorkInfo work = new WorkInfo("work1", "테스트업무", SmartWork.TYPE_INFORMATION);
+		work.setProvidedBy(Work.PROVIDED_BY_USER);
+		work.setRunning(true);
+		usedWork1.setWork(work);
+		usedWork1.setWorkFullpathName("기본>업무보고");
+		usedWork1.setCreatedInstanceCount(56);
+		return new UsedWorkInfo[] {usedWork1};		
 	}
 }

@@ -257,6 +257,8 @@ smartMessage.bundle['en'] = {
 	createReportPaneError : "Error has been occured while adding new Report Pane in Dashboard. Please contact the Administrator!",
 	setReportPaneSucceed : "Report Pane in Dashboard has been changed successfully.",
 	setReportPaneError : "Error has been occured while changing Report Pane in Dashboard. Please contact the Administrator!",
+	executeRetireMemberSucceed : "Retire Member has been excuted successfully.",
+	executeRetireMemberError : "Error has been occured while executing Retire Member. Please contact the Administrator!",
 	replyMailError : "Error has been occured while repling Mail Instance. Please contact the Administrator!",
 	forwardMailError : "Error has been occured while forwarding Mail Instance. Please contact the Administrator!",
 	fetchMailsError : "Error has been occured while fetching Mail Instances. Please contact the Administrator!",
@@ -311,7 +313,8 @@ smartMessage.bundle['en'] = {
 	addAdjunctConfirmation : "Do you really want to add Adjunct Member? ",
 	removeCommentConfirmation : "Do you really want to remove the Comment?",
 	downloadAppConfirmation : "Do you really want to download the Work App?",
-	removeAllRepeatConfirmation : "It is repeating event. Do you want to remove all repeating events?",
+	removeAllRepeatConfirmation : "It is repeating event. Do you really want to remove all repeating events?",
+	retireMemberConfirmation : "If retired, the member would be disabled all functions. Do you really want to retire this member though?",
 	
 	spaceOverDateSeleted : "Future date has been selected. Please select today or before!",
 			

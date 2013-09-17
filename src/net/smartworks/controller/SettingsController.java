@@ -318,4 +318,10 @@ public class SettingsController extends ExceptionInterceptor {
 		smartworks.addAdjunctMember(requestBody, request);
 	}
 	
+	@RequestMapping(value = "/execute_retire_member", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void executeRetireMember(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.executeRetireMember(requestBody, request);
+	}
+	
 }

@@ -212,4 +212,10 @@ public class PopupController {
 		return SmartUtil.returnMnv(request, "jsp/popup/pop_new_report_pane.jsp", "");
 	}
 
+	@RequestMapping("/pop_retire_member")
+	public ModelAndView popRetireMember(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_retire_member.jsp", "");
+	}
+
 }

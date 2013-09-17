@@ -27,6 +27,7 @@ import net.smartworks.model.calendar.WorkHour;
 import net.smartworks.model.calendar.WorkHourPolicy;
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
+import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
@@ -38,6 +39,7 @@ import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WSDLOperation;
 import net.smartworks.model.service.WSDLPort;
 import net.smartworks.model.service.WebService;
+import net.smartworks.model.work.info.UsedWorkInfo;
 import net.smartworks.server.engine.authority.model.SwaDepartment;
 import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
 import net.smartworks.server.engine.common.manager.IManager;
@@ -76,6 +78,7 @@ import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.ISettingsService;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
 import org.claros.commons.mail.models.ConnectionProfile;
@@ -2670,5 +2673,19 @@ public class SettingsServiceImpl implements ISettingsService {
 				SwManagerFactory.getInstance().getSwoManager().getUserExtend(userId, swoUser.getId(), false);
 			}
 		}
+	}
+	@Override
+	public UsedWorkInfo[] getUsedWorkListByUserId(String userId) throws Exception {
+		return SmartTest.getUsedWorkListByUserId(userId);
+	}
+	@Override
+	public UserInfo getHeadByUserId(String userId) throws Exception {
+		// TODO Auto-generated method stub
+		return SmartTest.getHeadByUserId(userId);
+	}
+	@Override
+	public void executeRetireMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 }

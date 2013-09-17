@@ -10,12 +10,14 @@ import net.smartworks.model.RecordList;
 import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.calendar.CompanyEvent;
 import net.smartworks.model.calendar.WorkHourPolicy;
+import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.mail.EmailServer;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
+import net.smartworks.model.work.info.UsedWorkInfo;
 
 public interface ISettingsService {
 
@@ -89,4 +91,9 @@ public interface ISettingsService {
 	
 	public abstract void addAdjunctMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract UsedWorkInfo[] getUsedWorkListByUserId(String userId) throws Exception;
+	
+	public abstract UserInfo getHeadByUserId(String userId) throws Exception;
+	
+	public abstract void executeRetireMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 }

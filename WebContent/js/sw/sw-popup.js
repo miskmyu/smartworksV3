@@ -683,6 +683,29 @@ smartPop = {
 		});
 	},
 	
+	retireMember : function(userId){
+		if(isEmpty(userId)) return;
+		$.get("pop_retire_member.sw", {userId: userId}, function(data){
+			$(data).modal({
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
+				containerCss:{
+					height:500,
+					width:800
+				},
+				autoResize : true,
+				overlayClose: false,
+				onShow: function(dialog){
+					$('.js_close_retire_member').die('click');
+					$('.js_close_retire_member').live( 'click', function(e){
+						smartPop.close();
+						return false;
+					});
+				}
+			});
+		});
+	},
+	
 	selectApprovalLine : function(){
 		$.get("pop_select_approval_line.sw", {}, function(data){
 			$(data).modal({

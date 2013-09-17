@@ -78,6 +78,7 @@ import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.model.work.info.SmartWorkInfo;
+import net.smartworks.model.work.info.UsedWorkInfo;
 import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.model.work.info.WorkInfoList;
 import net.smartworks.server.engine.common.model.Property;
@@ -1865,5 +1866,17 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public String removeWorkReportPane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return reportService.removeWorkReportPane(requestBody, request);
+	}
+	@Override
+	public UsedWorkInfo[] getUsedWorkListByUserId(String userId) throws Exception {
+		return settingsService.getUsedWorkListByUserId(userId);
+	}
+	@Override
+	public UserInfo getHeadByUserId(String userId) throws Exception {
+		return settingsService.getHeadByUserId(userId);
+	}
+	@Override
+	public void executeRetireMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		settingsService.executeRetireMember(requestBody, request);
 	}
 }

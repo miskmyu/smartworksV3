@@ -263,6 +263,8 @@ smartMessage.bundle['ko'] = {
 	changeMailPasswordError : "메일 비밀번호 수정 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	downloadAppSucceed : "업무를 앱스토어에서 [받은업무]함으로 정상적으로 내려받았습니다.",
 	downloadAppError : "앱스토어에서 업무를 내려받는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	executeRetireMemberSucceed : "구성원 퇴직처리가 정상적으로 완료 되었습니다.",
+	executeRetireMemberError : "구성원 퇴직처리 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	replyMailError : "메일에 답장하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	forwardMailError : "메일을 전달하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	fetchMailsError : "메일을 가져오는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
@@ -320,6 +322,7 @@ smartMessage.bundle['ko'] = {
 	removeCommentConfirmation : "댓글을 삭제하려고 합니다. 정말로 삭제하시겠습니까?",
 	downloadAppConfirmation : "업무를 내려받기하려고 합니다. 정말로 내려받으시겠습니까? ",
 	removeAllRepeatConfirmation : "삭제하는 일정이 반복일정입니다. 반복일정 모두를 삭제하시겠습니까?",
+	retireMemberConfirmation : "구성원을 퇴직처리하게 되면 더이상 사용할 수 없게 됩니다. 그래도 퇴직처리를 하시겠습니까?",
 	
 	spaceOverDateSeleted : "미래의 날짜를 선택하였습니다. 오늘이나 과거의 날짜를 선택하십시요!",
 	

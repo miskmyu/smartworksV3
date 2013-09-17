@@ -82,6 +82,7 @@ import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.model.work.info.SmartWorkInfo;
+import net.smartworks.model.work.info.UsedWorkInfo;
 import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.model.work.info.WorkInfoList;
 import net.smartworks.server.engine.common.model.Property;
@@ -834,4 +835,9 @@ public interface ISmartWorks {
 
 	public abstract ReportPane[] getMyDashboard() throws Exception;
 	
+	public abstract UsedWorkInfo[] getUsedWorkListByUserId(String userId) throws Exception;
+	
+	public abstract UserInfo getHeadByUserId(String userId) throws Exception;
+
+	public abstract void executeRetireMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 }
