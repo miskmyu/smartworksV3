@@ -73,7 +73,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  전체 레이아웃 -->
-<div class="pop_corner_all js_pop_retire_member_page">
+<div class="pop_corner_all js_pop_retire_member_page js_work_transfer_page" fromMemberId="<%=retiredUserId%>">
 
 	<!-- 팝업 타이틀 -->
 	<div class="form_title">
@@ -112,17 +112,18 @@
 				<tr>
 					<th><fmt:message key="transfer.title.work_transfer" /></th>
 					<td>
-						<div>
-							<input name="rdoTransferAll" type="radio" value="true" checked><fmt:message key="transfer.label.all_works"/>
-							<input name="rdoTransferAll" type="radio" value="false"><fmt:message key="transfer.label.selected_works"/>
+						<div >
+							<input class="js_click_transfer_all" name="rdoTransferAll" type="radio" value="true" checked><fmt:message key="transfer.label.all_works"/>
+							<input class="js_click_selected_transfer" name="rdoTransferAll" type="radio" value="false"><fmt:message key="transfer.label.selected_works"/>
+							<span class="js_sub_progress_span"></span>
 						</div>
 					</td>
 				</tr>
 				<tr>
 					<th></th>
-					<td>
-						<jsp:include page="/jsp/popup/pop_retire_work_list.jsp">
-							<jsp:param value="<%=retiredUserId %>" name="retireUserId"/>
+					<td id="js_used_work_list">
+						<jsp:include page="/jsp/content/settings/used_work_list.jsp">
+							<jsp:param value="" name="userId"/>
 						</jsp:include>
 					</td>
 				</tr>

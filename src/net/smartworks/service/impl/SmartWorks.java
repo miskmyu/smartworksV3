@@ -1879,4 +1879,8 @@ public class SmartWorks implements ISmartWorks {
 	public void executeRetireMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		settingsService.executeRetireMember(requestBody, request);
 	}
+	@Override
+	public void executeWorkTransfer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		settingsService.executeWorkTransfer(requestBody, request);
+	}
 }

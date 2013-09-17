@@ -96,4 +96,6 @@ public interface ISettingsService {
 	public abstract UserInfo getHeadByUserId(String userId) throws Exception;
 	
 	public abstract void executeRetireMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void executeWorkTransfer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 }

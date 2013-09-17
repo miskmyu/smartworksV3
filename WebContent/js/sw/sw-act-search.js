@@ -259,6 +259,9 @@ $(function() {
 			inputTarget.focus().parents('.js_community_names').change();
 		}		
 		
+		if(!isEmpty(input.parents('td[fieldId="txtFromMember"]'))){
+			input.parents('.js_work_transfer_page').attr('fromMemberId', comId).find('input.js_click_transfer_all').click();
+		}
 		return false;
 	});
 
@@ -274,6 +277,9 @@ $(function() {
 		var searchFilter = input.parents('.js_search_filter_page');
 		if(!isEmpty(searchFilter)){
 			userField.find('input[name="txtFilterStringOperand"]').attr('value', '');
+		}
+		if(!isEmpty(input.parents('td[fieldId="txtFromMember"]'))){
+			input.parents('.js_work_transfer_page').attr('fromMemberId', '').find('input.js_click_transfer_all').click();
 		}
 		input.parents('span.js_community_item').remove();
 		userField.find('.js_community_names').change();

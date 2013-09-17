@@ -691,7 +691,7 @@ smartPop = {
 				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:500,
-					width:800
+					width:740
 				},
 				autoResize : true,
 				overlayClose: false,

@@ -72,6 +72,12 @@ public class SettingsController extends ExceptionInterceptor {
 		return SmartUtil.returnMnv(request, "jsp/content/settings/approval_line.jsp", "approval_line.tiles");
 	}
 
+	@RequestMapping("/work_transfer")
+	public ModelAndView workTransfer(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/settings/work_transfer.jsp", "work_transfer.tiles");
+	}
+
 	@RequestMapping("/web_service")
 	public ModelAndView webserviceManagement(HttpServletRequest request, HttpServletResponse response) {
 
@@ -294,6 +300,12 @@ public class SettingsController extends ExceptionInterceptor {
 		return SmartUtil.returnMnv(request, "jsp/content/settings/edit_email_server.jsp", "edit_email_server.tiles");
 	}
 
+	@RequestMapping("/used_work_list")
+	public ModelAndView usedWorkList(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/settings/used_work_list.jsp", "");
+	}
+
 	@RequestMapping(value = "/create_email_server", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody void createEmailServer(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -322,6 +334,12 @@ public class SettingsController extends ExceptionInterceptor {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void executeRetireMember(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.executeRetireMember(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/execute_work_transfer", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void executeWorkTransfer(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.executeWorkTransfer(requestBody, request);
 	}
 	
 }

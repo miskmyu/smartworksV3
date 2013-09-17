@@ -687,4 +687,43 @@ $(function() {
 		else input.next().hide();
 	});
 	
+	$('.js_click_transfer_all').live('click', function(e){
+		var input = $(targetElement(e));
+		var workTransfer = input.parents('.js_work_transfer_page');
+		var fromMemberId = workTransfer.attr("fromMember");
+		var target = workTransfer.find('#js_used_work_list');
+		
+		$.ajax({
+			url : "used_work_list.sw",
+			success : function(data, status, jqXHR) {
+				target.html(data);
+			}			
+		});
+	});
+	
+	$('.js_click_selected_transfer').live('click', function(e){
+		var input = $(targetElement(e));
+		var workTransfer = input.parents('.js_work_transfer_page');
+		var fromMemberId = workTransfer.attr("fromMemberId");
+		var target = workTransfer.find('#js_used_work_list');
+		var progressSpan = workTransfer.find('.js_sub_progress_span');
+		smartPop.progressCont(progressSpan);
+		
+		$.ajax({
+			url : "used_work_list.sw?userId=" + fromMemberId,
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				smartPop.closeProgress();
+			}			
+		});
+	});
+	
+	$('.js_toggle_select_all_work').live('click', function(e){
+		var input = $(targetElement(e));
+		var checkValue = input.is(':checked');
+		var checkBoxes = input.parents('.js_used_work_list_page').find('input[name="chkSelectRetireWork"]');
+		checkBoxes.attr('checked', checkValue);
+		return true;
+	});
+
 });

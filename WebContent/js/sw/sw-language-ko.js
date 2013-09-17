@@ -265,6 +265,8 @@ smartMessage.bundle['ko'] = {
 	downloadAppError : "앱스토어에서 업무를 내려받는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	executeRetireMemberSucceed : "구성원 퇴직처리가 정상적으로 완료 되었습니다.",
 	executeRetireMemberError : "구성원 퇴직처리 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	executeWorkTransferSucceed : "업무이관이 정상적으로 완료 되었습니다.",
+	executeWorkTransferError : "업무이관 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	replyMailError : "메일에 답장하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	forwardMailError : "메일을 전달하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	fetchMailsError : "메일을 가져오는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
@@ -300,6 +302,7 @@ smartMessage.bundle['ko'] = {
 	removeItemsNotSelected : "삭제할 항목들을 선택하지 않았습니다. 항목을 선택하고 다시 하시기 바랍니다.",
 	replyItemNotSelected : "답장할 항목을 선택하지 않았습니다. 항목을 선택하고 다시 하시기 바랍니다.",
 	forwardItemNotSelected : "전달할 항목을 선택하지 않았습니다. 항목을 선택하고 다시 하시기 바랍니다.",
+	sameMemberError : "업무 인계자와 인수자가 같습니다. 인계자나 인수자를 다시 선택하여 주시기 바랍니다.",
 	
 	moveConfirmation : "선택한 항목들을 이동하려고 합니다. 정말로 이동하시겠습니까? ",
 	removeConfirmation : "항목을 삭제하려고 합니다. 정말로 삭제하시겠습니까? ",

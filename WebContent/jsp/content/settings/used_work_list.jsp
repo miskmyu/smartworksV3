@@ -27,24 +27,24 @@
 	ISmartWorks smartWorks = (ISmartWorks)request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 	
-	String retiredUserId = request.getParameter("retiredUserId");
-	UsedWorkInfo[] usedWorkList =  smartWorks.getUsedWorkListByUserId(retiredUserId);
+	String userId = request.getParameter("userId");
+	UsedWorkInfo[] usedWorkList =  SmartUtil.isBlankObject(userId) ? null : smartWorks.getUsedWorkListByUserId(userId);
 	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="list_contents js_pop_instance_list_page" style="height:400px; border:1px solid #c7c7c7;width:666px !important">
+<div class="list_contents js_used_work_list_page" style="height:400px; border:1px solid #c7c7c7;width:600px !important">
 
 	<!-- 목록 테이블 -->
-	<table style="width:666px !important">
+	<table style="width:600px !important">
 		<%
 		if (usedWorkList != null) {
 		%>
 			<thead>
 				<tr class="tit_bg">
-					<th class="r_line" width="40px"><input type="checkbox" class="js_toggle_select_all" /></th>
-					<th class="r_line" width="500px"><fmt:message key="common.title.work_name"/></th>		
+					<th class="r_line" width="40px"><input type="checkbox" class="js_toggle_select_all_work" /></th>
+					<th class="r_line" width="440px"><fmt:message key="common.title.work_name"/></th>		
 					<th class="r_line" width="100px"><fmt:message key="common.title.work_instance_count"/></th>		
 				</tr>
 			</thead>
@@ -55,7 +55,7 @@
 				%>
 					<tr>
 						<td class="tc"  width="40px"><input name="chkSelectRetireWork" type="checkbox" value="<%=usedWork.getWork().getId() %>"/></td>
-						<td class="tl" width="500px"><%=usedWork.getWorkFullpathName() %></td>
+						<td class="tl" width="440px" title="<%=usedWork.getWorkFullpathName() %>"><%=usedWork.getWorkFullpathName() %></td>
 						<td class="tr" width="80px"><%=usedWork.getCreatedInstanceCount()%></td>
 					</tr>				
 				<%
@@ -67,8 +67,8 @@
 		%>
 			<thead>
 				<tr class="tit_bg">
-					<th class="r_line" width="40px"><input type="checkbox" checked class="js_toggle_select_all" /></th>
-					<th class="r_line" width="500px"><fmt:message key="common.title.work_name"/></th>		
+					<th class="r_line" width="40px"><input type="checkbox" class="js_toggle_select_all" /></th>
+					<th class="r_line" width="440px"><fmt:message key="common.title.work_name"/></th>		
 					<th class="r_line" width="100px"><fmt:message key="common.title.work_instance_count"/></th>		
 				</tr>
 			</thead>

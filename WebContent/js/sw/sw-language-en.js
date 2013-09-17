@@ -259,6 +259,8 @@ smartMessage.bundle['en'] = {
 	setReportPaneError : "Error has been occured while changing Report Pane in Dashboard. Please contact the Administrator!",
 	executeRetireMemberSucceed : "Retire Member has been excuted successfully.",
 	executeRetireMemberError : "Error has been occured while executing Retire Member. Please contact the Administrator!",
+	executeWorkTransferSucceed : "Work Transfer has been excuted successfully.",
+	executeWorkTransferError : "Error has been occured while executing Work Transfer. Please contact the Administrator!",
 	replyMailError : "Error has been occured while repling Mail Instance. Please contact the Administrator!",
 	forwardMailError : "Error has been occured while forwarding Mail Instance. Please contact the Administrator!",
 	fetchMailsError : "Error has been occured while fetching Mail Instances. Please contact the Administrator!",
@@ -294,6 +296,7 @@ smartMessage.bundle['en'] = {
 	removeItemsNotSelected : "No selected items to remove. Please retry after select items.",
 	replyItemNotSelected : "No selected item to reply. Please retry after select items.",
 	forwardItemNotSelected : "No selected item to forward. Please retry after select items.",
+	samMemberError : "Same Member is not valid for Work Transfer. Please use different users.",
 		
 	moveConfirmation : "Do you really want to move selected items?",
 	removeConfirmation : "Do you really want to remove?",

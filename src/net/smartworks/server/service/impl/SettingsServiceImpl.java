@@ -2688,4 +2688,9 @@ public class SettingsServiceImpl implements ISettingsService {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void executeWorkTransfer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }

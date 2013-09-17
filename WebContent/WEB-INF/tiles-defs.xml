@@ -124,7 +124,11 @@
 		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
 		<put-attribute name="content" value="/jsp/content/settings/approval_line.jsp" />
 	</definition>
-	<definition name="web_service" extends="smart">
+	<definition name="work_transfer" extends="smart">
+		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
+		<put-attribute name="content" value="/jsp/content/settings/work_transfer.jsp" />
+	</definition>
+		<definition name="web_service" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
 		<put-attribute name="content" value="/jsp/content/settings/web_service.jsp" />
 	</definition>
