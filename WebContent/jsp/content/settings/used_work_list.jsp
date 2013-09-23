@@ -27,14 +27,14 @@
 	ISmartWorks smartWorks = (ISmartWorks)request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 	
-	String userId = request.getParameter("userId");
-	UsedWorkInfo[] usedWorkList =  SmartUtil.isBlankObject(userId) ? null : smartWorks.getUsedWorkListByUserId(userId);
+	String comId = request.getParameter("comId");
+	UsedWorkInfo[] usedWorkList =  SmartUtil.isBlankObject(comId) ? null : smartWorks.getUsedWorkListByCommunityId(comId);
 	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="list_contents js_used_work_list_page" style="height:400px; border:1px solid #c7c7c7;width:600px !important">
+<div class="list_contents js_used_work_list_page" style="height:300px; border:1px solid #c7c7c7;width:600px !important">
 
 	<!-- 목록 테이블 -->
 	<table style="width:600px !important">
@@ -48,7 +48,7 @@
 					<th class="r_line" width="100px"><fmt:message key="common.title.work_instance_count"/></th>		
 				</tr>
 			</thead>
- 			<tbody style="height:360px; overflow-y:auto; position:absolute">
+ 			<tbody style="height:260px; overflow-y:auto; position:absolute">
 				<%
 				for(int i=0; i<usedWorkList.length; i++){
 					UsedWorkInfo usedWork = usedWorkList[i];

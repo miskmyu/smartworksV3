@@ -305,14 +305,16 @@ smartPop = {
 							$('form.js_validation_required').validate({ showErrors: showErrors}).form();
 						}
 
-						if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true'))
-							communityItems.remove();
 						var isSameId = false;
-						for(var i=0; i<communityItems.length; i++){
-							var oldComId = $(communityItems[i]).attr('comId');
-							if(oldComId !=null && oldComId === comId){
-								isSameId = true;
-								break;
+						if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true')){
+							communityItems.remove();
+						}else{
+							for(var i=0; i<communityItems.length; i++){
+								var oldComId = $(communityItems[i]).attr('comId');
+								if(oldComId !=null && oldComId === comId){
+									isSameId = true;
+									break;
+								}
 							}
 						}
 						if(!isSameId){
@@ -425,14 +427,16 @@ smartPop = {
 							$('form.js_validation_required').validate({ showErrors: showErrors}).form();
 						}
 
-						if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true'))
-							communityItems.remove();
 						var isSameId = false;
-						for(var i=0; i<communityItems.length; i++){
-							var oldComId = $(communityItems[i]).attr('comId');
-							if(oldComId !=null && oldComId === comId){
-								isSameId = true;
-								break;
+						if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true')){
+							communityItems.remove();
+						}else{
+							for(var i=0; i<communityItems.length; i++){
+								var oldComId = $(communityItems[i]).attr('comId');
+								if(oldComId !=null && oldComId === comId){
+									isSameId = true;
+									break;
+								}
 							}
 						}
 						if(!isSameId){
@@ -457,6 +461,153 @@ smartPop = {
 							var comId = input.attr('userId');
 							var comName = input.text();
 							selectionProc(comId, comName);
+							smartPop.close();
+							target.html('');
+							return false;
+						});
+						$('a.js_pop_select_user').focus();
+						$('a.js_pop_select_user').keypress(function (e) {
+							var e = window.event || e;
+							var keyCode = e.which || e.keyCode;
+					        if (keyCode == $.ui.keyCode.ENTER) {
+					            $('a.js_pop_select_user').click();
+					            return false;
+					        } else {
+					            return true;
+					        }
+					    });
+					}else{
+						$('a.js_pop_select_users').live('click', function(e){
+							var input = $(targetElement(e));
+							var selections = input.parents('.pop_list_area').find('input.js_checkbox:checked');
+							if(isEmpty(selections)) return false;
+							
+							for(var i=0; i<selections.length; i++){
+								var selection = $(selections[i]);
+								var comId = selection.attr('value');
+								var comName = selection.attr("comName");
+								selectionProc(comId, comName);
+							}
+							smartPop.close();
+							target.html('');
+							return false;
+						});
+						$('a.js_pop_select_users').focus();
+						$('a.js_pop_select_users').keypress(function (e) {
+							var e = window.event || e;
+							var keyCode = e.which || e.keyCode;
+					        if (keyCode == $.ui.keyCode.ENTER) {
+					            $('a.js_pop_select_users').click();
+					            return false;
+					        } else {
+					            return true;
+					        }
+					    });
+					}
+				}
+			});
+		});
+	},
+
+	selectCommunity : function(communityItems, target, width, isMultiUsers, bottomUp){
+		target.html('');
+		var conWidth = (!isEmpty(width) && width>360) ? width : 360;
+		var url = "pop_select_community.sw?multiUsers="+isMultiUsers; 
+		var containerCss = (bottomUp) ? {width: conWidth, bottom: 0} : {width: conWidth}; 
+		$.get(url, function(data){
+			$(data).modal({
+				appendTo: target,
+				opacity: 0,
+				autoPosition: false,
+				fixed: false,
+				overlayCss: {backgroundColor:"#000"},
+				containerCss: containerCss,
+				overlayClose: true,
+				onShow: function(dialog){
+
+					var selectionProc = function(comId, comName){
+						var userField = target.parents('.js_type_userField:first');
+						var inputTarget = userField.find('input.js_auto_complete:first');
+						if(inputTarget.parents('.sw_required').hasClass('sw_error')){
+							inputTarget.parents('.sw_required').removeClass('sw_error');
+							$('form.js_validation_required').validate({ showErrors: showErrors}).form();
+						}
+
+						var isSameId = false;
+						if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true')){
+							communityItems.remove();
+						}else{
+							for(var i=0; i<communityItems.length; i++){
+								var oldComId = $(communityItems[i]).attr('comId');
+								if(oldComId !=null && oldComId === comId){
+									isSameId = true;
+									break;
+								}
+							}
+						}
+						if(!isSameId){
+							var comNameLong = comName;
+							$("<span class='js_community_item user_select' comId='" + comId + "' comName='" + comName + "'>" + comNameLong
+									+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
+						}
+						inputTarget.focus();
+						userField.find('.js_community_names').change();
+					};
+					
+					$('a.js_pop_select_user').die('click');
+					$('a.js_pop_select_users').die('click');
+					$('.js_pop_select_community').die('click');
+					if(isEmpty(isMultiUsers) || isMultiUsers!== 'true'){
+						$('.js_pop_select_community').live('click', function(e){
+							var input = $(targetElement(e));
+							var comId = input.attr('comId');
+							var comName = input.text();
+							selectionProc(comId, comName);
+							if(!isEmpty(input.parents('td[fieldId="txtFromCommunity"]'))){
+								var workTransfer = input.parents('.js_work_transfer_page');
+								workTransfer.attr('fromCommunityId', comId);
+								workTransfer.find('tr').hide();
+								workTransfer.find('input.js_click_transfer_all').click();
+								input.parents('tr:first').show();
+								if(isUserId(comId)){
+									workTransfer.attr('comType', 'user');
+									workTransfer.find('tr.js_transfer_user').show();
+								}else if(isDepartmentId(comId)){
+									workTransfer.attr('comType', 'department');
+									workTransfer.find('tr.js_transfer_depart').show();				
+								}else{
+									workTransfer.attr('comType', 'group');
+									workTransfer.find('tr.js_transfer_group').show();
+									
+								}
+							}
+							smartPop.close();
+							target.html('');
+							return false;
+						});
+						$('a.js_pop_select_user').live('click', function(e){
+							var input = $(targetElement(e));
+							var comId = input.attr('userId');
+							var comName = input.text();
+							selectionProc(comId, comName);
+							if(!isEmpty(input.parents('td[fieldId="txtFromCommunity"]'))){
+								var workTransfer = input.parents('.js_work_transfer_page');
+								workTransfer.attr('fromCommunityId', comId);
+								workTransfer.find('tr').hide();
+								workTransfer.find('input.js_click_transfer_all').click();
+								input.parents('tr:first').show();
+								if(isUserId(comId)){
+									workTransfer.attr('comType', 'user');
+									workTransfer.find('tr.js_transfer_user').show();
+								}else if(isDepartmentId(comId)){
+									workTransfer.attr('comType', 'department');
+									workTransfer.find('tr.js_transfer_depart').show();				
+								}else{
+									workTransfer.attr('comType', 'group');
+									workTransfer.find('tr.js_transfer_group').show();
+									
+								}
+							}
 							smartPop.close();
 							target.html('');
 							return false;
@@ -690,7 +841,7 @@ smartPop = {
 				opacity: 10,
 				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
-					height:500,
+					height:600,
 					width:740
 				},
 				autoResize : true,
@@ -698,6 +849,29 @@ smartPop = {
 				onShow: function(dialog){
 					$('.js_close_retire_member').die('click');
 					$('.js_close_retire_member').live( 'click', function(e){
+						smartPop.close();
+						return false;
+					});
+				}
+			});
+		});
+	},
+	
+	abolishDepartment : function(departId){
+		if(isEmpty(departId)) return;
+		$.get("pop_abolish_department.sw", {departId: departId}, function(data){
+			$(data).modal({
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
+				containerCss:{
+					height:600,
+					width:740
+				},
+				autoResize : true,
+				overlayClose: false,
+				onShow: function(dialog){
+					$('.js_close_abolish_department').die('click');
+					$('.js_close_abolish_department').live( 'click', function(e){
 						smartPop.close();
 						return false;
 					});

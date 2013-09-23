@@ -260,6 +260,16 @@ isEmailAddress = function(emailAddress){
 	return false;		
 };
 
+isUserId = function(comId){
+	return isEmailAddress(comId);
+};
+
+isDepartmentId = function(comId){
+	if(isEmpty(comId) || isUserId(comId))
+		return false;
+	return (comId.substring(0, 5) == ('dept_'));
+};
+
 function getByteLength(s){
 	var len = 0;
 	if ( s == null ) return 0;

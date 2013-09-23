@@ -303,6 +303,7 @@ smartMessage.bundle['ko'] = {
 	replyItemNotSelected : "답장할 항목을 선택하지 않았습니다. 항목을 선택하고 다시 하시기 바랍니다.",
 	forwardItemNotSelected : "전달할 항목을 선택하지 않았습니다. 항목을 선택하고 다시 하시기 바랍니다.",
 	sameMemberError : "업무 인계자와 인수자가 같습니다. 인계자나 인수자를 다시 선택하여 주시기 바랍니다.",
+	sameCommunityError : "업무 이관대상과 인수공간이 같습니다. 이관대상이나 인수공간을 다시 선택하여 주시기 바랍니다.",
 	
 	moveConfirmation : "선택한 항목들을 이동하려고 합니다. 정말로 이동하시겠습니까? ",
 	removeConfirmation : "항목을 삭제하려고 합니다. 정말로 삭제하시겠습니까? ",

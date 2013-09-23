@@ -1415,6 +1415,22 @@ $(function() {
 		return false;
 	});
 
+	$('a.js_communitypicker_button').live('click', function(e) {
+		var userField = $(targetElement(e)).parents('.js_type_userField:first');
+		var communityItems = userField.find('.js_community_item');
+		var target = userField.find('.js_community_popup:first');
+		var width = userField.find('.form_value').find('div:first').width();
+		var isMultiUsers = userField.attr('multiUsers');
+
+		var documentHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
+		var inputPosition = userField.position();
+		var inputOffset = userField.offset();
+		var listTop = inputOffset.top + userField.height();
+		var bottomUp = false;
+		smartPop.selectCommunity(communityItems, target, width, isMultiUsers, bottomUp);
+		return false;
+	});
+
 	$('a.js_departpicker_button').live('click', function(e) {
 		var departField = $(targetElement(e)).parents('.js_type_departmentField:first');
 		var communityItems = departField.find('.js_community_item');

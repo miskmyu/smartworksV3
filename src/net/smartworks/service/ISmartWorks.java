@@ -835,7 +835,7 @@ public interface ISmartWorks {
 
 	public abstract ReportPane[] getMyDashboard() throws Exception;
 	
-	public abstract UsedWorkInfo[] getUsedWorkListByUserId(String userId) throws Exception;
+	public abstract UsedWorkInfo[] getUsedWorkListByCommunityId(String communityId) throws Exception;
 	
 	public abstract UserInfo getHeadByUserId(String userId) throws Exception;
 

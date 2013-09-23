@@ -297,6 +297,7 @@ smartMessage.bundle['en'] = {
 	replyItemNotSelected : "No selected item to reply. Please retry after select items.",
 	forwardItemNotSelected : "No selected item to forward. Please retry after select items.",
 	samMemberError : "Same Member is not valid for Work Transfer. Please use different users.",
+	sameCommunityError : "Same Community is not valid for Work Transfer. Please use different communities.",
 		
 	moveConfirmation : "Do you really want to move selected items?",
 	removeConfirmation : "Do you really want to remove?",

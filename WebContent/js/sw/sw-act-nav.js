@@ -259,6 +259,7 @@ $(function() {
 		var groupId = input[0].getAttribute("groupId");
 		var departmentId = input[0].getAttribute("departmentId");
 		var comlistByDepart = input.parents('.js_comlist_by_depart_page');
+		var selectCommunity = input.parents('.js_pop_select_community_page');
 		var folderId = input[0].getAttribute("folderId");
 		if(!isEmpty(comlistByDepart)){
 			var editMember = comlistByDepart.parents('.js_organization_management_page').find('.js_edit_member');
@@ -268,6 +269,14 @@ $(function() {
 					editMember.html(data).slideDown();;
 				}			
 			});			
+		}else if(!isEmpty(selectCommunity)){
+			var prevSpan = $(targetElement(e)).prev();
+			if(!isEmpty(prevSpan) && prevSpan.hasClass('js_plus_minus_span') && (!isEmpty(departmentId) || !isEmpty(groupId))){
+				$(targetElement(e)).addClass('js_pop_select_community').attr('comId', departmentId || groupId).click();
+				smartPop.close();
+				target.html('');				
+				return false;		
+			}
 		}
 		if (url == 'undefined' || (categoryId==null && isEmpty(groupId) && isEmpty(departmentId) && isEmpty(folderId))) {
 			return false;

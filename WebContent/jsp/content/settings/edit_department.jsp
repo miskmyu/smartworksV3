@@ -158,10 +158,18 @@
 				<%
 				if(!SmartUtil.isBlankObject(departId)){
 				%>
-					<span class="btn_gray">
+<%-- 					<span class="btn_gray">
 						<a href="" class="js_delete_department">
 							<span class="txt_btn_start"></span>
 								<span class="txt_btn_center"><fmt:message key="common.button.delete"/></span>
+							<span class="txt_btn_end"></span>
+						</a>
+					</span>
+ --%>
+					<span class="btn_gray">
+						<a href="" class="js_abolish_department">
+							<span class="txt_btn_start"></span>
+								<span class="txt_btn_center"><fmt:message key="common.button.abolish_department"/></span>
 							<span class="txt_btn_end"></span>
 						</a>
 					</span>

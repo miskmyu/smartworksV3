@@ -1868,8 +1868,8 @@ public class SmartWorks implements ISmartWorks {
 		return reportService.removeWorkReportPane(requestBody, request);
 	}
 	@Override
-	public UsedWorkInfo[] getUsedWorkListByUserId(String userId) throws Exception {
-		return settingsService.getUsedWorkListByUserId(userId);
+	public UsedWorkInfo[] getUsedWorkListByCommunityId(String communityId) throws Exception {
+		return settingsService.getUsedWorkListByCommunityId(communityId);
 	}
 	@Override
 	public UserInfo getHeadByUserId(String userId) throws Exception {

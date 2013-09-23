@@ -224,14 +224,16 @@ $(function() {
 			selectedApproverInfo.nextAll('span').hide();
 			selectedApproverInfo.nextAll('input').attr('value', comId);
 		}else{
-			if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true') || (!isEmpty(departmentField)))
-				communityItems.remove();
 			var isSameId = false;
-			for(var i=0; i<communityItems.length; i++){
-				var oldComId = $(communityItems[i]).attr('comId');
-				if(oldComId !=null && oldComId === comId){
-					isSameId = true;
-					break;
+			if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true') || (!isEmpty(departmentField))){
+				communityItems.remove();
+			}else{
+				for(var i=0; i<communityItems.length; i++){
+					var oldComId = $(communityItems[i]).attr('comId');
+					if(oldComId !=null && oldComId === comId){
+						isSameId = true;
+						break;
+					}
 				}
 			}
 			if(!isSameId){
@@ -259,8 +261,23 @@ $(function() {
 			inputTarget.focus().parents('.js_community_names').change();
 		}		
 		
-		if(!isEmpty(input.parents('td[fieldId="txtFromMember"]'))){
-			input.parents('.js_work_transfer_page').attr('fromMemberId', comId).find('input.js_click_transfer_all').click();
+		if(!isEmpty(input.parents('td[fieldId="txtFromCommunity"]'))){
+			var workTransfer = input.parents('.js_work_transfer_page');
+			workTransfer.attr('fromCommunityId', comId);
+			workTransfer.find('tr').hide();
+			workTransfer.find('input.js_click_transfer_all').click();
+			input.parents('tr:first').show();
+			if(isUserId(comId)){
+				workTransfer.attr('comType', 'user');
+				workTransfer.find('tr.js_transfer_user').show();
+			}else if(isDepartmentId(comId)){
+				workTransfer.attr('comType', 'department');
+				workTransfer.find('tr.js_transfer_depart').show();				
+			}else{
+				workTransfer.attr('comType', 'group');
+				workTransfer.find('tr.js_transfer_group').show();
+				
+			}
 		}
 		return false;
 	});
@@ -278,8 +295,11 @@ $(function() {
 		if(!isEmpty(searchFilter)){
 			userField.find('input[name="txtFilterStringOperand"]').attr('value', '');
 		}
-		if(!isEmpty(input.parents('td[fieldId="txtFromMember"]'))){
-			input.parents('.js_work_transfer_page').attr('fromMemberId', '').find('input.js_click_transfer_all').click();
+		if(!isEmpty(input.parents('td[fieldId="txtFromCommunity"]'))){
+			var workTransfer = input.parents('.js_work_transfer_page');
+			workTransfer.attr('fromCommunityId', '').attr('comType', '').find('input.js_click_transfer_all').click();
+			workTransfer.find('tr').hide();
+			input.parents('tr:first').show();
 		}
 		input.parents('span.js_community_item').remove();
 		userField.find('.js_community_names').change();

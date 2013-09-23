@@ -403,30 +403,13 @@ $(function() {
 		var input = $(targetElement(e));
 		var userId = input.parents('.js_edit_member_page').attr('userId');
 		smartPop.retireMember(userId);
-//		smartPop.confirm(smartMessage.get("retireMemberConfirmation"), function(){
-//			var userId = input.parents('.js_edit_member_page').attr('userId');
-//			var departmentId = input.parents('.js_edit_member_page').attr('parentId');
-//			var paramsJson = {};
-//			paramsJson['userId'] = userId;
-//			paramsJson['departmentId'] = departmentId;
-//			console.log(JSON.stringify(paramsJson));
-//			$.ajax({
-//				url : "remove_member.sw",
-//				contentType : 'application/json',
-//				type : 'POST',
-//				data : JSON.stringify(paramsJson),
-//				success : function(data, status, jqXHR) {
-//					document.location.href = "organization_management.sw";					
-//				},
-//				error : function(e) {
-//					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-//					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeMemberError"), function(){
-//					});
-//					
-//				}
-//				
-//			});
-//		});
+		return false;
+	});
+	
+	$('a.js_abolish_department').live('click', function(e) {
+		var input = $(targetElement(e));
+		var departmentId = input.parents('.js_edit_department_page').attr('departId');
+		smartPop.abolishDepartment(departmentId);
 		return false;
 	});
 	
@@ -690,7 +673,6 @@ $(function() {
 	$('.js_click_transfer_all').live('click', function(e){
 		var input = $(targetElement(e));
 		var workTransfer = input.parents('.js_work_transfer_page');
-		var fromMemberId = workTransfer.attr("fromMember");
 		var target = workTransfer.find('#js_used_work_list');
 		
 		$.ajax({
@@ -704,13 +686,13 @@ $(function() {
 	$('.js_click_selected_transfer').live('click', function(e){
 		var input = $(targetElement(e));
 		var workTransfer = input.parents('.js_work_transfer_page');
-		var fromMemberId = workTransfer.attr("fromMemberId");
+		var fromCommunityId = workTransfer.attr("fromCommunityId");
 		var target = workTransfer.find('#js_used_work_list');
 		var progressSpan = workTransfer.find('.js_sub_progress_span');
 		smartPop.progressCont(progressSpan);
 		
 		$.ajax({
-			url : "used_work_list.sw?userId=" + fromMemberId,
+			url : "used_work_list.sw?comId=" + fromCommunityId,
 			success : function(data, status, jqXHR) {
 				target.html(data);
 				smartPop.closeProgress();

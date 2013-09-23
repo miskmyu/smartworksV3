@@ -50,7 +50,7 @@
 						<span class="dep">
 							<%if(isMultiSelectable){ %><input type="checkbox" class="js_checkbox fl_nowidth" comName="<%=group.getName() %>" value="<%=group.getId()%>"/><%} %>
 							<a href="pop_userlist_by_group.sw?multiUsers=<%=isMultiSelectable %>" groupId="<%=group.getId()%>" class="js_popup js_expandable">
-								<span class="<%=iconType%>"></span>
+								<span class="<%=iconType%>  js_plus_minus_span"></span>
 								<span><%=group.getName()%></span>
 							</a>
 						</span>

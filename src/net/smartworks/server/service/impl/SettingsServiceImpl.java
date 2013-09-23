@@ -2675,8 +2675,8 @@ public class SettingsServiceImpl implements ISettingsService {
 		}
 	}
 	@Override
-	public UsedWorkInfo[] getUsedWorkListByUserId(String userId) throws Exception {
-		return SmartTest.getUsedWorkListByUserId(userId);
+	public UsedWorkInfo[] getUsedWorkListByCommunityId(String communityId) throws Exception {
+		return SmartTest.getUsedWorkListByUserId(communityId);
 	}
 	@Override
 	public UserInfo getHeadByUserId(String userId) throws Exception {

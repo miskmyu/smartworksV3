@@ -91,7 +91,7 @@ public interface ISettingsService {
 	
 	public abstract void addAdjunctMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
-	public abstract UsedWorkInfo[] getUsedWorkListByUserId(String userId) throws Exception;
+	public abstract UsedWorkInfo[] getUsedWorkListByCommunityId(String communityId) throws Exception;
 	
 	public abstract UserInfo getHeadByUserId(String userId) throws Exception;
 	

@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.										 -->
 <!-- Created Date	: 2011.9.												 -->
 
+<%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.model.work.info.UsedWorkInfo"%>
 <%@page import="org.claros.intouch.webmail.services.GetUnreadCountService"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -22,9 +23,8 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 	
-	String retiredUserId = request.getParameter("userId");
-	UserInfo retiredUser = smartWorks.getUserById(retiredUserId).getUserInfo();
-	UserInfo givenUser = smartWorks.getHeadByUserId(retiredUserId);
+	String abolishDepartId = request.getParameter("departId");
+	DepartmentInfo abolishDepart = smartWorks.getDepartmentById(abolishDepartId).getDepartmentInfo();
 
 %>
 <script type="text/javascript">
@@ -35,11 +35,6 @@
 		var retireMember = $('.js_pop_retire_member_page');
 		if (SmartWorks.GridLayout.validate(retireMember.find('form.js_validation_required'), $('.js_pop_error_message'))) {
 			smartPop.confirm(smartMessage.get("retireMemberConfirmation"), function(){
-				if(retireMember.attr('fromCommunityId') === retireMember.find('td[fieldId="txtGivenMember"] .js_community_item').attr('comId')){
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('sameMemberError'));				
-					return;
-				}
-
 				var forms = retireMember.find('form');
 				var paramsJson = {};
 				for(var i=0; i<forms.length; i++){
@@ -82,11 +77,11 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  전체 레이아웃 -->
-<div class="pop_corner_all js_pop_retire_member_page js_work_transfer_page" fromCommunityId="<%=retiredUserId%>">
+<div class="pop_corner_all js_pop_abolish_department_page js_work_transfer_page" abolishDepartId="<%=abolishDepartId%>">
 
 	<!-- 팝업 타이틀 -->
 	<div class="form_title">
-		<div class="pop_title"><fmt:message key="common.button.retire_member"></fmt:message></div>
+		<div class="pop_title"><fmt:message key="common.button.abolish_department"></fmt:message></div>
 		<div class="txt_btn">			
 			<a href="" onclick="smartPop.close();return false;"><div class="btn_x"></div></a>
 		</div>
@@ -94,41 +89,29 @@
 	</div>
 	<!-- 팝업 타이틀 //-->
 	<!-- 컨텐츠 -->
-	<form name="frmRetireMember" class="js_validation_required">
+	<form name="frmAbolishDepart" class="js_validation_required">
 		<div class="contents_space">
 			<table>
 				<tr>
-					<th><fmt:message key="transfer.title.retired_member" /></th>
-					<td><img src="<%=retiredUser.getMinPicture() %>" class="profile_size_s"><%=retiredUser.getLongName() %></td>
+					<th><fmt:message key="transfer.title.abolish_depart" /></th>
+					<td><img src="<%=abolishDepart.getMinPicture() %>" class="profile_size_s"><%=abolishDepart.getName() %></td>
 				</tr>
 				<tr>
-					<th><fmt:message key="transfer.title.given_member" /></th>
-					<td class="js_type_userField" fieldId="txtGivenMember" multiUsers="false">
+					<th><fmt:message key="transfer.title.given_depart" /></th>
+					<td class="js_type_departmentField" fieldId="txtGivenDepart" multiUsers="false">
 						<div class="form_value w100">
 							<div class="icon_fb_space">
 								<div class="fieldline community_names js_community_names">
 									<div class="js_selected_communities user_sel_area"></div>
-									<input class="m0 w99 js_auto_complete" href="user_name.sw" type="text">
+									<input class="m0 w99 js_auto_complete" href="department_name.sw" type="text">
 								</div>
 								<div class="js_community_list com_list" style="display: none"></div>
 						</div>
 					</td>
 				</tr>
-				<tr>
-					<th></th>
-					<td><fmt:message key="transfer.message.given_member"><fmt:param><span class="t_name""><%=givenUser.getLongName() %></span></fmt:param></fmt:message></td>
-				</tr>
 				<tr height="10px">
 					<th></th>
 					<td></td>
-				</tr>
-				<tr>
-					<th><fmt:message key="transfer.title.authority" /></th>
-					<td>
-						<div>
-							<input name="chkTransferAuthority" type="checkbox" checked><fmt:message key="transfer.label.transfer_authority_retired"/>
-						</div>
-					</td>
 				</tr>
 				<tr>
 					<th><fmt:message key="transfer.title.work_transfer" /></th>
@@ -142,13 +125,9 @@
 				</tr>
 				<tr>
 					<th></th>
-					<td><fmt:message key="transfer.message.work_transfer_retired"/></td>
-				</tr>
-				<tr>
-					<th></th>
 					<td id="js_used_work_list">
 						<jsp:include page="/jsp/content/settings/used_work_list.jsp">
-							<jsp:param value="" name="comId"/>
+							<jsp:param value="" name="userId"/>
 						</jsp:include>
 					</td>
 				</tr>
@@ -167,7 +146,7 @@
 				</a> 
 			</span>
 			 <span class="btn_gray ml5"> 
-				 <a href="" class="js_close_retire_member"> 
+				 <a href="" class="js_close_abolish_department"> 
 				 	<span class="txt_btn_start"></span>
 				 	<span class="txt_btn_center"><fmt:message key="common.button.cancel"/></span>
 				 	<span class="txt_btn_end"></span> 

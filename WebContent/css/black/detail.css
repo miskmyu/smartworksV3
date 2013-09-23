@@ -139,7 +139,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_contents table td {padding:4px 5px}
 .list_contents table .tit_bg2 th {background-color:#F5F5F5; font-weight:normal}
 .list_contents table .tit_bg2 td {background-color:#FFF}
-.r_line {border-right:1px solid #cccccc}
+.r_line {border-right:1px solid #cccccc !important}
 .po_left {display:inline-block; float: left}
 
 /* 새로 만들기 부분 타이틀 */
